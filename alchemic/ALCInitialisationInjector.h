@@ -25,7 +25,7 @@
 /**
  Inject hooks into the runtime.
  */
--(void) addHooksToClasses:(NSArray *) classes withContext:(ALCContext *) context;
+-(void) executeStrategies:(NSArray *) classes withContext:(ALCContext *) context;
 
 /**
  Reset the runtime back to it's original state.

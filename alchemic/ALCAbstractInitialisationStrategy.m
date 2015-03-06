@@ -21,7 +21,7 @@ static NSArray *_initIMPStorage;
 -(instancetype) init {
     self = [super init];
     if (self) {
-        logClassProcessing(@"Initialising init IMP storage area for %s", class_getName([self class]));
+        logConfig(@"Initialising init IMP storage area for %s", class_getName([self class]));
         _initIMPStorage = [[NSArray alloc] init];
     }
     return self;
@@ -38,7 +38,7 @@ static NSArray *_initIMPStorage;
     // First attempt to add a new init.
     SEL initSelector = self.initSelector;
     if (class_addMethod(class, initSelector, wrapperIMP, wrapperTypeEncoding)) {
-        logClassProcessing(@"Added new init to %s", class_getName(class));
+        logRegistration(@"Added new init to %s", class_getName(class));
         [self storeInitFromClass:class
                     initSelector:initSelector
                          initIMP:NULL
@@ -47,7 +47,7 @@ static NSArray *_initIMPStorage;
     }
     
     // There must already be an init, so now we replace it.
-    logClassProcessing(@"Replacing init method %s::%s", class_getName(class), sel_getName(initSelector));
+    logRegistration(@"Replacing init method %s::%s", class_getName(class), sel_getName(initSelector));
     Method initMethod = class_getInstanceMethod(class, initSelector);
     IMP originalImp = method_setImplementation(initMethod, wrapperIMP);
     
@@ -65,14 +65,13 @@ static NSArray *_initIMPStorage;
                withContext:(ALCContext *) context {
     ALCOriginalInitInfo *initDetails = [[ALCOriginalInitInfo alloc] initWithOriginalClass:class
                                                                              initSelector:initSelector
-                                                                                  initIMP:initIMP
-                                                                              withContext:context];
+                                                                                  initIMP:initIMP];
     _initIMPStorage = [_initIMPStorage arrayByAddingObject:initDetails];
 }
 
 -(void) resetClasses {
     [_initIMPStorage enumerateObjectsUsingBlock:^(ALCOriginalInitInfo *replacedInitInfo, NSUInteger idx, BOOL *stop) {
-        logClassProcessing(@"Resetting init method %s::%s", class_getName(replacedInitInfo.originalClass), sel_getName(replacedInitInfo.initSelector));
+        logObjectResolving(@"Resetting init method %s::%s", class_getName(replacedInitInfo.originalClass), sel_getName(replacedInitInfo.initSelector));
         Method initMethod = class_getInstanceMethod(replacedInitInfo.originalClass, replacedInitInfo.initSelector);
         method_setImplementation(initMethod, replacedInitInfo.initIMP);
     }];

@@ -8,9 +8,13 @@
 
 @import Foundation;
 
+@class ALCDependencyInfo;
+
 /**
  This proxy will be used when doing initial injections. When the parent object sends it's first message to the proxy, it will transform itself into the desired object.
  */
-@interface ALCDependencyFault : NSProxy
+@interface ALCLazyDependency : NSProxy
+
+-(instancetype) initWithDependencyInfo:(ALCDependencyInfo *) dependencyInfo;
 
 @end

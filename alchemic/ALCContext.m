@@ -6,84 +6,92 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
+#import <objc/runtime.h>
+
+#import "Alchemic.h"
 #import "ALCContext.h"
 #import "ALCLogger.h"
 #import "ALCRuntime.h"
-#import <objc/runtime.h>
+
 #import "ALCClassInfo.h"
+#import "ALCInitialisationStrategyInjector.h"
+
+#import "ALCSimpleDependencyResolver.h"
+
 #import "ALCObjectFactory.h"
 #import "ALCSimpleObjectFactory.h"
-#import "ALCInitialisationStrategyInjector.h"
-#import "ALCSimpleObjectInjector.h"
-#import "ALCNSObjectInitialisationStrategy.h"
-#import "ALCUIViewControllerInitWithCoderInitStrategy.h"
-#import "ALCUIViewControllerInitWithFrameInitialisationStrategy.h"
+
+#import "ALCNSObjectInitStrategy.h"
+#import "ALCUIViewControllerInitWithCoderStrategy.h"
+#import "ALCUIViewControllerInitWithFrameStrategy.h"
 
 @implementation ALCContext {
     
-    // Injectors
-    id<ALCInitialisationInjector> _runtimeInjector;
-    id<ALCObjectInjector> _objectInjector;
+    // List of strategies used to inject init methods.
+    NSArray *_initialisationStrategies;
     
-    // Registry of classes that have registered dependencies.
-    NSMutableDictionary *_injectionRegistry;
+    // Resolvers.
+    NSArray *_dependencyResolvers;
+    
+    // List of factories for creating objects.
+    NSArray *_objectFactories;
     
     // Registry of singletons.
-    NSMutableArray *_singletonRegistry;
+    NSArray *_singletonRegistry;
     
     // Storage for objects created by alchemic.
     NSMutableDictionary *_dependencyStore;
     
-    // List of factories for creating objects.
-    NSMutableArray *_objectFactories;
+    // Registry of classes that have registered dependencies.
+    NSMutableDictionary *_injectionRegistry;
     
-}
-
--(void) start {
-    
-    // Set defaults.
-    if (_runtimeInjectorClass == NULL) {
-        _runtimeInjectorClass = [ALCInitialisationStrategyInjector class];
-    }
-    if (_objectInjectorClass == NULL) {
-        _objectInjectorClass = [ALCSimpleObjectInjector class];
-    }
-    
-    // Create runtime injector instance and add strategies for handling various inits.
-    _runtimeInjector = [[(Class)self.runtimeInjectorClass alloc] init];
-    [_runtimeInjector addInitWrapperStrategy:[[ALCNSObjectInitialisationStrategy alloc] init]];
-    [_runtimeInjector addInitWrapperStrategy:[[ALCUIViewControllerInitWithCoderInitStrategy alloc] init]];
-    [_runtimeInjector addInitWrapperStrategy:[[ALCUIViewControllerInitWithFrameInitialisationStrategy alloc] init]];
-
-    // Create object injector for injecting dependencies into objects.
-    _objectInjector = [[(Class)self.objectInjectorClass alloc] init];
-    
-    // Create factories.
-    [_objectFactories addObject:[[ALCSimpleObjectFactory alloc] init]];
-    
-    // Inject wrappers into the runtime.
-    [_runtimeInjector addHooksToClasses:_injectionRegistry.allKeys withContext:self];
-    
-    // Now initiate any found singletons.
-    [self startSingletons];
     
 }
 
 -(instancetype) init {
     self = [super init];
     if (self) {
+
+        _initialisationStrategies = [[NSArray alloc] init];
+        _objectFactories = [[NSArray alloc] init];
+        _dependencyResolvers = [[NSArray alloc] init];
+        
         _injectionRegistry = [[NSMutableDictionary alloc] init];
         _dependencyStore = [[NSMutableDictionary alloc] init];
-        _singletonRegistry = [[NSMutableArray alloc] init];
-        _objectFactories = [[NSMutableArray alloc] init];
+        _singletonRegistry = [[NSArray alloc] init];
+
+        [self addInitialisationStrategy:[[ALCNSObjectInitStrategy alloc] init]];
+        [self addInitialisationStrategy:[[ALCUIViewControllerInitWithCoderStrategy alloc] init]];
+        [self addInitialisationStrategy:[[ALCUIViewControllerInitWithFrameStrategy alloc] init]];
+        
+        [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
+
+        [self addDependencyResolver:[[ALCSimpleDependencyResolver alloc] init]];
+
     }
     return self;
 }
 
+-(void) start {
+    
+    // Set defaults.
+    if (self.runtimeInjector == nil) {
+        self.runtimeInjector = [[ALCInitialisationStrategyInjector alloc] init];
+    }
+    
+    // Inject wrappers into the classes that have registered for dependency injection.
+    [_runtimeInjector executeStrategies:_injectionRegistry.allKeys withContext:self];
+    
+    // Now initiate any found singletons.
+    [self startSingletons];
+    
+}
+
 -(void) startSingletons {
+    
     logCreation(@"Creating singletons");
     [_singletonRegistry enumerateObjectsUsingBlock:^(ALCClassInfo *classInfo, NSUInteger classInfoIdx, BOOL *stopReadingSingletons){
-
+        
         __block id createdObject = nil;
         [_objectFactories enumerateObjectsUsingBlock:^(id<ALCObjectFactory> objectFactory, NSUInteger factoryIdx, BOOL *stopCheckingFactories) {
             createdObject = [objectFactory createObjectFromClassInfo:classInfo];
@@ -103,9 +111,18 @@
     }];
 }
 
--(void) registerSingleton:(Class) singleton {
-    logRegistration(@"Registering singleton: %@", NSStringFromClass(singleton));
-    [_singletonRegistry addObject:[[ALCClassInfo alloc] initWithClass:singleton]];
+-(void) registerClass:(Class) class withInjectionPoints:(NSString *) injs, ... {
+    va_list args;
+    va_start(args, injs);
+    for (NSString *arg = injs; arg != nil; arg = va_arg(args, NSString *)) {
+        [self registerInjection: arg inClass:class];
+    }
+    va_end(args);
+}
+
+-(void) registerSingleton:(Class) singletonClass {
+    logRegistration(@"Registering singleton: %@", NSStringFromClass(singletonClass));
+    _singletonRegistry = [_singletonRegistry arrayByAddingObject:[[ALCClassInfo alloc] initWithClass:singletonClass]];
 }
 
 -(void) registerInjection:(NSString *) inj inClass:(Class) class {
@@ -122,8 +139,27 @@
     
 }
 
+#pragma mark - Configuration
+
+-(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
+    logConfig(@"Adding object factory: %s", class_getName([objectFactory class]));
+    _objectFactories = [_objectFactories arrayByAddingObject:objectFactory];
+}
+
+-(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy {
+    logConfig(@"Adding init strategy: %s", class_getName([initialisationStrategy class]));
+    _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
+}
+
+-(void) addDependencyResolver:(id<ALCDependencyResolver>) dependencyResolver {
+    logConfig(@"Adding dependency resolver: %s", class_getName([dependencyResolver class]));
+    _dependencyResolvers = [_dependencyResolvers arrayByAddingObject:dependencyResolver];
+}
+
+#pragma mark - Dependency resolution
+
 -(void) resolveDependencies:(id) object {
-    logClassProcessing(@"Being asked to resolve dependencies for a %s", class_getName([object class]));
+    logObjectResolving(@"Resolving dependencies in an instance of %s", class_getName([object class]));
 }
 
 @end

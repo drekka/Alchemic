@@ -8,16 +8,18 @@
 
 @import UIKit;
 
-#import "ALCUIViewControllerInitWithFrameInitialisationStrategy.h"
+#import "ALCUIViewControllerInitWithFrameStrategy.h"
 
 #import <objc/runtime.h>
 #import <objc/message.h>
+
 #import "ALCLogger.h"
+#import "Alchemic.h"
 #import "ALCRuntimeFunctions.h"
 #import "ALCContext.h"
 #import "ALCOriginalInitInfo.h"
 
-@implementation ALCUIViewControllerInitWithFrameInitialisationStrategy
+@implementation ALCUIViewControllerInitWithFrameStrategy
 
 -(BOOL) canWrapInitInClass:(Class) class {
     return class_decendsFromClass(class, [UIViewController class]);
@@ -34,7 +36,7 @@
 -(id) initWithFrameWrapper:(CGRect) aFrame {
     
     // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCOriginalInitInfo *initInfo = [ALCUIViewControllerInitWithFrameInitialisationStrategy initInfoForClass:[self class] initSelector:_cmd];
+    ALCOriginalInitInfo *initInfo = [ALCUIViewControllerInitWithFrameStrategy initInfoForClass:[self class] initSelector:_cmd];
     
     if (initInfo.initIMP == NULL) {
         struct objc_super superData = {self, class_getSuperclass([self class])};
@@ -44,7 +46,7 @@
     }
     
     logCreation(@"Triggering dependency injection in initWithFrame:");
-    [initInfo.context resolveDependencies:self];
+    [[Alchemic mainContext] resolveDependencies:self];
 
     return self;
 }

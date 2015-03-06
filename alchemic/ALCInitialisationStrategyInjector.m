@@ -12,7 +12,6 @@
 
 #import <objc/runtime.h>
 #import "ALCLogger.h"
-#import "ALCOriginalInitInfo.h"
 #import "ALCInitialisationStrategyManagement.h"
 #import "ALCInitialisationStrategy.h"
 
@@ -38,14 +37,14 @@ static BOOL injected = NO;
 }
 
 -(void) addInitWrapperStrategy:(id<ALCInitialisationStrategy>) wrapperInitialisationStrategy {
-    logClassProcessing(@"Adding strategy: %s", class_getName([wrapperInitialisationStrategy class]));
+    logConfig(@"Adding strategy: %s", class_getName([wrapperInitialisationStrategy class]));
     _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:wrapperInitialisationStrategy];
 }
 
--(void) addHooksToClasses:(NSArray *) classes withContext:(ALCContext *) context {
+-(void) executeStrategies:(NSArray *)classes withContext:(ALCContext *)context {
     
     if (injected) {
-        logClassProcessing(@"Wrappers already injected into classes");
+        logObjectResolving(@"Wrappers already injected into classes");
         return;
     }
 
@@ -56,7 +55,7 @@ static BOOL injected = NO;
     for (Class class in rootClasses) {
         for (id<ALCInitialisationStrategy, ALCInitialisationStrategyManagement> initStrategy in [_initialisationStrategies reverseObjectEnumerator]) {
             if ([initStrategy canWrapInitInClass:class]) {
-                logClassProcessing(@"%s wrapping init in %s", class_getName([initStrategy class]), class_getName(class));
+                logObjectResolving(@"%s wrapping init in %s", class_getName([initStrategy class]), class_getName(class));
                 [initStrategy wrapInitInClass:class withContext:context];
             }
         }
@@ -77,7 +76,7 @@ static BOOL injected = NO;
             
             // If the parent is in the list of injectable classes then end checking.
             if ([rootClasses containsObject:parent]) {
-                logClassProcessing(@"Parent class (%s) of %s scheduled for initialiser injection", class_getName(parent), class_getName(currentClass));
+                logObjectResolving(@"Parent class (%s) of %s scheduled for initialiser injection", class_getName(parent), class_getName(currentClass));
                 return;
             }
             parent = class_getSuperclass(parent);

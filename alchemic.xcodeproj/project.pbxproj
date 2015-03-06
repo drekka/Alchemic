@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6C37A6CE1A9757CD00ACD0F8 /* ALCSimpleObjectInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6CD1A9757CD00ACD0F8 /* ALCSimpleObjectInjector.m */; };
+		6C37A6CE1A9757CD00ACD0F8 /* ALCSimpleDependencyResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6CD1A9757CD00ACD0F8 /* ALCSimpleDependencyResolver.m */; };
 		6C37A6D81A988E8000ACD0F8 /* ALCLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6D71A988E8000ACD0F8 /* ALCLogger.m */; };
 		6C37A6EA1A98C49200ACD0F8 /* SingletonObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6E91A98C49200ACD0F8 /* SingletonObject.m */; };
 		6C37A6EE1A98CE5800ACD0F8 /* ALCDependencyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6ED1A98CE5800ACD0F8 /* ALCDependencyInfo.m */; };
@@ -15,13 +15,13 @@
 		6C37A6F41A9B566B00ACD0F8 /* ALCClassInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6F31A9B566B00ACD0F8 /* ALCClassInfo.m */; };
 		6C37A6F71A9B586100ACD0F8 /* ALCSimpleObjectFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6F61A9B586100ACD0F8 /* ALCSimpleObjectFactory.m */; };
 		6C37A6FA1A9F34EE00ACD0F8 /* AViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6F91A9F34EE00ACD0F8 /* AViewController.m */; };
-		6C37A6FE1A9F3B1800ACD0F8 /* ALCNSObjectInitialisationStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6FD1A9F3B1800ACD0F8 /* ALCNSObjectInitialisationStrategy.m */; };
+		6C37A6FE1A9F3B1800ACD0F8 /* ALCNSObjectInitStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6FD1A9F3B1800ACD0F8 /* ALCNSObjectInitStrategy.m */; };
 		6C37A7011A9F3DF800ACD0F8 /* ALCRuntimeFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6FF1A9F3DF800ACD0F8 /* ALCRuntimeFunctions.c */; };
 		6C37A7041A9F45AF00ACD0F8 /* ALCOriginalInitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A7031A9F45AF00ACD0F8 /* ALCOriginalInitInfo.m */; };
 		6C37A7071A9F53E100ACD0F8 /* ALCAbstractInitialisationStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A7061A9F53E100ACD0F8 /* ALCAbstractInitialisationStrategy.m */; };
-		6C37A70E1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameInitialisationStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A70D1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameInitialisationStrategy.m */; };
-		6C37A7111AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderInitStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A7101AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderInitStrategy.m */; };
-		6C37A7151AA0A17200ACD0F8 /* ALCDependencyFault.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A7141AA0A17200ACD0F8 /* ALCDependencyFault.m */; };
+		6C37A70E1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A70D1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameStrategy.m */; };
+		6C37A7111AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A7101AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderStrategy.m */; };
+		6C37A7151AA0A17200ACD0F8 /* ALCLazyDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A7141AA0A17200ACD0F8 /* ALCLazyDependency.m */; };
 		6C66DC321A8B82C3009F9D94 /* Alchemic.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C66DC311A8B82C3009F9D94 /* Alchemic.h */; };
 		6C66DC341A8B82C3009F9D94 /* Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C66DC331A8B82C3009F9D94 /* Alchemic.m */; };
 		6C66DC3A1A8B82C3009F9D94 /* libalchemic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C66DC2E1A8B82C3009F9D94 /* libalchemic.a */; };
@@ -57,10 +57,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6C37A6CC1A9757CD00ACD0F8 /* ALCSimpleObjectInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCSimpleObjectInjector.h; sourceTree = "<group>"; };
-		6C37A6CD1A9757CD00ACD0F8 /* ALCSimpleObjectInjector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCSimpleObjectInjector.m; sourceTree = "<group>"; };
+		6C37A6CC1A9757CD00ACD0F8 /* ALCSimpleDependencyResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCSimpleDependencyResolver.h; sourceTree = "<group>"; };
+		6C37A6CD1A9757CD00ACD0F8 /* ALCSimpleDependencyResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCSimpleDependencyResolver.m; sourceTree = "<group>"; };
 		6C37A6D01A975B7F00ACD0F8 /* ALCInitialisationInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInitialisationInjector.h; sourceTree = "<group>"; };
-		6C37A6D11A97612500ACD0F8 /* ALCObjectInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCObjectInjector.h; sourceTree = "<group>"; };
+		6C37A6D11A97612500ACD0F8 /* ALCDependencyResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependencyResolver.h; sourceTree = "<group>"; };
 		6C37A6D61A988E8000ACD0F8 /* ALCLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCLogger.h; sourceTree = "<group>"; };
 		6C37A6D71A988E8000ACD0F8 /* ALCLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCLogger.m; sourceTree = "<group>"; };
 		6C37A6E81A98C49200ACD0F8 /* SingletonObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonObject.h; sourceTree = "<group>"; };
@@ -77,8 +77,8 @@
 		6C37A6F81A9F34EE00ACD0F8 /* AViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AViewController.h; sourceTree = "<group>"; };
 		6C37A6F91A9F34EE00ACD0F8 /* AViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AViewController.m; sourceTree = "<group>"; };
 		6C37A6FB1A9F388200ACD0F8 /* ALCInitialisationStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInitialisationStrategy.h; sourceTree = "<group>"; };
-		6C37A6FC1A9F3B1800ACD0F8 /* ALCNSObjectInitialisationStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCNSObjectInitialisationStrategy.h; sourceTree = "<group>"; };
-		6C37A6FD1A9F3B1800ACD0F8 /* ALCNSObjectInitialisationStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCNSObjectInitialisationStrategy.m; sourceTree = "<group>"; };
+		6C37A6FC1A9F3B1800ACD0F8 /* ALCNSObjectInitStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCNSObjectInitStrategy.h; sourceTree = "<group>"; };
+		6C37A6FD1A9F3B1800ACD0F8 /* ALCNSObjectInitStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCNSObjectInitStrategy.m; sourceTree = "<group>"; };
 		6C37A6FF1A9F3DF800ACD0F8 /* ALCRuntimeFunctions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ALCRuntimeFunctions.c; sourceTree = "<group>"; };
 		6C37A7001A9F3DF800ACD0F8 /* ALCRuntimeFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCRuntimeFunctions.h; sourceTree = "<group>"; };
 		6C37A7021A9F45AF00ACD0F8 /* ALCOriginalInitInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCOriginalInitInfo.h; sourceTree = "<group>"; };
@@ -86,12 +86,12 @@
 		6C37A7051A9F53E100ACD0F8 /* ALCAbstractInitialisationStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractInitialisationStrategy.h; sourceTree = "<group>"; };
 		6C37A7061A9F53E100ACD0F8 /* ALCAbstractInitialisationStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractInitialisationStrategy.m; sourceTree = "<group>"; };
 		6C37A70A1AA079F200ACD0F8 /* ALCInitialisationStrategyManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInitialisationStrategyManagement.h; sourceTree = "<group>"; };
-		6C37A70C1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameInitialisationStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCUIViewControllerInitWithFrameInitialisationStrategy.h; sourceTree = "<group>"; };
-		6C37A70D1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameInitialisationStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCUIViewControllerInitWithFrameInitialisationStrategy.m; sourceTree = "<group>"; };
-		6C37A70F1AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderInitStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCUIViewControllerInitWithCoderInitStrategy.h; sourceTree = "<group>"; };
-		6C37A7101AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderInitStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCUIViewControllerInitWithCoderInitStrategy.m; sourceTree = "<group>"; };
-		6C37A7131AA0A17200ACD0F8 /* ALCDependencyFault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependencyFault.h; sourceTree = "<group>"; };
-		6C37A7141AA0A17200ACD0F8 /* ALCDependencyFault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCDependencyFault.m; sourceTree = "<group>"; };
+		6C37A70C1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCUIViewControllerInitWithFrameStrategy.h; sourceTree = "<group>"; };
+		6C37A70D1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCUIViewControllerInitWithFrameStrategy.m; sourceTree = "<group>"; };
+		6C37A70F1AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCUIViewControllerInitWithCoderStrategy.h; sourceTree = "<group>"; };
+		6C37A7101AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCUIViewControllerInitWithCoderStrategy.m; sourceTree = "<group>"; };
+		6C37A7131AA0A17200ACD0F8 /* ALCLazyDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCLazyDependency.h; sourceTree = "<group>"; };
+		6C37A7141AA0A17200ACD0F8 /* ALCLazyDependency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCLazyDependency.m; sourceTree = "<group>"; };
 		6C66DC2E1A8B82C3009F9D94 /* libalchemic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libalchemic.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C66DC311A8B82C3009F9D94 /* Alchemic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alchemic.h; sourceTree = "<group>"; };
 		6C66DC331A8B82C3009F9D94 /* Alchemic.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Alchemic.m; sourceTree = "<group>"; };
@@ -129,33 +129,57 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6C37A70B1AA07A7A00ACD0F8 /* Initialisation */ = {
+		6C37A70B1AA07A7A00ACD0F8 /* Init wrappers */ = {
 			isa = PBXGroup;
 			children = (
-				6C37A7051A9F53E100ACD0F8 /* ALCAbstractInitialisationStrategy.h */,
-				6C37A7061A9F53E100ACD0F8 /* ALCAbstractInitialisationStrategy.m */,
-				6C37A6FB1A9F388200ACD0F8 /* ALCInitialisationStrategy.h */,
+				6C37A6D01A975B7F00ACD0F8 /* ALCInitialisationInjector.h */,
 				6CEF23371A936012005E672E /* ALCInitialisationStrategyInjector.h */,
 				6CEF23381A936012005E672E /* ALCInitialisationStrategyInjector.m */,
-				6C37A70A1AA079F200ACD0F8 /* ALCInitialisationStrategyManagement.h */,
-				6C37A7021A9F45AF00ACD0F8 /* ALCOriginalInitInfo.h */,
-				6C37A7031A9F45AF00ACD0F8 /* ALCOriginalInitInfo.m */,
 				6C37A7121AA093E500ACD0F8 /* strategies */,
 			);
-			name = Initialisation;
+			name = "Init wrappers";
 			sourceTree = "<group>";
 		};
 		6C37A7121AA093E500ACD0F8 /* strategies */ = {
 			isa = PBXGroup;
 			children = (
-				6C37A6FC1A9F3B1800ACD0F8 /* ALCNSObjectInitialisationStrategy.h */,
-				6C37A6FD1A9F3B1800ACD0F8 /* ALCNSObjectInitialisationStrategy.m */,
-				6C37A70C1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameInitialisationStrategy.h */,
-				6C37A70D1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameInitialisationStrategy.m */,
-				6C37A70F1AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderInitStrategy.h */,
-				6C37A7101AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderInitStrategy.m */,
+				6C37A7051A9F53E100ACD0F8 /* ALCAbstractInitialisationStrategy.h */,
+				6C37A7061A9F53E100ACD0F8 /* ALCAbstractInitialisationStrategy.m */,
+				6C37A6FB1A9F388200ACD0F8 /* ALCInitialisationStrategy.h */,
+				6C37A70A1AA079F200ACD0F8 /* ALCInitialisationStrategyManagement.h */,
+				6C37A6FC1A9F3B1800ACD0F8 /* ALCNSObjectInitStrategy.h */,
+				6C37A6FD1A9F3B1800ACD0F8 /* ALCNSObjectInitStrategy.m */,
+				6C37A7021A9F45AF00ACD0F8 /* ALCOriginalInitInfo.h */,
+				6C37A7031A9F45AF00ACD0F8 /* ALCOriginalInitInfo.m */,
+				6C37A70F1AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderStrategy.h */,
+				6C37A7101AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderStrategy.m */,
+				6C37A70C1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameStrategy.h */,
+				6C37A70D1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameStrategy.m */,
 			);
 			name = strategies;
+			sourceTree = "<group>";
+		};
+		6C418BBC1AA48ED8003D2C90 /* Object factories */ = {
+			isa = PBXGroup;
+			children = (
+				6C37A6F21A9B566B00ACD0F8 /* ALCClassInfo.h */,
+				6C37A6F31A9B566B00ACD0F8 /* ALCClassInfo.m */,
+				6C37A6EB1A98CDFB00ACD0F8 /* ALCObjectFactory.h */,
+				6C37A6F51A9B586100ACD0F8 /* ALCSimpleObjectFactory.h */,
+				6C37A6F61A9B586100ACD0F8 /* ALCSimpleObjectFactory.m */,
+			);
+			name = "Object factories";
+			sourceTree = "<group>";
+		};
+		6C418BBD1AA72115003D2C90 /* Runtime */ = {
+			isa = PBXGroup;
+			children = (
+				6C66DC491A8B85E1009F9D94 /* ALCRuntime.h */,
+				6C66DC4A1A8B85E1009F9D94 /* ALCRuntime.m */,
+				6C37A6FF1A9F3DF800ACD0F8 /* ALCRuntimeFunctions.c */,
+				6C37A7001A9F3DF800ACD0F8 /* ALCRuntimeFunctions.h */,
+			);
+			name = Runtime;
 			sourceTree = "<group>";
 		};
 		6C66DC251A8B82C3009F9D94 = {
@@ -179,7 +203,15 @@
 		6C66DC301A8B82C3009F9D94 /* alchemic */ = {
 			isa = PBXGroup;
 			children = (
-				6C66DC481A8B85AE009F9D94 /* Internal */,
+				6C978BF01AA879AE00C2D48D /* Dependencies */,
+				6C418BBD1AA72115003D2C90 /* Runtime */,
+				6C66DC5D1A903204009F9D94 /* ALCContext.h */,
+				6C66DC5E1A903204009F9D94 /* ALCContext.m */,
+				6C66DC5A1A8F662E009F9D94 /* ALCInternal.h */,
+				6C37A6D61A988E8000ACD0F8 /* ALCLogger.h */,
+				6C37A6D71A988E8000ACD0F8 /* ALCLogger.m */,
+				6C37A70B1AA07A7A00ACD0F8 /* Init wrappers */,
+				6C418BBC1AA48ED8003D2C90 /* Object factories */,
 				6C66DC311A8B82C3009F9D94 /* Alchemic.h */,
 				6C66DC331A8B82C3009F9D94 /* Alchemic.m */,
 			);
@@ -201,36 +233,6 @@
 				6C66DC3F1A8B82C3009F9D94 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		6C66DC481A8B85AE009F9D94 /* Internal */ = {
-			isa = PBXGroup;
-			children = (
-				6C37A6F21A9B566B00ACD0F8 /* ALCClassInfo.h */,
-				6C37A6F31A9B566B00ACD0F8 /* ALCClassInfo.m */,
-				6C66DC5D1A903204009F9D94 /* ALCContext.h */,
-				6C66DC5E1A903204009F9D94 /* ALCContext.m */,
-				6C37A6EC1A98CE5800ACD0F8 /* ALCDependencyInfo.h */,
-				6C37A6ED1A98CE5800ACD0F8 /* ALCDependencyInfo.m */,
-				6C66DC5A1A8F662E009F9D94 /* ALCInternal.h */,
-				6C37A6D61A988E8000ACD0F8 /* ALCLogger.h */,
-				6C37A6D71A988E8000ACD0F8 /* ALCLogger.m */,
-				6C37A6EB1A98CDFB00ACD0F8 /* ALCObjectFactory.h */,
-				6C37A6D11A97612500ACD0F8 /* ALCObjectInjector.h */,
-				6C37A7131AA0A17200ACD0F8 /* ALCDependencyFault.h */,
-				6C37A7141AA0A17200ACD0F8 /* ALCDependencyFault.m */,
-				6C66DC491A8B85E1009F9D94 /* ALCRuntime.h */,
-				6C66DC4A1A8B85E1009F9D94 /* ALCRuntime.m */,
-				6C37A6FF1A9F3DF800ACD0F8 /* ALCRuntimeFunctions.c */,
-				6C37A7001A9F3DF800ACD0F8 /* ALCRuntimeFunctions.h */,
-				6C37A6D01A975B7F00ACD0F8 /* ALCInitialisationInjector.h */,
-				6C37A6F51A9B586100ACD0F8 /* ALCSimpleObjectFactory.h */,
-				6C37A6F61A9B586100ACD0F8 /* ALCSimpleObjectFactory.m */,
-				6C37A6CC1A9757CD00ACD0F8 /* ALCSimpleObjectInjector.h */,
-				6C37A6CD1A9757CD00ACD0F8 /* ALCSimpleObjectInjector.m */,
-				6C37A70B1AA07A7A00ACD0F8 /* Initialisation */,
-			);
-			name = Internal;
 			sourceTree = "<group>";
 		};
 		6C66DC561A8CBF28009F9D94 /* Test classes */ = {
@@ -264,6 +266,20 @@
 				6C37A6F91A9F34EE00ACD0F8 /* AViewController.m */,
 			);
 			name = "Object test cases";
+			sourceTree = "<group>";
+		};
+		6C978BF01AA879AE00C2D48D /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				6C37A6EC1A98CE5800ACD0F8 /* ALCDependencyInfo.h */,
+				6C37A6ED1A98CE5800ACD0F8 /* ALCDependencyInfo.m */,
+				6C37A6D11A97612500ACD0F8 /* ALCDependencyResolver.h */,
+				6C37A7131AA0A17200ACD0F8 /* ALCLazyDependency.h */,
+				6C37A7141AA0A17200ACD0F8 /* ALCLazyDependency.m */,
+				6C37A6CC1A9757CD00ACD0F8 /* ALCSimpleDependencyResolver.h */,
+				6C37A6CD1A9757CD00ACD0F8 /* ALCSimpleDependencyResolver.m */,
+			);
+			name = Dependencies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -361,14 +377,14 @@
 				6C37A6D81A988E8000ACD0F8 /* ALCLogger.m in Sources */,
 				6C37A6F41A9B566B00ACD0F8 /* ALCClassInfo.m in Sources */,
 				6C66DC341A8B82C3009F9D94 /* Alchemic.m in Sources */,
-				6C37A7151AA0A17200ACD0F8 /* ALCDependencyFault.m in Sources */,
+				6C37A7151AA0A17200ACD0F8 /* ALCLazyDependency.m in Sources */,
 				6C37A6F71A9B586100ACD0F8 /* ALCSimpleObjectFactory.m in Sources */,
 				6C66DC5F1A903204009F9D94 /* ALCContext.m in Sources */,
-				6C37A6FE1A9F3B1800ACD0F8 /* ALCNSObjectInitialisationStrategy.m in Sources */,
-				6C37A7111AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderInitStrategy.m in Sources */,
+				6C37A6FE1A9F3B1800ACD0F8 /* ALCNSObjectInitStrategy.m in Sources */,
+				6C37A7111AA07FC000ACD0F8 /* ALCUIViewControllerInitWithCoderStrategy.m in Sources */,
 				6C37A7071A9F53E100ACD0F8 /* ALCAbstractInitialisationStrategy.m in Sources */,
-				6C37A6CE1A9757CD00ACD0F8 /* ALCSimpleObjectInjector.m in Sources */,
-				6C37A70E1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameInitialisationStrategy.m in Sources */,
+				6C37A6CE1A9757CD00ACD0F8 /* ALCSimpleDependencyResolver.m in Sources */,
+				6C37A70E1AA07EBF00ACD0F8 /* ALCUIViewControllerInitWithFrameStrategy.m in Sources */,
 				6C37A7011A9F3DF800ACD0F8 /* ALCRuntimeFunctions.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

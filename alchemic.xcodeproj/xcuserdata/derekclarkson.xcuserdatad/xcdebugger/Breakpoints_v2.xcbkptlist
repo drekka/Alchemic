@@ -89,22 +89,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "alchemic/Alchemic.m"
-            timestampString = "446466619.350334"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
-            landmarkName = "+registerClass:withInjectionPoints:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "alchemicTests/AlchemicContextTests.m"
             timestampString = "446821402.485839"
             startingColumnNumber = "9223372036854775807"
@@ -120,6 +104,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "-[AlchemicContextTests testContextStoresRegisteredInjections]"
                   moduleName = "alchemicTests"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/derekclarkson/projects/alchemic/alchemic/alchemicTests/AlchemicContextTests.m"
                   timestampString = "445860082.060065"
                   startingColumnNumber = "9223372036854775807"
@@ -134,6 +119,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "-[AlchemicContextTests testContextStoresRegisteredInjections]"
                   moduleName = "alchemicTests"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/derekclarkson/projects/alchemic/alchemic/alchemicTests/AlchemicContextTests.m"
                   timestampString = "445860082.060259"
                   startingColumnNumber = "9223372036854775807"
@@ -148,6 +134,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "-[AlchemicContextTests testContextStoresRegisteredInjections]"
                   moduleName = "alchemicTests"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/derekclarkson/projects/alchemic/alchemic/alchemicTests/AlchemicContextTests.m"
                   timestampString = "445860082.060369"
                   startingColumnNumber = "9223372036854775807"
@@ -162,6 +149,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "-[AlchemicContextTests testContextStoresRegisteredInjections]"
                   moduleName = "alchemicTests"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/derekclarkson/projects/alchemic/alchemic/alchemicTests/AlchemicContextTests.m"
                   timestampString = "445860082.060488"
                   startingColumnNumber = "9223372036854775807"
@@ -223,22 +211,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "alchemic/Alchemic.m"
-            timestampString = "446466619.350334"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
-            landmarkName = "+registerClass:withInjectionPoints:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "alchemic/ALCLogger.m"
             timestampString = "446381723.639652"
             startingColumnNumber = "9223372036854775807"
@@ -254,11 +226,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "alchemic/ALCContext.m"
-            timestampString = "446726584.394409"
+            timestampString = "447335451.914743"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
             landmarkName = "-startSingletons"
             landmarkType = "5">
          </BreakpointContent>
@@ -270,11 +242,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "alchemic/ALCContext.m"
-            timestampString = "446726584.394409"
+            timestampString = "447335451.914743"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "-startSingletons"
             landmarkType = "5">
          </BreakpointContent>
@@ -286,11 +258,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "alchemic/ALCContext.m"
-            timestampString = "446726584.394409"
+            timestampString = "447335451.914743"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "-start"
             landmarkType = "5">
          </BreakpointContent>
@@ -324,6 +296,22 @@
             startingLineNumber = "38"
             endingLineNumber = "38"
             landmarkName = "-initWrapper"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "alchemic/ALCContext.m"
+            timestampString = "447335451.914743"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "-resolveDependencies:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -13,6 +13,6 @@
 /**
  Wrapper details for NSObject::init.
  */
-@interface ALCNSObjectInitialisationStrategy : ALCAbstractInitialisationStrategy
+@interface ALCNSObjectInitStrategy : ALCAbstractInitialisationStrategy
 
 @end

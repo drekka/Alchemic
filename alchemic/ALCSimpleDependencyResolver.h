@@ -6,8 +6,10 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
-@interface ALCSimpleObjectInjector : NSObject
+#import "ALCDependencyResolver.h"
+
+@interface ALCSimpleDependencyResolver : NSObject<ALCDependencyResolver>
 
 @end

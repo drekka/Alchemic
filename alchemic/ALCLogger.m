@@ -22,7 +22,7 @@ static int __alchemicLogOptions = 0;
              source:(const char *) source
                line:(int) line
             message:(NSString *) messageTemplate, ... {
-
+    
     if ( ! __alchemicLogOptions & category) {
         return;
     }
@@ -32,29 +32,22 @@ static int __alchemicLogOptions = 0;
     NSString *msg = [[NSString alloc] initWithFormat:messageTemplate arguments:args];
     va_end(args);
     
-    const char *categoryName = NULL;
-    switch (category) {
-        case AlchemicLogCategoryCreation:
-            categoryName = "Creation    ";
-            break;
-
-        case AlchemicLogCategoryClassProcessing:
-            categoryName = "Classes     ";
-            break;
-            
-        default:
-            // Registration
-            categoryName = "Registration";
-            break;
-    }
+    const char *categoryName = [ALCLogger categoryNameForEnum:category];
     
     //NSString *processName = [[NSProcessInfo processInfo] processName];
     //NSString *threadName = [NSThread currentThread].name;
     //NSString *finalThreadName = threadName == nil || [threadName length] == 0 ? [NSString stringWithFormat:@"%x", pthread_mach_thread_np(pthread_self())] : threadName;
     
     //printf("%5$s %6$s [%1$s] %2$s(%3$i) %4$s\n", categoryName, source, line, [msg UTF8String], [finalThreadName UTF8String], [processName UTF8String]);
-    printf("%1$s: %2$s(%3$i) %4$s\n", categoryName, source, line, [msg UTF8String]);
+    printf("%1$12s: %2$s(%3$i) %4$s\n", categoryName, source, line, [msg UTF8String]);
     
+}
+
++(const char *) categoryNameForEnum:(AlchemicLogCategory) category {
+    if (category == AlchemicLogCategoryCreation) return "Creation";
+    if (category == AlchemicLogCategoryObjectResolving) return "Resolving";
+    if (category == AlchemicLogCategoryConfiguration) return "Config";
+    return "Registration";
 }
 
 @end

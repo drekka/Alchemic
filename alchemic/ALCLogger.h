@@ -7,7 +7,8 @@
 //
 
 @import Foundation;
-#import "ALCLogger.h"
+
+@class ALCLogger;
 
 /**
  Logging levels.
@@ -24,7 +25,11 @@ typedef NS_OPTIONS(NSUInteger, AlchemicLogCategory){
     /**
      Logging around processing of classes.
      */
-    AlchemicLogCategoryClassProcessing
+    AlchemicLogCategoryObjectResolving,
+    /**
+     Logs the setup of Alchemic.
+     */
+    AlchemicLogCategoryConfiguration
     
 };
 
@@ -32,7 +37,9 @@ typedef NS_OPTIONS(NSUInteger, AlchemicLogCategory){
 
 #define logRegistration(template, ...) [ALCLogger logCategory:AlchemicLogCategoryRegistrations source:__PRETTY_FUNCTION__ line:__LINE__ message:template, ## __VA_ARGS__];
 
-#define logClassProcessing(template, ...) [ALCLogger logCategory:AlchemicLogCategoryClassProcessing source:__PRETTY_FUNCTION__ line:__LINE__ message:template, ## __VA_ARGS__];
+#define logObjectResolving(template, ...) [ALCLogger logCategory:AlchemicLogCategoryObjectResolving source:__PRETTY_FUNCTION__ line:__LINE__ message:template, ## __VA_ARGS__];
+
+#define logConfig(template, ...) [ALCLogger logCategory:AlchemicLogCategoryConfiguration source:__PRETTY_FUNCTION__ line:__LINE__ message:template, ## __VA_ARGS__];
 
 @interface ALCLogger : NSObject
 

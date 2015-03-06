@@ -33,17 +33,4 @@ static __strong ALCContext *__mainContext;
     }
 }
 
-+(void) registerSingleton:(Class) singletonClass {
-    [__mainContext registerSingleton:singletonClass];
-}
-
-+(void) registerClass:(Class) class withInjectionPoints:(NSString *) injs, ... {
-    va_list args;
-    va_start(args, injs);
-    for (NSString *arg = injs; arg != nil; arg = va_arg(args, NSString *)) {
-        [__mainContext registerInjection: arg inClass:class];
-    }
-    va_end(args);
-}
-
 @end

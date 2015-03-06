@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCNSObjectInitialisationStrategy.h"
+#import "ALCNSObjectInitStrategy.h"
 
 @import UIKit;
 
@@ -17,8 +17,9 @@
 #import "ALCRuntimeFunctions.h"
 #import "ALCOriginalInitInfo.h"
 #import "ALCContext.h"
+#import "Alchemic.h"
 
-@implementation ALCNSObjectInitialisationStrategy
+@implementation ALCNSObjectInitStrategy
 
 -(BOOL) canWrapInitInClass:(Class) class {
     return ! class_decendsFromClass(class, [UIViewController class]);
@@ -35,7 +36,7 @@
 -(id) initWrapper {
     
     // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCOriginalInitInfo *initInfo = [ALCNSObjectInitialisationStrategy initInfoForClass:[self class] initSelector:_cmd];
+    ALCOriginalInitInfo *initInfo = [ALCNSObjectInitStrategy initInfoForClass:[self class] initSelector:_cmd];
     
     if (initInfo.initIMP == NULL) {
         struct objc_super superData = {self, class_getSuperclass([self class])};
@@ -45,7 +46,7 @@
     }
     
     logCreation(@"Triggering dependency injection in init");
-    [initInfo.context resolveDependencies:self];
+    [[Alchemic mainContext] resolveDependencies:self];
     
     return self;
 }

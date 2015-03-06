@@ -14,5 +14,4 @@
  */
 @interface ALCInitialisationStrategyInjector : NSObject<ALCInitialisationInjector>
 
-
 @end

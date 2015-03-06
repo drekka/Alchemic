@@ -8,9 +8,13 @@
 
 @import Foundation;
 
+@class ALCContext;
+
 /**
  Protocol for classes that manage the onjection of dependencies into other objects.
  */
-@protocol ALCObjectInjector <NSObject>
+@protocol ALCDependencyResolver <NSObject>
+
+-(void) resolveDependenciesInObject:(id) object usingContext:(ALCContext *) context;
 
 @end

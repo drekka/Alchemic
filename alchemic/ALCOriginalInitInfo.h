@@ -9,8 +9,6 @@
 
 @import Foundation;
 
-@class ALCContext;
-
 /**
  Storage for a replaced init method.
  @discussion Outlines where it came from and stores the original IMP.
@@ -19,8 +17,6 @@
 @property (nonatomic, assign, readonly) Class originalClass;
 @property (nonatomic, assign, readonly) SEL initSelector;
 @property (nonatomic, assign, readonly) IMP initIMP;
-@property (nonatomic, strong, readonly) ALCContext *context;
-
 
 /**
  Default initialisaer.
@@ -34,7 +30,6 @@
  */
 -(instancetype) initWithOriginalClass:(Class) originalClass
                          initSelector:(SEL) initSelector
-                              initIMP:(IMP) initIMP
-                          withContext:(ALCContext *) context;
+                              initIMP:(IMP) initIMP;
 
 @end

@@ -12,9 +12,7 @@
 @implementation ALCTestCase
 
 +(void)load {
-    [ALCLogger setLoggingSwitch:AlchemicLogCategoryRegistrations
-     & AlchemicLogCategoryRegistrations
-     & AlchemicLogCategoryClassProcessing];
+    [ALCLogger setLoggingSwitch:NSIntegerMax];
 }
 
 @end

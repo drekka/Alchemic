@@ -8,9 +8,22 @@
 
 #import "ALCSimpleObjectFactory.h"
 #import "ALCLogger.h"
+#import "ALCClassInfo.h"
+#import "ALCContext.h"
+
 #import <objc/runtime.h>
 
-@implementation ALCSimpleObjectFactory
+@implementation ALCSimpleObjectFactory {
+    __weak ALCContext *_context;
+}
+
+-(instancetype) initWithContext:(ALCContext *) context {
+    self = [super init];
+    if (self) {
+        _context = context;
+    }
+    return self;
+}
 
 -(id) createObjectFromClassInfo:(ALCClassInfo *) classInfo {
     logCreation(@"Creating singleton for class %s using init", class_getName(classInfo.forClass));

@@ -1,5 +1,5 @@
 //
-//  ALCUIViewControllerInitialisationStrategy.h
+//  ALCUIViewControllerInitWithCoderInitStrategy.h
 //  alchemic
 //
 //  Created by Derek Clarkson on 27/02/2015.
@@ -8,6 +8,6 @@
 
 #import "ALCAbstractInitialisationStrategy.h"
 
-@interface ALCUIViewControllerInitWithFrameInitialisationStrategy : ALCAbstractInitialisationStrategy
+@interface ALCUIViewControllerInitWithCoderStrategy : ALCAbstractInitialisationStrategy
 
 @end

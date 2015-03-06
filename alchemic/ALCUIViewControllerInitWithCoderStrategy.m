@@ -6,18 +6,21 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCUIViewControllerInitWithCoderInitStrategy.h"
+#import "ALCUIViewControllerInitWithCoderStrategy.h"
 
 @import UIKit;
 @import Foundation;
+
 #import <objc/runtime.h>
 #import <objc/message.h>
+
+#import "Alchemic.h"
 #import "ALCLogger.h"
 #import "ALCRuntimeFunctions.h"
 #import "ALCContext.h"
 #import "ALCOriginalInitInfo.h"
 
-@implementation ALCUIViewControllerInitWithCoderInitStrategy
+@implementation ALCUIViewControllerInitWithCoderStrategy
 
 -(BOOL) canWrapInitInClass:(Class) class {
     return class_decendsFromClass(class, [UIViewController class]);
@@ -34,7 +37,7 @@
 -(id) initWithCoderWrapper:(NSCoder *) aDecoder {
 
     // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCOriginalInitInfo *initInfo = [ALCUIViewControllerInitWithCoderInitStrategy initInfoForClass:[self class] initSelector:_cmd];
+    ALCOriginalInitInfo *initInfo = [ALCUIViewControllerInitWithCoderStrategy initInfoForClass:[self class] initSelector:_cmd];
     
     if (initInfo.initIMP == NULL) {
         struct objc_super superData = {self, class_getSuperclass([self class])};
@@ -44,7 +47,7 @@
     }
     
     logCreation(@"Triggering dependency injection in initWithCoder:");
-    [initInfo.context resolveDependencies:self];
+    [[Alchemic mainContext] resolveDependencies:self];
 
     return self;
 }

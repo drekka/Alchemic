@@ -12,14 +12,12 @@
 
 -(instancetype) initWithOriginalClass:(Class) originalClass
                          initSelector:(SEL) initSelector
-                              initIMP:(IMP) initIMP
-                          withContext:(ALCContext *) context {
+                              initIMP:(IMP) initIMP {
     self = [super init];
     if (self) {
         _originalClass = originalClass;
         _initSelector = initSelector;
         _initIMP = initIMP;
-        _context = context;
     }
     return self;
 }
