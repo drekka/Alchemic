@@ -14,6 +14,12 @@
 
 @property (nonatomic, assign) SEL constructor;
 
+@property (nonatomic, strong, readonly) NSArray *injectionPoints;
+
+@property (nonatomic, assign) BOOL isSingleton;
+
 -(instancetype) initWithClass:(Class) forClass;
+
+-(void) addInjectionPoint:(NSString *) injectionPoint;
 
 @end

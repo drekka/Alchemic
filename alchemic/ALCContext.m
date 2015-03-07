@@ -36,37 +36,31 @@
     // List of factories for creating objects.
     NSArray *_objectFactories;
     
-    // Registry of singletons.
-    NSArray *_singletonRegistry;
-    
     // Storage for objects created by alchemic.
     NSMutableDictionary *_dependencyStore;
     
     // Registry of classes that have registered dependencies.
-    NSMutableDictionary *_injectionRegistry;
-    
+    NSMutableDictionary *_classRegistry;
     
 }
 
 -(instancetype) init {
     self = [super init];
     if (self) {
-
-        _initialisationStrategies = [[NSArray alloc] init];
-        _objectFactories = [[NSArray alloc] init];
-        _dependencyResolvers = [[NSArray alloc] init];
         
-        _injectionRegistry = [[NSMutableDictionary alloc] init];
-        _dependencyStore = [[NSMutableDictionary alloc] init];
-        _singletonRegistry = [[NSArray alloc] init];
-
+        _initialisationStrategies = @[];
         [self addInitialisationStrategy:[[ALCNSObjectInitStrategy alloc] init]];
         [self addInitialisationStrategy:[[ALCUIViewControllerInitWithCoderStrategy alloc] init]];
         [self addInitialisationStrategy:[[ALCUIViewControllerInitWithFrameStrategy alloc] init]];
         
+        _objectFactories = @[];
         [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
 
+        _dependencyResolvers = @[];
         [self addDependencyResolver:[[ALCSimpleDependencyResolver alloc] init]];
+
+        _classRegistry = [[NSMutableDictionary alloc] init];
+        _dependencyStore = [[NSMutableDictionary alloc] init];
 
     }
     return self;
@@ -76,11 +70,11 @@
     
     // Set defaults.
     if (self.runtimeInjector == nil) {
-        self.runtimeInjector = [[ALCInitialisationStrategyInjector alloc] init];
+        self.runtimeInjector = [[ALCInitialisationStrategyInjector alloc] initWithStrategies:_initialisationStrategies];
     }
     
-    // Inject wrappers into the classes that have registered for dependency injection.
-    [_runtimeInjector executeStrategies:_injectionRegistry.allKeys withContext:self];
+    // Inject wrappers into the singletons that have registered for dependency injection.
+    [_runtimeInjector executeStrategiesOnClasses:_classRegistry withContext:self];
     
     // Now initiate any found singletons.
     [self startSingletons];
@@ -90,7 +84,13 @@
 -(void) startSingletons {
     
     logCreation(@"Creating singletons");
-    [_singletonRegistry enumerateObjectsUsingBlock:^(ALCClassInfo *classInfo, NSUInteger classInfoIdx, BOOL *stopReadingSingletons){
+    [_classRegistry enumerateKeysAndObjectsUsingBlock:^(Class classKey, ALCClassInfo *classInfo, BOOL *stopReadingSingletons) {
+        
+        if (!classInfo.isSingleton) {
+            return;
+        }
+        
+        logCreation(@"Creating singleton %s", class_getName(classInfo.forClass));
         
         __block id createdObject = nil;
         [_objectFactories enumerateObjectsUsingBlock:^(id<ALCObjectFactory> objectFactory, NSUInteger factoryIdx, BOOL *stopCheckingFactories) {
@@ -122,21 +122,24 @@
 
 -(void) registerSingleton:(Class) singletonClass {
     logRegistration(@"Registering singleton: %@", NSStringFromClass(singletonClass));
-    _singletonRegistry = [_singletonRegistry arrayByAddingObject:[[ALCClassInfo alloc] initWithClass:singletonClass]];
+    ALCClassInfo *info = [self infoForClass:singletonClass];
+    info.isSingleton = YES;
 }
 
 -(void) registerInjection:(NSString *) inj inClass:(Class) class {
-    
+    ALCClassInfo *info = [self infoForClass:class];
     NSString *injectionPoint = [ALCRuntime findVariableInClass:class forInjectionPoint:[inj UTF8String]];
-    
-    NSMutableArray *injectionPoints = [_injectionRegistry objectForKey:class];
-    if (injectionPoints == nil) {
-        injectionPoints = [[NSMutableArray alloc] init];
-        _injectionRegistry[(id<NSCopying>)class] = injectionPoints;
-    }
+    [info addInjectionPoint:injectionPoint];
     logRegistration(@"Registering injection %@.%@", NSStringFromClass(class), injectionPoint);
-    [injectionPoints addObject:injectionPoint];
-    
+}
+
+-(ALCClassInfo *) infoForClass:(Class) forClass {
+    ALCClassInfo *info = _classRegistry[forClass];
+    if (info == nil) {
+        info = [[ALCClassInfo alloc] initWithClass:forClass];
+        _classRegistry[(id<NSCopying>) forClass] = info;
+    }
+    return info;
 }
 
 #pragma mark - Configuration

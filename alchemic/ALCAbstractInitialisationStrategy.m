@@ -38,7 +38,7 @@ static NSArray *_initIMPStorage;
     // First attempt to add a new init.
     SEL initSelector = self.initSelector;
     if (class_addMethod(class, initSelector, wrapperIMP, wrapperTypeEncoding)) {
-        logRegistration(@"Added new init to %s", class_getName(class));
+        logRegistration(@"Added new %s selector to %s", sel_getName(initSelector), class_getName(class));
         [self storeInitFromClass:class
                     initSelector:initSelector
                          initIMP:NULL
@@ -47,7 +47,7 @@ static NSArray *_initIMPStorage;
     }
     
     // There must already be an init, so now we replace it.
-    logRegistration(@"Replacing init method %s::%s", class_getName(class), sel_getName(initSelector));
+    logRegistration(@"Wrapping current %2$s method in %s::%s", class_getName(class), sel_getName(initSelector));
     Method initMethod = class_getInstanceMethod(class, initSelector);
     IMP originalImp = method_setImplementation(initMethod, wrapperIMP);
     

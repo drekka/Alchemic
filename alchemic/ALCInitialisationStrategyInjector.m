@@ -28,34 +28,28 @@ static BOOL injected = NO;
     [self resetRuntime];
 }
 
--(instancetype) init {
+-(instancetype) initWithStrategies:(NSArray *) strategies {
     self = [super init];
     if (self) {
-        _initialisationStrategies = @[];
+        _initialisationStrategies = strategies;
     }
     return self;
 }
 
--(void) addInitWrapperStrategy:(id<ALCInitialisationStrategy>) wrapperInitialisationStrategy {
-    logConfig(@"Adding strategy: %s", class_getName([wrapperInitialisationStrategy class]));
-    _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:wrapperInitialisationStrategy];
-}
+-(void) executeStrategiesOnClasses:(NSDictionary *) classRegistrations withContext:(ALCContext *) context {
 
--(void) executeStrategies:(NSArray *)classes withContext:(ALCContext *)context {
-    
     if (injected) {
         logObjectResolving(@"Wrappers already injected into classes");
         return;
     }
 
     // Reduce the list to just root classes.
-    NSArray *rootClasses = [self findRootClassesInArray:classes];
+    NSArray *rootClasses = [self findRootClassesInArray:[classRegistrations allKeys]];
 
     // Now hook into the classes.
     for (Class class in rootClasses) {
         for (id<ALCInitialisationStrategy, ALCInitialisationStrategyManagement> initStrategy in [_initialisationStrategies reverseObjectEnumerator]) {
             if ([initStrategy canWrapInitInClass:class]) {
-                logObjectResolving(@"%s wrapping init in %s", class_getName([initStrategy class]), class_getName(class));
                 [initStrategy wrapInitInClass:class withContext:context];
             }
         }
@@ -83,6 +77,7 @@ static BOOL injected = NO;
         }
         
         // The class must be a root class with no parents in the list.
+        logRegistration(@"Adding root class: %s", class_getName(currentClass));
         [rootClasses addObject:currentClass];
         
     }];

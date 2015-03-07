@@ -18,14 +18,16 @@
 @protocol ALCInitialisationInjector <NSObject>
 
 /**
- Adds a custom strategy to the list of initialisation strategies.
+ Main initialiser.
+ 
+ @param strategies A list of strategies to employ.
  */
--(void) addInitWrapperStrategy:(id<ALCInitialisationStrategy>) wrapperInitialisationStrategy;
+-(instancetype) initWithStrategies:(NSArray *) strategies;
 
 /**
  Inject hooks into the runtime.
  */
--(void) executeStrategies:(NSArray *) classes withContext:(ALCContext *) context;
+-(void) executeStrategiesOnClasses:(NSDictionary *) classRegistrations withContext:(ALCContext *) context;
 
 /**
  Reset the runtime back to it's original state.
