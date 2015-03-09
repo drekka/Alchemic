@@ -92,7 +92,7 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
     free(classMethods);
 }
 
-+(NSString *) findVariableInClass:(Class) class forInjectionPoint:(const char *) inj {
++(Ivar) findVariableInClass:(Class) class forInjectionPoint:(const char *) inj {
     Ivar var = class_getInstanceVariable(class, inj);
     if (var == NULL) {
         // It may be a property we have been passed so look for a '_' var.
@@ -110,7 +110,7 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
             }
         }
     }
-    return [NSString stringWithUTF8String:ivar_getName(var)];
+    return var;
 }
 
 @end

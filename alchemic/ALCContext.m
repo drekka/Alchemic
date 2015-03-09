@@ -13,10 +13,13 @@
 #import "ALCLogger.h"
 #import "ALCRuntime.h"
 
+#import "ALCObjectStore.h"
+
 #import "ALCClassInfo.h"
 #import "ALCInitialisationStrategyInjector.h"
 
 #import "ALCSimpleDependencyResolver.h"
+#import "ALCDependencyInfo.h"
 
 #import "ALCObjectFactory.h"
 #import "ALCSimpleObjectFactory.h"
@@ -37,7 +40,7 @@
     NSArray *_objectFactories;
     
     // Storage for objects created by alchemic.
-    NSMutableDictionary *_dependencyStore;
+    ALCObjectStore *_objectStore;
     
     // Registry of classes that have registered dependencies.
     NSMutableDictionary *_classRegistry;
@@ -55,13 +58,13 @@
         
         _objectFactories = @[];
         [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
-
+        
         _dependencyResolvers = @[];
-        [self addDependencyResolver:[[ALCSimpleDependencyResolver alloc] init]];
-
+        [self addDependencyResolver:[[ALCSimpleDependencyResolver alloc] initWithContext:self]];
+        
         _classRegistry = [[NSMutableDictionary alloc] init];
-        _dependencyStore = [[NSMutableDictionary alloc] init];
-
+        _objectStore = [[ALCObjectStore alloc] init];
+        
     }
     return self;
 }
@@ -107,7 +110,7 @@
                                          userInfo:nil];
         }
         
-        _dependencyStore[(id<NSCopying>)classInfo.forClass] = createdObject;
+        [_objectStore addObject: createdObject];
     }];
 }
 
@@ -128,9 +131,9 @@
 
 -(void) registerInjection:(NSString *) inj inClass:(Class) class {
     ALCClassInfo *info = [self infoForClass:class];
-    NSString *injectionPoint = [ALCRuntime findVariableInClass:class forInjectionPoint:[inj UTF8String]];
-    [info addInjectionPoint:injectionPoint];
-    logRegistration(@"Registering injection %@.%@", NSStringFromClass(class), injectionPoint);
+    Ivar variable = [ALCRuntime findVariableInClass:class forInjectionPoint:[inj UTF8String]];
+    ALCDependencyInfo *dependencyInfo = [[ALCDependencyInfo alloc] initWithVariable:variable inClass:class];
+    [info addDependency:dependencyInfo];
 }
 
 -(ALCClassInfo *) infoForClass:(Class) forClass {
@@ -162,7 +165,19 @@
 #pragma mark - Dependency resolution
 
 -(void) resolveDependencies:(id) object {
-    logObjectResolving(@"Resolving dependencies in an instance of %s", class_getName([object class]));
+    
+    Class objClass = [object class];
+    ALCClassInfo *info = [self infoForClass:objClass];
+
+    logObjectResolving(@"Resolving dependencies in an instance of %s", class_getName(objClass));
+    [info.dependencies enumerateObjectsUsingBlock:^(ALCDependencyInfo *dependencyInfo, NSUInteger idx, BOOL *stop) {
+        for (id<ALCDependencyResolver> resolver in [_dependencyResolvers reverseObjectEnumerator]) {
+            if ([resolver resolveDependency:dependencyInfo inObject:object withObjectStore:_objectStore]) {
+                break;
+            }
+        }
+    }];
+
 }
 
 @end

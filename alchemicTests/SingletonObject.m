@@ -9,12 +9,16 @@
 #import "SingletonObject.h"
 #import "Alchemic.h"
 #import "InjectableObject.h"
+#import "InjectableProtocol.h"
 
 @implementation SingletonObject {
+    id _idObj;
     InjectableObject *_injObj;
+    id<InjectableProtocol> _injProto;
+    NSObject<InjectableProtocol> *_injObjProto;
 }
 
 registerSingleton();
-inject(@"_injObj")
+inject(@"_injObj", @"_injProto", @"_injObjProto", @"_idObj")
 
 @end

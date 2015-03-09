@@ -12,7 +12,7 @@
 BOOL class_decendsFromClass(Class child, Class parent) {
     Class nextParent = child;
     while(nextParent) {
-        if(nextParent == parent) {
+        if (nextParent == parent) {
             return YES;
         }
         nextParent = class_getSuperclass(nextParent);

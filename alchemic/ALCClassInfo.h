@@ -8,18 +8,20 @@
 
 @import Foundation;
 
+@class ALCDependencyInfo;
+
 @interface ALCClassInfo : NSObject
 
 @property (nonatomic, assign, readonly) Class forClass;
 
 @property (nonatomic, assign) SEL constructor;
 
-@property (nonatomic, strong, readonly) NSArray *injectionPoints;
+@property (nonatomic, strong, readonly) NSArray *dependencies;
 
 @property (nonatomic, assign) BOOL isSingleton;
 
 -(instancetype) initWithClass:(Class) forClass;
 
--(void) addInjectionPoint:(NSString *) injectionPoint;
+-(void) addDependency:(ALCDependencyInfo *) dependency;
 
 @end

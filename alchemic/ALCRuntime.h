@@ -7,11 +7,13 @@
 //
 
 @import Foundation;
+#import <objc/runtime.h>
 
 @interface ALCRuntime : NSObject
 
 /**
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
+ @discussion Once found, the method is called to register the class and variable.
  */
 +(void) scanForMacros;
 
@@ -23,10 +25,10 @@
  @param class the class to look at.
  @param inj   The name of the variable.
  
- @return the actual name of the variable.
+ @return the Ivar for the variable.
  @throw an exception if no matching variable is found.
  */
-+(NSString *) findVariableInClass:(Class) class forInjectionPoint:(const char *) inj;
++(Ivar) findVariableInClass:(Class) class forInjectionPoint:(const char *) inj;
 
 
 @end

@@ -8,6 +8,8 @@
 
 @import UIKit;
 
-@interface AViewController : UIViewController
+#import "InjectableProtocol.h"
+
+@interface AViewController : UIViewController<InjectableProtocol>
 
 @end

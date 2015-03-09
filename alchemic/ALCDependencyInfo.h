@@ -8,13 +8,21 @@
 
 @import Foundation;
 
+#import <objc/runtime.h>
+
 /**
  Container object for information about an injection.
  */
 @interface ALCDependencyInfo : NSObject
 
-@property (nonatomic, assign) Class targetClass;
+@property (nonatomic, assign, readonly) Ivar variable;
+@property (nonatomic, assign, readonly) Class inClass;
 
-@property (nonatomic, strong) NSString *targetVariable;
+@property (nonatomic, strong, readonly) NSString *variableTypeEncoding;
+
+@property (nonatomic, assign, readonly) Class variableClass;
+@property (nonatomic, strong, readonly) NSArray *variableProtocols;
+
+-(instancetype) initWithVariable:(Ivar) variable inClass:(Class) inClass;
 
 @end

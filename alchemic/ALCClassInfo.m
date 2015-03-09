@@ -8,20 +8,22 @@
 
 #import "ALCClassInfo.h"
 
+@class ALCDependencyInfo;
+
 @implementation ALCClassInfo
 
 -(instancetype) initWithClass:(Class) forClass {
     self = [super init];
     if (self) {
         _forClass = forClass;
-        _injectionPoints = @[];
+        _dependencies = @[];
         self.constructor = @selector(init);
     }
     return self;
 }
 
--(void) addInjectionPoint:(NSString *) injectionPoint {
-    _injectionPoints = [_injectionPoints arrayByAddingObject:injectionPoint];
+-(void) addDependency:(ALCDependencyInfo *)dependency {
+    _dependencies = [_dependencies arrayByAddingObject:dependency];
 }
 
 

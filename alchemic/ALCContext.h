@@ -43,7 +43,7 @@
 -(void) addDependencyResolver:(id<ALCDependencyResolver>) dependencyResolver;
 
 /**
- Adds a ALCObjectFactory to the list of object factories. Factories are checked in reverse order. The last registered object factory is the one asked first factory asked for an object.
+ Adds a ALCObjectFactory to the list of object factories. Factories are checked in reverse order. The last registered object factory is the one asked first for an object.
  */
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory;
 
@@ -71,6 +71,14 @@
  @param singletonClass the class
  */
 -(void) registerSingleton:(Class) singletonClass;
+
+/**
+ Returns the known info for a class.
+ @discussion This includes such things as the main constructor, registered dependencies, whether it's a singleton etc.
+ @param forClass the class we want the info for.
+ @return an instance of ALCClassInfo.
+ */
+-(ALCClassInfo *) infoForClass:(Class) forClass;
 
 /**
  *  Registers injections required by the current class.

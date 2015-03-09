@@ -23,7 +23,7 @@
  
  @return an instance of the factory.
  */
--(instancetype) initWithContext:(ALCContext *) context;
+-(instancetype) initWithContext:(__weak ALCContext *) context;
 
 /**
  Called when the context needs an object to be created.

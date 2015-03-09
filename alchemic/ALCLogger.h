@@ -14,22 +14,10 @@
  Logging levels.
  */
 typedef NS_OPTIONS(NSUInteger, AlchemicLogCategory){
-    /**
-     Logging of object creation
-     */
-    AlchemicLogCategoryCreation,
-    /**
-     Logging of registration of classes and injection points.
-     */
-    AlchemicLogCategoryRegistrations,
-    /**
-     Logging around processing of classes.
-     */
-    AlchemicLogCategoryObjectResolving,
-    /**
-     Logs the setup of Alchemic.
-     */
-    AlchemicLogCategoryConfiguration
+    AlchemicLogCategoryCreation         = 1 << 0,
+    AlchemicLogCategoryRegistrations    = 1 << 1,
+    AlchemicLogCategoryObjectResolving  = 1 << 2,
+    AlchemicLogCategoryConfiguration    = 1 << 3
     
 };
 
