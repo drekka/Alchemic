@@ -19,7 +19,7 @@ static NSCharacterSet *_objectTypeDelims;
         _objectTypeDelims = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
         _variable = variable;
         _inClass = inClass;
-        _variableProtocols = @[];
+        _variableProtocols = [[NSMutableArray alloc] init];
         [self storeType];
     }
     return self;
@@ -29,7 +29,7 @@ static NSCharacterSet *_objectTypeDelims;
     // Get the type.
     const char *encoding = ivar_getTypeEncoding(_variable);
     _variableTypeEncoding = [NSString stringWithCString:encoding encoding:NSUTF8StringEncoding];
-    logRegistration(@"Dependency info for %s::%s [%@]", class_getName(_inClass), ivar_getName(_variable), _variableTypeEncoding);
+    logRegistration(@"Type encoding for %s::%s => %@", class_getName(_inClass), ivar_getName(_variable), _variableTypeEncoding);
     
     if ([_variableTypeEncoding hasPrefix:@"@"]) {
         
@@ -46,7 +46,7 @@ static NSCharacterSet *_objectTypeDelims;
             // Now any protocols.
             for (int i = 3; i < [defs count]; i++) {
                 if ([defs[i] length] > 0) {
-                    _variableProtocols = [_variableProtocols arrayByAddingObject:defs[i]];
+                    [(NSMutableArray *)_variableProtocols addObject:NSProtocolFromString(defs[i])];
                 }
             }
         }

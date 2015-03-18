@@ -11,73 +11,98 @@
 #import <objc/runtime.h>
 
 #import "ALCLogger.h"
+#import "ALCObjectProxy.h"
+#import "ALCClassInfo.h"
+#import "ALCRuntime.h"
+#import "ALCRuntimeFunctions.h"
 
 @implementation ALCObjectStore {
-    NSMutableDictionary *_byClass;
-    NSMutableDictionary *_byProtocol;
+    NSMutableArray *_objects;
+    NSMutableDictionary *_objectsByName;
+    __weak ALCContext *_context;
 }
 
--(instancetype) init {
+#pragma mark - Lifecycle
+
+-(instancetype) initWithContext:(__weak ALCContext *) context {
     self = [super init];
     if (self) {
-        _byClass = [[NSMutableDictionary alloc] init];
-        _byProtocol = [[NSMutableDictionary alloc] init];
+        _context = context;
+        _objects = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
--(void) addObject:(id) object {
-
-    Class objClass = [object class];
-    
-    // Add to the list of objects for the class.
-    NSArray *objs = _byClass[objClass];
-    if (objs == nil) {
-        objs = @[];
-        _byClass[(id<NSCopying>)objClass] = objs;
-    }
-    logObjectResolving(@"Object added to store with class %s", class_getName(objClass));
-    _byClass[(id<NSCopying>)objClass] = [objs arrayByAddingObject:object];
-    
-    // Find the protocols for the object.
-    unsigned int nbrProtocols;
-    __unsafe_unretained Protocol **protocols = class_copyProtocolList(objClass, &nbrProtocols);
-    Protocol *protocol;
-    for (size_t idx = 0; idx < nbrProtocols; ++idx) {
-        protocol = protocols[idx];
-        logObjectResolving(@"Object added with protocol %s", protocol_getName(protocol));
-
-        // Add the protocol.
-        NSString *protocolName = NSStringFromProtocol(protocol);
-        NSArray *objByProtocol = _byProtocol[protocolName];
-        if (objByProtocol == nil) {
-            objByProtocol = @[];
-            _byProtocol[protocolName] = objByProtocol;
+-(void) instantiateSingletons {
+    [_objects enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj class] == [ALCObjectProxy class]) {
+            ALCObjectProxy *proxy = (ALCObjectProxy *) obj;
+            if (proxy.classInfo.isSingleton) {
+                [proxy instantiate];
+            }
         }
-        _byProtocol[protocolName] = [objByProtocol arrayByAddingObject:object];
-        
-    }
-    
+    }];
 }
+
+#pragma mark - Adding objects
+
+-(void) addLazyInstantionForClass:(ALCClassInfo *) classInfo {
+    [self addLazyInstantionForClass:classInfo withName:NSStringFromClass([classInfo.forClass class])];
+}
+
+-(void) addLazyInstantionForClass:(ALCClassInfo *) classInfo withName:(NSString *) name {
+    ALCObjectProxy *proxy = [[ALCObjectProxy alloc] initWithFutureObjectInfo:classInfo context:_context];
+    [self addObject:proxy withName:name];
+}
+
+-(void) addObject:(id) object {
+    [self addObject:object withName:NSStringFromClass([object class])];
+}
+
+-(void) addObject:(id) object withName:(NSString *)name {
+    
+    [_objects addObject:object];
+    
+    // Find the name list for the object.
+    NSMutableArray *objectList = _objectsByName[name];
+    if (objectList == nil) {
+        objectList = [[NSMutableArray alloc] init];
+        _objectsByName[name] = objectList;
+    }
+    [objectList addObject:object];
+}
+
+#pragma mark - Searching for objects
 
 -(NSArray *) objectsOfClass:(Class) aClass {
-    return nil;
+    
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    Class proxyClass = [ALCObjectProxy class];
+    
+    for (id object in _objects) {
+        
+        // Work out the class of the object we are dealing with.
+        Class objClass = [object class];
+        if (objClass == proxyClass) {
+            objClass = ((ALCObjectProxy *)object).classInfo.forClass;
+        }
+
+        if (class_decendsFromClass(objClass, aClass)) {
+            [results addObject:object];
+        }
+        
+    };
+    
+    return [results count] == 0 ? nil : results;
 }
+
+-(NSArray *) objectsWithName:(NSString *) name {
+    return _objectsByName[name];
+}
+
 
 -(NSArray *) objectsWithProtocol:(Protocol *) protocol {
-    return nil;
-}
-
--(NSArray *) objectsWithSelector:(SEL) selector {
-    return nil;
-}
-
-+(NSArray *) objectsInArray:(NSArray *) array withProtocol:(Protocol *) protocol {
-    return nil;
-}
-
-+(NSArray *) objectsInArray:(NSArray *) array withSelector:(SEL) selector {
-    return nil;
+    return [ALCRuntime filterObjects:_objects forProtocols:@[protocol]];
 }
 
 @end

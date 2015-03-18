@@ -17,7 +17,8 @@
     NSString *_stringIVar;
 }
 
-inject(@"_stringIVar");
+registerSingleton();
+//inject(@"_stringIVar");
 
 -(instancetype) init {
     self = [super init];

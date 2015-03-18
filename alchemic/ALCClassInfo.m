@@ -16,15 +16,14 @@
     self = [super init];
     if (self) {
         _forClass = forClass;
-        _dependencies = @[];
+        _dependencies = [[NSMutableArray alloc] init];
         self.constructor = @selector(init);
     }
     return self;
 }
 
 -(void) addDependency:(ALCDependencyInfo *)dependency {
-    _dependencies = [_dependencies arrayByAddingObject:dependency];
+    [(NSMutableArray *)_dependencies addObject:dependency];
 }
-
 
 @end

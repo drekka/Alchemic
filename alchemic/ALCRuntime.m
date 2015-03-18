@@ -20,6 +20,8 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
 
 +(void) scanForMacros {
     
+    logRuntime(@"Scanning for alchemic methods in runtime");
+    
     // Find out how many classes there are in total.
     int numClasses = objc_getClassList(NULL, 0);
     
@@ -85,6 +87,7 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
         if (strncmp(methodName, toCharPointer(ALCHEMIC_METHOD_PREFIX), _prefixLength) != 0) {
             continue;
         }
+        logRuntime(@"Found alchemic method %s::%s", class_getName(class), methodName);
         ((void (*)(id, SEL))objc_msgSend)(class, sel); // Note cast because of XCode 6
         
     }
@@ -92,7 +95,7 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
     free(classMethods);
 }
 
-+(Ivar) findVariableInClass:(Class) class forInjectionPoint:(const char *) inj {
++(Ivar) variableInClass:(Class) class forInjectionPoint:(const char *) inj {
     Ivar var = class_getInstanceVariable(class, inj);
     if (var == NULL) {
         // It may be a property we have been passed so look for a '_' var.
@@ -111,6 +114,33 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
         }
     }
     return var;
+}
+
++(NSArray *) filterObjects:(NSArray *) objects forProtocols:(NSArray *) protocols {
+
+    logObjectResolving(@"Filtering objects using protocols");
+
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    BOOL conformsToProtocol;
+    
+    for (id object in objects) {
+        
+        Class objClass = [object class];
+        conformsToProtocol = YES;
+        
+        for (Protocol *protocol in protocols) {
+            if (!class_conformsToProtocol(objClass, protocol)) {
+                conformsToProtocol = NO;
+                break;
+            }
+        }
+        
+        if (conformsToProtocol) {
+            [results addObject:object];
+        }
+        
+    }
+    return [results count] == 0 ? nil: results;
 }
 
 @end

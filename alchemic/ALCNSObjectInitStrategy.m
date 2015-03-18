@@ -45,7 +45,7 @@
         self = ((id (*)(id, SEL))initInfo.initIMP)(self, initInfo.initSelector);
     }
     
-    logCreation(@"Triggering dependency injection in init");
+    logRuntime(@"Triggering dependency injection in init");
     [[Alchemic mainContext] resolveDependencies:self];
     
     return self;

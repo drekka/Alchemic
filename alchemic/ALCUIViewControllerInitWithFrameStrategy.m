@@ -45,7 +45,7 @@
         self = ((id (*)(id, SEL, CGRect))initInfo.initIMP)(self, initInfo.initSelector, aFrame);
     }
     
-    logCreation(@"Triggering dependency injection in initWithFrame:");
+    logRuntime(@"Triggering dependency injection in initWithFrame:");
     [[Alchemic mainContext] resolveDependencies:self];
 
     return self;

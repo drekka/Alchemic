@@ -19,6 +19,11 @@
 }
 
 registerSingleton();
-inject(@"_injObj", @"_injProto", @"_injObjProto", @"_idObj")
+inject(@"_injObj")
+//inject(@"_injObj", @"_injProto", @"_injObjProto", @"_idObj")
+
+-(void) didResolveDependencies {
+    NSLog(@"REsolved!");
+}
 
 @end

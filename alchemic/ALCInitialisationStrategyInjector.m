@@ -39,7 +39,7 @@ static BOOL injected = NO;
 -(void) executeStrategiesOnClasses:(NSDictionary *) classRegistrations withContext:(ALCContext *) context {
 
     if (injected) {
-        logObjectResolving(@"Wrappers already injected into classes");
+        logRuntime(@"Wrappers already injected into classes");
         return;
     }
 
@@ -70,14 +70,14 @@ static BOOL injected = NO;
             
             // If the parent is in the list of injectable classes then end checking.
             if ([rootClasses containsObject:parent]) {
-                logObjectResolving(@"Parent class (%s) of %s scheduled for initialiser injection", class_getName(parent), class_getName(currentClass));
+                logRuntime(@"Parent class (%s) of %s scheduled for initialiser injection", class_getName(parent), class_getName(currentClass));
                 return;
             }
             parent = class_getSuperclass(parent);
         }
         
         // The class must be a root class with no parents in the list.
-        logRegistration(@"Adding root class: %s", class_getName(currentClass));
+        logRuntime(@"Adding root class: %s", class_getName(currentClass));
         [rootClasses addObject:currentClass];
         
     }];

@@ -27,12 +27,14 @@
 -(instancetype) initWithContext:(__weak ALCContext *) context;
 
 /**
- Called to resolve dependencies in an object.
+ Called to resolve a dependency in an object.
+ 
  @param dependency the dependency info that specifies what needs to be resolved.
  @param object the object that needs the dependency.
  @param objectStore a ALCObjectStore of available objects.
- @return YES if all dependencies have been resolved. This stops the process of calling dependency resolvers.
+ 
+ @return a list of candidate objects or nil if no met the criteria.
  */
--(BOOL) resolveDependency:(ALCDependencyInfo *) dependency inObject:(id) object withObjectStore:(ALCObjectStore *) objectStore;
+-(NSArray *) resolveDependency:(ALCDependencyInfo *) dependency inObject:(id) object withObjectStore:(ALCObjectStore *) objectStore;
 
 @end

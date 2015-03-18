@@ -6,10 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-@import Foundation;
+#import "ALCAbstractDependencyResolver.h"
 
-#import "ALCDependencyResolver.h"
-
-@interface ALCSimpleDependencyResolver : NSObject<ALCDependencyResolver>
+@interface ALCClassDependencyResolver : ALCAbstractDependencyResolver
 
 @end

@@ -7,7 +7,8 @@
 //
 
 @import Foundation;
+#import "AlchemicAware.h"
 
-@interface SingletonObject : NSObject
+@interface SingletonObject : NSObject<AlchemicAware>
 
 @end

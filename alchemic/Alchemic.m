@@ -12,6 +12,7 @@
 
 @implementation Alchemic
 
+
 static __strong ALCContext *__mainContext;
 
 +(ALCContext *) mainContext {
@@ -19,18 +20,15 @@ static __strong ALCContext *__mainContext;
 }
 
 +(void) load {
-    
+#ifndef ALCHEMIC_NO_AUTOSTART
     @autoreleasepool {
-        
-        // Initiate the main context.
-        __mainContext = [[ALCContext alloc] init];
-        
-        // Perform a scan of the runtime for injectable classes.
-        dispatch_async(dispatch_queue_create("Class scan", NULL), ^{
+        dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
+            __mainContext = [[ALCContext alloc] init];
             [ALCRuntime scanForMacros];
             [__mainContext start];
         });
     }
+#endif
 }
 
 @end

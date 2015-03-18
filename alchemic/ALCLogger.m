@@ -48,6 +48,8 @@ static int __alchemicLogOptions = 0;
     if (category == AlchemicLogCategoryCreation) return "Creation";
     if (category == AlchemicLogCategoryObjectResolving) return "Resolving";
     if (category == AlchemicLogCategoryConfiguration) return "Config";
+    if (category == AlchemicLogCategoryProxies) return "Proxies";
+    if (category == AlchemicLogCategoryRuntime) return "Runtime";
     return "Registration";
 }
 

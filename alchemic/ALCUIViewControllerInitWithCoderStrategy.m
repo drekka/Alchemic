@@ -46,7 +46,7 @@
         self = ((id (*)(id, SEL, NSCoder *))initInfo.initIMP)(self, initInfo.initSelector, aDecoder);
     }
     
-    logCreation(@"Triggering dependency injection in initWithCoder:");
+    logRuntime(@"Triggering dependency injection in initWithCoder:");
     [[Alchemic mainContext] resolveDependencies:self];
 
     return self;
