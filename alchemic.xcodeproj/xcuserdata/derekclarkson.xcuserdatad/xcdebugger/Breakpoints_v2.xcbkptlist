@@ -89,13 +89,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "alchemic/ALCClassDependencyResolver.m"
-            timestampString = "448371462.871979"
+            filePath = "alchemic/ALCRuntime.m"
+            timestampString = "448199272.22159"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "-resolveDependency:inObject:withObjectStore:"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "+scanForMacros"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -105,13 +105,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "alchemic/ALCRuntime.m"
-            timestampString = "448199272.22159"
+            filePath = "alchemic/ALCContext.m"
+            timestampString = "448374382.763384"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
-            landmarkName = "+scanForMacros"
+            startingLineNumber = "187"
+            endingLineNumber = "187"
+            landmarkName = "-resolveDependencies:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "alchemic/NSObject+Alchemic.m"
+            timestampString = "448454262.292474"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "-resolveProxy:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

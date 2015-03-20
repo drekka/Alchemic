@@ -11,6 +11,8 @@
 #import "ALCDependencyResolver.h"
 #import "ALCInitialisationInjector.h"
 #import "ALCObjectFactory.h"
+#import "ALCObjectInjector.h"
+@class ALCClassInfo;
 
 @interface ALCContext : NSObject
 
@@ -33,9 +35,17 @@
 @property (nonatomic, strong) id<ALCInitialisationInjector> runtimeInjector;
 
 /**
- Adds an additional initialisation strategy to the built in ones. Strategies are run in reverse order from last registered through to the builtin ones.
+ Adds an additional initialisation strategy to the built in ones.
+ Strategies are run in reverse order from last registered through to the builtin ones.
  */
 -(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy;
+
+/**
+ Adds an onjector to the list of injectors.
+ These are run in reverse order with the last registered getting the first chance to make an injection.
+ @param objectInjector <#injector description#>
+ */
+-(void) addObjectInjector:(id<ALCObjectInjector>) objectInjector;
 
 /**
  Adds a ALCDependencyResolver to the list of resolvers. Resolvers are checked in reverse order so the last added will be checked first.

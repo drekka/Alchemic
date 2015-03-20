@@ -28,7 +28,6 @@
         return nil;
     }
     
-    logObjectResolving(@"Retrieving objects of class %s", class_getName(dependency.variableClass));
     NSArray *objs = [objectStore objectsOfClass:dependency.variableClass];
     if ([objs count] == 0) {
         logObjectResolving(@"No objects found");

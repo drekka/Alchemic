@@ -27,7 +27,7 @@
 
 -(void) instantiate {
     if (_proxiedObject == nil) {
-        logProxies(@"Attempting to instantiate a %s", class_getName(_classInfo.forClass));
+        logProxies(@"Asking context for a %s", class_getName(_classInfo.forClass));
         _proxiedObject = [_context objectForClassInfo:_classInfo];
         if (_proxiedObject == nil) {
             // A registered class that we don't know how to create.
@@ -35,7 +35,9 @@
                                            reason:[NSString stringWithFormat:@"Failed to create a instance of %s", class_getName(_classInfo.forClass)]
                                          userInfo:nil];
         }
+        return;
     }
+    logProxies(@"%s already instantiated", class_getName(_classInfo.forClass));
 }
 
 -(id) proxiedObject {

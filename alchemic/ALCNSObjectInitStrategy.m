@@ -36,16 +36,17 @@
 -(id) initWrapper {
     
     // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCOriginalInitInfo *initInfo = [ALCNSObjectInitStrategy initInfoForClass:[self class] initSelector:_cmd];
+    Class selfClass = [self class];
+    ALCOriginalInitInfo *initInfo = [ALCNSObjectInitStrategy initInfoForClass:selfClass initSelector:_cmd];
     
     if (initInfo.initIMP == NULL) {
-        struct objc_super superData = {self, class_getSuperclass([self class])};
+        struct objc_super superData = {self, class_getSuperclass(selfClass)};
         self = ((id (*)(struct objc_super *, SEL))objc_msgSendSuper)(&superData, @selector(init));
     } else {
         self = ((id (*)(id, SEL))initInfo.initIMP)(self, initInfo.initSelector);
     }
     
-    logRuntime(@"Triggering dependency injection in init");
+    logRuntime(@"Triggering dependency injection from %s::init", class_getName(selfClass));
     [[Alchemic mainContext] resolveDependencies:self];
     
     return self;

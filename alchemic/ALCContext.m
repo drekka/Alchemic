@@ -20,6 +20,9 @@
 #import "ALCClassInfo.h"
 #import "ALCInitialisationStrategyInjector.h"
 
+#import "ALCObjectInjector.h"
+#import "ALCSimpleObjectInjector.h"
+
 #import "ALCClassDependencyResolver.h"
 #import "ALCProtocolDependencyResolver.h"
 #import "ALCDependencyInfo.h"
@@ -32,22 +35,12 @@
 #import "ALCUIViewControllerInitWithFrameStrategy.h"
 
 @implementation ALCContext {
-    
-    // List of strategies used to inject init methods.
     NSMutableArray *_initialisationStrategies;
-    
-    // Resolvers.
     NSMutableArray *_dependencyResolvers;
-    
-    // List of factories for creating objects.
+    NSMutableArray *_objectInjectors;
     NSMutableArray *_objectFactories;
-    
-    // Storage for objects created by alchemic.
     ALCObjectStore *_objectStore;
-    
-    // Registry of classes that have registered dependencies.
     NSMutableDictionary *_classRegistry;
-    
 }
 
 -(instancetype) init {
@@ -63,7 +56,10 @@
         
         _objectFactories = [[NSMutableArray alloc] init];
         [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
-        
+
+        _objectInjectors = [[NSMutableArray alloc] init];
+        [self addObjectInjector:[[ALCSimpleObjectInjector alloc] init]];
+
         _dependencyResolvers = [[NSMutableArray alloc] init];
         [self addDependencyResolver:[[ALCProtocolDependencyResolver alloc] initWithContext:self]];
         [self addDependencyResolver:[[ALCClassDependencyResolver alloc] initWithContext:self]];
@@ -133,6 +129,11 @@
     return info;
 }
 
+-(void) addObjectInjector:(id<ALCObjectInjector>) objectInjector {
+    logConfig(@"Adding object injector: %s", class_getName([objectInjector class]));
+    [_objectInjectors addObject:objectInjector];
+}
+
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
     logConfig(@"Adding object factory: %s", class_getName([objectFactory class]));
     [_objectFactories addObject:objectFactory];
@@ -167,20 +168,26 @@
         }
 
         logObjectResolving(@"Resolving %s", ivar_getName(variable));
-        BOOL candidatesFound = NO;
+        NSArray *candidates = nil;
         for (id<ALCDependencyResolver> resolver in [_dependencyResolvers reverseObjectEnumerator]) {
-            NSArray *candidates = [resolver resolveDependency:dependencyInfo inObject:object withObjectStore:_objectStore];
+            candidates = [resolver resolveDependency:dependencyInfo inObject:object withObjectStore:_objectStore];
             if (candidates != nil) {
-                candidatesFound = YES;
                 break;
             }
         }
         
         // Ok, throw an error.
-        if (! candidatesFound) {
+        if (candidates == nil) {
             @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
                                            reason:[NSString stringWithFormat:@"Unable resolve dependency: %s::%s", class_getName(objClass), ivar_getName(dependencyInfo.variable)]
                                          userInfo:nil];
+        }
+        
+        // Call the injectors.
+        for (id<ALCObjectInjector> injector in [_objectInjectors reverseObjectEnumerator]) {
+            if ([injector inject:object dependency:dependencyInfo withCandidates:candidates]) {
+                break;
+            }
         }
         
     }];

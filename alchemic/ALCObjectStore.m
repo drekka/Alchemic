@@ -38,7 +38,9 @@
         if ([obj class] == [ALCObjectProxy class]) {
             ALCObjectProxy *proxy = (ALCObjectProxy *) obj;
             if (proxy.classInfo.isSingleton) {
+                logCreation(@"--- Instantiating %s singleton", class_getName(proxy.classInfo.forClass));
                 [proxy instantiate];
+                logCreation(@"--- %s singleton created", class_getName(proxy.classInfo.forClass));
             }
         }
     }];
@@ -93,16 +95,21 @@
         
     };
     
+    logObjectResolving(@"Returning %i objects of class %s", [results count], class_getName(aClass));
     return [results count] == 0 ? nil : results;
 }
 
 -(NSArray *) objectsWithName:(NSString *) name {
-    return _objectsByName[name];
+    NSArray *results = _objectsByName[name];
+    logObjectResolving(@"Returning %i objects for name %@", [results count], name);
+    return results;
 }
 
 
 -(NSArray *) objectsWithProtocol:(Protocol *) protocol {
-    return [ALCRuntime filterObjects:_objects forProtocols:@[protocol]];
+    NSArray *results = [ALCRuntime filterObjects:_objects forProtocols:@[protocol]];
+    logObjectResolving(@"Returning %i objects implementing protocol %s", [results count], protocol_getName(protocol));
+    return results;
 }
 
 @end

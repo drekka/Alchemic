@@ -36,17 +36,18 @@
 
 -(id) initWithCoderWrapper:(NSCoder *) aDecoder {
 
+    Class selfClass = [self class];
     // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCOriginalInitInfo *initInfo = [ALCUIViewControllerInitWithCoderStrategy initInfoForClass:[self class] initSelector:_cmd];
+    ALCOriginalInitInfo *initInfo = [ALCUIViewControllerInitWithCoderStrategy initInfoForClass:selfClass initSelector:_cmd];
     
     if (initInfo.initIMP == NULL) {
-        struct objc_super superData = {self, class_getSuperclass([self class])};
+        struct objc_super superData = {self, class_getSuperclass(selfClass)};
         self = ((id (*)(struct objc_super *, SEL, NSCoder *))objc_msgSendSuper)(&superData, @selector(initWithCoder:), aDecoder);
     } else {
         self = ((id (*)(id, SEL, NSCoder *))initInfo.initIMP)(self, initInfo.initSelector, aDecoder);
     }
     
-    logRuntime(@"Triggering dependency injection in initWithCoder:");
+    logRuntime(@"Triggering dependency injection in %s::initWithCoder:", class_getName(selfClass));
     [[Alchemic mainContext] resolveDependencies:self];
 
     return self;

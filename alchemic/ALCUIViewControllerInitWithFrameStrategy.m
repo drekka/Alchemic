@@ -35,17 +35,19 @@
 
 -(id) initWithFrameWrapper:(CGRect) aFrame {
     
+    Class selfClass = [self class];
+    
     // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCOriginalInitInfo *initInfo = [ALCUIViewControllerInitWithFrameStrategy initInfoForClass:[self class] initSelector:_cmd];
+    ALCOriginalInitInfo *initInfo = [ALCUIViewControllerInitWithFrameStrategy initInfoForClass:selfClass initSelector:_cmd];
     
     if (initInfo.initIMP == NULL) {
-        struct objc_super superData = {self, class_getSuperclass([self class])};
+        struct objc_super superData = {self, class_getSuperclass(selfClass)};
         self = ((id (*)(struct objc_super *, SEL, CGRect))objc_msgSendSuper)(&superData, @selector(initWithFrame:), aFrame);
     } else {
         self = ((id (*)(id, SEL, CGRect))initInfo.initIMP)(self, initInfo.initSelector, aFrame);
     }
     
-    logRuntime(@"Triggering dependency injection in initWithFrame:");
+    logRuntime(@"Triggering dependency injection in %s::initWithFrame:", class_getName(selfClass));
     [[Alchemic mainContext] resolveDependencies:self];
 
     return self;

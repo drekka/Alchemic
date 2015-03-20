@@ -26,7 +26,7 @@
 }
 
 -(id) createObjectFromClassInfo:(ALCClassInfo *) classInfo {
-    logCreation(@"Creating singleton using %s::init", class_getName(classInfo.forClass));
+    logCreation(@"Creating object using %s::init", class_getName(classInfo.forClass));
     return [[classInfo.forClass alloc] init];
 }
 
