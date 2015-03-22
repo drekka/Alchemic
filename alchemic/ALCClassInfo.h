@@ -13,15 +13,16 @@
 @interface ALCClassInfo : NSObject
 
 @property (nonatomic, assign, readonly) Class forClass;
-
-@property (nonatomic, assign) SEL constructor;
-
-@property (nonatomic, strong, readonly) NSArray *dependencies;
-
+@property (nonatomic, assign, readonly) NSString *name;
+@property (nonatomic, assign, readonly) NSArray *protocols;
 @property (nonatomic, assign) BOOL isSingleton;
 
--(instancetype) initWithClass:(Class) forClass;
+#pragma mark - Life cycle
+
+-(instancetype) initWithClass:(Class) forClass name:(NSString *) name;
 
 -(void) addDependency:(ALCDependencyInfo *) dependency;
+
+-(void) resolveDependenciesUsingResolvers:(NSArray *) objectResolvers;
 
 @end

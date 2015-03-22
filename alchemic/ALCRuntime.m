@@ -11,6 +11,7 @@
 
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
+#import "ALCClassInfo.h"
 #import "ALCInitialisationStrategyInjector.h"
 #import "ALCLogger.h"
 
@@ -28,14 +29,12 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
     // Allocate the memory to contain an array of the classes found.
     Class * classes = (__unsafe_unretained Class *) malloc(sizeof(Class) * (unsigned long) numClasses);
     
-    // Don't use the return number from this call because it's often wrong. Reported as a Bug to Apple.
     // Now load the array with the classes.
     numClasses = objc_getClassList(classes, numClasses);
     
     // Now scan them.
     Class nextClass;
     for (int index = 0; index < numClasses; index++) {
-        //for (int index = 0; index < nbrClasses; index++) {
         
         nextClass = classes[index];
         
@@ -87,7 +86,7 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
         if (strncmp(methodName, toCharPointer(ALCHEMIC_METHOD_PREFIX), _prefixLength) != 0) {
             continue;
         }
-        logRuntime(@"Found alchemic method %s::%s", class_getName(class), methodName);
+        logRuntime(@"Found %s::%s, executing ...", class_getName(class), methodName);
         ((void (*)(id, SEL))objc_msgSend)(class, sel); // Note cast because of XCode 6
         
     }
@@ -114,33 +113,6 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
         }
     }
     return var;
-}
-
-+(NSArray *) filterObjects:(NSArray *) objects forProtocols:(NSArray *) protocols {
-
-    logObjectResolving(@"Filtering objects using protocols");
-
-    NSMutableArray *results = [[NSMutableArray alloc] init];
-    BOOL conformsToProtocol;
-    
-    for (id object in objects) {
-        
-        Class objClass = [object class];
-        conformsToProtocol = YES;
-        
-        for (Protocol *protocol in protocols) {
-            if (!class_conformsToProtocol(objClass, protocol)) {
-                conformsToProtocol = NO;
-                break;
-            }
-        }
-        
-        if (conformsToProtocol) {
-            [results addObject:object];
-        }
-        
-    }
-    return [results count] == 0 ? nil: results;
 }
 
 @end

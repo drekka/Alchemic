@@ -12,6 +12,7 @@
 
 #import <objc/runtime.h>
 #import "ALCLogger.h"
+#import "ALCClassInfo.h"
 #import "ALCInitialisationStrategyManagement.h"
 #import "ALCInitialisationStrategy.h"
 
@@ -36,7 +37,7 @@ static BOOL injected = NO;
     return self;
 }
 
--(void) executeStrategiesOnClasses:(NSDictionary *) classRegistrations withContext:(ALCContext *) context {
+-(void) executeStrategiesOnObjects:(NSDictionary *) managedObjects withContext:(ALCContext *) context {
 
     if (injected) {
         logRuntime(@"Wrappers already injected into classes");
@@ -44,7 +45,7 @@ static BOOL injected = NO;
     }
 
     // Reduce the list to just root classes.
-    NSArray *rootClasses = [self findRootClassesInArray:[classRegistrations allKeys]];
+    NSArray *rootClasses = [self findRootClasses:[managedObjects allValues]];
 
     // Now hook into the classes.
     for (Class class in rootClasses) {
@@ -56,29 +57,29 @@ static BOOL injected = NO;
     }
 }
 
--(NSArray *) findRootClassesInArray:(NSArray *) classes {
+-(NSArray *) findRootClasses:(NSArray *) classInfoList {
     
     // Work out which classes we need to inject hooks into.
     NSMutableArray *rootClasses = [[NSMutableArray alloc] init];
-    [classes enumerateObjectsUsingBlock:^(Class currentClass, NSUInteger idx, BOOL *stop) {
+    [classInfoList enumerateObjectsUsingBlock:^(ALCClassInfo *classInfo, NSUInteger idx, BOOL *stop) {
         
         // Check the ancestory of the class.
         // If any of the parents appear in the list of injectable classes then skip to the next class.
         // After this loop the only classes added to the list should be top level ones.
-        Class parent = class_getSuperclass(currentClass);
-        while (parent != NULL) {
+        Class baseClass = class_getSuperclass(classInfo.forClass);
+        while (baseClass != NULL) {
             
             // If the parent is in the list of injectable classes then end checking.
-            if ([rootClasses containsObject:parent]) {
-                logRuntime(@"Parent class (%s) of %s scheduled for initialiser injection", class_getName(parent), class_getName(currentClass));
+            if ([rootClasses containsObject:baseClass]) {
+                logRuntime(@"Parent class (%s) of %s scheduled for initialiser injection", class_getName(baseClass), class_getName(classInfo.forClass));
                 return;
             }
-            parent = class_getSuperclass(parent);
+            baseClass = class_getSuperclass(baseClass);
         }
         
         // The class must be a root class with no parents in the list.
-        logRuntime(@"Adding root class: %s", class_getName(currentClass));
-        [rootClasses addObject:currentClass];
+        logRuntime(@"Adding root class: %s", class_getName(baseClass));
+        [rootClasses addObject:baseClass];
         
     }];
     return rootClasses;

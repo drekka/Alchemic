@@ -9,31 +9,31 @@
 #import "ALCDependencyInfo.h"
 #import "ALCLogger.h"
 
-@implementation ALCDependencyInfo
+@implementation ALCDependencyInfo {
+    NSMutableArray *_protocols;
+}
 
-static NSCharacterSet *_objectTypeDelims;
-
--(instancetype) initWithVariable:(Ivar) variable inClass:(Class) inClass {
+-(instancetype) initWithVariable:(Ivar) variable parentClass:(Class) parentClass {
     self = [super init];
     if (self) {
-        _objectTypeDelims = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
+        _parentClass = parentClass;
         _variable = variable;
-        _inClass = inClass;
-        _variableProtocols = [[NSMutableArray alloc] init];
-        [self storeType];
+        _protocols = [[NSMutableArray alloc] init];
+        [self readVariableDetails];
     }
     return self;
 }
 
--(void) storeType {
+-(void) readVariableDetails {
+    
     // Get the type.
     const char *encoding = ivar_getTypeEncoding(_variable);
     _variableTypeEncoding = [NSString stringWithCString:encoding encoding:NSUTF8StringEncoding];
-    logRegistration(@"Type encoding for %s::%s => %@", class_getName(_inClass), ivar_getName(_variable), _variableTypeEncoding);
+    logRegistration(@"Type encoding for %s::%s => %s", class_getName(_parentClass), ivar_getName(_variable), encoding);
     
     if ([_variableTypeEncoding hasPrefix:@"@"]) {
         
-        NSArray *defs = [_variableTypeEncoding componentsSeparatedByCharactersInSet:_objectTypeDelims];
+        NSArray *defs = [_variableTypeEncoding componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\",<>"]];
         
         // If there is no more than 2 in the array then the dependency is an id.
         if ([defs count] > 2) {
@@ -51,7 +51,11 @@ static NSCharacterSet *_objectTypeDelims;
             }
         }
     }
+    
+}
 
+-(void) setTargetClass:(ALCClassInfo *) targetClassInfo {
+    logRegistration(@"Setting target class for dependency");
 }
 
 @end

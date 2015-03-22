@@ -8,9 +8,7 @@
 
 @import Foundation;
 
-@class ALCContext;
 @class ALCDependencyInfo;
-@class ALCObjectStore;
 
 /**
  Protocol for classes that manage the onjection of dependencies into other objects.
@@ -24,17 +22,16 @@
  
  @return an instance of the resolver.
  */
--(instancetype) initWithContext:(__weak ALCContext *) context;
+-(instancetype) initWithModel:(NSDictionary *) model;
 
 /**
  Called to resolve a dependency in an object.
  
  @param dependency the dependency info that specifies what needs to be resolved.
  @param object the object that needs the dependency.
- @param objectStore a ALCObjectStore of available objects.
  
  @return a list of candidate objects or nil if no met the criteria.
  */
--(NSArray *) resolveDependency:(ALCDependencyInfo *) dependency inObject:(id) object withObjectStore:(ALCObjectStore *) objectStore;
+-(id) resolveDependency:(ALCDependencyInfo *) dependency;
 
 @end

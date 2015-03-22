@@ -14,12 +14,11 @@
 #import "ALCClassInfo.h"
 #import "ALCContext.h"
 #import "ALCDependencyInfo.h"
-#import "ALCObjectStore.h"
 #import "ALCRuntime.h"
 
 @implementation ALCProtocolDependencyResolver
 
--(NSArray *) resolveDependency:(ALCDependencyInfo *) dependency inObject:(id) object withObjectStore:(ALCObjectStore *) objectStore {
+-(NSArray *) resolveDependency:(ALCDependencyInfo *) dependency inObject:(id) object {
     
     Ivar variable = dependency.variable;
     logObjectResolving(@"Resolving %s", ivar_getName(variable));
@@ -29,7 +28,8 @@
         return nil;
     }
     
-    return [ALCRuntime filterObjects:objectStore.objects forProtocols:dependency.variableProtocols];
+    return nil;
+//    return [ALCRuntime filterObjects:self.model forProtocols:dependency.variableProtocols];
 }
 
 @end

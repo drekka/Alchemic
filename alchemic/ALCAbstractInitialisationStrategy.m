@@ -21,7 +21,6 @@ static NSMutableArray *_initIMPStorage;
 -(instancetype) init {
     self = [super init];
     if (self) {
-        logRuntime(@"Initialising init IMP storage area for %s", class_getName([self class]));
         _initIMPStorage = [[NSMutableArray alloc] init];
     }
     return self;

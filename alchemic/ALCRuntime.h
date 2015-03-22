@@ -30,14 +30,4 @@
  */
 +(Ivar) variableInClass:(Class) class forInjectionPoint:(const char *) inj;
 
-/**
- Returns a new array of objects which implement all the specified protocols.
- 
- @param objects   the original array of objects.
- @param protocols the protocols to search for.
- 
- @return a new array of objects.
- */
-+(NSArray *) filterObjects:(NSArray *) objects forProtocols:(NSArray *) protocols;
-
 @end

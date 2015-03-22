@@ -7,22 +7,17 @@
 //
 
 #import "ALCAbstractDependencyResolver.h"
-#import "ALCLogger.h"
-#import "ALCDependencyInfo.h"
 
-@implementation ALCAbstractDependencyResolver {
-@protected
-    __weak ALCContext *_context;
-}
+@implementation ALCAbstractDependencyResolver
 
--(NSArray *) resolveDependency:(ALCDependencyInfo *)dependency inObject:(id)object withObjectStore:(ALCObjectStore *)objectStore {
+-(id) resolveDependency:(ALCDependencyInfo *)dependency {
     return nil;
 }
 
--(instancetype) initWithContext:(__weak ALCContext *) context {
+-(instancetype) initWithModel:(NSDictionary *) model {
     self = [super init];
     if (self) {
-        _context = context;
+        _model = model;
     }
     return self;
 }

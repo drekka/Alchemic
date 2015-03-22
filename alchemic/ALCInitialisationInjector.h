@@ -27,7 +27,7 @@
 /**
  Inject hooks into the runtime.
  */
--(void) executeStrategiesOnClasses:(NSDictionary *) classRegistrations withContext:(ALCContext *) context;
+-(void) executeStrategiesOnObjects:(NSDictionary *) managedObjects withContext:(ALCContext *) context;
 
 /**
  Reset the runtime back to it's original state.

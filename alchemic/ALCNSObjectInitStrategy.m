@@ -47,7 +47,7 @@
     }
     
     logRuntime(@"Triggering dependency injection from %s::init", class_getName(selfClass));
-    [[Alchemic mainContext] resolveDependencies:self];
+    //[[Alchemic mainContext] resolveDependencies:self];
     
     return self;
 }

@@ -10,20 +10,26 @@
 
 @class ALCDependencyInfo;
 
-@implementation ALCClassInfo
+@implementation ALCClassInfo {
+    NSMutableArray *_dependencies;
+}
 
--(instancetype) initWithClass:(Class) forClass {
+-(instancetype) initWithClass:(Class) forClass name:(NSString *) name{
     self = [super init];
     if (self) {
         _forClass = forClass;
+        _name = name;
         _dependencies = [[NSMutableArray alloc] init];
-        self.constructor = @selector(init);
     }
     return self;
 }
 
 -(void) addDependency:(ALCDependencyInfo *)dependency {
     [(NSMutableArray *)_dependencies addObject:dependency];
+}
+
+-(void) resolveDependenciesUsingResolvers:(NSArray *) objectResolvers {
+    
 }
 
 @end

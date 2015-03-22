@@ -8,6 +8,7 @@
 
 @import Foundation;
 
+@class ALCClassInfo;
 #import <objc/runtime.h>
 
 /**
@@ -15,14 +16,14 @@
  */
 @interface ALCDependencyInfo : NSObject
 
+@property (nonatomic, assign, readonly) Class parentClass;
 @property (nonatomic, assign, readonly) Ivar variable;
-@property (nonatomic, assign, readonly) Class inClass;
-
-@property (nonatomic, strong, readonly) NSString *variableTypeEncoding;
-
 @property (nonatomic, assign, readonly) Class variableClass;
-@property (nonatomic, strong, readonly) NSArray *variableProtocols;
+@property (nonatomic, strong, readonly) NSString *variableTypeEncoding;
+@property (nonatomic, assign, readonly) NSArray *variableProtocols;
 
--(instancetype) initWithVariable:(Ivar) variable inClass:(Class) inClass;
+-(instancetype) initWithVariable:(Ivar) variable parentClass:(Class) parentClass;
+
+-(void) setTargetClass:(ALCClassInfo *) targetClassInfo;
 
 @end

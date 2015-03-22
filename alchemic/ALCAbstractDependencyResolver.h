@@ -12,4 +12,6 @@
 
 @interface ALCAbstractDependencyResolver : NSMutableDictionary<ALCDependencyResolver>
 
+@property (nonatomic, weak, readonly) NSDictionary *model;
+
 @end
