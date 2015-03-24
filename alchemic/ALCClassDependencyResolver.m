@@ -12,28 +12,32 @@
 #import "ALCLogger.h"
 #import "ALCContext.h"
 #import "ALCDependencyInfo.h"
+#import "NSDictionary+ALCModel.h"
 
 /**
  *  The main class for managing the injection of an object.
  */
 @implementation ALCClassDependencyResolver
 
--(NSArray *) resolveDependency:(ALCDependencyInfo *) dependency {
+-(NSDictionary *) resolveDependency:(ALCDependencyInfo *) dependency {
     
-    // If the dependency info specifies a class, then look for that class.
     if (dependency.variableClass == nil) {
         return nil;
     }
     
-    NSArray *objs = nil; //[self.model objectsOfClass:dependency.variableClass];
+    NSDictionary *objs = [self.model infoObjectsOfClass:dependency.variableClass];
     if ([objs count] == 0) {
-        logObjectResolving(@"No objects found");
         return nil;
     }
     
     // Scan for protocols and exit if not found.
     if ([dependency.variableProtocols count] > 0) {
-        //objs = [ALCRuntime filterObjects:objs forProtocols:dependency.variableProtocols];
+        for (Protocol *protocol in dependency.variableProtocols) {
+            objs = [objs infoObjectsWithProtocol:protocol];
+            if ([objs count] == 0) {
+                return nil;
+            }
+        }
     }
 
     return objs;

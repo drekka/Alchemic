@@ -7,6 +7,9 @@
 //
 
 #import "ALCClassInfo.h"
+#import "ALCDependencyResolver.h"
+#import "ALCDependencyInfo.h"
+#import "ALCLogger.h"
 
 @class ALCDependencyInfo;
 
@@ -28,8 +31,26 @@
     [(NSMutableArray *)_dependencies addObject:dependency];
 }
 
--(void) resolveDependenciesUsingResolvers:(NSArray *) objectResolvers {
-    
+-(void) resolveDependenciesUsingResolvers:(NSArray *) dependencyResolvers {
+    for (ALCDependencyInfo *dependencyInfo in _dependencies) {
+        
+        NSDictionary *candidates;
+        for (id<ALCDependencyResolver> resolver in [dependencyResolvers reverseObjectEnumerator]) {
+            logDependencyResolving(@"Asking %s to resolve %s::%s", class_getName([resolver class]), class_getName(dependencyInfo.parentClass), ivar_getName(dependencyInfo.variable));
+            candidates = [resolver resolveDependency:dependencyInfo];
+            if (candidates != nil) {
+                break;
+            }
+        }
+
+        dependencyInfo.targetClassInfoObjects = candidates;
+        if (dependencyInfo.targetClassInfoObjects == nil) {
+            @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
+                                           reason:[NSString stringWithFormat:@"Unable to resolve dependency for: %s::%s", class_getName(dependencyInfo.parentClass), ivar_getName(dependencyInfo.variable)]
+                                         userInfo:nil];
+        }
+        logDependencyResolving(@"Resolved dependency");
+    }
 }
 
 @end

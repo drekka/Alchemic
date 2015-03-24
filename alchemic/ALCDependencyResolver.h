@@ -32,6 +32,6 @@
  
  @return a list of candidate objects or nil if no met the criteria.
  */
--(id) resolveDependency:(ALCDependencyInfo *) dependency;
+-(NSDictionary *) resolveDependency:(ALCDependencyInfo *) dependency;
 
 @end

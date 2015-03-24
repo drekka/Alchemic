@@ -21,9 +21,8 @@
 @property (nonatomic, assign, readonly) Class variableClass;
 @property (nonatomic, strong, readonly) NSString *variableTypeEncoding;
 @property (nonatomic, assign, readonly) NSArray *variableProtocols;
+@property (nonatomic, strong) NSDictionary *targetClassInfoObjects;
 
 -(instancetype) initWithVariable:(Ivar) variable parentClass:(Class) parentClass;
-
--(void) setTargetClass:(ALCClassInfo *) targetClassInfo;
 
 @end

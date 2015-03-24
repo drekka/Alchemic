@@ -15,21 +15,21 @@
 #import "ALCContext.h"
 #import "ALCDependencyInfo.h"
 #import "ALCRuntime.h"
+#import "NSDictionary+ALCModel.h"
 
 @implementation ALCProtocolDependencyResolver
 
--(NSArray *) resolveDependency:(ALCDependencyInfo *) dependency inObject:(id) object {
-    
-    Ivar variable = dependency.variable;
-    logObjectResolving(@"Resolving %s", ivar_getName(variable));
-    
-    if ([dependency.variableProtocols count] == 0) {
-        logObjectResolving(@"No protocol found on variable %s", ivar_getName(variable));
-        return nil;
+-(NSDictionary *) resolveDependency:(ALCDependencyInfo *) dependency {
+
+    NSDictionary *objs;
+    for (Protocol *protocol in dependency.variableProtocols) {
+        objs = [objs infoObjectsWithProtocol:protocol];
+        if ([objs count] == 0) {
+            return nil;
+        }
     }
     
-    return nil;
-//    return [ALCRuntime filterObjects:self.model forProtocols:dependency.variableProtocols];
+    return objs;
 }
 
 @end

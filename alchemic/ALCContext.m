@@ -20,9 +20,6 @@
 #import "ALCClassInfo.h"
 #import "ALCInitialisationStrategyInjector.h"
 
-#import "ALCObjectInjector.h"
-#import "ALCSimpleObjectInjector.h"
-
 #import "ALCClassDependencyResolver.h"
 #import "ALCProtocolDependencyResolver.h"
 #import "ALCDependencyInfo.h"
@@ -34,10 +31,12 @@
 #import "ALCUIViewControllerInitWithCoderStrategy.h"
 #import "ALCUIViewControllerInitWithFrameStrategy.h"
 
+#import "NSDictionary+ALCModel.h"
+#import "NSMutableDictionary+ALCModel.h"
+
 @implementation ALCContext {
     NSMutableArray *_initialisationStrategies;
     NSMutableArray *_dependencyResolvers;
-    NSMutableArray *_objectInjectors;
     NSMutableArray *_objectFactories;
     NSMutableDictionary *_model;
     NSMutableDictionary *_objects;
@@ -49,6 +48,10 @@
         
         logConfig(@"Initing context");
 
+        // Create storage for objects.
+        _model = [[NSMutableDictionary alloc] init];
+        _objects = [[NSMutableDictionary alloc] init];
+
         _initialisationStrategies = [[NSMutableArray alloc] init];
         [self addInitialisationStrategy:[[ALCNSObjectInitStrategy alloc] init]];
         [self addInitialisationStrategy:[[ALCUIViewControllerInitWithCoderStrategy alloc] init]];
@@ -57,16 +60,9 @@
         _objectFactories = [[NSMutableArray alloc] init];
         [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
 
-        _objectInjectors = [[NSMutableArray alloc] init];
-        [self addObjectInjector:[[ALCSimpleObjectInjector alloc] init]];
-
         _dependencyResolvers = [[NSMutableArray alloc] init];
         [self addDependencyResolver:[[ALCProtocolDependencyResolver alloc] initWithModel:_model]];
         [self addDependencyResolver:[[ALCClassDependencyResolver alloc] initWithModel:_model]];
-        
-        // Create storage for objects.
-        _model = [[NSMutableDictionary alloc] init];
-        _objects = [[NSMutableDictionary alloc] init];
         
     }
     return self;
@@ -94,6 +90,10 @@
 
 -(void) connectDependencies {
     logRegistration(@"Connecting dependencies ...");
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCClassInfo *info, BOOL *stop){
+        logDependencyResolving(@"Resolving dependencies in %s", class_getName(info.forClass));
+        [info resolveDependenciesUsingResolvers:_dependencyResolvers];
+    }];
 }
 
 -(void) instantiateObjects {
@@ -112,7 +112,7 @@
     va_list args;
     va_start(args, injs);
     for (NSString *arg = injs; arg != nil; arg = va_arg(args, NSString *)) {
-        [self registerInjection:arg inClass:class withName:NSStringFromClass(class)];
+        [_model registerInjection:arg inClass:class withName:NSStringFromClass(class)];
     }
     va_end(args);
 }
@@ -121,7 +121,7 @@
     va_list args;
     va_start(args, injs);
     for (NSString *arg = injs; arg != nil; arg = va_arg(args, NSString *)) {
-        [self registerInjection:arg inClass:class withName:name];
+        [_model registerInjection:arg inClass:class withName:name];
     }
     va_end(args);
 }
@@ -131,37 +131,7 @@
 }
 
 -(void) registerClass:(Class)class withName:(NSString *)name {
-    [self createInfoForClass:class withName:name];
-}
-
--(void) registerInjection:(NSString *) inj inClass:(Class) class {
-    [self registerInjection:inj inClass:class withName:NSStringFromClass(class)];
-}
-
--(void) registerInjection:(NSString *) inj inClass:(Class) class withName:(NSString *)name {
-    ALCClassInfo *info = [self infoForClass:class name:name];
-    Ivar variable = [ALCRuntime variableInClass:class forInjectionPoint:[inj UTF8String]];
-    ALCDependencyInfo *dependencyInfo = [[ALCDependencyInfo alloc] initWithVariable:variable parentClass:class];
-    [info addDependency:dependencyInfo];
-}
-
--(ALCClassInfo *) createInfoForClass:(Class) forClass withName:(NSString *) name {
-    if (_model[name] != nil) {
-        @throw [NSException exceptionWithName:@"AlchemicDuplicateObjectName"
-                                       reason:[NSString stringWithFormat:@"Cannot register more than one object with name: %@", name]
-                                     userInfo:nil];
-    }
-    logRegistration(@"Registering: %@ (%s)", name, class_getName(forClass));
-    return [self infoForClass:forClass name:name];
-}
-
--(ALCClassInfo *) infoForClass:(Class) forClass name:(NSString *) name {
-    ALCClassInfo *info = _model[name];
-    if (info == nil) {
-        info = [[ALCClassInfo alloc] initWithClass:forClass name:name];
-        _model[name] = info;
-    }
-    return info;
+    [_model infoForClass:class name:name];
 }
 
 #pragma mark - Objects
@@ -191,11 +161,6 @@
 }
 
 #pragma mark - Configuration
-
--(void) addObjectInjector:(id<ALCObjectInjector>) objectInjector {
-    logConfig(@"Adding object injector: %s", class_getName([objectInjector class]));
-    [_objectInjectors addObject:objectInjector];
-}
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
     logConfig(@"Adding object factory: %s", class_getName([objectFactory class]));
