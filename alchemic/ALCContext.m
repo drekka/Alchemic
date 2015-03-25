@@ -17,12 +17,12 @@
 
 #import "AlchemicAware.h"
 
-#import "ALCClassInfo.h"
+#import "ALCObjectDescription.h"
 #import "ALCInitialisationStrategyInjector.h"
 
 #import "ALCClassDependencyResolver.h"
 #import "ALCProtocolDependencyResolver.h"
-#import "ALCDependencyInfo.h"
+#import "ALCDependency.h"
 
 #import "ALCObjectFactory.h"
 #import "ALCSimpleObjectFactory.h"
@@ -83,27 +83,37 @@
     // First we need to connect up all the dependencies.
     [self connectDependencies];
     
-    // Now initiate any found singletons.
+    // Now initiate the objects.
     [self instantiateObjects];
+    
+    // And inject the dependencies.
+    [self injectDependencies];
     
 }
 
 -(void) connectDependencies {
     logRegistration(@"Connecting dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCClassInfo *info, BOOL *stop){
-        logDependencyResolving(@"Resolving dependencies in %s", class_getName(info.forClass));
-        [info resolveDependenciesUsingResolvers:_dependencyResolvers];
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop){
+        logDependencyResolving(@"Resolving dependencies in %s", class_getName(description.forClass));
+        [description resolveDependenciesUsingResolvers:_dependencyResolvers];
     }];
 }
 
 -(void) instantiateObjects {
     logCreation(@"Instantiating objects ...");
-        [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCClassInfo *info, BOOL *stop) {
-            if (_objects[name] == nil) {
-                logCreation(@"--- Instantiating a %s", class_getName(info.forClass));
-                _objects[name] = [self objectForClassInfo:info];
+        [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop) {
+            if (description.finalObject == nil) {
+                logCreation(@"Instantiating a %s", class_getName(description.forClass));
+                [description instantiateUsingFactories:_objectFactories];
             }
         }];
+}
+
+-(void) injectDependencies {
+    logCreation(@"Injecting dependencies into objects ...");
+    [_objects enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *decription, BOOL *stop) {
+        
+    }];
 }
 
 #pragma mark - The model
@@ -131,7 +141,7 @@
 }
 
 -(void) registerClass:(Class)class withName:(NSString *)name {
-    [_model infoForClass:class name:name];
+    [_model objectDescriptionForClass:class name:name];
 }
 
 #pragma mark - Objects
@@ -147,17 +157,6 @@
                                      userInfo:nil];
     }
     _objects[name] = object;
-}
-
--(id) objectForClassInfo:(ALCClassInfo *) classInfo {
-    __block id createdObject = nil;
-    for (id<ALCObjectFactory> objectFactory in _objectFactories) {
-        createdObject = [objectFactory createObjectFromClassInfo:classInfo];
-        if (createdObject) {
-            return createdObject;
-        }
-    }
-    return nil;
 }
 
 #pragma mark - Configuration

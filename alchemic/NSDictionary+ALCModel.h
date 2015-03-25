@@ -10,8 +10,8 @@
 
 @interface NSDictionary (ALCModel)
 
--(NSDictionary *) infoObjectsOfClass:(Class) class;
+-(NSDictionary *) objectDescriptionsForClass:(Class) class;
 
--(NSDictionary *) infoObjectsWithProtocol:(Protocol *) protocol;
+-(NSDictionary *) objectDescriptionsWithProtocol:(Protocol *) protocol;
 
 @end

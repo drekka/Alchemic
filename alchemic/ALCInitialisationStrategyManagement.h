@@ -9,7 +9,7 @@
 @import Foundation;
 
 @class ALCContext;
-@class ALCOriginalInitInfo;
+@class ALCInitDetails;
 
 /**
  Methods use to manage initialisation strategies.
@@ -37,6 +37,6 @@
  
  @return the IMP of the original init method.
  */
-+(ALCOriginalInitInfo *) initInfoForClass:(Class) class initSelector:(SEL) initSelector;
++(ALCInitDetails *) initDetailsForClass:(Class) class initSelector:(SEL) initSelector;
 
 @end

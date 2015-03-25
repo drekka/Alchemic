@@ -11,7 +11,7 @@
 
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
-#import "ALCClassInfo.h"
+#import "ALCObjectDescription.h"
 #import "ALCInitialisationStrategyInjector.h"
 #import "ALCLogger.h"
 

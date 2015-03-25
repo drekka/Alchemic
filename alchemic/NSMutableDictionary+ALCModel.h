@@ -8,11 +8,11 @@
 
 @import Foundation;
 
-#import "ALCClassInfo.h"
+#import "ALCObjectDescription.h"
 
 @interface NSMutableDictionary (ALCModel)
 
--(ALCClassInfo *) infoForClass:(Class) forClass name:(NSString *) name;
+-(ALCObjectDescription *) objectDescriptionForClass:(Class) forClass name:(NSString *) name;
 
 -(void) registerInjection:(NSString *) inj inClass:(Class) class withName:(NSString *)name;
 

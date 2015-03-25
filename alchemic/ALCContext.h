@@ -11,7 +11,7 @@
 #import "ALCDependencyResolver.h"
 #import "ALCInitialisationInjector.h"
 #import "ALCObjectFactory.h"
-@class ALCClassInfo;
+@class ALCObjectDescription;
 
 @interface ALCContext : NSObject
 

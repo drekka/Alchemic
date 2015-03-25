@@ -13,7 +13,7 @@
  Storage for a replaced init method.
  @discussion Outlines where it came from and stores the original IMP.
  */
-@interface ALCOriginalInitInfo : NSObject
+@interface ALCInitDetails : NSObject
 @property (nonatomic, assign, readonly) Class originalClass;
 @property (nonatomic, assign, readonly) SEL initSelector;
 @property (nonatomic, assign, readonly) IMP initIMP;

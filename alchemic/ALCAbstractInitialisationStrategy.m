@@ -9,7 +9,7 @@
 #import "ALCAbstractInitialisationStrategy.h"
 
 #import "ALCLogger.h"
-#import "ALCOriginalInitInfo.h"
+#import "ALCInitDetails.h"
 
 #import <objc/runtime.h>
 
@@ -62,24 +62,24 @@ static NSMutableArray *_initIMPStorage;
               initSelector:(SEL) initSelector
                    initIMP:(IMP) initIMP
                withContext:(ALCContext *) context {
-    ALCOriginalInitInfo *initDetails = [[ALCOriginalInitInfo alloc] initWithOriginalClass:class
+    ALCInitDetails *initDetails = [[ALCInitDetails alloc] initWithOriginalClass:class
                                                                              initSelector:initSelector
                                                                                   initIMP:initIMP];
     [_initIMPStorage addObject:initDetails];
 }
 
 -(void) resetClasses {
-    [_initIMPStorage enumerateObjectsUsingBlock:^(ALCOriginalInitInfo *replacedInitInfo, NSUInteger idx, BOOL *stop) {
-        logRuntime(@"Resetting %s::%s", class_getName(replacedInitInfo.originalClass), sel_getName(replacedInitInfo.initSelector));
-        Method initMethod = class_getInstanceMethod(replacedInitInfo.originalClass, replacedInitInfo.initSelector);
-        method_setImplementation(initMethod, replacedInitInfo.initIMP);
+    [_initIMPStorage enumerateObjectsUsingBlock:^(ALCInitDetails *replacedInitDetails, NSUInteger idx, BOOL *stop) {
+        logRuntime(@"Resetting %s::%s", class_getName(replacedInitDetails.originalClass), sel_getName(replacedInitDetails.initSelector));
+        Method initMethod = class_getInstanceMethod(replacedInitDetails.originalClass, replacedInitDetails.initSelector);
+        method_setImplementation(initMethod, replacedInitDetails.initIMP);
     }];
 }
 
-+(ALCOriginalInitInfo *) initInfoForClass:(Class) class initSelector:(SEL) initSelector {
-    for (ALCOriginalInitInfo *replaceInfo in _initIMPStorage) {
-        if (replaceInfo.originalClass == class && replaceInfo.initSelector == initSelector) {
-            return replaceInfo;
++(ALCInitDetails *) initDetailsForClass:(Class) class initSelector:(SEL) initSelector {
+    for (ALCInitDetails *replacedInitDetails in _initIMPStorage) {
+        if (replacedInitDetails.originalClass == class && replacedInitDetails.initSelector == initSelector) {
+            return replacedInitDetails;
         }
     }
     return nil;

@@ -11,19 +11,19 @@
 #import <objc/runtime.h>
 
 #import "ALCLogger.h"
-#import "ALCClassInfo.h"
+#import "ALCObjectDescription.h"
 #import "ALCContext.h"
-#import "ALCDependencyInfo.h"
+#import "ALCDependency.h"
 #import "ALCRuntime.h"
 #import "NSDictionary+ALCModel.h"
 
 @implementation ALCProtocolDependencyResolver
 
--(NSDictionary *) resolveDependency:(ALCDependencyInfo *) dependency {
+-(NSDictionary *) resolveDependency:(ALCDependency *) dependency {
 
     NSDictionary *objs;
     for (Protocol *protocol in dependency.variableProtocols) {
-        objs = [objs infoObjectsWithProtocol:protocol];
+        objs = [objs objectDescriptionsWithProtocol:protocol];
         if ([objs count] == 0) {
             return nil;
         }

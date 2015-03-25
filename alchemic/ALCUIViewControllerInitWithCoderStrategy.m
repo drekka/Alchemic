@@ -18,7 +18,7 @@
 #import "ALCLogger.h"
 #import "ALCRuntimeFunctions.h"
 #import "ALCContext.h"
-#import "ALCOriginalInitInfo.h"
+#import "ALCInitDetails.h"
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
@@ -38,13 +38,13 @@
 
     Class selfClass = [self class];
     // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCOriginalInitInfo *initInfo = [ALCUIViewControllerInitWithCoderStrategy initInfoForClass:selfClass initSelector:_cmd];
+    ALCInitDetails *initDetails = [ALCUIViewControllerInitWithCoderStrategy initDetailsForClass:selfClass initSelector:_cmd];
     
-    if (initInfo.initIMP == NULL) {
+    if (initDetails.initIMP == NULL) {
         struct objc_super superData = {self, class_getSuperclass(selfClass)};
         self = ((id (*)(struct objc_super *, SEL, NSCoder *))objc_msgSendSuper)(&superData, @selector(initWithCoder:), aDecoder);
     } else {
-        self = ((id (*)(id, SEL, NSCoder *))initInfo.initIMP)(self, initInfo.initSelector, aDecoder);
+        self = ((id (*)(id, SEL, NSCoder *))initDetails.initIMP)(self, initDetails.initSelector, aDecoder);
     }
     
     logRuntime(@"Triggering dependency injection in %s::initWithCoder:", class_getName(selfClass));

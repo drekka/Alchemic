@@ -11,26 +11,26 @@
 #import <objc/runtime.h>
 #import "ALCLogger.h"
 #import "ALCRuntime.h"
-#import "ALCDependencyInfo.h"
+#import "ALCDependency.h"
 
 @implementation NSMutableDictionary (ALCModel)
 
--(ALCClassInfo *) infoForClass:(Class) forClass name:(NSString *) name {
-    ALCClassInfo *info = self[name];
-    if (info == nil) {
+-(ALCObjectDescription *) objectDescriptionForClass:(Class) forClass name:(NSString *) name {
+    ALCObjectDescription *description = self[name];
+    if (description == nil) {
         logRegistration(@"Creating info for %@ (%s)", name, class_getName(forClass));
-        info = [[ALCClassInfo alloc] initWithClass:forClass name:name];
-        self[name] = info;
+        description = [[ALCObjectDescription alloc] initWithClass:forClass name:name];
+        self[name] = description;
     }
-    return info;
+    return description;
 }
 
 -(void) registerInjection:(NSString *) inj inClass:(Class) class withName:(NSString *)name {
-    ALCClassInfo *info = [self infoForClass:class name:name];
+    ALCObjectDescription *description = [self objectDescriptionForClass:class name:name];
     Ivar variable = [ALCRuntime variableInClass:class forInjectionPoint:[inj UTF8String]];
-    ALCDependencyInfo *dependencyInfo = [[ALCDependencyInfo alloc] initWithVariable:variable parentClass:class];
-    logRegistration(@"Registering: %s::%s (%@)", class_getName(class), ivar_getName(variable), dependencyInfo.variableTypeEncoding);
-    [info addDependency:dependencyInfo];
+    ALCDependency *dependency = [[ALCDependency alloc] initWithVariable:variable parentClass:class];
+    logRegistration(@"Registering: %s::%s (%@)", class_getName(class), ivar_getName(variable), dependency.variableTypeEncoding);
+    [description addDependency:dependency];
 }
 
 @end

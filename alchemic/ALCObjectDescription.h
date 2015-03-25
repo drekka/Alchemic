@@ -8,21 +8,23 @@
 
 @import Foundation;
 
-@class ALCDependencyInfo;
+@class ALCDependency;
 
-@interface ALCClassInfo : NSObject
+@interface ALCObjectDescription : NSObject
 
 @property (nonatomic, assign, readonly) Class forClass;
 @property (nonatomic, assign, readonly) NSString *name;
 @property (nonatomic, assign, readonly) NSArray *protocols;
-@property (nonatomic, assign) BOOL isSingleton;
+@property (nonatomic, strong, readonly) id finalObject;
 
 #pragma mark - Life cycle
 
 -(instancetype) initWithClass:(Class) forClass name:(NSString *) name;
 
--(void) addDependency:(ALCDependencyInfo *) dependency;
+-(void) addDependency:(ALCDependency *) dependency;
 
 -(void) resolveDependenciesUsingResolvers:(NSArray *) objectResolvers;
+
+-(void) instantiateUsingFactories:(NSArray *) objectFactories;
 
 @end

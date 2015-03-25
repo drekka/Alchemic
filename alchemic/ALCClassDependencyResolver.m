@@ -11,7 +11,7 @@
 #import "ALCClassDependencyResolver.h"
 #import "ALCLogger.h"
 #import "ALCContext.h"
-#import "ALCDependencyInfo.h"
+#import "ALCDependency.h"
 #import "NSDictionary+ALCModel.h"
 
 /**
@@ -19,13 +19,13 @@
  */
 @implementation ALCClassDependencyResolver
 
--(NSDictionary *) resolveDependency:(ALCDependencyInfo *) dependency {
+-(NSDictionary *) resolveDependency:(ALCDependency *) dependency {
     
     if (dependency.variableClass == nil) {
         return nil;
     }
     
-    NSDictionary *objs = [self.model infoObjectsOfClass:dependency.variableClass];
+    NSDictionary *objs = [self.model objectDescriptionsForClass:dependency.variableClass];
     if ([objs count] == 0) {
         return nil;
     }
@@ -33,7 +33,7 @@
     // Scan for protocols and exit if not found.
     if ([dependency.variableProtocols count] > 0) {
         for (Protocol *protocol in dependency.variableProtocols) {
-            objs = [objs infoObjectsWithProtocol:protocol];
+            objs = [objs objectDescriptionsWithProtocol:protocol];
             if ([objs count] == 0) {
                 return nil;
             }

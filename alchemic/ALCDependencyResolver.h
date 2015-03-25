@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@class ALCDependencyInfo;
+@class ALCDependency;
 
 /**
  Protocol for classes that manage the onjection of dependencies into other objects.
@@ -32,6 +32,6 @@
  
  @return a list of candidate objects or nil if no met the criteria.
  */
--(NSDictionary *) resolveDependency:(ALCDependencyInfo *) dependency;
+-(NSDictionary *) resolveDependency:(ALCDependency *) dependency;
 
 @end

@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCOriginalInitInfo.h"
+#import "ALCInitDetails.h"
 
-@implementation ALCOriginalInitInfo
+@implementation ALCInitDetails
 
 -(instancetype) initWithOriginalClass:(Class) originalClass
                          initSelector:(SEL) initSelector

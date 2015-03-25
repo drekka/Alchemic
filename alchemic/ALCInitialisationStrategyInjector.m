@@ -12,7 +12,7 @@
 
 #import <objc/runtime.h>
 #import "ALCLogger.h"
-#import "ALCClassInfo.h"
+#import "ALCObjectDescription.h"
 #import "ALCInitialisationStrategyManagement.h"
 #import "ALCInitialisationStrategy.h"
 
@@ -57,21 +57,21 @@ static BOOL injected = NO;
     }
 }
 
--(NSArray *) findRootClasses:(NSArray *) classInfoList {
+-(NSArray *) findRootClasses:(NSArray *) objectDescriptionList {
     
     // Work out which classes we need to inject hooks into.
     NSMutableArray *rootClasses = [[NSMutableArray alloc] init];
-    [classInfoList enumerateObjectsUsingBlock:^(ALCClassInfo *classInfo, NSUInteger idx, BOOL *stop) {
+    [objectDescriptionList enumerateObjectsUsingBlock:^(ALCObjectDescription *objectDescription, NSUInteger idx, BOOL *stop) {
         
         // Check the ancestory of the class.
         // If any of the parents appear in the list of injectable classes then skip to the next class.
         // After this loop the only classes added to the list should be top level ones.
-        Class baseClass = class_getSuperclass(classInfo.forClass);
+        Class baseClass = class_getSuperclass(objectDescription.forClass);
         while (baseClass != NULL) {
             
             // If the parent is in the list of injectable classes then end checking.
             if ([rootClasses containsObject:baseClass]) {
-                logRuntime(@"Parent class (%s) of %s scheduled for initialiser injection", class_getName(baseClass), class_getName(classInfo.forClass));
+                logRuntime(@"Parent class (%s) of %s scheduled for initialiser injection", class_getName(baseClass), class_getName(objectDescription.forClass));
                 return;
             }
             baseClass = class_getSuperclass(baseClass);

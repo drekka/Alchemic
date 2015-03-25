@@ -10,7 +10,7 @@
 
 @implementation ALCAbstractDependencyResolver
 
--(id) resolveDependency:(ALCDependencyInfo *)dependency {
+-(id) resolveDependency:(ALCDependency *)dependency {
     return nil;
 }
 

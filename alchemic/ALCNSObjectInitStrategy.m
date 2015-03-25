@@ -15,7 +15,7 @@
 
 #import "ALCLogger.h"
 #import "ALCRuntimeFunctions.h"
-#import "ALCOriginalInitInfo.h"
+#import "ALCInitDetails.h"
 #import "ALCContext.h"
 #import "Alchemic.h"
 
@@ -37,13 +37,13 @@
     
     // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
     Class selfClass = [self class];
-    ALCOriginalInitInfo *initInfo = [ALCNSObjectInitStrategy initInfoForClass:selfClass initSelector:_cmd];
+    ALCInitDetails *initDetails = [ALCNSObjectInitStrategy initDetailsForClass:selfClass initSelector:_cmd];
     
-    if (initInfo.initIMP == NULL) {
+    if (initDetails.initIMP == NULL) {
         struct objc_super superData = {self, class_getSuperclass(selfClass)};
         self = ((id (*)(struct objc_super *, SEL))objc_msgSendSuper)(&superData, @selector(init));
     } else {
-        self = ((id (*)(id, SEL))initInfo.initIMP)(self, initInfo.initSelector);
+        self = ((id (*)(id, SEL))initDetails.initIMP)(self, initDetails.initSelector);
     }
     
     logRuntime(@"Triggering dependency injection from %s::init", class_getName(selfClass));
