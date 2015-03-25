@@ -27,4 +27,6 @@
 
 -(void) instantiateUsingFactories:(NSArray *) objectFactories;
 
+-(void) injectDependenciesUsingInjectors:(NSArray *) injectors;
+
 @end

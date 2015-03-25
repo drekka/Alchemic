@@ -29,6 +29,7 @@
 		6C6D00B21AB9859800984CF7 /* ALCProtocolDependencyResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6D00B11AB9859800984CF7 /* ALCProtocolDependencyResolver.m */; };
 		6C7BF2301AC0274F002F0D4F /* NSMutableDictionary+ALCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BF22F1AC0274F002F0D4F /* NSMutableDictionary+ALCModel.m */; };
 		6C7BF2331AC03692002F0D4F /* NSDictionary+ALCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BF2321AC03692002F0D4F /* NSDictionary+ALCModel.m */; };
+		6C7BFFDB1AC2D9A500456536 /* ALCSimpleDependencyInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BFFDA1AC2D9A500456536 /* ALCSimpleDependencyInjector.m */; };
 		6C978BF31AAB241100C2D48D /* ALCDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C978BF21AAB241100C2D48D /* ALCDependency.m */; };
 		6CEF23391A936012005E672E /* ALCInitialisationStrategyInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEF23381A936012005E672E /* ALCInitialisationStrategyInjector.m */; };
 		6CEF233B1A9364DA005E672E /* AlchemicRuntimeInjectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEF233A1A9364DA005E672E /* AlchemicRuntimeInjectorTests.m */; };
@@ -110,6 +111,9 @@
 		6C7BF22F1AC0274F002F0D4F /* NSMutableDictionary+ALCModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+ALCModel.m"; sourceTree = "<group>"; };
 		6C7BF2311AC03692002F0D4F /* NSDictionary+ALCModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ALCModel.h"; sourceTree = "<group>"; };
 		6C7BF2321AC03692002F0D4F /* NSDictionary+ALCModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ALCModel.m"; sourceTree = "<group>"; };
+		6C7BFFD81AC2D13300456536 /* ALCDependencyInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependencyInjector.h; sourceTree = "<group>"; };
+		6C7BFFD91AC2D9A500456536 /* ALCSimpleDependencyInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCSimpleDependencyInjector.h; sourceTree = "<group>"; };
+		6C7BFFDA1AC2D9A500456536 /* ALCSimpleDependencyInjector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCSimpleDependencyInjector.m; sourceTree = "<group>"; };
 		6C978BF11AAB241100C2D48D /* ALCDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependency.h; sourceTree = "<group>"; };
 		6C978BF21AAB241100C2D48D /* ALCDependency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCDependency.m; sourceTree = "<group>"; };
 		6C978BF41AAC08C200C2D48D /* InjectableProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InjectableProtocol.h; sourceTree = "<group>"; };
@@ -283,9 +287,20 @@
 			name = "Object test cases";
 			sourceTree = "<group>";
 		};
+		6C7BFFD71AC2D10500456536 /* Injectors */ = {
+			isa = PBXGroup;
+			children = (
+				6C7BFFD81AC2D13300456536 /* ALCDependencyInjector.h */,
+				6C7BFFD91AC2D9A500456536 /* ALCSimpleDependencyInjector.h */,
+				6C7BFFDA1AC2D9A500456536 /* ALCSimpleDependencyInjector.m */,
+			);
+			name = Injectors;
+			sourceTree = "<group>";
+		};
 		6C978BF01AA879AE00C2D48D /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				6C7BFFD71AC2D10500456536 /* Injectors */,
 				6C6D00A91AB70DF700984CF7 /* ALCAbstractDependencyResolver.h */,
 				6C6D00AA1AB70DF700984CF7 /* ALCAbstractDependencyResolver.m */,
 				6C37A6CC1A9757CD00ACD0F8 /* ALCClassDependencyResolver.h */,
@@ -388,6 +403,7 @@
 				6CEF23391A936012005E672E /* ALCInitialisationStrategyInjector.m in Sources */,
 				6C7BF2331AC03692002F0D4F /* NSDictionary+ALCModel.m in Sources */,
 				6C37A7041A9F45AF00ACD0F8 /* ALCInitDetails.m in Sources */,
+				6C7BFFDB1AC2D9A500456536 /* ALCSimpleDependencyInjector.m in Sources */,
 				6C66DC4B1A8B85E1009F9D94 /* ALCRuntime.m in Sources */,
 				6C37A6D81A988E8000ACD0F8 /* ALCLogger.m in Sources */,
 				6C37A6F41A9B566B00ACD0F8 /* ALCObjectDescription.m in Sources */,

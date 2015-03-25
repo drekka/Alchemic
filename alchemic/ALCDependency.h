@@ -26,4 +26,8 @@
 
 -(instancetype) initWithVariable:(Ivar) variable parentClass:(Class) parentClass;
 
+-(void) resolveUsingResolvers:(NSArray *) resolvers;
+
+-(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors;
+
 @end

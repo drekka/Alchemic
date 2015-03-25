@@ -22,7 +22,10 @@
 
 #import "ALCClassDependencyResolver.h"
 #import "ALCProtocolDependencyResolver.h"
+
 #import "ALCDependency.h"
+
+#import "ALCSimpleDependencyInjector.h"
 
 #import "ALCObjectFactory.h"
 #import "ALCSimpleObjectFactory.h"
@@ -37,6 +40,7 @@
 @implementation ALCContext {
     NSMutableArray *_initialisationStrategies;
     NSMutableArray *_dependencyResolvers;
+    NSMutableArray *_dependencyInjectors;
     NSMutableArray *_objectFactories;
     NSMutableDictionary *_model;
     NSMutableDictionary *_objects;
@@ -47,11 +51,11 @@
     if (self) {
         
         logConfig(@"Initing context");
-
+        
         // Create storage for objects.
         _model = [[NSMutableDictionary alloc] init];
         _objects = [[NSMutableDictionary alloc] init];
-
+        
         _initialisationStrategies = [[NSMutableArray alloc] init];
         [self addInitialisationStrategy:[[ALCNSObjectInitStrategy alloc] init]];
         [self addInitialisationStrategy:[[ALCUIViewControllerInitWithCoderStrategy alloc] init]];
@@ -59,10 +63,13 @@
         
         _objectFactories = [[NSMutableArray alloc] init];
         [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
-
+        
         _dependencyResolvers = [[NSMutableArray alloc] init];
         [self addDependencyResolver:[[ALCProtocolDependencyResolver alloc] initWithModel:_model]];
         [self addDependencyResolver:[[ALCClassDependencyResolver alloc] initWithModel:_model]];
+        
+        _dependencyInjectors = [[NSMutableArray alloc] init];
+        [self addDependencyInjector:[[ALCSimpleDependencyInjector alloc] init]];
         
     }
     return self;
@@ -71,7 +78,7 @@
 -(void) start {
     
     logRuntime(@"Starting alchemic");
-
+    
     // Set defaults.
     if (self.runtimeInjector == nil) {
         self.runtimeInjector = [[ALCInitialisationStrategyInjector alloc] initWithStrategies:_initialisationStrategies];
@@ -81,18 +88,16 @@
     [_runtimeInjector executeStrategiesOnObjects:_objects withContext:self];
     
     // First we need to connect up all the dependencies.
-    [self connectDependencies];
+    [self resolveDependencies];
     
-    // Now initiate the objects.
+    // Now initiate the objects and finishing injecting dependencies.
     [self instantiateObjects];
-    
-    // And inject the dependencies.
     [self injectDependencies];
     
 }
 
--(void) connectDependencies {
-    logRegistration(@"Connecting dependencies ...");
+-(void) resolveDependencies {
+    logDependencyResolving(@"Resolving dependencies ...");
     [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop){
         logDependencyResolving(@"Resolving dependencies in %s", class_getName(description.forClass));
         [description resolveDependenciesUsingResolvers:_dependencyResolvers];
@@ -101,18 +106,19 @@
 
 -(void) instantiateObjects {
     logCreation(@"Instantiating objects ...");
-        [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop) {
-            if (description.finalObject == nil) {
-                logCreation(@"Instantiating a %s", class_getName(description.forClass));
-                [description instantiateUsingFactories:_objectFactories];
-            }
-        }];
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop) {
+        if (description.finalObject == nil) { // Allow for pre-built objects.
+            logCreation(@"Instantiating %@ (%s)", description.name, class_getName(description.forClass));
+            [description instantiateUsingFactories:_objectFactories];
+        }
+    }];
 }
 
 -(void) injectDependencies {
-    logCreation(@"Injecting dependencies into objects ...");
-    [_objects enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *decription, BOOL *stop) {
-        
+    logDependencyResolving(@"Injecting dependencies ...");
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop) {
+        logDependencyResolving(@"Injecting dependencies into %@", description.name);
+        [description injectDependenciesUsingInjectors:_dependencyInjectors];
     }];
 }
 
@@ -163,17 +169,22 @@
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
     logConfig(@"Adding object factory: %s", class_getName([objectFactory class]));
-    [_objectFactories addObject:objectFactory];
+    [_objectFactories insertObject:objectFactory atIndex:0];
 }
 
 -(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy {
     logConfig(@"Adding init strategy: %s", class_getName([initialisationStrategy class]));
-    [_initialisationStrategies addObject:initialisationStrategy];
+    [_initialisationStrategies insertObject:initialisationStrategy atIndex:0];
 }
 
 -(void) addDependencyResolver:(id<ALCDependencyResolver>) dependencyResolver {
     logConfig(@"Adding dependency resolver: %s", class_getName([dependencyResolver class]));
-    [_dependencyResolvers addObject:dependencyResolver];
+    [_dependencyResolvers insertObject:dependencyResolver atIndex:0];
+}
+
+-(void) addDependencyInjector:(id<ALCDependencyInjector>) dependencyinjector {
+    logConfig(@"Adding dependency injector: %s", class_getName([dependencyinjector class]));
+    [_dependencyInjectors insertObject:dependencyinjector atIndex:0];
 }
 
 @end

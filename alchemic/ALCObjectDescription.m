@@ -8,6 +8,7 @@
 
 #import "ALCObjectDescription.h"
 #import "ALCDependencyResolver.h"
+#import "ALCDependencyInjector.h"
 #import "ALCDependency.h"
 #import "ALCLogger.h"
 #import "ALCObjectFactory.h"
@@ -32,25 +33,15 @@
     [(NSMutableArray *)_dependencies addObject:dependency];
 }
 
--(void) resolveDependenciesUsingResolvers:(NSArray *) dependencyResolvers {
+-(void) resolveDependenciesUsingResolvers:(NSArray *) resolvers {
     for (ALCDependency *dependency in _dependencies) {
-        
-        NSDictionary *candidates;
-        for (id<ALCDependencyResolver> resolver in [dependencyResolvers reverseObjectEnumerator]) {
-            logDependencyResolving(@"Asking %s to resolve %s::%s", class_getName([resolver class]), class_getName(dependency.parentClass), ivar_getName(dependency.variable));
-            candidates = [resolver resolveDependency:dependency];
-            if (candidates != nil) {
-                break;
-            }
-        }
+        [dependency resolveUsingResolvers:resolvers];
+    }
+}
 
-        dependency.candidateObjectDescriptions = candidates;
-        if (dependency.candidateObjectDescriptions == nil) {
-            @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
-                                           reason:[NSString stringWithFormat:@"Unable to resolve dependency for: %s::%s", class_getName(dependency.parentClass), ivar_getName(dependency.variable)]
-                                         userInfo:nil];
-        }
-        logDependencyResolving(@"Resolved dependency");
+-(void) injectDependenciesUsingInjectors:(NSArray *)injectors {
+    for (ALCDependency *dependency in _dependencies) {
+        [dependency injectObject:_finalObject usingInjectors:injectors];
     }
 }
 

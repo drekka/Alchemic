@@ -8,6 +8,8 @@
 
 #import "ALCDependency.h"
 #import "ALCLogger.h"
+#import "ALCDependencyResolver.h"
+#import "ALCDependencyInjector.h"
 
 @implementation ALCDependency {
     NSMutableArray *_protocols;
@@ -46,6 +48,40 @@
         }
     }
     
+}
+
+-(void) resolveUsingResolvers:(NSArray *) resolvers {
+
+    NSDictionary *candidates;
+    for (id<ALCDependencyResolver> resolver in resolvers) {
+        logDependencyResolving(@"Asking %s to resolve %s::%s", class_getName([resolver class]), class_getName(_parentClass), ivar_getName(_variable));
+        candidates = [resolver resolveDependency:self];
+        if (candidates != nil) {
+            break;
+        }
+    }
+    
+    _candidateObjectDescriptions = candidates;
+    if (_candidateObjectDescriptions == nil) {
+        @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
+                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency for: %s::%s", class_getName(_parentClass), ivar_getName(_variable)]
+                                     userInfo:nil];
+    }
+    logDependencyResolving(@"Resolved dependency");
+
+}
+
+-(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors {
+    for (id<ALCDependencyInjector> injector in injectors) {
+        if ([injector injectObject:finalObject dependency:self]) {
+            return;
+        }
+    }
+
+    @throw [NSException exceptionWithName:@"AlchemicValueNotInjected"
+                                   reason:[NSString stringWithFormat:@"Unable to inject any candidateobjects for: %s::%s", class_getName(_parentClass), ivar_getName(_variable)]
+                                 userInfo:nil];
+
 }
 
 @end

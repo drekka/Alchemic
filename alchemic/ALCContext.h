@@ -11,6 +11,8 @@
 #import "ALCDependencyResolver.h"
 #import "ALCInitialisationInjector.h"
 #import "ALCObjectFactory.h"
+#import "ALCDependencyInjector.h"
+
 @class ALCObjectDescription;
 
 @interface ALCContext : NSObject
@@ -30,9 +32,14 @@
 -(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy;
 
 /**
- Adds a ALCDependencyResolver to the list of resolvers. Resolvers are checked in reverse order so the last added will be checked first.
+ Adds a ALCDependencyResolver to the list of resolvers.
  */
 -(void) addDependencyResolver:(id<ALCDependencyResolver>) dependencyResolver;
+
+/**
+ Adds a ALCDependencyInjector to the list of injectors.
+ */
+-(void) addDependencyInjector:(id<ALCDependencyInjector>) dependencyinjector;
 
 /**
  Adds a ALCObjectFactory to the list of object factories. Factories are checked in reverse order. The last registered object factory is the one asked first for an object.

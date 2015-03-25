@@ -49,7 +49,7 @@ static BOOL injected = NO;
 
     // Now hook into the classes.
     for (Class class in rootClasses) {
-        for (id<ALCInitialisationStrategy, ALCInitialisationStrategyManagement> initStrategy in [_initialisationStrategies reverseObjectEnumerator]) {
+        for (id<ALCInitialisationStrategy, ALCInitialisationStrategyManagement> initStrategy in _initialisationStrategies) {
             if ([initStrategy canWrapInitInClass:class]) {
                 [initStrategy wrapInitInClass:class withContext:context];
             }
