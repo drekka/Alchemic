@@ -13,17 +13,38 @@
 
 // This macros is used to do injections. The args can be any combination of
 // variable names, property names or internal property variables.
-#define inject(...) \
+#define injectValues(...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(dependency_, __LINE__)) { \
-[[Alchemic mainContext] registerClass:self withInjectionPoints: __VA_ARGS__, NULL]; \
+[[Alchemic mainContext] registerClass:self injectionPoints:__VA_ARGS__, NULL]; \
 }
+
+#define injectValueWithName(injection, name)
+#define injectValueWithClass(injection, class)
+#define injectValueWithProtocol(injection, protocol)
+
+/**
+ This macros is used to register a class in Alchemic. Registered classes will be created automatically.
+ */
+#define registerComponent() \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, registerObject) { \
+[[Alchemic mainContext] registerClass:self]; \
+}
+
+#define injectDependencies(object) \
+[[Alchemic mainContext] registerClass:self injectionPoints:__VA_ARGS__, NULL]
+
 
 /**
  This macros is used to specify that this class is a singleton.
  */
-#define registerSingleton() \
+#define registerComponentWithName(objectName) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, registerObject) { \
-[[Alchemic mainContext] registerClass:self]; \
+[[Alchemic mainContext] registerClass:self withName:objectName]; \
+}
+
+#define addObjectWithName(objectValue, objectName) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(object_, __LINE__)) { \
+[[Alchemic mainContext] registerObject:(objectValue) withName:objectName]; \
 }
 
 /**

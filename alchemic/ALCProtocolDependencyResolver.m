@@ -19,11 +19,12 @@
 
 @implementation ALCProtocolDependencyResolver
 
--(NSDictionary *) resolveDependency:(ALCDependency *) dependency {
-
+-(NSDictionary *) resolveDependencyWithClass:(Class) aClass
+                                   protocols:(NSArray *) protocols
+                                        name:(NSString *) name {
     NSDictionary *objs;
-    for (Protocol *protocol in dependency.variableProtocols) {
-        objs = [objs objectDescriptionsWithProtocol:protocol];
+    for (Protocol *protocol in protocols) {
+        objs = [objs == nil ? self.model : objs objectDescriptionsWithProtocol:protocol];
         if ([objs count] == 0) {
             return nil;
         }

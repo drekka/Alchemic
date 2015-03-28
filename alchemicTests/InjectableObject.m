@@ -9,23 +9,8 @@
 #import "InjectableObject.h"
 #import "Alchemic.h"
 
-@interface InjectableObject ()
-@property (nonatomic, strong) NSString *privateString;
-@end
+@implementation InjectableObject
 
-@implementation InjectableObject {
-    NSString *_stringIVar;
-}
-
-registerSingleton();
-//inject(@"_stringIVar");
-
--(instancetype) init {
-    self = [super init];
-    if (self) {
-        _stringIVar = @"abc";
-    }
-    return self;
-}
+registerComponent();
 
 @end

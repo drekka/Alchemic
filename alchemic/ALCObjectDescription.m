@@ -12,6 +12,7 @@
 #import "ALCDependency.h"
 #import "ALCLogger.h"
 #import "ALCObjectFactory.h"
+#import "NSDictionary+ALCModel.h"
 
 @class ALCDependency;
 
@@ -33,9 +34,19 @@
     [(NSMutableArray *)_dependencies addObject:dependency];
 }
 
--(void) resolveDependenciesUsingResolvers:(NSArray *) resolvers {
+-(void) resolveDependenciesInModel:(NSDictionary *) model usingResolvers:(NSArray *) resolvers {
     for (ALCDependency *dependency in _dependencies) {
-        [dependency resolveUsingResolvers:resolvers];
+        NSDictionary *candidates = [model objectDescriptionsForClass:dependency.variableClass
+                                                           protocols:dependency.variableProtocols
+                                                           qualifier:dependency.variableQualifier
+                                                      usingResolvers:resolvers];
+        if (candidates == nil) {
+            @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
+                                           reason:[NSString stringWithFormat:@"Unable to resolve '%@' %s<%@>", dependency.variableQualifier, class_getName(dependency.variableClass), [dependency.variableProtocols componentsJoinedByString:@","]]
+                                         userInfo:nil];
+        }
+        logDependencyResolving(@"Resolved dependency");
+
     }
 }
 
@@ -46,10 +57,10 @@
 }
 
 -(void) instantiateUsingFactories:(NSArray *) objectFactories {
-
+    
     for (id<ALCObjectFactory> objectFactory in objectFactories) {
         _finalObject = [objectFactory createObjectFromObjectDescription:self];
-        if (_finalObject) {
+        if (_finalObject != nil) {
             return;
         }
     }

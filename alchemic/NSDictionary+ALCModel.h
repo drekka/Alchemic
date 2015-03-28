@@ -10,6 +10,11 @@
 
 @interface NSDictionary (ALCModel)
 
+-(NSDictionary *) objectDescriptionsForClass:(Class) aClass
+                                   protocols:(NSArray *) protocols
+                                   qualifier:(NSString *) qualifier
+                              usingResolvers:(NSArray *) resolvers;
+
 -(NSDictionary *) objectDescriptionsForClass:(Class) class;
 
 -(NSDictionary *) objectDescriptionsWithProtocol:(Protocol *) protocol;

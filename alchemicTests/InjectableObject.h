@@ -7,9 +7,8 @@
 //
 
 @import Foundation;
+#import "InjectableProtocol.h"
 
-@interface InjectableObject : NSObject
-
-@property (nonatomic, strong) NSString *publicString;
+@interface InjectableObject : NSObject<InjectableProtocol>
 
 @end

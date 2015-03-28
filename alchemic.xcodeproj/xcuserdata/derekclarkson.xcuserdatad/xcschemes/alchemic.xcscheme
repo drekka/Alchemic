@@ -29,8 +29,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-               BuildableName = "alchemicTests.xctest"
-               BlueprintName = "alchemicTests"
+               BuildableName = "Simple class.xctest"
+               BlueprintName = "Simple class"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,8 +47,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-               BuildableName = "alchemicTests.xctest"
-               BlueprintName = "alchemicTests"
+               BuildableName = "Simple class.xctest"
+               BlueprintName = "Simple class"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>

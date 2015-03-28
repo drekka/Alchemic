@@ -24,14 +24,8 @@
  */
 -(instancetype) initWithModel:(NSDictionary *) model;
 
-/**
- Called to resolve a dependency in an object.
- 
- @param dependency the dependency info that specifies what needs to be resolved.
- @param object the object that needs the dependency.
- 
- @return a list of candidate objects or nil if no met the criteria.
- */
--(NSDictionary *) resolveDependency:(ALCDependency *) dependency;
+-(NSDictionary *) resolveDependencyWithClass:(Class) aClass
+                                   protocols:(NSArray *) protocols
+                                        name:(NSString *) name;
 
 @end

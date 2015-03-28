@@ -18,15 +18,14 @@
 
 @property (nonatomic, assign, readonly) Class parentClass;
 @property (nonatomic, assign, readonly) Ivar variable;
+@property (nonatomic, strong, readonly) NSString *variableQualifier;
 @property (nonatomic, assign, readonly) Class variableClass;
 @property (nonatomic, strong, readonly) NSString *variableTypeEncoding;
-@property (nonatomic, assign, readonly) NSArray *variableProtocols;
+@property (nonatomic, strong, readonly) NSArray *variableProtocols;
 
 @property (nonatomic, strong) NSDictionary *candidateObjectDescriptions;
 
--(instancetype) initWithVariable:(Ivar) variable parentClass:(Class) parentClass;
-
--(void) resolveUsingResolvers:(NSArray *) resolvers;
+-(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier parentClass:(Class) parentClass;
 
 -(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors;
 

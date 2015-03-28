@@ -56,8 +56,18 @@
 
 -(void) registerClass:(Class) class withName:(NSString *) name;
 
--(void) registerClass:(Class) class withInjectionPoints:(NSString *) injs, ...;
+-(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ...;
 
--(void) registerClass:(Class) class withName:(NSString *) name withInjectionPoints:(NSString *) injs, ...;
+#pragma mark - Directly adding objects
+
+-(void) registerObject:(id) finalObject withName:(NSString *) name;
+
+#pragma mark - Retrieving objects
+
+-(id) objectWithName:(NSString *) name;
+
+#pragma mark - Manually injecting dependencies
+
+-(void) injectDependencies:(id) object;
 
 @end

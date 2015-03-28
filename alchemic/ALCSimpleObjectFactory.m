@@ -26,7 +26,7 @@
 }
 
 -(id) createObjectFromObjectDescription:(ALCObjectDescription *) objectDescription {
-    logCreation(@"Creating object using %s::init", class_getName(objectDescription.forClass));
+    logCreation(@"Creating a '%@' using %s::init", objectDescription.name, class_getName(objectDescription.forClass));
     return [[objectDescription.forClass alloc] init];
 }
 

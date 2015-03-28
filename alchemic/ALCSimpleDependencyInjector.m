@@ -19,7 +19,7 @@
     NSString *name = [[dependency.candidateObjectDescriptions allKeys] firstObject];
     ALCObjectDescription *objectDescription = dependency.candidateObjectDescriptions[name];
     id value = objectDescription.finalObject;
-    logDependencyResolving(@"Injecting %s with a %s(%@)", ivar_getName(dependency.variable), class_getName([value class]), name);
+    logDependencyResolving(@"Injecting %s with '%3$@' (%2$s)", ivar_getName(dependency.variable), class_getName([value class]), name);
     object_setIvar(finalObject, dependency.variable, value);
     return YES;
 }

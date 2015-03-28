@@ -19,27 +19,29 @@
  */
 @implementation ALCClassDependencyResolver
 
--(NSDictionary *) resolveDependency:(ALCDependency *) dependency {
+-(NSDictionary *) resolveDependencyWithClass:(Class) aClass
+                                   protocols:(NSArray *) protocols
+                                        name:(NSString *) name {
     
-    if (dependency.variableClass == nil) {
+    if (aClass == nil) {
         return nil;
     }
     
-    NSDictionary *objs = [self.model objectDescriptionsForClass:dependency.variableClass];
+    NSDictionary *objs = [self.model objectDescriptionsForClass:aClass];
     if ([objs count] == 0) {
         return nil;
     }
     
     // Scan for protocols and exit if not found.
-    if ([dependency.variableProtocols count] > 0) {
-        for (Protocol *protocol in dependency.variableProtocols) {
+    if ([protocols count] > 0) {
+        for (Protocol *protocol in protocols) {
             objs = [objs objectDescriptionsWithProtocol:protocol];
             if ([objs count] == 0) {
                 return nil;
             }
         }
     }
-
+    
     return objs;
     
 }

@@ -10,7 +10,9 @@
 
 @implementation ALCAbstractDependencyResolver
 
--(id) resolveDependency:(ALCDependency *)dependency {
+-(NSDictionary *) resolveDependencyWithClass:(Class) aClass
+                                   protocols:(NSArray *) protocols
+                                        name:(NSString *) name {
     return nil;
 }
 
