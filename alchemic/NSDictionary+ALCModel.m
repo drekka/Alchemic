@@ -9,7 +9,7 @@
 #import "NSDictionary+ALCModel.h"
 
 @import Foundation;
-#import "ALCObjectDescription.h"
+#import "ALCInstance.h"
 #import "ALCRuntimeFunctions.h"
 #import "ALCDependencyResolver.h"
 #import <objc/runtime.h>
@@ -36,7 +36,7 @@
 
 -(NSDictionary *) objectDescriptionsForClass:(Class) class {
     NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
-    [self enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop) {
+    [self enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop) {
         if (class_decendsFromClass(description.forClass, class)) {
             results[name] = description;
         }
@@ -46,7 +46,7 @@
 
 -(NSDictionary *) objectDescriptionsWithProtocol:(Protocol *) protocol {
     NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
-    [self enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop) {
+    [self enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop) {
         if (class_conformsToProtocol(description.forClass, protocol)) {
             results[name] = description;
         }

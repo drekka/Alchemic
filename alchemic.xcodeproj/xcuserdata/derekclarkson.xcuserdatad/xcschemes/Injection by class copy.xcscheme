@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0620"
+   LastUpgradeVersion = "0630"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -9,28 +9,14 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6C66DC2D1A8B82C3009F9D94"
-               BuildableName = "libalchemic.a"
-               BlueprintName = "alchemic"
-               ReferencedContainer = "container:alchemic.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-               BuildableName = "Injection by class.xctest"
-               BlueprintName = "Injection by class"
+               BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
+               BuildableName = "Injection by class copy.xctest"
+               BlueprintName = "Injection by qualifier"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-               BuildableName = "Injection by class.xctest"
-               BlueprintName = "Injection by class"
+               BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
+               BuildableName = "Injection by class copy.xctest"
+               BlueprintName = "Injection by qualifier"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -56,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C66DC2D1A8B82C3009F9D94"
-            BuildableName = "libalchemic.a"
-            BlueprintName = "alchemic"
+            BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
+            BuildableName = "Injection by class copy.xctest"
+            BlueprintName = "Injection by qualifier"
             ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -75,9 +61,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C66DC2D1A8B82C3009F9D94"
-            BuildableName = "libalchemic.a"
-            BlueprintName = "alchemic"
+            BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
+            BuildableName = "Injection by class copy.xctest"
+            BlueprintName = "Injection by qualifier"
             ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -93,9 +79,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C66DC2D1A8B82C3009F9D94"
-            BuildableName = "libalchemic.a"
-            BlueprintName = "alchemic"
+            BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
+            BuildableName = "Injection by class copy.xctest"
+            BlueprintName = "Injection by qualifier"
             ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

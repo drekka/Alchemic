@@ -7,6 +7,8 @@
 //
 
 #import <objc/objc.h>
+#import <Objc/runtime.h>
 
 BOOL class_decendsFromClass(Class child, Class parent);
 
+Ivar class_getIvarForName(Class class, const char *name);

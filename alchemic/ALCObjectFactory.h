@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@class ALCObjectDescription;
+@class ALCInstance;
 @class ALCContext;
 
 /**
@@ -31,6 +31,6 @@
  @param classInfo the information tha describes the object to be created.
  @return an instance of the object or null if the factory cannot create the object.
  */
--(id) createObjectFromObjectDescription:(ALCObjectDescription *) objectDescription;
+-(id) createObjectFromObjectDescription:(ALCInstance *) objectDescription;
 
 @end

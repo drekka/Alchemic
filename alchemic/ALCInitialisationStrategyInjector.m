@@ -12,7 +12,7 @@
 
 #import <objc/runtime.h>
 #import "ALCLogger.h"
-#import "ALCObjectDescription.h"
+#import "ALCInstance.h"
 #import "ALCInitialisationStrategyManagement.h"
 #import "ALCInitialisationStrategy.h"
 
@@ -61,7 +61,7 @@ static BOOL injected = NO;
     
     // Work out which classes we need to inject hooks into.
     NSMutableArray *rootClasses = [[NSMutableArray alloc] init];
-    [objectDescriptionList enumerateObjectsUsingBlock:^(ALCObjectDescription *objectDescription, NSUInteger idx, BOOL *stop) {
+    [objectDescriptionList enumerateObjectsUsingBlock:^(ALCInstance *objectDescription, NSUInteger idx, BOOL *stop) {
         
         // Check the ancestory of the class.
         // If any of the parents appear in the list of injectable classes then skip to the next class.

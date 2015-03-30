@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@class ALCObjectDescription;
+@class ALCInstance;
 #import <objc/runtime.h>
 
 /**
@@ -16,7 +16,6 @@
  */
 @interface ALCDependency : NSObject
 
-@property (nonatomic, assign, readonly) Class parentClass;
 @property (nonatomic, assign, readonly) Ivar variable;
 @property (nonatomic, strong, readonly) NSString *variableQualifier;
 @property (nonatomic, assign, readonly) Class variableClass;
@@ -25,7 +24,7 @@
 
 @property (nonatomic, strong) NSDictionary *candidateObjectDescriptions;
 
--(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier parentClass:(Class) parentClass;
+-(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier;
 
 -(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors;
 

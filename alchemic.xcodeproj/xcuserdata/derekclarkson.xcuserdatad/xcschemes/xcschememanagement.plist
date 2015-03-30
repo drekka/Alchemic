@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Injection by class copy.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>alchemic.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>6C45ADBA1AC978E500D9BF7C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>6C66DC2D1A8B82C3009F9D94</key>
 		<dict>
 			<key>primary</key>

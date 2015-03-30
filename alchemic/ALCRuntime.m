@@ -11,13 +11,18 @@
 
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
-#import "ALCObjectDescription.h"
+#import "ALCInstance.h"
 #import "ALCInitialisationStrategyInjector.h"
 #import "ALCLogger.h"
+#import "ALCRuntimeFunctions.h"
+#import "ALCDependency.h"
+#import "NSDictionary+ALCModel.h"
 
 @implementation ALCRuntime
 
 static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX));
+
+#pragma mark - Class scanning
 
 +(void) scanForMacros {
     
@@ -95,22 +100,11 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
 }
 
 +(Ivar) variableInClass:(Class) class forInjectionPoint:(const char *) inj {
-    Ivar var = class_getInstanceVariable(class, inj);
+    Ivar var = class_getIvarForName(class, inj);
     if (var == NULL) {
-        // It may be a property we have been passed so look for a '_' var.
-        char * propertyName = NULL;
-        asprintf(&propertyName, "%s%s", "_", inj);
-        var = class_getInstanceVariable(class, propertyName);
-        if (var == NULL) {
-            // Still null then it's may be a class variable.
-            var = class_getClassVariable(class, inj);
-            if (var == NULL) {
-                // Ok, throw an error.
-                @throw [NSException exceptionWithName:@"AlchemicInjectionNotFound"
-                                               reason:[NSString stringWithFormat:@"Cannot find variable/property '%s' in class %s", inj, class_getName(class)]
-                                             userInfo:nil];
-            }
-        }
+        @throw [NSException exceptionWithName:@"AlchemicInjectionNotFound"
+                                       reason:[NSString stringWithFormat:@"Cannot find variable/property '%s' in class %s", inj, class_getName(class)]
+                                     userInfo:nil];
     }
     return var;
 }

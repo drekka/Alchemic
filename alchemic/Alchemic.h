@@ -18,10 +18,6 @@
 [[Alchemic mainContext] registerClass:self injectionPoints:__VA_ARGS__, NULL]; \
 }
 
-#define injectValueWithName(injection, name)
-#define injectValueWithClass(injection, class)
-#define injectValueWithProtocol(injection, protocol)
-
 /**
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.
  */
@@ -31,17 +27,11 @@
 }
 
 #define injectDependencies(object) \
-[[Alchemic mainContext] registerClass:self injectionPoints:__VA_ARGS__, NULL]
-
+[[Alchemic mainContext] injectDependencies:object];
 
 /**
- This macros is used to specify that this class is a singleton.
+ Adds a pre-built object to the model.
  */
-#define registerComponentWithName(objectName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, registerObject) { \
-[[Alchemic mainContext] registerClass:self withName:objectName]; \
-}
-
 #define addObjectWithName(objectValue, objectName) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(object_, __LINE__)) { \
 [[Alchemic mainContext] registerObject:(objectValue) withName:objectName]; \

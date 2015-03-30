@@ -14,10 +14,11 @@
 
 #import "ALCRuntime.h"
 #import "ALCRuntimeFunctions.h"
+#import "ALCRuntimeClassDecorations.h"
 
 #import "AlchemicAware.h"
 
-#import "ALCObjectDescription.h"
+#import "ALCInstance.h"
 #import "ALCInitialisationStrategyInjector.h"
 
 #import "ALCClassDependencyResolver.h"
@@ -45,6 +46,8 @@
     NSMutableDictionary *_model;
     NSMutableDictionary *_objects;
 }
+
+#pragma mark - Lifecycle
 
 -(instancetype) init {
     self = [super init];
@@ -99,90 +102,86 @@
 
 -(void) resolveDependencies {
     logDependencyResolving(@"Resolving dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop){
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop){
         logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(description.forClass));
-        [description resolveDependenciesInModel:_model usingResolvers:_dependencyResolvers];
+        Class class = description.forClass;
+        [ALCRuntimeClassDecorations resolveDependenciesInClass:class withModel:_model dependencyResolvers:_dependencyResolvers];
     }];
 }
 
 -(void) instantiateObjects {
+    
     logCreation(@"Instantiating objects ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop) {
-        if (description.createInstance && description.finalObject == nil) { // Allow for pre-built objects.
-            logCreation(@"Instantiating '%@' (%s)", description.name, class_getName(description.forClass));
-            [description instantiateUsingFactories:_objectFactories];
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop) {
+        
+        if (description.finalObject == nil) { // Allow for pre-built objects.
+            
+            logCreation(@"Instantiating '%@' (%s)", name, class_getName(description.forClass));
+            for (id<ALCObjectFactory> objectFactory in _objectFactories) {
+                description.finalObject = [objectFactory createObjectFromObjectDescription:description];
+                if (description.finalObject != nil) {
+                    break;
+                }
+            }
+            
+            if (description.finalObject == nil) {
+                @throw [NSException exceptionWithName:@"AlchemicUnableToCreateInstance"
+                                               reason:[NSString stringWithFormat:@"Unable to create an instance of %s", class_getName(description.forClass)]
+                                             userInfo:nil];
+            }
+            
         }
     }];
 }
 
 -(void) injectDependencies {
     logDependencyResolving(@"Injecting dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectDescription *description, BOOL *stop) {
-        if (description.createInstance) {
-            logDependencyResolving(@"Injecting dependencies into '%@'", name);
-            [description injectDependenciesUsingInjectors:_dependencyInjectors];
-        }
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop) {
+        logDependencyResolving(@"Injecting dependencies into '%@'", name);
+        [ALCRuntimeClassDecorations injectDependenciesInto:description.finalObject usingDependencyInjectors:_dependencyInjectors];
     }];
 }
 
-#pragma mark - The model
+-(void) injectDependencies:(id) object {
+    logDependencyResolving(@"Resolving dependencies for a %s", class_getName([object class]));
+    [ALCRuntimeClassDecorations resolveDependenciesInClass:[object class] withModel:_model dependencyResolvers:_dependencyResolvers];
+    logDependencyResolving(@"Injecting dependencies into a %s", class_getName([object class]));
+    [ALCRuntimeClassDecorations injectDependenciesInto:object usingDependencyInjectors:_dependencyInjectors];
+}
+
+#pragma mark - Declaring injections
 
 -(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ... {
-
-    // Find any current description for the class.
-    ALCObjectDescription *description = [self objectDescriptionForClass:class withQualifier:nil];
+    
+    if (![ALCRuntimeClassDecorations classIsDecorated:class]) {
+        [ALCRuntimeClassDecorations decorateClass:class];
+    }
     
     va_list args;
     va_start(args, injs);
     for (NSString *inj = injs; inj != nil; inj = va_arg(args, NSString *)) {
-        [self addInjection:inj
-             withQualifier:nil
-       toObjectDescription:description];
+        [ALCRuntimeClassDecorations addInjectionToClass:class injection:inj qualifier:nil];
     }
     va_end(args);
 }
 
+#pragma mark - Registering classes
+
 -(void) registerClass:(Class)class {
-    [self registerClass:class withName:NSStringFromClass(class)];
+    [self objectDescriptionForClass:class withQualifier:NSStringFromClass(class)];
 }
 
 -(void) registerClass:(Class)class withName:(NSString *) name {
-    ALCObjectDescription *description = [self objectDescriptionForClass:class withQualifier:name];
-    description.createInstance = YES;
-    // Update the name which may be a default if the object description was created during field registration.
-    description.name = name;
+    [self objectDescriptionForClass:class withQualifier:name];
 }
 
--(void) addInjection:(NSString *) inj
-       withQualifier:(NSString *) qualifier
- toObjectDescription:(ALCObjectDescription *) objectDescription {
-
-    Ivar variable = [ALCRuntime variableInClass:objectDescription.forClass forInjectionPoint:[inj UTF8String]];
-    
-    ALCDependency *dependency = [[ALCDependency alloc] initWithVariable:variable
-                                                              qualifier:qualifier
-                                                            parentClass:objectDescription.forClass];
-    logRegistration(@"Registering: '%@' (%s::%s)->%@", objectDescription.name, class_getName(objectDescription.forClass), ivar_getName(variable), dependency.variableTypeEncoding);
-    [objectDescription addDependency:dependency];
-}
-
--(ALCObjectDescription *) objectDescriptionForClass:(Class) class withQualifier:(NSString *) qualifier {
- 
-    ALCObjectDescription *description = nil;
-    
-    // First look to see what is already a match.
-    NSDictionary *candidates = [_model objectDescriptionsForClass:class
-                                                        protocols:nil
-                                                        qualifier:qualifier
-                                                   usingResolvers:_dependencyResolvers];
-    if (candidates != nil) {
-        return candidates.allValues[0];
-    }
-    
+-(ALCInstance *) objectDescriptionForClass:(Class) class withQualifier:(NSString *) qualifier {
+    ALCInstance *description = _model[qualifier];
     if (description == nil) {
         logRegistration(@"Creating info for '%2$s' (%1$@)", qualifier, class_getName(class));
-        description = [[ALCObjectDescription alloc] initWithClass:class name:qualifier == nil ? NSStringFromClass(class) : qualifier];
-        _model[description.name] = description;
+        [ALCRuntimeClassDecorations decorateClass:class];
+        description = [[ALCInstance alloc] initWithClass:class];
+        _model[qualifier] = description;
     }
     return description;
 }
@@ -191,7 +190,7 @@
 
 -(void) registerObject:(id) finalObject withName:(NSString *) name {
     logCreation(@"Storing '%@' (%s)", name, class_getName([finalObject class]));
-    ALCObjectDescription *description = [self objectDescriptionForClass:[finalObject class] withQualifier:name];
+    ALCInstance *description = [self objectDescriptionForClass:[finalObject class] withQualifier:name];
     description.finalObject = finalObject;
 }
 
@@ -213,11 +212,7 @@
 #pragma mark - Retrieving objects
 
 -(id) objectWithName:(NSString *) name {
-    return ((ALCObjectDescription *)_model[name]).finalObject;
-}
-
--(void) injectDependencies:(id) object {
-    
+    return ((ALCInstance *)_model[name]).finalObject;
 }
 
 #pragma mark - Configuration

@@ -11,7 +11,7 @@
 #import <objc/runtime.h>
 
 #import "ALCLogger.h"
-#import "ALCObjectDescription.h"
+#import "ALCInstance.h"
 #import "ALCContext.h"
 #import "ALCDependency.h"
 #import "ALCRuntime.h"

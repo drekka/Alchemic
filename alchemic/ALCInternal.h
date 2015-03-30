@@ -20,4 +20,3 @@
 #define dataToNSString(data) [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
 #define stringToData(string) [string dataUsingEncoding:NSUTF8StringEncoding]
 
-

@@ -13,19 +13,18 @@
 
 @implementation ALCDependency
 
--(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier parentClass:(Class) parentClass {
+-(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier {
     self = [super init];
     if (self) {
-        _parentClass = parentClass;
         _variableQualifier = qualifier;
         _variable = variable;
         _variableProtocols = [[NSMutableArray alloc] init];
-        [self readVariableDetails];
+        [self loadVariableDetails];
     }
     return self;
 }
 
--(void) readVariableDetails {
+-(void) loadVariableDetails {
     
     // Get the type.
     const char *encoding = ivar_getTypeEncoding(_variable);
@@ -50,6 +49,7 @@
 }
 
 -(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors {
+
     for (id<ALCDependencyInjector> injector in injectors) {
         if ([injector injectObject:finalObject dependency:self]) {
             return;
@@ -57,7 +57,7 @@
     }
 
     @throw [NSException exceptionWithName:@"AlchemicValueNotInjected"
-                                   reason:[NSString stringWithFormat:@"Unable to inject any candidateobjects for: %s::%s", class_getName(_parentClass), ivar_getName(_variable)]
+                                   reason:[NSString stringWithFormat:@"Unable to inject any candidateobjects for: %s", ivar_getName(_variable)]
                                  userInfo:nil];
 
 }

@@ -8,7 +8,7 @@
 
 #import "ALCSimpleObjectFactory.h"
 #import "ALCLogger.h"
-#import "ALCObjectDescription.h"
+#import "ALCInstance.h"
 #import "ALCContext.h"
 
 #import <objc/runtime.h>
@@ -25,8 +25,8 @@
     return self;
 }
 
--(id) createObjectFromObjectDescription:(ALCObjectDescription *) objectDescription {
-    logCreation(@"Creating a '%@' using %s::init", objectDescription.name, class_getName(objectDescription.forClass));
+-(id) createObjectFromObjectDescription:(ALCInstance *) objectDescription {
+    logCreation(@"Creating instance using %s::init", class_getName(objectDescription.forClass));
     return [[objectDescription.forClass alloc] init];
 }
 

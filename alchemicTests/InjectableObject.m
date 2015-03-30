@@ -8,6 +8,7 @@
 
 #import "InjectableObject.h"
 #import "Alchemic.h"
+#import <objc/runtime.h>
 
 @implementation InjectableObject
 

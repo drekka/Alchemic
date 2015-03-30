@@ -11,13 +11,13 @@
 #import "ALCDependency.h"
 #import <objc/runtime.h>
 #import "ALCLogger.h"
-#import "ALCObjectDescription.h"
+#import "ALCInstance.h"
 
 @implementation ALCSimpleDependencyInjector
 
 -(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
     NSString *name = [[dependency.candidateObjectDescriptions allKeys] firstObject];
-    ALCObjectDescription *objectDescription = dependency.candidateObjectDescriptions[name];
+    ALCInstance *objectDescription = dependency.candidateObjectDescriptions[name];
     id value = objectDescription.finalObject;
     logDependencyResolving(@"Injecting %s with '%3$@' (%2$s)", ivar_getName(dependency.variable), class_getName([value class]), name);
     object_setIvar(finalObject, dependency.variable, value);

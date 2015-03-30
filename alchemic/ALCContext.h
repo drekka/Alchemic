@@ -13,7 +13,7 @@
 #import "ALCObjectFactory.h"
 #import "ALCDependencyInjector.h"
 
-@class ALCObjectDescription;
+@class ALCInstance;
 
 @interface ALCContext : NSObject
 
