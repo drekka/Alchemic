@@ -16,14 +16,14 @@
 
 #import "Alchemic.h"
 #import "ALCLogger.h"
-#import "ALCRuntimeFunctions.h"
+#import "ALCRuntime.h"
 #import "ALCContext.h"
 #import "ALCInitDetails.h"
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
 -(BOOL) canWrapInitInClass:(Class) class {
-    return class_decendsFromClass(class, [UIViewController class]);
+    return [ALCRuntime class:class extends:[UIViewController class]];
 }
 
 -(SEL) wrapperSelector {

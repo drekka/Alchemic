@@ -7,13 +7,15 @@
 //
 
 #import "ALCNameDependencyResolver.h"
+#import "ALCInstance.h"
 
 @implementation ALCNameDependencyResolver
 
 -(NSDictionary *) resolveDependencyWithClass:(Class) aClass
                                    protocols:(NSArray *) protocols
                                         name:(NSString *) name {
-    return self.model[name];
+    ALCInstance * instance = self.model[name];
+    return instance == nil ? nil : @{name: instance};
 }
 
 @end

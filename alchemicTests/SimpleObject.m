@@ -11,6 +11,6 @@
 
 @implementation SimpleObject
 
-registerComponent()
+registerComponentWithName(@"abc")
 
 @end

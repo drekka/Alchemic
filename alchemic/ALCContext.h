@@ -50,13 +50,17 @@
 
 -(void) start;
 
-#pragma mark - Registration
+#pragma mark - Registering classes
 
 -(void) registerClass:(Class) class;
 
 -(void) registerClass:(Class) class withName:(NSString *) name;
 
+#pragma mark - Registering injections
+
 -(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ...;
+
+-(void) registerClass:(Class) class injectionPoint:(NSString *) inj withQualifier:(NSString *) qualifier;
 
 #pragma mark - Directly adding objects
 

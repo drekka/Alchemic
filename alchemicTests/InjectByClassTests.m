@@ -29,7 +29,7 @@ injectValues(@"_simpleObject")
     injectDependencies(self);
 }
 
--(void) testNonContextInjection {
+-(void) testInjectByClass {
     XCTAssertNotNil(_simpleObject);
 }
 

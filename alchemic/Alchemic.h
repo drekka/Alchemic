@@ -14,9 +14,23 @@
 // This macros is used to do injections. The args can be any combination of
 // variable names, property names or internal property variables.
 #define injectValues(...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(dependency_, __LINE__)) { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(dependencies_, __LINE__)) { \
 [[Alchemic mainContext] registerClass:self injectionPoints:__VA_ARGS__, NULL]; \
 }
+
+#define injectValue(variable)
+
+#define injectValueWithClass(variable, class)
+
+#define injectValueWithName(variable, name) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(dependency_, __LINE__)) { \
+[[Alchemic mainContext] registerClass:self injectionPoint:variable withQualifier:name]; \
+}
+
+
+
+#define injectDependencies(object) \
+[[Alchemic mainContext] injectDependencies:object];
 
 /**
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.
@@ -26,8 +40,10 @@
 [[Alchemic mainContext] registerClass:self]; \
 }
 
-#define injectDependencies(object) \
-[[Alchemic mainContext] injectDependencies:object];
+#define registerComponentWithName(name) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, registerObject) { \
+[[Alchemic mainContext] registerClass:self withName:name]; \
+}
 
 /**
  Adds a pre-built object to the model.

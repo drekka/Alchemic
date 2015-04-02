@@ -45,8 +45,30 @@
             }
         }
     }
+}
+
+-(void) resolveUsingResolvers:(NSArray *) resolvers {
+    
+    NSDictionary *candidates;
+    for (id<ALCDependencyResolver> resolver in resolvers) {
+        logDependencyResolving(@"Asking %s to resolve '%@' %s", _variableQualifier, ivar_getName(_variable));
+        candidates = [resolver resolveDependencyWithClass:_variableClass protocols:_variableProtocols name:_variableQualifier];
+        if (candidates != nil) {
+            break;
+        }
+    }
+    
+    _candidateObjectDescriptions = candidates;
+    if (_candidateObjectDescriptions == nil) {
+        @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
+                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency for: %s", ivar_getName(_variable)]
+                                     userInfo:nil];
+    }
+    logDependencyResolving(@"Resolved dependency");
     
 }
+
+
 
 -(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors {
 

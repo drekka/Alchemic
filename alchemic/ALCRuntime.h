@@ -11,11 +11,23 @@
 
 @interface ALCRuntime : NSObject
 
+#pragma mark - General
+
++(BOOL) class:(Class) child extends:(Class) parent;
+
++(Ivar) class:(Class) class withName:(NSString *) name;
+
+#pragma mark - Alchemic
+
 /**
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
  @discussion Once found, the method is called to register the class and variable.
  */
 +(void) scanForMacros;
+
++(BOOL) isClassDecorated:(Class) class;
+
++(void) decorateClass:(Class) class;
 
 /**
  Scans a class to find the actual variable used.
@@ -28,6 +40,12 @@
  @return the Ivar for the variable.
  @throw an exception if no matching variable is found.
  */
-+(Ivar) variableInClass:(Class) class forInjectionPoint:(const char *) inj;
++(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj;
+
++(void) class:(Class) class addInjection:(NSString *) inj withQualifier:(NSString *) qualifier;
+
++(void) class:(Class) class resolveDependenciesWithResolvers:(NSArray *) dependencyResolvers;
+
++(void) object:(id) object injectUsingDependencyInjectors:(NSArray *) dependencyInjectors;
 
 @end

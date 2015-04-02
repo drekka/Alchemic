@@ -21,10 +21,11 @@
 @property (nonatomic, assign, readonly) Class variableClass;
 @property (nonatomic, strong, readonly) NSString *variableTypeEncoding;
 @property (nonatomic, strong, readonly) NSArray *variableProtocols;
-
-@property (nonatomic, strong) NSDictionary *candidateObjectDescriptions;
+@property (nonatomic, strong, readonly) NSDictionary *candidateObjectDescriptions;
 
 -(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier;
+
+-(void) resolveUsingResolvers:(NSArray *) resolvers;
 
 -(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors;
 

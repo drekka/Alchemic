@@ -13,8 +13,6 @@
 #import "ALCLogger.h"
 
 #import "ALCRuntime.h"
-#import "ALCRuntimeFunctions.h"
-#import "ALCRuntimeClassDecorations.h"
 
 #import "AlchemicAware.h"
 
@@ -91,12 +89,10 @@
     // Inject wrappers into the singletons that have registered for dependency injection.
     [_runtimeInjector executeStrategiesOnObjects:_objects withContext:self];
     
-    // First we need to connect up all the dependencies.
+    // Now boot up the model.
     [self resolveDependencies];
-    
-    // Now initiate the objects and finishing injecting dependencies.
     [self instantiateObjects];
-    [self injectDependencies];
+    [self injectModelDependencies];
     
 }
 
@@ -105,7 +101,7 @@
     [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop){
         logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(description.forClass));
         Class class = description.forClass;
-        [ALCRuntimeClassDecorations resolveDependenciesInClass:class withModel:_model dependencyResolvers:_dependencyResolvers];
+        [ALCRuntime class:class resolveDependenciesWithResolvers:_dependencyResolvers];
     }];
 }
 
@@ -134,35 +130,41 @@
     }];
 }
 
--(void) injectDependencies {
+-(void) injectModelDependencies {
     logDependencyResolving(@"Injecting dependencies ...");
     [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop) {
         logDependencyResolving(@"Injecting dependencies into '%@'", name);
-        [ALCRuntimeClassDecorations injectDependenciesInto:description.finalObject usingDependencyInjectors:_dependencyInjectors];
+        [ALCRuntime object:description.finalObject injectUsingDependencyInjectors:_dependencyInjectors];
     }];
 }
 
 -(void) injectDependencies:(id) object {
     logDependencyResolving(@"Resolving dependencies for a %s", class_getName([object class]));
-    [ALCRuntimeClassDecorations resolveDependenciesInClass:[object class] withModel:_model dependencyResolvers:_dependencyResolvers];
+    [ALCRuntime class:[object class] resolveDependenciesWithResolvers:_dependencyResolvers];
     logDependencyResolving(@"Injecting dependencies into a %s", class_getName([object class]));
-    [ALCRuntimeClassDecorations injectDependenciesInto:object usingDependencyInjectors:_dependencyInjectors];
+    [ALCRuntime object:object injectUsingDependencyInjectors:_dependencyInjectors];
 }
 
 #pragma mark - Declaring injections
 
 -(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ... {
-    
-    if (![ALCRuntimeClassDecorations classIsDecorated:class]) {
-        [ALCRuntimeClassDecorations decorateClass:class];
-    }
-    
     va_list args;
     va_start(args, injs);
     for (NSString *inj = injs; inj != nil; inj = va_arg(args, NSString *)) {
-        [ALCRuntimeClassDecorations addInjectionToClass:class injection:inj qualifier:nil];
+        [self registerClass:class injectionPoint:inj qualifier:nil];
     }
     va_end(args);
+}
+
+-(void) registerClass:(Class) class injectionPoint:(NSString *) inj withQualifier:(NSString *) qualifier {
+    [self registerClass:class injectionPoint:inj qualifier:qualifier];
+}
+
+-(void) registerClass:(Class) class injectionPoint:(NSString *) inj qualifier:(NSString *) qualifier {
+    if (![ALCRuntime isClassDecorated:class]) {
+        [ALCRuntime decorateClass:class];
+    }
+    [ALCRuntime class:class addInjection:inj withQualifier:qualifier];
 }
 
 #pragma mark - Registering classes
@@ -179,7 +181,7 @@
     ALCInstance *description = _model[qualifier];
     if (description == nil) {
         logRegistration(@"Creating info for '%2$s' (%1$@)", qualifier, class_getName(class));
-        [ALCRuntimeClassDecorations decorateClass:class];
+        [ALCRuntime decorateClass:class];
         description = [[ALCInstance alloc] initWithClass:class];
         _model[qualifier] = description;
     }
