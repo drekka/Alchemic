@@ -27,8 +27,6 @@
 [[Alchemic mainContext] registerClass:self injectionPoint:variable withQualifier:name]; \
 }
 
-
-
 #define injectDependencies(object) \
 [[Alchemic mainContext] injectDependencies:object];
 

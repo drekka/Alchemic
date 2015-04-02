@@ -17,7 +17,7 @@ registerComponent()
 injectValues(@"injObj", @"injProto")
 
 -(void) didResolveDependencies {
-    NSLog(@"Resolved !!!");
+    _awareCalled = YES;
 }
 
 @end

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
-               BuildableName = "Injection by qualifier.xctest"
-               BlueprintName = "Injection by qualifier"
+               BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
+               BuildableName = "Injection by qualifier copy.xctest"
+               BlueprintName = "Model injections"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
-               BuildableName = "Injection by qualifier.xctest"
-               BlueprintName = "Injection by qualifier"
+               BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
+               BuildableName = "Injection by qualifier copy.xctest"
+               BlueprintName = "Model injections"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -42,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
-            BuildableName = "Injection by qualifier.xctest"
-            BlueprintName = "Injection by qualifier"
+            BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
+            BuildableName = "Injection by qualifier copy.xctest"
+            BlueprintName = "Model injections"
             ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -61,9 +61,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
-            BuildableName = "Injection by qualifier.xctest"
-            BlueprintName = "Injection by qualifier"
+            BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
+            BuildableName = "Injection by qualifier copy.xctest"
+            BlueprintName = "Model injections"
             ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -79,9 +79,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C45ADBA1AC978E500D9BF7C"
-            BuildableName = "Injection by qualifier.xctest"
-            BlueprintName = "Injection by qualifier"
+            BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
+            BuildableName = "Injection by qualifier copy.xctest"
+            BlueprintName = "Model injections"
             ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

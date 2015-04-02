@@ -13,7 +13,8 @@
 
 @interface Component : NSObject<AlchemicAware>
 
-@property(nonatomic, strong) InjectableObject *injObj;
-@property(nonatomic, strong) id<InjectableProtocol> injProto;
+@property(nonatomic, strong, readonly) InjectableObject *injObj;
+@property(nonatomic, strong, readonly) id<InjectableProtocol> injProto;
+@property(nonatomic, assign, readonly) BOOL awareCalled;
 
 @end

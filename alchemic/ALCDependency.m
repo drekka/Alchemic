@@ -51,7 +51,7 @@
     
     NSDictionary *candidates;
     for (id<ALCDependencyResolver> resolver in resolvers) {
-        logDependencyResolving(@"Asking %s to resolve '%@' %s", _variableQualifier, ivar_getName(_variable));
+        logDependencyResolving(@"Asking %s to resolve %s", class_getName([resolver class]), ivar_getName(_variable));
         candidates = [resolver resolveDependencyWithClass:_variableClass protocols:_variableProtocols name:_variableQualifier];
         if (candidates != nil) {
             break;

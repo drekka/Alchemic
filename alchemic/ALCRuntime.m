@@ -141,9 +141,16 @@ static SEL injectDependenciesSelector;
 static SEL addInjectionSelector;
 static SEL resolveDependenciesSelector;
 
-void _alchemic_addInjectionWithQualifierImpl(id self, SEL cmd, NSString *inj, NSString *qualifier);
-void _alchemic_resolveDependenciesWithResolversImpl(id self, SEL cmd, NSArray *dependencyResolvers);
-void _alchemic_injectDependenciesWithInjectorsImpl(id self, SEL cmd, NSArray *dependencyInjectors);
+void _alchemic_addInjectionWithQualifierImpl(id futureSelfClass, SEL cmd, NSString *inj, NSString *qualifier);
+void _alchemic_resolveDependenciesWithResolversImpl(id futureSelfClass, SEL cmd, NSArray *dependencyResolvers);
+void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArray *dependencyInjectors);
+
++(void) initialize {
+    logRuntime(@"Setting selectors");
+    injectDependenciesSelector = sel_registerName(injectDependencies);
+    addInjectionSelector = sel_registerName(addInjection);
+    resolveDependenciesSelector = sel_registerName(resolveDependencies);
+}
 
 +(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj {
 
@@ -168,22 +175,16 @@ void _alchemic_injectDependenciesWithInjectorsImpl(id self, SEL cmd, NSArray *de
 }
 
 +(BOOL) isClassDecorated:(Class) class {
-    return [class respondsToSelector:injectDependenciesSelector];
+    return class_respondsToSelector(class, injectDependenciesSelector);
 }
 
 +(void) decorateClass:(Class) class {
     
-    // Store selectors
-    if (injectDependenciesSelector == NULL) {
-        injectDependenciesSelector = sel_registerName(injectDependencies);
-        addInjectionSelector = sel_registerName(addInjection);
-        resolveDependenciesSelector = sel_registerName(resolveDependencies);
-    }
-    
+    logRuntime(@"Decorating %s", class_getName(class));
     class_addMethod(class, injectDependenciesSelector, (IMP) _alchemic_injectDependenciesWithInjectorsImpl, injectDependenciesSig);
     
     // Class methods are added by adding to the meta class.
-    Class metaClass = object_getClass((id) class);
+    Class metaClass = object_getClass(class);
     class_addMethod(metaClass, addInjectionSelector, (IMP) _alchemic_addInjectionWithQualifierImpl, addInjectionSig);
     class_addMethod(metaClass, resolveDependenciesSelector, (IMP) _alchemic_resolveDependenciesWithResolversImpl, resolveDependenciesSig);
     
@@ -193,11 +194,11 @@ void _alchemic_injectDependenciesWithInjectorsImpl(id self, SEL cmd, NSArray *de
 }
 
 +(void) class:(Class) class addInjection:(NSString *) inj withQualifier:(NSString *) qualifier {
-    ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)((id) class, addInjectionSelector, inj, qualifier);
+    ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(class, addInjectionSelector, inj, qualifier);
 }
 
 +(void) class:(Class) class resolveDependenciesWithResolvers:(NSArray *) dependencyResolvers {
-    ((void (*)(id, SEL, NSArray *))objc_msgSend)((id) class, resolveDependenciesSelector, dependencyResolvers);
+    ((void (*)(id, SEL, NSArray *))objc_msgSend)(class, resolveDependenciesSelector, dependencyResolvers);
 }
 
 +(void) object:(id) object injectUsingDependencyInjectors:(NSArray *) dependencyInjectors {
@@ -206,33 +207,31 @@ void _alchemic_injectDependenciesWithInjectorsImpl(id self, SEL cmd, NSArray *de
 
 #pragma mark - Implementations
 
-void _alchemic_addInjectionWithQualifierImpl(id self, SEL cmd, NSString *inj, NSString *qualifier) {
+void _alchemic_addInjectionWithQualifierImpl(id futureSelfClass, SEL cmd, NSString *inj, NSString *qualifier) {
 
     // Create the dependency info to be store.
-    Ivar variable = [self class:self variableForInjectionPoint:inj];
+    Ivar variable = [ALCRuntime class:futureSelfClass variableForInjectionPoint:inj];
     id dependency = [[ALCDependency alloc] initWithVariable:variable qualifier:qualifier];
     
-    // Get the storage from the class.
-    NSMutableArray *dependencies = objc_getAssociatedObject(self, dependenciesProperty);
-    
-    // Store the new dependency.
+    // Store the dependency.
+    logRegistration(@"Adding future injection into %s::%s", class_getName(futureSelfClass), ivar_getName(variable));
+    NSMutableArray *dependencies = objc_getAssociatedObject(futureSelfClass, dependenciesProperty);
     [dependencies addObject:dependency];
 }
 
 
-void _alchemic_resolveDependenciesWithResolversImpl(id self, SEL cmd, NSArray *dependencyResolvers) {
-    NSMutableArray *dependencies = objc_getAssociatedObject(self, dependenciesProperty);
+void _alchemic_resolveDependenciesWithResolversImpl(id futureSelfClass, SEL cmd, NSArray *dependencyResolvers) {
+    NSMutableArray *dependencies = objc_getAssociatedObject(futureSelfClass, dependenciesProperty);
     for (ALCDependency *dependency in dependencies) {
         [dependency resolveUsingResolvers:dependencyResolvers];
-        logDependencyResolving(@"Resolved dependency");
     }
 }
 
 // Note this is an instance method. Unlike the ones above which are class methods.
-void _alchemic_injectDependenciesWithInjectorsImpl(id self, SEL cmd, NSArray *dependencyInjectors) {
-    NSMutableArray *dependencies = objc_getAssociatedObject(self, dependenciesProperty);
+void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArray *dependencyInjectors) {
+    NSMutableArray *dependencies = objc_getAssociatedObject([futureSelf class], dependenciesProperty);
     for (ALCDependency *dependency in dependencies) {
-        [dependency injectObject:self usingInjectors:dependencyInjectors];
+        [dependency injectObject:futureSelf usingInjectors:dependencyInjectors];
     }
 }
 

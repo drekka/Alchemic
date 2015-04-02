@@ -8,13 +8,7 @@
 
 #import "ALCTestCase.h"
 #import "Alchemic.h"
-#import "ALCContext.h"
-
-#import "ALCRuntime.h"
 #import "SimpleObject.h"
-
-#import <objc/runtime.h>
-#import <objc/message.h>
 
 @interface InjectByClassTests : ALCTestCase
 @end
