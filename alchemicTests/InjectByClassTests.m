@@ -20,7 +20,7 @@
 injectValues(@"_simpleObject")
 
 -(void) setUp {
-    injectDependencies(self);
+    resolveDependencies(self);
 }
 
 -(void) testInjectByClass {

@@ -96,15 +96,6 @@
     
 }
 
--(void) resolveDependencies {
-    logDependencyResolving(@"Resolving dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop){
-        logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(description.forClass));
-        Class class = description.forClass;
-        [ALCRuntime class:class resolveDependenciesWithResolvers:_dependencyResolvers];
-    }];
-}
-
 -(void) instantiateObjects {
     
     logCreation(@"Instantiating objects ...");
@@ -133,16 +124,22 @@
 -(void) injectModelDependencies {
     logDependencyResolving(@"Injecting dependencies ...");
     [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop) {
-        logDependencyResolving(@"Injecting dependencies into '%@'", name);
-        [ALCRuntime object:description.finalObject injectUsingDependencyInjectors:_dependencyInjectors];
+        [self injectDependencies:description.finalObject];
     }];
 }
 
--(void) injectDependencies:(id) object {
+-(void) resolveDependencies:(id) object {
     logDependencyResolving(@"Resolving dependencies for a %s", class_getName([object class]));
     [ALCRuntime class:[object class] resolveDependenciesWithResolvers:_dependencyResolvers];
+    [self injectDependencies:object];
+}
+
+-(void) injectDependencies:(id) object {
     logDependencyResolving(@"Injecting dependencies into a %s", class_getName([object class]));
     [ALCRuntime object:object injectUsingDependencyInjectors:_dependencyInjectors];
+    if ([object conformsToProtocol:@protocol(AlchemicAware)]) {
+        [object didResolveDependencies];
+    }
 }
 
 #pragma mark - Declaring injections
@@ -211,7 +208,14 @@
     _objects[name] = object;
 }
 
-#pragma mark - Retrieving objects
+-(void) resolveDependencies {
+    logDependencyResolving(@"Resolving dependencies ...");
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop){
+        logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(description.forClass));
+        Class class = description.forClass;
+        [ALCRuntime class:class resolveDependenciesWithResolvers:_dependencyResolvers];
+    }];
+}
 
 -(id) objectWithName:(NSString *) name {
     return ((ALCInstance *)_model[name]).finalObject;

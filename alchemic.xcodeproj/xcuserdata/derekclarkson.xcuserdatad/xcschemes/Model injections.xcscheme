@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
-               BuildableName = "Injection by qualifier copy.xctest"
+               BuildableName = "Model injections.xctest"
                BlueprintName = "Model injections"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
-               BuildableName = "Injection by qualifier copy.xctest"
+               BuildableName = "Model injections.xctest"
                BlueprintName = "Model injections"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
-            BuildableName = "Injection by qualifier copy.xctest"
+            BuildableName = "Model injections.xctest"
             BlueprintName = "Model injections"
             ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
-            BuildableName = "Injection by qualifier copy.xctest"
+            BuildableName = "Model injections.xctest"
             BlueprintName = "Model injections"
             ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6C65A61E1ACD7247006ADC1F"
-            BuildableName = "Injection by qualifier copy.xctest"
+            BuildableName = "Model injections.xctest"
             BlueprintName = "Model injections"
             ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>

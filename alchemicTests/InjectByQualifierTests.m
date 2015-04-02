@@ -22,7 +22,7 @@
 injectValueWithName(@"_simpleObject", @"abc")
 
 -(void) setUp {
-    injectDependencies(self);
+    resolveDependencies(self);
 }
 
 -(void) testInjectByQualifier {

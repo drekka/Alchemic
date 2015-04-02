@@ -27,8 +27,8 @@
 [[Alchemic mainContext] registerClass:self injectionPoint:variable withQualifier:name]; \
 }
 
-#define injectDependencies(object) \
-[[Alchemic mainContext] injectDependencies:object];
+#define resolveDependencies(object) \
+[[Alchemic mainContext] resolveDependencies:object];
 
 /**
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.
