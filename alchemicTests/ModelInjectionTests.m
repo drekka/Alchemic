@@ -9,7 +9,10 @@
 #import "ALCTestCase.h"
 #import "Component.h"
 #import "InjectableObject.h"
+#import "InjectableProtocol.h"
 #import "Alchemic.h"
+
+#import <objc/runtime.h>
 
 @interface ModelInjectionTests : ALCTestCase<AlchemicAware>
 
@@ -18,10 +21,12 @@
 @implementation ModelInjectionTests {
     Component *_component;
     InjectableObject *_injectableObject;
+    NSArray *_arrayOfComponents;
     BOOL callbackExecuted;
 }
 
 injectValues(@"_component", @"_injectableObject")
+injectValue(@"_arrayOfComponents", [Component class], @protocol(InjectableProtocol))
 
 -(void) setUp {
     resolveDependencies(self);

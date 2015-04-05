@@ -42,7 +42,7 @@
  */
 +(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj;
 
-+(void) class:(Class) class addInjection:(NSString *) inj withQualifier:(NSString *) qualifier;
++(void) class:(Class) class addInjection:(NSString *) inj withQualifiers:(NSArray *) qualifiers;
 
 +(void) class:(Class) class resolveDependenciesWithResolvers:(NSArray *) dependencyResolvers;
 

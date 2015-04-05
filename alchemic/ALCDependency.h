@@ -17,13 +17,16 @@
 @interface ALCDependency : NSObject
 
 @property (nonatomic, assign, readonly) Ivar variable;
-@property (nonatomic, strong, readonly) NSString *variableQualifier;
-@property (nonatomic, assign, readonly) Class variableClass;
-@property (nonatomic, strong, readonly) NSString *variableTypeEncoding;
-@property (nonatomic, strong, readonly) NSArray *variableProtocols;
+
+@property (nonatomic, strong) NSString *resolveUsingName;
+@property (nonatomic, assign) Class resolveUsingClass;
+@property (nonatomic, strong, readonly) NSArray *resolveUsingProtocols;
+
 @property (nonatomic, strong, readonly) NSDictionary *candidateObjectDescriptions;
 
--(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier;
+-(void) setNewResolvingQualifiers:(NSArray *) qualifiers;
+
+-(instancetype) initWithVariable:(Ivar) variable;
 
 -(void) resolveUsingResolvers:(NSArray *) resolvers;
 

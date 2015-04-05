@@ -60,7 +60,7 @@
 
 -(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ...;
 
--(void) registerClass:(Class) class injectionPoint:(NSString *) inj withQualifier:(NSString *) qualifier;
+-(void) registerClass:(Class) class injectionPoint:(NSString *) inj withQualifiers:(id) qualifiers, ...;
 
 #pragma mark - Directly adding objects
 

@@ -11,14 +11,16 @@
 #import "ALCDependencyResolver.h"
 #import "ALCDependencyInjector.h"
 
+#import <objc/runtime.h>
+#import <objc/protocol.h>
+
 @implementation ALCDependency
 
--(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier {
+-(instancetype) initWithVariable:(Ivar) variable {
     self = [super init];
     if (self) {
-        _variableQualifier = qualifier;
         _variable = variable;
-        _variableProtocols = [[NSMutableArray alloc] init];
+        _resolveUsingProtocols = [[NSMutableArray alloc] init];
         [self loadVariableDetails];
     }
     return self;
@@ -28,23 +30,64 @@
     
     // Get the type.
     const char *encoding = ivar_getTypeEncoding(_variable);
-    _variableTypeEncoding = [NSString stringWithCString:encoding encoding:NSUTF8StringEncoding];
+    NSString *variableTypeEncoding = [NSString stringWithCString:encoding encoding:NSUTF8StringEncoding];
     
-    if ([_variableTypeEncoding hasPrefix:@"@"]) {
+    if ([variableTypeEncoding hasPrefix:@"@"]) {
         
-        NSArray *defs = [_variableTypeEncoding componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\",<>"]];
+        NSArray *defs = [variableTypeEncoding componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\",<>"]];
         
         // If there is no more than 2 in the array then the dependency is an id.
         for (int i = 2; i < [defs count]; i ++) {
             if ([defs[i] length] > 0) {
                 if (i == 2) {
-                    _variableClass = objc_lookUpClass([defs[2] cStringUsingEncoding:NSUTF8StringEncoding]);
+                    self.resolveUsingClass = objc_lookUpClass([defs[2] cStringUsingEncoding:NSUTF8StringEncoding]);
                 } else {
-                    [(NSMutableArray *)_variableProtocols addObject:NSProtocolFromString(defs[i])];
+                    [(NSMutableArray *)self.resolveUsingProtocols addObject:NSProtocolFromString(defs[i])];
                 }
             }
         }
     }
+}
+
+-(void) setNewResolvingQualifiers:(NSArray *) qualifiers {
+    
+    // Clear current settings.
+    self.resolveUsingName = nil;
+    [(NSMutableArray *)self.resolveUsingProtocols removeAllObjects];
+    self.resolveUsingClass = nil;
+    
+    // Loop through the new qualifiers and store them.
+    [qualifiers enumerateObjectsUsingBlock:^(id qualifier, NSUInteger idx, BOOL *stop) {
+        
+        if ([qualifier isKindOfClass:[NSString class]]) {
+            logRegistration(@"Resolve using name: %@", qualifier);
+            self.resolveUsingName = qualifier;
+        } else {
+            // Test to see if it's a class.
+            if (object_isClass(qualifier)) {
+                
+                Class classQualifier = qualifier;
+                
+                // Check for a Protocol.
+                if ([@"Protocol" isEqualToString:NSStringFromClass(classQualifier)]) {
+                    logRegistration(@"Resolve using protocol: %@", NSStringFromClass(classQualifier));
+                    [(NSMutableArray *)self.resolveUsingProtocols addObject:classQualifier];
+                } else {
+                    logRegistration(@"Resolve using class: %@", qualifier);
+                    self.resolveUsingClass = classQualifier;
+                }
+                return;
+                
+            }
+            
+            // It's not something we understand.
+            @throw [NSException exceptionWithName:@"AlchemicUnknownQualifierType"
+                                           reason:[NSString stringWithFormat:@"Unknown type of qualifier: %@", qualifier]
+                                         userInfo:nil];
+
+        }
+    }];
+    
 }
 
 -(void) resolveUsingResolvers:(NSArray *) resolvers {
@@ -52,7 +95,9 @@
     NSDictionary *candidates;
     for (id<ALCDependencyResolver> resolver in resolvers) {
         logDependencyResolving(@"Asking %s to resolve %s", class_getName([resolver class]), ivar_getName(_variable));
-        candidates = [resolver resolveDependencyWithClass:_variableClass protocols:_variableProtocols name:_variableQualifier];
+        candidates = [resolver resolveDependencyWithClass:self.resolveUsingClass
+                                                protocols:self.resolveUsingProtocols
+                                                     name:self.resolveUsingName];
         if (candidates != nil) {
             break;
         }
@@ -71,17 +116,17 @@
 
 
 -(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors {
-
+    
     for (id<ALCDependencyInjector> injector in injectors) {
         if ([injector injectObject:finalObject dependency:self]) {
             return;
         }
     }
-
+    
     @throw [NSException exceptionWithName:@"AlchemicValueNotInjected"
                                    reason:[NSString stringWithFormat:@"Unable to inject any candidateobjects for: %s", ivar_getName(_variable)]
                                  userInfo:nil];
-
+    
 }
 
 @end

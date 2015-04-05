@@ -141,7 +141,7 @@ static SEL injectDependenciesSelector;
 static SEL addInjectionSelector;
 static SEL resolveDependenciesSelector;
 
-void _alchemic_addInjectionWithQualifierImpl(id futureSelfClass, SEL cmd, NSString *inj, NSString *qualifier);
+void _alchemic_addInjectionWithQualifierImpl(id futureSelfClass, SEL cmd, NSString *inj, NSArray *qualifiers);
 void _alchemic_resolveDependenciesWithResolversImpl(id futureSelfClass, SEL cmd, NSArray *dependencyResolvers);
 void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArray *dependencyInjectors);
 
@@ -193,8 +193,8 @@ void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArr
 
 }
 
-+(void) class:(Class) class addInjection:(NSString *) inj withQualifier:(NSString *) qualifier {
-    ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(class, addInjectionSelector, inj, qualifier);
++(void) class:(Class) class addInjection:(NSString *) inj withQualifiers:(NSArray *) qualifiers {
+    ((void (*)(id, SEL, NSString *, NSArray *))objc_msgSend)(class, addInjectionSelector, inj, qualifiers);
 }
 
 +(void) class:(Class) class resolveDependenciesWithResolvers:(NSArray *) dependencyResolvers {
@@ -207,11 +207,16 @@ void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArr
 
 #pragma mark - Implementations
 
-void _alchemic_addInjectionWithQualifierImpl(id futureSelfClass, SEL cmd, NSString *inj, NSString *qualifier) {
+void _alchemic_addInjectionWithQualifierImpl(id futureSelfClass, SEL cmd, NSString *inj, NSArray *qualifiers) {
 
     // Create the dependency info to be store.
     Ivar variable = [ALCRuntime class:futureSelfClass variableForInjectionPoint:inj];
-    id dependency = [[ALCDependency alloc] initWithVariable:variable qualifier:qualifier];
+    ALCDependency *dependency = [[ALCDependency alloc] initWithVariable:variable];
+    
+    // If there are qualifiers then clear the pre-loaded settings sort through them.
+    if ([qualifiers count] > 0) {
+        [dependency setNewResolvingQualifiers:qualifiers];
+    }
     
     // Store the dependency.
     logRegistration(@"Adding future injection into %s::%s", class_getName(futureSelfClass), ivar_getName(variable));

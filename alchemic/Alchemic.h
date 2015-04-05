@@ -18,17 +18,13 @@
 [[Alchemic mainContext] registerClass:self injectionPoints:__VA_ARGS__, NULL]; \
 }
 
-#define injectValue(variable)
-
-#define injectValueWithClass(variable, class)
-
-#define injectValueWithName(variable, name) \
+#define injectValue(variable, ...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(dependency_, __LINE__)) { \
-[[Alchemic mainContext] registerClass:self injectionPoint:variable withQualifier:name]; \
+    [[Alchemic mainContext] registerClass:self injectionPoint:variable withQualifiers:__VA_ARGS__, NULL]; \
 }
 
 #define resolveDependencies(object) \
-[[Alchemic mainContext] resolveDependencies:object];
+[[Alchemic mainContext] resolveDependencies:object]
 
 /**
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.

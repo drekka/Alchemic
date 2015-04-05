@@ -26,6 +26,7 @@
 #import "ALCDependency.h"
 
 #import "ALCSimpleDependencyInjector.h"
+#import "ALCArrayDependencyInjector.h"
 
 #import "ALCObjectFactory.h"
 #import "ALCSimpleObjectFactory.h"
@@ -72,6 +73,7 @@
         
         _dependencyInjectors = [[NSMutableArray alloc] init];
         [self addDependencyInjector:[[ALCSimpleDependencyInjector alloc] init]];
+        [self addDependencyInjector:[[ALCArrayDependencyInjector alloc] init]];
         
     }
     return self;
@@ -147,21 +149,28 @@
 -(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ... {
     va_list args;
     va_start(args, injs);
-    for (NSString *inj = injs; inj != nil; inj = va_arg(args, NSString *)) {
-        [self registerClass:class injectionPoint:inj qualifier:nil];
+    for (NSString *inj = injs; inj != NULL; inj = va_arg(args, NSString *)) {
+        [self storeClass:class injectionPoint:inj withQualifiers:nil];
     }
     va_end(args);
 }
 
--(void) registerClass:(Class) class injectionPoint:(NSString *) inj withQualifier:(NSString *) qualifier {
-    [self registerClass:class injectionPoint:inj qualifier:qualifier];
+-(void) registerClass:(Class) class injectionPoint:(NSString *) inj withQualifiers:(id) qualifiers, ... {
+    va_list args;
+    va_start(args, qualifiers);
+    NSMutableArray *finalQualifiers = [[NSMutableArray alloc] init];
+    for (id qualifier = qualifiers; qualifier != NULL; qualifier = va_arg(args, id)) {
+        [finalQualifiers addObject:qualifier];
+    }
+    va_end(args);
+    [self storeClass:class injectionPoint:inj withQualifiers:finalQualifiers];
 }
 
--(void) registerClass:(Class) class injectionPoint:(NSString *) inj qualifier:(NSString *) qualifier {
+-(void) storeClass:(Class) class injectionPoint:(NSString *) inj withQualifiers:(NSArray *) qualifiers {
     if (![ALCRuntime isClassDecorated:class]) {
         [ALCRuntime decorateClass:class];
     }
-    [ALCRuntime class:class addInjection:inj withQualifier:qualifier];
+    [ALCRuntime class:class addInjection:inj withQualifiers:qualifiers];
 }
 
 #pragma mark - Registering classes
