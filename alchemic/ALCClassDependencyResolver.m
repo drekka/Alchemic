@@ -27,7 +27,7 @@
         return nil;
     }
     
-    NSDictionary *objs = [self.model objectDescriptionsForClass:aClass];
+    NSDictionary *objs = [self.model objectDescriptionsWithClass:aClass];
     if ([objs count] == 0) {
         return nil;
     }

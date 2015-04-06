@@ -17,6 +17,8 @@
 
 +(Ivar) class:(Class) class withName:(NSString *) name;
 
++(BOOL) classIsProtocol:(Class) possiblePrototocol;
+
 #pragma mark - Alchemic
 
 /**

@@ -15,7 +15,7 @@
 #import "ALCInitialisationStrategyInjector.h"
 #import "ALCLogger.h"
 #import "ALCDependency.h"
-#import "NSDictionary+ALCModel.h"
+#import "NSMutableDictionary+ALCModel.h"
 #import "ALCDependencyResolver.h"
 
 @implementation ALCRuntime
@@ -145,11 +145,14 @@ void _alchemic_addInjectionWithQualifierImpl(id futureSelfClass, SEL cmd, NSStri
 void _alchemic_resolveDependenciesWithResolversImpl(id futureSelfClass, SEL cmd, NSArray *dependencyResolvers);
 void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArray *dependencyInjectors);
 
+static Class protocolClass;
+
 +(void) initialize {
     logRuntime(@"Setting selectors");
     injectDependenciesSelector = sel_registerName(injectDependencies);
     addInjectionSelector = sel_registerName(addInjection);
     resolveDependenciesSelector = sel_registerName(resolveDependencies);
+    protocolClass = objc_getClass("Protocol");
 }
 
 +(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj {
@@ -173,6 +176,12 @@ void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArr
     
     return var;
 }
+
++(BOOL) classIsProtocol:(Class) possiblePrototocol {
+    return protocolClass == possiblePrototocol;
+}
+
+#pragma mark - Alchemic
 
 +(BOOL) isClassDecorated:(Class) class {
     return class_respondsToSelector(class, injectDependenciesSelector);

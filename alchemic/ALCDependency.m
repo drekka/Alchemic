@@ -10,6 +10,7 @@
 #import "ALCLogger.h"
 #import "ALCDependencyResolver.h"
 #import "ALCDependencyInjector.h"
+#import "ALCRuntime.h"
 
 #import <objc/runtime.h>
 #import <objc/protocol.h>
@@ -60,31 +61,26 @@
     [qualifiers enumerateObjectsUsingBlock:^(id qualifier, NSUInteger idx, BOOL *stop) {
         
         if ([qualifier isKindOfClass:[NSString class]]) {
-            logRegistration(@"Resolve using name: %@", qualifier);
+            logRegistration(@"Resolve %s using name: %@", ivar_getName(self.variable), qualifier);
             self.resolveUsingName = qualifier;
-        } else {
-            // Test to see if it's a class.
-            if (object_isClass(qualifier)) {
-                
-                Class classQualifier = qualifier;
-                
-                // Check for a Protocol.
-                if ([@"Protocol" isEqualToString:NSStringFromClass(classQualifier)]) {
-                    logRegistration(@"Resolve using protocol: %@", NSStringFromClass(classQualifier));
-                    [(NSMutableArray *)self.resolveUsingProtocols addObject:classQualifier];
-                } else {
-                    logRegistration(@"Resolve using class: %@", qualifier);
-                    self.resolveUsingClass = classQualifier;
-                }
-                return;
-                
-            }
             
-            // It's not something we understand.
-            @throw [NSException exceptionWithName:@"AlchemicUnknownQualifierType"
-                                           reason:[NSString stringWithFormat:@"Unknown type of qualifier: %@", qualifier]
-                                         userInfo:nil];
-
+        } else if (object_isClass(qualifier)) {
+            logRegistration(@"Resolve %s using class: %@", ivar_getName(self.variable), qualifier);
+            self.resolveUsingClass = qualifier;
+            
+        } else {
+            
+            Class qualifierClass = [qualifier class];
+            if ([ALCRuntime classIsProtocol:qualifierClass]) {
+                logRegistration(@"Resolve %s using protocol: %@", ivar_getName(self.variable), NSStringFromProtocol(qualifier));
+                [(NSMutableArray *)self.resolveUsingProtocols addObject:qualifier];
+                
+            } else {
+                // It's not something we understand.
+                @throw [NSException exceptionWithName:@"AlchemicUnknownQualifierType"
+                                               reason:[NSString stringWithFormat:@"Unknown type of qualifier: %@", qualifier]
+                                             userInfo:nil];
+            }
         }
     }];
     

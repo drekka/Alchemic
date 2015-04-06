@@ -37,11 +37,12 @@ static int __alchemicLogOptions = 0;
     //NSString *processName = [[NSProcessInfo processInfo] processName];
     //NSString *threadName = [NSThread currentThread].name;
     //NSString *finalThreadName = threadName == nil || [threadName length] == 0 ? [NSString stringWithFormat:@"%x", pthread_mach_thread_np(pthread_self())] : threadName;
-    NSString *finalThreadName = [NSString stringWithFormat:@"%x", pthread_mach_thread_np(pthread_self())];
+//    NSString *finalThreadName = [NSString stringWithFormat:@"%x", pthread_mach_thread_np(pthread_self())];
     
     //printf("%5$s %6$s [%1$s] %2$s(%3$i) %4$s\n", categoryName, source, line, [msg UTF8String], [finalThreadName UTF8String], [processName UTF8String]);
     //printf("%5$4s %1$12s: %2$s(%3$i) %4$s\n", categoryName, source, line, [msg UTF8String], [finalThreadName UTF8String]);
-    printf("%5$s %1$12s: %4$-80s %2$s(%3$i)\n", categoryName, source, line, [msg UTF8String], [finalThreadName UTF8String]);
+    //printf("%5$s %1$12s: %4$-80s %2$s(%3$i)\n", categoryName, source, line, [msg UTF8String], [finalThreadName UTF8String]);
+    printf("%1$12s: %2$s\n", categoryName, [msg UTF8String]);
     
 }
 
@@ -49,7 +50,6 @@ static int __alchemicLogOptions = 0;
     if (category == AlchemicLogCategoryCreation) return "Creation";
     if (category == AlchemicLogCategoryDependencyResolving) return "Resolving";
     if (category == AlchemicLogCategoryConfiguration) return "Config";
-    if (category == AlchemicLogCategoryProxies) return "Proxies";
     if (category == AlchemicLogCategoryRuntime) return "Runtime";
     return "Registration";
 }

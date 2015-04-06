@@ -37,6 +37,8 @@ injectValue(@"_arrayOfComponents", [Component class], @protocol(InjectableProtoc
     XCTAssertNotNil(_injectableObject);
     XCTAssertNotNil(_component.injObj);
     XCTAssertNotNil(_component.injProto);
+    XCTAssertEqual(_injectableObject, _component.injObj);
+    XCTAssertEqual(_injectableObject, _component.injProto);
     XCTAssertTrue(_component.awareCalled);
     XCTAssertTrue(callbackExecuted);
 }

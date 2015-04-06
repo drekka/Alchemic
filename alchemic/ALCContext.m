@@ -35,15 +35,16 @@
 #import "ALCUIViewControllerInitWithCoderStrategy.h"
 #import "ALCUIViewControllerInitWithFrameStrategy.h"
 
-#import "NSDictionary+ALCModel.h"
+#import "NSMutableDictionary+ALCModel.h"
 
 @implementation ALCContext {
+    
     NSMutableArray *_initialisationStrategies;
     NSMutableArray *_dependencyResolvers;
     NSMutableArray *_dependencyInjectors;
     NSMutableArray *_objectFactories;
+
     NSMutableDictionary *_model;
-    NSMutableDictionary *_objects;
 }
 
 #pragma mark - Lifecycle
@@ -56,7 +57,6 @@
         
         // Create storage for objects.
         _model = [[NSMutableDictionary alloc] init];
-        _objects = [[NSMutableDictionary alloc] init];
         
         _initialisationStrategies = [[NSMutableArray alloc] init];
         [self addInitialisationStrategy:[[ALCNSObjectInitStrategy alloc] init]];
@@ -89,7 +89,7 @@
     }
     
     // Inject wrappers into the singletons that have registered for dependency injection.
-    [_runtimeInjector executeStrategiesOnObjects:_objects withContext:self];
+    //[_runtimeInjector executeStrategiesOnObjects:_objects withContext:self];
     
     // Now boot up the model.
     [self resolveDependencies];
@@ -144,7 +144,7 @@
     }
 }
 
-#pragma mark - Declaring injections
+#pragma mark - Registering injections
 
 -(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ... {
     va_list args;
@@ -167,6 +167,7 @@
 }
 
 -(void) storeClass:(Class) class injectionPoint:(NSString *) inj withQualifiers:(NSArray *) qualifiers {
+    [_model objectDescriptionForClass:class name:nil];
     if (![ALCRuntime isClassDecorated:class]) {
         [ALCRuntime decorateClass:class];
     }
@@ -176,45 +177,19 @@
 #pragma mark - Registering classes
 
 -(void) registerClass:(Class)class {
-    [self objectDescriptionForClass:class withQualifier:NSStringFromClass(class)];
+    [self registerClass:class withName:nil];
 }
 
 -(void) registerClass:(Class)class withName:(NSString *) name {
-    [self objectDescriptionForClass:class withQualifier:name];
-}
-
--(ALCInstance *) objectDescriptionForClass:(Class) class withQualifier:(NSString *) qualifier {
-    ALCInstance *description = _model[qualifier];
-    if (description == nil) {
-        logRegistration(@"Creating info for '%2$s' (%1$@)", qualifier, class_getName(class));
-        [ALCRuntime decorateClass:class];
-        description = [[ALCInstance alloc] initWithClass:class];
-        _model[qualifier] = description;
-    }
-    return description;
+    [_model objectDescriptionForClass:class name:name];
 }
 
 #pragma mark - Registering objects directly
 
 -(void) registerObject:(id) finalObject withName:(NSString *) name {
     logCreation(@"Storing '%@' (%s)", name, class_getName([finalObject class]));
-    ALCInstance *description = [self objectDescriptionForClass:[finalObject class] withQualifier:name];
+    ALCInstance *description = [_model objectDescriptionForClass:[finalObject class] name:name];
     description.finalObject = finalObject;
-}
-
-#pragma mark - Objects
-
--(void) addObject:(id) object {
-    [self addObject:object withName:NSStringFromClass([object class])];
-}
-
--(void) addObject:(id) object withName:(NSString *)name {
-    if (_objects[name] != nil) {
-        @throw [NSException exceptionWithName:@"AlchemicDuplicateObjectName"
-                                       reason:[NSString stringWithFormat:@"Cannot register more than one object with name: %@", name]
-                                     userInfo:nil];
-    }
-    _objects[name] = object;
 }
 
 -(void) resolveDependencies {

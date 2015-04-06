@@ -18,8 +18,7 @@ typedef NS_OPTIONS(NSUInteger, AlchemicLogCategory){
     AlchemicLogCategoryRegistrations       = 1 << 1,
     AlchemicLogCategoryDependencyResolving = 1 << 2,
     AlchemicLogCategoryConfiguration       = 1 << 3,
-    AlchemicLogCategoryProxies             = 1 << 4,
-    AlchemicLogCategoryRuntime             = 1 << 5
+    AlchemicLogCategoryRuntime             = 1 << 4
 };
 
 #define logCreation(template, ...) [ALCLogger logCategory:AlchemicLogCategoryCreation source:__PRETTY_FUNCTION__ line:__LINE__ message:template, ## __VA_ARGS__];
@@ -29,8 +28,6 @@ typedef NS_OPTIONS(NSUInteger, AlchemicLogCategory){
 #define logDependencyResolving(template, ...) [ALCLogger logCategory:AlchemicLogCategoryDependencyResolving source:__PRETTY_FUNCTION__ line:__LINE__ message:template, ## __VA_ARGS__];
 
 #define logConfig(template, ...) [ALCLogger logCategory:AlchemicLogCategoryConfiguration source:__PRETTY_FUNCTION__ line:__LINE__ message:template, ## __VA_ARGS__];
-
-#define logProxies(template, ...) [ALCLogger logCategory:AlchemicLogCategoryProxies source:__PRETTY_FUNCTION__ line:__LINE__ message:template, ## __VA_ARGS__];
 
 #define logRuntime(template, ...) [ALCLogger logCategory:AlchemicLogCategoryRuntime source:__PRETTY_FUNCTION__ line:__LINE__ message:template, ## __VA_ARGS__];
 

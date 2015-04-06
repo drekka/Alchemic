@@ -7,12 +7,6 @@
 //
 
 #import "ALCInstance.h"
-#import "ALCDependencyResolver.h"
-#import "ALCDependencyInjector.h"
-#import "ALCDependency.h"
-#import "ALCLogger.h"
-#import "ALCObjectFactory.h"
-#import "NSDictionary+ALCModel.h"
 
 @class ALCDependency;
 
