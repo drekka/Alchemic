@@ -8,10 +8,10 @@
 
 @import Foundation;
 
-#import "ALCDependencyResolver.h"
 #import "ALCInitialisationInjector.h"
 #import "ALCObjectFactory.h"
 #import "ALCDependencyInjector.h"
+#import "ALCMatcher.h"
 
 @class ALCInstance;
 
@@ -30,11 +30,6 @@
  Strategies are run in reverse order from last registered through to the builtin ones.
  */
 -(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy;
-
-/**
- Adds a ALCDependencyResolver to the list of resolvers.
- */
--(void) addDependencyResolver:(id<ALCDependencyResolver>) dependencyResolver;
 
 /**
  Adds a ALCDependencyInjector to the list of injectors.
@@ -58,9 +53,7 @@
 
 #pragma mark - Registering injections
 
--(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ...;
-
--(void) registerClass:(Class) class injectionPoint:(NSString *) inj withQualifiers:(id) qualifiers, ...;
+-(void) registerClass:(Class) class injectionPoint:(NSString *) inj, ...;
 
 #pragma mark - Directly adding objects
 

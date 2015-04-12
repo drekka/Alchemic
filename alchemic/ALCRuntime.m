@@ -16,9 +16,15 @@
 #import "ALCLogger.h"
 #import "ALCDependency.h"
 #import "NSMutableDictionary+ALCModel.h"
-#import "ALCDependencyResolver.h"
 
 @implementation ALCRuntime
+
++(void) initialize {
+    injectDependenciesSelector = sel_registerName(injectDependencies);
+    addInjectionSelector = sel_registerName(addInjection);
+    resolveDependenciesSelector = sel_registerName(resolveDependencies);
+    protocolClass = objc_getClass("Protocol");
+}
 
 #pragma mark - General
 
@@ -31,6 +37,10 @@
         nextParent = class_getSuperclass(nextParent);
     }
     return NO;
+}
+
++(BOOL) classIsProtocol:(Class) possiblePrototocol {
+    return protocolClass == possiblePrototocol;
 }
 
 +(Ivar) class:(Class) class withName:(NSString *) name {
@@ -49,7 +59,7 @@
 
 #pragma mark - Alchemic
 
-static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX));
+static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_METHOD_PREFIX));
 
 #pragma mark - Class scanning
 
@@ -117,10 +127,10 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
         currMethod = classMethods[idx];
         sel = method_getName(currMethod);
         const char * methodName = sel_getName(sel);
-        if (strncmp(methodName, toCharPointer(ALCHEMIC_METHOD_PREFIX), _prefixLength) != 0) {
+        if (strncmp(methodName, _alchemic_toCharPointer(ALCHEMIC_METHOD_PREFIX), _prefixLength) != 0) {
             continue;
         }
-        logRuntime(@"Found %s::%s, executing ...", class_getName(class), methodName);
+        logRuntime(@"Executing %s::%s ...", class_getName(class), methodName);
         ((void (*)(id, SEL))objc_msgSend)(class, sel); // Note cast because of XCode 6
         
     }
@@ -128,31 +138,29 @@ static const size_t _prefixLength = strlen(toCharPointer(ALCHEMIC_METHOD_PREFIX)
     free(classMethods);
 }
 
+#pragma mark - Alchemic
+
 static const char * dependenciesProperty = "_alchemic_dependencies";
 
 static const char *injectDependencies = "_alchemic_injectUsingDependencyInjectors:";
 static const char *injectDependenciesSig = "v@:@";
-static const char *addInjection = "_alchemic_addinjection:withQualifier:";
+static const char *addInjection = "_alchemic_addinjection:withMatcher:";
 static const char *addInjectionSig = "v@::@@";
-static const char *resolveDependencies = "_alchemic_resolveDependenciesWithModel:dependencyResolvers:";
+static const char *resolveDependencies = "_alchemic_resolveDependenciesWithModel:";
 static const char *resolveDependenciesSig = "v@:@@";
 
 static SEL injectDependenciesSelector;
 static SEL addInjectionSelector;
 static SEL resolveDependenciesSelector;
 
-void _alchemic_addInjectionWithQualifierImpl(id futureSelfClass, SEL cmd, NSString *inj, NSArray *qualifiers);
-void _alchemic_resolveDependenciesWithResolversImpl(id futureSelfClass, SEL cmd, NSArray *dependencyResolvers);
-void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArray *dependencyInjectors);
+//void _alchemic_addInjectionWithMatcherImpl(id futureSelfClass, SEL cmd, NSString *inj, NSArray *matchers);
+//void _alchemic_resolveDependenciesWithModelImpl(id futureSelfClass, SEL cmd, NSDictionary *model);
+//void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArray *dependencyInjectors);
 
 static Class protocolClass;
 
-+(void) initialize {
-    logRuntime(@"Setting selectors");
-    injectDependenciesSelector = sel_registerName(injectDependencies);
-    addInjectionSelector = sel_registerName(addInjection);
-    resolveDependenciesSelector = sel_registerName(resolveDependencies);
-    protocolClass = objc_getClass("Protocol");
++(BOOL) isClassDecorated:(Class) class {
+    return class_respondsToSelector(class, injectDependenciesSelector);
 }
 
 +(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj {
@@ -174,40 +182,31 @@ static Class protocolClass;
                                      userInfo:nil];
     }
     
+    logRegistration(@"Inject: %@, mapped to variable: %s", inj, ivar_getName(var));
     return var;
-}
-
-+(BOOL) classIsProtocol:(Class) possiblePrototocol {
-    return protocolClass == possiblePrototocol;
-}
-
-#pragma mark - Alchemic
-
-+(BOOL) isClassDecorated:(Class) class {
-    return class_respondsToSelector(class, injectDependenciesSelector);
 }
 
 +(void) decorateClass:(Class) class {
     
-    logRuntime(@"Decorating %s", class_getName(class));
+    logRuntime(@"Decorating class %s", class_getName(class));
     class_addMethod(class, injectDependenciesSelector, (IMP) _alchemic_injectDependenciesWithInjectorsImpl, injectDependenciesSig);
     
     // Class methods are added by adding to the meta class.
     Class metaClass = object_getClass(class);
-    class_addMethod(metaClass, addInjectionSelector, (IMP) _alchemic_addInjectionWithQualifierImpl, addInjectionSig);
-    class_addMethod(metaClass, resolveDependenciesSelector, (IMP) _alchemic_resolveDependenciesWithResolversImpl, resolveDependenciesSig);
+    class_addMethod(metaClass, addInjectionSelector, (IMP) _alchemic_addInjectionWithMatcherImpl, addInjectionSig);
+    class_addMethod(metaClass, resolveDependenciesSelector, (IMP) _alchemic_resolveDependenciesWithModelImpl, resolveDependenciesSig);
     
     NSMutableArray *dependencies = [[NSMutableArray alloc] init];
     objc_setAssociatedObject(class, dependenciesProperty, dependencies, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
 }
 
-+(void) class:(Class) class addInjection:(NSString *) inj withQualifiers:(NSArray *) qualifiers {
-    ((void (*)(id, SEL, NSString *, NSArray *))objc_msgSend)(class, addInjectionSelector, inj, qualifiers);
++(void) class:(Class) class addInjection:(NSString *) inj withMatchers:(NSArray *) matchers {
+    ((void (*)(id, SEL, NSString *, NSArray *))objc_msgSend)(class, addInjectionSelector, inj, matchers);
 }
 
-+(void) class:(Class) class resolveDependenciesWithResolvers:(NSArray *) dependencyResolvers {
-    ((void (*)(id, SEL, NSArray *))objc_msgSend)(class, resolveDependenciesSelector, dependencyResolvers);
++(void) class:(Class) class resolveDependenciesWithModel:(NSDictionary *) model {
+    ((void (*)(id, SEL, NSDictionary *))objc_msgSend)(class, resolveDependenciesSelector, model);
 }
 
 +(void) object:(id) object injectUsingDependencyInjectors:(NSArray *) dependencyInjectors {
@@ -216,28 +215,22 @@ static Class protocolClass;
 
 #pragma mark - Implementations
 
-void _alchemic_addInjectionWithQualifierImpl(id futureSelfClass, SEL cmd, NSString *inj, NSArray *qualifiers) {
+void _alchemic_addInjectionWithMatcherImpl(id futureSelfClass, SEL cmd, NSString *inj, NSArray *matchers) {
 
     // Create the dependency info to be store.
     Ivar variable = [ALCRuntime class:futureSelfClass variableForInjectionPoint:inj];
-    ALCDependency *dependency = [[ALCDependency alloc] initWithVariable:variable];
-    
-    // If there are qualifiers then clear the pre-loaded settings sort through them.
-    if ([qualifiers count] > 0) {
-        [dependency setNewResolvingQualifiers:qualifiers];
-    }
+    ALCDependency *dependency = [[ALCDependency alloc] initWithVariable:variable matchers:matchers];
     
     // Store the dependency.
-    logRegistration(@"Adding future injection into %s::%s", class_getName(futureSelfClass), ivar_getName(variable));
     NSMutableArray *dependencies = objc_getAssociatedObject(futureSelfClass, dependenciesProperty);
     [dependencies addObject:dependency];
 }
 
 
-void _alchemic_resolveDependenciesWithResolversImpl(id futureSelfClass, SEL cmd, NSArray *dependencyResolvers) {
+void _alchemic_resolveDependenciesWithModelImpl(id futureSelfClass, SEL cmd, NSDictionary *model) {
     NSMutableArray *dependencies = objc_getAssociatedObject(futureSelfClass, dependenciesProperty);
     for (ALCDependency *dependency in dependencies) {
-        [dependency resolveUsingResolvers:dependencyResolvers];
+        [dependency resolveUsingModel:model];
     }
 }
 

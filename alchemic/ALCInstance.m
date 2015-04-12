@@ -7,6 +7,7 @@
 //
 
 #import "ALCInstance.h"
+#import <objc/runtime.h>
 
 @class ALCDependency;
 
@@ -20,6 +21,8 @@
     return self;
 }
 
-
+-(NSString *) debugDescription {
+    return [NSString stringWithFormat:@"Instance of %s", class_getName(_forClass)];
+}
 
 @end

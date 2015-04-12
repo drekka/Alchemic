@@ -10,6 +10,7 @@
 
 @class ALCInstance;
 #import <objc/runtime.h>
+#import "ALCMatcher.h"
 
 /**
  Container object for information about an injection.
@@ -17,18 +18,14 @@
 @interface ALCDependency : NSObject
 
 @property (nonatomic, assign, readonly) Ivar variable;
+@property (nonatomic, assign, readonly) Class variableClass;
+@property (nonatomic, strong, readonly) NSArray *variableProtocols;
 
-@property (nonatomic, strong) NSString *resolveUsingName;
-@property (nonatomic, assign) Class resolveUsingClass;
-@property (nonatomic, strong, readonly) NSArray *resolveUsingProtocols;
+@property (nonatomic, strong, readonly) NSArray *candidateObjectDescriptions;
 
-@property (nonatomic, strong, readonly) NSDictionary *candidateObjectDescriptions;
+-(instancetype) initWithVariable:(Ivar) variable matchers:(NSArray *) dependencyMatchers;
 
--(void) setNewResolvingQualifiers:(NSArray *) qualifiers;
-
--(instancetype) initWithVariable:(Ivar) variable;
-
--(void) resolveUsingResolvers:(NSArray *) resolvers;
+-(void) resolveUsingModel:(NSDictionary *) model;
 
 -(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors;
 

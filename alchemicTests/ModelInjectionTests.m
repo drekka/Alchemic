@@ -25,8 +25,9 @@
     BOOL callbackExecuted;
 }
 
-injectValues(@"_component", @"_injectableObject")
-injectValue(@"_arrayOfComponents", [Component class], @protocol(InjectableProtocol))
+inject(intoVariable(_component))
+inject(intoVariable(_injectableObject))
+inject(intoVariable(_arrayOfComponents), withClass(Component), withProtocol(AlchemicAware))
 
 -(void) setUp {
     resolveDependencies(self);

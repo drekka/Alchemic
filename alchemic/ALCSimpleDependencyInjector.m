@@ -16,10 +16,9 @@
 @implementation ALCSimpleDependencyInjector
 
 -(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
-    NSString *name = [[dependency.candidateObjectDescriptions allKeys] firstObject];
-    ALCInstance *objectDescription = dependency.candidateObjectDescriptions[name];
+    ALCInstance *objectDescription = [dependency.candidateObjectDescriptions lastObject];
     id value = objectDescription.finalObject;
-    logDependencyResolving(@"Injecting %s with '%3$@' (%2$s)", ivar_getName(dependency.variable), class_getName([value class]), name);
+    logRuntime(@"Injecting %s with a %2$s", ivar_getName(dependency.variable), class_getName([value class]));
     object_setIvar(finalObject, dependency.variable, value);
     return YES;
 }

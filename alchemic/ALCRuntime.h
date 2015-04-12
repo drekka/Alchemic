@@ -44,9 +44,9 @@
  */
 +(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj;
 
-+(void) class:(Class) class addInjection:(NSString *) inj withQualifiers:(NSArray *) qualifiers;
++(void) class:(Class) class addInjection:(NSString *) inj withMatchers:(NSArray *) matchers;
 
-+(void) class:(Class) class resolveDependenciesWithResolvers:(NSArray *) dependencyResolvers;
++(void) class:(Class) class resolveDependenciesWithModel:(NSDictionary *) model;
 
 +(void) object:(id) object injectUsingDependencyInjectors:(NSArray *) dependencyInjectors;
 

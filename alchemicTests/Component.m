@@ -14,7 +14,8 @@
 @implementation Component
 
 registerComponent()
-injectValues(@"injObj", @"injProto")
+inject(intoVariable(injObj))
+inject(intoVariable(injProto))
 
 -(void) didResolveDependencies {
     _awareCalled = YES;

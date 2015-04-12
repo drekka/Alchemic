@@ -10,17 +10,24 @@
 
 #import "ALCInternal.h"
 #import "ALCContext.h"
+#import "ALCClassMatcher.h"
+#import "ALCProtocolMatcher.h"
+#import "ALCNameMatcher.h"
+#import "ALCLogger.h"
+#import <objc/runtime.h>
 
-// This macros is used to do injections. The args can be any combination of
-// variable names, property names or internal property variables.
-#define injectValues(...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(dependencies_, __LINE__)) { \
-[[Alchemic mainContext] registerClass:self injectionPoints:__VA_ARGS__, NULL]; \
-}
+// Matcher wrapping macros.
+#define intoVariable(variableName) _alchemic_toNSString(variableName)
 
-#define injectValue(variable, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(dependency_, __LINE__)) { \
-    [[Alchemic mainContext] registerClass:self injectionPoint:variable withQualifiers:__VA_ARGS__, NULL]; \
+#define withClass(className) [[ALCClassMatcher alloc] initWithClass:[className class]]
+
+#define withProtocol(protocolName) [[ALCProtocolMatcher alloc] initWithProtocol:@protocol(protocolName)]
+
+#define withName(objectName) [[ALCNameMatcher alloc] initWithName:objectName]
+
+#define inject(variable, ...) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _alchemic_concat(inject_dependency_, __LINE__)) { \
+    [[Alchemic mainContext] registerClass:self injectionPoint:variable, ## __VA_ARGS__, nil]; \
 }
 
 #define resolveDependencies(object) \

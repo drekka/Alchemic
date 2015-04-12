@@ -14,9 +14,13 @@
 #define _alchemic_concat_strings(prefix, suffix) prefix ## suffix
 
 // Convert raw macro text to a char *
-#define toCharPointer(text) _toCharPointer(text)
-#define _toCharPointer(text) #text
+#define _alchemic_toCharPointer(text) __alchemic_toCharPointer(text)
+#define __alchemic_toCharPointer(text) #text
 
-#define dataToNSString(data) [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
-#define stringToData(string) [string dataUsingEncoding:NSUTF8StringEncoding]
+// Convert raw macro text to a NSString *
+#define _alchemic_toNSString(chars) __alchemic_toNSString(chars)
+#define __alchemic_toNSString(chars) @#chars
+
+//#define dataToNSString(data) [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
+//#define stringToData(string) [string dataUsingEncoding:NSUTF8StringEncoding]
 

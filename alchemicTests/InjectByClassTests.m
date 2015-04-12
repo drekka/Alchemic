@@ -17,7 +17,7 @@
     SimpleObject *_simpleObject;
 }
 
-injectValues(@"_simpleObject")
+injectValues(intoVariable(_simpleObject))
 
 -(void) setUp {
     resolveDependencies(self);

@@ -8,21 +8,41 @@
 
 #import "ALCDependency.h"
 #import "ALCLogger.h"
-#import "ALCDependencyResolver.h"
 #import "ALCDependencyInjector.h"
 #import "ALCRuntime.h"
+#import "ALCInstance.h"
+
+#import "ALCClassMatcher.h"
+#import "ALCProtocolMatcher.h"
 
 #import <objc/runtime.h>
 #import <objc/protocol.h>
 
-@implementation ALCDependency
+@implementation ALCDependency {
+    NSArray *_dependencyMatchers;
+}
 
--(instancetype) initWithVariable:(Ivar) variable {
+-(instancetype) initWithVariable:(Ivar) variable matchers:(NSArray *) dependencyMatchers {
     self = [super init];
     if (self) {
+        
         _variable = variable;
-        _resolveUsingProtocols = [[NSMutableArray alloc] init];
+        _dependencyMatchers = dependencyMatchers;
+        _variableProtocols = [[NSMutableArray alloc] init];
+        _candidateObjectDescriptions = [[NSMutableArray alloc] init];
+        
         [self loadVariableDetails];
+        
+        if (dependencyMatchers == nil) {
+            logRegistration(@"Using variable declaration to define matchers");
+            _dependencyMatchers = [[NSMutableArray alloc] init];
+            if (_variableClass != nil) {
+                [(NSMutableArray *)_dependencyMatchers addObject:[[ALCClassMatcher alloc] initWithClass:_variableClass]];
+            }
+            [_variableProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, NSUInteger idx, BOOL *stop) {
+                [(NSMutableArray *)_dependencyMatchers addObject:[[ALCProtocolMatcher alloc] initWithProtocol:protocol]];
+            }];
+        }
     }
     return self;
 }
@@ -41,72 +61,43 @@
         for (int i = 2; i < [defs count]; i ++) {
             if ([defs[i] length] > 0) {
                 if (i == 2) {
-                    self.resolveUsingClass = objc_lookUpClass([defs[2] cStringUsingEncoding:NSUTF8StringEncoding]);
+                    _variableClass = objc_lookUpClass([defs[2] cStringUsingEncoding:NSUTF8StringEncoding]);
                 } else {
-                    [(NSMutableArray *)self.resolveUsingProtocols addObject:NSProtocolFromString(defs[i])];
+                    Protocol *protocol = NSProtocolFromString(defs[i]);
+                    [(NSMutableArray *)_variableProtocols addObject:protocol];
                 }
             }
         }
     }
 }
 
--(void) setNewResolvingQualifiers:(NSArray *) qualifiers {
+-(void) resolveUsingModel:(NSDictionary *)model {
     
-    // Clear current settings.
-    self.resolveUsingName = nil;
-    [(NSMutableArray *)self.resolveUsingProtocols removeAllObjects];
-    self.resolveUsingClass = nil;
-    
-    // Loop through the new qualifiers and store them.
-    [qualifiers enumerateObjectsUsingBlock:^(id qualifier, NSUInteger idx, BOOL *stop) {
+    logDependencyResolving(@"Searching for candidates for %s using %lu model objects", ivar_getName(_variable), [model count]);
+    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *Stop) {
         
-        if ([qualifier isKindOfClass:[NSString class]]) {
-            logRegistration(@"Resolve %s using name: %@", ivar_getName(self.variable), qualifier);
-            self.resolveUsingName = qualifier;
-            
-        } else if (object_isClass(qualifier)) {
-            logRegistration(@"Resolve %s using class: %@", ivar_getName(self.variable), qualifier);
-            self.resolveUsingClass = qualifier;
-            
-        } else {
-            
-            Class qualifierClass = [qualifier class];
-            if ([ALCRuntime classIsProtocol:qualifierClass]) {
-                logRegistration(@"Resolve %s using protocol: %@", ivar_getName(self.variable), NSStringFromProtocol(qualifier));
-                [(NSMutableArray *)self.resolveUsingProtocols addObject:qualifier];
-                
-            } else {
-                // It's not something we understand.
-                @throw [NSException exceptionWithName:@"AlchemicUnknownQualifierType"
-                                               reason:[NSString stringWithFormat:@"Unknown type of qualifier: %@", qualifier]
-                                             userInfo:nil];
+        // Run matchers to see if they match. All must accept the candidate object.
+        BOOL matched = YES;
+        for (id<ALCMatcher> dependencyMatcher in _dependencyMatchers) {
+            if (![dependencyMatcher matches:instance withName:name]) {
+                matched = NO;
+                break;
             }
         }
+        
+        if (matched) {
+            logDependencyResolving(@"Adding '%@' %s to candidates", name, class_getName(instance.forClass));
+            [(NSMutableArray *)_candidateObjectDescriptions addObject:instance];
+        }
+        
     }];
     
-}
-
--(void) resolveUsingResolvers:(NSArray *) resolvers {
-    
-    NSDictionary *candidates;
-    for (id<ALCDependencyResolver> resolver in resolvers) {
-        logDependencyResolving(@"Asking %s to resolve %s", class_getName([resolver class]), ivar_getName(_variable));
-        candidates = [resolver resolveDependencyWithClass:self.resolveUsingClass
-                                                protocols:self.resolveUsingProtocols
-                                                     name:self.resolveUsingName];
-        if (candidates != nil) {
-            break;
-        }
-    }
-    
-    _candidateObjectDescriptions = candidates;
-    if (_candidateObjectDescriptions == nil) {
+    // if there are no candidates left then error.
+    if ([_candidateObjectDescriptions count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency for: %s", ivar_getName(_variable)]
+                                       reason:[NSString stringWithFormat:@"Unable to resolve: %s", ivar_getName(_variable)]
                                      userInfo:nil];
     }
-    logDependencyResolving(@"Resolved dependency");
-    
 }
 
 

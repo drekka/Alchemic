@@ -14,6 +14,7 @@
 
 @property (nonatomic, assign, readonly) Class forClass;
 @property (nonatomic, strong) id finalObject;
+@property (nonatomic, assign) BOOL instantiate;
 
 #pragma mark - Life cycle
 

@@ -1,5 +1,5 @@
 //
-//  InjectByQualifierTests.m
+//  InjectByMatcherTests.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 30/03/2015.
@@ -11,21 +11,21 @@
 
 @import XCTest;
 
-@interface InjectByQualifierTests : ALCTestCase
+@interface InjectByMatcherTests : ALCTestCase
 
 @end
 
-@implementation InjectByQualifierTests {
+@implementation InjectByMatcherTests {
     id _simpleObject;
 }
 
-injectValueWithName(@"_simpleObject", @"abc")
+injectValue(intoVariable(_simpleObject), withName(abc))
 
 -(void) setUp {
     resolveDependencies(self);
 }
 
--(void) testInjectByQualifier {
+-(void) testInjectByMatcher {
     XCTAssertNotNil(_simpleObject);
 }
 

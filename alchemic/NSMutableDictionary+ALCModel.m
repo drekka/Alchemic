@@ -14,7 +14,6 @@
 #import "ALClogger.h"
 
 #import "ALCRuntime.h"
-#import "ALCDependencyResolver.h"
 
 static const char *_nameProperty = "_alchemic_name";
 
@@ -62,7 +61,7 @@ static const char *_nameProperty = "_alchemic_name";
     
     NSAssert(self[name] == nil, @"Cannot create an instance when one already exists with name %@", name);
     
-    logRegistration(@"Creating info for '%2$s' (%1$@)", name, class_getName(class));
+    logRegistration(@"----> Adding '%2$s' (%1$@) to model", name, class_getName(class));
     [ALCRuntime decorateClass:class];
     ALCInstance *description = [[ALCInstance alloc] initWithClass:class];
     
