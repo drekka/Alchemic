@@ -73,8 +73,13 @@
 
 -(void) resolveUsingModel:(NSDictionary *)model {
     
+    if ([_candidateObjectDescriptions count] > 0) {
+        logDependencyResolving(@"Dependency previously resolved");
+        return;
+    }
+    
     logDependencyResolving(@"Searching for candidates for %s using %lu model objects", ivar_getName(_variable), [model count]);
-    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *Stop) {
+    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop) {
         
         // Run matchers to see if they match. All must accept the candidate object.
         BOOL matched = YES;
@@ -100,8 +105,6 @@
     }
 }
 
-
-
 -(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors {
     
     for (id<ALCDependencyInjector> injector in injectors) {
@@ -113,6 +116,15 @@
     @throw [NSException exceptionWithName:@"AlchemicValueNotInjected"
                                    reason:[NSString stringWithFormat:@"Unable to inject any candidateobjects for: %s", ivar_getName(_variable)]
                                  userInfo:nil];
+    
+}
+
+-(NSString *) debugDescription {
+    NSMutableArray *protocols = [[NSMutableArray alloc] initWithCapacity:[self.variableProtocols count]];
+    [self.variableProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, NSUInteger idx, BOOL *stop) {
+        protocols[idx] = NSStringFromProtocol(protocol);
+    }];
+    return [NSString stringWithFormat:@"Variable %s -> type: %s <%@>", ivar_getName(self.variable), class_getName(self.variableClass), [protocols componentsJoinedByString:@","]];
     
 }
 

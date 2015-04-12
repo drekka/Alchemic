@@ -30,7 +30,7 @@ inject(intoVariable(_injectableObject))
 inject(intoVariable(_arrayOfComponents), withClass(Component), withProtocol(AlchemicAware))
 
 -(void) setUp {
-    resolveDependencies(self);
+    injectDependencies(self);
 }
 
 -(void) testInjections {

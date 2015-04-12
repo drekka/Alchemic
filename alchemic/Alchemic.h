@@ -30,8 +30,8 @@
     [[Alchemic mainContext] registerClass:self injectionPoint:variable, ## __VA_ARGS__, nil]; \
 }
 
-#define resolveDependencies(object) \
-[[Alchemic mainContext] resolveDependencies:object]
+#define injectDependencies(object) \
+[[Alchemic mainContext] injectDependencies:object]
 
 /**
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.

@@ -65,6 +65,6 @@
 
 #pragma mark - Manually injecting dependencies
 
--(void) resolveDependencies:(id) object;
+-(void) injectDependencies:(id) object;
 
 @end

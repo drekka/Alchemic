@@ -124,12 +124,6 @@
     }];
 }
 
--(void) resolveDependencies:(id) object {
-    logDependencyResolving(@"Resolving dependencies for a %s", class_getName([object class]));
-    [ALCRuntime class:[object class] resolveDependenciesWithModel:_model];
-    [self injectDependencies:object];
-}
-
 -(void) injectDependencies:(id) object {
     logRuntime(@"Injecting dependencies into a %s", class_getName([object class]));
     [ALCRuntime object:object injectUsingDependencyInjectors:_dependencyInjectors];
@@ -143,7 +137,7 @@
 -(void) registerClass:(Class) class injectionPoint:(NSString *) inj, ... {
     va_list args;
     va_start(args, inj);
-    NSMutableArray *finalMatchers = [[NSMutableArray alloc] init];
+    NSMutableArray *finalMatchers;
     id matcher = va_arg(args, id);
     while (matcher != nil) {
     
@@ -153,6 +147,9 @@
                                          userInfo:nil];
         }
         
+        if (finalMatchers == nil) {
+            finalMatchers = [[NSMutableArray alloc] init];
+        }
         [finalMatchers addObject:matcher];
         matcher = va_arg(args, id);
     }
