@@ -17,10 +17,10 @@
     SimpleObject *_simpleObject;
 }
 
-injectValues(intoVariable(_simpleObject))
+inject(intoVariable(_simpleObject))
 
 -(void) setUp {
-    resolveDependencies(self);
+    injectDependencies(self);
 }
 
 -(void) testInjectByClass {

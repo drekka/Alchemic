@@ -18,7 +18,7 @@
 -(instancetype) initWithClass:(Class) class {
     self = [super init];
     if (self) {
-        logRegistration(@"Creating class matcher: %s", class_getName(class));
+        logRegistration(@"Creating class matcher for class: %s", class_getName(class));
         _class = class;
     }
     return self;

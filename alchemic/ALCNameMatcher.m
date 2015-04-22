@@ -17,7 +17,7 @@
 -(instancetype) initWithName:(NSString *) name {
     self = [super init];
     if (self) {
-        logRegistration(@"Creating name matcher: %@", name);
+        logRegistration(@"Creating name matcher for name: %@", name);
         _name = name;
     }
     return self;

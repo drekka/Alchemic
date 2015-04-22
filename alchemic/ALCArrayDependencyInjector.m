@@ -18,19 +18,19 @@
 
     if ([ALCRuntime class:dependency.variableClass extends:[NSArray class]]) {
     
-        NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateObjectDescriptions count]];
-        [dependency.candidateObjectDescriptions enumerateObjectsUsingBlock:^(ALCInstance *obj, NSUInteger idx, BOOL *stop) {
+        NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
+        [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCInstance *obj, NSUInteger idx, BOOL *stop) {
             [values addObject:obj.finalObject];
         }];
 
-        logRuntime(@"Injecting %s with array of %lu objects", ivar_getName(dependency.variable), [dependency.candidateObjectDescriptions count]);
+        logRuntime(@"Injecting %s with array of %lu objects", ivar_getName(dependency.variable), [dependency.candidateInstances count]);
         object_setIvar(finalObject, dependency.variable, values);
         return YES;
 
     } else {
-        if ([dependency.candidateObjectDescriptions count] > 1) {
+        if ([dependency.candidateInstances count] > 1) {
             @throw [NSException exceptionWithName:@"AlchemicTooManyObjects"
-                                           reason:[NSString stringWithFormat:@"Expected 1 object for dependency %s, found %lu", ivar_getName(dependency.variable), (unsigned long)[dependency.candidateObjectDescriptions count]]
+                                           reason:[NSString stringWithFormat:@"Expected 1 object for dependency %s, found %lu", ivar_getName(dependency.variable), (unsigned long)[dependency.candidateInstances count]]
                                          userInfo:nil];
         }
     }

@@ -12,6 +12,6 @@
 
 @protocol ALCDependencyInjector <NSObject>
 
--(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency;
+-(BOOL) injectObject:(id) object dependency:(ALCDependency *) dependency;
 
 @end

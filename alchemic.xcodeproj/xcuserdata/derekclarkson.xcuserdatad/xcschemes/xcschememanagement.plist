@@ -14,6 +14,11 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>Value tests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>alchemic.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -38,6 +43,11 @@
 			<true/>
 		</dict>
 		<key>6C66DC381A8B82C3009F9D94</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6CF341A41ADD5A2C00A9B76B</key>
 		<dict>
 			<key>primary</key>
 			<true/>

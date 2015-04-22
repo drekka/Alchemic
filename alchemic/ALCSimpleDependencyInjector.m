@@ -15,11 +15,12 @@
 
 @implementation ALCSimpleDependencyInjector
 
--(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
-    ALCInstance *objectDescription = [dependency.candidateObjectDescriptions lastObject];
-    id value = objectDescription.finalObject;
-    logRuntime(@"Injecting %s with a %2$s", ivar_getName(dependency.variable), class_getName([value class]));
-    object_setIvar(finalObject, dependency.variable, value);
+-(BOOL) injectObject:(id) object dependency:(ALCDependency *) dependency {
+    ALCInstance *instance = [dependency.candidateInstances lastObject];
+    id value = instance.finalObject;
+    Ivar var = dependency.variable;
+    logRuntime(@"Injecting %s::%s with a %2$s",object_getClassName(object) , ivar_getName(var), object_getClassName(value));
+    object_setIvar(object, var, value);
     return YES;
 }
 

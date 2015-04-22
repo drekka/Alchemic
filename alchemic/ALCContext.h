@@ -8,7 +8,6 @@
 
 @import Foundation;
 
-#import "ALCInitialisationInjector.h"
 #import "ALCObjectFactory.h"
 #import "ALCDependencyInjector.h"
 #import "ALCMatcher.h"
@@ -18,18 +17,6 @@
 @interface ALCContext : NSObject
 
 #pragma mark - Configuration
-
-/**
- Specifies the class used to inject dependencies into the runtime. Normally this doesn't been to be changed from the default.
- @discussion By default this is AlchemicRuntimeInjector.
- */
-@property (nonatomic, strong) id<ALCInitialisationInjector> runtimeInjector;
-
-/**
- Adds an additional initialisation strategy to the built in ones.
- Strategies are run in reverse order from last registered through to the builtin ones.
- */
--(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy;
 
 /**
  Adds a ALCDependencyInjector to the list of injectors.
@@ -47,21 +34,7 @@
 
 #pragma mark - Registering classes
 
--(void) registerClass:(Class) class;
-
--(void) registerClass:(Class) class withName:(NSString *) name;
-
-#pragma mark - Registering injections
-
--(void) registerClass:(Class) class injectionPoint:(NSString *) inj, ...;
-
-#pragma mark - Directly adding objects
-
--(void) registerObject:(id) finalObject withName:(NSString *) name;
-
-#pragma mark - Retrieving objects
-
--(id) objectWithName:(NSString *) name;
+-(void) addInstance:(ALCInstance *) instance;
 
 #pragma mark - Manually injecting dependencies
 

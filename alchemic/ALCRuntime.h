@@ -8,6 +8,7 @@
 
 @import Foundation;
 #import <objc/runtime.h>
+@class ALCInstance;
 
 @interface ALCRuntime : NSObject
 
@@ -19,17 +20,15 @@
 
 +(BOOL) classIsProtocol:(Class) possiblePrototocol;
 
++(void) validateMatcher:(id) object;
+
 #pragma mark - Alchemic
 
 /**
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
- @discussion Once found, the method is called to register the class and variable.
+ @discussion Once found, the block is called to finish the registration of the class.
  */
-+(void) scanForMacros;
-
-+(BOOL) isClassDecorated:(Class) class;
-
-+(void) decorateClass:(Class) class;
++(void) findAlchemicClasses:(void (^)(ALCInstance *)) registerClassBlock;
 
 /**
  Scans a class to find the actual variable used.
@@ -43,11 +42,5 @@
  @throw an exception if no matching variable is found.
  */
 +(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj;
-
-+(void) class:(Class) class addInjection:(NSString *) inj withMatchers:(NSArray *) matchers;
-
-+(void) class:(Class) class resolveDependenciesWithModel:(NSDictionary *) model;
-
-+(void) object:(id) object injectUsingDependencyInjectors:(NSArray *) dependencyInjectors;
 
 @end

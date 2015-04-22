@@ -12,17 +12,15 @@
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
 #import "ALCInstance.h"
-#import "ALCInitialisationStrategyInjector.h"
 #import "ALCLogger.h"
 #import "ALCDependency.h"
-#import "NSMutableDictionary+ALCModel.h"
+#import "NSDictionary+ALCModel.h"
 
 @implementation ALCRuntime
 
+static Class protocolClass;
+
 +(void) initialize {
-    injectDependenciesSelector = sel_registerName(injectDependencies);
-    addInjectionSelector = sel_registerName(addInjection);
-    resolveDependenciesSelector = sel_registerName(resolveDependencies);
     protocolClass = objc_getClass("Protocol");
 }
 
@@ -57,16 +55,23 @@
     return var;
 }
 
++(void) validateMatcher:(id) object {
+    if ([object conformsToProtocol:@protocol(ALCMatcher)]) {
+        return;
+    }
+    @throw [NSException exceptionWithName:@"AlchemicUnableNotAMatcher"
+                                   reason:[NSString stringWithFormat:@"Passed matcher %s does not conform to the ALCMatcher protocol", object_getClassName(object)]
+                                 userInfo:nil];
+}
+
 #pragma mark - Alchemic
 
-static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_METHOD_PREFIX));
+static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREFIX));
 
 #pragma mark - Class scanning
 
-+(void) scanForMacros {
-    
-    logRuntime(@"Scanning for alchemic methods in runtime");
-    
++(void) findAlchemicClasses:(void (^)(ALCInstance *)) registerClassBlock {
+
     // Find out how many classes there are in total.
     int numClasses = objc_getClassList(NULL, 0);
     
@@ -78,93 +83,78 @@ static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_METH
     
     // Now scan them.
     Class nextClass;
+    NSArray *bundles = [NSBundle allBundles];
     for (int index = 0; index < numClasses; index++) {
-        
         nextClass = classes[index];
-        
-        if (nextClass == NULL) {
+        const char *className = class_getName(nextClass);
+        if (strncmp(className, "ALC", 3) == 0
+            || strncmp(className, "Alc", 3) == 0
+            || ! [bundles containsObject:[NSBundle bundleForClass:nextClass]]
+            ) {
             continue;
         }
-        
-        // Exempt system and known classes.
-        if ([ALCRuntime isClassIgnorable:nextClass]) {
-            continue;
+        ALCInstance *instance = [self executeAlchemicMethodsInClass:nextClass];
+        if (instance != nil) {
+            registerClassBlock(instance);
         }
-        
-        // Look for injection points in class.
-        [ALCRuntime checkClassForRegistrations:nextClass];
-        
     }
+    return;
     
-    // Free the array.
-    free(classes);
+    
+    for (NSBundle *bundle in [NSBundle allBundles]) {
+
+        logRuntime(@"Scanning bundle %@", bundle);
+        unsigned int count = 0;
+        const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
+        
+        for(unsigned int i = 0;i < count;i++){
+
+            if (strncmp(classes[i], "ALC", 3) == 0 || strncmp(classes[i], "Alc", 3) == 0) {
+                continue;
+            }
+            
+            Class class = objc_getClass(classes[i]);
+            ALCInstance *instance = [self executeAlchemicMethodsInClass:class];
+            if (instance != nil) {
+                registerClassBlock(instance);
+            }
+        }
+    }
 }
 
-+(BOOL) isClassIgnorable:(Class) class {
-    // Ignore if the class if it's a know system class.
-    const char *className = class_getName(class);
-    return
-    strncmp(className, "NS", 2) == 0
-    || strncmp(className, "UI", 2) == 0
-    || strncmp(className, "CF", 2) == 0
-    || strncmp(className, "XC", 2) == 0
-    || strncmp(className, "OS", 2) == 0
-    || strncmp(className, "_", 1) == 0
-    || strncmp(className, "Alchemic", 8) == 0;
-}
-
-+(void) checkClassForRegistrations:(Class) class {
++(ALCInstance *) executeAlchemicMethodsInClass:(Class) class {
     
-    // Get the class methods.
+    // Get the class methods. We need to get the class of the class for them.
     unsigned int methodCount;
     Method *classMethods = class_copyMethodList(object_getClass(class), &methodCount);
     
     // Search the methods for registration methods.
-    Method currMethod;
-    SEL sel;
+    ALCInstance *instance = nil;
     for (size_t idx = 0; idx < methodCount; ++idx) {
         
-        currMethod = classMethods[idx];
-        sel = method_getName(currMethod);
+        SEL sel = method_getName(classMethods[idx]);
         const char * methodName = sel_getName(sel);
-        if (strncmp(methodName, _alchemic_toCharPointer(ALCHEMIC_METHOD_PREFIX), _prefixLength) != 0) {
+        if (strncmp(methodName, _alchemic_toCharPointer(ALCHEMIC_PREFIX), _prefixLength) != 0) {
             continue;
         }
+        
+        if (instance == nil) {
+            instance = [[ALCInstance alloc] initWithClass:class];
+        }
+        
         logRuntime(@"Executing %s::%s ...", class_getName(class), methodName);
-        ((void (*)(id, SEL))objc_msgSend)(class, sel); // Note cast because of XCode 6
+        ((void (*)(id, SEL, ALCInstance *))objc_msgSend)(class, sel, instance); // Note cast because of XCode 6
         
     }
     
     free(classMethods);
+    return instance;
 }
 
 #pragma mark - Alchemic
 
-static const char * dependenciesProperty = "_alchemic_dependencies";
-
-static const char *injectDependencies = "_alchemic_injectUsingDependencyInjectors:";
-static const char *injectDependenciesSig = "v@:@";
-static const char *addInjection = "_alchemic_addinjection:withMatcher:";
-static const char *addInjectionSig = "v@::@@";
-static const char *resolveDependencies = "_alchemic_resolveDependenciesWithModel:";
-static const char *resolveDependenciesSig = "v@:@@";
-
-static SEL injectDependenciesSelector;
-static SEL addInjectionSelector;
-static SEL resolveDependenciesSelector;
-
-//void _alchemic_addInjectionWithMatcherImpl(id futureSelfClass, SEL cmd, NSString *inj, NSArray *matchers);
-//void _alchemic_resolveDependenciesWithModelImpl(id futureSelfClass, SEL cmd, NSDictionary *model);
-//void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArray *dependencyInjectors);
-
-static Class protocolClass;
-
-+(BOOL) isClassDecorated:(Class) class {
-    return class_respondsToSelector(class, injectDependenciesSelector);
-}
-
 +(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj {
-
+    
     const char * charName = [inj UTF8String];
     Ivar var = class_getInstanceVariable(class, charName);
     if (var == NULL) {
@@ -184,62 +174,6 @@ static Class protocolClass;
     
     logRegistration(@"Inject: %@, mapped to variable: %s", inj, ivar_getName(var));
     return var;
-}
-
-+(void) decorateClass:(Class) class {
-    
-    logRuntime(@"Decorating class %s", class_getName(class));
-    class_addMethod(class, injectDependenciesSelector, (IMP) _alchemic_injectDependenciesWithInjectorsImpl, injectDependenciesSig);
-    
-    // Class methods are added by adding to the meta class.
-    Class metaClass = object_getClass(class);
-    class_addMethod(metaClass, addInjectionSelector, (IMP) _alchemic_addInjectionWithMatcherImpl, addInjectionSig);
-    class_addMethod(metaClass, resolveDependenciesSelector, (IMP) _alchemic_resolveDependenciesWithModelImpl, resolveDependenciesSig);
-    
-    NSMutableArray *dependencies = [[NSMutableArray alloc] init];
-    objc_setAssociatedObject(class, dependenciesProperty, dependencies, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
-}
-
-+(void) class:(Class) class addInjection:(NSString *) inj withMatchers:(NSArray *) matchers {
-    ((void (*)(id, SEL, NSString *, NSArray *))objc_msgSend)(class, addInjectionSelector, inj, matchers);
-}
-
-+(void) class:(Class) class resolveDependenciesWithModel:(NSDictionary *) model {
-    ((void (*)(id, SEL, NSDictionary *))objc_msgSend)(class, resolveDependenciesSelector, model);
-}
-
-+(void) object:(id) object injectUsingDependencyInjectors:(NSArray *) dependencyInjectors {
-    ((void (*)(id, SEL, NSArray *))objc_msgSend)(object, injectDependenciesSelector, dependencyInjectors);
-}
-
-#pragma mark - Implementations
-
-void _alchemic_addInjectionWithMatcherImpl(id futureSelfClass, SEL cmd, NSString *inj, NSArray *matchers) {
-
-    // Create the dependency info to be store.
-    Ivar variable = [ALCRuntime class:futureSelfClass variableForInjectionPoint:inj];
-    ALCDependency *dependency = [[ALCDependency alloc] initWithVariable:variable matchers:matchers];
-    
-    // Store the dependency.
-    NSMutableArray *dependencies = objc_getAssociatedObject(futureSelfClass, dependenciesProperty);
-    [dependencies addObject:dependency];
-}
-
-
-void _alchemic_resolveDependenciesWithModelImpl(id futureSelfClass, SEL cmd, NSDictionary *model) {
-    NSMutableArray *dependencies = objc_getAssociatedObject(futureSelfClass, dependenciesProperty);
-    for (ALCDependency *dependency in dependencies) {
-        [dependency resolveUsingModel:model];
-    }
-}
-
-// Note this is an instance method. Unlike the ones above which are class methods.
-void _alchemic_injectDependenciesWithInjectorsImpl(id futureSelf, SEL cmd, NSArray *dependencyInjectors) {
-    NSMutableArray *dependencies = objc_getAssociatedObject([futureSelf class], dependenciesProperty);
-    for (ALCDependency *dependency in dependencies) {
-        [dependency injectObject:futureSelf usingInjectors:dependencyInjectors];
-    }
 }
 
 @end

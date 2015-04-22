@@ -16,32 +16,30 @@
 #import "ALCProtocolMatcher.h"
 
 #import <objc/runtime.h>
-#import <objc/protocol.h>
 
-@implementation ALCDependency {
-    NSArray *_dependencyMatchers;
-}
+@implementation ALCDependency 
 
 -(instancetype) initWithVariable:(Ivar) variable matchers:(NSArray *) dependencyMatchers {
-    self = [super init];
+    
+    self = [super initWithMatchers:dependencyMatchers];
     if (self) {
         
         _variable = variable;
-        _dependencyMatchers = dependencyMatchers;
         _variableProtocols = [[NSMutableArray alloc] init];
-        _candidateObjectDescriptions = [[NSMutableArray alloc] init];
         
         [self loadVariableDetails];
         
         if (dependencyMatchers == nil) {
             logRegistration(@"Using variable declaration to define matchers");
-            _dependencyMatchers = [[NSMutableArray alloc] init];
+            NSMutableArray *matchers = [[NSMutableArray alloc] init];
             if (_variableClass != nil) {
-                [(NSMutableArray *)_dependencyMatchers addObject:[[ALCClassMatcher alloc] initWithClass:_variableClass]];
+                [matchers addObject:[[ALCClassMatcher alloc] initWithClass:_variableClass]];
             }
             [_variableProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, NSUInteger idx, BOOL *stop) {
-                [(NSMutableArray *)_dependencyMatchers addObject:[[ALCProtocolMatcher alloc] initWithProtocol:protocol]];
+                [matchers addObject:[[ALCProtocolMatcher alloc] initWithProtocol:protocol]];
             }];
+            
+            self.dependencyMatchers = matchers;
         }
     }
     return self;
@@ -73,42 +71,20 @@
 
 -(void) resolveUsingModel:(NSDictionary *)model {
     
-    if ([_candidateObjectDescriptions count] > 0) {
-        logDependencyResolving(@"Dependency previously resolved");
-        return;
-    }
+    [super resolveUsingModel:model];
     
-    logDependencyResolving(@"Searching for candidates for %s using %lu model objects", ivar_getName(_variable), [model count]);
-    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop) {
-        
-        // Run matchers to see if they match. All must accept the candidate object.
-        BOOL matched = YES;
-        for (id<ALCMatcher> dependencyMatcher in _dependencyMatchers) {
-            if (![dependencyMatcher matches:instance withName:name]) {
-                matched = NO;
-                break;
-            }
-        }
-        
-        if (matched) {
-            logDependencyResolving(@"Adding '%@' %s to candidates", name, class_getName(instance.forClass));
-            [(NSMutableArray *)_candidateObjectDescriptions addObject:instance];
-        }
-        
-    }];
-    
-    // if there are no candidates left then error.
-    if ([_candidateObjectDescriptions count] == 0) {
+    // If there are no candidates left then error.
+    if ([self.candidateInstances count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
                                        reason:[NSString stringWithFormat:@"Unable to resolve: %s", ivar_getName(_variable)]
                                      userInfo:nil];
     }
 }
 
--(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors {
+-(void) injectObject:(id) object usingInjectors:(NSArray *) injectors {
     
     for (id<ALCDependencyInjector> injector in injectors) {
-        if ([injector injectObject:finalObject dependency:self]) {
+        if ([injector injectObject:object dependency:self]) {
             return;
         }
     }

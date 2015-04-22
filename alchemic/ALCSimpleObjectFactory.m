@@ -25,9 +25,9 @@
     return self;
 }
 
--(id) createObjectFromObjectDescription:(ALCInstance *) objectDescription {
-    logCreation(@"Creating instance using %s::init", class_getName(objectDescription.forClass));
-    return [[objectDescription.forClass alloc] init];
+-(id) createObjectFromInstance:(ALCInstance *) instance {
+    logCreation(@"Creating instance using %s::init", class_getName(instance.forClass));
+    return [[instance.forClass alloc] init];
 }
 
 @end
