@@ -26,6 +26,10 @@ static Class protocolClass;
 
 #pragma mark - General
 
++(SEL) alchemicSelectorForSelector:(SEL) selector {
+    return sel_registerName(strcat(_alchemic_toCharPointer(ALCHEMIC_PREFIX), sel_getName(selector)));
+}
+
 +(BOOL) class:(Class) child extends:(Class) parent {
     Class nextParent = child;
     while(nextParent) {
@@ -71,35 +75,6 @@ static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREF
 #pragma mark - Class scanning
 
 +(void) findAlchemicClasses:(void (^)(ALCInstance *)) registerClassBlock {
-
-    // Find out how many classes there are in total.
-    int numClasses = objc_getClassList(NULL, 0);
-    
-    // Allocate the memory to contain an array of the classes found.
-    Class * classes = (__unsafe_unretained Class *) malloc(sizeof(Class) * (unsigned long) numClasses);
-    
-    // Now load the array with the classes.
-    numClasses = objc_getClassList(classes, numClasses);
-    
-    // Now scan them.
-    Class nextClass;
-    NSArray *bundles = [NSBundle allBundles];
-    for (int index = 0; index < numClasses; index++) {
-        nextClass = classes[index];
-        const char *className = class_getName(nextClass);
-        if (strncmp(className, "ALC", 3) == 0
-            || strncmp(className, "Alc", 3) == 0
-            || ! [bundles containsObject:[NSBundle bundleForClass:nextClass]]
-            ) {
-            continue;
-        }
-        ALCInstance *instance = [self executeAlchemicMethodsInClass:nextClass];
-        if (instance != nil) {
-            registerClassBlock(instance);
-        }
-    }
-    return;
-    
     
     for (NSBundle *bundle in [NSBundle allBundles]) {
 

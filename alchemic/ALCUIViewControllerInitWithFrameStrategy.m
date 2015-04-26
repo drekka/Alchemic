@@ -17,7 +17,6 @@
 #import "Alchemic.h"
 #import "ALCRuntime.h"
 #import "ALCContext.h"
-#import "ALCInitDetails.h"
 
 @implementation ALCUIViewControllerInitWithFrameStrategy
 
@@ -25,7 +24,7 @@
     return [ALCRuntime class:class extends:[UIViewController class]];
 }
 
--(SEL) wrapperSelector {
+-(SEL) initWrapperSelector {
     return @selector(initWithFrameWrapper:);
 }
 
@@ -35,20 +34,20 @@
 
 -(id) initWithFrameWrapper:(CGRect) aFrame {
     
-    Class selfClass = [self class];
+    Class selfClass = object_getClass(self);
+    SEL initSel = @selector(init);
+    SEL relocatedInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
     
-    // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCInitDetails *initDetails = [ALCUIViewControllerInitWithFrameStrategy initDetailsForClass:selfClass initSelector:_cmd];
-    
-    if (initDetails.initIMP == NULL) {
-        struct objc_super superData = {self, class_getSuperclass(selfClass)};
-        self = ((id (*)(struct objc_super *, SEL, CGRect))objc_msgSendSuper)(&superData, @selector(initWithFrame:), aFrame);
+    // If the method exists then call it, otherwise call super.
+    if ([self respondsToSelector:relocatedInitSel]) {
+        self = ((id (*)(id, SEL, CGRect))objc_msgSend)(self, relocatedInitSel, aFrame);
     } else {
-        self = ((id (*)(id, SEL, CGRect))initDetails.initIMP)(self, initDetails.initSelector, aFrame);
+        struct objc_super superData = {self, class_getSuperclass(selfClass)};
+        self = ((id (*)(struct objc_super *, SEL, CGRect))objc_msgSendSuper)(&superData, initSel, aFrame);
     }
     
-    logRuntime(@"Triggering dependency injection in %s::initWithFrame:", class_getName(selfClass));
-    //[[Alchemic mainContext] resolveDependencies:self];
+    logRuntime(@"Triggering dependency injection from %s::%s", class_getName(selfClass), sel_getName(initSel));
+    [[Alchemic mainContext] injectDependencies:self];
 
     return self;
 }

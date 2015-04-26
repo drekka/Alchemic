@@ -13,6 +13,12 @@
 #import "ALCLogger.h"
 #import "ALCInternal.h"
 
+#import "ALCInitialisationStrategyInjector.h"
+
+#import "ALCNSObjectInitStrategy.h"
+#import "ALCUIViewControllerInitWithCoderStrategy.h"
+#import "ALCUIViewControllerInitWithFrameStrategy.h"
+
 #import "ALCRuntime.h"
 
 #import "AlchemicAware.h"
@@ -38,6 +44,7 @@
 #import "NSDictionary+ALCModel.h"
 
 @implementation ALCContext {
+    NSMutableArray *_initialisationStrategyClasses;
     NSMutableArray *_dependencyInjectors;
     NSMutableArray *_objectFactories;
     NSDictionary *_model;
@@ -53,6 +60,11 @@
         
         // Create storage for objects.
         _model = [[NSMutableDictionary alloc] init];
+        
+        _initialisationStrategyClasses = [[NSMutableArray alloc] init];
+        [self addInitialisationStrategy:[ALCNSObjectInitStrategy class]];
+        [self addInitialisationStrategy:[ALCUIViewControllerInitWithCoderStrategy class]];
+        [self addInitialisationStrategy:[ALCUIViewControllerInitWithFrameStrategy class]];
         
         _objectFactories = [[NSMutableArray alloc] init];
         [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
@@ -72,6 +84,15 @@
 
 -(void) start {
     logRuntime(@"Starting alchemic");
+    
+    // Set defaults.
+    if (self.runtimeInitInjector == nil) {
+        self.runtimeInitInjector = [[ALCInitialisationStrategyInjector alloc] initWithStrategyClasses:_initialisationStrategyClasses];
+    }
+    
+    // Inject init wrappers into classes that have registered for dependency injection.
+    [_runtimeInitInjector replaceInitsInModelClasses:_model];
+
     [self resolveDependencies];
     [self instantiateObjects];
     [self injectDependencies];
@@ -137,6 +158,11 @@
 
 -(void) addInstance:(ALCInstance *) instance {
     [_model addInstance:instance];
+}
+
+-(void) addInitialisationStrategy:(Class) initialisationStrategyClass {
+    logConfig(@"Adding init strategy: %s", class_getName(initialisationStrategyClass));
+    [_initialisationStrategyClasses insertObject:initialisationStrategyClass atIndex:0];
 }
 
 @end

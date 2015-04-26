@@ -13,11 +13,10 @@
 #import <objc/runtime.h>
 #import "ALCLogger.h"
 #import "ALCInstance.h"
-#import "ALCInitialisationStrategyManagement.h"
 #import "ALCInitialisationStrategy.h"
 
 @implementation ALCInitialisationStrategyInjector {
-    NSArray *_initialisationStrategies;
+    NSArray *_strategyClasses;
 }
 
 static BOOL injected = NO;
@@ -29,67 +28,68 @@ static BOOL injected = NO;
     [self resetRuntime];
 }
 
--(instancetype) initWithStrategies:(NSArray *) strategies {
+-(instancetype) initWithStrategyClasses:(NSArray *) strategyClasses {
     self = [super init];
     if (self) {
-        _initialisationStrategies = strategies;
+        _strategyClasses = strategyClasses;
     }
     return self;
 }
 
--(void) executeStrategiesOnObjects:(NSDictionary *) managedObjects withContext:(ALCContext *) context {
+-(void) replaceInitsInModelClasses:(NSDictionary *) model {
 
     if (injected) {
         logRuntime(@"Wrappers already injected into classes");
         return;
     }
 
-    // Reduce the list to just root classes.
-    NSArray *rootClasses = [self findRootClasses:[managedObjects allValues]];
+    // Extract a list of root classes from the model.
+    NSArray *rootInstances = [self findRootInstances:[model allValues]];
 
     // Now hook into the classes.
-    for (Class class in rootClasses) {
-        for (id<ALCInitialisationStrategy, ALCInitialisationStrategyManagement> initStrategy in _initialisationStrategies) {
-            if ([initStrategy canWrapInitInClass:class]) {
-                [initStrategy wrapInitInClass:class withContext:context];
+    for (ALCInstance *instance in rootInstances) {
+        for (Class initStrategy in _strategyClasses) {
+            if ([initStrategy canWrapInit:instance]) {
+                [instance addInitialisationStrategy:[[initStrategy alloc] initWithInstance:instance]];
             }
         }
     }
 }
 
--(NSArray *) findRootClasses:(NSArray *) objectDescriptionList {
+-(NSArray *) findRootInstances:(NSArray *) instances {
     
-    // Work out which classes we need to inject hooks into.
-    NSMutableArray *rootClasses = [[NSMutableArray alloc] init];
-    [objectDescriptionList enumerateObjectsUsingBlock:^(ALCInstance *objectDescription, NSUInteger idx, BOOL *stop) {
+    // Copy all the classes into an array for checking.
+    NSMutableSet *modelClasses = [[NSMutableSet alloc] initWithCapacity:[instances count]];
+    for (ALCInstance *instance in instances) {
+        [modelClasses addObject:instance.forClass];
+    }
+
+    // Work out which classes we need to inject hooks into
+    NSMutableArray *rootInstances = [[NSMutableArray alloc] init];
+    for (ALCInstance *instance in instances) {
         
-        // Check the ancestory of the class.
-        // If any of the parents appear in the list of injectable classes then skip to the next class.
-        // After this loop the only classes added to the list should be top level ones.
-        Class baseClass = class_getSuperclass(objectDescription.forClass);
-        while (baseClass != NULL) {
-            
-            // If the parent is in the list of injectable classes then end checking.
-            if ([rootClasses containsObject:baseClass]) {
-                logRuntime(@"Parent class (%s) of %s scheduled for initialiser injection", class_getName(baseClass), class_getName(objectDescription.forClass));
-                return;
+        // Check each ancestor class in turn. If any are in the list, then ignore the current class.
+        Class parentClass = class_getSuperclass(instance.forClass);
+        while (parentClass != NULL) {
+            if ([modelClasses containsObject:parentClass]) {
+                // The parent is in the model too so stop looking.
+                break;
             }
-            baseClass = class_getSuperclass(baseClass);
         }
         
-        // The class must be a root class with no parents in the list.
-        logRuntime(@"Adding root class: %s", class_getName(baseClass));
-        [rootClasses addObject:baseClass];
+        // If we are here and the parent is NULL then we are safe to add the class to the final list.
+        if (parentClass == NULL) {
+            logRuntime(@"Scheduling '%@' %s for init wrapper injection", instance.name, class_getName(instance.forClass));
+            [rootInstances addObject:instance];
+        }
         
-    }];
-    return rootClasses;
+    }
+
+    return rootInstances;
 
 }
 
 -(void) resetRuntime {
-    [_initialisationStrategies enumerateObjectsUsingBlock:^(id<ALCInitialisationStrategy, ALCInitialisationStrategyManagement> strategy, NSUInteger idx, BOOL *stop) {
-        [strategy resetClasses];
-    }];
 }
 
 @end

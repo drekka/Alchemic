@@ -10,6 +10,8 @@
 
 #import "ALCObjectFactory.h"
 #import "ALCDependencyInjector.h"
+#import "ALCInitialisationInjector.h"
+#import "ALCDependencyInjector.h"
 #import "ALCMatcher.h"
 
 @class ALCInstance;
@@ -17,6 +19,18 @@
 @interface ALCContext : NSObject
 
 #pragma mark - Configuration
+
+/**
+ Specifies the class used to inject init method wrappers into the runtime. Normally this doesn't been to be changed from the default.
+ @discussion By default this is AlchemicRuntimeInjector.
+ */
+@property (nonatomic, strong) id<ALCInitialisationInjector> runtimeInitInjector;
+
+/**
+ Adds an additional initialisation strategy to the built in ones.
+ Strategies are run in reverse order from last registered through to the builtin ones.
+ */
+-(void) addInitialisationStrategy:(Class) initialisationStrategyClass;
 
 /**
  Adds a ALCDependencyInjector to the list of injectors.

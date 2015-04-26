@@ -8,6 +8,8 @@
 
 @import Foundation;
 
+#import "ALCInitialisationStrategy.h"
+
 @interface ALCInstance : NSObject
 
 @property (nonatomic, assign, readonly) Class forClass;
@@ -32,5 +34,7 @@
 -(void) injectDependenciesUsingInjectors:(NSArray *) dependencyInjectors;
 
 -(void) instantiateUsingFactories:(NSArray *) objectFactories;
+
+-(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy;
 
 @end

@@ -14,6 +14,8 @@
 
 #pragma mark - General
 
++(SEL) alchemicSelectorForSelector:(SEL) selector;
+
 +(BOOL) class:(Class) child extends:(Class) parent;
 
 +(Ivar) class:(Class) class withName:(NSString *) name;

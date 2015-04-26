@@ -22,12 +22,12 @@
  
  @param strategies A list of strategies to employ.
  */
--(instancetype) initWithStrategies:(NSArray *) strategies;
+-(instancetype) initWithStrategyClasses:(NSArray *) strategyClasses;
 
 /**
  Inject hooks into the runtime.
  */
--(void) executeStrategiesOnObjects:(NSDictionary *) managedObjects withContext:(ALCContext *) context;
+-(void) replaceInitsInModelClasses:(NSDictionary *) model;
 
 /**
  Reset the runtime back to it's original state.

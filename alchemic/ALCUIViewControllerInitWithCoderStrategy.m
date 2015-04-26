@@ -9,7 +9,6 @@
 #import "ALCUIViewControllerInitWithCoderStrategy.h"
 
 @import UIKit;
-@import Foundation;
 
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -18,15 +17,14 @@
 #import "ALCLogger.h"
 #import "ALCRuntime.h"
 #import "ALCContext.h"
-#import "ALCInitDetails.h"
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
--(BOOL) canWrapInitInClass:(Class) class {
-    return [ALCRuntime class:class extends:[UIViewController class]];
+-(BOOL) canWrapInit:(ALCInstance *) instance {
+    return [ALCRuntime class:instance.forClass extends:[UIViewController class]];
 }
 
--(SEL) wrapperSelector {
+-(SEL) initWrapperSelector {
     return @selector(initWithCoderWrapper:);
 }
 
@@ -36,19 +34,21 @@
 
 -(id) initWithCoderWrapper:(NSCoder *) aDecoder {
 
-    Class selfClass = [self class];
-    // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCInitDetails *initDetails = [ALCUIViewControllerInitWithCoderStrategy initDetailsForClass:selfClass initSelector:_cmd];
+    // Get the selector for the original init which will now have an alchemic prefix.
+    Class selfClass = object_getClass(self);
+    SEL initSel = @selector(initWithCoder:);
+    SEL relocatedInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
     
-    if (initDetails.initIMP == NULL) {
-        struct objc_super superData = {self, class_getSuperclass(selfClass)};
-        self = ((id (*)(struct objc_super *, SEL, NSCoder *))objc_msgSendSuper)(&superData, @selector(initWithCoder:), aDecoder);
+    // If the method exists then call it, otherwise call super.
+    if ([self respondsToSelector:relocatedInitSel]) {
+        self = ((id (*)(id, SEL, NSCoder *))objc_msgSend)(self, relocatedInitSel, aDecoder);
     } else {
-        self = ((id (*)(id, SEL, NSCoder *))initDetails.initIMP)(self, initDetails.initSelector, aDecoder);
+        struct objc_super superData = {self, class_getSuperclass(selfClass)};
+        self = ((id (*)(struct objc_super *, SEL, NSCoder *))objc_msgSendSuper)(&superData, initSel, aDecoder);
     }
     
-    logRuntime(@"Triggering dependency injection in %s::initWithCoder:", class_getName(selfClass));
-    //[[Alchemic mainContext] resolveDependencies:self];
+    logRuntime(@"Triggering dependency injection from %s::%s", class_getName(selfClass), sel_getName(initSel));
+    [[Alchemic mainContext] injectDependencies:self];
 
     return self;
 }

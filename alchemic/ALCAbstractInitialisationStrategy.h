@@ -9,8 +9,7 @@
 @import Foundation;
 
 #import "ALCInitialisationStrategy.h"
-#import "ALCInitialisationStrategyManagement.h"
 
-@interface ALCAbstractInitialisationStrategy : NSObject<ALCInitialisationStrategy, ALCInitialisationStrategyManagement>
+@interface ALCAbstractInitialisationStrategy : NSObject<ALCInitialisationStrategy>
 
 @end

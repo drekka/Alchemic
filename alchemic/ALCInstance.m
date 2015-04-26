@@ -16,11 +16,13 @@
 
 @implementation ALCInstance {
     NSMutableArray *_dependencies;
+    NSArray *_initialisationStrategies;
 }
 
 -(instancetype) initWithClass:(Class) class {
     self = [super init];
     if (self) {
+        _initialisationStrategies = @[];
         _forClass = class;
         _dependencies = [[NSMutableArray alloc] init];
         self.name = NSStringFromClass(class);
@@ -98,5 +100,8 @@
     }
 }
 
+-(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy {
+    _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
+}
 
 @end
