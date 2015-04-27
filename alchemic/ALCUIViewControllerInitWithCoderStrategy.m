@@ -10,8 +10,8 @@
 
 @import UIKit;
 
-#import <objc/runtime.h>
-#import <objc/message.h>
+@import ObjectiveC;
+
 
 #import "Alchemic.h"
 #import "ALCLogger.h"
@@ -20,21 +20,20 @@
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
--(BOOL) canWrapInit:(ALCInstance *) instance {
++(BOOL) canWrapInit:(ALCInstance *) instance {
     return [ALCRuntime class:instance.forClass extends:[UIViewController class]];
 }
 
--(SEL) initWrapperSelector {
-    return @selector(initWithCoderWrapper:);
+-(SEL) replacementInitSelector {
+    return @selector(initWithCoderReplacement:);
 }
 
 -(SEL) initSelector {
     return @selector(initWithCoder:);
 }
 
--(id) initWithCoderWrapper:(NSCoder *) aDecoder {
+-(id) initWithCoderReplacement:(NSCoder *) aDecoder {
 
-    // Get the selector for the original init which will now have an alchemic prefix.
     Class selfClass = object_getClass(self);
     SEL initSel = @selector(initWithCoder:);
     SEL relocatedInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];

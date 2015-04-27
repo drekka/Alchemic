@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <objc/runtime.h>
+@import ObjectiveC;
 
 #import "Alchemic.h"
 #import "ALCContext.h"

@@ -12,16 +12,16 @@
 #import "ALCInstance.h"
 #import "ALCInternal.h"
 #import "ALCRuntime.h"
+#import "ALCInternal.h"
 
-#import <objc/runtime.h>
-
+@import ObjectiveC;
 
 @implementation ALCAbstractInitialisationStrategy {
     Class _forClass;
 }
 
 @synthesize initSelector;
-@synthesize initWrapperSelector;
+@synthesize replacementInitSelector;
 
 // Abstract
 +(BOOL) canWrapInit:(ALCInstance *) instance {
@@ -39,39 +39,37 @@
 
 -(void) wrapInit {
     
-    // Get the new imp.
-    SEL wrapperSel = self.initWrapperSelector;
+    // Check to see if the class has already been modified for this init.
     SEL initSel = self.initSelector;
-    
-    Class selfClass = object_getClass(self);
-    Method wrapperMethod = class_getInstanceMethod(selfClass, wrapperSel);
-    const char * initTypeEncoding = method_getTypeEncoding(wrapperMethod);
-    IMP wrapperIMP = class_getMethodImplementation(selfClass, wrapperSel);
-    
-    // First attempt to add a new init.
-    if (class_addMethod(_forClass, initSel, wrapperIMP, initTypeEncoding)) {
-        logRuntime(@"Added %s::%s", class_getName(_forClass), sel_getName(initSel));
+    const char *initPropertyName = [ALCRuntime concat:_alchemic_toCharPointer(ALCHEMIC_PREFIX) to:sel_getName(initSel)];
+
+    logRuntime(@"Replacing %s::%s with wrapper %2$s", class_getName(_forClass), sel_getName(initSel));
+    NSNumber *initAdded = objc_getAssociatedObject(_forClass, initPropertyName);
+    if ([initAdded boolValue]) {
+        logRuntime(@"Init method already replaced.");
         return;
     }
-    
-    // There must already be an init, so now we replace it.
-    logRuntime(@"Wrapping %s::%s", class_getName(_forClass), sel_getName(initSel));
-    Method initMethod = class_getInstanceMethod(_forClass, initSel);
-    IMP originalInit = method_setImplementation(initMethod, wrapperIMP);
-    
-    // Add the original init back into the class using a prefix.
-    SEL alchemicInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
-    class_addMethod(_forClass, alchemicInitSel, originalInit, initTypeEncoding);
-    
-}
 
--(void) resetInit {
-    SEL initSel = self.initSelector;
-    SEL alchemicInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
-    logRuntime(@"Resetting %s::%s", class_getName(_forClass), sel_getName(initSel));
-    Method initMethod = class_getInstanceMethod(_forClass, initSel);
-    IMP originalIMP = class_getMethodImplementation(_forClass, alchemicInitSel);
-    method_setImplementation(initMethod, originalIMP);
+    Class selfClass = object_getClass(self);
+    SEL replacementInitSel = self.replacementInitSelector;
+
+    // Get the new methods details.
+    Method replacementMethod = class_getInstanceMethod(selfClass, replacementInitSel);
+    const char * initTypeEncoding = method_getTypeEncoding(replacementMethod);
+    IMP wrapperIMP = class_getMethodImplementation(selfClass, replacementInitSel);
+
+    // Add or replace any existing IMP with a wrapper IMP.
+    IMP originalInitIMP = class_replaceMethod(_forClass, initSel, wrapperIMP, initTypeEncoding);
+    if (originalInitIMP != NULL) {
+        // There was an original init method so save it so it can be found.
+        SEL alchemicInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
+        logRuntime(@"Storing original init as %s::%s", class_getName(selfClass), sel_getName(alchemicInitSel));
+        class_addMethod(_forClass, alchemicInitSel, originalInitIMP, initTypeEncoding);
+    }
+ 
+    // Tag the class so we know it's been modified.
+    objc_setAssociatedObject(_forClass, initPropertyName, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
 }
 
 @end

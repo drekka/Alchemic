@@ -15,7 +15,7 @@
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
 
-#import <objc/runtime.h>
+@import ObjectiveC;
 
 @implementation ALCDependency 
 

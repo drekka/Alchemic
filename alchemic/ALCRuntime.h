@@ -7,12 +7,14 @@
 //
 
 @import Foundation;
-#import <objc/runtime.h>
+@import ObjectiveC;
 @class ALCInstance;
 
 @interface ALCRuntime : NSObject
 
 #pragma mark - General
+
++(const char *) concat:(const char *) left to:(const char *) right;
 
 +(SEL) alchemicSelectorForSelector:(SEL) selector;
 

@@ -7,7 +7,7 @@
 //
 
 #import "ALCInstance.h"
-#import <objc/runtime.h>
+@import ObjectiveC;
 
 #import "ALCDependency.h"
 #import "ALCRuntime.h"

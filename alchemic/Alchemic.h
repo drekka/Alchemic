@@ -14,7 +14,7 @@
 #import "ALCProtocolMatcher.h"
 #import "ALCNameMatcher.h"
 #import "ALCLogger.h"
-#import <objc/runtime.h>
+@import ObjectiveC;
 
 // Matcher wrapping macros passed to the inject macro.
 

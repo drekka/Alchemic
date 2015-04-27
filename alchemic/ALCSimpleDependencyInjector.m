@@ -9,7 +9,7 @@
 #import "ALCSimpleDependencyInjector.h"
 
 #import "ALCDependency.h"
-#import <objc/runtime.h>
+@import ObjectiveC;
 #import "ALCLogger.h"
 #import "ALCInstance.h"
 

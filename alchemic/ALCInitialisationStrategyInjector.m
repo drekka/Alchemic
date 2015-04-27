@@ -10,7 +10,7 @@
 
 @import UIKit;
 
-#import <objc/runtime.h>
+@import ObjectiveC;
 #import "ALCLogger.h"
 #import "ALCInstance.h"
 #import "ALCInitialisationStrategy.h"
@@ -75,6 +75,7 @@ static BOOL injected = NO;
                 // The parent is in the model too so stop looking.
                 break;
             }
+            parentClass = class_getSuperclass(parentClass);
         }
         
         // If we are here and the parent is NULL then we are safe to add the class to the final list.

@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
+#define ALCHEMIC_PREFIX _alchemic_
 
 // Used to assemble two strings. We use double macros to ensure any
 // embedded macros are resolved.
 #define _alchemic_concat(prefix, suffix) _alchemic_concat_strings(prefix, suffix)
 #define _alchemic_concat_strings(prefix, suffix) prefix ## suffix
 
-#define ALCHEMIC_PREFIX _alchemic_
 #define ALCHEMIC_METHOD_PREFIX _alchemic_concat(ALCHEMIC_PREFIX, __LINE__)
 
 // Convert raw macro text to a char *
@@ -23,6 +23,4 @@
 #define _alchemic_toNSString(chars) __alchemic_toNSString(chars)
 #define __alchemic_toNSString(chars) @#chars
 
-//#define dataToNSString(data) [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
-//#define stringToData(string) [string dataUsingEncoding:NSUTF8StringEncoding]
 

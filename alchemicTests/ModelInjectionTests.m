@@ -12,7 +12,7 @@
 #import "InjectableProtocol.h"
 #import "Alchemic.h"
 
-#import <objc/runtime.h>
+@import ObjectiveC;
 
 @interface ModelInjectionTests : ALCTestCase<AlchemicAware>
 

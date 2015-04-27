@@ -18,11 +18,9 @@
 
 -(instancetype) initWithInstance:(ALCInstance *) instance;
 
--(void) resetInit;
-
 #pragma mark - Used by the abstract parent
 
-@property (nonatomic, assign, readonly) SEL initWrapperSelector;
 @property (nonatomic, assign, readonly) SEL initSelector;
+@property (nonatomic, assign, readonly) SEL replacementInitSelector;
 
 @end

@@ -9,10 +9,9 @@
 #import "ALCNSObjectInitStrategy.h"
 
 @import UIKit;
+@import ObjectiveC;
 
-#import <objc/runtime.h>
-#import <objc/message.h>
-
+#import "ALCInternal.h"
 #import "ALCLogger.h"
 #import "ALCRuntime.h"
 #import "ALCContext.h"
@@ -20,19 +19,19 @@
 
 @implementation ALCNSObjectInitStrategy
 
--(BOOL) canWrapInit:(ALCInstance *) instance {
++(BOOL) canWrapInit:(ALCInstance *) instance {
     return ! [ALCRuntime class:instance.forClass extends:[UIViewController class]];
-}
-
--(SEL) initWrapperSelector {
-    return @selector(initWrapper);
 }
 
 -(SEL) initSelector {
     return @selector(init);
 }
 
--(id) initWrapper {
+-(SEL) replacementInitSelector {
+    return @selector(initReplacement);
+}
+
+-(instancetype) initReplacement {
 
     // Get the selector for the original init which will now have an alchemic prefix.
     Class selfClass = object_getClass(self);

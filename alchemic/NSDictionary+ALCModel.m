@@ -9,7 +9,7 @@
 #import "NSDictionary+ALCModel.h"
 
 @import Foundation;
-#import <objc/runtime.h>
+@import ObjectiveC;
 
 #import "ALClogger.h"
 #import "ALCResolver.h"

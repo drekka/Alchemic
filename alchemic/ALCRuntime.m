@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <objc/runtime.h>
-#import <objc/message.h>
+@import ObjectiveC;
 
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
@@ -26,8 +25,27 @@ static Class protocolClass;
 
 #pragma mark - General
 
++(const char *) concat:(const char *) left to:(const char *) right {
+    
+    size_t newStringSize = strlen(left) + strlen(right) + 1;
+    char *finalString = malloc(newStringSize);
+    strlcat(finalString, left, newStringSize);
+    strlcat(finalString, right, newStringSize);
+    return finalString;
+}
+
 +(SEL) alchemicSelectorForSelector:(SEL) selector {
-    return sel_registerName(strcat(_alchemic_toCharPointer(ALCHEMIC_PREFIX), sel_getName(selector)));
+
+    const char * prefix = _alchemic_toCharPointer(ALCHEMIC_PREFIX);
+    const char * selName = sel_getName(selector);
+
+    char finalString[sizeof(prefix) + sizeof(selName)];
+    int bufSize = sizeof(finalString);
+    strlcat(finalString, prefix, bufSize);
+    strlcat(finalString, selName, bufSize);
+    
+    logRuntime(@"Registering @selector(%s)", finalString);
+    return sel_registerName(finalString);
 }
 
 +(BOOL) class:(Class) child extends:(Class) parent {

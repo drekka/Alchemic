@@ -8,7 +8,7 @@
 
 #import "ALCProtocolMatcher.h"
 #import "ALCInstance.h"
-#import <objc/runtime.h>
+@import ObjectiveC;
 #import "ALCLogger.h"
 
 @implementation ALCProtocolMatcher {

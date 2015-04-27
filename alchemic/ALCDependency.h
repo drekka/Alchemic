@@ -9,7 +9,7 @@
 @import Foundation;
 
 @class ALCInstance;
-#import <objc/runtime.h>
+@import ObjectiveC;
 #import "ALCMatcher.h"
 #import "ALCResolver.h"
 

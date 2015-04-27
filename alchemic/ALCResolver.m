@@ -8,7 +8,7 @@
 
 #import "ALCResolver.h"
 #import "ALCLogger.h"
-#import <objc/runtime.h>
+@import ObjectiveC;
 #import "ALCMatcher.h"
 #import "ALCInstance.h"
 

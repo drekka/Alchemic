@@ -10,8 +10,8 @@
 
 #import "ALCUIViewControllerInitWithFrameStrategy.h"
 
-#import <objc/runtime.h>
-#import <objc/message.h>
+@import ObjectiveC;
+
 
 #import "ALCLogger.h"
 #import "Alchemic.h"
@@ -20,22 +20,22 @@
 
 @implementation ALCUIViewControllerInitWithFrameStrategy
 
--(BOOL) canWrapInitInClass:(Class) class {
-    return [ALCRuntime class:class extends:[UIViewController class]];
++(BOOL) canWrapInit:(ALCInstance *) instance {
+    return [ALCRuntime class:instance.forClass extends:[UIViewController class]];
 }
 
--(SEL) initWrapperSelector {
-    return @selector(initWithFrameWrapper:);
+-(SEL) replacementInitSelector {
+    return @selector(initWithFrameReplacement:);
 }
 
 -(SEL) initSelector {
     return @selector(initWithFrame:);
 }
 
--(id) initWithFrameWrapper:(CGRect) aFrame {
+-(id) initWithFrameReplacement:(CGRect) aFrame {
     
     Class selfClass = object_getClass(self);
-    SEL initSel = @selector(init);
+    SEL initSel = @selector(initWithFrame:);
     SEL relocatedInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
     
     // If the method exists then call it, otherwise call super.
