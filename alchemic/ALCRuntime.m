@@ -26,26 +26,15 @@ static Class protocolClass;
 #pragma mark - General
 
 +(const char *) concat:(const char *) left to:(const char *) right {
-    
-    size_t newStringSize = strlen(left) + strlen(right) + 1;
-    char *finalString = malloc(newStringSize);
-    strlcat(finalString, left, newStringSize);
-    strlcat(finalString, right, newStringSize);
-    return finalString;
+    return [[NSString stringWithFormat:@"%s%s", left, right] cStringUsingEncoding:NSUTF8StringEncoding];
 }
 
 +(SEL) alchemicSelectorForSelector:(SEL) selector {
-
     const char * prefix = _alchemic_toCharPointer(ALCHEMIC_PREFIX);
     const char * selName = sel_getName(selector);
-
-    char finalString[sizeof(prefix) + sizeof(selName)];
-    int bufSize = sizeof(finalString);
-    strlcat(finalString, prefix, bufSize);
-    strlcat(finalString, selName, bufSize);
-    
-    logRuntime(@"Registering @selector(%s)", finalString);
-    return sel_registerName(finalString);
+    const char * newSelectorName = [self concat:prefix to:selName];
+    logRuntime(@"Registering @selector(%s)", newSelectorName);
+    return sel_registerName(newSelectorName);
 }
 
 +(BOOL) class:(Class) child extends:(Class) parent {
