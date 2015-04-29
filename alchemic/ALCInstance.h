@@ -27,11 +27,11 @@
 
 -(void) addDependency:(NSString *) inj, ...;
 
--(void) addDependency:(NSString *) inj withMatchers:(NSArray *) matchers;
+-(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers;
 
 -(void) resolveDependenciesWithModel:(NSDictionary *) model;
 
--(void) applyPostProcessors:(NSArray *) postProcessors;
+-(void) applyPostProcessors:(NSSet *) postProcessors;
 
 -(void) injectDependenciesUsingInjectors:(NSArray *) dependencyInjectors;
 

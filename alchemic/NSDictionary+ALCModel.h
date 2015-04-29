@@ -18,13 +18,13 @@
 
 -(ALCInstance *) instanceForClass:(Class) class withName:(NSString *) name;
 
--(NSArray *) instancesWithMatcherArray:(NSArray *) matchers;
+-(NSSet *) instancesWithMatchers:(NSSet *) matchers;
 
 #pragma mark - Finding objects
 
--(NSArray *) objectsWithMatchers:(id) firstMatcher, ...;
+-(NSSet *) objectsWithMatcherArgs:(id) firstMatcher, ...;
 
--(NSArray *) objectsWithMatcherArray:(NSArray *) matchers;
+-(NSSet *) objectsWithMatchers:(NSSet *) matchers;
 
 #pragma mark - Adding new instances
 

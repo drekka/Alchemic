@@ -15,11 +15,11 @@
 
 @implementation ALCResolver
 
--(instancetype) initWithMatchers:(NSArray *) dependencyMatchers {
+-(instancetype) initWithMatchers:(NSSet *) dependencyMatchers {
     self = [super init];
     if (self) {
         _dependencyMatchers = dependencyMatchers;
-        _candidateInstances = [[NSMutableArray alloc] init];
+        _candidateInstances = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -52,9 +52,9 @@
     
 }
 
--(void) postProcess:(NSArray *) postProcessors {
+-(void) postProcess:(NSSet *) postProcessors {
     for (id<ALCResolverPostProcessor> postProcessor in postProcessors) {
-        NSArray *newCandiates = [postProcessor process:self];
+        NSSet *newCandiates = [postProcessor process:self];
         if (newCandiates != nil) {
             _candidateInstances = newCandiates;
         }

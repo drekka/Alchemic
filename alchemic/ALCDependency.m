@@ -19,7 +19,7 @@
 
 @implementation ALCDependency 
 
--(instancetype) initWithVariable:(Ivar) variable matchers:(NSArray *) dependencyMatchers {
+-(instancetype) initWithVariable:(Ivar) variable matchers:(NSSet *) dependencyMatchers {
     
     self = [super initWithMatchers:dependencyMatchers];
     if (self) {
@@ -31,7 +31,7 @@
         
         if (dependencyMatchers == nil) {
             logRegistration(@"Using variable declaration to define matchers");
-            NSMutableArray *matchers = [[NSMutableArray alloc] init];
+            NSMutableSet *matchers = [[NSMutableSet alloc] init];
             if (_variableClass != nil) {
                 [matchers addObject:[[ALCClassMatcher alloc] initWithClass:_variableClass]];
             }

@@ -14,6 +14,6 @@
 /**
  @return a new list of candidates objects or nil if the list is not changed.
  */
--(NSArray *) process:(ALCResolver *) resolver;
+-(NSSet *) process:(ALCResolver *) resolver;
 
 @end

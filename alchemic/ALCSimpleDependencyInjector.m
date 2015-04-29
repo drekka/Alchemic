@@ -18,7 +18,7 @@
 -(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
     return [self injectObject:finalObject
                      variable:dependency.variable
-                    withValue:[dependency.candidateInstances lastObject]];
+                    withValue:[dependency.candidateInstances anyObject]];
 }
 
 @end

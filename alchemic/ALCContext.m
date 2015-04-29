@@ -47,10 +47,10 @@
 
 @implementation ALCContext {
     NSMutableArray *_initialisationStrategyClasses;
-    NSMutableArray *_resolverPostProcessors;
+    NSMutableSet *_resolverPostProcessors;
     NSMutableArray *_dependencyInjectors;
     NSMutableArray *_objectFactories;
-    NSDictionary *_model;
+    NSMutableDictionary *_model;
 }
 
 #pragma mark - Lifecycle
@@ -69,8 +69,8 @@
         [self addInitialisationStrategy:[ALCUIViewControllerInitWithCoderStrategy class]];
         [self addInitialisationStrategy:[ALCUIViewControllerInitWithFrameStrategy class]];
         
-        _resolverPostProcessors = [[NSMutableArray alloc] init];
-        [_resolverPostProcessors addObject:[[ALCPrimaryObjectPostProcessor alloc] init]];
+        _resolverPostProcessors = [[NSMutableSet alloc] init];
+        [self addResolverPostProcessor:[[ALCPrimaryObjectPostProcessor alloc] init]];
         
         _objectFactories = [[NSMutableArray alloc] init];
         [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
@@ -161,6 +161,11 @@
 -(void) addDependencyInjector:(id<ALCDependencyInjector>) dependencyinjector {
     logConfig(@"Adding dependency injector: %s", object_getClassName(dependencyinjector));
     [_dependencyInjectors insertObject:dependencyinjector atIndex:0];
+}
+
+-(void) addResolverPostProcessor:(id<ALCResolverPostProcessor>) postProcessor {
+    logConfig(@"Adding resolver post processor: %s", object_getClassName(postProcessor));
+    [_resolverPostProcessors addObject:postProcessor];
 }
 
 -(void) addInstance:(ALCInstance *) instance {

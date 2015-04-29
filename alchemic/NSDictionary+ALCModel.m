@@ -21,14 +21,14 @@
 
 @implementation NSMutableDictionary (ALCModel)
 
--(NSArray *) objectsWithMatchers:(id) firstMatcher, ... {
+-(NSSet *) objectsWithMatcherArgs:(id) firstMatcher, ... {
     
     [ALCRuntime validateMatcher:firstMatcher];
     
     // Assemble the matchers.
     va_list args;
     va_start(args, firstMatcher);
-    NSMutableArray *finalMatchers = [NSMutableArray arrayWithObject:firstMatcher];
+    NSMutableSet *finalMatchers = [NSMutableSet setWithObject:firstMatcher];
     id matcher = va_arg(args, id);
     while (matcher != nil) {
         [ALCRuntime validateMatcher:matcher];
@@ -37,19 +37,19 @@
     }
     va_end(args);
     
-    return [self objectsWithMatcherArray:finalMatchers];
+    return [self objectsWithMatchers:finalMatchers];
     
 }
 
--(NSArray *) objectsWithMatcherArray:(NSArray *) matchers {
-    NSMutableArray *results = [NSMutableArray array];
-    for (ALCInstance *instance in [self instancesWithMatcherArray:matchers]) {
+-(NSSet *) objectsWithMatchers:(NSSet *) matchers {
+    NSMutableSet *results = [[NSMutableSet alloc] init];
+    for (ALCInstance *instance in [self instancesWithMatchers:matchers]) {
         [results addObject:instance.finalObject];
     }
     return results;
 }
 
--(NSArray *) instancesWithMatcherArray:(NSArray *) matchers {
+-(NSSet *) instancesWithMatcher:(NSSet *) matchers {
     ALCResolver *resolver = [[ALCResolver alloc] initWithMatchers:matchers];
     [resolver resolveUsingModel:self];
     return resolver.candidateInstances;
@@ -61,24 +61,30 @@
     
     // Object will have a matching instance in the model if it has any injection point.
     NSString *className = [NSString stringWithCString:object_getClassName(object) encoding:NSUTF8StringEncoding];
-    NSArray *instances = [self instancesWithMatcherArray:@[[[ALCNameMatcher alloc] initWithName:className]]];
+    NSSet *instances = [self instancesWithMatchers:[NSSet setWithObject:[[ALCNameMatcher alloc] initWithName:className]]];
     if ([instances count] == 0) {
         // Look for any instances based on the class.
-        instances = [self instancesWithMatcherArray:@[[[ALCClassMatcher alloc] initWithClass:object_getClass(object)]]];
+        instances = [self instancesWithMatchers:[NSSet setWithObject:[[ALCClassMatcher alloc] initWithClass:object_getClass(object)]]];
     }
-
+    
+    if ([instances count] > 1) {
+        @throw [NSException exceptionWithName:@"AlchemicTooManyInstancesForObject"
+                                       reason:[NSString stringWithFormat:@"Found too many instances matching %s", object_getClassName(object)]
+                                     userInfo:nil];
+    }
+    
     // If nothing found then there are no injections.
-    return [instances count] == 0 ? nil : [instances firstObject];
+    return [instances count] == 0 ? nil : [instances anyObject];
     
 }
 
 -(ALCInstance *) instanceForClass:(Class) class withName:(NSString *) name {
-
+    
     NSString *finalName = name;
     if (finalName == nil) {
         finalName = NSStringFromClass(class);
     }
-
+    
     ALCInstance *instance = self[finalName];
     if (instance == nil) {
         instance = [self createInstanceForClass:class name:finalName];
@@ -94,7 +100,7 @@
     return instance;
 }
 
-#pragma mark - Adding 
+#pragma mark - Adding
 
 -(void) addInstance:(ALCInstance *) instance {
     logRegistration(@"Storing instance '%@' %s", instance.name, class_getName(instance.forClass));

@@ -13,10 +13,10 @@
 
 @implementation ALCPrimaryObjectPostProcessor
 
--(NSArray *) process:(ALCResolver *) resolver {
+-(NSSet *) process:(ALCResolver *) resolver {
     
     // Build a list of primary objects.
-    NSMutableArray *primaryInstances = [[NSMutableArray alloc] init];
+    NSMutableSet *primaryInstances = [[NSMutableSet alloc] init];
     for (ALCInstance *candidateInstance in resolver.candidateInstances) {
         if (candidateInstance.primaryInstance) {
             [primaryInstances addObject:candidateInstance];

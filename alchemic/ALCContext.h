@@ -13,6 +13,7 @@
 #import "ALCInitialisationInjector.h"
 #import "ALCDependencyInjector.h"
 #import "ALCMatcher.h"
+#import "ALCResolverPostProcessor.h"
 
 @class ALCInstance;
 
@@ -31,6 +32,8 @@
  Strategies are run in reverse order from last registered through to the builtin ones.
  */
 -(void) addInitialisationStrategy:(Class) initialisationStrategyClass;
+
+-(void) addResolverPostProcessor:(id<ALCResolverPostProcessor>) postProcessor;
 
 /**
  Adds a ALCDependencyInjector to the list of injectors.

@@ -38,7 +38,7 @@
     
     va_list args;
     va_start(args, inj);
-    NSMutableArray *finalMatchers;
+    NSMutableSet *finalMatchers;
     id matcher = va_arg(args, id);
     while (matcher != nil) {
         
@@ -49,7 +49,7 @@
         }
         
         if (finalMatchers == nil) {
-            finalMatchers = [[NSMutableArray alloc] init];
+            finalMatchers = [[NSMutableSet alloc] init];
         }
         [finalMatchers addObject:matcher];
         matcher = va_arg(args, id);
@@ -71,7 +71,7 @@
     }
 }
 
--(void) applyPostProcessors:(NSArray *) postProcessors {
+-(void) applyPostProcessors:(NSSet *) postProcessors {
     for (ALCDependency *dependency in _dependencies) {
         [dependency postProcess:postProcessors];
     }

@@ -19,13 +19,13 @@
     if ([ALCRuntime class:dependency.variableClass extends:[NSArray class]]) {
     
         NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
-        [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCInstance *obj, NSUInteger idx, BOOL *stop) {
+        [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCInstance *obj, BOOL *stop) {
             [values addObject:obj.finalObject];
         }];
 
         return [self injectObject:finalObject
                          variable:dependency.variable
-                        withValue:[dependency.candidateInstances lastObject]];
+                        withValue:[dependency.candidateInstances anyObject]];
 
     } else {
         if ([dependency.candidateInstances count] > 1) {

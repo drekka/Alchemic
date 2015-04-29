@@ -10,13 +10,13 @@
 
 @interface ALCResolver : NSObject
 
-@property (nonatomic, strong, readonly) NSArray *candidateInstances;
-@property (nonatomic, strong) NSArray *dependencyMatchers;
+@property (nonatomic, strong, readonly) NSSet *candidateInstances;
+@property (nonatomic, strong) NSSet *dependencyMatchers;
 
--(instancetype) initWithMatchers:(NSArray *) dependencyMatchers;
+-(instancetype) initWithMatchers:(NSSet *) dependencyMatchers;
 
 -(void) resolveUsingModel:(NSDictionary *) model;
 
--(void) postProcess:(NSArray *) postProcessors;
+-(void) postProcess:(NSSet *) postProcessors;
 
 @end
