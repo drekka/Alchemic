@@ -6,10 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-@import Foundation;
+#import "ALCAbstractDependencyInjector.h"
 
-#import "ALCDependencyInjector.h"
-
-@interface ALCSimpleDependencyInjector : NSObject<ALCDependencyInjector>
+@interface ALCSimpleDependencyInjector : ALCAbstractDependencyInjector
 
 @end

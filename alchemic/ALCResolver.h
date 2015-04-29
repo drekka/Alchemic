@@ -17,4 +17,6 @@
 
 -(void) resolveUsingModel:(NSDictionary *) model;
 
+-(void) postProcess:(NSArray *) postProcessors;
+
 @end

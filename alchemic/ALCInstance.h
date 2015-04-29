@@ -31,6 +31,8 @@
 
 -(void) resolveDependenciesWithModel:(NSDictionary *) model;
 
+-(void) applyPostProcessors:(NSArray *) postProcessors;
+
 -(void) injectDependenciesUsingInjectors:(NSArray *) dependencyInjectors;
 
 -(void) instantiateUsingFactories:(NSArray *) objectFactories;

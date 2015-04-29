@@ -69,7 +69,12 @@
     for (ALCDependency *dependency in _dependencies) {
         [dependency resolveUsingModel:model];
     }
-    
+}
+
+-(void) applyPostProcessors:(NSArray *) postProcessors {
+    for (ALCDependency *dependency in _dependencies) {
+        [dependency postProcess:postProcessors];
+    }
 }
 
 -(void) injectDependenciesUsingInjectors:(NSArray *) dependencyInjectors {

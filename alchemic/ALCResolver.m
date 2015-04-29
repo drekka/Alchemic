@@ -11,6 +11,7 @@
 @import ObjectiveC;
 #import "ALCMatcher.h"
 #import "ALCInstance.h"
+#import "ALCResolverPostProcessor.h"
 
 @implementation ALCResolver
 
@@ -49,6 +50,15 @@
         
     }];
     
+}
+
+-(void) postProcess:(NSArray *) postProcessors {
+    for (id<ALCResolverPostProcessor> postProcessor in postProcessors) {
+        NSArray *newCandiates = [postProcessor process:self];
+        if (newCandiates != nil) {
+            _candidateInstances = newCandiates;
+        }
+    }
 }
 
 @end

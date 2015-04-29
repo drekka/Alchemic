@@ -19,6 +19,8 @@
 #import "ALCUIViewControllerInitWithCoderStrategy.h"
 #import "ALCUIViewControllerInitWithFrameStrategy.h"
 
+#import "ALCPrimaryObjectPostProcessor.h"
+
 #import "ALCRuntime.h"
 
 #import "AlchemicAware.h"
@@ -45,6 +47,7 @@
 
 @implementation ALCContext {
     NSMutableArray *_initialisationStrategyClasses;
+    NSMutableArray *_resolverPostProcessors;
     NSMutableArray *_dependencyInjectors;
     NSMutableArray *_objectFactories;
     NSDictionary *_model;
@@ -65,6 +68,9 @@
         [self addInitialisationStrategy:[ALCNSObjectInitStrategy class]];
         [self addInitialisationStrategy:[ALCUIViewControllerInitWithCoderStrategy class]];
         [self addInitialisationStrategy:[ALCUIViewControllerInitWithFrameStrategy class]];
+        
+        _resolverPostProcessors = [[NSMutableArray alloc] init];
+        [_resolverPostProcessors addObject:[[ALCPrimaryObjectPostProcessor alloc] init]];
         
         _objectFactories = [[NSMutableArray alloc] init];
         [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
@@ -141,6 +147,7 @@
     [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop){
         logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(instance.forClass));
         [instance resolveDependenciesWithModel:_model];
+        [instance applyPostProcessors:_resolverPostProcessors];
     }];
 }
 

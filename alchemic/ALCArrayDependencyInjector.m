@@ -23,9 +23,9 @@
             [values addObject:obj.finalObject];
         }];
 
-        logRuntime(@"Injecting %s with array of %lu objects", ivar_getName(dependency.variable), [dependency.candidateInstances count]);
-        object_setIvar(finalObject, dependency.variable, values);
-        return YES;
+        return [self injectObject:finalObject
+                         variable:dependency.variable
+                        withValue:[dependency.candidateInstances lastObject]];
 
     } else {
         if ([dependency.candidateInstances count] > 1) {
