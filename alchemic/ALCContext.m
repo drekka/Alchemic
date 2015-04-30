@@ -13,7 +13,7 @@
 #import "ALCLogger.h"
 #import "ALCInternal.h"
 
-#import "ALCInitialisationStrategyInjector.h"
+#import "ALCInitStrategyInjector.h"
 
 #import "ALCNSObjectInitStrategy.h"
 #import "ALCUIViewControllerInitWithCoderStrategy.h"
@@ -65,9 +65,9 @@
         _model = [[NSMutableDictionary alloc] init];
         
         _initialisationStrategyClasses = [[NSMutableArray alloc] init];
-        [self addInitialisationStrategy:[ALCNSObjectInitStrategy class]];
-        [self addInitialisationStrategy:[ALCUIViewControllerInitWithCoderStrategy class]];
-        [self addInitialisationStrategy:[ALCUIViewControllerInitWithFrameStrategy class]];
+        [self addInitStrategy:[ALCNSObjectInitStrategy class]];
+        [self addInitStrategy:[ALCUIViewControllerInitWithCoderStrategy class]];
+        [self addInitStrategy:[ALCUIViewControllerInitWithFrameStrategy class]];
         
         _resolverPostProcessors = [[NSMutableSet alloc] init];
         [self addResolverPostProcessor:[[ALCPrimaryObjectPostProcessor alloc] init]];
@@ -93,7 +93,7 @@
     
     // Set defaults.
     if (self.runtimeInitInjector == nil) {
-        self.runtimeInitInjector = [[ALCInitialisationStrategyInjector alloc] initWithStrategyClasses:_initialisationStrategyClasses];
+        self.runtimeInitInjector = [[ALCInitStrategyInjector alloc] initWithStrategyClasses:_initialisationStrategyClasses];
     }
     
     // Inject init wrappers into classes that have registered for dependency injection.
@@ -112,7 +112,7 @@
 }
 
 -(void) injectDependencies {
-    logRuntime(@"Injecting dependencies ...");
+    logRuntime(@"Injecting dependencies in model objects ...");
     [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop) {
         [instance injectDependenciesUsingInjectors:_dependencyInjectors];
     }];
@@ -172,7 +172,7 @@
     [_model addInstance:instance];
 }
 
--(void) addInitialisationStrategy:(Class) initialisationStrategyClass {
+-(void) addInitStrategy:(Class) initialisationStrategyClass {
     logConfig(@"Adding init strategy: %s", class_getName(initialisationStrategyClass));
     [_initialisationStrategyClasses insertObject:initialisationStrategyClass atIndex:0];
 }

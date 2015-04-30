@@ -19,20 +19,17 @@
     if ([ALCRuntime class:dependency.variableClass extends:[NSArray class]]) {
     
         NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
-        [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCInstance *obj, BOOL *stop) {
-            [values addObject:obj.finalObject];
+        [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCInstance *instance, BOOL *stop) {
+            id value = instance.finalObject;
+            if (value != nil) {
+                [values addObject:value];
+            }
         }];
 
+        logDependencyResolving(@"%lu candidates found, %lu have objects associated", [dependency.candidateInstances count], [values count]);
         return [self injectObject:finalObject
                          variable:dependency.variable
-                        withValue:[dependency.candidateInstances anyObject]];
-
-    } else {
-        if ([dependency.candidateInstances count] > 1) {
-            @throw [NSException exceptionWithName:@"AlchemicTooManyObjects"
-                                           reason:[NSString stringWithFormat:@"Expected 1 object for dependency %s, found %lu", ivar_getName(dependency.variable), (unsigned long)[dependency.candidateInstances count]]
-                                         userInfo:nil];
-        }
+                        withValue:values];
     }
 
     return NO;

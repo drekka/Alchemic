@@ -10,7 +10,7 @@
 
 #import "ALCObjectFactory.h"
 #import "ALCDependencyInjector.h"
-#import "ALCInitialisationInjector.h"
+#import "ALCInitInjector.h"
 #import "ALCDependencyInjector.h"
 #import "ALCMatcher.h"
 #import "ALCResolverPostProcessor.h"
@@ -25,13 +25,13 @@
  Specifies the class used to inject init method wrappers into the runtime. Normally this doesn't been to be changed from the default.
  @discussion By default this is AlchemicRuntimeInjector.
  */
-@property (nonatomic, strong) id<ALCInitialisationInjector> runtimeInitInjector;
+@property (nonatomic, strong) id<ALCInitInjector> runtimeInitInjector;
 
 /**
  Adds an additional initialisation strategy to the built in ones.
  Strategies are run in reverse order from last registered through to the builtin ones.
  */
--(void) addInitialisationStrategy:(Class) initialisationStrategyClass;
+-(void) addInitStrategy:(Class) initialisationStrategyClass;
 
 -(void) addResolverPostProcessor:(id<ALCResolverPostProcessor>) postProcessor;
 

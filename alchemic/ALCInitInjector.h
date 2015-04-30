@@ -8,14 +8,14 @@
 
 @import Foundation;
 
-#import "ALCInitialisationStrategy.h"
+#import "ALCInitStrategy.h"
 
 @class ALCContext;
 
 /**
  Protocol of classes that can perform injection of Alchemic startup code into the Objective C runtime.
  */
-@protocol ALCInitialisationInjector <NSObject>
+@protocol ALCInitInjector <NSObject>
 
 /**
  Main initialiser.

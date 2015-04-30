@@ -60,8 +60,10 @@
 /**
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.
  */
-#define registerComponent() \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCInstance *) instance {}
+#define registerComponent \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCInstance *) instance { \
+    instance.instantiate = YES; \
+}
 
 #define registerComponentWithName(componentName) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCInstance *) instance { \

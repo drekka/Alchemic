@@ -105,7 +105,7 @@
     }
 }
 
--(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy {
+-(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy {
     _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
 }
 

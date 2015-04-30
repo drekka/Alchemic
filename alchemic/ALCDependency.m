@@ -76,7 +76,7 @@
     // If there are no candidates left then error.
     if ([self.candidateInstances count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve: %s", ivar_getName(_variable)]
+                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency: %s", ivar_getName(_variable)]
                                      userInfo:nil];
     }
 }
@@ -90,7 +90,7 @@
     }
     
     @throw [NSException exceptionWithName:@"AlchemicValueNotInjected"
-                                   reason:[NSString stringWithFormat:@"Unable to inject any candidateobjects for: %s", ivar_getName(_variable)]
+                                   reason:[NSString stringWithFormat:@"Unable to inject any candidate objects for: %s", ivar_getName(_variable)]
                                  userInfo:nil];
     
 }

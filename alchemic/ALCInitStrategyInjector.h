@@ -7,11 +7,11 @@
 //
 
 @import Foundation;
-#import "ALCInitialisationInjector.h"
+#import "ALCInitInjector.h"
 
 /**
  This class handles self injection into the iOS runtime.
  */
-@interface ALCInitialisationStrategyInjector : NSObject<ALCInitialisationInjector>
+@interface ALCInitStrategyInjector : NSObject<ALCInitInjector>
 
 @end

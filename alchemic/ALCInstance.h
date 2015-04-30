@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCInitialisationStrategy.h"
+#import "ALCInitStrategy.h"
 
 @interface ALCInstance : NSObject
 
@@ -37,6 +37,6 @@
 
 -(void) instantiateUsingFactories:(NSArray *) objectFactories;
 
--(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy;
+-(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
 
 @end

@@ -11,7 +11,8 @@
 
 @implementation SimpleObject
 
-registerComponentWithName(@"abc")
+registerComponent
+//registerComponentWithName(@"abc")
 
 -(instancetype) init {
     self = [super init];

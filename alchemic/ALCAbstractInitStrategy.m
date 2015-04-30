@@ -1,12 +1,12 @@
 //
-//  ALCAbstractInitialisationStrategy.m
+//  ALCAbstractInitStrategy.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 27/02/2015.
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractInitialisationStrategy.h"
+#import "ALCAbstractInitStrategy.h"
 
 #import "ALCLogger.h"
 #import "ALCInstance.h"
@@ -16,7 +16,7 @@
 
 @import ObjectiveC;
 
-@implementation ALCAbstractInitialisationStrategy {
+@implementation ALCAbstractInitStrategy {
     Class _forClass;
 }
 

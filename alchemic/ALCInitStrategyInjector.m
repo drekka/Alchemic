@@ -6,16 +6,16 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCInitialisationStrategyInjector.h"
+#import "ALCInitStrategyInjector.h"
 
 @import UIKit;
 
 @import ObjectiveC;
 #import "ALCLogger.h"
 #import "ALCInstance.h"
-#import "ALCInitialisationStrategy.h"
+#import "ALCInitStrategy.h"
 
-@implementation ALCInitialisationStrategyInjector {
+@implementation ALCInitStrategyInjector {
     NSArray *_strategyClasses;
 }
 
@@ -50,7 +50,7 @@ static BOOL injected = NO;
     for (ALCInstance *instance in rootInstances) {
         for (Class initStrategy in _strategyClasses) {
             if ([initStrategy canWrapInit:instance]) {
-                [instance addInitialisationStrategy:[[initStrategy alloc] initWithInstance:instance]];
+                [instance addInitStrategy:[[initStrategy alloc] initWithInstance:instance]];
             }
         }
     }

@@ -16,9 +16,22 @@
 @implementation ALCSimpleDependencyInjector
 
 -(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
+    
+    if ([dependency.candidateInstances count] > 1) {
+        @throw [NSException exceptionWithName:@"AlchemicTooManyObjects"
+                                       reason:[NSString stringWithFormat:@"Expected 1 object for dependency %s, found %lu", ivar_getName(dependency.variable), (unsigned long)[dependency.candidateInstances count]]
+                                     userInfo:nil];
+    }
+    
+    ALCInstance *instance = [dependency.candidateInstances anyObject];
+    if (instance.finalObject == nil) {
+        @throw [NSException exceptionWithName:@"AlchemicObjectNotCreated"
+                                       reason:[NSString stringWithFormat:@"Dependency %s has not be set or instantiated", ivar_getName(dependency.variable)]
+                                     userInfo:nil];
+    }
     return [self injectObject:finalObject
                      variable:dependency.variable
-                    withValue:[dependency.candidateInstances anyObject]];
+                    withValue:instance.finalObject];
 }
 
 @end

@@ -8,11 +8,11 @@
 
 @import Foundation;
 
-#import "ALCAbstractInitialisationStrategy.h"
+#import "ALCAbstractInitStrategy.h"
 
 /**
  Wrapper details for NSObject::init.
  */
-@interface ALCNSObjectInitStrategy : ALCAbstractInitialisationStrategy
+@interface ALCNSObjectInitStrategy : ALCAbstractInitStrategy
 
 @end

@@ -33,7 +33,6 @@ static Class protocolClass;
     const char * prefix = _alchemic_toCharPointer(ALCHEMIC_PREFIX);
     const char * selName = sel_getName(selector);
     const char * newSelectorName = [self concat:prefix to:selName];
-    logRuntime(@"Registering @selector(%s)", newSelectorName);
     return sel_registerName(newSelectorName);
 }
 

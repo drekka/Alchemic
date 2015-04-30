@@ -49,7 +49,7 @@
     return results;
 }
 
--(NSSet *) instancesWithMatcher:(NSSet *) matchers {
+-(NSSet *) instancesWithMatchers:(NSSet *) matchers {
     ALCResolver *resolver = [[ALCResolver alloc] initWithMatchers:matchers];
     [resolver resolveUsingModel:self];
     return resolver.candidateInstances;
