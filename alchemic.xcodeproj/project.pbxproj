@@ -58,6 +58,7 @@
 		6C9ADAC21ADFF9F700A240F2 /* ALCResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9ADAC11ADFF9F700A240F2 /* ALCResolver.m */; };
 		6CC54B611AF3B16F00D5D634 /* ALCInitStrategyClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC54B601AF3B16F00D5D634 /* ALCInitStrategyClassProcessor.m */; };
 		6CC54B641AF3C1C100D5D634 /* ALCResolverPostProcessorClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC54B631AF3C1C100D5D634 /* ALCResolverPostProcessorClassProcessor.m */; };
+		6CC54B671AF3C67F00D5D634 /* ALCResourceLocatorClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC54B661AF3C67F00D5D634 /* ALCResourceLocatorClassProcessor.m */; };
 		6CEF233B1A9364DA005E672E /* InjectByClassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEF233A1A9364DA005E672E /* InjectByClassTests.m */; };
 		6CF341AA1ADD5A2C00A9B76B /* ALCTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6F01A9B339500ACD0F8 /* ALCTestCase.m */; };
 		6CF341AC1ADD5A2C00A9B76B /* libalchemic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C66DC2E1A8B82C3009F9D94 /* libalchemic.a */; };
@@ -206,6 +207,8 @@
 		6CC54B601AF3B16F00D5D634 /* ALCInitStrategyClassProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCInitStrategyClassProcessor.m; sourceTree = "<group>"; };
 		6CC54B621AF3C1C100D5D634 /* ALCResolverPostProcessorClassProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCResolverPostProcessorClassProcessor.h; sourceTree = "<group>"; };
 		6CC54B631AF3C1C100D5D634 /* ALCResolverPostProcessorClassProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCResolverPostProcessorClassProcessor.m; sourceTree = "<group>"; };
+		6CC54B651AF3C67F00D5D634 /* ALCResourceLocatorClassProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCResourceLocatorClassProcessor.h; sourceTree = "<group>"; };
+		6CC54B661AF3C67F00D5D634 /* ALCResourceLocatorClassProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCResourceLocatorClassProcessor.m; sourceTree = "<group>"; };
 		6CEF233A1A9364DA005E672E /* InjectByClassTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InjectByClassTests.m; sourceTree = "<group>"; };
 		6CF341B11ADD5A2C00A9B76B /* Value tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Value tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CF341B31ADD5A9100A9B76B /* ValueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueTests.m; sourceTree = "<group>"; };
@@ -266,6 +269,8 @@
 				6CC54B601AF3B16F00D5D634 /* ALCInitStrategyClassProcessor.m */,
 				6CC54B621AF3C1C100D5D634 /* ALCResolverPostProcessorClassProcessor.h */,
 				6CC54B631AF3C1C100D5D634 /* ALCResolverPostProcessorClassProcessor.m */,
+				6CC54B651AF3C67F00D5D634 /* ALCResourceLocatorClassProcessor.h */,
+				6CC54B661AF3C67F00D5D634 /* ALCResourceLocatorClassProcessor.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -666,6 +671,7 @@
 				6C9473151AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.m in Sources */,
 				6C1C6A761AF3A9480074BB26 /* ALCModelClassProcessor.m in Sources */,
 				6C9473171AE7D7CB008EB2E5 /* ALCInitStrategyInjector.m in Sources */,
+				6CC54B671AF3C67F00D5D634 /* ALCResourceLocatorClassProcessor.m in Sources */,
 				6C9ADAB91ADFEC7D00A240F2 /* ALCPlistResourceLocator.m in Sources */,
 				6C9ADABF1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.m in Sources */,
 				6C9ADAC21ADFF9F700A240F2 /* ALCResolver.m in Sources */,

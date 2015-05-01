@@ -19,6 +19,7 @@
 #import "ALCModelClassProcessor.h"
 #import "ALCInitStrategyClassProcessor.h"
 #import "ALCResolverPostProcessorClassProcessor.h"
+#import "ALCResourceLocatorClassProcessor.h"
 
 @implementation ALCRuntime
 
@@ -86,7 +87,8 @@ static Class protocolClass;
     NSSet *processors = [NSSet setWithArray:@[
                                               [[ALCModelClassProcessor alloc] init],
                                               [[ALCInitStrategyClassProcessor alloc] init],
-                                              [[ALCResolverPostProcessorClassProcessor alloc] init]
+                                              [[ALCResolverPostProcessorClassProcessor alloc] init],
+                                              [[ALCResourceLocatorClassProcessor alloc] init]
                                               ]];
 
     for (NSBundle *bundle in [NSBundle allBundles]) {

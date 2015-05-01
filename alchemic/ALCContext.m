@@ -33,10 +33,6 @@
 #import "ALCObjectFactory.h"
 #import "ALCSimpleObjectFactory.h"
 
-#import "ALCPlistResourceLocator.h"
-#import "ALCBundleResourceLocator.h"
-#import "ALCFileContentsResourceLocator.h"
-
 #import "NSDictionary+ALCModel.h"
 
 @implementation ALCContext {
@@ -67,11 +63,6 @@
         _dependencyInjectors = [[NSMutableArray alloc] init];
         [self addDependencyInjector:[[ALCSimpleDependencyInjector alloc] init]];
         [self addDependencyInjector:[[ALCArrayDependencyInjector alloc] init]];
-        
-        // Add value resolvers as objects in the model.
-        [_model addObject:[[ALCPlistResourceLocator alloc] init] withName:nil];
-        [_model addObject:[[ALCBundleResourceLocator alloc] init] withName:nil];
-        [_model addObject:[[ALCFileContentsResourceLocator alloc] init] withName:nil];
         
     }
     return self;

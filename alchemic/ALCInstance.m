@@ -81,6 +81,8 @@
     if (self.finalObject == nil) {
         return;
     }
+    
+    logDependencyResolving(@"Checking %s for dependencies", class_getName(_forClass));
     for (ALCDependency *dependency in _dependencies) {
         [dependency injectObject:self.finalObject usingInjectors:dependencyInjectors];
     }
