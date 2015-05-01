@@ -15,12 +15,6 @@
 
 #import "ALCInitStrategyInjector.h"
 
-#import "ALCNSObjectInitStrategy.h"
-#import "ALCUIViewControllerInitWithCoderStrategy.h"
-#import "ALCUIViewControllerInitWithFrameStrategy.h"
-
-#import "ALCPrimaryObjectPostProcessor.h"
-
 #import "ALCRuntime.h"
 
 #import "AlchemicAware.h"
@@ -65,12 +59,7 @@
         _model = [[NSMutableDictionary alloc] init];
         
         _initialisationStrategyClasses = [[NSMutableSet alloc] init];
-        //[self addInitStrategy:[ALCNSObjectInitStrategy class]];
-        //[self addInitStrategy:[ALCUIViewControllerInitWithCoderStrategy class]];
-        //[self addInitStrategy:[ALCUIViewControllerInitWithFrameStrategy class]];
-        
         _resolverPostProcessors = [[NSMutableSet alloc] init];
-        [self addResolverPostProcessor:[[ALCPrimaryObjectPostProcessor alloc] init]];
         
         _objectFactories = [[NSMutableArray alloc] init];
         [self addObjectFactory:[[ALCSimpleObjectFactory alloc] init]];

@@ -18,6 +18,7 @@
 
 #import "ALCModelClassProcessor.h"
 #import "ALCInitStrategyClassProcessor.h"
+#import "ALCResolverPostProcessorClassProcessor.h"
 
 @implementation ALCRuntime
 
@@ -78,21 +79,14 @@ static Class protocolClass;
                                  userInfo:nil];
 }
 
-+(void) executeOnClassHierarchy:(Class) initialClass block:(BOOL (^)(Class class)) classBlock {
-    Class nextClass = initialClass;
-    while (nextClass != NULL && classBlock(nextClass)) {
-        nextClass = class_getSuperclass(nextClass);
-    }
-}
-
-
 #pragma mark - Class scanning
 
 +(void) scanRuntimeWithContext:(ALCContext *) context {
     
     NSSet *processors = [NSSet setWithArray:@[
                                               [[ALCModelClassProcessor alloc] init],
-                                              [[ALCInitStrategyClassProcessor alloc] init]
+                                              [[ALCInitStrategyClassProcessor alloc] init],
+                                              [[ALCResolverPostProcessorClassProcessor alloc] init]
                                               ]];
 
     for (NSBundle *bundle in [NSBundle allBundles]) {

@@ -28,8 +28,6 @@
 
 +(void) validateMatcher:(id) object;
 
-+(void) executeOnClassHierarchy:(Class) initialClass block:(BOOL (^)(Class class)) classBlock;
-
 #pragma mark - Alchemic
 
 /**
