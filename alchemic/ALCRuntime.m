@@ -14,6 +14,10 @@
 #import "ALCLogger.h"
 #import "ALCDependency.h"
 #import "NSDictionary+ALCModel.h"
+#import "ALCContext.h"
+
+#import "ALCModelClassProcessor.h"
+#import "ALCInitStrategyClassProcessor.h"
 
 @implementation ALCRuntime
 
@@ -74,14 +78,23 @@ static Class protocolClass;
                                  userInfo:nil];
 }
 
-#pragma mark - Alchemic
++(void) executeOnClassHierarchy:(Class) initialClass block:(BOOL (^)(Class class)) classBlock {
+    Class nextClass = initialClass;
+    while (nextClass != NULL && classBlock(nextClass)) {
+        nextClass = class_getSuperclass(nextClass);
+    }
+}
 
-static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREFIX));
 
 #pragma mark - Class scanning
 
-+(void) findAlchemicClasses:(void (^)(ALCInstance *)) registerClassBlock {
++(void) scanRuntimeWithContext:(ALCContext *) context {
     
+    NSSet *processors = [NSSet setWithArray:@[
+                                              [[ALCModelClassProcessor alloc] init],
+                                              [[ALCInitStrategyClassProcessor alloc] init]
+                                              ]];
+
     for (NSBundle *bundle in [NSBundle allBundles]) {
 
         logRuntime(@"Scanning bundle %@", bundle);
@@ -89,47 +102,11 @@ static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREF
         const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
         
         for(unsigned int i = 0;i < count;i++){
-
-            if (strncmp(classes[i], "ALC", 3) == 0 || strncmp(classes[i], "Alc", 3) == 0) {
-                continue;
-            }
-            
-            Class class = objc_getClass(classes[i]);
-            ALCInstance *instance = [self executeAlchemicMethodsInClass:class];
-            if (instance != nil) {
-                registerClassBlock(instance);
+            for (id<ALCClassProcessor> processor in processors) {
+                [processor processClass:objc_getClass(classes[i]) withContext:context];
             }
         }
     }
-}
-
-+(ALCInstance *) executeAlchemicMethodsInClass:(Class) class {
-    
-    // Get the class methods. We need to get the class of the class for them.
-    unsigned int methodCount;
-    Method *classMethods = class_copyMethodList(object_getClass(class), &methodCount);
-    
-    // Search the methods for registration methods.
-    ALCInstance *instance = nil;
-    for (size_t idx = 0; idx < methodCount; ++idx) {
-        
-        SEL sel = method_getName(classMethods[idx]);
-        const char * methodName = sel_getName(sel);
-        if (strncmp(methodName, _alchemic_toCharPointer(ALCHEMIC_PREFIX), _prefixLength) != 0) {
-            continue;
-        }
-        
-        if (instance == nil) {
-            instance = [[ALCInstance alloc] initWithClass:class];
-        }
-        
-        logRuntime(@"Executing %s::%s ...", class_getName(class), methodName);
-        ((void (*)(id, SEL, ALCInstance *))objc_msgSend)(class, sel, instance); // Note cast because of XCode 6
-        
-    }
-    
-    free(classMethods);
-    return instance;
 }
 
 #pragma mark - Alchemic

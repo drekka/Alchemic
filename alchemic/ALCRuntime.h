@@ -8,7 +8,9 @@
 
 @import Foundation;
 @import ObjectiveC;
+
 @class ALCInstance;
+@class ALCContext;
 
 @interface ALCRuntime : NSObject
 
@@ -26,13 +28,15 @@
 
 +(void) validateMatcher:(id) object;
 
++(void) executeOnClassHierarchy:(Class) initialClass block:(BOOL (^)(Class class)) classBlock;
+
 #pragma mark - Alchemic
 
 /**
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
  @discussion Once found, the block is called to finish the registration of the class.
  */
-+(void) findAlchemicClasses:(void (^)(ALCInstance *)) registerClassBlock;
++(void) scanRuntimeWithContext:(ALCContext *) context;
 
 /**
  Scans a class to find the actual variable used.

@@ -22,7 +22,7 @@
  
  @param strategies A list of strategies to employ.
  */
--(instancetype) initWithStrategyClasses:(NSArray *) strategyClasses;
+-(instancetype) initWithStrategyClasses:(NSSet *) strategyClasses;
 
 /**
  Inject hooks into the runtime.

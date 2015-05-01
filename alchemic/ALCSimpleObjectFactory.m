@@ -14,18 +14,7 @@
 
 @import ObjectiveC;
 
-
-@implementation ALCSimpleObjectFactory {
-    __weak ALCContext *_context;
-}
-
--(instancetype) initWithContext:(ALCContext *) context {
-    self = [super init];
-    if (self) {
-        _context = context;
-    }
-    return self;
-}
+@implementation ALCSimpleObjectFactory
 
 -(id) createObjectFromInstance:(ALCInstance *) instance {
     

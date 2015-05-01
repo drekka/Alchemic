@@ -46,7 +46,7 @@
 #import "NSDictionary+ALCModel.h"
 
 @implementation ALCContext {
-    NSMutableArray *_initialisationStrategyClasses;
+    NSMutableSet *_initialisationStrategyClasses;
     NSMutableSet *_resolverPostProcessors;
     NSMutableArray *_dependencyInjectors;
     NSMutableArray *_objectFactories;
@@ -64,16 +64,16 @@
         // Create storage for objects.
         _model = [[NSMutableDictionary alloc] init];
         
-        _initialisationStrategyClasses = [[NSMutableArray alloc] init];
-        [self addInitStrategy:[ALCNSObjectInitStrategy class]];
-        [self addInitStrategy:[ALCUIViewControllerInitWithCoderStrategy class]];
-        [self addInitStrategy:[ALCUIViewControllerInitWithFrameStrategy class]];
+        _initialisationStrategyClasses = [[NSMutableSet alloc] init];
+        //[self addInitStrategy:[ALCNSObjectInitStrategy class]];
+        //[self addInitStrategy:[ALCUIViewControllerInitWithCoderStrategy class]];
+        //[self addInitStrategy:[ALCUIViewControllerInitWithFrameStrategy class]];
         
         _resolverPostProcessors = [[NSMutableSet alloc] init];
         [self addResolverPostProcessor:[[ALCPrimaryObjectPostProcessor alloc] init]];
         
         _objectFactories = [[NSMutableArray alloc] init];
-        [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
+        [self addObjectFactory:[[ALCSimpleObjectFactory alloc] init]];
         
         _dependencyInjectors = [[NSMutableArray alloc] init];
         [self addDependencyInjector:[[ALCSimpleDependencyInjector alloc] init]];
@@ -174,7 +174,7 @@
 
 -(void) addInitStrategy:(Class) initialisationStrategyClass {
     logConfig(@"Adding init strategy: %s", class_getName(initialisationStrategyClass));
-    [_initialisationStrategyClasses insertObject:initialisationStrategyClass atIndex:0];
+    [_initialisationStrategyClasses addObject:initialisationStrategyClass];
 }
 
 @end

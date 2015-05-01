@@ -16,7 +16,7 @@
 #import "ALCInitStrategy.h"
 
 @implementation ALCInitStrategyInjector {
-    NSArray *_strategyClasses;
+    NSSet *_strategyClasses;
 }
 
 static BOOL injected = NO;
@@ -28,7 +28,7 @@ static BOOL injected = NO;
     [self resetRuntime];
 }
 
--(instancetype) initWithStrategyClasses:(NSArray *) strategyClasses {
+-(instancetype) initWithStrategyClasses:(NSSet *) strategyClasses {
     self = [super init];
     if (self) {
         _strategyClasses = strategyClasses;

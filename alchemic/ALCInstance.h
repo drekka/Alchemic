@@ -23,11 +23,15 @@
 
 -(instancetype) initWithClass:(Class) class;
 
-#pragma mark -Setting up
+#pragma mark - Setting up
 
 -(void) addDependency:(NSString *) inj, ...;
 
 -(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers;
+
+-(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
+
+#pragma mark - Processing
 
 -(void) resolveDependenciesWithModel:(NSDictionary *) model;
 
@@ -37,6 +41,5 @@
 
 -(void) instantiateUsingFactories:(NSArray *) objectFactories;
 
--(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
 
 @end

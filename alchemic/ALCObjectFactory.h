@@ -17,15 +17,6 @@
 @protocol ALCObjectFactory <NSObject>
 
 /**
- Default initialiser
- 
- @param context the ALCContext that owns the factory.
- 
- @return an instance of the factory.
- */
--(instancetype) initWithContext:(__weak ALCContext *) context;
-
-/**
  Called when the context needs an object to be created.
  
  @param classInfo the information tha describes the object to be created.

@@ -24,9 +24,7 @@ static __strong ALCContext *__mainContext;
     //dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
         //@autoreleasepool {
             __mainContext = [[ALCContext alloc] init];
-            [ALCRuntime findAlchemicClasses:^(ALCInstance *instance) {
-                [__mainContext addInstance:instance];
-            }];
+        [ALCRuntime scanRuntimeWithContext:__mainContext];
             [__mainContext start];
         //}
     //});
