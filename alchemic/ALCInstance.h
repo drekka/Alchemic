@@ -37,9 +37,9 @@
 
 -(void) applyPostProcessors:(NSSet *) postProcessors;
 
--(void) injectDependenciesUsingInjectors:(NSArray *) dependencyInjectors;
+-(void) injectDependenciesUsingInjectors:(NSSet *) dependencyInjectors;
 
--(void) instantiateUsingFactories:(NSArray *) objectFactories;
+-(void) instantiateUsingFactories:(NSSet *) objectFactories;
 
 
 @end

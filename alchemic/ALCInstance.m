@@ -59,7 +59,7 @@
     [self addDependency:inj withMatchers:finalMatchers];
 }
 
--(void) addDependency:(NSString *) inj withMatchers:(NSArray *) matchers {
+-(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers {
     // Create the dependency info to be store.
     Ivar variable = [ALCRuntime class:_forClass variableForInjectionPoint:inj];
     [_dependencies addObject:[[ALCDependency alloc] initWithVariable:variable matchers:matchers]];
@@ -77,7 +77,8 @@
     }
 }
 
--(void) injectDependenciesUsingInjectors:(NSArray *) dependencyInjectors {
+-(void) injectDependenciesUsingInjectors:(NSSet *) dependencyInjectors {
+    
     if (self.finalObject == nil) {
         return;
     }
@@ -88,7 +89,7 @@
     }
 }
 
--(void) instantiateUsingFactories:(NSArray *) objectFactories {
+-(void) instantiateUsingFactories:(NSSet *) objectFactories {
     if (self.instantiate && self.finalObject == nil) { // Allow for pre-built objects.
         
         logCreation(@"Instantiating '%@' (%s)", self.name, class_getName(self.forClass));

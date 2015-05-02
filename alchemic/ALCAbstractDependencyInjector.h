@@ -9,8 +9,9 @@
 @import ObjectiveC;
 
 #import "ALCDependencyInjector.h"
+#import "ALCAbstractClass.h"
 
-@interface ALCAbstractDependencyInjector : NSObject<ALCDependencyInjector>
+@interface ALCAbstractDependencyInjector : NSObject<ALCDependencyInjector, ALCAbstractClass>
 
 -(BOOL) injectObject:(id) object variable:(Ivar) variable withValue:(id) value;
 

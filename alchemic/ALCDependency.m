@@ -81,7 +81,7 @@
     }
 }
 
--(void) injectObject:(id) object usingInjectors:(NSArray *) injectors {
+-(void) injectObject:(id) object usingInjectors:(NSSet *) injectors {
     
     for (id<ALCDependencyInjector> injector in injectors) {
         if ([injector injectObject:object dependency:self]) {

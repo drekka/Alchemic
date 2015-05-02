@@ -18,6 +18,7 @@
 }
 
 -(BOOL) injectObject:(id) object dependency:(ALCDependency *) dependency {
+    [self doesNotRecognizeSelector:@selector(injectObject:dependency:)];
     return NO;
 }
 

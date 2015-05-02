@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-
+#import "ALCAbstractClass.h"
 #import "ALCInitStrategy.h"
 
 // Use this macro with the initLogic macro to safely wrap up the args. This allows us to passed multiple
@@ -39,7 +39,7 @@ logRuntime(@"Triggering dependency injection from %s::%s", class_getName(selfCla
 [[Alchemic mainContext] injectDependencies:self]; \
 return self
 
-@interface ALCAbstractInitStrategy : NSObject<ALCInitStrategy>
+@interface ALCAbstractInitStrategy : NSObject<ALCInitStrategy, ALCAbstractClass>
 
 @property (nonatomic, assign, readonly) SEL initSelector;
 @property (nonatomic, assign, readonly) SEL replacementInitSelector;

@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
+@import ObjectiveC;
 #import "ALCClassMatcher.h"
-#import "ALCRuntime.h"
 #import "ALCinstance.h"
 #import "ALCLogger.h"
 
@@ -25,7 +25,7 @@
 }
 
 -(BOOL) matches:(ALCInstance *)instance withName:(NSString *) name {
-    return [ALCRuntime class:instance.forClass extends:_class];
+    return [instance.forClass isSubclassOfClass:_class];
 }
 
 @end

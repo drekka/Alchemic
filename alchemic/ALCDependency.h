@@ -23,8 +23,8 @@
 @property (nonatomic, assign, readonly) Class variableClass;
 @property (nonatomic, strong, readonly) NSArray *variableProtocols;
 
--(instancetype) initWithVariable:(Ivar) variable matchers:(NSArray *) dependencyMatchers;
+-(instancetype) initWithVariable:(Ivar) variable matchers:(NSSet *) dependencyMatchers;
 
--(void) injectObject:(id) object usingInjectors:(NSArray *) injectors;
+-(void) injectObject:(id) object usingInjectors:(NSSet *) injectors;
 
 @end

@@ -8,39 +8,26 @@
 
 @import ObjectiveC;
 
-#import "Alchemic.h"
 #import "ALCContext.h"
 #import "ALCLogger.h"
 #import "ALCInternal.h"
-
 #import "ALCInitStrategyInjector.h"
-
 #import "ALCRuntime.h"
-
-#import "AlchemicAware.h"
-
 #import "ALCInstance.h"
-
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
-
 #import "ALCDependency.h"
-
-#import "ALCSimpleDependencyInjector.h"
-#import "ALCArrayDependencyInjector.h"
-
-#import "ALCObjectFactory.h"
-#import "ALCSimpleObjectFactory.h"
-
 #import "NSDictionary+ALCModel.h"
 
 @implementation ALCContext {
+
+    NSMutableDictionary *_model;
+    
     NSMutableSet *_initialisationStrategyClasses;
     NSMutableSet *_resolverPostProcessors;
-    NSMutableArray *_dependencyInjectors;
-    NSMutableArray *_objectFactories;
-    NSMutableDictionary *_model;
+    NSMutableSet *_dependencyInjectors;
+    NSMutableSet *_objectFactories;
 }
 
 #pragma mark - Lifecycle
@@ -48,22 +35,11 @@
 -(instancetype) init {
     self = [super init];
     if (self) {
-        
-        logConfig(@"Initing context");
-        
-        // Create storage for objects.
         _model = [[NSMutableDictionary alloc] init];
-        
         _initialisationStrategyClasses = [[NSMutableSet alloc] init];
         _resolverPostProcessors = [[NSMutableSet alloc] init];
-        
-        _objectFactories = [[NSMutableArray alloc] init];
-        [self addObjectFactory:[[ALCSimpleObjectFactory alloc] init]];
-        
-        _dependencyInjectors = [[NSMutableArray alloc] init];
-        [self addDependencyInjector:[[ALCSimpleDependencyInjector alloc] init]];
-        [self addDependencyInjector:[[ALCArrayDependencyInjector alloc] init]];
-        
+        _objectFactories = [[NSMutableSet alloc] init];
+        _dependencyInjectors = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -135,12 +111,12 @@
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
     logConfig(@"Adding object factory: %s", object_getClassName(objectFactory));
-    [_objectFactories insertObject:objectFactory atIndex:0];
+    [_objectFactories addObject:objectFactory];
 }
 
 -(void) addDependencyInjector:(id<ALCDependencyInjector>) dependencyinjector {
     logConfig(@"Adding dependency injector: %s", object_getClassName(dependencyinjector));
-    [_dependencyInjectors insertObject:dependencyinjector atIndex:0];
+    [_dependencyInjectors addObject:dependencyinjector];
 }
 
 -(void) addResolverPostProcessor:(id<ALCResolverPostProcessor>) postProcessor {

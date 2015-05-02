@@ -12,16 +12,15 @@
 
 @import ObjectiveC;
 
-
+#import "ALCRuntime.h"
 #import "ALCLogger.h"
 #import "Alchemic.h"
-#import "ALCRuntime.h"
 #import "ALCContext.h"
 
 @implementation ALCUIViewControllerInitWithFrameStrategy
 
 +(BOOL) canWrapInit:(ALCInstance *) instance {
-    return [ALCRuntime class:instance.forClass extends:[UIViewController class]];
+    return [instance.forClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

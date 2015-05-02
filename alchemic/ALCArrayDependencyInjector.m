@@ -9,14 +9,13 @@
 #import "ALCArrayDependencyInjector.h"
 #import "ALCDependency.h"
 #import "ALCLogger.h"
-#import "ALCRuntime.h"
 #import "ALCInstance.h"
 
 @implementation ALCArrayDependencyInjector
 
 -(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
 
-    if ([ALCRuntime class:dependency.variableClass extends:[NSArray class]]) {
+    if ([dependency.variableClass isSubclassOfClass:[NSArray class]]) {
     
         NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
         [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCInstance *instance, BOOL *stop) {

@@ -20,7 +20,7 @@
 @implementation ALCNSObjectInitStrategy
 
 +(BOOL) canWrapInit:(ALCInstance *) instance {
-    return ! [ALCRuntime class:instance.forClass extends:[UIViewController class]];
+    return ! [instance.forClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) initSelector {

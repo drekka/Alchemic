@@ -17,9 +17,10 @@
 #import "ALCContext.h"
 
 #import "ALCModelClassProcessor.h"
-#import "ALCInitStrategyClassProcessor.h"
-#import "ALCResolverPostProcessorClassProcessor.h"
-#import "ALCResourceLocatorClassProcessor.h"
+#import "ALCResolverPostProcessor.h"
+#import "ALCClassWithProtocolClassProcessor.h"
+#import "ALCResourceLocator.h"
+
 
 @implementation ALCRuntime
 
@@ -40,17 +41,6 @@ static Class protocolClass;
     const char * selName = sel_getName(selector);
     const char * newSelectorName = [self concat:prefix to:selName];
     return sel_registerName(newSelectorName);
-}
-
-+(BOOL) class:(Class) child extends:(Class) parent {
-    Class nextParent = child;
-    while(nextParent) {
-        if (nextParent == parent) {
-            return YES;
-        }
-        nextParent = class_getSuperclass(nextParent);
-    }
-    return NO;
 }
 
 +(BOOL) classIsProtocol:(Class) possiblePrototocol {
@@ -83,16 +73,46 @@ static Class protocolClass;
 #pragma mark - Class scanning
 
 +(void) scanRuntimeWithContext:(ALCContext *) context {
+
+    id<ALCClassProcessor> checkForInitStrategies = [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCInitStrategy)
+                                                                                                            whenMatches:^(classMatchesBlockArgs){
+                                                                                                                [context addInitStrategy:class];
+                                                                                                            }];
+
+    id<ALCClassProcessor> checkForResolverPostProcessors = [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResolverPostProcessor)
+                                                                                                            whenMatches:^(classMatchesBlockArgs){
+                                                                                                                [context addResolverPostProcessor:[[class alloc] init]];
+                                                                                                            }];
+    
+    id<ALCClassProcessor> checkForResourceLocators = [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResourceLocator)
+                                                                                                      whenMatches:^(classMatchesBlockArgs){
+                                                                                                          ALCInstance *instance = [[ALCInstance alloc] initWithClass:class];
+                                                                                                          instance.finalObject = [[class alloc] init];
+                                                                                                          instance.instantiate = YES;
+                                                                                                          [context addInstance:instance];
+                                                                                                      }];
+    
+    id<ALCClassProcessor> checkForObjectFactories = [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCObjectFactory)
+                                                                                                     whenMatches:^(classMatchesBlockArgs){
+                                                                                                         [context addObjectFactory:[[class alloc] init]];
+                                                                                                     }];
+    
+    id<ALCClassProcessor> checkForDependencyInjectors = [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCDependencyInjector)
+                                                                                                     whenMatches:^(classMatchesBlockArgs){
+                                                                                                         [context addDependencyInjector:[[class alloc] init]];
+                                                                                                     }];
     
     NSSet *processors = [NSSet setWithArray:@[
                                               [[ALCModelClassProcessor alloc] init],
-                                              [[ALCInitStrategyClassProcessor alloc] init],
-                                              [[ALCResolverPostProcessorClassProcessor alloc] init],
-                                              [[ALCResourceLocatorClassProcessor alloc] init]
+                                              checkForInitStrategies,
+                                              checkForResolverPostProcessors,
+                                              checkForResourceLocators,
+                                              checkForObjectFactories,
+                                              checkForDependencyInjectors
                                               ]];
-
+    
     for (NSBundle *bundle in [NSBundle allBundles]) {
-
+        
         logRuntime(@"Scanning bundle %@", bundle);
         unsigned int count = 0;
         const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
