@@ -24,8 +24,14 @@
 -(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
     
     if ([dependency.candidateInstances count] > 1) {
+
+        NSMutableArray *objectDescriptions = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
+        for (id<ALCObjectMetadata> metadata in dependency.candidateInstances) {
+            [objectDescriptions addObject:[metadata description]];
+        }
+        
         @throw [NSException exceptionWithName:@"AlchemicTooManyCandidates"
-                                       reason:[NSString stringWithFormat:@"Found %lu instances for %s, when expecting only 1.", [dependency.candidateInstances count], ivar_getName(dependency.variable)]
+                                       reason:[NSString stringWithFormat:@"Expecting 1 object for %@, but found %lu:%@", dependency, [dependency.candidateInstances count], [objectDescriptions componentsJoinedByString:@","]]
                                      userInfo:nil];
         return NO;
     }

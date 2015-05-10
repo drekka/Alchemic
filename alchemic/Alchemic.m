@@ -20,15 +20,13 @@ static __strong ALCContext *__mainContext;
 }
 
 +(void) load {
-#ifndef ALCHEMIC_NO_AUTOSTART
-    //dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
-        //@autoreleasepool {
+    dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
+        @autoreleasepool {
             __mainContext = [[ALCContext alloc] init];
         [ALCRuntime scanRuntimeWithContext:__mainContext];
             [__mainContext start];
-        //}
-    //});
-#endif
+        }
+    });
 }
 
 @end

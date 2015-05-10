@@ -90,13 +90,15 @@
 
 }
 
--(NSString *) debugDescription {
+-(NSString *) description {
+    
     NSMutableArray *protocols = [[NSMutableArray alloc] initWithCapacity:[self.variableProtocols count]];
     [self.variableProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, NSUInteger idx, BOOL *stop) {
         protocols[idx] = NSStringFromProtocol(protocol);
     }];
-    const char *type = class_getName(self.variableClass);
-    return [NSString stringWithFormat:@"Variable %s -> type: %s<%@>", ivar_getName(self.variable), type == nil ? "id" : type, [protocols componentsJoinedByString:@","]];
+
+    const char *type = self.variableClass == nil ? "id" : class_getName(self.variableClass);
+    return [NSString stringWithFormat:@"Variable %s -> type: %s<%@>", ivar_getName(self.variable), type, [protocols componentsJoinedByString:@", "]];
     
 }
 

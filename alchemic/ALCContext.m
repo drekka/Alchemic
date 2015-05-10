@@ -41,7 +41,8 @@
 }
 
 -(void) start {
-    logRuntime(@"Starting alchemic");
+
+    logRuntime(@"Starting alchemic ...");
     
     // Set defaults.
     if (self.runtimeInitInjector == nil) {
@@ -52,6 +53,8 @@
     [_runtimeInitInjector replaceInitsInModelClasses:_model];
     
     [self resolveModelObjects];
+
+    logRuntime(@"Creating objects ...");
     [self instantiateModelObjects];
 }
 

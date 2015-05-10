@@ -61,12 +61,12 @@
 
 -(void) resolveDependencies {
     
-    logDependencyResolving(@"Resolving dependencies for %@", [self debugDescription]);
+    logDependencyResolving(@"Resolving dependencies for %@", [self description]);
     for (ALCDependency *dependency in _dependencies) {
         [dependency resolveUsingModel:self.context.model];
     }
     
-    logRegistration(@"Post processing dependencies for %@", [self debugDescription]);
+    logRegistration(@"Post processing dependencies for %@", [self description]);
     for (ALCDependency *dependency in _dependencies) {
         [dependency postProcess:self.context.resolverPostProcessors];
     }
@@ -79,7 +79,7 @@
         return;
     }
     
-    logCreation(@"Instantiating %@", [self debugDescription]);
+    logCreation(@"Instantiating %@", [self description]);
     for (id<ALCObjectFactory> objectFactory in self.context.objectFactories) {
         self.object = [objectFactory createObjectFromInstance:self];
         if (self.objectClass != nil) {
@@ -89,7 +89,7 @@
     
     if (self.object == nil) {
         @throw [NSException exceptionWithName:@"AlchemicUnableToCreateInstance"
-                                       reason:[NSString stringWithFormat:@"Unable to create an instance of %@", [self debugDescription]]
+                                       reason:[NSString stringWithFormat:@"Unable to create an instance of %@", [self description]]
                                      userInfo:nil];
     }
     
@@ -97,7 +97,7 @@
 }
 
 -(void) injectDependenciesInto:(id) object {
-    logDependencyResolving(@"Checking %@ for dependencies", [self debugDescription]);
+    logDependencyResolving(@"Checking %@ for dependencies", [self description]);
     for (ALCDependency *dependency in _dependencies) {
         [dependency injectObject:object usingInjectors:self.context.dependencyInjectors];
     }
@@ -107,7 +107,7 @@
     _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
 }
 
--(NSString *) debugDescription {
+-(NSString *) description {
     return [NSString stringWithFormat:@"'%@' (%s)", self.name, class_getName(self.objectClass)];
 }
 
