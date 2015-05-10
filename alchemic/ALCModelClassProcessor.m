@@ -16,42 +16,38 @@
 
 @implementation ALCModelClassProcessor
 
--(void) processClass:(Class)class withContext:(ALCContext *)context {
-    ALCInstance *instance = [self executeAlchemicMethodsInClass:class];
-    if (instance != nil) {
-        [context addInstance:instance];
-    }
-}
-
 static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREFIX));
 
--(ALCInstance *) executeAlchemicMethodsInClass:(Class) class {
+-(void) processClass:(Class)class withContext:(ALCContext *)context {
     
     // Get the class methods. We need to get the class of the class for them.
     unsigned int methodCount;
     Method *classMethods = class_copyMethodList(object_getClass(class), &methodCount);
     
     // Search the methods for registration methods.
-    ALCInstance *instance = nil;
+    ALCInstance *currentClassInstance = nil;
     for (size_t idx = 0; idx < methodCount; ++idx) {
         
+        // If the method is not an alchemic one, then ignore it.
         SEL sel = method_getName(classMethods[idx]);
         const char * methodName = sel_getName(sel);
         if (strncmp(methodName, _alchemic_toCharPointer(ALCHEMIC_PREFIX), _prefixLength) != 0) {
             continue;
         }
         
-        if (instance == nil) {
-            instance = [[ALCInstance alloc] initWithClass:class];
+        // If we are here then we have an alchemic method to process.
+        if (currentClassInstance == nil) {
+            currentClassInstance = [context.model addInstanceForClass:class inContext:context];
         }
         
         logRuntime(@"Executing %s::%s ...", class_getName(class), methodName);
-        ((void (*)(id, SEL, ALCInstance *))objc_msgSend)(class, sel, instance); // Note cast because of XCode 6
+        // Note cast because of XCode 6
+        // If this returns a new ALCInstance it is assumed to be a new model object and is added.
+        ((void (*)(id, SEL, ALCInstance *))objc_msgSend)(class, sel, currentClassInstance);
         
     }
     
     free(classMethods);
-    return instance;
 }
 
 @end

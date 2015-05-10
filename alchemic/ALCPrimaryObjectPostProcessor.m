@@ -8,7 +8,7 @@
 
 #import "ALCPrimaryObjectPostProcessor.h"
 #import "ALCResolver.h"
-#import "ALCInstance.h"
+#import "ALCObjectMetadata.h"
 #import "ALCLogger.h"
 
 @implementation ALCPrimaryObjectPostProcessor
@@ -17,8 +17,8 @@
     
     // Build a list of primary objects.
     NSMutableSet *primaryInstances = [[NSMutableSet alloc] init];
-    for (ALCInstance *candidateInstance in resolver.candidateInstances) {
-        if (candidateInstance.primaryInstance) {
+    for (id<ALCObjectMetadata> candidateInstance in resolver.candidateInstances) {
+        if (candidateInstance.primary) {
             [primaryInstances addObject:candidateInstance];
         }
     }

@@ -14,24 +14,24 @@
 @implementation ALCArrayDependencyInjector
 
 -(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
-
-    if ([dependency.variableClass isSubclassOfClass:[NSArray class]]) {
     
-        NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
-        [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCInstance *instance, BOOL *stop) {
-            id value = instance.finalObject;
-            if (value != nil) {
-                [values addObject:value];
-            }
-        }];
-
-        logDependencyResolving(@"%lu candidates found, %lu have objects associated", [dependency.candidateInstances count], [values count]);
-        return [self injectObject:finalObject
-                         variable:dependency.variable
-                        withValue:values];
+    if (![dependency.variableClass isSubclassOfClass:[NSArray class]]) {
+        return NO;
     }
-
-    return NO;
+    
+    NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
+    [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCInstance *instance, BOOL *stop) {
+        id value = instance.object;
+        if (value != nil) {
+            [values addObject:value];
+        }
+    }];
+    
+    logDependencyResolving(@"%lu candidates found, %lu have objects associated", [dependency.candidateInstances count], [values count]);
+    [self injectObject:finalObject
+              variable:dependency.variable
+             withValue:values];
+    return YES;
 }
 
 @end

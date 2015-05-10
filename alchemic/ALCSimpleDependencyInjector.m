@@ -8,30 +8,40 @@
 
 #import "ALCSimpleDependencyInjector.h"
 
-#import "ALCDependency.h"
 @import ObjectiveC;
+
+#import "ALCDependency.h"
 #import "ALCLogger.h"
 #import "ALCInstance.h"
 
 @implementation ALCSimpleDependencyInjector
 
+-(int) order {
+    // Put this injector last.
+    return -1;
+}
+
 -(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
     
     if ([dependency.candidateInstances count] > 1) {
-        @throw [NSException exceptionWithName:@"AlchemicTooManyObjects"
-                                       reason:[NSString stringWithFormat:@"Expected 1 object for dependency %s, found %lu", ivar_getName(dependency.variable), (unsigned long)[dependency.candidateInstances count]]
+        @throw [NSException exceptionWithName:@"AlchemicTooManyCandidates"
+                                       reason:[NSString stringWithFormat:@"Found %lu instances for %s, when expecting only 1.", [dependency.candidateInstances count], ivar_getName(dependency.variable)]
                                      userInfo:nil];
+        return NO;
     }
-    
+
     ALCInstance *instance = [dependency.candidateInstances anyObject];
-    if (instance.finalObject == nil) {
+    
+    if (instance.object == nil) {
         @throw [NSException exceptionWithName:@"AlchemicObjectNotCreated"
                                        reason:[NSString stringWithFormat:@"Dependency %s has not be set or instantiated", ivar_getName(dependency.variable)]
                                      userInfo:nil];
     }
-    return [self injectObject:finalObject
-                     variable:dependency.variable
-                    withValue:instance.finalObject];
+    
+    [self injectObject:finalObject
+              variable:dependency.variable
+             withValue:instance.object];
+    return YES;
 }
 
 @end

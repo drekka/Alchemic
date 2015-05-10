@@ -9,19 +9,12 @@
 @import Foundation;
 
 #import "ALCInitStrategy.h"
+#import "ALCContext.h"
+#import "ALCModelObject.h"
 
-@interface ALCInstance : NSObject
-
-@property (nonatomic, assign, readonly) Class forClass;
-@property (nonatomic, strong) id finalObject;
-@property (nonatomic, strong) NSString *name;
+@interface ALCInstance : ALCModelObject
 
 @property (nonatomic, assign) BOOL instantiate;
-@property (nonatomic, assign) BOOL primaryInstance;
-
-#pragma mark - Life cycle
-
--(instancetype) initWithClass:(Class) class;
 
 #pragma mark - Setting up
 
@@ -30,16 +23,5 @@
 -(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers;
 
 -(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
-
-#pragma mark - Processing
-
--(void) resolveDependenciesWithModel:(NSDictionary *) model;
-
--(void) applyPostProcessors:(NSSet *) postProcessors;
-
--(void) injectDependenciesUsingInjectors:(NSSet *) dependencyInjectors;
-
--(void) instantiateUsingFactories:(NSSet *) objectFactories;
-
 
 @end

@@ -22,7 +22,7 @@
 injectValue(intoVariable(_simpleObject), withName(abc))
 
 -(void) setUp {
-    resolveDependencies(self);
+    injectDependencies(self);
 }
 
 -(void) testInjectByMatcher {

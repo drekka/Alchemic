@@ -13,7 +13,7 @@
 
 @implementation Component
 
-registerComponent()
+registerSingleton
 inject(intoVariable(injObj))
 inject(intoVariable(injProto))
 

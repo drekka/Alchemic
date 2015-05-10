@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCInstance.h"
+@class ALCInstance;
 @class ALCContext;
 
 /**

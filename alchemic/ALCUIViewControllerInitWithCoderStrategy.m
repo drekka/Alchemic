@@ -9,19 +9,15 @@
 #import "ALCUIViewControllerInitWithCoderStrategy.h"
 
 @import UIKit;
-
 @import ObjectiveC;
 
-
 #import "Alchemic.h"
-#import "ALCLogger.h"
-#import "ALCRuntime.h"
-#import "ALCContext.h"
+#import "ALCInstance.h"
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
 +(BOOL) canWrapInit:(ALCInstance *) instance {
-    return [instance.forClass isSubclassOfClass:[UIViewController class]];
+    return [instance.objectClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

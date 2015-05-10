@@ -44,7 +44,7 @@
         }
         
         if (matched) {
-            logDependencyResolving(@"Adding '%@' %s to candidates", name, class_getName(instance.forClass));
+            logDependencyResolving(@"Adding '%@' %s to candidates", name, class_getName(instance.objectClass));
             [(NSMutableArray *)_candidateInstances addObject:instance];
         }
         

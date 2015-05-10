@@ -25,6 +25,6 @@
 
 -(instancetype) initWithVariable:(Ivar) variable matchers:(NSSet *) dependencyMatchers;
 
--(void) injectObject:(id) object usingInjectors:(NSSet *) injectors;
+-(void) injectObject:(id) object usingInjectors:(NSArray *) injectors;
 
 @end

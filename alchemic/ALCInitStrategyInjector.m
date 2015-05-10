@@ -14,6 +14,7 @@
 #import "ALCLogger.h"
 #import "ALCInstance.h"
 #import "ALCInitStrategy.h"
+#import "ALCClassMatcher.h"
 
 @implementation ALCInitStrategyInjector {
     NSSet *_strategyClasses;
@@ -43,11 +44,8 @@ static BOOL injected = NO;
         return;
     }
 
-    // Extract a list of root classes from the model.
-    NSArray *rootInstances = [self findRootInstances:[model allValues]];
-
     // Now hook into the classes.
-    for (ALCInstance *instance in rootInstances) {
+    for (ALCInstance *instance in [self findRootInstancesInModel:model]) {
         for (Class initStrategy in _strategyClasses) {
             if ([initStrategy canWrapInit:instance]) {
                 [instance addInitStrategy:[[initStrategy alloc] initWithInstance:instance]];
@@ -56,12 +54,15 @@ static BOOL injected = NO;
     }
 }
 
--(NSArray *) findRootInstances:(NSArray *) instances {
+-(NSArray *) findRootInstancesInModel:(NSDictionary *) model {
     
-    // Copy all the classes into an array for checking.
+    // First find all instances of ALCInstance.
+    NSSet *instances = [model metadataWithMatchers:[NSSet setWithObject:[[ALCClassMatcher alloc] initWithClass:[ALCInstance class]]]];
+    
+    // Copy all the classes into an array for Against the list..
     NSMutableSet *modelClasses = [[NSMutableSet alloc] initWithCapacity:[instances count]];
     for (ALCInstance *instance in instances) {
-        [modelClasses addObject:instance.forClass];
+        [modelClasses addObject:instance.objectClass];
     }
 
     // Work out which classes we need to inject hooks into
@@ -69,7 +70,7 @@ static BOOL injected = NO;
     for (ALCInstance *instance in instances) {
         
         // Check each ancestor class in turn. If any are in the list, then ignore the current class.
-        Class parentClass = class_getSuperclass(instance.forClass);
+        Class parentClass = class_getSuperclass(instance.objectClass);
         while (parentClass != NULL) {
             if ([modelClasses containsObject:parentClass]) {
                 // The parent is in the model too so stop looking.
@@ -80,7 +81,7 @@ static BOOL injected = NO;
         
         // If we are here and the parent is NULL then we are safe to add the class to the final list.
         if (parentClass == NULL) {
-            logRuntime(@"Scheduling '%@' %s for init wrapper injection", instance.name, class_getName(instance.forClass));
+            logRuntime(@"Scheduling '%@' %s for init wrapper injection", instance.name, class_getName(instance.objectClass));
             [rootInstances addObject:instance];
         }
         

@@ -26,6 +26,8 @@
 
 +(void) validateMatcher:(id) object;
 
++(void) validateSelector:(SEL) selector withClass:(Class) class;
+
 #pragma mark - Alchemic
 
 /**

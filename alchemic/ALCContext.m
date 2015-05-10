@@ -13,21 +13,17 @@
 #import "ALCInternal.h"
 #import "ALCInitStrategyInjector.h"
 #import "ALCRuntime.h"
-#import "ALCInstance.h"
+#import "ALCObjectMetadata.h"
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
 #import "ALCDependency.h"
 #import "NSDictionary+ALCModel.h"
+#import "ALCInstance.h"
+#import "ALCFactoryMethod.h"
 
 @implementation ALCContext {
-
-    NSMutableDictionary *_model;
-    
     NSMutableSet *_initialisationStrategyClasses;
-    NSMutableSet *_resolverPostProcessors;
-    NSMutableSet *_dependencyInjectors;
-    NSMutableSet *_objectFactories;
 }
 
 #pragma mark - Lifecycle
@@ -39,7 +35,7 @@
         _initialisationStrategyClasses = [[NSMutableSet alloc] init];
         _resolverPostProcessors = [[NSMutableSet alloc] init];
         _objectFactories = [[NSMutableSet alloc] init];
-        _dependencyInjectors = [[NSMutableSet alloc] init];
+        _dependencyInjectors = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -54,23 +50,23 @@
     
     // Inject init wrappers into classes that have registered for dependency injection.
     [_runtimeInitInjector replaceInitsInModelClasses:_model];
-
-    [self resolveDependencies];
-    [self instantiateObjects];
-    [self injectDependencies];
+    
+    [self resolveModelObjects];
+    [self instantiateModelObjects];
 }
 
--(void) instantiateObjects {
-    logCreation(@"Instantiating objects ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop) {
-        [instance instantiateUsingFactories:_objectFactories];
+-(void) resolveModelObjects {
+    logDependencyResolving(@"Resolving dependencies ...");
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectMetadata> objectMetadata, BOOL *stop){
+        logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(objectMetadata.objectClass));
+        [objectMetadata resolveDependencies];
     }];
 }
 
--(void) injectDependencies {
-    logRuntime(@"Injecting dependencies in model objects ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop) {
-        [instance injectDependenciesUsingInjectors:_dependencyInjectors];
+-(void) instantiateModelObjects {
+    logCreation(@"Instantiating objects ...");
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectMetadata> object, BOOL *stop) {
+        [object instantiateObject];
     }];
 }
 
@@ -79,58 +75,101 @@
     logRuntime(@"Injecting dependencies into a %s", object_getClassName(object));
     
     // Object will have a matching instance in the model if it has any injection point.
-    ALCInstance *instance = [_model instanceForObject:object];
+    id<ALCObjectMetadata> objectMetadata = [_model metadataForObject:object];
     
-    if (instance == nil) {
-        logConfig(@"No instance found for an instance of %s", object_getClassName(object));
+    if (objectMetadata == nil) {
+        @throw [NSException exceptionWithName:@"AlchemicUnableToLocateMetadata"
+                                       reason:[NSString stringWithFormat:@"Unable to find any metata for a instance of %s", object_getClassName(object)]
+                                     userInfo:nil];
         return;
     }
-
-    // Store any current object.
-    id finalObject = instance.finalObject;
-
-    // Set the final object and inject it.
-    instance.finalObject = object;
-    [instance injectDependenciesUsingInjectors:_dependencyInjectors];
-
-    // Restore the final object.
-    instance.finalObject = finalObject;
     
-}
-
--(void) resolveDependencies {
-    logDependencyResolving(@"Resolving dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop){
-        logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(instance.forClass));
-        [instance resolveDependenciesWithModel:_model];
-        [instance applyPostProcessors:_resolverPostProcessors];
-    }];
+    // Set the final object and inject it.
+    [objectMetadata injectDependenciesInto:object];
 }
 
 #pragma mark - Configuration
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
     logConfig(@"Adding object factory: %s", object_getClassName(objectFactory));
-    [_objectFactories addObject:objectFactory];
+    [(NSMutableSet *)_objectFactories addObject:objectFactory];
 }
 
 -(void) addDependencyInjector:(id<ALCDependencyInjector>) dependencyinjector {
     logConfig(@"Adding dependency injector: %s", object_getClassName(dependencyinjector));
-    [_dependencyInjectors addObject:dependencyinjector];
+    [(NSMutableArray *)_dependencyInjectors addObject:dependencyinjector];
+    [(NSMutableArray *)_dependencyInjectors sortUsingComparator:^NSComparisonResult(ALCAbstractDependencyInjector *di1, ALCAbstractDependencyInjector *di2) {
+        if (di1.order > di2.order) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        if (di1.order < di2.order) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        return (NSComparisonResult)NSOrderedSame;
+    }];
 }
 
 -(void) addResolverPostProcessor:(id<ALCResolverPostProcessor>) postProcessor {
     logConfig(@"Adding resolver post processor: %s", object_getClassName(postProcessor));
-    [_resolverPostProcessors addObject:postProcessor];
-}
-
--(void) addInstance:(ALCInstance *) instance {
-    [_model addInstance:instance];
+    [(NSMutableSet *)_resolverPostProcessors addObject:postProcessor];
 }
 
 -(void) addInitStrategy:(Class) initialisationStrategyClass {
     logConfig(@"Adding init strategy: %s", class_getName(initialisationStrategyClass));
     [_initialisationStrategyClasses addObject:initialisationStrategyClass];
+}
+
+#pragma mark - Registration call backs
+
+-(void) registerAsSingleton:(ALCInstance *) objectInstance {
+    objectInstance.instantiate = YES;
+}
+
+-(void) registerAsSingleton:(ALCInstance *) objectInstance withName:(NSString *) name {
+    objectInstance.name = name;
+    objectInstance.instantiate = YES;
+}
+
+-(void) registerObject:(id) object withName:(NSString *) name {
+    ALCInstance *instance = [_model addObject:object inContext:self withName:name];
+    instance.instantiate = YES;
+    instance.object = object;
+}
+
+-(void) registerFactory:(ALCInstance *) instance
+        factorySelector:(SEL) factorySelector
+             returnType:(Class) returnTypeClass, ... {
+    
+    [ALCRuntime validateSelector:factorySelector withClass:instance.objectClass];
+    
+    // Process the selector arguments
+    va_list args;
+    va_start(args, returnTypeClass);
+    id argument = va_arg(args, id);
+    NSMutableArray *argumentMatchers = [[NSMutableArray alloc] init];
+    while (argument != nil) {
+        
+        // Validate the matchers, checking any arrays.
+        if ([argument isKindOfClass:[NSArray class]]) {
+            for (id nestedArgument in (NSArray *) argument) {
+                [ALCRuntime validateMatcher:nestedArgument];
+            }
+        } else {
+            [ALCRuntime validateMatcher:argument];
+        }
+        
+        [argumentMatchers addObject:argument];
+        argument = va_arg(args, id);
+    }
+    va_end(args);
+
+    
+    // Declare a new instance to represent the factory method for dependency resolving.
+    ALCFactoryMethod *factoryMethod = [_model addFactoryMethod:factorySelector
+                                                    toInstance:instance
+                                                    returnType:returnTypeClass];
+    factoryMethod.argumentMatchers = argumentMatchers;
+    
 }
 
 @end

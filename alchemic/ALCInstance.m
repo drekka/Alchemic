@@ -15,24 +15,20 @@
 #import "ALCLogger.h"
 
 @implementation ALCInstance {
-    NSMutableArray *_dependencies;
+    NSMutableSet *_dependencies;
     NSArray *_initialisationStrategies;
 }
 
--(instancetype) initWithClass:(Class) class {
-    self = [super init];
+-(instancetype) initWithContext:(__weak ALCContext *) context objectClass:(Class) objectClass {
+    self = [super initWithContext:context objectClass:objectClass];
     if (self) {
         _initialisationStrategies = @[];
-        _forClass = class;
-        _dependencies = [[NSMutableArray alloc] init];
-        self.name = NSStringFromClass(class);
+        _dependencies = [[NSMutableSet alloc] init];
     }
     return self;
 }
 
--(NSString *) debugDescription {
-    return [NSString stringWithFormat:@"Instance of %s", class_getName(_forClass)];
-}
+#pragma mark - Adding dependencies
 
 -(void) addDependency:(NSString *) inj, ... {
     
@@ -42,11 +38,7 @@
     id matcher = va_arg(args, id);
     while (matcher != nil) {
         
-        if (![matcher conformsToProtocol:@protocol(ALCMatcher)]) {
-            @throw [NSException exceptionWithName:@"AlchemicUnableNotAMatcher"
-                                           reason:[NSString stringWithFormat:@"Passed matcher %s does not conform to the ALCMatcher protocol", object_getClassName(matcher)]
-                                         userInfo:nil];
-        }
+        [ALCRuntime validateMatcher:matcher];
         
         if (finalMatchers == nil) {
             finalMatchers = [[NSMutableSet alloc] init];
@@ -61,55 +53,62 @@
 
 -(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers {
     // Create the dependency info to be store.
-    Ivar variable = [ALCRuntime class:_forClass variableForInjectionPoint:inj];
+    Ivar variable = [ALCRuntime class:self.objectClass variableForInjectionPoint:inj];
     [_dependencies addObject:[[ALCDependency alloc] initWithVariable:variable matchers:matchers]];
 }
 
--(void) resolveDependenciesWithModel:(NSDictionary *) model {
-    for (ALCDependency *dependency in _dependencies) {
-        [dependency resolveUsingModel:model];
-    }
-}
+#pragma mark - Lifecycle
 
--(void) applyPostProcessors:(NSSet *) postProcessors {
-    for (ALCDependency *dependency in _dependencies) {
-        [dependency postProcess:postProcessors];
-    }
-}
-
--(void) injectDependenciesUsingInjectors:(NSSet *) dependencyInjectors {
+-(void) resolveDependencies {
     
-    if (self.finalObject == nil) {
+    logDependencyResolving(@"Resolving dependencies for %@", [self debugDescription]);
+    for (ALCDependency *dependency in _dependencies) {
+        [dependency resolveUsingModel:self.context.model];
+    }
+    
+    logRegistration(@"Post processing dependencies for %@", [self debugDescription]);
+    for (ALCDependency *dependency in _dependencies) {
+        [dependency postProcess:self.context.resolverPostProcessors];
+    }
+}
+
+-(void) instantiateObject {
+    
+    if (!self.instantiate || self.object != nil) {
+        logCreation(@"Not instantiable or object already present.");
         return;
     }
     
-    logDependencyResolving(@"Checking %s for dependencies", class_getName(_forClass));
-    for (ALCDependency *dependency in _dependencies) {
-        [dependency injectObject:self.finalObject usingInjectors:dependencyInjectors];
+    logCreation(@"Instantiating %@", [self debugDescription]);
+    for (id<ALCObjectFactory> objectFactory in self.context.objectFactories) {
+        self.object = [objectFactory createObjectFromInstance:self];
+        if (self.objectClass != nil) {
+            break;
+        }
     }
+    
+    if (self.object == nil) {
+        @throw [NSException exceptionWithName:@"AlchemicUnableToCreateInstance"
+                                       reason:[NSString stringWithFormat:@"Unable to create an instance of %@", [self debugDescription]]
+                                     userInfo:nil];
+    }
+    
+    [self injectDependenciesInto:self.object];    
 }
 
--(void) instantiateUsingFactories:(NSSet *) objectFactories {
-    if (self.instantiate && self.finalObject == nil) { // Allow for pre-built objects.
-        
-        logCreation(@"Instantiating '%@' (%s)", self.name, class_getName(self.forClass));
-        for (id<ALCObjectFactory> objectFactory in objectFactories) {
-            self.finalObject = [objectFactory createObjectFromInstance:self];
-            if (self.finalObject != nil) {
-                break;
-            }
-        }
-        
-        if (self.finalObject == nil) {
-            @throw [NSException exceptionWithName:@"AlchemicUnableToCreateInstance"
-                                           reason:[NSString stringWithFormat:@"Unable to create an instance of %s", class_getName(self.forClass)]
-                                         userInfo:nil];
-        }
+-(void) injectDependenciesInto:(id) object {
+    logDependencyResolving(@"Checking %@ for dependencies", [self debugDescription]);
+    for (ALCDependency *dependency in _dependencies) {
+        [dependency injectObject:object usingInjectors:self.context.dependencyInjectors];
     }
 }
 
 -(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy {
     _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
+}
+
+-(NSString *) debugDescription {
+    return [NSString stringWithFormat:@"'%@' (%s)", self.name, class_getName(self.objectClass)];
 }
 
 @end

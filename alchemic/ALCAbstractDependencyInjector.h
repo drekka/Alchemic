@@ -8,11 +8,16 @@
 
 @import ObjectiveC;
 
-#import "ALCDependencyInjector.h"
 #import "ALCAbstractClass.h"
+#import "ALCDependencyInjector.h"
 
-@interface ALCAbstractDependencyInjector : NSObject<ALCDependencyInjector, ALCAbstractClass>
+@interface ALCAbstractDependencyInjector : NSObject<ALCAbstractClass, ALCDependencyInjector>
 
--(BOOL) injectObject:(id) object variable:(Ivar) variable withValue:(id) value;
+/**
+ Higher numbers mean the injector will be used first.
+ */
+@property (nonatomic, assign, readonly) int order;
+
+-(void) injectObject:(id) object variable:(Ivar) variable withValue:(id) value;
 
 @end

@@ -11,13 +11,25 @@
 
 @implementation SimpleObject
 
-registerComponent
+registerSingleton
 //registerComponentWithName(@"abc")
 
 -(instancetype) init {
     self = [super init];
     if (self) {}
     return self;
+}
+
+registerFactoryMethod(simpleObject, SimpleObject)
+
+-(SimpleObject *) simpleObject {
+    return [[SimpleObject alloc] init];
+}
+
+registerFactoryMethod(simpleObject, SimpleObject, withClass(SimpleObject))
+
+-(SimpleObject *) simpleObjectWithSImpleObject:(SimpleObject *) simpleObject {
+    return [[SimpleObject alloc] init];
 }
 
 @end

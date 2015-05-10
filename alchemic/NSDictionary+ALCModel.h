@@ -8,17 +8,21 @@
 
 @import Foundation;
 
-#import "ALCInstance.h"
+#import "ALCObjectMetadata.h"
+
+@class ALCContext;
+@class ALCInstance;
+@class ALCFactoryMethod;
 
 @interface NSDictionary (ALCModel)
 
-#pragma mark - Finding instances.
+#pragma mark - Finding Metadata
 
--(ALCInstance *) instanceForObject:(id) object;
+-(id<ALCObjectMetadata>) metadataForObject:(id) object;
 
--(ALCInstance *) instanceForClass:(Class) class withName:(NSString *) name;
+-(id<ALCObjectMetadata>) metedataForClass:(Class) class withName:(NSString *) name;
 
--(NSSet *) instancesWithMatchers:(NSSet *) matchers;
+-(NSSet *) metadataWithMatchers:(NSSet *) matchers;
 
 #pragma mark - Finding objects
 
@@ -26,10 +30,16 @@
 
 -(NSSet *) objectsWithMatchers:(NSSet *) matchers;
 
-#pragma mark - Adding new instances
+#pragma mark - Adding new Metadata
 
--(void) addInstance:(ALCInstance *) instance;
+-(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context;
 
--(void) addObject:(id) finalObject withName:(NSString *) name;
+-(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
+
+-(ALCInstance *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
+
+-(ALCFactoryMethod *) addFactoryMethod:(SEL) factorySelector
+                            toInstance:(ALCInstance *) instance
+                            returnType:(Class) returnType;
 
 @end

@@ -25,7 +25,7 @@
 }
 
 -(BOOL) matches:(ALCInstance *)instance withName:(NSString *) name {
-    return [instance.forClass isSubclassOfClass:_class];
+    return [instance.objectClass isSubclassOfClass:_class];
 }
 
 @end

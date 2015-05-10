@@ -32,7 +32,7 @@
 -(instancetype) initWithInstance:(ALCInstance *)instance {
     self = [super init];
     if (self) {
-        _forClass = instance.forClass;
+        _forClass = instance.objectClass;
         [self wrapInit];
     }
     return self;

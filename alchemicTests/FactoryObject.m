@@ -11,6 +11,6 @@
 
 @implementation FactoryObject
 
-addObjectWithName(@"XXXX", @"Mrs Smith")
+registerObjectWithName(@"XXXX", @"Mrs Smith")
 
 @end

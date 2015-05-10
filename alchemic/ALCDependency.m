@@ -8,7 +8,7 @@
 
 #import "ALCDependency.h"
 #import "ALCLogger.h"
-#import "ALCDependencyInjector.h"
+#import "ALCAbstractDependencyInjector.h"
 #import "ALCRuntime.h"
 #import "ALCInstance.h"
 
@@ -69,30 +69,25 @@
     }
 }
 
--(void) resolveUsingModel:(NSDictionary *)model {
+-(void) injectObject:(id) object usingInjectors:(NSArray *) injectors {
+    for (id<ALCDependencyInjector> injector in injectors) {
+        if ([injector injectObject:object dependency:self]) {
+            return;
+        }
+    }
+}
+
+-(void) postProcess:(NSSet *)postProcessors {
     
-    [super resolveUsingModel:model];
-    
+    [super postProcess:postProcessors];
+
     // If there are no candidates left then error.
     if ([self.candidateInstances count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
                                        reason:[NSString stringWithFormat:@"Unable to resolve dependency: %s", ivar_getName(_variable)]
                                      userInfo:nil];
     }
-}
 
--(void) injectObject:(id) object usingInjectors:(NSSet *) injectors {
-    
-    for (id<ALCDependencyInjector> injector in injectors) {
-        if ([injector injectObject:object dependency:self]) {
-            return;
-        }
-    }
-    
-    @throw [NSException exceptionWithName:@"AlchemicValueNotInjected"
-                                   reason:[NSString stringWithFormat:@"Unable to inject any candidate objects for: %s", ivar_getName(_variable)]
-                                 userInfo:nil];
-    
 }
 
 -(NSString *) debugDescription {
@@ -100,7 +95,8 @@
     [self.variableProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, NSUInteger idx, BOOL *stop) {
         protocols[idx] = NSStringFromProtocol(protocol);
     }];
-    return [NSString stringWithFormat:@"Variable %s -> type: %s <%@>", ivar_getName(self.variable), class_getName(self.variableClass), [protocols componentsJoinedByString:@","]];
+    const char *type = class_getName(self.variableClass);
+    return [NSString stringWithFormat:@"Variable %s -> type: %s<%@>", ivar_getName(self.variable), type == nil ? "id" : type, [protocols componentsJoinedByString:@","]];
     
 }
 

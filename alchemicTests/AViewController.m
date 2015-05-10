@@ -11,6 +11,6 @@
 
 @implementation AViewController
 
-registerSingleton();
+registerSingleton
 
 @end

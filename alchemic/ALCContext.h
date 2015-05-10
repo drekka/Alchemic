@@ -9,15 +9,21 @@
 @import Foundation;
 
 #import "ALCObjectFactory.h"
-#import "ALCDependencyInjector.h"
+#import "ALCAbstractDependencyInjector.h"
 #import "ALCInitInjector.h"
-#import "ALCDependencyInjector.h"
 #import "ALCMatcher.h"
 #import "ALCResolverPostProcessor.h"
+#import "ALCObjectMetadata.h"
+#import "NSDictionary+ALCModel.h"
 
 @class ALCInstance;
 
 @interface ALCContext : NSObject
+
+@property (nonatomic, strong, readonly) NSDictionary *model;
+@property (nonatomic, strong, readonly) NSSet *resolverPostProcessors;
+@property (nonatomic, strong, readonly) NSArray *dependencyInjectors;
+@property (nonatomic, strong, readonly) NSSet *objectFactories;
 
 #pragma mark - Configuration
 
@@ -38,7 +44,7 @@
 /**
  Adds a ALCDependencyInjector to the list of injectors.
  */
--(void) addDependencyInjector:(id<ALCDependencyInjector>) dependencyinjector;
+-(void) addDependencyInjector:(ALCAbstractDependencyInjector *) dependencyinjector;
 
 /**
  Adds a ALCObjectFactory to the list of object factories. Factories are checked in reverse order. The last registered object factory is the one asked first for an object.
@@ -49,12 +55,23 @@
 
 -(void) start;
 
-#pragma mark - Registering classes
-
--(void) addInstance:(ALCInstance *) instance;
-
 #pragma mark - Manually injecting dependencies
 
 -(void) injectDependencies:(id) object;
+
+#pragma mark - Registration call backs
+
+-(void) registerAsSingleton:(ALCInstance *) objectInstance;
+
+-(void) registerAsSingleton:(ALCInstance *) objectInstance withName:(NSString *) name;
+
+-(void) registerObject:(id) object withName:(NSString *) name;
+
+/**
+ Registers a factory method with it's return data type and matchers for locating the objects for each argument.
+ */
+-(void) registerFactory:(ALCInstance *) objectInstance
+        factorySelector:(SEL) factorySelector
+             returnType:(Class) returnTypeClass, ...;
 
 @end

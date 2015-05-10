@@ -9,6 +9,7 @@
 @import Foundation;
 
 #import "ALCInternal.h"
+#import "ALCInstance.h"
 #import "ALCContext.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
@@ -18,32 +19,19 @@
 
 // Matcher wrapping macros passed to the inject macro.
 
-#define intoVariable(variableName) _alchemic_toNSString(variableName)
+#define intoVariable(_variableName) _alchemic_toNSString(_variableName)
 
-#define withClass(className) [[ALCClassMatcher alloc] initWithClass:object_getClass(className)]
+#define withClass(_className) [[ALCClassMatcher alloc] initWithClass:[_className class]]
 
-#define withProtocol(protocolName) [[ALCProtocolMatcher alloc] initWithProtocol:@protocol(protocolName)]
+#define withProtocol(_protocolName) [[ALCProtocolMatcher alloc] initWithProtocol:@protocol(_protocolName)]
 
-#define withName(objectName) [[ALCNameMatcher alloc] initWithName:objectName]
+#define withName(_objectName) [[ALCNameMatcher alloc] initWithName:_objectName]
 
 #pragma mark - Injection
-
-/// Main injection method.
-#define inject(variable, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _inject_dependency_intoInstance):(ALCInstance *) instance { \
-    [instance addDependency:variable, ## __VA_ARGS__, nil]; \
-}
 
 #define injectDependencies(object) [[Alchemic mainContext] injectDependencies:object]
 
 #define primary
-
-// Creates an object using a method. These are treated as if the method
-// was the class definition. Only creates a single object. Any other calls will return that object.
-#define object(methodSignature)
-
-// Same as object, except that every time it's called, a new object is created.
-#define objectFactory(methodSignature)
 
 #pragma mark - Injecting values
 
@@ -51,41 +39,56 @@
 #define localisedValue(key)
 #define fileContentsValue(filename)
 #define imageValue(imageName, resolution)
-#define plistValue(plistName, keyPath) [[Alchemic mainContext] res
+#define plistValue(plistName, keyPath)
 
 #define injectValue(variable, locator)
 
 #pragma mark - Registering
 
+// All registration methods must make use of the same signature.
+
+// Registers an injection point in the current class.
+#define inject(_variable, ...) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInInstance):(ALCInstance *) instance { \
+    [instance addDependency:_variable, ## __VA_ARGS__, nil]; \
+}
+
 /**
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.
  */
-#define registerComponent \
+#define registerSingleton \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCInstance *) instance { \
-    instance.instantiate = YES; \
+    [[Alchemic mainContext] registerAsSingleton:instance]; \
 }
 
-#define registerComponentWithName(componentName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCInstance *) instance { \
-    instance.name = componentName; \
-    instance.instantiate = YES; \
+#define registerSingletonWithName(_componentName) \
++(ALCInstance *) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCInstance *) instance { \
+    [[Alchemic mainContext] registerInstanceAsSingleton:instance withName:_componentName]; \
 }
 
 /**
  Adds a pre-built object to the model.
  */
-#define addObjectWithName(objectValue, objectName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _object_withInstance):(ALCInstance *) instance { \
-    instance.name = componentName; \
-    instance.instantiate = YES; \
-    instance.finalObject = object; \
+#define registerObjectWithName(_object, _objectName) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerObjecWithInstance):(ALCInstance *) instance { \
+    [[Alchemic mainContext] registerObject:_object withName:_objectName]; \
 }
 
 /**
  This macros is used to specify that this class is a factory for other objects.
+ @param factorySelector the signature of the factory selector.
+ @param returnType the Class of the return type. Will be used to for resolving dependecies which will use this factory.
+ @param ... a args list of criteria which will be used to locate the arguments needed for the factory method. Argments can be several things.
+ A single Matcher object.
+ An Array of Matcher objects.
+ The number of objects passed must match the number of expected arguments.
  */
-#define registerFactory() \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryWithInstance):(ALCInstance *) instance {}
+#define registerFactoryMethod(_factorySelector, _returnTypeClassName, ...) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCInstance *) instance { \
+    [[Alchemic mainContext] registerFactory:instance \
+                            factorySelector:@selector(_factorySelector) \
+                                 returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \
+}
 
 #pragma mark - The context itself
 

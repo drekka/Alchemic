@@ -11,15 +11,14 @@
 
 @implementation ALCAbstractDependencyInjector
 
--(BOOL) injectObject:(id) object variable:(Ivar) variable withValue:(id) value {
-    logRuntime(@"Injecting %s::%s with a %s",object_getClassName(object) , ivar_getName(variable), object_getClassName(value));
-    object_setIvar(object, variable, value);
-    return YES;
-}
-
 -(BOOL) injectObject:(id) object dependency:(ALCDependency *) dependency {
     [self doesNotRecognizeSelector:@selector(injectObject:dependency:)];
     return NO;
+}
+
+-(void) injectObject:(id) object variable:(Ivar) variable withValue:(id) value {
+    logRuntime(@"Injecting %s::%s with a %s",object_getClassName(object) , ivar_getName(variable), object_getClassName(value));
+    object_setIvar(object, variable, value);
 }
 
 @end

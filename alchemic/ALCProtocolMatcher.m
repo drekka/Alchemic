@@ -25,7 +25,7 @@
 }
 
 -(BOOL) matches:(ALCInstance *)instance withName:(NSString *) name {
-    return class_conformsToProtocol(instance.forClass, _protocol);
+    return class_conformsToProtocol(instance.objectClass, _protocol);
 }
 
 @end

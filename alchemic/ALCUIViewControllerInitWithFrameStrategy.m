@@ -16,11 +16,12 @@
 #import "ALCLogger.h"
 #import "Alchemic.h"
 #import "ALCContext.h"
+#import "ALCInstance.h"
 
 @implementation ALCUIViewControllerInitWithFrameStrategy
 
 +(BOOL) canWrapInit:(ALCInstance *) instance {
-    return [instance.forClass isSubclassOfClass:[UIViewController class]];
+    return [instance.objectClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

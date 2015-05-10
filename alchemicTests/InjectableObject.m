@@ -12,6 +12,6 @@
 
 @implementation InjectableObject
 
-registerComponent();
+registerSingleton
 
 @end

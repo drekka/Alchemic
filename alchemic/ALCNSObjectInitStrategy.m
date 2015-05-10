@@ -11,16 +11,12 @@
 @import UIKit;
 @import ObjectiveC;
 
-#import "ALCInternal.h"
-#import "ALCLogger.h"
-#import "ALCRuntime.h"
-#import "ALCContext.h"
-#import "Alchemic.h"
+#import "ALCInstance.h"
 
 @implementation ALCNSObjectInitStrategy
 
 +(BOOL) canWrapInit:(ALCInstance *) instance {
-    return ! [instance.forClass isSubclassOfClass:[UIViewController class]];
+    return ! [instance.objectClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) initSelector {
