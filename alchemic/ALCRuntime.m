@@ -12,7 +12,7 @@
 #import "ALCInternal.h"
 #import "ALCInstance.h"
 #import "ALCLogger.h"
-#import "ALCDependency.h"
+#import "ALCVariableDependency.h"
 #import "NSDictionary+ALCModel.h"
 #import "ALCContext.h"
 

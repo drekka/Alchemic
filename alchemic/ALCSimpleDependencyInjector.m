@@ -10,7 +10,7 @@
 
 @import ObjectiveC;
 
-#import "ALCDependency.h"
+#import "ALCVariableDependency.h"
 #import "ALCLogger.h"
 #import "ALCInstance.h"
 
@@ -21,7 +21,7 @@
     return -1;
 }
 
--(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
+-(BOOL) injectObject:(id) finalObject dependency:(ALCVariableDependency *) dependency {
     
     if ([dependency.candidateInstances count] > 1) {
 

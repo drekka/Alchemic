@@ -17,7 +17,7 @@
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
-#import "ALCDependency.h"
+#import "ALCVariableDependency.h"
 #import "NSDictionary+ALCModel.h"
 #import "ALCInstance.h"
 #import "ALCFactoryMethod.h"

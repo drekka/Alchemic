@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCDependency.h"
+#import "ALCVariableDependency.h"
 #import "ALCLogger.h"
 #import "ALCAbstractDependencyInjector.h"
 #import "ALCRuntime.h"
@@ -17,11 +17,11 @@
 
 @import ObjectiveC;
 
-@implementation ALCDependency {
+@implementation ALCVariableDependency {
     __weak ALCInstance *_instance;
 }
 
--(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak id<ALCObjectMetadata>) modelObject matchers:(NSSet *) dependencyMatchers {
+-(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCInstance *) modelObject matchers:(NSSet *) dependencyMatchers {
 
     self = [super initWithMatchers:dependencyMatchers];
     if (self) {

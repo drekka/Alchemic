@@ -18,14 +18,14 @@
 /**
  Container object for information about an injection.
  */
-@interface ALCDependency : ALCResolver
+@interface ALCVariableDependency : ALCResolver
 
 @property (nonatomic, assign, readonly) Ivar variable;
 @property (nonatomic, assign, readonly) char variableType;
 @property (nonatomic, assign, readonly) Class variableClass;
 @property (nonatomic, strong, readonly) NSArray *variableProtocols;
 
--(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak id<ALCObjectMetadata>) modelObject matchers:(NSSet *) dependencyMatchers;
+-(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCInstance *) modelObject matchers:(NSSet *) dependencyMatchers;
 
 -(void) injectObject:(id) object usingInjectors:(NSArray *) injectors;
 

@@ -7,10 +7,10 @@
 //
 
 @import Foundation;
-@class ALCDependency;
+@class ALCVariableDependency;
 
 @protocol ALCDependencyInjector <NSObject>
 
--(BOOL) injectObject:(id) object dependency:(ALCDependency *) dependency;
+-(BOOL) injectObject:(id) object dependency:(ALCVariableDependency *) dependency;
 
 @end

@@ -7,13 +7,13 @@
 //
 
 #import "ALCArrayDependencyInjector.h"
-#import "ALCDependency.h"
+#import "ALCVariableDependency.h"
 #import "ALCLogger.h"
 #import "ALCInstance.h"
 
 @implementation ALCArrayDependencyInjector
 
--(BOOL) injectObject:(id) finalObject dependency:(ALCDependency *) dependency {
+-(BOOL) injectObject:(id) finalObject dependency:(ALCVariableDependency *) dependency {
     
     if (![dependency.variableClass isSubclassOfClass:[NSArray class]]) {
         return NO;
