@@ -119,11 +119,13 @@
 
 -(ALCFactoryMethod *) addFactoryMethod:(SEL) factorySelector
                             toInstance:(ALCInstance *) instance
-                            returnType:(Class) returnType {
+                            returnType:(Class) returnType
+                      argumentMatchers:(NSArray *) argumentMatchers {
     ALCFactoryMethod *factoryMethod = [[ALCFactoryMethod alloc] initWithContext:instance.context
                                                                 factoryInstance:instance
                                                                 factorySelector:factorySelector
-                                                                     returnType:returnType];
+                                                                     returnType:returnType
+                                                               argumentMatchers:argumentMatchers];
     [self addMetadata:factoryMethod name:nil];
     return factoryMethod;
 }

@@ -25,7 +25,7 @@
 
 // Abstract
 +(BOOL) canWrapInit:(ALCInstance *) instance {
-    [self doesNotRecognizeSelector:@selector(canWrapInit:)];
+    [self doesNotRecognizeSelector:_cmd];
     return NO;
 }
 

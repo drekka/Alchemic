@@ -166,11 +166,11 @@
     }
     va_end(args);
 
-    
     // Declare a new instance to represent the factory method for dependency resolving.
     ALCFactoryMethod *factoryMethod = [_model addFactoryMethod:factorySelector
                                                     toInstance:instance
-                                                    returnType:returnTypeClass];
+                                                    returnType:returnTypeClass
+                                              argumentMatchers:argumentMatchers];
     factoryMethod.argumentMatchers = argumentMatchers;
     
 }

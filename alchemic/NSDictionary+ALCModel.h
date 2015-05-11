@@ -40,6 +40,7 @@
 
 -(ALCFactoryMethod *) addFactoryMethod:(SEL) factorySelector
                             toInstance:(ALCInstance *) instance
-                            returnType:(Class) returnType;
+                            returnType:(Class) returnType
+                      argumentMatchers:(NSArray *) argumentMatchers;
 
 @end

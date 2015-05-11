@@ -31,7 +31,7 @@
         }
         
         @throw [NSException exceptionWithName:@"AlchemicTooManyCandidates"
-                                       reason:[NSString stringWithFormat:@"Expecting 1 object for %@, but found %lu:%@", dependency, [dependency.candidateInstances count], [objectDescriptions componentsJoinedByString:@","]]
+                                       reason:[NSString stringWithFormat:@"Expecting 1 object for %@, but found %lu:%@", dependency, [dependency.candidateInstances count], [objectDescriptions componentsJoinedByString:@", "]]
                                      userInfo:nil];
         return NO;
     }

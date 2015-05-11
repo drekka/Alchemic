@@ -15,7 +15,7 @@
 
 registerSingleton
 inject(intoVariable(injObj))
-inject(intoVariable(injProto))
+inject(intoVariable(injProto), withClass(InjectableObject))
 
 -(void) didResolveDependencies {
     _awareCalled = YES;

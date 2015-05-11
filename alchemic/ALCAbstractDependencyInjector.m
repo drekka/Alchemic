@@ -12,7 +12,7 @@
 @implementation ALCAbstractDependencyInjector
 
 -(BOOL) injectObject:(id) object dependency:(ALCDependency *) dependency {
-    [self doesNotRecognizeSelector:@selector(injectObject:dependency:)];
+    [self doesNotRecognizeSelector:_cmd];
     return NO;
 }
 

@@ -54,7 +54,7 @@
 -(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers {
     // Create the dependency info to be store.
     Ivar variable = [ALCRuntime class:self.objectClass variableForInjectionPoint:inj];
-    [_dependencies addObject:[[ALCDependency alloc] initWithVariable:variable matchers:matchers]];
+    [_dependencies addObject:[[ALCDependency alloc] initWithVariable:variable inModelObject:self matchers:matchers]];
 }
 
 #pragma mark - Lifecycle
@@ -108,7 +108,7 @@
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"'%@' (%s)", self.name, class_getName(self.objectClass)];
+    return [NSString stringWithFormat:@"Object '%@' (%s)", self.name, class_getName(self.objectClass)];
 }
 
 @end

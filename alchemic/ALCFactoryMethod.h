@@ -17,6 +17,7 @@
 -(instancetype) initWithContext:(__weak ALCContext *) context
                 factoryInstance:(ALCInstance *) factoryInstance
                 factorySelector:(SEL) factorySelector
-                     returnType:(Class) returnTypeClass;
+                     returnType:(Class) returnTypeClass
+               argumentMatchers:(NSArray *) argumentMatchers;
 
 @end

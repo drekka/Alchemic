@@ -17,13 +17,16 @@
 
 @import ObjectiveC;
 
-@implementation ALCDependency 
+@implementation ALCDependency {
+    __weak ALCInstance *_instance;
+}
 
--(instancetype) initWithVariable:(Ivar) variable matchers:(NSSet *) dependencyMatchers {
-    
+-(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak id<ALCObjectMetadata>) modelObject matchers:(NSSet *) dependencyMatchers {
+
     self = [super initWithMatchers:dependencyMatchers];
     if (self) {
-        
+
+        _instance = modelObject;
         _variable = variable;
         _variableProtocols = [[NSMutableArray alloc] init];
         
@@ -98,7 +101,7 @@
     }];
 
     const char *type = self.variableClass == nil ? "id" : class_getName(self.variableClass);
-    return [NSString stringWithFormat:@"Variable %s -> type: %s<%@>", ivar_getName(self.variable), type, [protocols componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"Variable %s::%s (%s<%@>)", class_getName(_instance.objectClass), ivar_getName(self.variable), type, [protocols componentsJoinedByString:@", "]];
     
 }
 

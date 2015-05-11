@@ -129,7 +129,7 @@
 		6C66DC2E1A8B82C3009F9D94 /* libalchemic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libalchemic.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C66DC311A8B82C3009F9D94 /* Alchemic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Alchemic.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C66DC331A8B82C3009F9D94 /* Alchemic.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Alchemic.m; sourceTree = "<group>"; };
-		6C66DC391A8B82C3009F9D94 /* Injection by class.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Injection by class.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C66DC391A8B82C3009F9D94 /* alchemic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "alchemic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C66DC3F1A8B82C3009F9D94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C66DC491A8B85E1009F9D94 /* ALCRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCRuntime.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C66DC4A1A8B85E1009F9D94 /* ALCRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCRuntime.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -241,7 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				6C66DC2E1A8B82C3009F9D94 /* libalchemic.a */,
-				6C66DC391A8B82C3009F9D94 /* Injection by class.xctest */,
+				6C66DC391A8B82C3009F9D94 /* alchemic tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -453,7 +453,7 @@
 			);
 			name = "alchemic tests";
 			productName = alchemicTests;
-			productReference = 6C66DC391A8B82C3009F9D94 /* Injection by class.xctest */;
+			productReference = 6C66DC391A8B82C3009F9D94 /* alchemic tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */

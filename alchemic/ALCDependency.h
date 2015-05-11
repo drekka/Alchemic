@@ -10,8 +10,10 @@
 
 @class ALCInstance;
 @import ObjectiveC;
+
 #import "ALCMatcher.h"
 #import "ALCResolver.h"
+#import "ALCObjectMetadata.h"
 
 /**
  Container object for information about an injection.
@@ -23,7 +25,7 @@
 @property (nonatomic, assign, readonly) Class variableClass;
 @property (nonatomic, strong, readonly) NSArray *variableProtocols;
 
--(instancetype) initWithVariable:(Ivar) variable matchers:(NSSet *) dependencyMatchers;
+-(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak id<ALCObjectMetadata>) modelObject matchers:(NSSet *) dependencyMatchers;
 
 -(void) injectObject:(id) object usingInjectors:(NSArray *) injectors;
 

@@ -62,8 +62,8 @@
 }
 
 #define registerSingletonWithName(_componentName) \
-+(ALCInstance *) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCInstance *) instance { \
-    [[Alchemic mainContext] registerInstanceAsSingleton:instance withName:_componentName]; \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCInstance *) instance { \
+    [[Alchemic mainContext] registerAsSingleton:instance withName:_componentName]; \
 }
 
 /**
@@ -83,7 +83,7 @@
  An Array of Matcher objects.
  The number of objects passed must match the number of expected arguments.
  */
-#define registerFactoryMethod(_factorySelector, _returnTypeClassName, ...) \
+#define registerFactoryMethod(_returnTypeClassName, _factorySelector, ...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCInstance *) instance { \
     [[Alchemic mainContext] registerFactory:instance \
                             factorySelector:@selector(_factorySelector) \
