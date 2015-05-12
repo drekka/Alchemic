@@ -10,14 +10,18 @@
 #import "ALCObjectMetadata.h"
 
 @class ALCContext;
+@class ALCResolver;
 
-@interface ALCModelObject : NSObject<ALCObjectMetadata>
+@interface ALCAbstractModelObject : NSObject<ALCObjectMetadata>
 
 @property(nonatomic, weak, readonly) ALCContext *context;
+@property(nonatomic, strong, readonly) NSArray *dependencies;
 
 /**
  Initialiser used when registering classes.
  */
 -(instancetype) initWithContext:(__weak ALCContext *) context objectClass:(Class) objectClass;
+
+-(void) addDependencyResolver:(ALCResolver *) dependency;
 
 @end

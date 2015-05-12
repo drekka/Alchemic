@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCModelObject.h"
+#import "ALCAbstractModelObject.h"
 
 @class ALCInstance;
 
-@interface ALCFactoryMethod : ALCModelObject
+@interface ALCFactoryMethod : ALCAbstractModelObject
 
 @property (nonatomic, strong) NSArray *argumentMatchers;
 

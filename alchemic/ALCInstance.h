@@ -10,9 +10,9 @@
 
 #import "ALCInitStrategy.h"
 #import "ALCContext.h"
-#import "ALCModelObject.h"
+#import "ALCAbstractModelObject.h"
 
-@interface ALCInstance : ALCModelObject
+@interface ALCInstance : ALCAbstractModelObject
 
 @property (nonatomic, assign) BOOL instantiate;
 
@@ -23,5 +23,7 @@
 -(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers;
 
 -(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
+
+-(void) injectDependenciesInto:(id) object;
 
 @end

@@ -47,7 +47,7 @@
 		6C9ADABF1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9ADABE1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.m */; };
 		6C9ADAC21ADFF9F700A240F2 /* ALCResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9ADAC11ADFF9F700A240F2 /* ALCResolver.m */; };
 		6CC54B6A1AF4F20000D5D634 /* ALCClassWithProtocolClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC54B691AF4F20000D5D634 /* ALCClassWithProtocolClassProcessor.m */; };
-		6CC54B711AFCEAED00D5D634 /* ALCModelObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC54B701AFCEAED00D5D634 /* ALCModelObject.m */; };
+		6CC54B711AFCEAED00D5D634 /* ALCAbstractModelObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC54B701AFCEAED00D5D634 /* ALCAbstractModelObject.m */; };
 		6CC54B751AFE3D7B00D5D634 /* ALCFactoryMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC54B741AFE3D7B00D5D634 /* ALCFactoryMethod.m */; };
 		6CDF44951B00E3420066D18B /* ALCMethodArgumentDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF44941B00E3420066D18B /* ALCMethodArgumentDependency.m */; };
 		6CEF233B1A9364DA005E672E /* InjectByClassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEF233A1A9364DA005E672E /* InjectByClassTests.m */; };
@@ -176,8 +176,8 @@
 		6CC54B691AF4F20000D5D634 /* ALCClassWithProtocolClassProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCClassWithProtocolClassProcessor.m; sourceTree = "<group>"; };
 		6CC54B6B1AF50DE500D5D634 /* ALCAbstractClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractClass.h; sourceTree = "<group>"; };
 		6CC54B6D1AFA516A00D5D634 /* ALCObjectMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCObjectMetadata.h; sourceTree = "<group>"; };
-		6CC54B6F1AFCEAED00D5D634 /* ALCModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCModelObject.h; sourceTree = "<group>"; };
-		6CC54B701AFCEAED00D5D634 /* ALCModelObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelObject.m; sourceTree = "<group>"; };
+		6CC54B6F1AFCEAED00D5D634 /* ALCAbstractModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractModelObject.h; sourceTree = "<group>"; };
+		6CC54B701AFCEAED00D5D634 /* ALCAbstractModelObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractModelObject.m; sourceTree = "<group>"; };
 		6CC54B721AFCEFDA00D5D634 /* ALCDependencyInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependencyInjector.h; sourceTree = "<group>"; };
 		6CC54B731AFE3D7B00D5D634 /* ALCFactoryMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCFactoryMethod.h; sourceTree = "<group>"; };
 		6CC54B741AFE3D7B00D5D634 /* ALCFactoryMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCFactoryMethod.m; sourceTree = "<group>"; };
@@ -409,8 +409,8 @@
 				6C37A6F21A9B566B00ACD0F8 /* ALCInstance.h */,
 				6C37A6F31A9B566B00ACD0F8 /* ALCInstance.m */,
 				6CC54B6D1AFA516A00D5D634 /* ALCObjectMetadata.h */,
-				6CC54B6F1AFCEAED00D5D634 /* ALCModelObject.h */,
-				6CC54B701AFCEAED00D5D634 /* ALCModelObject.m */,
+				6CC54B6F1AFCEAED00D5D634 /* ALCAbstractModelObject.h */,
+				6CC54B701AFCEAED00D5D634 /* ALCAbstractModelObject.m */,
 				6CC54B731AFE3D7B00D5D634 /* ALCFactoryMethod.h */,
 				6CC54B741AFE3D7B00D5D634 /* ALCFactoryMethod.m */,
 			);
@@ -529,7 +529,7 @@
 				6C37A6F41A9B566B00ACD0F8 /* ALCInstance.m in Sources */,
 				6C9473151AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.m in Sources */,
 				6C1C6A761AF3A9480074BB26 /* ALCModelClassProcessor.m in Sources */,
-				6CC54B711AFCEAED00D5D634 /* ALCModelObject.m in Sources */,
+				6CC54B711AFCEAED00D5D634 /* ALCAbstractModelObject.m in Sources */,
 				6C9473171AE7D7CB008EB2E5 /* ALCInitStrategyInjector.m in Sources */,
 				6CC54B6A1AF4F20000D5D634 /* ALCClassWithProtocolClassProcessor.m in Sources */,
 				6C9ADAB91ADFEC7D00A240F2 /* ALCPlistResourceLocator.m in Sources */,

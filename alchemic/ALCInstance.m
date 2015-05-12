@@ -15,7 +15,6 @@
 #import "ALCLogger.h"
 
 @implementation ALCInstance {
-    NSMutableSet *_dependencies;
     NSArray *_initialisationStrategies;
 }
 
@@ -23,7 +22,6 @@
     self = [super initWithContext:context objectClass:objectClass];
     if (self) {
         _initialisationStrategies = @[];
-        _dependencies = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -52,25 +50,11 @@
 }
 
 -(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers {
-    // Create the dependency info to be store.
     Ivar variable = [ALCRuntime class:self.objectClass variableForInjectionPoint:inj];
-    [_dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:variable inModelObject:self matchers:matchers]];
+    [self addDependencyResolver:[[ALCVariableDependency alloc] initWithVariable:variable inModelObject:self matchers:matchers]];
 }
 
 #pragma mark - Lifecycle
-
--(void) resolveDependencies {
-    
-    logDependencyResolving(@"Resolving dependencies for %@", [self description]);
-    for (ALCVariableDependency *dependency in _dependencies) {
-        [dependency resolveUsingModel:self.context.model];
-    }
-    
-    logRegistration(@"Post processing dependencies for %@", [self description]);
-    for (ALCVariableDependency *dependency in _dependencies) {
-        [dependency postProcess:self.context.resolverPostProcessors];
-    }
-}
 
 -(void) instantiateObject {
     
@@ -98,7 +82,7 @@
 
 -(void) injectDependenciesInto:(id) object {
     logDependencyResolving(@"Checking %@ for dependencies", [self description]);
-    for (ALCVariableDependency *dependency in _dependencies) {
+    for (ALCVariableDependency *dependency in self.dependencies) {
         [dependency injectObject:object usingInjectors:self.context.dependencyInjectors];
     }
 }
@@ -108,7 +92,7 @@
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Object '%@' (%s)", self.name, class_getName(self.objectClass)];
+    return [NSString stringWithFormat:@"Object instance '%@' (%s)", self.name, class_getName(self.objectClass)];
 }
 
 @end

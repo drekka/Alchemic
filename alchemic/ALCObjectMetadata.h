@@ -21,6 +21,5 @@
 
 -(void) instantiateObject;
 
--(void) injectDependenciesInto:(id) object;
 
 @end

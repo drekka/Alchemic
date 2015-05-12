@@ -10,11 +10,11 @@
 #import "ALCRuntime.h"
 #import "ALCInstance.h"
 #import "ALCMethodArgumentDependency.h"
+#import "ALCLogger.h"
 
 @implementation ALCFactoryMethod {
     __weak ALCInstance *_factoryInstance;
     SEL _factorySelector;
-    NSMutableArray *_argumentDependencies;
 }
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
@@ -47,30 +47,21 @@
         self.name = [NSString stringWithFormat:@"%s::%s", class_getName(factoryInstance.objectClass), sel_getName(factorySelector)];
         
         // Setup the dependencies for each argument.
-        _argumentDependencies = [[NSMutableArray alloc] initWithCapacity:[argumentMatchers count]];
         Class arrayClass = [NSArray class];
         [argumentMatchers enumerateObjectsUsingBlock:^(id matchers, NSUInteger idx, BOOL *stop) {
             NSSet *matcherSet = object_isClass(arrayClass) ? [NSSet setWithArray:matchers] : [NSSet setWithObject:matchers];
-            ALCMethodArgumentDependency *argumentDependency = [[ALCMethodArgumentDependency alloc] initWithFactoryMethod:self
-                                                                                                           argumentIndex:(int) idx
-                                                                                                                matchers:matcherSet];
-            [_argumentDependencies addObject:argumentDependency];
+            [self addDependencyResolver:[[ALCMethodArgumentDependency alloc] initWithFactoryMethod:self
+                                                                                     argumentIndex:(int) idx
+                                                                                          matchers:matcherSet]];
         }];
         
     }
     return self;
 }
 
--(void) resolveDependencies {
-    logDependencyResolving(@"Resolving dependencies for %@", [self description]);
-    for (ALCResolver *dependency in _argumentDependencies) {
-        [dependency resolveUsingModel:self.context.model];
-    }
-    
-    logRegistration(@"Post processing dependencies for %@", [self description]);
-    for (ALCResolver *dependency in _argumentDependencies) {
-        [dependency postProcess:self.context.resolverPostProcessors];
-    }
+-(id) object {
+    logCreation(@"Creating object with %@", [self description]);
+    return nil;
 }
 
 -(NSString *) description {

@@ -7,6 +7,7 @@
 //
 
 @import Foundation;
+#import "ALCMatcher.h"
 
 @interface ALCResolver : NSObject
 
@@ -14,6 +15,8 @@
 @property (nonatomic, strong) NSSet *dependencyMatchers;
 
 -(instancetype) initWithMatchers:(NSSet *) dependencyMatchers;
+
+-(instancetype) initWithMatcher:(id<ALCMatcher>) dependencyMatcher;
 
 -(void) resolveUsingModel:(NSDictionary *) model;
 

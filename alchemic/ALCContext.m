@@ -78,17 +78,10 @@
     logRuntime(@"Injecting dependencies into a %s", object_getClassName(object));
     
     // Object will have a matching instance in the model if it has any injection point.
-    id<ALCObjectMetadata> objectMetadata = [_model metadataForObject:object];
+    ALCInstance *instance = [_model instanceForObject:object];
     
-    if (objectMetadata == nil) {
-        @throw [NSException exceptionWithName:@"AlchemicUnableToLocateMetadata"
-                                       reason:[NSString stringWithFormat:@"Unable to find any metata for a instance of %s", object_getClassName(object)]
-                                     userInfo:nil];
-        return;
-    }
     
-    // Set the final object and inject it.
-    [objectMetadata injectDependenciesInto:object];
+    [instance injectDependenciesInto:object];
 }
 
 #pragma mark - Configuration

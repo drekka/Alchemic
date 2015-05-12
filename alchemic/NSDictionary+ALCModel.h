@@ -14,15 +14,17 @@
 @class ALCInstance;
 @class ALCFactoryMethod;
 
+#import "ALCMatcher.h"
+
 @interface NSDictionary (ALCModel)
 
 #pragma mark - Finding Metadata
 
--(id<ALCObjectMetadata>) metadataForObject:(id) object;
-
--(id<ALCObjectMetadata>) metedataForClass:(Class) class withName:(NSString *) name;
+-(ALCInstance *) instanceForObject:(id) object;
 
 -(NSSet *) metadataWithMatchers:(NSSet *) matchers;
+
+-(NSSet *) metadataWithMatcher:(id<ALCMatcher>) matcher;
 
 #pragma mark - Finding objects
 

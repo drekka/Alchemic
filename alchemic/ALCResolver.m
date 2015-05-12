@@ -15,6 +15,10 @@
 
 @implementation ALCResolver
 
+-(instancetype) initWithMatcher:(id<ALCMatcher>) dependencyMatcher {
+    return [self initWithMatchers:[NSSet setWithObject:dependencyMatcher]];
+}
+
 -(instancetype) initWithMatchers:(NSSet *) dependencyMatchers {
     self = [super init];
     if (self) {

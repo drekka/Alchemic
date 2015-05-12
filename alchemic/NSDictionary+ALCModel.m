@@ -21,7 +21,11 @@
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 
+#import "ALCObjectMetadata.h"
+
 @implementation NSMutableDictionary (ALCModel)
+
+#pragma mark - Finding things
 
 -(NSSet *) objectsWithMatcherArgs:(id) firstMatcher, ... {
     
@@ -44,11 +48,21 @@
 }
 
 -(NSSet *) objectsWithMatchers:(NSSet *) matchers {
-    NSMutableSet *results = [[NSMutableSet alloc] init];
-    for (id<ALCObjectMetadata> objectMetadata in [self metadataWithMatchers:matchers]) {
-        [results addObject:objectMetadata.object];
-    }
-    return results;
+    return [self findWithMatchers:matchers
+                    selectorBlock:^id(id<ALCObjectMetadata> metadata) {
+                        return metadata.object;
+                    }];
+}
+
+-(NSSet *) instancesWithMatcher:(id<ALCMatcher>) matcher {
+    return [self instancesWithMatchers:[NSSet setWithObject:matcher]];
+}
+
+-(NSSet *) instancesWithMatchers:(NSSet *) matchers {
+    return [self findWithMatchers:matchers
+                    selectorBlock:^id(id<ALCObjectMetadata> metadata) {
+                        return [metadata isKindOfClass:[ALCInstance class]] ? metadata : nil;
+                    }];
 }
 
 -(NSSet *) metadataWithMatchers:(NSSet *) matchers {
@@ -57,35 +71,38 @@
     return resolver.candidateInstances;
 }
 
-#pragma mark - Managing instances
-
--(id<ALCObjectMetadata>) metadataForObject:(id) object {
-    
-    // Object will have a matching instance in the model if it has any injection point.
-    NSString *className = [NSString stringWithCString:object_getClassName(object) encoding:NSUTF8StringEncoding];
-    NSSet *metadataObjects = [self metadataWithMatchers:[NSSet setWithObject:[[ALCNameMatcher alloc] initWithName:className]]];
-    if ([metadataObjects count] == 0) {
-        // Look for any instances based on the class.
-        metadataObjects = [self metadataWithMatchers:[NSSet setWithObject:[[ALCClassMatcher alloc] initWithClass:object_getClass(object)]]];
-    }
-    
-    if ([metadataObjects count] > 1) {
-        @throw [NSException exceptionWithName:@"AlchemicTooManyMetadataObjectsForObject"
-                                       reason:[NSString stringWithFormat:@"Found too many metadata object matching %s", object_getClassName(object)]
-                                     userInfo:nil];
-    }
-    
-    // If nothing found then there are no injections.
-    return [metadataObjects count] == 0 ? nil : [metadataObjects anyObject];
-    
+-(NSSet *) metadataWithMatcher:(id<ALCMatcher>) matcher {
+    return [self metadataWithMatchers:[NSSet setWithObject:matcher]];
 }
 
--(id<ALCObjectMetadata>) metadataForClass:(Class) class withName:(NSString *) name {
-    NSString *finalName = name;
-    if (finalName == nil) {
-        finalName = NSStringFromClass(class);
+-(NSSet *) findWithMatchers:(NSSet *) matchers selectorBlock:(id (^) (id<ALCObjectMetadata> metadata)) selectorBlock {
+    NSMutableSet *results = [[NSMutableSet alloc] init];
+    for (id<ALCObjectMetadata> objectMetadata in [self metadataWithMatchers:matchers]) {
+        id result = selectorBlock(objectMetadata);
+        if (result != nil) {
+            [results addObject:result];
+        }
     }
-    return self[finalName];
+    return results;
+}
+
+#pragma mark - Managing instances
+
+-(ALCInstance *) instanceForObject:(id) object {
+    
+    // Look for instance data based on the class name first.
+    Class objectClass = object_getClass(object);
+    NSSet *instances = [self instancesWithMatcher:[[ALCNameMatcher alloc] initWithName:NSStringFromClass(objectClass)]];
+    if ([instances count] == 0) {
+        // Now Look for any instances based on the class.
+        instances = [self instancesWithMatcher:[[ALCClassMatcher alloc] initWithClass:objectClass]];
+        if ([instances count] > 0) {
+            @throw [NSException exceptionWithName:@"AlchemicUnableToLocateMetadata"
+                                           reason:[NSString stringWithFormat:@"Unable to find any metata for a instance of %s", object_getClassName(object)]
+                                         userInfo:nil];
+        }
+    }
+    return [instances anyObject];
 }
 
 #pragma mark - Adding
@@ -129,6 +146,5 @@
     [self addMetadata:factoryMethod name:nil];
     return factoryMethod;
 }
-
 
 @end
