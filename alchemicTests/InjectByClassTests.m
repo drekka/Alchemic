@@ -17,7 +17,7 @@
     SimpleObject *_simpleObject;
 }
 
-inject(intoVariable(_simpleObject))
+inject(intoVariable(_simpleObject), withName(@"abc"))
 
 -(void) setUp {
     injectDependencies(self);

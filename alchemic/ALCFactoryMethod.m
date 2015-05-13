@@ -44,7 +44,6 @@
         
         _factoryInstance = factoryInstance;
         _factorySelector = factorySelector;
-        self.name = [NSString stringWithFormat:@"%s::%s", class_getName(factoryInstance.objectClass), sel_getName(factorySelector)];
         
         // Setup the dependencies for each argument.
         Class arrayClass = [NSArray class];
@@ -65,7 +64,7 @@
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Factory method '%@' %s::%s (%s)", self.name, class_getName(_factoryInstance.objectClass), sel_getName(_factorySelector), class_getName(self.objectClass)];
+    return [NSString stringWithFormat:@"Factory method %s::%s (%s)", class_getName(_factoryInstance.objectClass), sel_getName(_factorySelector), class_getName(self.objectClass)];
 }
 
 @end

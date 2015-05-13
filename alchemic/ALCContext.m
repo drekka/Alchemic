@@ -122,8 +122,8 @@
 }
 
 -(void) registerAsSingleton:(ALCInstance *) objectInstance withName:(NSString *) name {
-    objectInstance.name = name;
     objectInstance.instantiate = YES;
+    [_model indexMetadata:objectInstance underName:name];
 }
 
 -(void) registerObject:(id) object withName:(NSString *) name {

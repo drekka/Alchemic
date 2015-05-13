@@ -12,7 +12,6 @@
 
 @property (nonatomic, assign, readonly) Class objectClass;
 @property (nonatomic, strong) id object;
-@property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) BOOL primary;
 
 #pragma mark - Lifecycle

@@ -34,6 +34,8 @@
 
 #pragma mark - Adding new Metadata
 
+-(void) indexMetadata:(id<ALCObjectMetadata>) objectMetadata underName:(NSString *) name;
+
 -(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context;
 
 -(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;

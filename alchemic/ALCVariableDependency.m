@@ -87,7 +87,7 @@
     // If there are no candidates left then error.
     if ([self.candidateInstances count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency: %s", ivar_getName(_variable)]
+                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency: %s::%s", class_getName(_instance.objectClass), ivar_getName(_variable)]
                                      userInfo:nil];
     }
 

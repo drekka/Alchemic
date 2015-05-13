@@ -91,8 +91,12 @@
     _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
 }
 
+//-(NSString *) debugDescription {
+//    return [self description];
+//}
+
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Object instance '%@' (%s)", self.name, class_getName(self.objectClass)];
+    return [NSString stringWithFormat:@"Object instance: %s", class_getName(self.objectClass)];
 }
 
 @end

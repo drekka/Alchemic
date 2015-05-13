@@ -29,7 +29,7 @@
 }
 
 -(void) resolveUsingModel:(NSDictionary *)model {
-
+    
     if ([_candidateInstances count] > 0) {
         logDependencyResolving(@"Dependency previously resolved");
         return;
@@ -37,20 +37,21 @@
     
     logDependencyResolving(@"Searching for candidates using %lu model objects", [model count]);
     [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop) {
-        
+
+        // Don't bother adding if already present.
+        if ([_candidateInstances containsObject:instance]) {
+            return;
+        }
+
         // Run matchers to see if they match. All must accept the candidate object.
-        BOOL matched = YES;
         for (id<ALCMatcher> dependencyMatcher in _dependencyMatchers) {
             if (![dependencyMatcher matches:instance withName:name]) {
-                matched = NO;
-                break;
+                return;
             }
         }
         
-        if (matched) {
-            logDependencyResolving(@"Adding '%@' %s to candidates", name, class_getName(instance.objectClass));
-            [(NSMutableArray *)_candidateInstances addObject:instance];
-        }
+        logDependencyResolving(@"Adding '%@' %s to candidates", name, class_getName(instance.objectClass));
+        [(NSMutableArray *)_candidateInstances addObject:instance];
         
     }];
     

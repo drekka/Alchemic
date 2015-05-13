@@ -105,25 +105,31 @@
     return [instances anyObject];
 }
 
-#pragma mark - Adding
+#pragma mark - Adding new meta data
 
--(void) addMetadata:(id<ALCObjectMetadata>)objectMetadata name:(NSString *) name {
-    logRegistration(@"Storing instance '%@' %s", objectMetadata.name, class_getName(objectMetadata.objectClass));
-    if (name != nil) {
-        objectMetadata.name = name;
+-(void) indexMetadata:(id<ALCObjectMetadata>) objectMetadata underName:(NSString *) name {
+    
+    NSString *finalName = name == nil ? NSStringFromClass(objectMetadata.objectClass) : name;
+
+    if (self[finalName] != nil) {
+    @throw [NSException exceptionWithName:@"AlchemicMetadataAlreadyIndexed"
+                                   reason:[NSString stringWithFormat:@"Metadata already indexed under name: %@", finalName]
+                                 userInfo:nil];
     }
-    self[objectMetadata.name] = objectMetadata;
+    
+    logRegistration(@"Storing instance of %s under key: %@", class_getName(objectMetadata.objectClass), name);
+    self[finalName] = objectMetadata;
 }
 
 -(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context {
     ALCInstance *instance = [[ALCInstance alloc] initWithContext:context objectClass:class];
-    [self addMetadata:instance name:nil];
+    [self indexMetadata:instance underName:nil];
     return instance;
 }
 
 -(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name {
     ALCInstance *instance = [[ALCInstance alloc] initWithContext:context objectClass:class];
-    [self addMetadata:instance name:name];
+    [self indexMetadata:instance underName:name];
     return instance;
 }
 
@@ -143,7 +149,7 @@
                                                                 factorySelector:factorySelector
                                                                      returnType:returnType
                                                                argumentMatchers:argumentMatchers];
-    [self addMetadata:factoryMethod name:nil];
+    [self indexMetadata:factoryMethod underName:[NSString stringWithFormat:@"%s::%s", class_getName(instance.objectClass), sel_getName(factorySelector)]];
     return factoryMethod;
 }
 

@@ -15,7 +15,6 @@
 
 @synthesize objectClass = _objectClass;
 @synthesize object = _object;
-@synthesize name = _name;
 @synthesize primary = _primary;
 
 #pragma mark - Lifecycle
@@ -25,7 +24,6 @@
     if (self) {
         _context = context;
         _objectClass = objectClass;
-        _name = NSStringFromClass(objectClass);
         _dependencies = [[NSMutableArray alloc] init];
     }
     return self;
