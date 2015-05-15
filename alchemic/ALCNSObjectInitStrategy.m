@@ -11,11 +11,11 @@
 @import UIKit;
 @import ObjectiveC;
 
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 
 @implementation ALCNSObjectInitStrategy
 
-+(BOOL) canWrapInit:(ALCInstance *) instance {
++(BOOL) canWrapInit:(ALCObjectInstance *) instance {
     return ! [instance.objectClass isSubclassOfClass:[UIViewController class]];
 }
 

@@ -12,16 +12,16 @@
 @import ObjectiveC;
 
 #import "ALClogger.h"
-#import "ALCResolver.h"
+#import "ALCDependencyResolver.h"
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 #import "ALCFactoryMethod.h"
 
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 
-#import "ALCObjectMetadata.h"
+#import "ALCModelObject.h"
 
 @implementation NSMutableDictionary (ALCModel)
 
@@ -49,7 +49,7 @@
 
 -(NSSet *) objectsWithMatchers:(NSSet *) matchers {
     return [self findWithMatchers:matchers
-                    selectorBlock:^id(id<ALCObjectMetadata> metadata) {
+                    selectorBlock:^id(id<ALCModelObject> metadata) {
                         return metadata.object;
                     }];
 }
@@ -60,13 +60,13 @@
 
 -(NSSet *) instancesWithMatchers:(NSSet *) matchers {
     return [self findWithMatchers:matchers
-                    selectorBlock:^id(id<ALCObjectMetadata> metadata) {
-                        return [metadata isKindOfClass:[ALCInstance class]] ? metadata : nil;
+                    selectorBlock:^id(id<ALCModelObject> metadata) {
+                        return [metadata isKindOfClass:[ALCObjectInstance class]] ? metadata : nil;
                     }];
 }
 
 -(NSSet *) metadataWithMatchers:(NSSet *) matchers {
-    ALCResolver *resolver = [[ALCResolver alloc] initWithMatchers:matchers];
+    ALCDependencyResolver *resolver = [[ALCDependencyResolver alloc] initWithMatchers:matchers];
     [resolver resolveUsingModel:self];
     return resolver.candidateInstances;
 }
@@ -75,9 +75,9 @@
     return [self metadataWithMatchers:[NSSet setWithObject:matcher]];
 }
 
--(NSSet *) findWithMatchers:(NSSet *) matchers selectorBlock:(id (^) (id<ALCObjectMetadata> metadata)) selectorBlock {
+-(NSSet *) findWithMatchers:(NSSet *) matchers selectorBlock:(id (^) (id<ALCModelObject> metadata)) selectorBlock {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    for (id<ALCObjectMetadata> objectMetadata in [self metadataWithMatchers:matchers]) {
+    for (id<ALCModelObject> objectMetadata in [self metadataWithMatchers:matchers]) {
         id result = selectorBlock(objectMetadata);
         if (result != nil) {
             [results addObject:result];
@@ -88,7 +88,7 @@
 
 #pragma mark - Managing instances
 
--(ALCInstance *) instanceForObject:(id) object {
+-(ALCObjectInstance *) instanceForObject:(id) object {
     
     // Look for instance data based on the class name first.
     Class objectClass = object_getClass(object);
@@ -107,7 +107,7 @@
 
 #pragma mark - Adding new meta data
 
--(void) indexMetadata:(id<ALCObjectMetadata>) objectMetadata underName:(NSString *) name {
+-(void) indexMetadata:(id<ALCModelObject>) objectMetadata underName:(NSString *) name {
     
     NSString *finalName = name == nil ? NSStringFromClass(objectMetadata.objectClass) : name;
     
@@ -121,27 +121,27 @@
     self[finalName] = objectMetadata;
 }
 
--(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context {
-    ALCInstance *instance = [[ALCInstance alloc] initWithContext:context objectClass:class];
+-(ALCObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context {
+    ALCObjectInstance *instance = [[ALCObjectInstance alloc] initWithContext:context objectClass:class];
     [self indexMetadata:instance underName:nil];
     return instance;
 }
 
--(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name {
-    ALCInstance *instance = [[ALCInstance alloc] initWithContext:context objectClass:class];
+-(ALCObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name {
+    ALCObjectInstance *instance = [[ALCObjectInstance alloc] initWithContext:context objectClass:class];
     [self indexMetadata:instance underName:name];
     return instance;
 }
 
--(ALCInstance *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name {
-    ALCInstance *instance = [self addInstanceForClass:object_getClass(finalObject) inContext:context withName:name];
+-(ALCObjectInstance *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name {
+    ALCObjectInstance *instance = [self addInstanceForClass:object_getClass(finalObject) inContext:context withName:name];
     instance.object = finalObject;
     instance.instantiate = YES;
     return instance;
 }
 
 -(ALCFactoryMethod *) addFactoryMethod:(SEL) factorySelector
-                            toInstance:(ALCInstance *) instance
+                            toInstance:(ALCObjectInstance *) instance
                             returnType:(Class) returnType
                       argumentMatchers:(NSArray *) argumentMatchers {
     ALCFactoryMethod *factoryMethod = [[ALCFactoryMethod alloc] initWithContext:instance.context

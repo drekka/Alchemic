@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCMethodArgumentDependency.h"
+#import "ALCArgumentDependencyResolver.h"
 #import "ALCFactoryMethod.h"
 
-@implementation ALCMethodArgumentDependency {
+@implementation ALCArgumentDependencyResolver {
     __weak ALCFactoryMethod *_factoryMethod;
     int _argumentIndex;
 }

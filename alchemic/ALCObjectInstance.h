@@ -12,7 +12,7 @@
 #import "ALCContext.h"
 #import "ALCAbstractModelObject.h"
 
-@interface ALCInstance : ALCAbstractModelObject
+@interface ALCObjectInstance : ALCAbstractModelObject
 
 @property (nonatomic, assign) BOOL instantiate;
 

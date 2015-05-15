@@ -7,12 +7,12 @@
 //
 
 @import Foundation;
-#import "ALCObjectMetadata.h"
+#import "ALCModelObject.h"
 
 @class ALCContext;
-@class ALCResolver;
+@class ALCDependencyResolver;
 
-@interface ALCAbstractModelObject : NSObject<ALCObjectMetadata>
+@interface ALCAbstractModelObject : NSObject<ALCModelObject>
 
 @property(nonatomic, weak, readonly) ALCContext *context;
 @property(nonatomic, strong, readonly) NSArray *dependencies;
@@ -22,6 +22,6 @@
  */
 -(instancetype) initWithContext:(__weak ALCContext *) context objectClass:(Class) objectClass;
 
--(void) addDependencyResolver:(ALCResolver *) dependency;
+-(void) addDependencyResolver:(ALCDependencyResolver *) dependency;
 
 @end

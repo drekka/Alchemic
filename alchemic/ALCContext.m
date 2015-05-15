@@ -13,13 +13,13 @@
 #import "ALCInternal.h"
 #import "ALCInitStrategyInjector.h"
 #import "ALCRuntime.h"
-#import "ALCObjectMetadata.h"
+#import "ALCModelObject.h"
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
-#import "ALCVariableDependency.h"
+#import "ALCVariableDependencyResolver.h"
 #import "NSDictionary+ALCModel.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 #import "ALCFactoryMethod.h"
 
 @implementation ALCContext {
@@ -60,7 +60,7 @@
 
 -(void) resolveModelObjects {
     logDependencyResolving(@"Resolving dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectMetadata> objectMetadata, BOOL *stop){
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCModelObject> objectMetadata, BOOL *stop){
         logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(objectMetadata.objectClass));
         [objectMetadata resolveDependencies];
     }];
@@ -68,7 +68,7 @@
 
 -(void) instantiateModelObjects {
     logCreation(@"Instantiating objects ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectMetadata> object, BOOL *stop) {
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCModelObject> object, BOOL *stop) {
         [object instantiateObject];
     }];
 }
@@ -78,7 +78,7 @@
     logRuntime(@"Injecting dependencies into a %s", object_getClassName(object));
     
     // Object will have a matching instance in the model if it has any injection point.
-    ALCInstance *instance = [_model instanceForObject:object];
+    ALCObjectInstance *instance = [_model instanceForObject:object];
     
     
     [instance injectDependenciesInto:object];
@@ -91,10 +91,10 @@
     [(NSMutableSet *)_objectFactories addObject:objectFactory];
 }
 
--(void) addDependencyInjector:(id<ALCDependencyInjector>) dependencyinjector {
+-(void) addDependencyInjector:(id<ALCObjectResolver>) dependencyinjector {
     logConfig(@"Adding dependency injector: %s", object_getClassName(dependencyinjector));
     [(NSMutableArray *)_dependencyInjectors addObject:dependencyinjector];
-    [(NSMutableArray *)_dependencyInjectors sortUsingComparator:^NSComparisonResult(ALCAbstractDependencyInjector *di1, ALCAbstractDependencyInjector *di2) {
+    [(NSMutableArray *)_dependencyInjectors sortUsingComparator:^NSComparisonResult(ALCAbstractObjectResolver *di1, ALCAbstractObjectResolver *di2) {
         if (di1.order > di2.order) {
             return (NSComparisonResult)NSOrderedDescending;
         }
@@ -105,7 +105,7 @@
     }];
 }
 
--(void) addResolverPostProcessor:(id<ALCResolverPostProcessor>) postProcessor {
+-(void) addResolverPostProcessor:(id<ALCDependencyResolverPostProcessor>) postProcessor {
     logConfig(@"Adding resolver post processor: %s", object_getClassName(postProcessor));
     [(NSMutableSet *)_resolverPostProcessors addObject:postProcessor];
 }
@@ -117,22 +117,22 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCInstance *) objectInstance {
+-(void) registerAsSingleton:(ALCObjectInstance *) objectInstance {
     objectInstance.instantiate = YES;
 }
 
--(void) registerAsSingleton:(ALCInstance *) objectInstance withName:(NSString *) name {
+-(void) registerAsSingleton:(ALCObjectInstance *) objectInstance withName:(NSString *) name {
     objectInstance.instantiate = YES;
     [_model indexMetadata:objectInstance underName:name];
 }
 
 -(void) registerObject:(id) object withName:(NSString *) name {
-    ALCInstance *instance = [_model addObject:object inContext:self withName:name];
+    ALCObjectInstance *instance = [_model addObject:object inContext:self withName:name];
     instance.instantiate = YES;
     instance.object = object;
 }
 
--(void) registerFactory:(ALCInstance *) objectInstance
+-(void) registerFactory:(ALCObjectInstance *) objectInstance
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ... {
     
@@ -172,7 +172,7 @@
     [matcherArray addObject:argument];
 }
 
--(void) registerFactory:(ALCInstance *) objectInstance
+-(void) registerFactory:(ALCObjectInstance *) objectInstance
                withName:(NSString *) name
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ... {

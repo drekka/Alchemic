@@ -7,7 +7,7 @@
 //
 
 #import "ALCProtocolMatcher.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 @import ObjectiveC;
 #import "ALCLogger.h"
 
@@ -24,7 +24,7 @@
     return self;
 }
 
--(BOOL) matches:(ALCInstance *)instance withName:(NSString *) name {
+-(BOOL) matches:(ALCObjectInstance *)instance withName:(NSString *) name {
     return class_conformsToProtocol(instance.objectClass, _protocol);
 }
 

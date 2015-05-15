@@ -9,14 +9,14 @@
 @import Foundation;
 
 #import "ALCObjectFactory.h"
-#import "ALCAbstractDependencyInjector.h"
+#import "ALCAbstractObjectResolver.h"
 #import "ALCInitInjector.h"
 #import "ALCMatcher.h"
 #import "ALCResolverPostProcessor.h"
-#import "ALCObjectMetadata.h"
+#import "ALCModelObject.h"
 #import "NSDictionary+ALCModel.h"
 
-@class ALCInstance;
+@class ALCObjectInstance;
 
 @interface ALCContext : NSObject
 
@@ -39,12 +39,12 @@
  */
 -(void) addInitStrategy:(Class) initialisationStrategyClass;
 
--(void) addResolverPostProcessor:(id<ALCResolverPostProcessor>) postProcessor;
+-(void) addResolverPostProcessor:(id<ALCDependencyResolverPostProcessor>) postProcessor;
 
 /**
  Adds a ALCDependencyInjector to the list of injectors.
  */
--(void) addDependencyInjector:(ALCAbstractDependencyInjector *) dependencyinjector;
+-(void) addDependencyInjector:(ALCAbstractObjectResolver *) dependencyinjector;
 
 /**
  Adds a ALCObjectFactory to the list of object factories. Factories are checked in reverse order. The last registered object factory is the one asked first for an object.
@@ -61,20 +61,20 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCInstance *) objectInstance;
+-(void) registerAsSingleton:(ALCObjectInstance *) objectInstance;
 
--(void) registerAsSingleton:(ALCInstance *) objectInstance withName:(NSString *) name;
+-(void) registerAsSingleton:(ALCObjectInstance *) objectInstance withName:(NSString *) name;
 
 -(void) registerObject:(id) object withName:(NSString *) name;
 
 /**
  Registers a factory method with it's return data type and matchers for locating the objects for each argument.
  */
--(void) registerFactory:(ALCInstance *) objectInstance
+-(void) registerFactory:(ALCObjectInstance *) objectInstance
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;
 
--(void) registerFactory:(ALCInstance *) objectInstance
+-(void) registerFactory:(ALCObjectInstance *) objectInstance
                withName:(NSString *) name
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;

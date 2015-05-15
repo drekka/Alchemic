@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractDependencyInjector.h"
+#import "ALCAbstractObjectResolver.h"
 
-@interface ALCArrayDependencyInjector : ALCAbstractDependencyInjector
+@interface ALCArrayObjectResolver : ALCAbstractObjectResolver
 
 @end

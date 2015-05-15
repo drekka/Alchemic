@@ -10,9 +10,9 @@
 
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 #import "ALCLogger.h"
-#import "ALCVariableDependency.h"
+#import "ALCVariableDependencyResolver.h"
 #import "NSDictionary+ALCModel.h"
 #import "ALCContext.h"
 
@@ -91,7 +91,7 @@ static Class protocolClass;
     };
     
     ClassMatchesBlock resourceLocatorBlock = ^(classMatchesBlockArgs){
-        ALCInstance *instance = [context.model addInstanceForClass:class inContext:context];
+        ALCObjectInstance *instance = [context.model addInstanceForClass:class inContext:context];
         instance.object = [[class alloc] init];
         instance.instantiate = YES;
     };
@@ -108,13 +108,13 @@ static Class protocolClass;
                                               [[ALCModelClassProcessor alloc] init],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCInitStrategy)
                                                                                                whenMatches:initStrategiesBlock],
-                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResolverPostProcessor)
+                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCDependencyResolverPostProcessor)
                                                                                                whenMatches:resolverPostProcessorBlock],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResourceLocator)
                                                                                                whenMatches:resourceLocatorBlock],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCObjectFactory)
                                                                                                whenMatches:objectFactoryBlock],
-                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCDependencyInjector)
+                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCObjectResolver)
                                                                                                whenMatches:dependencyInjectorBlock],
                                               ]];
     

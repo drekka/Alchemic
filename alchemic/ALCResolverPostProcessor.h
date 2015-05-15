@@ -7,13 +7,13 @@
 //
 
 @import Foundation;
-@class ALCResolver;
+@class ALCDependencyResolver;
 
-@protocol ALCResolverPostProcessor <NSObject>
+@protocol ALCDependencyResolverPostProcessor <NSObject>
 
 /**
  @return a new list of candidates objects or nil if the list is not changed.
  */
--(NSSet *) process:(ALCResolver *) resolver;
+-(NSSet *) process:(ALCDependencyResolver *) resolver;
 
 @end

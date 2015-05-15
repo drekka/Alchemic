@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@protocol ALCObjectMetadata <NSObject>
+@protocol ALCModelObject <NSObject>
 
 @property (nonatomic, assign, readonly) Class objectClass;
 @property (nonatomic, strong) id object;

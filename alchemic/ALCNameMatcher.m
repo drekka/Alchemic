@@ -7,7 +7,7 @@
 //
 
 #import "ALCNameMatcher.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 #import "ALCLogger.h"
 
 @implementation ALCNameMatcher {
@@ -23,7 +23,7 @@
     return self;
 }
 
--(BOOL) matches:(ALCInstance *)instance withName:(NSString *) name {
+-(BOOL) matches:(ALCObjectInstance *)instance withName:(NSString *) name {
     return [name isEqualToString:_name];
 }
 

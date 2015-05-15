@@ -11,7 +11,7 @@
 #import "ALCAbstractClass.h"
 #import "ALCDependencyInjector.h"
 
-@interface ALCAbstractDependencyInjector : NSObject<ALCAbstractClass, ALCDependencyInjector>
+@interface ALCAbstractObjectResolver : NSObject<ALCAbstractClass, ALCObjectResolver>
 
 /**
  Higher numbers mean the injector will be used first.

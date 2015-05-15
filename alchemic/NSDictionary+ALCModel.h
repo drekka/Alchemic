@@ -8,10 +8,10 @@
 
 @import Foundation;
 
-#import "ALCObjectMetadata.h"
+#import "ALCModelObject.h"
 
 @class ALCContext;
-@class ALCInstance;
+@class ALCObjectInstance;
 @class ALCFactoryMethod;
 
 #import "ALCMatcher.h"
@@ -20,7 +20,7 @@
 
 #pragma mark - Finding Metadata
 
--(ALCInstance *) instanceForObject:(id) object;
+-(ALCObjectInstance *) instanceForObject:(id) object;
 
 -(NSSet *) metadataWithMatchers:(NSSet *) matchers;
 
@@ -34,16 +34,16 @@
 
 #pragma mark - Adding new Metadata
 
--(void) indexMetadata:(id<ALCObjectMetadata>) objectMetadata underName:(NSString *) name;
+-(void) indexMetadata:(id<ALCModelObject>) objectMetadata underName:(NSString *) name;
 
--(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context;
+-(ALCObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context;
 
--(ALCInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
+-(ALCObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
 
--(ALCInstance *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
+-(ALCObjectInstance *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
 
 -(ALCFactoryMethod *) addFactoryMethod:(SEL) factorySelector
-                            toInstance:(ALCInstance *) instance
+                            toInstance:(ALCObjectInstance *) instance
                             returnType:(Class) returnType
                       argumentMatchers:(NSArray *) argumentMatchers;
 

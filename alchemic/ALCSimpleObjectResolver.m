@@ -6,27 +6,27 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCSimpleDependencyInjector.h"
+#import "ALCSimpleObjectResolver.h"
 
 @import ObjectiveC;
 
-#import "ALCVariableDependency.h"
+#import "ALCVariableDependencyResolver.h"
 #import "ALCLogger.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 
-@implementation ALCSimpleDependencyInjector
+@implementation ALCSimpleObjectResolver
 
 -(int) order {
     // Put this injector last.
     return -1;
 }
 
--(BOOL) injectObject:(id) finalObject dependency:(ALCVariableDependency *) dependency {
+-(BOOL) injectObject:(id) finalObject dependency:(ALCVariableDependencyResolver *) dependency {
     
     if ([dependency.candidateInstances count] > 1) {
 
         NSMutableArray *objectDescriptions = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
-        for (id<ALCObjectMetadata> metadata in dependency.candidateInstances) {
+        for (id<ALCModelObject> metadata in dependency.candidateInstances) {
             [objectDescriptions addObject:[metadata description]];
         }
         
@@ -36,7 +36,7 @@
         return NO;
     }
 
-    ALCInstance *instance = [dependency.candidateInstances anyObject];
+    ALCObjectInstance *instance = [dependency.candidateInstances anyObject];
     
     if (instance.object == nil) {
         @throw [NSException exceptionWithName:@"AlchemicObjectNotCreated"

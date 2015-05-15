@@ -9,7 +9,7 @@
 @import ObjectiveC;
 
 #import "ALCModelClassProcessor.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 #import "ALCContext.h"
 #import "ALCInternal.h"
 #import "ALCLogger.h"
@@ -25,7 +25,7 @@ static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREF
     Method *classMethods = class_copyMethodList(object_getClass(class), &methodCount);
     
     // Search the methods for registration methods.
-    ALCInstance *currentClassInstance = nil;
+    ALCObjectInstance *currentClassInstance = nil;
     for (size_t idx = 0; idx < methodCount; ++idx) {
         
         // If the method is not an alchemic one, then ignore it.
@@ -43,7 +43,7 @@ static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREF
         logRuntime(@"Executing %s::%s ...", class_getName(class), methodName);
         // Note cast because of XCode 6
         // If this returns a new ALCInstance it is assumed to be a new model object and is added.
-        ((void (*)(id, SEL, ALCInstance *))objc_msgSend)(class, sel, currentClassInstance);
+        ((void (*)(id, SEL, ALCObjectInstance *))objc_msgSend)(class, sel, currentClassInstance);
         
     }
     

@@ -6,14 +6,14 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCResolver.h"
+#import "ALCDependencyResolver.h"
 #import "ALCLogger.h"
 @import ObjectiveC;
 #import "ALCMatcher.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 #import "ALCResolverPostProcessor.h"
 
-@implementation ALCResolver
+@implementation ALCDependencyResolver
 
 -(instancetype) initWithMatcher:(id<ALCMatcher>) dependencyMatcher {
     return [self initWithMatchers:[NSSet setWithObject:dependencyMatcher]];
@@ -31,7 +31,7 @@
     
     logDependencyResolving(@"Searching for candidates using %lu model objects", [model count]);
     _candidateInstances = [[NSMutableSet alloc] init];
-    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop) {
+    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectInstance *instance, BOOL *stop) {
 
         // Run matchers to see if they match. All must accept the candidate object.
         for (id<ALCMatcher> dependencyMatcher in _dependencyMatchers) {
@@ -48,7 +48,7 @@
 }
 
 -(void) postProcess:(NSSet *) postProcessors {
-    for (id<ALCResolverPostProcessor> postProcessor in postProcessors) {
+    for (id<ALCDependencyResolverPostProcessor> postProcessor in postProcessors) {
         NSSet *newCandiates = [postProcessor process:self];
         if (newCandiates != nil) {
             _candidateInstances = newCandiates;

@@ -9,7 +9,7 @@
 #import "ALCAbstractModelObject.h"
 #import "ALCLogger.h"
 #import "ALCContext.h"
-#import "ALCResolver.h"
+#import "ALCDependencyResolver.h"
 
 @implementation ALCAbstractModelObject
 
@@ -29,12 +29,12 @@
     return self;
 }
 
--(void) addDependencyResolver:(ALCResolver *) dependency {
+-(void) addDependencyResolver:(ALCDependencyResolver *) dependency {
     [(NSMutableArray *) self.dependencies addObject:dependency];
 }
 
 -(void) resolveDependencies {
-    for (ALCResolver *dependency in self.dependencies) {
+    for (ALCDependencyResolver *dependency in self.dependencies) {
         [dependency resolveUsingModel:_context.model];
         [dependency postProcess:self.context.resolverPostProcessors];
     }

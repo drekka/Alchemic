@@ -8,14 +8,14 @@
 
 #import "ALCAbstractModelObject.h"
 
-@class ALCInstance;
+@class ALCObjectInstance;
 
 @interface ALCFactoryMethod : ALCAbstractModelObject
 
 @property (nonatomic, strong) NSArray *argumentMatchers;
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
-                factoryInstance:(ALCInstance *) factoryInstance
+                factoryInstance:(ALCObjectInstance *) factoryInstance
                 factorySelector:(SEL) factorySelector
                      returnType:(Class) returnTypeClass
                argumentMatchers:(NSArray *) argumentMatchers;

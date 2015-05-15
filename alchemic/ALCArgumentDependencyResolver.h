@@ -8,10 +8,10 @@
 
 @import Foundation;
 
-#import "ALCResolver.h"
+#import "ALCDependencyResolver.h"
 #import "ALCFactoryMethod.h"
 
-@interface ALCMethodArgumentDependency : ALCResolver
+@interface ALCArgumentDependencyResolver : ALCDependencyResolver
 
 -(instancetype) initWithFactoryMethod:(__weak ALCFactoryMethod *) factoryMethod
                         argumentIndex:(int) argumentIndex

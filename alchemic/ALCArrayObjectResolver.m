@@ -6,21 +6,21 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCArrayDependencyInjector.h"
-#import "ALCVariableDependency.h"
+#import "ALCArrayObjectResolver.h"
+#import "ALCVariableDependencyResolver.h"
 #import "ALCLogger.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 
-@implementation ALCArrayDependencyInjector
+@implementation ALCArrayObjectResolver
 
--(BOOL) injectObject:(id) finalObject dependency:(ALCVariableDependency *) dependency {
+-(BOOL) injectObject:(id) finalObject dependency:(ALCVariableDependencyResolver *) dependency {
     
     if (![dependency.variableClass isSubclassOfClass:[NSArray class]]) {
         return NO;
     }
     
     NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
-    [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCInstance *instance, BOOL *stop) {
+    [dependency.candidateInstances enumerateObjectsUsingBlock:^(ALCObjectInstance *instance, BOOL *stop) {
         id value = instance.object;
         if (value != nil) {
             [values addObject:value];

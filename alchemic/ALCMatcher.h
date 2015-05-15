@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-@class ALCInstance;
+@class ALCObjectInstance;
 
 /**
  Implement to define a matcher for selectinign injections.
@@ -17,6 +17,6 @@
 /**
  Return YES if the instance being examined is matched by the matcher.
  */
--(BOOL) matches:(ALCInstance *) instance withName:(NSString *) name;
+-(BOOL) matches:(ALCObjectInstance *) instance withName:(NSString *) name;
 
 @end

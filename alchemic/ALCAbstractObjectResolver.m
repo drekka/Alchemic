@@ -6,12 +6,12 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractDependencyInjector.h"
+#import "ALCAbstractObjectResolver.h"
 #import "ALCLogger.h"
 
-@implementation ALCAbstractDependencyInjector
+@implementation ALCAbstractObjectResolver
 
--(BOOL) injectObject:(id) object dependency:(ALCVariableDependency *) dependency {
+-(BOOL) injectObject:(id) object dependency:(ALCVariableDependencyResolver *) dependency {
     [self doesNotRecognizeSelector:_cmd];
     return NO;
 }

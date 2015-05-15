@@ -8,24 +8,24 @@
 
 @import Foundation;
 
-@class ALCInstance;
+@class ALCObjectInstance;
 @import ObjectiveC;
 
 #import "ALCMatcher.h"
-#import "ALCResolver.h"
-#import "ALCObjectMetadata.h"
+#import "ALCDependencyResolver.h"
+#import "ALCModelObject.h"
 
 /**
  Container object for information about an injection.
  */
-@interface ALCVariableDependency : ALCResolver
+@interface ALCVariableDependencyResolver : ALCDependencyResolver
 
 @property (nonatomic, assign, readonly) Ivar variable;
 @property (nonatomic, assign, readonly) char variableType;
 @property (nonatomic, assign, readonly) Class variableClass;
 @property (nonatomic, strong, readonly) NSArray *variableProtocols;
 
--(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCInstance *) modelObject matchers:(NSSet *) dependencyMatchers;
+-(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCObjectInstance *) modelObject matchers:(NSSet *) dependencyMatchers;
 
 -(void) injectObject:(id) object usingInjectors:(NSArray *) injectors;
 

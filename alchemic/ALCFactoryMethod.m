@@ -8,18 +8,18 @@
 
 #import "ALCFactoryMethod.h"
 #import "ALCRuntime.h"
-#import "ALCInstance.h"
-#import "ALCMethodArgumentDependency.h"
+#import "ALCObjectInstance.h"
+#import "ALCArgumentDependencyResolver.h"
 #import "ALCLogger.h"
 
 @implementation ALCFactoryMethod {
-    __weak ALCInstance *_factoryInstance;
+    __weak ALCObjectInstance *_factoryInstance;
     SEL _factorySelector;
     NSInvocation *_factoryInvocation;
 }
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
-                factoryInstance:(ALCInstance *) factoryInstance
+                factoryInstance:(ALCObjectInstance *) factoryInstance
                 factorySelector:(SEL) factorySelector
                      returnType:(Class) returnTypeClass
                argumentMatchers:(NSArray *) argumentMatchers {
@@ -50,7 +50,7 @@
         Class arrayClass = [NSArray class];
         [argumentMatchers enumerateObjectsUsingBlock:^(id matchers, NSUInteger idx, BOOL *stop) {
             NSSet *matcherSet = object_isClass(arrayClass) ? [NSSet setWithArray:matchers] : [NSSet setWithObject:matchers];
-            [self addDependencyResolver:[[ALCMethodArgumentDependency alloc] initWithFactoryMethod:self
+            [self addDependencyResolver:[[ALCArgumentDependencyResolver alloc] initWithFactoryMethod:self
                                                                                      argumentIndex:(int) idx
                                                                                           matchers:matcherSet]];
         }];
@@ -74,7 +74,7 @@
 
     // Load the arguments.
     [self resolveDependencies];
-    [self.dependencies enumerateObjectsUsingBlock:^(ALCResolver *resolver, NSUInteger idx, BOOL *stop) {
+    [self.dependencies enumerateObjectsUsingBlock:^(ALCDependencyResolver *resolver, NSUInteger idx, BOOL *stop) {
         NSSet *candidates = resolver.candidateInstances;
     }];
     

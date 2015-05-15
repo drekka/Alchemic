@@ -6,22 +6,22 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCVariableDependency.h"
+#import "ALCVariableDependencyResolver.h"
 #import "ALCLogger.h"
-#import "ALCAbstractDependencyInjector.h"
+#import "ALCAbstractObjectResolver.h"
 #import "ALCRuntime.h"
-#import "ALCInstance.h"
+#import "ALCObjectInstance.h"
 
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
 
 @import ObjectiveC;
 
-@implementation ALCVariableDependency {
-    __weak ALCInstance *_instance;
+@implementation ALCVariableDependencyResolver {
+    __weak ALCObjectInstance *_instance;
 }
 
--(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCInstance *) modelObject matchers:(NSSet *) dependencyMatchers {
+-(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCObjectInstance *) modelObject matchers:(NSSet *) dependencyMatchers {
 
     self = [super initWithMatchers:dependencyMatchers];
     if (self) {
@@ -73,7 +73,7 @@
 }
 
 -(void) injectObject:(id) object usingInjectors:(NSArray *) injectors {
-    for (id<ALCDependencyInjector> injector in injectors) {
+    for (id<ALCObjectResolver> injector in injectors) {
         if ([injector injectObject:object dependency:self]) {
             return;
         }

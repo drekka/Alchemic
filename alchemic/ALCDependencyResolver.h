@@ -9,7 +9,7 @@
 @import Foundation;
 #import "ALCMatcher.h"
 
-@interface ALCResolver : NSObject
+@interface ALCDependencyResolver : NSObject
 
 @property (nonatomic, strong, readonly) NSSet *candidateInstances;
 @property (nonatomic, strong) NSSet *dependencyMatchers;
