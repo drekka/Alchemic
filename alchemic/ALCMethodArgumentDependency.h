@@ -13,6 +13,8 @@
 
 @interface ALCMethodArgumentDependency : ALCResolver
 
--(instancetype) initWithFactoryMethod:(__weak ALCFactoryMethod *) factoryMethod argumentIndex:(int) argumentIndex matchers:(NSSet *) dependencyMatchers;
+-(instancetype) initWithFactoryMethod:(__weak ALCFactoryMethod *) factoryMethod
+                        argumentIndex:(int) argumentIndex
+                             matchers:(NSSet *) dependencyMatchers;
 
 @end

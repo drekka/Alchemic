@@ -15,6 +15,7 @@
 @implementation ALCFactoryMethod {
     __weak ALCInstance *_factoryInstance;
     SEL _factorySelector;
+    NSInvocation *_factoryInvocation;
 }
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
@@ -59,12 +60,34 @@
 }
 
 -(id) object {
+
     logCreation(@"Creating object with %@", [self description]);
-    return nil;
+    
+    id factoryObject = _factoryInstance.object;
+    
+    // Get an invocation ready.
+    if (_factoryInvocation == nil) {
+        NSMethodSignature *sig = [factoryObject methodSignatureForSelector:_factorySelector];
+        _factoryInvocation = [NSInvocation invocationWithMethodSignature:sig];
+        _factoryInvocation.selector = _factorySelector;
+    }
+
+    // Load the arguments.
+    [self resolveDependencies];
+    [self.dependencies enumerateObjectsUsingBlock:^(ALCResolver *resolver, NSUInteger idx, BOOL *stop) {
+        NSSet *candidates = resolver.candidateInstances;
+    }];
+    
+    [_factoryInvocation invokeWithTarget:factoryObject];
+
+    id returnObj;
+    [_factoryInvocation getReturnValue:&returnObj];
+    return returnObj;
+
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Factory method %s::%s (%s)", class_getName(_factoryInstance.objectClass), sel_getName(_factorySelector), class_getName(self.objectClass)];
+    return [NSString stringWithFormat:@"factory method %s::%s -> %s", class_getName(_factoryInstance.objectClass), sel_getName(_factorySelector), class_getName(self.objectClass)];
 }
 
 @end

@@ -13,7 +13,7 @@
 
 +(void)load {
 //    [ALCLogger setLoggingSwitch:AlchemicLogCategoryRegistrations];
-    [ALCLogger setLoggingSwitch:NSIntegerMax];
+    [ALCLogger setLoggingSwitch:NSIntegerMax - AlchemicLogCategoryRuntime];
 }
 
 @end

@@ -74,4 +74,9 @@
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;
 
+-(void) registerFactory:(ALCInstance *) objectInstance
+               withName:(NSString *) name
+        factorySelector:(SEL) factorySelector
+             returnType:(Class) returnTypeClass, ...;
+
 @end

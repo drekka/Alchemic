@@ -23,25 +23,15 @@
     self = [super init];
     if (self) {
         _dependencyMatchers = dependencyMatchers;
-        _candidateInstances = [[NSMutableSet alloc] init];
     }
     return self;
 }
 
 -(void) resolveUsingModel:(NSDictionary *)model {
     
-    if ([_candidateInstances count] > 0) {
-        logDependencyResolving(@"Dependency previously resolved");
-        return;
-    }
-    
     logDependencyResolving(@"Searching for candidates using %lu model objects", [model count]);
+    _candidateInstances = [[NSMutableSet alloc] init];
     [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *instance, BOOL *stop) {
-
-        // Don't bother adding if already present.
-        if ([_candidateInstances containsObject:instance]) {
-            return;
-        }
 
         // Run matchers to see if they match. All must accept the candidate object.
         for (id<ALCMatcher> dependencyMatcher in _dependencyMatchers) {

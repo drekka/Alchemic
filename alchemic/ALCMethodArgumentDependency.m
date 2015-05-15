@@ -14,7 +14,9 @@
     int _argumentIndex;
 }
 
--(instancetype) initWithFactoryMethod:(__weak ALCFactoryMethod *) factoryMethod argumentIndex:(int) argumentIndex matchers:(NSSet *) dependencyMatchers {
+-(instancetype) initWithFactoryMethod:(__weak ALCFactoryMethod *) factoryMethod
+                        argumentIndex:(int) argumentIndex
+                             matchers:(NSSet *) dependencyMatchers {
     self = [super initWithMatchers:dependencyMatchers];
     if (self) {
         _factoryMethod = factoryMethod;

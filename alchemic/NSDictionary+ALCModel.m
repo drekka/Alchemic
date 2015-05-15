@@ -34,13 +34,13 @@
     // Assemble the matchers.
     va_list args;
     va_start(args, firstMatcher);
-    NSMutableSet *finalMatchers = [NSMutableSet setWithObject:firstMatcher];
-    id matcher = va_arg(args, id);
-    while (matcher != nil) {
+    
+    NSMutableSet *finalMatchers = [[NSMutableSet alloc] init];
+    for (id matcher = firstMatcher; matcher != nil; va_arg(args, id)) {
         [ALCRuntime validateMatcher:matcher];
         [finalMatchers addObject:matcher];
-        matcher = va_arg(args, id);
     }
+    
     va_end(args);
     
     return [self objectsWithMatchers:finalMatchers];
@@ -110,14 +110,14 @@
 -(void) indexMetadata:(id<ALCObjectMetadata>) objectMetadata underName:(NSString *) name {
     
     NSString *finalName = name == nil ? NSStringFromClass(objectMetadata.objectClass) : name;
-
+    
     if (self[finalName] != nil) {
-    @throw [NSException exceptionWithName:@"AlchemicMetadataAlreadyIndexed"
-                                   reason:[NSString stringWithFormat:@"Metadata already indexed under name: %@", finalName]
-                                 userInfo:nil];
+        @throw [NSException exceptionWithName:@"AlchemicMetadataAlreadyIndexed"
+                                       reason:[NSString stringWithFormat:@"Metadata already indexed under name: %@", finalName]
+                                     userInfo:nil];
     }
     
-    logRegistration(@"Storing instance of %s under key: %@", class_getName(objectMetadata.objectClass), name);
+    logRegistration(@"Registering '%@' %@", finalName, objectMetadata);
     self[finalName] = objectMetadata;
 }
 

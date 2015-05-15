@@ -34,7 +34,6 @@
 }
 
 -(void) resolveDependencies {
-    logDependencyResolving(@"Resolving dependencies for %@", [self description]);
     for (ALCResolver *dependency in self.dependencies) {
         [dependency resolveUsingModel:_context.model];
         [dependency postProcess:self.context.resolverPostProcessors];

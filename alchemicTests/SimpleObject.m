@@ -9,20 +9,16 @@
 #import "SimpleObject.h"
 #import "Alchemic.h"
 
-@implementation SimpleObject
+@implementation SimpleObject {
+    int i;
+}
 
 registerSingletonWithName(@"abc")
 
--(instancetype) init {
-    self = [super init];
-    if (self) {}
-    return self;
-}
+registerFactoryMethodWithName(@"def", NSString, stringFactory)
 
-registerFactoryMethod(SimpleObject, simpleObject)
-
--(SimpleObject *) simpleObject {
-    return [[SimpleObject alloc] init];
+-(NSString *) stringFactory {
+    return [NSString stringWithFormat:@"String %i", i++];
 }
 
 registerFactoryMethod(SimpleObject, simpleObjectWithSimpleObject:, @[withClass(SimpleObject), withName(@"abc")])

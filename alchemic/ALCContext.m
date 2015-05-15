@@ -132,11 +132,11 @@
     instance.object = object;
 }
 
--(void) registerFactory:(ALCInstance *) instance
+-(void) registerFactory:(ALCInstance *) objectInstance
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ... {
     
-    [ALCRuntime validateSelector:factorySelector withClass:instance.objectClass];
+    [ALCRuntime validateSelector:factorySelector withClass:objectInstance.objectClass];
     
     // Process the selector arguments
     va_list args;
@@ -144,28 +144,59 @@
     id argument = va_arg(args, id);
     NSMutableArray *argumentMatchers = [[NSMutableArray alloc] init];
     while (argument != nil) {
-        
-        // Validate the matchers, checking any arrays.
-        if ([argument isKindOfClass:[NSArray class]]) {
-            for (id nestedArgument in (NSArray *) argument) {
-                [ALCRuntime validateMatcher:nestedArgument];
-            }
-        } else {
-            [ALCRuntime validateMatcher:argument];
-        }
-        
-        [argumentMatchers addObject:argument];
+        [self addMatcherArgument:argument toMatcherArray:argumentMatchers];
         argument = va_arg(args, id);
     }
     va_end(args);
 
     // Declare a new instance to represent the factory method for dependency resolving.
     ALCFactoryMethod *factoryMethod = [_model addFactoryMethod:factorySelector
-                                                    toInstance:instance
+                                                    toInstance:objectInstance
                                                     returnType:returnTypeClass
                                               argumentMatchers:argumentMatchers];
     factoryMethod.argumentMatchers = argumentMatchers;
     
+}
+
+-(void) addMatcherArgument:(id) argument toMatcherArray:(NSMutableArray *) matcherArray {
+
+    // Validate the matchers, checking any arrays.
+    if ([argument isKindOfClass:[NSArray class]]) {
+        for (id nestedArgument in (NSArray *) argument) {
+            [ALCRuntime validateMatcher:nestedArgument];
+        }
+    } else {
+        [ALCRuntime validateMatcher:argument];
+    }
+    
+    [matcherArray addObject:argument];
+}
+
+-(void) registerFactory:(ALCInstance *) objectInstance
+               withName:(NSString *) name
+        factorySelector:(SEL) factorySelector
+             returnType:(Class) returnTypeClass, ... {
+
+    [ALCRuntime validateSelector:factorySelector withClass:objectInstance.objectClass];
+    
+    // Process the selector arguments
+    va_list args;
+    va_start(args, returnTypeClass);
+    id argument = va_arg(args, id);
+    NSMutableArray *argumentMatchers = [[NSMutableArray alloc] init];
+    while (argument != nil) {
+        [self addMatcherArgument:argument toMatcherArray:argumentMatchers];
+        argument = va_arg(args, id);
+    }
+    va_end(args);
+    
+    // Declare a new instance to represent the factory method for dependency resolving.
+    ALCFactoryMethod *factoryMethod = [_model addFactoryMethod:factorySelector
+                                                    toInstance:objectInstance
+                                                    returnType:returnTypeClass
+                                              argumentMatchers:argumentMatchers];
+    [_model indexMetadata:factoryMethod underName:name];
+    factoryMethod.argumentMatchers = argumentMatchers;
 }
 
 @end

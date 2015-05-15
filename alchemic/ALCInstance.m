@@ -96,7 +96,7 @@
 //}
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Object instance: %s", class_getName(self.objectClass)];
+    return [NSString stringWithFormat:@"instance of %s", class_getName(self.objectClass)];
 }
 
 @end

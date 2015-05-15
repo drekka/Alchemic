@@ -90,6 +90,14 @@
                                  returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \
 }
 
+#define registerFactoryMethodWithName(_componentName, _returnTypeClassName, _factorySelector, ...) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCInstance *) instance { \
+    [[Alchemic mainContext] registerFactory:instance \
+                                   withName:_componentName \
+                            factorySelector:@selector(_factorySelector) \
+                                 returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \
+}
+
 #pragma mark - The context itself
 
 @interface Alchemic : NSObject
