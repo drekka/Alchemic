@@ -36,7 +36,6 @@
 		6C7827051B039512009EAE27 /* FactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7827041B039512009EAE27 /* FactoryTests.m */; };
 		6C7BF2331AC03692002F0D4F /* NSDictionary+ALCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BF2321AC03692002F0D4F /* NSDictionary+ALCModel.m */; };
 		6C7BFFDB1AC2D9A500456536 /* ALCSimpleObjectResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BFFDA1AC2D9A500456536 /* ALCSimpleObjectResolver.m */; };
-		6C8EF6BE1AF0E91A00D548B8 /* ALCAbstractObjectResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8EF6BD1AF0E91A00D548B8 /* ALCAbstractObjectResolver.m */; };
 		6C9473151AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9473071AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.m */; };
 		6C9473171AE7D7CB008EB2E5 /* ALCInitStrategyInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C94730D1AE7D7CB008EB2E5 /* ALCInitStrategyInjector.m */; };
 		6C9473181AE7D7CB008EB2E5 /* ALCNSObjectInitStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9473101AE7D7CB008EB2E5 /* ALCNSObjectInitStrategy.m */; };
@@ -148,8 +147,6 @@
 		6C7BFFDA1AC2D9A500456536 /* ALCSimpleObjectResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCSimpleObjectResolver.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C7BFFDC1AC2E7AB00456536 /* FactoryObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactoryObject.h; sourceTree = "<group>"; };
 		6C7BFFDD1AC2E7AB00456536 /* FactoryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactoryObject.m; sourceTree = "<group>"; };
-		6C8EF6BC1AF0E91A00D548B8 /* ALCAbstractObjectResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractObjectResolver.h; sourceTree = "<group>"; };
-		6C8EF6BD1AF0E91A00D548B8 /* ALCAbstractObjectResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractObjectResolver.m; sourceTree = "<group>"; };
 		6C9473061AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractInitStrategy.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C9473071AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractInitStrategy.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C94730A1AE7D7CB008EB2E5 /* ALCInitInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInitInjector.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -180,7 +177,7 @@
 		6CC54B6D1AFA516A00D5D634 /* ALCModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCModelObject.h; sourceTree = "<group>"; };
 		6CC54B6F1AFCEAED00D5D634 /* ALCAbstractModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractModelObject.h; sourceTree = "<group>"; };
 		6CC54B701AFCEAED00D5D634 /* ALCAbstractModelObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractModelObject.m; sourceTree = "<group>"; };
-		6CC54B721AFCEFDA00D5D634 /* ALCDependencyInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependencyInjector.h; sourceTree = "<group>"; };
+		6CC54B721AFCEFDA00D5D634 /* ALCObjectResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCObjectResolver.h; sourceTree = "<group>"; };
 		6CC54B731AFE3D7B00D5D634 /* ALCFactoryMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCFactoryMethod.h; sourceTree = "<group>"; };
 		6CC54B741AFE3D7B00D5D634 /* ALCFactoryMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCFactoryMethod.m; sourceTree = "<group>"; };
 		6CDF44931B00E3420066D18B /* ALCArgumentDependencyResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCArgumentDependencyResolver.h; sourceTree = "<group>"; };
@@ -317,18 +314,16 @@
 			name = "Object test cases";
 			sourceTree = "<group>";
 		};
-		6C7BFFD71AC2D10500456536 /* Injectors */ = {
+		6C7BFFD71AC2D10500456536 /* Object Resolvers */ = {
 			isa = PBXGroup;
 			children = (
 				6C7BFFD91AC2D9A500456536 /* ALCSimpleObjectResolver.h */,
 				6C7BFFDA1AC2D9A500456536 /* ALCSimpleObjectResolver.m */,
 				6C65A64E1ACD93A3006ADC1F /* ALCArrayObjectResolver.h */,
 				6C65A64F1ACD93A3006ADC1F /* ALCArrayObjectResolver.m */,
-				6C8EF6BC1AF0E91A00D548B8 /* ALCAbstractObjectResolver.h */,
-				6C8EF6BD1AF0E91A00D548B8 /* ALCAbstractObjectResolver.m */,
-				6CC54B721AFCEFDA00D5D634 /* ALCDependencyInjector.h */,
+				6CC54B721AFCEFDA00D5D634 /* ALCObjectResolver.h */,
 			);
-			name = Injectors;
+			name = "Object Resolvers";
 			sourceTree = "<group>";
 		};
 		6C7BFFDF1AC568B600456536 /* Simple class */ = {
@@ -384,7 +379,7 @@
 				6C9ADAC01ADFF9F700A240F2 /* ALCDependencyResolver.h */,
 				6C9ADAC11ADFF9F700A240F2 /* ALCDependencyResolver.m */,
 				6C1C6A6E1AF108F90074BB26 /* ALCResolverPostProcessor.h */,
-				6C7BFFD71AC2D10500456536 /* Injectors */,
+				6C7BFFD71AC2D10500456536 /* Object Resolvers */,
 				6CDF44921B00E2F20066D18B /* Matchers */,
 			);
 			name = Dependencies;
@@ -545,7 +540,6 @@
 				6C66DC341A8B82C3009F9D94 /* Alchemic.m in Sources */,
 				6C61807F1AD2BD0000BD7398 /* ALCProtocolMatcher.m in Sources */,
 				6CDF44951B00E3420066D18B /* ALCArgumentDependencyResolver.m in Sources */,
-				6C8EF6BE1AF0E91A00D548B8 /* ALCAbstractObjectResolver.m in Sources */,
 				6C1C6A711AF10D900074BB26 /* ALCPrimaryObjectPostProcessor.m in Sources */,
 				6C37A6F71A9B586100ACD0F8 /* ALCSimpleObjectFactory.m in Sources */,
 				6C66DC5F1A903204009F9D94 /* ALCContext.m in Sources */,

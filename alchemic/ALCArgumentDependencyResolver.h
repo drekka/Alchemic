@@ -9,7 +9,7 @@
 @import Foundation;
 
 #import "ALCDependencyResolver.h"
-#import "ALCFactoryMethod.h"
+@class ALCFactoryMethod;
 
 @interface ALCArgumentDependencyResolver : ALCDependencyResolver
 

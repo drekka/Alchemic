@@ -61,6 +61,11 @@ static Class protocolClass;
     return var;
 }
 
++(void) injectObject:(id) object variable:(Ivar) variable withValue:(id) value {
+    logRuntime(@"Injecting %s::%s with a %s",object_getClassName(object) , ivar_getName(variable), object_getClassName(value));
+    object_setIvar(object, variable, value);
+}
+
 +(void) validateMatcher:(id) object {
     if ([object conformsToProtocol:@protocol(ALCMatcher)]) {
         return;
@@ -76,6 +81,17 @@ static Class protocolClass;
                                        reason:[NSString stringWithFormat:@"Faciled to find selector %s::%s", class_getName(class), sel_getName(selector)]
                                      userInfo:nil];
     }
+}
+
++(BOOL) class:(Class) class isKindOfClass:(Class) otherClass {
+    Class nextClass = class;
+    while (nextClass != nil) {
+        if (nextClass == otherClass) {
+            return YES;
+        }
+        nextClass = class_getSuperclass(nextClass);
+    }
+    return NO;
 }
 
 #pragma mark - Class scanning
@@ -100,10 +116,6 @@ static Class protocolClass;
         [context addObjectFactory:[[class alloc] init]];
     };
     
-    ClassMatchesBlock dependencyInjectorBlock = ^(classMatchesBlockArgs){
-        [context addDependencyInjector:[[class alloc] init]];
-    };
-    
     NSSet *processors = [NSSet setWithArray:@[
                                               [[ALCModelClassProcessor alloc] init],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCInitStrategy)
@@ -113,9 +125,7 @@ static Class protocolClass;
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResourceLocator)
                                                                                                whenMatches:resourceLocatorBlock],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCObjectFactory)
-                                                                                               whenMatches:objectFactoryBlock],
-                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCObjectResolver)
-                                                                                               whenMatches:dependencyInjectorBlock],
+                                                                                               whenMatches:objectFactoryBlock]
                                               ]];
     
     for (NSBundle *bundle in [NSBundle allBundles]) {

@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractObjectResolver.h"
+#import "ALCObjectResolver.h"
 
-@interface ALCArrayObjectResolver : ALCAbstractObjectResolver
+@interface ALCArrayObjectResolver : NSObject<ALCObjectResolver>
 
 @end

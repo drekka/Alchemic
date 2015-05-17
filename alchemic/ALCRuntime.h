@@ -28,6 +28,10 @@
 
 +(void) validateSelector:(SEL) selector withClass:(Class) class;
 
++(void) injectObject:(id) object variable:(Ivar) variable withValue:(id) value;
+
++(BOOL) class:(Class) class isKindOfClass:(Class) otherClass;
+
 #pragma mark - Alchemic
 
 /**

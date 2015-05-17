@@ -35,7 +35,6 @@
         _initialisationStrategyClasses = [[NSMutableSet alloc] init];
         _resolverPostProcessors = [[NSMutableSet alloc] init];
         _objectFactories = [[NSMutableSet alloc] init];
-        _dependencyInjectors = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -89,20 +88,6 @@
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
     logConfig(@"Adding object factory: %s", object_getClassName(objectFactory));
     [(NSMutableSet *)_objectFactories addObject:objectFactory];
-}
-
--(void) addDependencyInjector:(id<ALCObjectResolver>) dependencyinjector {
-    logConfig(@"Adding dependency injector: %s", object_getClassName(dependencyinjector));
-    [(NSMutableArray *)_dependencyInjectors addObject:dependencyinjector];
-    [(NSMutableArray *)_dependencyInjectors sortUsingComparator:^NSComparisonResult(ALCAbstractObjectResolver *di1, ALCAbstractObjectResolver *di2) {
-        if (di1.order > di2.order) {
-            return (NSComparisonResult)NSOrderedDescending;
-        }
-        if (di1.order < di2.order) {
-            return (NSComparisonResult)NSOrderedAscending;
-        }
-        return (NSComparisonResult)NSOrderedSame;
-    }];
 }
 
 -(void) addResolverPostProcessor:(id<ALCDependencyResolverPostProcessor>) postProcessor {

@@ -8,12 +8,12 @@
 
 #import "ALCVariableDependencyResolver.h"
 #import "ALCLogger.h"
-#import "ALCAbstractObjectResolver.h"
 #import "ALCRuntime.h"
 #import "ALCObjectInstance.h"
 
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
+#import "ALCObjectResolver.h"
 
 @import ObjectiveC;
 
@@ -73,11 +73,6 @@
 }
 
 -(void) injectObject:(id) object usingInjectors:(NSArray *) injectors {
-    for (id<ALCObjectResolver> injector in injectors) {
-        if ([injector injectObject:object dependency:self]) {
-            return;
-        }
-    }
 }
 
 -(void) postProcess:(NSSet *)postProcessors {

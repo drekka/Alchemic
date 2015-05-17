@@ -10,44 +10,46 @@
 
 @import ObjectiveC;
 
+#import "ALCDependencyResolver.h"
 #import "ALCVariableDependencyResolver.h"
 #import "ALCLogger.h"
 #import "ALCObjectInstance.h"
+#import "ALCRuntime.h"
 
 @implementation ALCSimpleObjectResolver
 
--(int) order {
-    // Put this injector last.
-    return -1;
+-(BOOL) canResolveClass:(Class)class {
+    return ! [ALCRuntime class:class isKindOfClass:[NSArray class]];
 }
 
--(BOOL) injectObject:(id) finalObject dependency:(ALCVariableDependencyResolver *) dependency {
-    
-    if ([dependency.candidateInstances count] > 1) {
+-(id) resolveDependency:(ALCDependencyResolver *) dependency {
 
-        NSMutableArray *objectDescriptions = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
-        for (id<ALCModelObject> metadata in dependency.candidateInstances) {
-            [objectDescriptions addObject:[metadata description]];
+    ALCObjectInstance *instance = [dependency.candidateInstances anyObject];
+    id object = instance.object;
+    
+    if (object == nil) {
+        @throw [NSException exceptionWithName:@"AlchemicNilObject"
+                                       reason:[NSString stringWithFormat:@"Dependency %s has not created an object", ivar_getName(((ALCVariableDependencyResolver *)dependency).variable)]
+                                     userInfo:nil];
+    }
+
+    return object;
+}
+
+-(void) validateDependencyCandidates:(ALCDependencyResolver *)dependency {
+
+    if ([dependency.candidateInstances count] > 1) {
+        
+        NSMutableArray *candidates = [[NSMutableArray alloc] initWithCapacity:[dependency.candidateInstances count]];
+        for (id<ALCModelObject> modelObject in dependency.candidateInstances) {
+            [candidates addObject:[modelObject description]];
         }
         
         @throw [NSException exceptionWithName:@"AlchemicTooManyCandidates"
-                                       reason:[NSString stringWithFormat:@"Expecting 1 object for %@, but found %lu:%@", dependency, [dependency.candidateInstances count], [objectDescriptions componentsJoinedByString:@", "]]
+                                       reason:[NSString stringWithFormat:@"Expecting 1 object for %@, but found %lu:%@", dependency, [dependency.candidateInstances count], [candidates componentsJoinedByString:@", "]]
                                      userInfo:nil];
-        return NO;
     }
 
-    ALCObjectInstance *instance = [dependency.candidateInstances anyObject];
-    
-    if (instance.object == nil) {
-        @throw [NSException exceptionWithName:@"AlchemicObjectNotCreated"
-                                       reason:[NSString stringWithFormat:@"Dependency %s has not be set or instantiated", ivar_getName(dependency.variable)]
-                                     userInfo:nil];
-    }
-    
-    [self injectObject:finalObject
-              variable:dependency.variable
-             withValue:instance.object];
-    return YES;
 }
 
 @end

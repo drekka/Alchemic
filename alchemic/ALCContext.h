@@ -9,7 +9,6 @@
 @import Foundation;
 
 #import "ALCObjectFactory.h"
-#import "ALCAbstractObjectResolver.h"
 #import "ALCInitInjector.h"
 #import "ALCMatcher.h"
 #import "ALCResolverPostProcessor.h"
@@ -40,11 +39,6 @@
 -(void) addInitStrategy:(Class) initialisationStrategyClass;
 
 -(void) addResolverPostProcessor:(id<ALCDependencyResolverPostProcessor>) postProcessor;
-
-/**
- Adds a ALCDependencyInjector to the list of injectors.
- */
--(void) addDependencyInjector:(ALCAbstractObjectResolver *) dependencyinjector;
 
 /**
  Adds a ALCObjectFactory to the list of object factories. Factories are checked in reverse order. The last registered object factory is the one asked first for an object.
