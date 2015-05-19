@@ -12,7 +12,7 @@
 
 @import ObjectiveC;
 #import "ALCLogger.h"
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 #import "ALCInitStrategy.h"
 #import "ALCClassMatcher.h"
 
@@ -38,14 +38,14 @@ static BOOL injected = NO;
 }
 
 -(void) replaceInitsInModelClasses:(NSDictionary *) model {
-
+    return;
     if (injected) {
         logRuntime(@"Wrappers already injected into classes");
         return;
     }
 
     // Now hook into the classes.
-    for (ALCObjectInstance *instance in [self findRootInstancesInModel:model]) {
+    for (ALCModelObjectInstance *instance in [self findRootInstancesInModel:model]) {
         for (Class initStrategy in _strategyClasses) {
             if ([initStrategy canWrapInit:instance]) {
                 [instance addInitStrategy:[[initStrategy alloc] initWithInstance:instance]];
@@ -57,17 +57,17 @@ static BOOL injected = NO;
 -(NSArray *) findRootInstancesInModel:(NSDictionary *) model {
     
     // First find all instances of ALCInstance.
-    NSSet *instances = [model metadataWithMatchers:[NSSet setWithObject:[[ALCClassMatcher alloc] initWithClass:[ALCObjectInstance class]]]];
+    NSSet *instances = [model metadataWithMatchers:[NSSet setWithObject:[[ALCClassMatcher alloc] initWithClass:[ALCModelObjectInstance class]]]];
     
     // Copy all the classes into an array for Against the list..
     NSMutableSet *modelClasses = [[NSMutableSet alloc] initWithCapacity:[instances count]];
-    for (ALCObjectInstance *instance in instances) {
+    for (ALCModelObjectInstance *instance in instances) {
         [modelClasses addObject:instance.objectClass];
     }
 
     // Work out which classes we need to inject hooks into
     NSMutableArray *rootInstances = [[NSMutableArray alloc] init];
-    for (ALCObjectInstance *instance in instances) {
+    for (ALCModelObjectInstance *instance in instances) {
         
         // Check each ancestor class in turn. If any are in the list, then ignore the current class.
         Class parentClass = class_getSuperclass(instance.objectClass);

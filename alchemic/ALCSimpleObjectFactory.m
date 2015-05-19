@@ -8,7 +8,7 @@
 
 #import "ALCSimpleObjectFactory.h"
 #import "ALCLogger.h"
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 #import "ALCRuntime.h"
 #import "ALCContext.h"
 
@@ -16,7 +16,7 @@
 
 @implementation ALCSimpleObjectFactory
 
--(id) createObjectFromInstance:(ALCObjectInstance *) instance {
+-(id) createObjectFromInstance:(ALCModelObjectInstance *) instance {
     
     logCreation(@"Creating instance using %s::init", class_getName(instance.objectClass));
     id obj = [instance.objectClass alloc];

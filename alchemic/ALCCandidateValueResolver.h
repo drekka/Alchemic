@@ -13,21 +13,21 @@
 /**
  Protocol for classes that can resolve the final values from the list of candidates in a dependency object.
  */
-@protocol ALCObjectResolver <NSObject>
+@protocol ALCCandidateValueResolver <NSObject>
 
 /**
  Used by the factory to decide if this resolver should be used for a specific dependency.
  */
--(BOOL) canResolveClass:(Class) class;
++(BOOL) canResolveClass:(Class) class;
 
 /**
  Returns an object derived from the candidates object resolvers.
  */
--(id) resolveDependency:(ALCDependencyResolver *) dependency;
+-(id) resolveCandidateValues:(ALCDependencyResolver *) dependency;
 
 /**
  Called during resolution to validate the candidates.
  */
--(void) validateDependencyCandidates:(ALCDependencyResolver *) dependency;
+-(void) validateCandidates:(ALCDependencyResolver *) dependency;
 
 @end

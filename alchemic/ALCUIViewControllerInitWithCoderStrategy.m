@@ -12,11 +12,11 @@
 @import ObjectiveC;
 
 #import "Alchemic.h"
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
-+(BOOL) canWrapInit:(ALCObjectInstance *) instance {
++(BOOL) canWrapInit:(ALCModelObjectInstance *) instance {
     return [instance.objectClass isSubclassOfClass:[UIViewController class]];
 }
 

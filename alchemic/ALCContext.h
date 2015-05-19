@@ -14,17 +14,20 @@
 #import "ALCResolverPostProcessor.h"
 #import "ALCModelObject.h"
 #import "NSDictionary+ALCModel.h"
+#import "ALCCandidateValueResolverFactory.h"
 
-@class ALCObjectInstance;
+@class ALCModelObjectInstance;
 
 @interface ALCContext : NSObject
 
 @property (nonatomic, strong, readonly) NSDictionary *model;
 @property (nonatomic, strong, readonly) NSSet *resolverPostProcessors;
-@property (nonatomic, strong, readonly) NSArray *dependencyInjectors;
 @property (nonatomic, strong, readonly) NSSet *objectFactories;
+@property (nonatomic, strong, readonly) id<ALCCandidateValueResolverFactory> objectResolverFactory;
 
 #pragma mark - Configuration
+
+@property (nonatomic, strong) Class objectResolverFactoryClass;
 
 /**
  Specifies the class used to inject init method wrappers into the runtime. Normally this doesn't been to be changed from the default.
@@ -55,20 +58,20 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCObjectInstance *) objectInstance;
+-(void) registerAsSingleton:(ALCModelObjectInstance *) objectInstance;
 
--(void) registerAsSingleton:(ALCObjectInstance *) objectInstance withName:(NSString *) name;
+-(void) registerAsSingleton:(ALCModelObjectInstance *) objectInstance withName:(NSString *) name;
 
 -(void) registerObject:(id) object withName:(NSString *) name;
 
 /**
  Registers a factory method with it's return data type and matchers for locating the objects for each argument.
  */
--(void) registerFactory:(ALCObjectInstance *) objectInstance
+-(void) registerFactory:(ALCModelObjectInstance *) objectInstance
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;
 
--(void) registerFactory:(ALCObjectInstance *) objectInstance
+-(void) registerFactory:(ALCModelObjectInstance *) objectInstance
                withName:(NSString *) name
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;

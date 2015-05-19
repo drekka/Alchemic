@@ -20,5 +20,4 @@
 
 -(void) instantiateObject;
 
-
 @end

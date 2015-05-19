@@ -6,20 +6,20 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCFactoryMethod.h"
+#import "ALCModelObjectFactoryMethod.h"
 #import "ALCRuntime.h"
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 #import "ALCArgumentDependencyResolver.h"
 #import "ALCLogger.h"
 
-@implementation ALCFactoryMethod {
-    __weak ALCObjectInstance *_factoryInstance;
+@implementation ALCModelObjectFactoryMethod {
+    __weak ALCModelObjectInstance *_factoryInstance;
     SEL _factorySelector;
     NSInvocation *_factoryInvocation;
 }
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
-                factoryInstance:(ALCObjectInstance *) factoryInstance
+                factoryInstance:(ALCModelObjectInstance *) factoryInstance
                 factorySelector:(SEL) factorySelector
                      returnType:(Class) returnTypeClass
                argumentMatchers:(NSArray *) argumentMatchers {

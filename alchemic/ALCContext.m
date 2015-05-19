@@ -19,8 +19,9 @@
 #import "ALCProtocolMatcher.h"
 #import "ALCVariableDependencyResolver.h"
 #import "NSDictionary+ALCModel.h"
-#import "ALCObjectInstance.h"
-#import "ALCFactoryMethod.h"
+#import "ALCModelObjectInstance.h"
+#import "ALCModelObjectFactoryMethod.h"
+#import "ALCDefaultCandidateValueResolverFactory.h"
 
 @implementation ALCContext {
     NSMutableSet *_initialisationStrategyClasses;
@@ -35,6 +36,7 @@
         _initialisationStrategyClasses = [[NSMutableSet alloc] init];
         _resolverPostProcessors = [[NSMutableSet alloc] init];
         _objectFactories = [[NSMutableSet alloc] init];
+        self.objectResolverFactoryClass = [ALCDefaultCandidateValueResolverFactory class];
     }
     return self;
 }
@@ -42,6 +44,7 @@
 -(void) start {
 
     logRuntime(@"Starting alchemic ...");
+    [self setDefaults];
     
     // Set defaults.
     if (self.runtimeInitInjector == nil) {
@@ -54,7 +57,14 @@
     [self resolveModelObjects];
 
     logRuntime(@"Creating objects ...");
-    [self instantiateModelObjects];
+    [self instantiateSingletons];
+}
+
+-(void) setDefaults {
+
+    logConfig(@"Creating an object resolver from a %s", class_getName(self.objectResolverFactoryClass));
+    _objectResolverFactory = [[self.objectResolverFactoryClass alloc] init];
+    
 }
 
 -(void) resolveModelObjects {
@@ -65,11 +75,23 @@
     }];
 }
 
--(void) instantiateModelObjects {
+-(void) instantiateSingletons {
+
     logCreation(@"Instantiating objects ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCModelObject> object, BOOL *stop) {
-        [object instantiateObject];
+    [_model enumerateInstancesUsingBlock:^(NSString *name, ALCModelObjectInstance *instance, BOOL *stop) {
+        if (instance.object == nil && instance.instantiate) {
+            logCreation(@"instanting '%@' %@", name, instance);
+            [instance instantiateObject];
+        }
     }];
+    
+    logCreation(@"Injecting dependencies objects ...");
+    [_model enumerateInstancesUsingBlock:^(NSString *name, ALCModelObjectInstance *instance, BOOL *stop) {
+        if (instance.object != nil) {
+            [instance injectDependenciesInto:instance.object];
+        }
+    }];
+
 }
 
 -(void) injectDependencies:(id) object {
@@ -77,7 +99,7 @@
     logRuntime(@"Injecting dependencies into a %s", object_getClassName(object));
     
     // Object will have a matching instance in the model if it has any injection point.
-    ALCObjectInstance *instance = [_model instanceForObject:object];
+    ALCModelObjectInstance *instance = [_model instanceForObject:object];
     
     
     [instance injectDependenciesInto:object];
@@ -102,22 +124,22 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCObjectInstance *) objectInstance {
+-(void) registerAsSingleton:(ALCModelObjectInstance *) objectInstance {
     objectInstance.instantiate = YES;
 }
 
--(void) registerAsSingleton:(ALCObjectInstance *) objectInstance withName:(NSString *) name {
+-(void) registerAsSingleton:(ALCModelObjectInstance *) objectInstance withName:(NSString *) name {
     objectInstance.instantiate = YES;
     [_model indexMetadata:objectInstance underName:name];
 }
 
 -(void) registerObject:(id) object withName:(NSString *) name {
-    ALCObjectInstance *instance = [_model addObject:object inContext:self withName:name];
+    ALCModelObjectInstance *instance = [_model addObject:object inContext:self withName:name];
     instance.instantiate = YES;
     instance.object = object;
 }
 
--(void) registerFactory:(ALCObjectInstance *) objectInstance
+-(void) registerFactory:(ALCModelObjectInstance *) objectInstance
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ... {
     
@@ -135,7 +157,7 @@
     va_end(args);
 
     // Declare a new instance to represent the factory method for dependency resolving.
-    ALCFactoryMethod *factoryMethod = [_model addFactoryMethod:factorySelector
+    ALCModelObjectFactoryMethod *factoryMethod = [_model addFactoryMethod:factorySelector
                                                     toInstance:objectInstance
                                                     returnType:returnTypeClass
                                               argumentMatchers:argumentMatchers];
@@ -157,7 +179,7 @@
     [matcherArray addObject:argument];
 }
 
--(void) registerFactory:(ALCObjectInstance *) objectInstance
+-(void) registerFactory:(ALCModelObjectInstance *) objectInstance
                withName:(NSString *) name
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ... {
@@ -176,7 +198,7 @@
     va_end(args);
     
     // Declare a new instance to represent the factory method for dependency resolving.
-    ALCFactoryMethod *factoryMethod = [_model addFactoryMethod:factorySelector
+    ALCModelObjectFactoryMethod *factoryMethod = [_model addFactoryMethod:factorySelector
                                                     toInstance:objectInstance
                                                     returnType:returnTypeClass
                                               argumentMatchers:argumentMatchers];

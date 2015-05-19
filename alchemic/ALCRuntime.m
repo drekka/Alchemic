@@ -10,7 +10,7 @@
 
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 #import "ALCLogger.h"
 #import "ALCVariableDependencyResolver.h"
 #import "NSDictionary+ALCModel.h"
@@ -107,7 +107,7 @@ static Class protocolClass;
     };
     
     ClassMatchesBlock resourceLocatorBlock = ^(classMatchesBlockArgs){
-        ALCObjectInstance *instance = [context.model addInstanceForClass:class inContext:context];
+        ALCModelObjectInstance *instance = [context.model addInstanceForClass:class inContext:context];
         instance.object = [[class alloc] init];
         instance.instantiate = YES;
     };
@@ -163,7 +163,7 @@ static Class protocolClass;
                                      userInfo:nil];
     }
     
-    logRegistration(@"Inject: %@, mapped to variable: %s", inj, ivar_getName(var));
+    logRegistration(@"Injection %@, mapped to variable: %s", inj, ivar_getName(var));
     return var;
 }
 

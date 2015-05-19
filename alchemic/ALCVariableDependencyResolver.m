@@ -9,19 +9,18 @@
 #import "ALCVariableDependencyResolver.h"
 #import "ALCLogger.h"
 #import "ALCRuntime.h"
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
-#import "ALCObjectResolver.h"
 
 @import ObjectiveC;
 
 @implementation ALCVariableDependencyResolver {
-    __weak ALCObjectInstance *_instance;
+    __weak ALCModelObjectInstance *_instance;
 }
 
--(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCObjectInstance *) modelObject matchers:(NSSet *) dependencyMatchers {
+-(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCModelObjectInstance *) modelObject matchers:(NSSet *) dependencyMatchers {
 
     self = [super initWithMatchers:dependencyMatchers];
     if (self) {

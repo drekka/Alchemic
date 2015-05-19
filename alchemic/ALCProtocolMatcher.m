@@ -7,9 +7,8 @@
 //
 
 #import "ALCProtocolMatcher.h"
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 @import ObjectiveC;
-#import "ALCLogger.h"
 
 @implementation ALCProtocolMatcher {
     Protocol *_protocol;
@@ -18,13 +17,12 @@
 -(instancetype) initWithProtocol:(Protocol *) protocol {
     self = [super init];
     if (self) {
-        logRegistration(@"Creating protocol matcher: %s", protocol_getName(protocol));
         _protocol = protocol;
     }
     return self;
 }
 
--(BOOL) matches:(ALCObjectInstance *)instance withName:(NSString *) name {
+-(BOOL) matches:(ALCModelObjectInstance *)instance withName:(NSString *) name {
     return class_conformsToProtocol(instance.objectClass, _protocol);
 }
 

@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@class ALCObjectInstance;
+@class ALCModelObjectInstance;
 @import ObjectiveC;
 
 #import "ALCMatcher.h"
@@ -25,7 +25,7 @@
 @property (nonatomic, assign, readonly) Class variableClass;
 @property (nonatomic, strong, readonly) NSArray *variableProtocols;
 
--(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCObjectInstance *) modelObject matchers:(NSSet *) dependencyMatchers;
+-(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCModelObjectInstance *) modelObject matchers:(NSSet *) dependencyMatchers;
 
 -(void) injectObject:(id) object usingInjectors:(NSArray *) injectors;
 

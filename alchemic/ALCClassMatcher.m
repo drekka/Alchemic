@@ -8,8 +8,7 @@
 
 @import ObjectiveC;
 #import "ALCClassMatcher.h"
-#import "ALCObjectInstance.h"
-#import "ALCLogger.h"
+#import "ALCModelObjectInstance.h"
 
 @implementation ALCClassMatcher {
     Class _class;
@@ -18,13 +17,12 @@
 -(instancetype) initWithClass:(Class) class {
     self = [super init];
     if (self) {
-        logRegistration(@"Creating class matcher for class: %s", class_getName(class));
         _class = class;
     }
     return self;
 }
 
--(BOOL) matches:(ALCObjectInstance *)instance withName:(NSString *) name {
+-(BOOL) matches:(ALCModelObjectInstance *)instance withName:(NSString *) name {
     return [instance.objectClass isSubclassOfClass:_class];
 }
 

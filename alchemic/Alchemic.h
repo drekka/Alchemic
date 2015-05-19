@@ -9,7 +9,7 @@
 @import Foundation;
 
 #import "ALCInternal.h"
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 #import "ALCContext.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
@@ -49,7 +49,7 @@
 
 // Registers an injection point in the current class.
 #define inject(_variable, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInInstance):(ALCObjectInstance *) instance { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInInstance):(ALCModelObjectInstance *) instance { \
     [instance addDependency:_variable, ## __VA_ARGS__, nil]; \
 }
 
@@ -57,12 +57,12 @@
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.
  */
 #define registerSingleton \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCObjectInstance *) instance { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCModelObjectInstance *) instance { \
     [[Alchemic mainContext] registerAsSingleton:instance]; \
 }
 
 #define registerSingletonWithName(_componentName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCObjectInstance *) instance { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCModelObjectInstance *) instance { \
     [[Alchemic mainContext] registerAsSingleton:instance withName:_componentName]; \
 }
 
@@ -70,7 +70,7 @@
  Adds a pre-built object to the model.
  */
 #define registerObjectWithName(_object, _objectName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerObjecWithInstance):(ALCObjectInstance *) instance { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerObjecWithInstance):(ALCModelObjectInstance *) instance { \
     [[Alchemic mainContext] registerObject:_object withName:_objectName]; \
 }
 
@@ -84,14 +84,14 @@
  The number of objects passed must match the number of expected arguments.
  */
 #define registerFactoryMethod(_returnTypeClassName, _factorySelector, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCObjectInstance *) instance { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCModelObjectInstance *) instance { \
     [[Alchemic mainContext] registerFactory:instance \
                             factorySelector:@selector(_factorySelector) \
                                  returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \
 }
 
 #define registerFactoryMethodWithName(_componentName, _returnTypeClassName, _factorySelector, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCObjectInstance *) instance { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCModelObjectInstance *) instance { \
     [[Alchemic mainContext] registerFactory:instance \
                                    withName:_componentName \
                             factorySelector:@selector(_factorySelector) \

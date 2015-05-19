@@ -10,7 +10,7 @@
 #import "ALCLogger.h"
 @import ObjectiveC;
 #import "ALCMatcher.h"
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 #import "ALCResolverPostProcessor.h"
 
 @implementation ALCDependencyResolver
@@ -29,9 +29,8 @@
 
 -(void) resolveUsingModel:(NSDictionary *)model {
     
-    logDependencyResolving(@"Searching for candidates using %lu model objects", [model count]);
     _candidateInstances = [[NSMutableSet alloc] init];
-    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCObjectInstance *instance, BOOL *stop) {
+    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCModelObjectInstance *instance, BOOL *stop) {
 
         // Run matchers to see if they match. All must accept the candidate object.
         for (id<ALCMatcher> dependencyMatcher in _dependencyMatchers) {
@@ -39,12 +38,12 @@
                 return;
             }
         }
-        
-        logDependencyResolving(@"Adding '%@' %s to candidates", name, class_getName(instance.objectClass));
         [(NSMutableArray *)_candidateInstances addObject:instance];
         
     }];
-    
+
+    logDependencyResolving(@"Found %lu candidates", [_candidateInstances count]);
+
 }
 
 -(void) postProcess:(NSSet *) postProcessors {

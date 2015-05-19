@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCObjectResolver.h"
+#import "ALCCandidateValueResolver.h"
 
-@interface ALCArrayObjectResolver : NSObject<ALCObjectResolver>
+@interface ALCArrayCandidateValueResolver : NSObject<ALCCandidateValueResolver>
 
 @end

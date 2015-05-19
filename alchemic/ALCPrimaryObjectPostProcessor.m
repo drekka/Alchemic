@@ -9,7 +9,6 @@
 #import "ALCPrimaryObjectPostProcessor.h"
 #import "ALCDependencyResolver.h"
 #import "ALCModelObject.h"
-#import "ALCLogger.h"
 
 @implementation ALCPrimaryObjectPostProcessor
 
@@ -24,7 +23,6 @@
     }
     
     // Replace the list if primaries are present.
-    logDependencyResolving(@"Found %lu primary objects", [primaryInstances count]);
     return [primaryInstances count] > 0 ? primaryInstances : nil;
 }
 

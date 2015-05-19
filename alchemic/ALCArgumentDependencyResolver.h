@@ -9,11 +9,11 @@
 @import Foundation;
 
 #import "ALCDependencyResolver.h"
-@class ALCFactoryMethod;
+@class ALCModelObjectFactoryMethod;
 
 @interface ALCArgumentDependencyResolver : ALCDependencyResolver
 
--(instancetype) initWithFactoryMethod:(__weak ALCFactoryMethod *) factoryMethod
+-(instancetype) initWithFactoryMethod:(__weak ALCModelObjectFactoryMethod *) factoryMethod
                         argumentIndex:(int) argumentIndex
                              matchers:(NSSet *) dependencyMatchers;
 

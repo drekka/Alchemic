@@ -6,19 +6,19 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCArrayObjectResolver.h"
+#import "ALCArrayCandidateValueResolver.h"
 #import "ALCVariableDependencyResolver.h"
 #import "ALCLogger.h"
 #import "ALCModelObject.h"
 #import "ALCRuntime.h"
 
-@implementation ALCArrayObjectResolver
+@implementation ALCArrayCandidateValueResolver
 
--(BOOL) canResolveClass:(Class)class {
++(BOOL) canResolveClass:(Class)class {
     return ! [ALCRuntime class:class isKindOfClass:[NSArray class]];
 }
 
--(id) resolveDependency:(ALCDependencyResolver *)dependency {
+-(id) resolveCandidateValues:(ALCDependencyResolver *)dependency {
 
     if ([dependency.candidateInstances count] == 1) {
         id value = ((id<ALCModelObject>)[dependency.candidateInstances anyObject]).object;
@@ -36,7 +36,7 @@
     
 }
 
--(void) validateDependencyCandidates:(ALCDependencyResolver *)dependency {
+-(void) validateCandidates:(ALCDependencyResolver *)dependency {
     // Nothing to do here.
 }
 

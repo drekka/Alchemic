@@ -7,7 +7,9 @@
 //
 
 @import Foundation;
+
 #import "ALCModelObject.h"
+#import "ALCCandidateValueResolver.h"
 
 @class ALCContext;
 @class ALCDependencyResolver;
@@ -16,6 +18,7 @@
 
 @property(nonatomic, weak, readonly) ALCContext *context;
 @property(nonatomic, strong, readonly) NSArray *dependencies;
+@property(nonatomic, strong, readonly) id<ALCCandidateValueResolver> objectResolver;
 
 /**
  Initialiser used when registering classes.

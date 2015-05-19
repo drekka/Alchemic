@@ -11,8 +11,8 @@
 #import "ALCModelObject.h"
 
 @class ALCContext;
-@class ALCObjectInstance;
-@class ALCFactoryMethod;
+@class ALCModelObjectInstance;
+@class ALCModelObjectFactoryMethod;
 
 #import "ALCMatcher.h"
 
@@ -20,11 +20,13 @@
 
 #pragma mark - Finding Metadata
 
--(ALCObjectInstance *) instanceForObject:(id) object;
+-(ALCModelObjectInstance *) instanceForObject:(id) object;
 
 -(NSSet *) metadataWithMatchers:(NSSet *) matchers;
 
 -(NSSet *) metadataWithMatcher:(id<ALCMatcher>) matcher;
+
+-(void) enumerateInstancesUsingBlock:(void (^)(NSString *name, ALCModelObjectInstance *instance, BOOL *stop))block;
 
 #pragma mark - Finding objects
 
@@ -36,14 +38,14 @@
 
 -(void) indexMetadata:(id<ALCModelObject>) objectMetadata underName:(NSString *) name;
 
--(ALCObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context;
+-(ALCModelObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context;
 
--(ALCObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
+-(ALCModelObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
 
--(ALCObjectInstance *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
+-(ALCModelObjectInstance *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
 
--(ALCFactoryMethod *) addFactoryMethod:(SEL) factorySelector
-                            toInstance:(ALCObjectInstance *) instance
+-(ALCModelObjectFactoryMethod *) addFactoryMethod:(SEL) factorySelector
+                            toInstance:(ALCModelObjectInstance *) instance
                             returnType:(Class) returnType
                       argumentMatchers:(NSArray *) argumentMatchers;
 

@@ -7,14 +7,14 @@
 //
 
 #import "ALCArgumentDependencyResolver.h"
-#import "ALCFactoryMethod.h"
+#import "ALCModelObjectFactoryMethod.h"
 
 @implementation ALCArgumentDependencyResolver {
-    __weak ALCFactoryMethod *_factoryMethod;
+    __weak ALCModelObjectFactoryMethod *_factoryMethod;
     int _argumentIndex;
 }
 
--(instancetype) initWithFactoryMethod:(__weak ALCFactoryMethod *) factoryMethod
+-(instancetype) initWithFactoryMethod:(__weak ALCModelObjectFactoryMethod *) factoryMethod
                         argumentIndex:(int) argumentIndex
                              matchers:(NSSet *) dependencyMatchers {
     self = [super initWithMatchers:dependencyMatchers];

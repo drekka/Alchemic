@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCObjectInstance.h"
+#import "ALCModelObjectInstance.h"
 @import ObjectiveC;
 
 #import "ALCVariableDependencyResolver.h"
@@ -14,7 +14,7 @@
 #import "ALCObjectFactory.h"
 #import "ALCLogger.h"
 
-@implementation ALCObjectInstance {
+@implementation ALCModelObjectInstance {
     NSArray *_initialisationStrategies;
 }
 
@@ -57,13 +57,7 @@
 #pragma mark - Lifecycle
 
 -(void) instantiateObject {
-    
-    if (!self.instantiate || self.object != nil) {
-        logCreation(@"Not instantiable or object already present.");
-        return;
-    }
-    
-    logCreation(@"Instantiating %@", [self description]);
+
     for (id<ALCObjectFactory> objectFactory in self.context.objectFactories) {
         self.object = [objectFactory createObjectFromInstance:self];
         if (self.objectClass != nil) {
@@ -76,14 +70,18 @@
                                        reason:[NSString stringWithFormat:@"Unable to create an instance of %@", [self description]]
                                      userInfo:nil];
     }
-    
-    [self injectDependenciesInto:self.object];    
 }
 
 -(void) injectDependenciesInto:(id) object {
-    logDependencyResolving(@"Checking %@ for dependencies", [self description]);
+
+    if ([self.dependencies count] == 0) {
+        return;
+    }
+    
+    logDependencyResolving(@"Injecting a %s with %lu dependencies from %@", object_getClassName(object), [self.dependencies count], [self description]);
     for (ALCVariableDependencyResolver *dependency in self.dependencies) {
-        [dependency injectObject:object usingInjectors:self.context.dependencyInjectors];
+        id result = [self.objectResolver resolveCandidateValues:dependency];
+        [ALCRuntime injectObject:object variable:dependency.variable withValue:result];
     }
 }
 
@@ -91,12 +89,9 @@
     _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
 }
 
-//-(NSString *) debugDescription {
-//    return [self description];
-//}
-
 -(NSString *) description {
-    return [NSString stringWithFormat:@"instance of %s", class_getName(self.objectClass)];
+    NSString *prefix = self.instantiate ? @"singleton" : @"meta-data";
+    return [NSString stringWithFormat:@"%@ %s", prefix, class_getName(self.objectClass)];
 }
 
 @end

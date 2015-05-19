@@ -10,6 +10,7 @@
 #import "ALCLogger.h"
 #import "ALCContext.h"
 #import "ALCDependencyResolver.h"
+#import "ALCCandidateValueResolverFactory.h"
 
 @implementation ALCAbstractModelObject
 
@@ -25,6 +26,7 @@
         _context = context;
         _objectClass = objectClass;
         _dependencies = [[NSMutableArray alloc] init];
+        _objectResolver = [context.objectResolverFactory resolverForDependency:self];
     }
     return self;
 }
