@@ -8,12 +8,12 @@
 
 @import Foundation;
 
-@class ALCDependencyResolver;
+@class ALCDependency;
 
 /**
  Protocol for classes that can resolve the final values from the list of candidates in a dependency object.
  */
-@protocol ALCCandidateValueResolver <NSObject>
+@protocol ALCValueProcessor <NSObject>
 
 /**
  Used by the factory to decide if this resolver should be used for a specific dependency.
@@ -23,11 +23,11 @@
 /**
  Returns an object derived from the candidates object resolvers.
  */
--(id) resolveCandidateValues:(ALCDependencyResolver *) dependency;
+-(id) resolveCandidateValues:(ALCDependency *) dependency;
 
 /**
  Called during resolution to validate the candidates.
  */
--(void) validateCandidates:(ALCDependencyResolver *) dependency;
+-(void) validateCandidates:(ALCDependency *) dependency;
 
 @end

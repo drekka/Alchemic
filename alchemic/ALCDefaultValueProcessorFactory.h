@@ -7,9 +7,9 @@
 //
 
 @import Foundation;
-#import "ALCCandidateValueResolverFactory.h"
+#import "ALCValueProcessorFactory.h"
 
 
-@interface ALCDefaultCandidateValueResolverFactory : NSObject<ALCCandidateValueResolverFactory>
+@interface ALCDefaultValueProcessorFactory : NSObject<ALCValueProcessorFactory>
 
 @end

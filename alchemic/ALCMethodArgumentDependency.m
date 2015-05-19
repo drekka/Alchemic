@@ -6,15 +6,15 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCArgumentDependencyResolver.h"
-#import "ALCModelObjectFactoryMethod.h"
+#import "ALCMethodArgumentDependency.h"
+#import "ALCResolvableMethod.h"
 
-@implementation ALCArgumentDependencyResolver {
-    __weak ALCModelObjectFactoryMethod *_factoryMethod;
+@implementation ALCMethodArgumentDependency {
+    __weak ALCResolvableMethod *_factoryMethod;
     int _argumentIndex;
 }
 
--(instancetype) initWithFactoryMethod:(__weak ALCModelObjectFactoryMethod *) factoryMethod
+-(instancetype) initWithFactoryMethod:(__weak ALCResolvableMethod *) factoryMethod
                         argumentIndex:(int) argumentIndex
                              matchers:(NSSet *) dependencyMatchers {
     self = [super initWithMatchers:dependencyMatchers];

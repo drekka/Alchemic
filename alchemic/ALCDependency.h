@@ -9,9 +9,9 @@
 @import Foundation;
 #import "ALCMatcher.h"
 
-@interface ALCDependencyResolver : NSObject
+@interface ALCDependency : NSObject
 
-@property (nonatomic, strong, readonly) NSSet *candidateInstances;
+@property (nonatomic, strong, readonly) NSSet *candidates;
 @property (nonatomic, strong) NSSet *dependencyMatchers;
 
 -(instancetype) initWithMatchers:(NSSet *) dependencyMatchers;

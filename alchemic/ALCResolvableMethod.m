@@ -6,20 +6,20 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCModelObjectFactoryMethod.h"
+#import "ALCResolvableMethod.h"
 #import "ALCRuntime.h"
-#import "ALCModelObjectInstance.h"
-#import "ALCArgumentDependencyResolver.h"
+#import "ALCResolvableObject.h"
+#import "ALCMethodArgumentDependency.h"
 #import "ALCLogger.h"
 
-@implementation ALCModelObjectFactoryMethod {
-    __weak ALCModelObjectInstance *_factoryInstance;
+@implementation ALCResolvableMethod {
+    __weak ALCResolvableObject *_factoryInstance;
     SEL _factorySelector;
     NSInvocation *_factoryInvocation;
 }
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
-                factoryInstance:(ALCModelObjectInstance *) factoryInstance
+                factoryInstance:(ALCResolvableObject *) factoryInstance
                 factorySelector:(SEL) factorySelector
                      returnType:(Class) returnTypeClass
                argumentMatchers:(NSArray *) argumentMatchers {
@@ -50,7 +50,7 @@
         Class arrayClass = [NSArray class];
         [argumentMatchers enumerateObjectsUsingBlock:^(id matchers, NSUInteger idx, BOOL *stop) {
             NSSet *matcherSet = object_isClass(arrayClass) ? [NSSet setWithArray:matchers] : [NSSet setWithObject:matchers];
-            [self addDependencyResolver:[[ALCArgumentDependencyResolver alloc] initWithFactoryMethod:self
+            [self addDependencyResolver:[[ALCMethodArgumentDependency alloc] initWithFactoryMethod:self
                                                                                      argumentIndex:(int) idx
                                                                                           matchers:matcherSet]];
         }];
@@ -74,8 +74,8 @@
 
     // Load the arguments.
     [self resolveDependencies];
-    [self.dependencies enumerateObjectsUsingBlock:^(ALCDependencyResolver *resolver, NSUInteger idx, BOOL *stop) {
-        NSSet *candidates = resolver.candidateInstances;
+    [self.dependencies enumerateObjectsUsingBlock:^(ALCDependency *resolver, NSUInteger idx, BOOL *stop) {
+        NSSet *candidates = resolver.candidates;
     }];
     
     [_factoryInvocation invokeWithTarget:factoryObject];

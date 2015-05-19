@@ -9,7 +9,7 @@
 #import "ALCAbstractInitStrategy.h"
 
 #import "ALCLogger.h"
-#import "ALCModelObjectInstance.h"
+#import "ALCResolvableObject.h"
 #import "ALCInternal.h"
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
@@ -24,12 +24,12 @@
 @synthesize replacementInitSelector;
 
 // Abstract
-+(BOOL) canWrapInit:(ALCModelObjectInstance *) instance {
++(BOOL) canWrapInit:(ALCResolvableObject *) instance {
     [self doesNotRecognizeSelector:_cmd];
     return NO;
 }
 
--(instancetype) initWithInstance:(ALCModelObjectInstance *)instance {
+-(instancetype) initWithInstance:(ALCResolvableObject *)instance {
     self = [super init];
     if (self) {
         _forClass = instance.objectClass;

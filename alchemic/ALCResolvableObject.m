@@ -6,15 +6,15 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCModelObjectInstance.h"
+#import "ALCResolvableObject.h"
 @import ObjectiveC;
 
-#import "ALCVariableDependencyResolver.h"
+#import "ALCVariableDependency.h"
 #import "ALCRuntime.h"
 #import "ALCObjectFactory.h"
 #import "ALCLogger.h"
 
-@implementation ALCModelObjectInstance {
+@implementation ALCResolvableObject {
     NSArray *_initialisationStrategies;
 }
 
@@ -51,7 +51,7 @@
 
 -(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers {
     Ivar variable = [ALCRuntime class:self.objectClass variableForInjectionPoint:inj];
-    [self addDependencyResolver:[[ALCVariableDependencyResolver alloc] initWithVariable:variable inModelObject:self matchers:matchers]];
+    [self addDependencyResolver:[[ALCVariableDependency alloc] initWithVariable:variable inResolvableObject:self matchers:matchers]];
 }
 
 #pragma mark - Lifecycle
@@ -79,8 +79,8 @@
     }
     
     logDependencyResolving(@"Injecting a %s with %lu dependencies from %@", object_getClassName(object), [self.dependencies count], [self description]);
-    for (ALCVariableDependencyResolver *dependency in self.dependencies) {
-        id result = [self.objectResolver resolveCandidateValues:dependency];
+    for (ALCVariableDependency *dependency in self.dependencies) {
+        id result = [self.valueProcessor resolveCandidateValues:dependency];
         [ALCRuntime injectObject:object variable:dependency.variable withValue:result];
     }
 }

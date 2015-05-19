@@ -10,14 +10,14 @@
 
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
-#import "ALCModelObjectInstance.h"
+#import "ALCResolvableObject.h"
 #import "ALCLogger.h"
-#import "ALCVariableDependencyResolver.h"
+#import "ALCVariableDependency.h"
 #import "NSDictionary+ALCModel.h"
 #import "ALCContext.h"
 
 #import "ALCModelClassProcessor.h"
-#import "ALCResolverPostProcessor.h"
+#import "ALCDependencyPostProcessor.h"
 #import "ALCClassWithProtocolClassProcessor.h"
 #import "ALCResourceLocator.h"
 
@@ -107,7 +107,7 @@ static Class protocolClass;
     };
     
     ClassMatchesBlock resourceLocatorBlock = ^(classMatchesBlockArgs){
-        ALCModelObjectInstance *instance = [context.model addInstanceForClass:class inContext:context];
+        ALCResolvableObject *instance = [context.model addResolvableObjectForClass:class inContext:context];
         instance.object = [[class alloc] init];
         instance.instantiate = YES;
     };
@@ -120,7 +120,7 @@ static Class protocolClass;
                                               [[ALCModelClassProcessor alloc] init],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCInitStrategy)
                                                                                                whenMatches:initStrategiesBlock],
-                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCDependencyResolverPostProcessor)
+                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCDependencyPostProcessor)
                                                                                                whenMatches:resolverPostProcessorBlock],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResourceLocator)
                                                                                                whenMatches:resourceLocatorBlock],

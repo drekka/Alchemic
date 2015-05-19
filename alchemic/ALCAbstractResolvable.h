@@ -8,23 +8,23 @@
 
 @import Foundation;
 
-#import "ALCModelObject.h"
-#import "ALCCandidateValueResolver.h"
+#import "ALCResolvable.h"
+#import "ALCValueProcessor.h"
 
 @class ALCContext;
-@class ALCDependencyResolver;
+@class ALCDependency;
 
-@interface ALCAbstractModelObject : NSObject<ALCModelObject>
+@interface ALCAbstractResolvable : NSObject<ALCResolvable>
 
 @property(nonatomic, weak, readonly) ALCContext *context;
 @property(nonatomic, strong, readonly) NSArray *dependencies;
-@property(nonatomic, strong, readonly) id<ALCCandidateValueResolver> objectResolver;
+@property(nonatomic, strong, readonly) id<ALCValueProcessor> valueProcessor;
 
 /**
  Initialiser used when registering classes.
  */
 -(instancetype) initWithContext:(__weak ALCContext *) context objectClass:(Class) objectClass;
 
--(void) addDependencyResolver:(ALCDependencyResolver *) dependency;
+-(void) addDependencyResolver:(ALCDependency *) dependency;
 
 @end

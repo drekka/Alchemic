@@ -11,23 +11,23 @@
 #import "ALCObjectFactory.h"
 #import "ALCInitInjector.h"
 #import "ALCMatcher.h"
-#import "ALCResolverPostProcessor.h"
-#import "ALCModelObject.h"
+#import "ALCDependencyPostProcessor.h"
+#import "ALCResolvable.h"
 #import "NSDictionary+ALCModel.h"
-#import "ALCCandidateValueResolverFactory.h"
+#import "ALCValueProcessorFactory.h"
 
-@class ALCModelObjectInstance;
+@class ALCResolvableObject;
 
 @interface ALCContext : NSObject
 
 @property (nonatomic, strong, readonly) NSDictionary *model;
 @property (nonatomic, strong, readonly) NSSet *resolverPostProcessors;
 @property (nonatomic, strong, readonly) NSSet *objectFactories;
-@property (nonatomic, strong, readonly) id<ALCCandidateValueResolverFactory> objectResolverFactory;
+@property (nonatomic, strong, readonly) id<ALCValueProcessorFactory> valueProcessorFactory;
 
 #pragma mark - Configuration
 
-@property (nonatomic, strong) Class objectResolverFactoryClass;
+@property (nonatomic, strong) Class valueProcessorFactoryClass;
 
 /**
  Specifies the class used to inject init method wrappers into the runtime. Normally this doesn't been to be changed from the default.
@@ -41,7 +41,7 @@
  */
 -(void) addInitStrategy:(Class) initialisationStrategyClass;
 
--(void) addResolverPostProcessor:(id<ALCDependencyResolverPostProcessor>) postProcessor;
+-(void) addResolverPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor;
 
 /**
  Adds a ALCObjectFactory to the list of object factories. Factories are checked in reverse order. The last registered object factory is the one asked first for an object.
@@ -58,20 +58,20 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCModelObjectInstance *) objectInstance;
+-(void) registerAsSingleton:(ALCResolvableObject *) resolvableObject;
 
--(void) registerAsSingleton:(ALCModelObjectInstance *) objectInstance withName:(NSString *) name;
+-(void) registerAsSingleton:(ALCResolvableObject *) resolvableObject withName:(NSString *) name;
 
 -(void) registerObject:(id) object withName:(NSString *) name;
 
 /**
  Registers a factory method with it's return data type and matchers for locating the objects for each argument.
  */
--(void) registerFactory:(ALCModelObjectInstance *) objectInstance
+-(void) registerFactory:(ALCResolvableObject *) resolvableObject
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;
 
--(void) registerFactory:(ALCModelObjectInstance *) objectInstance
+-(void) registerFactory:(ALCResolvableObject *) resolvableObject
                withName:(NSString *) name
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;

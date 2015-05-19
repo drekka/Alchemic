@@ -6,26 +6,28 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCVariableDependencyResolver.h"
+#import "ALCVariableDependency.h"
 #import "ALCLogger.h"
 #import "ALCRuntime.h"
-#import "ALCModelObjectInstance.h"
+#import "ALCResolvableObject.h"
 
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
 
 @import ObjectiveC;
 
-@implementation ALCVariableDependencyResolver {
-    __weak ALCModelObjectInstance *_instance;
+@implementation ALCVariableDependency {
+    __weak ALCResolvableObject *_resolvableObject;
 }
 
--(instancetype) initWithVariable:(Ivar) variable inModelObject:(__weak ALCModelObjectInstance *) modelObject matchers:(NSSet *) dependencyMatchers {
-
+-(instancetype) initWithVariable:(Ivar) variable
+              inResolvableObject:(__weak ALCResolvableObject *) resolvableObject
+                        matchers:(NSSet *) dependencyMatchers {
+    
     self = [super initWithMatchers:dependencyMatchers];
     if (self) {
-
-        _instance = modelObject;
+        
+        _resolvableObject = resolvableObject;
         _variable = variable;
         _variableProtocols = [[NSMutableArray alloc] init];
         
@@ -71,20 +73,17 @@
     }
 }
 
--(void) injectObject:(id) object usingInjectors:(NSArray *) injectors {
-}
-
 -(void) postProcess:(NSSet *)postProcessors {
     
     [super postProcess:postProcessors];
-
+    
     // If there are no candidates left then error.
-    if ([self.candidateInstances count] == 0) {
+    if ([self.candidates count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency: %s::%s", class_getName(_instance.objectClass), ivar_getName(_variable)]
+                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency: %s::%s", class_getName(_resolvableObject.objectClass), ivar_getName(_variable)]
                                      userInfo:nil];
     }
-
+    
 }
 
 -(NSString *) description {
@@ -93,9 +92,9 @@
     [self.variableProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, NSUInteger idx, BOOL *stop) {
         protocols[idx] = NSStringFromProtocol(protocol);
     }];
-
+    
     const char *type = self.variableClass == nil ? "id" : class_getName(self.variableClass);
-    return [NSString stringWithFormat:@"Variable %s::%s (%s<%@>)", class_getName(_instance.objectClass), ivar_getName(self.variable), type, [protocols componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"Variable %s::%s (%s<%@>)", class_getName(_resolvableObject.objectClass), ivar_getName(self.variable), type, [protocols componentsJoinedByString:@", "]];
     
 }
 

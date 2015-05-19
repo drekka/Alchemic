@@ -8,7 +8,6 @@
 
 @import ObjectiveC;
 #import "ALCClassMatcher.h"
-#import "ALCModelObjectInstance.h"
 
 @implementation ALCClassMatcher {
     Class _class;
@@ -22,8 +21,8 @@
     return self;
 }
 
--(BOOL) matches:(ALCModelObjectInstance *)instance withName:(NSString *) name {
-    return [instance.objectClass isSubclassOfClass:_class];
+-(BOOL) matches:(id <ALCResolvable>) resolvable withName:(NSString *) name {
+    return [resolvable.objectClass isSubclassOfClass:_class];
 }
 
 @end

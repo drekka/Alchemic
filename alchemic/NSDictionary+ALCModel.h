@@ -8,11 +8,11 @@
 
 @import Foundation;
 
-#import "ALCModelObject.h"
+#import "ALCResolvable.h"
 
 @class ALCContext;
-@class ALCModelObjectInstance;
-@class ALCModelObjectFactoryMethod;
+@class ALCResolvableObject;
+@class ALCResolvableMethod;
 
 #import "ALCMatcher.h"
 
@@ -20,13 +20,13 @@
 
 #pragma mark - Finding Metadata
 
--(ALCModelObjectInstance *) instanceForObject:(id) object;
+-(ALCResolvableObject *) findResolvableObjectForObject:(id) object;
 
--(NSSet *) metadataWithMatchers:(NSSet *) matchers;
+-(NSSet *) resolvablesWithMatchers:(NSSet *) matchers;
 
--(NSSet *) metadataWithMatcher:(id<ALCMatcher>) matcher;
+-(NSSet *) resolvablesWithMatcher:(id<ALCMatcher>) matcher;
 
--(void) enumerateInstancesUsingBlock:(void (^)(NSString *name, ALCModelObjectInstance *instance, BOOL *stop))block;
+-(void) enumerateResolvableObjectsUsingBlock:(void (^)(NSString *name, ALCResolvableObject *resolvableObject, BOOL *stop))block;
 
 #pragma mark - Finding objects
 
@@ -36,17 +36,17 @@
 
 #pragma mark - Adding new Metadata
 
--(void) indexMetadata:(id<ALCModelObject>) objectMetadata underName:(NSString *) name;
+-(void) storeResolvable:(id<ALCResolvable>) objectMetadata underName:(NSString *) name;
 
--(ALCModelObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context;
+-(ALCResolvableObject *) addResolvableObjectForClass:(Class) class inContext:(ALCContext *) context;
 
--(ALCModelObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
+-(ALCResolvableObject *) addResolvableObjectForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
 
--(ALCModelObjectInstance *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
+-(ALCResolvableObject *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
 
--(ALCModelObjectFactoryMethod *) addFactoryMethod:(SEL) factorySelector
-                            toInstance:(ALCModelObjectInstance *) instance
-                            returnType:(Class) returnType
-                      argumentMatchers:(NSArray *) argumentMatchers;
+-(ALCResolvableMethod *) addMethod:(SEL) factorySelector
+                toResolvableObject:(ALCResolvableObject *) resolvableObject
+                        returnType:(Class) returnType
+                  argumentMatchers:(NSArray *) argumentMatchers;
 
 @end

@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@protocol ALCModelObject <NSObject>
+@protocol ALCResolvable <NSObject>
 
 @property (nonatomic, assign, readonly) Class objectClass;
 @property (nonatomic, strong) id object;

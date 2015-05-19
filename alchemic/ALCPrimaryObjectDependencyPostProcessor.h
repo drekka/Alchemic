@@ -7,8 +7,8 @@
 //
 
 @import Foundation;
-#import "ALCResolverPostProcessor.h"
+#import "ALCDependencyPostProcessor.h"
 
-@interface ALCPrimaryObjectPostProcessor : NSObject<ALCDependencyResolverPostProcessor>
+@interface ALCPrimaryObjectDependencyPostProcessor : NSObject<ALCDependencyPostProcessor>
 
 @end

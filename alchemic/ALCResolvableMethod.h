@@ -6,16 +6,16 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractModelObject.h"
+#import "ALCAbstractResolvable.h"
 
-@class ALCModelObjectInstance;
+@class ALCResolvableObject;
 
-@interface ALCModelObjectFactoryMethod : ALCAbstractModelObject
+@interface ALCResolvableMethod : ALCAbstractResolvable
 
 @property (nonatomic, strong) NSArray *argumentMatchers;
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
-                factoryInstance:(ALCModelObjectInstance *) factoryInstance
+                factoryInstance:(ALCResolvableObject *) factoryInstance
                 factorySelector:(SEL) factorySelector
                      returnType:(Class) returnTypeClass
                argumentMatchers:(NSArray *) argumentMatchers;

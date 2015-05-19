@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractModelObject.h"
+#import "ALCAbstractResolvable.h"
 #import "ALCLogger.h"
 #import "ALCContext.h"
-#import "ALCDependencyResolver.h"
-#import "ALCCandidateValueResolverFactory.h"
+#import "ALCDependency.h"
+#import "ALCValueProcessorFactory.h"
 
-@implementation ALCAbstractModelObject
+@implementation ALCAbstractResolvable
 
 @synthesize objectClass = _objectClass;
 @synthesize object = _object;
@@ -26,17 +26,17 @@
         _context = context;
         _objectClass = objectClass;
         _dependencies = [[NSMutableArray alloc] init];
-        _objectResolver = [context.objectResolverFactory resolverForDependency:self];
+        _valueProcessor = [context.valueProcessorFactory resolverForDependency:self];
     }
     return self;
 }
 
--(void) addDependencyResolver:(ALCDependencyResolver *) dependency {
+-(void) addDependencyResolver:(ALCDependency *) dependency {
     [(NSMutableArray *) self.dependencies addObject:dependency];
 }
 
 -(void) resolveDependencies {
-    for (ALCDependencyResolver *dependency in self.dependencies) {
+    for (ALCDependency *dependency in self.dependencies) {
         [dependency resolveUsingModel:_context.model];
         [dependency postProcess:self.context.resolverPostProcessors];
     }

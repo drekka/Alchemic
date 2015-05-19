@@ -7,15 +7,15 @@
 //
 
 @class ALCInitDetails;
-@class ALCModelObjectInstance;
+@class ALCResolvableObject;
 
 /**
  Classes that implement this protocol can be used to inject wrappers into a class.
  */
 @protocol ALCInitStrategy <NSObject>
 
-+(BOOL) canWrapInit:(ALCModelObjectInstance *) instance;
++(BOOL) canWrapInit:(ALCResolvableObject *) instance;
 
--(instancetype) initWithInstance:(ALCModelObjectInstance *) instance;
+-(instancetype) initWithInstance:(ALCResolvableObject *) instance;
 
 @end

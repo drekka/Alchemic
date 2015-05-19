@@ -7,7 +7,7 @@
 //
 
 #import "ALCNameMatcher.h"
-#import "ALCModelObjectInstance.h"
+#import "ALCResolvableObject.h"
 
 @implementation ALCNameMatcher {
     NSString *_name;
@@ -21,7 +21,7 @@
     return self;
 }
 
--(BOOL) matches:(ALCModelObjectInstance *)instance withName:(NSString *) name {
+-(BOOL) matches:(id <ALCResolvable>) resolvable withName:(NSString *) name {
     return [name isEqualToString:_name];
 }
 

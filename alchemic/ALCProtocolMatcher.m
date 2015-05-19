@@ -7,7 +7,7 @@
 //
 
 #import "ALCProtocolMatcher.h"
-#import "ALCModelObjectInstance.h"
+#import "ALCResolvableObject.h"
 @import ObjectiveC;
 
 @implementation ALCProtocolMatcher {
@@ -22,8 +22,8 @@
     return self;
 }
 
--(BOOL) matches:(ALCModelObjectInstance *)instance withName:(NSString *) name {
-    return class_conformsToProtocol(instance.objectClass, _protocol);
+-(BOOL) matches:(id <ALCResolvable>) resolvable withName:(NSString *) name {
+    return class_conformsToProtocol(resolvable.objectClass, _protocol);
 }
 
 @end

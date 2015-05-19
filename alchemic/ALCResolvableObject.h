@@ -10,9 +10,9 @@
 
 #import "ALCInitStrategy.h"
 #import "ALCContext.h"
-#import "ALCAbstractModelObject.h"
+#import "ALCAbstractResolvable.h"
 
-@interface ALCModelObjectInstance : ALCAbstractModelObject
+@interface ALCResolvableObject : ALCAbstractResolvable
 
 @property (nonatomic, assign) BOOL instantiate;
 

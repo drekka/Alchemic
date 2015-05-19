@@ -12,7 +12,7 @@
 
 @import ObjectiveC;
 #import "ALCLogger.h"
-#import "ALCModelObjectInstance.h"
+#import "ALCResolvableObject.h"
 #import "ALCInitStrategy.h"
 #import "ALCClassMatcher.h"
 
@@ -45,7 +45,7 @@ static BOOL injected = NO;
     }
 
     // Now hook into the classes.
-    for (ALCModelObjectInstance *instance in [self findRootInstancesInModel:model]) {
+    for (ALCResolvableObject *instance in [self findRootInstancesInModel:model]) {
         for (Class initStrategy in _strategyClasses) {
             if ([initStrategy canWrapInit:instance]) {
                 [instance addInitStrategy:[[initStrategy alloc] initWithInstance:instance]];
@@ -57,17 +57,17 @@ static BOOL injected = NO;
 -(NSArray *) findRootInstancesInModel:(NSDictionary *) model {
     
     // First find all instances of ALCInstance.
-    NSSet *instances = [model metadataWithMatchers:[NSSet setWithObject:[[ALCClassMatcher alloc] initWithClass:[ALCModelObjectInstance class]]]];
+    NSSet *instances = [model resolvablesWithMatchers:[NSSet setWithObject:[[ALCClassMatcher alloc] initWithClass:[ALCResolvableObject class]]]];
     
     // Copy all the classes into an array for Against the list..
     NSMutableSet *modelClasses = [[NSMutableSet alloc] initWithCapacity:[instances count]];
-    for (ALCModelObjectInstance *instance in instances) {
+    for (ALCResolvableObject *instance in instances) {
         [modelClasses addObject:instance.objectClass];
     }
 
     // Work out which classes we need to inject hooks into
     NSMutableArray *rootInstances = [[NSMutableArray alloc] init];
-    for (ALCModelObjectInstance *instance in instances) {
+    for (ALCResolvableObject *instance in instances) {
         
         // Check each ancestor class in turn. If any are in the list, then ignore the current class.
         Class parentClass = class_getSuperclass(instance.objectClass);

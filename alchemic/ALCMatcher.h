@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-@class ALCModelObjectInstance;
+#import "ALCResolvable.h"
 
 /**
  Implement to define a matcher for selectinign injections.
@@ -17,6 +17,6 @@
 /**
  Return YES if the instance being examined is matched by the matcher.
  */
--(BOOL) matches:(ALCModelObjectInstance *) instance withName:(NSString *) name;
+-(BOOL) matches:(id <ALCResolvable>) resolvable withName:(NSString *) name;
 
 @end

@@ -9,7 +9,7 @@
 @import Foundation;
 @import ObjectiveC;
 
-@class ALCModelObjectInstance;
+@class ALCResolvableObject;
 @class ALCContext;
 
 @interface ALCRuntime : NSObject

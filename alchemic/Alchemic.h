@@ -9,7 +9,7 @@
 @import Foundation;
 
 #import "ALCInternal.h"
-#import "ALCModelObjectInstance.h"
+#import "ALCResolvableObject.h"
 #import "ALCContext.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
@@ -49,28 +49,28 @@
 
 // Registers an injection point in the current class.
 #define inject(_variable, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInInstance):(ALCModelObjectInstance *) instance { \
-    [instance addDependency:_variable, ## __VA_ARGS__, nil]; \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInInstance):(ALCResolvableObject *) resolvableObject { \
+    [resolvableObject addDependency:_variable, ## __VA_ARGS__, nil]; \
 }
 
 /**
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.
  */
 #define registerSingleton \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCModelObjectInstance *) instance { \
-    [[Alchemic mainContext] registerAsSingleton:instance]; \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCResolvableObject *) resolvableObject { \
+    [[Alchemic mainContext] registerAsSingleton:resolvableObject]; \
 }
 
 #define registerSingletonWithName(_componentName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCModelObjectInstance *) instance { \
-    [[Alchemic mainContext] registerAsSingleton:instance withName:_componentName]; \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCResolvableObject *) resolvableObject { \
+    [[Alchemic mainContext] registerAsSingleton:resolvableObject withName:_componentName]; \
 }
 
 /**
  Adds a pre-built object to the model.
  */
 #define registerObjectWithName(_object, _objectName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerObjecWithInstance):(ALCModelObjectInstance *) instance { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectWithInstance):(ALCResolvableObject *) resolvableObject { \
     [[Alchemic mainContext] registerObject:_object withName:_objectName]; \
 }
 
@@ -84,15 +84,15 @@
  The number of objects passed must match the number of expected arguments.
  */
 #define registerFactoryMethod(_returnTypeClassName, _factorySelector, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCModelObjectInstance *) instance { \
-    [[Alchemic mainContext] registerFactory:instance \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCResolvableObject *) resolvableObject { \
+    [[Alchemic mainContext] registerFactory:resolvableObject \
                             factorySelector:@selector(_factorySelector) \
                                  returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \
 }
 
 #define registerFactoryMethodWithName(_componentName, _returnTypeClassName, _factorySelector, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCModelObjectInstance *) instance { \
-    [[Alchemic mainContext] registerFactory:instance \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCResolvableObject *) resolvableObject { \
+    [[Alchemic mainContext] registerFactory:resolvableObject \
                                    withName:_componentName \
                             factorySelector:@selector(_factorySelector) \
                                  returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \

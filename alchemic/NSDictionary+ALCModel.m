@@ -12,16 +12,16 @@
 @import ObjectiveC;
 
 #import "ALClogger.h"
-#import "ALCDependencyResolver.h"
+#import "ALCDependency.h"
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
-#import "ALCModelObjectInstance.h"
-#import "ALCModelObjectFactoryMethod.h"
+#import "ALCResolvableObject.h"
+#import "ALCResolvableMethod.h"
 
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 
-#import "ALCModelObject.h"
+#import "ALCResolvable.h"
 
 @implementation NSMutableDictionary (ALCModel)
 
@@ -48,36 +48,43 @@
 }
 
 -(NSSet *) objectsWithMatchers:(NSSet *) matchers {
-    return [self findWithMatchers:matchers
-                    selectorBlock:^id(id<ALCModelObject> metadata) {
-                        return metadata.object;
-                    }];
+    return [self filterResolvablesWithMatchers:matchers
+                                 selectorBlock:^id(id<ALCResolvable> metadata) {
+                                     return metadata.object;
+                                 }];
 }
 
--(NSSet *) instancesWithMatcher:(id<ALCMatcher>) matcher {
-    return [self instancesWithMatchers:[NSSet setWithObject:matcher]];
-}
-
--(NSSet *) instancesWithMatchers:(NSSet *) matchers {
-    return [self findWithMatchers:matchers
-                    selectorBlock:^id(id<ALCModelObject> metadata) {
-                        return [metadata isKindOfClass:[ALCModelObjectInstance class]] ? metadata : nil;
-                    }];
-}
-
--(NSSet *) metadataWithMatchers:(NSSet *) matchers {
-    ALCDependencyResolver *resolver = [[ALCDependencyResolver alloc] initWithMatchers:matchers];
+-(NSSet *) resolvablesWithMatchers:(NSSet *) matchers {
+    ALCDependency *resolver = [[ALCDependency alloc] initWithMatchers:matchers];
     [resolver resolveUsingModel:self];
-    return resolver.candidateInstances;
+    return resolver.candidates;
 }
 
--(NSSet *) metadataWithMatcher:(id<ALCMatcher>) matcher {
-    return [self metadataWithMatchers:[NSSet setWithObject:matcher]];
+-(NSSet *) resolvablesWithMatcher:(id<ALCMatcher>) matcher {
+    return [self resolvablesWithMatchers:[NSSet setWithObject:matcher]];
 }
 
--(NSSet *) findWithMatchers:(NSSet *) matchers selectorBlock:(id (^) (id<ALCModelObject> metadata)) selectorBlock {
+-(void) enumerateResolvableObjectsUsingBlock:(void (^)(NSString *name, ALCResolvableObject *instance, BOOL *stop))block {
+    Class resolvableObjectClass = [ALCResolvableObject class];
+    [self enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCResolvable> resolvable, BOOL *stopEnumerating) {
+        if ([resolvable isKindOfClass:resolvableObjectClass]) {
+            block(name, resolvable, stopEnumerating);
+        }
+    }];
+}
+
+#pragma mark - Internal
+
+-(NSSet *) resolvableObjectsWithMatcher:(id<ALCMatcher>) matcher {
+    return [self filterResolvablesWithMatchers:[NSSet setWithObject:matcher]
+                                 selectorBlock:^id(id<ALCResolvable> metadata) {
+                                     return [metadata isKindOfClass:[ALCResolvableObject class]] ? metadata : nil;
+                                 }];
+}
+
+-(NSSet *) filterResolvablesWithMatchers:(NSSet *) matchers selectorBlock:(id (^) (id<ALCResolvable> metadata)) selectorBlock {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    for (id<ALCModelObject> objectMetadata in [self metadataWithMatchers:matchers]) {
+    for (id<ALCResolvable> objectMetadata in [self resolvablesWithMatchers:matchers]) {
         id result = selectorBlock(objectMetadata);
         if (result != nil) {
             [results addObject:result];
@@ -86,37 +93,30 @@
     return results;
 }
 
--(void) enumerateInstancesUsingBlock:(void (^)(NSString *name, ALCModelObjectInstance *instance, BOOL *stop))block {
-    Class instanceClass = [ALCModelObjectInstance class];
-        [self enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCModelObject> modelObject, BOOL *stopEnumerating) {
-            if ([modelObject isKindOfClass:instanceClass]) {
-                block(name, modelObject, stopEnumerating);
-            }
-        }];
-}
+#pragma mark - Managing resolvable objects
 
-#pragma mark - Managing instances
-
--(ALCModelObjectInstance *) instanceForObject:(id) object {
+-(ALCResolvableObject *) findResolvableObjectForObject:(id) object {
     
-    // Look for instance data based on the class name first.
     Class objectClass = object_getClass(object);
-    NSSet *instances = [self instancesWithMatcher:[[ALCNameMatcher alloc] initWithName:NSStringFromClass(objectClass)]];
-    if ([instances count] == 0) {
+    NSSet *resolvableObjects = [self resolvableObjectsWithMatcher:[[ALCNameMatcher alloc] initWithName:NSStringFromClass(objectClass)]];
+    
+    if ([resolvableObjects count] == 0) {
+        
         // Now Look for any instances based on the class.
-        instances = [self instancesWithMatcher:[[ALCClassMatcher alloc] initWithClass:objectClass]];
-        if ([instances count] > 0) {
+        resolvableObjects = [self resolvableObjectsWithMatcher:[[ALCClassMatcher alloc] initWithClass:objectClass]];
+        if ([resolvableObjects count] > 0) {
             @throw [NSException exceptionWithName:@"AlchemicUnableToLocateMetadata"
                                            reason:[NSString stringWithFormat:@"Unable to find any metata for a instance of %s", object_getClassName(object)]
                                          userInfo:nil];
         }
     }
-    return [instances anyObject];
+    
+    return [resolvableObjects anyObject];
 }
 
 #pragma mark - Adding new meta data
 
--(void) indexMetadata:(id<ALCModelObject>) objectMetadata underName:(NSString *) name {
+-(void) storeResolvable:(id<ALCResolvable>) objectMetadata underName:(NSString *) name {
     
     NSString *finalName = name == nil ? NSStringFromClass(objectMetadata.objectClass) : name;
     
@@ -130,35 +130,35 @@
     self[finalName] = objectMetadata;
 }
 
--(ALCModelObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context {
-    ALCModelObjectInstance *instance = [[ALCModelObjectInstance alloc] initWithContext:context objectClass:class];
-    [self indexMetadata:instance underName:nil];
-    return instance;
+-(ALCResolvableObject *) addResolvableObjectForClass:(Class) class inContext:(ALCContext *) context {
+    ALCResolvableObject *resolvableObject = [[ALCResolvableObject alloc] initWithContext:context objectClass:class];
+    [self storeResolvable:resolvableObject underName:nil];
+    return resolvableObject;
 }
 
--(ALCModelObjectInstance *) addInstanceForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name {
-    ALCModelObjectInstance *instance = [[ALCModelObjectInstance alloc] initWithContext:context objectClass:class];
-    [self indexMetadata:instance underName:name];
-    return instance;
+-(ALCResolvableObject *) addResolvableObjectForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name {
+    ALCResolvableObject *resolvableObject = [[ALCResolvableObject alloc] initWithContext:context objectClass:class];
+    [self storeResolvable:resolvableObject underName:name];
+    return resolvableObject;
 }
 
--(ALCModelObjectInstance *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name {
-    ALCModelObjectInstance *instance = [self addInstanceForClass:object_getClass(finalObject) inContext:context withName:name];
-    instance.object = finalObject;
-    instance.instantiate = YES;
-    return instance;
+-(ALCResolvableObject *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name {
+    ALCResolvableObject *resolvableObject = [self addResolvableObjectForClass:object_getClass(finalObject) inContext:context withName:name];
+    resolvableObject.object = finalObject;
+    resolvableObject.instantiate = YES;
+    return resolvableObject;
 }
 
--(ALCModelObjectFactoryMethod *) addFactoryMethod:(SEL) factorySelector
-                            toInstance:(ALCModelObjectInstance *) instance
-                            returnType:(Class) returnType
-                      argumentMatchers:(NSArray *) argumentMatchers {
-    ALCModelObjectFactoryMethod *factoryMethod = [[ALCModelObjectFactoryMethod alloc] initWithContext:instance.context
-                                                                factoryInstance:instance
-                                                                factorySelector:factorySelector
-                                                                     returnType:returnType
-                                                               argumentMatchers:argumentMatchers];
-    [self indexMetadata:factoryMethod underName:[NSString stringWithFormat:@"%s::%s", class_getName(instance.objectClass), sel_getName(factorySelector)]];
+-(ALCResolvableMethod *) addMethod:(SEL) factorySelector
+                toResolvableObject:(ALCResolvableObject *) resolvableObject
+                        returnType:(Class) returnType
+                  argumentMatchers:(NSArray *) argumentMatchers {
+    ALCResolvableMethod *factoryMethod = [[ALCResolvableMethod alloc] initWithContext:resolvableObject.context
+                                                                      factoryInstance:resolvableObject
+                                                                      factorySelector:factorySelector
+                                                                           returnType:returnType
+                                                                     argumentMatchers:argumentMatchers];
+    [self storeResolvable:factoryMethod underName:[NSString stringWithFormat:@"%s::%s", class_getName(resolvableObject.objectClass), sel_getName(factorySelector)]];
     return factoryMethod;
 }
 

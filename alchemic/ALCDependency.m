@@ -6,14 +6,14 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCDependencyResolver.h"
+#import "ALCDependency.h"
 #import "ALCLogger.h"
 @import ObjectiveC;
 #import "ALCMatcher.h"
-#import "ALCModelObjectInstance.h"
-#import "ALCResolverPostProcessor.h"
+#import "ALCResolvableObject.h"
+#import "ALCDependencyPostProcessor.h"
 
-@implementation ALCDependencyResolver
+@implementation ALCDependency
 
 -(instancetype) initWithMatcher:(id<ALCMatcher>) dependencyMatcher {
     return [self initWithMatchers:[NSSet setWithObject:dependencyMatcher]];
@@ -29,28 +29,28 @@
 
 -(void) resolveUsingModel:(NSDictionary *)model {
     
-    _candidateInstances = [[NSMutableSet alloc] init];
-    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCModelObjectInstance *instance, BOOL *stop) {
+    _candidates = [[NSMutableSet alloc] init];
+    [model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCResolvableObject *resolvableObject, BOOL *stop) {
 
         // Run matchers to see if they match. All must accept the candidate object.
         for (id<ALCMatcher> dependencyMatcher in _dependencyMatchers) {
-            if (![dependencyMatcher matches:instance withName:name]) {
+            if (![dependencyMatcher matches:resolvableObject withName:name]) {
                 return;
             }
         }
-        [(NSMutableArray *)_candidateInstances addObject:instance];
+        [(NSMutableArray *)_candidates addObject:resolvableObject];
         
     }];
 
-    logDependencyResolving(@"Found %lu candidates", [_candidateInstances count]);
+    logDependencyResolving(@"Found %lu candidates", [_candidates count]);
 
 }
 
 -(void) postProcess:(NSSet *) postProcessors {
-    for (id<ALCDependencyResolverPostProcessor> postProcessor in postProcessors) {
+    for (id<ALCDependencyPostProcessor> postProcessor in postProcessors) {
         NSSet *newCandiates = [postProcessor process:self];
         if (newCandiates != nil) {
-            _candidateInstances = newCandiates;
+            _candidates = newCandiates;
         }
     }
 }
