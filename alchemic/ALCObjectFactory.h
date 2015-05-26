@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@class ALCResolvableObject;
+@class ALCClassBuilder;
 @class ALCContext;
 
 /**
@@ -19,9 +19,8 @@
 /**
  Called when the context needs an object to be created.
  
- @param classInfo the information tha describes the object to be created.
  @return an instance of the object or null if the factory cannot create the object.
  */
--(id) createObjectFromInstance:(ALCResolvableObject *) instance;
+-(id) createObjectFromBuilder:(ALCClassBuilder *) builder;
 
 @end

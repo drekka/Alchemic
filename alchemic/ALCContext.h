@@ -16,12 +16,12 @@
 #import "NSDictionary+ALCModel.h"
 #import "ALCValueProcessorFactory.h"
 
-@class ALCResolvableObject;
+@class ALCClassBuilder;
 
 @interface ALCContext : NSObject
 
 @property (nonatomic, strong, readonly) NSDictionary *model;
-@property (nonatomic, strong, readonly) NSSet *resolverPostProcessors;
+@property (nonatomic, strong, readonly) NSSet *dependencyPostProcessors;
 @property (nonatomic, strong, readonly) NSSet *objectFactories;
 @property (nonatomic, strong, readonly) id<ALCValueProcessorFactory> valueProcessorFactory;
 
@@ -41,7 +41,7 @@
  */
 -(void) addInitStrategy:(Class) initialisationStrategyClass;
 
--(void) addResolverPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor;
+-(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor;
 
 /**
  Adds a ALCObjectFactory to the list of object factories. Factories are checked in reverse order. The last registered object factory is the one asked first for an object.
@@ -58,20 +58,20 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCResolvableObject *) resolvableObject;
+-(void) registerAsSingleton:(ALCClassBuilder *) resolvableObject;
 
--(void) registerAsSingleton:(ALCResolvableObject *) resolvableObject withName:(NSString *) name;
+-(void) registerAsSingleton:(ALCClassBuilder *) resolvableObject withName:(NSString *) name;
 
 -(void) registerObject:(id) object withName:(NSString *) name;
 
 /**
  Registers a factory method with it's return data type and matchers for locating the objects for each argument.
  */
--(void) registerFactory:(ALCResolvableObject *) resolvableObject
+-(void) registerFactory:(ALCClassBuilder *) resolvableObject
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;
 
--(void) registerFactory:(ALCResolvableObject *) resolvableObject
+-(void) registerFactory:(ALCClassBuilder *) resolvableObject
                withName:(NSString *) name
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;

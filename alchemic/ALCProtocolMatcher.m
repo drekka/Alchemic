@@ -7,23 +7,26 @@
 //
 
 #import "ALCProtocolMatcher.h"
-#import "ALCResolvableObject.h"
+#import "ALCClassBuilder.h"
 @import ObjectiveC;
+#import "ALCType.h"
 
 @implementation ALCProtocolMatcher {
     Protocol *_protocol;
 }
 
--(instancetype) initWithProtocol:(Protocol *) protocol {
-    self = [super init];
-    if (self) {
-        _protocol = protocol;
-    }
-    return self;
++(instancetype) matcherWithProtocol:(Protocol *) protocol {
+    ALCProtocolMatcher *matcher = [[ALCProtocolMatcher alloc] init];
+    matcher->_protocol = protocol;
+    return matcher;
 }
 
--(BOOL) matches:(id <ALCResolvable>) resolvable withName:(NSString *) name {
-    return class_conformsToProtocol(resolvable.objectClass, _protocol);
+-(BOOL) matches:(id <ALCBuilder>) builder withName:(NSString *) name {
+    return [builder.valueType typeConformsToProtocol:_protocol];
+}
+
+-(NSString *) description {
+    return [NSString stringWithFormat:@"Protocol matcher: %s", protocol_getName(_protocol)];
 }
 
 @end

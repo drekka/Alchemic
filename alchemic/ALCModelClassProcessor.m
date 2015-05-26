@@ -9,7 +9,7 @@
 @import ObjectiveC;
 
 #import "ALCModelClassProcessor.h"
-#import "ALCResolvableObject.h"
+#import "ALCClassBuilder.h"
 #import "ALCContext.h"
 #import "ALCInternal.h"
 #import "ALCLogger.h"
@@ -25,7 +25,7 @@ static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREF
     Method *classMethods = class_copyMethodList(object_getClass(class), &methodCount);
     
     // Search the methods for registration methods.
-    ALCResolvableObject *currentClassInstance = nil;
+    ALCClassBuilder *currentClassInstance = nil;
     for (size_t idx = 0; idx < methodCount; ++idx) {
         
         // If the method is not an alchemic one, then ignore it.
@@ -37,13 +37,13 @@ static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREF
         
         // If we are here then we have an alchemic method to process.
         if (currentClassInstance == nil) {
-            currentClassInstance = [context.model addResolvableObjectForClass:class inContext:context];
+            currentClassInstance = [context.model createClassBuilderForClass:class inContext:context];
         }
         
         logRuntime(@"Executing %s::%s ...", class_getName(class), methodName);
         // Note cast because of XCode 6
         // If this returns a new ALCInstance it is assumed to be a new model object and is added.
-        ((void (*)(id, SEL, ALCResolvableObject *))objc_msgSend)(class, sel, currentClassInstance);
+        ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(class, sel, currentClassInstance);
         
     }
     

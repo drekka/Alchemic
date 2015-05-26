@@ -10,9 +10,8 @@
 
 #import "ALCRuntime.h"
 #import "ALCInternal.h"
-#import "ALCResolvableObject.h"
+#import "ALCClassBuilder.h"
 #import "ALCLogger.h"
-#import "ALCVariableDependency.h"
 #import "NSDictionary+ALCModel.h"
 #import "ALCContext.h"
 
@@ -103,13 +102,13 @@ static Class protocolClass;
     };
     
     ClassMatchesBlock resolverPostProcessorBlock = ^(classMatchesBlockArgs){
-        [context addResolverPostProcessor:[[class alloc] init]];
+        [context addDependencyPostProcessor:[[class alloc] init]];
     };
     
     ClassMatchesBlock resourceLocatorBlock = ^(classMatchesBlockArgs){
-        ALCResolvableObject *instance = [context.model addResolvableObjectForClass:class inContext:context];
-        instance.object = [[class alloc] init];
-        instance.instantiate = YES;
+        ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
+        classBuilder.value = [[class alloc] init];
+        classBuilder.singleton = YES;
     };
     
     ClassMatchesBlock objectFactoryBlock = ^(classMatchesBlockArgs){
@@ -163,7 +162,7 @@ static Class protocolClass;
                                      userInfo:nil];
     }
     
-    logRegistration(@"Injection %@, mapped to variable: %s", inj, ivar_getName(var));
+    logRegistration(@" + Injection %@, mapped to variable: %s", inj, ivar_getName(var));
     return var;
 }
 

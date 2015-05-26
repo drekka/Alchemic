@@ -7,27 +7,29 @@
 //
 
 #import "ALCArrayValueProcessor.h"
-#import "ALCVariableDependency.h"
 #import "ALCLogger.h"
 #import "ALCResolvable.h"
 #import "ALCRuntime.h"
+#import "ALCBuilder.h"
+#import "ALCDependency.h"
+#import "ALCType.h"
 
 @implementation ALCArrayValueProcessor
 
-+(BOOL) canResolveClass:(Class)class {
-    return ! [ALCRuntime class:class isKindOfClass:[NSArray class]];
++(BOOL) canResolveValueForDependency:(ALCDependency *)dependency {
+    return ! [ALCRuntime class:dependency.valueType.typeClass isKindOfClass:[NSArray class]];
 }
 
--(id) resolveCandidateValues:(ALCDependency *)dependency {
+-(id) resolveCandidateValues:(NSSet *) candidates {
 
-    if ([dependency.candidates count] == 1) {
-        id value = ((id<ALCResolvable>)[dependency.candidates anyObject]).object;
+    if ([candidates count] == 1) {
+        id value = ((id<ALCBuilder>)[candidates anyObject]).value;
         return  [value isKindOfClass:[NSArray class]] ? value : @[value];
     }
     
-    NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[dependency.candidates count]];
-    [dependency.candidates enumerateObjectsUsingBlock:^(id<ALCResolvable> modelObject, BOOL *stop) {
-        id value = modelObject.object;
+    NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:[candidates count]];
+    [candidates enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop) {
+        id value = builder.value;
         if (value != nil) {
             [values addObject:value];
         }
@@ -36,7 +38,7 @@
     
 }
 
--(void) validateCandidates:(ALCDependency *)dependency {
+-(void) validateCandidates:(NSSet *) candidates {
     // Nothing to do here.
 }
 

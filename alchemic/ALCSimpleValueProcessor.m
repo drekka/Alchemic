@@ -11,45 +11,44 @@
 @import ObjectiveC;
 
 #import "ALCDependency.h"
-#import "ALCVariableDependency.h"
 #import "ALCLogger.h"
-#import "ALCResolvableObject.h"
 #import "ALCRuntime.h"
+#import "ALCType.h"
+#import "ALCBuilder.h"
 
 @implementation ALCSimpleValueProcessor
 
-+(BOOL) canResolveClass:(Class)class {
-    return ! [ALCRuntime class:class isKindOfClass:[NSArray class]];
++(BOOL) canResolveValueForDependency:(ALCDependency *)dependency {
+    return ! [dependency.valueType.typeClass isKindOfClass:[NSArray class]];
 }
 
--(id) resolveCandidateValues:(ALCDependency *) dependency {
-
-    ALCResolvableObject *instance = [dependency.candidates anyObject];
-    id object = instance.object;
+-(id) resolveCandidateValues:(NSSet *) candidates {
+    
+    id object = [candidates anyObject];
     
     if (object == nil) {
         @throw [NSException exceptionWithName:@"AlchemicNilObject"
-                                       reason:[NSString stringWithFormat:@"Dependency %s has not created an object", ivar_getName(((ALCVariableDependency *)dependency).variable)]
+                                       reason:[NSString stringWithFormat:@"Dependency resolved to a nil"]
                                      userInfo:nil];
     }
-
+    
     return object;
 }
 
--(void) validateCandidates:(ALCDependency *)dependency {
-
-    if ([dependency.candidates count] > 1) {
+-(void) validateCandidates:(NSSet *)candidates {
+    
+    if ([candidates count] > 1) {
         
-        NSMutableArray *candidates = [[NSMutableArray alloc] initWithCapacity:[dependency.candidates count]];
-        for (id<ALCResolvable> modelObject in dependency.candidates) {
-            [candidates addObject:[modelObject description]];
+        NSMutableArray *candidateDescriptions = [[NSMutableArray alloc] initWithCapacity:[candidates count]];
+        for (id<ALCBuilder> builder in candidates) {
+            [candidateDescriptions addObject:[builder description]];
         }
         
         @throw [NSException exceptionWithName:@"AlchemicTooManyCandidates"
-                                       reason:[NSString stringWithFormat:@"Expecting 1 object for %@, but found %lu:%@", dependency, [dependency.candidates count], [candidates componentsJoinedByString:@", "]]
+                                       reason:[NSString stringWithFormat:@"Expecting 1 object, but found %lu: %@", [candidates count], [candidateDescriptions componentsJoinedByString:@", "]]
                                      userInfo:nil];
     }
-
+    
 }
 
 @end

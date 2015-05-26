@@ -8,21 +8,24 @@
 
 @import ObjectiveC;
 #import "ALCClassMatcher.h"
+#import "ALCtype.h"
 
 @implementation ALCClassMatcher {
     Class _class;
 }
 
--(instancetype) initWithClass:(Class) class {
-    self = [super init];
-    if (self) {
-        _class = class;
-    }
-    return self;
++(instancetype) matcherWithClass:(Class)class {
+    ALCClassMatcher *matcher = [[ALCClassMatcher alloc] init];
+    matcher->_class = class;
+    return matcher;
 }
 
--(BOOL) matches:(id <ALCResolvable>) resolvable withName:(NSString *) name {
-    return [resolvable.objectClass isSubclassOfClass:_class];
+-(BOOL) matches:(id <ALCBuilder>) builder withName:(NSString *) name {
+    return [builder.valueType typeIsKindOfClass:_class];
+}
+
+-(NSString *) description {
+    return [NSString stringWithFormat:@"class matcher: %s", class_getName(_class)];
 }
 
 @end

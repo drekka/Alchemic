@@ -18,16 +18,16 @@
 /**
  Used by the factory to decide if this resolver should be used for a specific dependency.
  */
-+(BOOL) canResolveClass:(Class) class;
++(BOOL) canResolveValueForDependency:(ALCDependency *) dependency;
 
 /**
  Returns an object derived from the candidates object resolvers.
  */
--(id) resolveCandidateValues:(ALCDependency *) dependency;
+-(id) resolveCandidateValues:(NSSet *) candidates;
 
 /**
  Called during resolution to validate the candidates.
  */
--(void) validateCandidates:(ALCDependency *) dependency;
+-(void) validateCandidates:(NSSet *) candidates;
 
 @end

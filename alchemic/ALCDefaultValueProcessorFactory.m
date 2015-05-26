@@ -9,14 +9,13 @@
 #import "ALCDefaultValueProcessorFactory.h"
 #import "ALCSimpleValueProcessor.h"
 #import "ALCArrayValueProcessor.h"
+#import "ALCLogger.h"
 
 @implementation ALCDefaultValueProcessorFactory
 
--(id<ALCValueProcessor>) resolverForDependency:(id<ALCResolvable>) dependency {
+-(id<ALCValueProcessor>) resolverForDependency:(ALCDependency *) dependency {
 
-    Class dependencyExpectsClass = dependency.objectClass;
-    
-    if ([ALCArrayValueProcessor canResolveClass:dependencyExpectsClass]) {
+    if ([ALCArrayValueProcessor canResolveValueForDependency:dependency]) {
         return [[ALCArrayValueProcessor alloc] init];
     }
 

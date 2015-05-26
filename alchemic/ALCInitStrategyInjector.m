@@ -12,9 +12,10 @@
 
 @import ObjectiveC;
 #import "ALCLogger.h"
-#import "ALCResolvableObject.h"
+#import "ALCClassBuilder.h"
 #import "ALCInitStrategy.h"
 #import "ALCClassMatcher.h"
+#import "ALCType.h"
 
 @implementation ALCInitStrategyInjector {
     NSSet *_strategyClasses;
@@ -45,34 +46,34 @@ static BOOL injected = NO;
     }
 
     // Now hook into the classes.
-    for (ALCResolvableObject *instance in [self findRootInstancesInModel:model]) {
+    for (ALCClassBuilder *classBuilder in [self findRootClassBuildersInModel:model]) {
         for (Class initStrategy in _strategyClasses) {
-            if ([initStrategy canWrapInit:instance]) {
-                [instance addInitStrategy:[[initStrategy alloc] initWithInstance:instance]];
+            if ([initStrategy canWrapInit:classBuilder]) {
+                [classBuilder addInitStrategy:[[initStrategy alloc] initWithClassBuilder:classBuilder]];
             }
         }
     }
 }
 
--(NSArray *) findRootInstancesInModel:(NSDictionary *) model {
+-(NSArray *) findRootClassBuildersInModel:(NSDictionary *) model {
     
-    // First find all instances of ALCInstance.
-    NSSet *instances = [model resolvablesWithMatchers:[NSSet setWithObject:[[ALCClassMatcher alloc] initWithClass:[ALCResolvableObject class]]]];
+    // First find all instances.
+    NSSet *builders = [model buildersWithMatchers:[NSSet setWithObject:[ALCClassMatcher matcherWithClass:[ALCClassBuilder class]]]];
     
-    // Copy all the classes into an array for Against the list..
-    NSMutableSet *modelClasses = [[NSMutableSet alloc] initWithCapacity:[instances count]];
-    for (ALCResolvableObject *instance in instances) {
-        [modelClasses addObject:instance.objectClass];
+    // Copy all the classes into an array
+    NSMutableSet *builderClasses = [[NSMutableSet alloc] initWithCapacity:[builders count]];
+    for (ALCClassBuilder *builder in builders) {
+        [builderClasses addObject:builder.valueType.typeClass];
     }
 
     // Work out which classes we need to inject hooks into
-    NSMutableArray *rootInstances = [[NSMutableArray alloc] init];
-    for (ALCResolvableObject *instance in instances) {
+    NSMutableArray *rootBuilders = [[NSMutableArray alloc] init];
+    for (ALCClassBuilder *builder in builders) {
         
         // Check each ancestor class in turn. If any are in the list, then ignore the current class.
-        Class parentClass = class_getSuperclass(instance.objectClass);
+        Class parentClass = class_getSuperclass(builder.valueType.typeClass);
         while (parentClass != NULL) {
-            if ([modelClasses containsObject:parentClass]) {
+            if ([builderClasses containsObject:parentClass]) {
                 // The parent is in the model too so stop looking.
                 break;
             }
@@ -81,13 +82,13 @@ static BOOL injected = NO;
         
         // If we are here and the parent is NULL then we are safe to add the class to the final list.
         if (parentClass == NULL) {
-            logRuntime(@"Scheduling %s for init wrapper injection", class_getName(instance.objectClass));
-            [rootInstances addObject:instance];
+            logRuntime(@"Scheduling %s for init wrapper injection", class_getName(builder.valueType.typeClass));
+            [rootBuilders addObject:builder];
         }
         
     }
 
-    return rootInstances;
+    return rootBuilders;
 
 }
 

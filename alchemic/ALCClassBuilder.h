@@ -10,20 +10,26 @@
 
 #import "ALCInitStrategy.h"
 #import "ALCContext.h"
-#import "ALCAbstractResolvable.h"
+#import "ALCAbstractBuilder.h"
 
-@interface ALCResolvableObject : ALCAbstractResolvable
+@interface ALCClassBuilder : ALCAbstractBuilder
 
-@property (nonatomic, assign) BOOL instantiate;
+@property (nonatomic, assign) BOOL singleton;
+
+@property (nonatomic, assign, readonly) BOOL instantiated;
 
 #pragma mark - Setting up
 
--(void) addDependency:(NSString *) inj, ...;
+-(void) addInjectionPoint:(NSString *) inj, ...;
 
--(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers;
+-(void) addInjectionPoint:(NSString *) inj withMatchers:(NSSet *) matchers;
 
 -(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
 
+#pragma mark - Creation
+
 -(void) injectDependenciesInto:(id) object;
+
+-(id) instantiate;
 
 @end

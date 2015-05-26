@@ -12,12 +12,13 @@
 @import ObjectiveC;
 
 #import "Alchemic.h"
-#import "ALCResolvableObject.h"
+#import "ALCClassBuilder.h"
+#import "ALCType.h"
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
-+(BOOL) canWrapInit:(ALCResolvableObject *) instance {
-    return [instance.objectClass isSubclassOfClass:[UIViewController class]];
++(BOOL) canWrapInit:(ALCClassBuilder *) instance {
+    return [instance.valueType.typeClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

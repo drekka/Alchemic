@@ -16,12 +16,13 @@
 #import "ALCLogger.h"
 #import "Alchemic.h"
 #import "ALCContext.h"
-#import "ALCResolvableObject.h"
+#import "ALCClassBuilder.h"
+#import "ALCType.h"
 
 @implementation ALCUIViewControllerInitWithFrameStrategy
 
-+(BOOL) canWrapInit:(ALCResolvableObject *) instance {
-    return [instance.objectClass isSubclassOfClass:[UIViewController class]];
++(BOOL) canWrapInit:(ALCClassBuilder *) classBuilder {
+    return [classBuilder.valueType.typeClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

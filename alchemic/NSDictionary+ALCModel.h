@@ -8,25 +8,23 @@
 
 @import Foundation;
 
-#import "ALCResolvable.h"
-
+#import "ALCBuilder.h"
 @class ALCContext;
-@class ALCResolvableObject;
-@class ALCResolvableMethod;
+@class ALCClassBuilder;
+@class ALCFactoryMethodBuilder;
+
 
 #import "ALCMatcher.h"
 
 @interface NSDictionary (ALCModel)
 
-#pragma mark - Finding Metadata
+#pragma mark - Finding builders
 
--(ALCResolvableObject *) findResolvableObjectForObject:(id) object;
+-(ALCClassBuilder *) findBuilderForObject:(id) object;
 
--(NSSet *) resolvablesWithMatchers:(NSSet *) matchers;
+-(NSSet *) buildersWithMatchers:(NSSet *) matchers;
 
--(NSSet *) resolvablesWithMatcher:(id<ALCMatcher>) matcher;
-
--(void) enumerateResolvableObjectsUsingBlock:(void (^)(NSString *name, ALCResolvableObject *resolvableObject, BOOL *stop))block;
+-(void) enumerateClassBuildersWithBlock:(void (^)(NSString *name, ALCClassBuilder *builder, BOOL *stop))block;
 
 #pragma mark - Finding objects
 
@@ -34,19 +32,19 @@
 
 -(NSSet *) objectsWithMatchers:(NSSet *) matchers;
 
-#pragma mark - Adding new Metadata
+#pragma mark - Adding builders
 
--(void) storeResolvable:(id<ALCResolvable>) objectMetadata underName:(NSString *) name;
+-(void) addBuilder:(id<ALCBuilder>) builder underName:(NSString *) name;
 
--(ALCResolvableObject *) addResolvableObjectForClass:(Class) class inContext:(ALCContext *) context;
+-(ALCClassBuilder *) createClassBuilderForClass:(Class) class inContext:(ALCContext *) context;
 
--(ALCResolvableObject *) addResolvableObjectForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
+-(ALCClassBuilder *) createClassBuilderForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
 
--(ALCResolvableObject *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
+-(ALCClassBuilder *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
 
--(ALCResolvableMethod *) addMethod:(SEL) factorySelector
-                toResolvableObject:(ALCResolvableObject *) resolvableObject
-                        returnType:(Class) returnType
-                  argumentMatchers:(NSArray *) argumentMatchers;
+-(ALCFactoryMethodBuilder *) addMethod:(SEL) factorySelector
+                             toBuilder:(ALCClassBuilder *) builder
+                            returnType:(Class) returnType
+                      argumentMatchers:(NSArray *) argumentMatchers;
 
 @end

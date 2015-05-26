@@ -6,20 +6,21 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCResolvableObject.h"
+#import "ALCClassBuilder.h"
 @import ObjectiveC;
 
-#import "ALCVariableDependency.h"
 #import "ALCRuntime.h"
 #import "ALCObjectFactory.h"
+#import "ALCVariableDependency.h"
 #import "ALCLogger.h"
+#import "ALCType.h"
 
-@implementation ALCResolvableObject {
+@implementation ALCClassBuilder {
     NSArray *_initialisationStrategies;
 }
 
--(instancetype) initWithContext:(__weak ALCContext *) context objectClass:(Class) objectClass {
-    self = [super initWithContext:context objectClass:objectClass];
+-(instancetype) initWithContext:(ALCContext *__weak)context valueType:(ALCType *)valueType {
+    self = [super initWithContext:context valueType:valueType];
     if (self) {
         _initialisationStrategies = @[];
     }
@@ -28,7 +29,7 @@
 
 #pragma mark - Adding dependencies
 
--(void) addDependency:(NSString *) inj, ... {
+-(void) addInjectionPoint:(NSString *) inj, ... {
     
     va_list args;
     va_start(args, inj);
@@ -46,42 +47,63 @@
     }
     va_end(args);
     
-    [self addDependency:inj withMatchers:finalMatchers];
+    [self addInjectionPoint:inj withMatchers:finalMatchers];
 }
 
--(void) addDependency:(NSString *) inj withMatchers:(NSSet *) matchers {
-    Ivar variable = [ALCRuntime class:self.objectClass variableForInjectionPoint:inj];
-    [self addDependencyResolver:[[ALCVariableDependency alloc] initWithVariable:variable inResolvableObject:self matchers:matchers]];
+-(void) addInjectionPoint:(NSString *) inj withMatchers:(NSSet *) matchers {
+    Class objClass = self.valueType.typeClass;
+    Ivar variable = [ALCRuntime class:objClass variableForInjectionPoint:inj];
+    ALCType *type = [ALCType typeForInjection:variable inClass:objClass];
+    ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithContext:self.context
+                                                                              variable:variable
+                                                                             valueType:type
+                                                                              matchers:matchers];
+    [self addDependency:dependency];
 }
 
 #pragma mark - Lifecycle
 
--(void) instantiateObject {
+-(void) resolve {
+    
+}
 
+#pragma mark - Properties
+
+-(id) value {
+    if (super.value == nil) {
+        [self instantiate];
+        [self injectDependenciesInto:self];
+    }
+    return super.value;
+}
+
+-(id) instantiate {
+    
     for (id<ALCObjectFactory> objectFactory in self.context.objectFactories) {
-        self.object = [objectFactory createObjectFromInstance:self];
-        if (self.objectClass != nil) {
+        super.value = [objectFactory createObjectFromBuilder:self];
+        if (super.value != nil) {
             break;
         }
     }
     
-    if (self.object == nil) {
+    if (super.value == nil) {
         @throw [NSException exceptionWithName:@"AlchemicUnableToCreateInstance"
                                        reason:[NSString stringWithFormat:@"Unable to create an instance of %@", [self description]]
                                      userInfo:nil];
     }
+    
+    return super.value;
 }
 
 -(void) injectDependenciesInto:(id) object {
-
+    
     if ([self.dependencies count] == 0) {
         return;
     }
     
     logDependencyResolving(@"Injecting a %s with %lu dependencies from %@", object_getClassName(object), [self.dependencies count], [self description]);
     for (ALCVariableDependency *dependency in self.dependencies) {
-        id result = [self.valueProcessor resolveCandidateValues:dependency];
-        [ALCRuntime injectObject:object variable:dependency.variable withValue:result];
+        [ALCRuntime injectObject:object variable:dependency.variable withValue:dependency.value];
     }
 }
 
@@ -90,8 +112,8 @@
 }
 
 -(NSString *) description {
-    NSString *prefix = self.instantiate ? @"singleton" : @"meta-data";
-    return [NSString stringWithFormat:@"%@ %s", prefix, class_getName(self.objectClass)];
+    NSString *prefix = self.singleton ? @"singleton" : @"resolvable";
+    return [NSString stringWithFormat:@"%@ for %s", prefix, class_getName(self.valueType.typeClass)];
 }
 
 @end

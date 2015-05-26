@@ -11,6 +11,6 @@
 
 @interface ALCNameMatcher : NSObject<ALCMatcher>
 
--(instancetype) initWithName:(NSString *) name;
++(instancetype) matcherWithName:(NSString *) name;
 
 @end

@@ -7,22 +7,24 @@
 //
 
 #import "ALCNameMatcher.h"
-#import "ALCResolvableObject.h"
+#import "ALCClassBuilder.h"
 
 @implementation ALCNameMatcher {
     NSString *_name;
 }
 
--(instancetype) initWithName:(NSString *) name {
-    self = [super init];
-    if (self) {
-        _name = name;
-    }
-    return self;
++(instancetype) matcherWithName:(NSString *)name {
+    ALCNameMatcher *matcher = [[ALCNameMatcher alloc] init];
+    matcher->_name = name;
+    return matcher;
 }
 
--(BOOL) matches:(id <ALCResolvable>) resolvable withName:(NSString *) name {
+-(BOOL) matches:(id <ALCBuilder>) builder withName:(NSString *) name {
     return [name isEqualToString:_name];
+}
+
+-(NSString *) description {
+    return [NSString stringWithFormat:@"Name matcher: %@", _name];
 }
 
 @end

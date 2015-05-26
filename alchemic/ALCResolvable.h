@@ -8,16 +8,19 @@
 
 @import Foundation;
 
+@class ALCType;
+
+/**
+ Base protocol for things that can resolve to a value.
+ */
 @protocol ALCResolvable <NSObject>
 
-@property (nonatomic, assign, readonly) Class objectClass;
-@property (nonatomic, strong) id object;
-@property (nonatomic, assign) BOOL primary;
+#pragma mark - Resolving
 
-#pragma mark - Lifecycle
+-(void) resolve;
 
--(void) resolveDependencies;
+@property (nonatomic, strong, readonly) id value;
 
--(void) instantiateObject;
+@property (nonatomic, assign, readonly) ALCType *valueType;
 
 @end

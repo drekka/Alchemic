@@ -12,6 +12,6 @@
 
 @interface ALCProtocolMatcher : NSObject<ALCMatcher>
 
--(instancetype) initWithProtocol:(Protocol *) protocol;
++(instancetype) matcherWithProtocol:(Protocol *) protocol;
 
 @end

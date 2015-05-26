@@ -14,6 +14,6 @@
 /**
  @return a new list of candidates objects or nil if the list is not changed.
  */
--(NSSet *) process:(ALCDependency *) resolver;
+-(NSSet *) process:(NSSet *) dependencies;
 
 @end

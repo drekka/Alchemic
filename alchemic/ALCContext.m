@@ -19,9 +19,10 @@
 #import "ALCProtocolMatcher.h"
 #import "ALCVariableDependency.h"
 #import "NSDictionary+ALCModel.h"
-#import "ALCResolvableObject.h"
-#import "ALCResolvableMethod.h"
+#import "ALCClassBuilder.h"
+#import "ALCFactoryMethodBuilder.h"
 #import "ALCDefaultValueProcessorFactory.h"
+#import "ALCType.h"
 
 @implementation ALCContext {
     NSMutableSet *_initialisationStrategyClasses;
@@ -34,7 +35,7 @@
     if (self) {
         _model = [[NSMutableDictionary alloc] init];
         _initialisationStrategyClasses = [[NSMutableSet alloc] init];
-        _resolverPostProcessors = [[NSMutableSet alloc] init];
+        _dependencyPostProcessors = [[NSMutableSet alloc] init];
         _objectFactories = [[NSMutableSet alloc] init];
         self.valueProcessorFactoryClass = [ALCDefaultValueProcessorFactory class];
     }
@@ -66,41 +67,36 @@
 }
 
 -(void) resolveModelObjects {
-    logDependencyResolving(@"Resolving dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCResolvable> objectMetadata, BOOL *stop){
-        logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(objectMetadata.objectClass));
-        [objectMetadata resolveDependencies];
+    logDependencyResolving(@"---- Resolving dependencies ----");
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCResolvable> resolvable, BOOL *stop){
+        logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(resolvable.valueType.typeClass));
+        [resolvable resolve];
     }];
 }
 
 -(void) instantiateSingletons {
     
-    logCreation(@"Instantiating objects ...");
-    [_model enumerateResolvableObjectsUsingBlock:^(NSString *name, ALCResolvableObject *resolvableObject, BOOL *stop) {
-        if (resolvableObject.object == nil && resolvableObject.instantiate) {
-            logCreation(@"instanting '%@' %@", name, resolvableObject);
-            [resolvableObject instantiateObject];
+    logCreation(@"---- Instantiating singletons ----");
+    [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
+        if (!classBuilder.instantiated && classBuilder.singleton) {
+            logCreation(@"instanting '%@' %@", name, classBuilder);
+            [classBuilder instantiate];
         }
     }];
     
-    logCreation(@"Injecting dependencies objects ...");
-    [_model enumerateResolvableObjectsUsingBlock:^(NSString *name, ALCResolvableObject *resolvableObject, BOOL *stop) {
-        if (resolvableObject.object != nil) {
-            [resolvableObject injectDependenciesInto:resolvableObject.object];
+    logCreation(@"---- Injecting dependencies into singletons ----");
+    [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
+        if (classBuilder.instantiated) {
+            [classBuilder injectDependenciesInto:classBuilder.value];
         }
     }];
     
 }
 
 -(void) injectDependencies:(id) object {
-    
     logRuntime(@"Injecting dependencies into a %s", object_getClassName(object));
-    
-    // Object will have a matching instance in the model if it has any injection point.
-    ALCResolvableObject *instance = [_model findResolvableObjectForObject:object];
-    
-    
-    [instance injectDependenciesInto:object];
+    ALCClassBuilder *classBuilder = [_model findBuilderForObject:object];
+    [classBuilder injectDependenciesInto:object];
 }
 
 #pragma mark - Configuration
@@ -110,9 +106,9 @@
     [(NSMutableSet *)_objectFactories addObject:objectFactory];
 }
 
--(void) addResolverPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor {
-    logConfig(@"Adding resolver post processor: %s", object_getClassName(postProcessor));
-    [(NSMutableSet *)_resolverPostProcessors addObject:postProcessor];
+-(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor {
+    logConfig(@"Adding dependency post processor: %s", object_getClassName(postProcessor));
+    [(NSMutableSet *)_dependencyPostProcessors addObject:postProcessor];
 }
 
 -(void) addInitStrategy:(Class) initialisationStrategyClass {
@@ -122,26 +118,26 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCResolvableObject *) resolvableObject {
-    resolvableObject.instantiate = YES;
+-(void) registerAsSingleton:(ALCClassBuilder *) resolvableObject {
+    resolvableObject.singleton = YES;
 }
 
--(void) registerAsSingleton:(ALCResolvableObject *) resolvableObject withName:(NSString *) name {
-    resolvableObject.instantiate = YES;
-    [_model storeResolvable:resolvableObject underName:name];
+-(void) registerAsSingleton:(ALCClassBuilder *) classBuilder withName:(NSString *) name {
+    classBuilder.singleton = YES;
+    [_model addBuilder:classBuilder underName:name];
 }
 
 -(void) registerObject:(id) object withName:(NSString *) name {
-    ALCResolvableObject *instance = [_model addObject:object inContext:self withName:name];
-    instance.instantiate = YES;
-    instance.object = object;
+    ALCClassBuilder *instance = [_model addObject:object inContext:self withName:name];
+    instance.singleton = YES;
+    instance.value = object;
 }
 
--(void) registerFactory:(ALCResolvableObject *) resolvableObject
+-(void) registerFactory:(ALCClassBuilder *) classBuilder
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ... {
     
-    [ALCRuntime validateSelector:factorySelector withClass:resolvableObject.objectClass];
+    [ALCRuntime validateSelector:factorySelector withClass:classBuilder.valueType.typeClass];
     
     // Process the selector arguments
     va_list args;
@@ -155,12 +151,36 @@
     va_end(args);
     
     // Declare a new instance to represent the factory method for dependency resolving.
-    ALCResolvableMethod *factoryMethod = [_model addMethod:factorySelector
-                                        toResolvableObject:resolvableObject
-                                                returnType:returnTypeClass
-                                          argumentMatchers:argumentMatchers];
-    factoryMethod.argumentMatchers = argumentMatchers;
+    [_model addMethod:factorySelector
+            toBuilder:classBuilder
+           returnType:returnTypeClass
+     argumentMatchers:argumentMatchers];
     
+}
+
+-(void) registerFactory:(ALCClassBuilder *) classBuilder
+               withName:(NSString *) name
+        factorySelector:(SEL) factorySelector
+             returnType:(Class) returnTypeClass, ... {
+    
+    [ALCRuntime validateSelector:factorySelector withClass:classBuilder.valueType.typeClass];
+    
+    // Process the selector arguments
+    va_list args;
+    va_start(args, returnTypeClass);
+    id argument = va_arg(args, id);
+    NSMutableArray *argumentMatchers = [[NSMutableArray alloc] init];
+    while (argument != nil) {
+        [self addMatcherArgument:argument toMatcherArray:argumentMatchers];
+        argument = va_arg(args, id);
+    }
+    va_end(args);
+    
+    // Declare a new instance to represent the factory method for dependency resolving.
+    [_model addMethod:factorySelector
+            toBuilder:classBuilder
+           returnType:returnTypeClass
+     argumentMatchers:argumentMatchers];
 }
 
 -(void) addMatcherArgument:(id) argument toMatcherArray:(NSMutableArray *) matcherArray {
@@ -175,33 +195,6 @@
     }
     
     [matcherArray addObject:argument];
-}
-
--(void) registerFactory:(ALCResolvableObject *) resolvableObject
-               withName:(NSString *) name
-        factorySelector:(SEL) factorySelector
-             returnType:(Class) returnTypeClass, ... {
-    
-    [ALCRuntime validateSelector:factorySelector withClass:resolvableObject.objectClass];
-    
-    // Process the selector arguments
-    va_list args;
-    va_start(args, returnTypeClass);
-    id argument = va_arg(args, id);
-    NSMutableArray *argumentMatchers = [[NSMutableArray alloc] init];
-    while (argument != nil) {
-        [self addMatcherArgument:argument toMatcherArray:argumentMatchers];
-        argument = va_arg(args, id);
-    }
-    va_end(args);
-    
-    // Declare a new instance to represent the factory method for dependency resolving.
-    ALCResolvableMethod *factoryMethod = [_model addMethod:factorySelector
-                                        toResolvableObject:resolvableObject
-                                                returnType:returnTypeClass
-                                          argumentMatchers:argumentMatchers];
-    [_model storeResolvable:factoryMethod underName:name];
-    factoryMethod.argumentMatchers = argumentMatchers;
 }
 
 @end

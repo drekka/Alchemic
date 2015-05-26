@@ -11,6 +11,6 @@
 
 @interface ALCClassMatcher : NSObject<ALCMatcher>
 
--(instancetype) initWithClass:(Class) class;
++(instancetype) matcherWithClass:(Class) class;
 
 @end

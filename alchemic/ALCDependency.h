@@ -7,19 +7,17 @@
 //
 
 @import Foundation;
+
+@class ALCContext;
+
 #import "ALCMatcher.h"
+#import "ALCValueProcessor.h"
+#import "ALCResolvable.h"
 
-@interface ALCDependency : NSObject
+@interface ALCDependency : NSObject<ALCResolvable>
 
-@property (nonatomic, strong, readonly) NSSet *candidates;
-@property (nonatomic, strong) NSSet *dependencyMatchers;
-
--(instancetype) initWithMatchers:(NSSet *) dependencyMatchers;
-
--(instancetype) initWithMatcher:(id<ALCMatcher>) dependencyMatcher;
-
--(void) resolveUsingModel:(NSDictionary *) model;
-
--(void) postProcess:(NSSet *) postProcessors;
+-(instancetype) initWithContext:(__weak ALCContext *) context
+                      valueType:(ALCType *) valueType
+                       matchers:(NSSet *) dependencyMatchers;
 
 @end

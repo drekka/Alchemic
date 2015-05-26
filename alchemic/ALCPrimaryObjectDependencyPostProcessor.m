@@ -8,22 +8,22 @@
 
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
 #import "ALCDependency.h"
-#import "ALCResolvable.h"
+#import "ALCBuilder.h"
 
 @implementation ALCPrimaryObjectDependencyPostProcessor
 
--(NSSet *) process:(ALCDependency *) resolver {
-    
+-(NSSet *) process:(NSSet *) dependencies {
+
     // Build a list of primary objects.
     NSMutableSet *primaries = [[NSMutableSet alloc] init];
-    for (id<ALCResolvable> candidateResolvable in resolver.candidates) {
-        if (candidateResolvable.primary) {
-            [primaries addObject:candidateResolvable];
+    for (id<ALCBuilder> candidateBuilder in dependencies) {
+        if (candidateBuilder.primary) {
+            [primaries addObject:candidateBuilder];
         }
     }
     
     // Replace the list if primaries are present.
-    return [primaries count] > 0 ? primaries : nil;
+    return [primaries count] > 0 ? primaries : dependencies;
 }
 
 @end

@@ -9,7 +9,7 @@
 @import Foundation;
 
 #import "ALCInternal.h"
-#import "ALCResolvableObject.h"
+#import "ALCClassBuilder.h"
 #import "ALCContext.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
@@ -21,11 +21,11 @@
 
 #define intoVariable(_variableName) _alchemic_toNSString(_variableName)
 
-#define withClass(_className) [[ALCClassMatcher alloc] initWithClass:[_className class]]
+#define withClass(_className) [ALCClassMatcher matcherWithClass:[_className class]]
 
-#define withProtocol(_protocolName) [[ALCProtocolMatcher alloc] initWithProtocol:@protocol(_protocolName)]
+#define withProtocol(_protocolName) [ALCProtocolMatcher matcherWithProtocol:@protocol(_protocolName)]
 
-#define withName(_objectName) [[ALCNameMatcher alloc] initWithName:_objectName]
+#define withName(_objectName) [ALCNameMatcher matcherWithName:_objectName]
 
 #pragma mark - Injection
 
@@ -49,28 +49,28 @@
 
 // Registers an injection point in the current class.
 #define inject(_variable, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInInstance):(ALCResolvableObject *) resolvableObject { \
-    [resolvableObject addDependency:_variable, ## __VA_ARGS__, nil]; \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInInstance):(ALCClassBuilder *) classBuilder { \
+    [classBuilder addInjectionPoint:_variable, ## __VA_ARGS__, nil]; \
 }
 
 /**
  This macros is used to register a class in Alchemic. Registered classes will be created automatically.
  */
 #define registerSingleton \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCResolvableObject *) resolvableObject { \
-    [[Alchemic mainContext] registerAsSingleton:resolvableObject]; \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCClassBuilder *) classBuilder { \
+    [[Alchemic mainContext] registerAsSingleton:classBuilder]; \
 }
 
 #define registerSingletonWithName(_componentName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCResolvableObject *) resolvableObject { \
-    [[Alchemic mainContext] registerAsSingleton:resolvableObject withName:_componentName]; \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCClassBuilder *) classBuilder { \
+    [[Alchemic mainContext] registerAsSingleton:classBuilder withName:_componentName]; \
 }
 
 /**
  Adds a pre-built object to the model.
  */
 #define registerObjectWithName(_object, _objectName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectWithInstance):(ALCResolvableObject *) resolvableObject { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectWithInstance):(ALCClassBuilder *) classBuilder { \
     [[Alchemic mainContext] registerObject:_object withName:_objectName]; \
 }
 
@@ -84,15 +84,15 @@
  The number of objects passed must match the number of expected arguments.
  */
 #define registerFactoryMethod(_returnTypeClassName, _factorySelector, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCResolvableObject *) resolvableObject { \
-    [[Alchemic mainContext] registerFactory:resolvableObject \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCClassBuilder *) classBuilder { \
+    [[Alchemic mainContext] registerFactory:classBuilder \
                             factorySelector:@selector(_factorySelector) \
                                  returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \
 }
 
 #define registerFactoryMethodWithName(_componentName, _returnTypeClassName, _factorySelector, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCResolvableObject *) resolvableObject { \
-    [[Alchemic mainContext] registerFactory:resolvableObject \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCClassBuilder *) classBuilder { \
+    [[Alchemic mainContext] registerFactory:classBuilder \
                                    withName:_componentName \
                             factorySelector:@selector(_factorySelector) \
                                  returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \
