@@ -111,9 +111,12 @@
     _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
 }
 
+-(NSString *) debugDescription {
+    return [self description];
+}
+
 -(NSString *) description {
-    NSString *prefix = self.singleton ? @"singleton" : @"resolvable";
-    return [NSString stringWithFormat:@"%@ for %s", prefix, class_getName(self.valueType.typeClass)];
+    return [NSStringFromClass(self.valueType.typeClass) stringByAppendingString:self.singleton ? @" (singleton)" : @""];
 }
 
 @end

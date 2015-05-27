@@ -12,7 +12,6 @@
 #import "ALCInitInjector.h"
 #import "ALCMatcher.h"
 #import "ALCDependencyPostProcessor.h"
-#import "ALCResolvable.h"
 #import "NSDictionary+ALCModel.h"
 #import "ALCValueProcessorFactory.h"
 
@@ -58,20 +57,20 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCClassBuilder *) resolvableObject;
+-(void) registerAsSingleton:(ALCClassBuilder *) classBuilder;
 
--(void) registerAsSingleton:(ALCClassBuilder *) resolvableObject withName:(NSString *) name;
+-(void) registerAsSingleton:(ALCClassBuilder *) classBuilder withName:(NSString *) name;
 
 -(void) registerObject:(id) object withName:(NSString *) name;
 
 /**
  Registers a factory method with it's return data type and matchers for locating the objects for each argument.
  */
--(void) registerFactory:(ALCClassBuilder *) resolvableObject
+-(void) registerFactory:(ALCClassBuilder *) classBuilder
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;
 
--(void) registerFactory:(ALCClassBuilder *) resolvableObject
+-(void) registerFactory:(ALCClassBuilder *) classBuilder
                withName:(NSString *) name
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ...;

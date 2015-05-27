@@ -20,7 +20,7 @@
 -(id) createObjectFromBuilder:(ALCClassBuilder *) builder {
     
     Class objClass = builder.valueType.typeClass;
-    logCreation(@"Creating instance using %s::init", class_getName(objClass));
+    logCreation(@"   using %s::init", class_getName(objClass));
     id obj = [objClass alloc];
     SEL initSel = @selector(init);
     

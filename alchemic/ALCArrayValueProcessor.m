@@ -8,7 +8,6 @@
 
 #import "ALCArrayValueProcessor.h"
 #import "ALCLogger.h"
-#import "ALCResolvable.h"
 #import "ALCRuntime.h"
 #import "ALCBuilder.h"
 #import "ALCDependency.h"

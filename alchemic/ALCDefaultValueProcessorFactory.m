@@ -1,5 +1,4 @@
 //
-//  ALCDefaultObjectResolverFactory.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 17/05/2015.
@@ -13,7 +12,7 @@
 
 @implementation ALCDefaultValueProcessorFactory
 
--(id<ALCValueProcessor>) resolverForDependency:(ALCDependency *) dependency {
+-(id<ALCValueProcessor>) valueProcessorForDependency:(ALCDependency *) dependency {
 
     if ([ALCArrayValueProcessor canResolveValueForDependency:dependency]) {
         return [[ALCArrayValueProcessor alloc] init];

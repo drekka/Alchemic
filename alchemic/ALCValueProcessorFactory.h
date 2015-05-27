@@ -16,6 +16,6 @@
  */
 @protocol ALCValueProcessorFactory <NSObject>
 
--(id<ALCValueProcessor>) resolverForDependency:(ALCDependency *) dependency;
+-(id<ALCValueProcessor>) valueProcessorForDependency:(ALCDependency *) dependency;
 
 @end

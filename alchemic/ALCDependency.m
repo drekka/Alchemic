@@ -1,5 +1,4 @@
 //
-//  ALCResolver.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 17/04/2015.
@@ -40,27 +39,24 @@
         if (valueType.typeClass != nil) {
             id<ALCMatcher> matcher = [ALCClassMatcher matcherWithClass:valueType.typeClass];
             [(NSMutableSet *)matchers addObject:matcher];
-            logRegistration(@"   Adding derived %@", matcher);
         }
         
         [valueType.typeProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, BOOL *stop) {
             id<ALCMatcher> matcher = [ALCProtocolMatcher matcherWithProtocol:protocol];
             [(NSMutableSet *)matchers addObject:matcher];
-            logRegistration(@"   Adding derived %@", matcher);
         }];
         
-    } else {
-        [dependencyMatchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
-            logRegistration(@"   Storing passed %@", matcher);
-        }];
     }
     
     self = [super init];
     if (self) {
+        [matchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
+            logRegistration(@"      %@", matcher);
+        }];
         _context = context;
         _valueType = valueType;
         _dependencyMatchers = matchers;
-        _valueProcessor = [context.valueProcessorFactory resolverForDependency:self];
+        _valueProcessor = [context.valueProcessorFactory valueProcessorForDependency:self];
     }
     return self;
 }

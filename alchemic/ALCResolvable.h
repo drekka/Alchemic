@@ -21,6 +21,6 @@
 
 @property (nonatomic, strong, readonly) id value;
 
-@property (nonatomic, assign, readonly) ALCType *valueType;
+@property (nonatomic, strong, readonly) ALCType *valueType;
 
 @end

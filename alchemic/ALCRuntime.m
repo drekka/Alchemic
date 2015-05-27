@@ -162,7 +162,7 @@ static Class protocolClass;
                                      userInfo:nil];
     }
     
-    logRegistration(@" + Injection %@, mapped to variable: %s", inj, ivar_getName(var));
+    logRegistration(@"   Injection %@ -> variable: %s", inj, ivar_getName(var));
     return var;
 }
 

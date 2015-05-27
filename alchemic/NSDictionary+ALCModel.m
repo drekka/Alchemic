@@ -23,8 +23,6 @@
 #import "ALCClassMatcher.h"
 #import "ALCType.h"
 
-#import "ALCResolvable.h"
-
 @implementation NSMutableDictionary (ALCModel)
 
 #pragma mark - Finding things
@@ -102,37 +100,37 @@
     }];
 }
 
-#pragma mark - Managing resolvable objects
+#pragma mark - Managing builders
 
 -(ALCClassBuilder *) findClassBuilderForObject:(id) object {
     
     ALCNameMatcher * nameMatcher = [ALCNameMatcher matcherWithName:NSStringFromClass([object class])];
-    NSSet *resolvableObjects = [self classBuildersWithMatchers:[NSSet setWithObject:nameMatcher]];
+    NSSet *classBuilders = [self classBuildersWithMatchers:[NSSet setWithObject:nameMatcher]];
     
-    if ([resolvableObjects count] == 0) {
+    if ([classBuilders count] == 0) {
         
         // Now Look for any instances based on the class.
         ALCClassMatcher *classMatcher = [ALCClassMatcher matcherWithClass:object_getClass(object)];
-        resolvableObjects = [self classBuildersWithMatchers:[NSSet setWithObject:classMatcher]];
-        if ([resolvableObjects count] > 0) {
-            @throw [NSException exceptionWithName:@"AlchemicUnableToLocateResolvable"
-                                           reason:[NSString stringWithFormat:@"Unable to find any resolvable matching a %s", object_getClassName(object)]
+        classBuilders = [self classBuildersWithMatchers:[NSSet setWithObject:classMatcher]];
+        if ([classBuilders count] > 0) {
+            @throw [NSException exceptionWithName:@"AlchemicUnableToLocateBuilder"
+                                           reason:[NSString stringWithFormat:@"Unable to find any builder matching a %s", object_getClassName(object)]
                                          userInfo:nil];
         }
     }
     
-    return [resolvableObjects anyObject];
+    return [classBuilders anyObject];
 }
 
-#pragma mark - Adding new resolvables
+#pragma mark - Adding new builders
 
 -(void) addBuilder:(id<ALCBuilder>)builder underName:(NSString *)name {
     
     NSString *finalName = name == nil ? NSStringFromClass(builder.valueType.typeClass) : name;
     
     if (self[finalName] != nil) {
-        @throw [NSException exceptionWithName:@"AlchemicResolvableAlreadyIndexed"
-                                       reason:[NSString stringWithFormat:@"Resolvable already indexed under name: %@", finalName]
+        @throw [NSException exceptionWithName:@"AlchemicBuilderAlreadyIndexed"
+                                       reason:[NSString stringWithFormat:@"Builder already indexed under name: %@", finalName]
                                      userInfo:nil];
     }
     
