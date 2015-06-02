@@ -16,7 +16,7 @@
 @implementation ALCArrayValueProcessor
 
 +(BOOL) canResolveValueForDependency:(ALCDependency *)dependency {
-    return ! [ALCRuntime class:dependency.valueType.typeClass isKindOfClass:[NSArray class]];
+    return [ALCRuntime class:dependency.valueType.typeClass isKindOfClass:[NSArray class]];
 }
 
 -(id) resolveCandidateValues:(NSSet *) candidates {

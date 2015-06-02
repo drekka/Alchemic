@@ -16,6 +16,8 @@
 // Properties from protocol
 @synthesize valueType = _valueType;
 @synthesize primary = _primary;
+@synthesize singleton = _singleton;
+@synthesize factory = _factory;
 
 #pragma mark - Lifecycle
 

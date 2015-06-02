@@ -25,6 +25,4 @@
 
 -(instancetype) initWithContext:(__weak ALCContext *) context valueType:(ALCType *) valueType;
 
--(void) addDependency:(ALCDependency *) dependency;
-
 @end

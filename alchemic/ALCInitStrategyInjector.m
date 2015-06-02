@@ -39,7 +39,7 @@ static BOOL injected = NO;
 }
 
 -(void) replaceInitsInModelClasses:(NSDictionary *) model {
-    return;
+/*
     if (injected) {
         logRuntime(@"Wrappers already injected into classes");
         return;
@@ -53,6 +53,7 @@ static BOOL injected = NO;
             }
         }
     }
+ */
 }
 
 -(NSArray *) findRootClassBuildersInModel:(NSDictionary *) model {

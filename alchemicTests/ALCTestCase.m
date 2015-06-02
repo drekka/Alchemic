@@ -12,8 +12,8 @@
 @implementation ALCTestCase
 
 +(void)load {
-//    [ALCLogger setLoggingSwitch:AlchemicLogCategoryRegistrations];
-    [ALCLogger setLoggingSwitch:NSIntegerMax - AlchemicLogCategoryRuntime];
+    [ALCLogger turnOnAllLogging];
+    [ALCLogger stopLogging:AlchemicLogCategoryRuntime];
 }
 
 @end

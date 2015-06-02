@@ -27,7 +27,7 @@
     self = [super initWithContext:context valueType:valueType];
     if (self) {
         
-        Class factoryClass = object_getClass(factoryClassBuilder);
+        Class factoryClass = factoryClassBuilder.valueType.typeClass;
         [ALCRuntime validateSelector:factorySelector withClass:factoryClass];
         
         // Locate the method.
@@ -76,7 +76,7 @@
     // Load the arguments.
     [self.dependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
         id argument = dependency.value;
-        [_factoryInvocation setArgument:&argument atIndex:idx];
+        [self->_factoryInvocation setArgument:&argument atIndex:(NSInteger)idx];
     }];
     
     [_factoryInvocation invokeWithTarget:factoryObject];

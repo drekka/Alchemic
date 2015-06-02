@@ -20,7 +20,6 @@
 -(id) createObjectFromBuilder:(ALCClassBuilder *) builder {
     
     Class objClass = builder.valueType.typeClass;
-    logCreation(@"   using %s::init", class_getName(objClass));
     id obj = [objClass alloc];
     SEL initSel = @selector(init);
     
@@ -28,13 +27,13 @@
     SEL originalInit = [ALCRuntime alchemicSelectorForSelector:@selector(init)];
     if (class_respondsToSelector(objClass, originalInit)) {
     
-        logRuntime(@"Calling original init method %s::%s", class_getName(objClass), sel_getName(originalInit));
+        logRuntime(@"   using original %s::%s", class_getName(objClass), sel_getName(originalInit));
         return ((id (*)(id, SEL))objc_msgSend)(obj, originalInit);
 
     } else {
         
         struct objc_super superData = {obj, class_getSuperclass(objClass)};
-        logRuntime(@"Calling classes super init %s::%s", class_getName(superData.super_class), sel_getName(initSel));
+        logRuntime(@"   using super %s::%s", class_getName(superData.super_class), sel_getName(initSel));
         return ((id (*)(struct objc_super *, SEL))objc_msgSendSuper)(&superData, initSel);
     }
 }

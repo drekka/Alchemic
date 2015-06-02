@@ -56,23 +56,29 @@
         _context = context;
         _valueType = valueType;
         _dependencyMatchers = matchers;
-        _valueProcessor = [context.valueProcessorFactory valueProcessorForDependency:self];
     }
     return self;
 }
 
 -(void) resolve {
+
+    if (_valueProcessor == nil) {
+        ALCContext *strongContext = _context;
+        _valueProcessor = [strongContext.valueProcessorFactory valueProcessorForDependency:self];
+    }
     
-    _candidateBuilders = [_context.model buildersWithMatchers:_dependencyMatchers];
+    logDependencyResolving(@"   resolving %@", self);
+    ALCContext *strongContext = _context;
+    _candidateBuilders = [strongContext.model buildersWithMatchers:_dependencyMatchers];
     
-    for (id<ALCDependencyPostProcessor> postProcessor in _context.dependencyPostProcessors) {
+    for (id<ALCDependencyPostProcessor> postProcessor in strongContext.dependencyPostProcessors) {
         _candidateBuilders = [postProcessor process:_candidateBuilders];
         if ([_candidateBuilders count] == 0) {
             break;
         }
     }
     
-    logDependencyResolving(@"Found %lu candidates", [_candidateBuilders count]);
+    logDependencyResolving(@"   found %lu candidates", [_candidateBuilders count]);
     
     // If there are no candidates left then error.
     if ([_candidateBuilders count] == 0) {

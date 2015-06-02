@@ -20,7 +20,7 @@
 
 #pragma mark - Finding builders
 
--(ALCClassBuilder *) findBuilderForObject:(id) object;
+-(ALCClassBuilder *) findClassBuilderForObject:(id) object;
 
 -(NSSet *) buildersWithMatchers:(NSSet *) matchers;
 
@@ -44,7 +44,7 @@
 
 -(ALCFactoryMethodBuilder *) addMethod:(SEL) factorySelector
                              toBuilder:(ALCClassBuilder *) builder
-                            returnType:(Class) returnType
+                            returnType:(ALCType *) returnType
                       argumentMatchers:(NSArray *) argumentMatchers;
 
 @end

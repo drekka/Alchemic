@@ -15,12 +15,12 @@
  */
 @protocol ALCResolvable <NSObject>
 
-#pragma mark - Resolving
-
--(void) resolve;
-
 @property (nonatomic, strong, readonly) id value;
 
 @property (nonatomic, strong, readonly) ALCType *valueType;
+
+#pragma mark - Resolving
+
+-(void) resolve;
 
 @end

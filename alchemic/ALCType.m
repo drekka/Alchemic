@@ -20,6 +20,10 @@
     return self;
 }
 
++(instancetype) typeForClass:(Class) class {
+    return [[ALCType alloc] initWithClass:class];
+}
+
 +(instancetype) typeForInjection:(Ivar) variable inClass:(Class) class {
     
     // Get the type.
@@ -33,12 +37,15 @@
         NSArray *defs = [variableTypeEncoding componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\",<>"]];
         
         // If there is no more than 2 in the array then the dependency is an id.
-        for (int i = 2; i < [defs count]; i ++) {
+        for (NSUInteger i = 2; i < [defs count]; i ++) {
             if ([defs[i] length] > 0) {
                 if (i == 2) {
                     Class class = objc_lookUpClass([defs[2] cStringUsingEncoding:NSUTF8StringEncoding]);
                     info = [[ALCType alloc] initWithClass:class];
                 } else {
+                    if (info == nil) {
+                        info = [[ALCType alloc] initWithClass:NULL];
+                    }
                     [info addProtocol:NSProtocolFromString(defs[i])];
                 }
             }

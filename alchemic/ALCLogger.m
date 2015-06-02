@@ -10,11 +10,23 @@
 #import "ALCInternal.h"
 #import <pthread/pthread.h>
 
-static int __alchemicLogOptions = 0;
+static NSUInteger __alchemicLogOptions = 0;
 
 @implementation ALCLogger
 
-+(void) setLoggingSwitch:(AlchemicLogCategory) categorySwitch {
++(void) turnOnAllLogging {
+    __alchemicLogOptions = NSIntegerMax;
+}
+
++(void) turnOffAllLogging {
+    __alchemicLogOptions = 0;
+}
+
++(void) stopLogging:(AlchemicLogCategory) categorySwitch {
+    __alchemicLogOptions &= ~categorySwitch;
+}
+
++(void) startLogging:(AlchemicLogCategory) categorySwitch {
     __alchemicLogOptions |= categorySwitch;
 }
 
@@ -22,7 +34,7 @@ static int __alchemicLogOptions = 0;
              source:(const char *) source
                line:(int) line
             message:(NSString *) messageTemplate, ... {
-
+    
     if ( ! (__alchemicLogOptions & category)) {
         return;
     }
@@ -37,7 +49,7 @@ static int __alchemicLogOptions = 0;
     //NSString *processName = [[NSProcessInfo processInfo] processName];
     //NSString *threadName = [NSThread currentThread].name;
     //NSString *finalThreadName = threadName == nil || [threadName length] == 0 ? [NSString stringWithFormat:@"%x", pthread_mach_thread_np(pthread_self())] : threadName;
-//    NSString *finalThreadName = [NSString stringWithFormat:@"%x", pthread_mach_thread_np(pthread_self())];
+    //    NSString *finalThreadName = [NSString stringWithFormat:@"%x", pthread_mach_thread_np(pthread_self())];
     
     //printf("%5$s %6$s [%1$s] %2$s(%3$i) %4$s\n", categoryName, source, line, [msg UTF8String], [finalThreadName UTF8String], [processName UTF8String]);
     //printf("%5$4s %1$12s: %2$s(%3$i) %4$s\n", categoryName, source, line, [msg UTF8String], [finalThreadName UTF8String]);

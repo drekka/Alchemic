@@ -19,6 +19,8 @@
 
 +(instancetype) typeForInjection:(Ivar) variable inClass:(Class) class;
 
++(instancetype) typeForClass:(Class) class;
+
 -(instancetype) initWithClass:(Class) class NS_DESIGNATED_INITIALIZER;
 
 -(void) addProtocol:(Protocol *) protocol;

@@ -56,7 +56,7 @@
     
     [self resolveBuilderDependencies];
     
-    logRuntime(@"Creating objects ...");
+    logRuntime(@"Creating singletons ...");
     [self instantiateSingletons];
 }
 
@@ -76,25 +76,25 @@
 -(void) instantiateSingletons {
     
     logCreation(@"---- Instantiating singletons ----");
+    NSMutableSet *singletonClassbuilders = [[NSMutableSet alloc] init];
     [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
-        if (!classBuilder.instantiated && classBuilder.singleton) {
-            logCreation(@"Instanting '%@' %@", name, classBuilder);
-            [classBuilder instantiate];
+        if (classBuilder.singleton) {
+            if ([classBuilder instantiate] != nil) {
+                [singletonClassbuilders addObject:classBuilder];
+            }
         }
     }];
     
     logCreation(@"---- Injecting dependencies into singletons ----");
-    [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
-        if (classBuilder.instantiated) {
-            [classBuilder injectDependenciesInto:classBuilder.value];
-        }
+    [singletonClassbuilders enumerateObjectsUsingBlock:^(ALCClassBuilder *classBuilder, BOOL *stop) {
+        [classBuilder injectDependenciesInto:classBuilder.value];
     }];
     
 }
 
 -(void) injectDependencies:(id) object {
     logRuntime(@"Injecting dependencies into a %s", object_getClassName(object));
-    ALCClassBuilder *classBuilder = [_model findBuilderForObject:object];
+    ALCClassBuilder *classBuilder = [_model findClassBuilderForObject:object];
     [classBuilder injectDependenciesInto:object];
 }
 
@@ -118,6 +118,7 @@
 #pragma mark - Registration call backs
 
 -(void) registerAsSingleton:(ALCClassBuilder *) classBuilder {
+    logRegistration(@"   registering %@ as singleton", classBuilder);
     classBuilder.singleton = YES;
 }
 
@@ -128,6 +129,7 @@
 
 -(void) registerObject:(id) object withName:(NSString *) name {
     ALCClassBuilder *instance = [_model addObject:object inContext:self withName:name];
+    logRegistration(@"Adding object %@", object);
     instance.singleton = YES;
     instance.value = object;
 }
@@ -136,25 +138,21 @@
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ... {
     
-    [ALCRuntime validateSelector:factorySelector withClass:classBuilder.valueType.typeClass];
-    
     // Process the selector arguments
     va_list args;
     va_start(args, returnTypeClass);
-    id argument = va_arg(args, id);
     NSMutableArray *argumentMatchers = [[NSMutableArray alloc] init];
-    while (argument != nil) {
+    id argument;
+    while ((argument = va_arg(args, id)) != nil) {
         [self addMatcherArgument:argument toMatcherArray:argumentMatchers];
-        argument = va_arg(args, id);
     }
     va_end(args);
     
-    // Declare a new instance to represent the factory method for dependency resolving.
-    [_model addMethod:factorySelector
-            toBuilder:classBuilder
-           returnType:returnTypeClass
-     argumentMatchers:argumentMatchers];
-    
+    [self registerFactory:classBuilder
+                 withName:nil
+          factorySelector:factorySelector
+               returnType:returnTypeClass
+                 matchers:argumentMatchers];
 }
 
 -(void) registerFactory:(ALCClassBuilder *) classBuilder
@@ -162,24 +160,39 @@
         factorySelector:(SEL) factorySelector
              returnType:(Class) returnTypeClass, ... {
     
-    //[ALCRuntime validateSelector:factorySelector withClass:classBuilder.valueType.typeClass];
-    
     // Process the selector arguments
     va_list args;
     va_start(args, returnTypeClass);
-    id argument = va_arg(args, id);
     NSMutableArray *argumentMatchers = [[NSMutableArray alloc] init];
-    while (argument != nil) {
+    id argument;
+    while ((argument = va_arg(args, id)) != nil) {
         [self addMatcherArgument:argument toMatcherArray:argumentMatchers];
-        argument = va_arg(args, id);
     }
     va_end(args);
     
+    [self registerFactory:classBuilder
+                 withName:name
+          factorySelector:factorySelector
+               returnType:returnTypeClass
+                 matchers:argumentMatchers];
+}
+
+-(void) registerFactory:(ALCClassBuilder *) classBuilder
+               withName:(NSString *) name
+        factorySelector:(SEL) factorySelector
+             returnType:(Class) returnTypeClass
+               matchers:(NSArray *) argumentMatchers {
+    
+    [ALCRuntime validateSelector:factorySelector withClass:classBuilder.valueType.typeClass];
+    
     // Declare a new instance to represent the factory method for dependency resolving.
-    [_model addMethod:factorySelector
-            toBuilder:classBuilder
-           returnType:returnTypeClass
-     argumentMatchers:argumentMatchers];
+    ALCFactoryMethodBuilder *factoryBuilder = [_model addMethod:factorySelector
+                                                      toBuilder:classBuilder
+                                                     returnType:[ALCType typeForClass:returnTypeClass]
+                                               argumentMatchers:argumentMatchers];
+    if (name != nil) {
+        [_model addBuilder:factoryBuilder underName:name];
+    }
 }
 
 -(void) addMatcherArgument:(id) argument toMatcherArray:(NSMutableArray *) matcherArray {

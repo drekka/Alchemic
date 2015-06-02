@@ -61,38 +61,48 @@
     [self addDependency:dependency];
 }
 
-#pragma mark - Lifecycle
-
--(void) resolve {
-    
-}
-
 #pragma mark - Properties
 
 -(id) value {
-    if (super.value == nil) {
-        [self instantiate];
-        [self injectDependenciesInto:self];
+    
+    id value = super.value;
+    if (value != nil) {
+        return value;
     }
-    return super.value;
+    
+    value = [self instantiate];
+    [self injectDependenciesInto:value];
+    return value;
 }
 
 -(id) instantiate {
     
-    for (id<ALCObjectFactory> objectFactory in self.context.objectFactories) {
-        super.value = [objectFactory createObjectFromBuilder:self];
-        if (super.value != nil) {
-            break;
+    // Ignore where another model reference has already created the object.
+    id value = super.value;
+    if (value != nil) {
+        return nil;
+    }
+    
+    logCreation(@"Instantiating %@", self);
+    
+    ALCContext *strongContext = self.context;
+    for (id<ALCObjectFactory> objectFactory in strongContext.objectFactories) {
+        id newValue = [objectFactory createObjectFromBuilder:self];
+        if (newValue != nil) {
+
+            // Set the value if this is not a factory.
+            if (! super.factory) {
+                super.value = newValue;
+            }
+            
+            return newValue;
         }
     }
     
-    if (super.value == nil) {
-        @throw [NSException exceptionWithName:@"AlchemicUnableToCreateInstance"
-                                       reason:[NSString stringWithFormat:@"Unable to create an instance of %@", [self description]]
-                                     userInfo:nil];
-    }
-    
-    return super.value;
+    // Trigger an exception if we don't create anything.
+    @throw [NSException exceptionWithName:@"AlchemicUnableToCreateInstance"
+                                   reason:[NSString stringWithFormat:@"Unable to create an instance of %@", [self description]]
+                                 userInfo:nil];
 }
 
 -(void) injectDependenciesInto:(id) object {
@@ -101,18 +111,16 @@
         return;
     }
     
-    logDependencyResolving(@"Injecting a %s with %lu dependencies from %@", object_getClassName(object), [self.dependencies count], [self description]);
+    logDependencyResolving(@"Injecting %2$lu dependencies into a %1$s defined in %3$@", object_getClassName(object), [self.dependencies count], [self description]);
     for (ALCVariableDependency *dependency in self.dependencies) {
-        [ALCRuntime injectObject:object variable:dependency.variable withValue:dependency.value];
+        id value = dependency.value;
+        logDependencyResolving(@"   %s::%s <- %s",object_getClassName(object) , ivar_getName(dependency.variable), object_getClassName(value));
+        [ALCRuntime injectObject:object variable:dependency.variable withValue:value];
     }
 }
 
 -(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy {
     _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
-}
-
--(NSString *) debugDescription {
-    return [self description];
 }
 
 -(NSString *) description {

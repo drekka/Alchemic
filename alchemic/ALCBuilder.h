@@ -8,8 +8,16 @@
 
 #import "ALCResolvable.h"
 
+@class ALCDependency;
+
 @protocol ALCBuilder <ALCResolvable>
 
 @property (nonatomic, assign) BOOL primary;
+
+@property (nonatomic, assign) BOOL factory;
+
+@property (nonatomic, assign) BOOL singleton;
+
+-(void) addDependency:(ALCDependency *) dependency;
 
 @end

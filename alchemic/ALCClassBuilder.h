@@ -14,10 +14,6 @@
 
 @interface ALCClassBuilder : ALCAbstractBuilder
 
-@property (nonatomic, assign) BOOL singleton;
-
-@property (nonatomic, assign, readonly) BOOL instantiated;
-
 #pragma mark - Setting up
 
 -(void) addInjectionPoint:(NSString *) inj, ...;
@@ -28,8 +24,8 @@
 
 #pragma mark - Creation
 
--(void) injectDependenciesInto:(id) object;
-
 -(id) instantiate;
+
+-(void) injectDependenciesInto:(id) object;
 
 @end

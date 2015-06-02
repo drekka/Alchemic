@@ -33,12 +33,10 @@ typedef NS_OPTIONS(NSUInteger, AlchemicLogCategory){
 
 @interface ALCLogger : NSObject
 
-/**
- Turns on a category of logging.
- 
- @param categorySwitch the switch.
- */
-+(void) setLoggingSwitch:(AlchemicLogCategory) categorySwitch;
++(void) turnOnAllLogging;
++(void) turnOffAllLogging;
++(void) startLogging:(AlchemicLogCategory) categorySwitch;
++(void) stopLogging:(AlchemicLogCategory) categorySwitch;
 
 /**
  Logs a message.

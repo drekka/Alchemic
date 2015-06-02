@@ -158,18 +158,19 @@
 
 -(ALCFactoryMethodBuilder *) addMethod:(SEL) factorySelector
                              toBuilder:(ALCClassBuilder *) builder
-                            returnType:(Class) returnType
+                            returnType:(ALCType *) returnType
                       argumentMatchers:(NSArray *) argumentMatchers {
-/*
+
     ALCFactoryMethodBuilder *factoryMethod = [[ALCFactoryMethodBuilder alloc] initWithContext:builder.context
-                                                                              factoryInstance:builder
+                                                                                    valueType:returnType
+                                                                          factoryClassBuilder:builder
                                                                               factorySelector:factorySelector
-                                                                                   returnType:returnType
                                                                              argumentMatchers:argumentMatchers];
-    [self storeResolvable:factoryMethod underName:[NSString stringWithFormat:@"%s::%s", class_getName(builder.valueType.typeClass), sel_getName(factorySelector)]];
+    
+    [self addBuilder:factoryMethod
+           underName:[NSString stringWithFormat:@"%s::%s", class_getName(builder.valueType.typeClass), sel_getName(factorySelector)]];
     return factoryMethod;
-    */
-    return nil;
+
 }
 
 @end

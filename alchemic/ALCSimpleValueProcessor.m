@@ -24,7 +24,7 @@
 
 -(id) resolveCandidateValues:(NSSet *) candidates {
     
-    id object = [candidates anyObject];
+    id<ALCBuilder> object = [candidates anyObject];
     
     if (object == nil) {
         @throw [NSException exceptionWithName:@"AlchemicNilObject"
@@ -32,7 +32,7 @@
                                      userInfo:nil];
     }
     
-    return object;
+    return object.value;
 }
 
 -(void) validateCandidates:(NSSet *)candidates {
