@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCValueProcessor.h"
+#import "ALCValueResolver.h"
 
-@interface ALCSimpleValueProcessor : NSObject<ALCValueProcessor>
+@interface ALCSimpleValueResolver : NSObject<ALCValueResolver>
 
 @end

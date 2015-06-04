@@ -8,25 +8,33 @@
 
 #import "ALCTestCase.h"
 #import "Alchemic.h"
+#import "SimpleObject.h"
 
 @import XCTest;
 
 @interface InjectByMatcherTests : ALCTestCase
-
 @end
 
 @implementation InjectByMatcherTests {
-    id _simpleObject;
+    id _simpleObject1;
+    id _listSimpleObjects;
 }
 
-injectValue(intoVariable(_simpleObject), withName(abc))
+inject(intoVariable(_simpleObject1), withName(@"abc"))
+inject(intoVariable(_listSimpleObjects), withClass(SimpleObject))
 
 -(void) setUp {
     injectDependencies(self);
 }
 
--(void) testInjectByMatcher {
-    XCTAssertNotNil(_simpleObject);
+-(void) testInjectByName {
+    XCTAssertNotNil(_simpleObject1);
+    XCTAssertTrue([_simpleObject1 isKindOfClass:[SimpleObject class]]);
+}
+
+-(void) testInjectByClass {
+    XCTAssertNotNil(_listSimpleObjects);
+    XCTAssertTrue([_listSimpleObjects isKindOfClass:[NSArray class]]);
 }
 
 @end

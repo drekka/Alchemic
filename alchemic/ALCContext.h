@@ -13,7 +13,7 @@
 #import "ALCMatcher.h"
 #import "ALCDependencyPostProcessor.h"
 #import "NSDictionary+ALCModel.h"
-#import "ALCValueProcessorFactory.h"
+#import "ALCValueResolverManager.h"
 
 @class ALCClassBuilder;
 
@@ -22,11 +22,9 @@
 @property (nonatomic, strong, readonly) NSDictionary *model;
 @property (nonatomic, strong, readonly) NSSet *dependencyPostProcessors;
 @property (nonatomic, strong, readonly) NSSet *objectFactories;
-@property (nonatomic, strong, readonly) id<ALCValueProcessorFactory> valueProcessorFactory;
+@property (nonatomic, strong, readonly) id<ALCValueResolverManager> valueResolverManager;
 
 #pragma mark - Configuration
-
-@property (nonatomic, strong) Class valueProcessorFactoryClass;
 
 /**
  Specifies the class used to inject init method wrappers into the runtime. Normally this doesn't been to be changed from the default.

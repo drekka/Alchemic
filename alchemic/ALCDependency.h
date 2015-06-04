@@ -11,7 +11,6 @@
 @class ALCContext;
 
 #import "ALCMatcher.h"
-#import "ALCValueProcessor.h"
 #import "ALCResolvable.h"
 
 @interface ALCDependency : NSObject<ALCResolvable>

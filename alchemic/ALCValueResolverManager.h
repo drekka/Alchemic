@@ -8,14 +8,13 @@
 
 @import Foundation;
 
-#import "ALCValueProcessor.h"
 #import "ALCDependency.h"
 
 /**
  A factory for find the particular object resolver for a dependency.
  */
-@protocol ALCValueProcessorFactory <NSObject>
+@protocol ALCValueResolverManager <NSObject>
 
--(id<ALCValueProcessor>) valueProcessorForDependency:(ALCDependency *) dependency;
+-(id) resolveValueForDependency:(ALCDependency *) dependency candidates:(NSSet *) candidates;
 
 @end

@@ -20,7 +20,7 @@
 #import "NSDictionary+ALCModel.h"
 #import "ALCClassBuilder.h"
 #import "ALCFactoryMethodBuilder.h"
-#import "ALCDefaultValueProcessorFactory.h"
+#import "ALCDefaultValueResolverManager.h"
 #import "ALCType.h"
 
 @implementation ALCContext {
@@ -36,7 +36,7 @@
         _initialisationStrategyClasses = [[NSMutableSet alloc] init];
         _dependencyPostProcessors = [[NSMutableSet alloc] init];
         _objectFactories = [[NSMutableSet alloc] init];
-        self.valueProcessorFactoryClass = [ALCDefaultValueProcessorFactory class];
+        _valueResolverManager = [[ALCDefaultValueResolverManager alloc] init];
     }
     return self;
 }
@@ -44,7 +44,6 @@
 -(void) start {
     
     logRuntime(@"Starting alchemic ...");
-    [self setDefaults];
     
     // Set defaults.
     if (self.runtimeInitInjector == nil) {
@@ -58,11 +57,6 @@
     
     logRuntime(@"Creating singletons ...");
     [self instantiateSingletons];
-}
-
--(void) setDefaults {
-    logConfig(@"Creating a Processor Factory from a %s", class_getName(self.valueProcessorFactoryClass));
-    _valueProcessorFactory = [[self.valueProcessorFactoryClass alloc] init];
 }
 
 -(void) resolveBuilderDependencies {

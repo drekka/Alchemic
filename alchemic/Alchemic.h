@@ -41,8 +41,6 @@
 #define imageValue(imageName, resolution)
 #define plistValue(plistName, keyPath)
 
-#define injectValue(variable, locator)
-
 #pragma mark - Registering
 
 // All registration methods must make use of the same signature.

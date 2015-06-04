@@ -6,17 +6,19 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCArrayValueProcessor.h"
+#import "ALCArrayValueResolver.h"
 #import "ALCLogger.h"
 #import "ALCRuntime.h"
 #import "ALCBuilder.h"
 #import "ALCDependency.h"
 #import "ALCType.h"
 
-@implementation ALCArrayValueProcessor
+@implementation ALCArrayValueResolver
 
-+(BOOL) canResolveValueForDependency:(ALCDependency *)dependency {
-    return [ALCRuntime class:dependency.valueType.typeClass isKindOfClass:[NSArray class]];
+-(BOOL) canResolveValueForDependency:(ALCDependency *)dependency candidates:(NSSet *)candidates {
+    Class typeClass = dependency.valueType.typeClass;
+    return (typeClass == NULL && [candidates count] > 1)
+    || [ALCRuntime class:typeClass isKindOfClass:[NSArray class]];
 }
 
 -(id) resolveCandidateValues:(NSSet *) candidates {
@@ -35,10 +37,6 @@
     }];
     return values;
     
-}
-
--(void) validateCandidates:(NSSet *) candidates {
-    // Nothing to do here.
 }
 
 @end

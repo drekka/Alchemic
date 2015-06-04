@@ -5,19 +5,20 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
+@import ObjectiveC;
+
 #import "ALCDependency.h"
 #import "ALCLogger.h"
-@import ObjectiveC;
 #import "ALCMatcher.h"
 #import "ALCClassBuilder.h"
 #import "ALCDependencyPostProcessor.h"
 #import "ALCType.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
+#import "ALCValueResolverManager.h"
 
 @implementation ALCDependency {
     __weak ALCContext *_context;
-    id<ALCValueProcessor> _valueProcessor;
     NSSet *_dependencyMatchers;
     NSSet *_candidateBuilders;
     id _value;
@@ -62,11 +63,6 @@
 
 -(void) resolve {
 
-    if (_valueProcessor == nil) {
-        ALCContext *strongContext = _context;
-        _valueProcessor = [strongContext.valueProcessorFactory valueProcessorForDependency:self];
-    }
-    
     logDependencyResolving(@"   resolving %@", self);
     ALCContext *strongContext = _context;
     _candidateBuilders = [strongContext.model buildersWithMatchers:_dependencyMatchers];
@@ -87,13 +83,11 @@
                                      userInfo:nil];
     }
     
-    // Validate with the value processor.
-    [_valueProcessor validateCandidates:_candidateBuilders];
-    
 }
 
 -(id) value {
-    return [_valueProcessor resolveCandidateValues:_candidateBuilders];
+    ALCContext *strongContext = _context;
+    return [strongContext.valueResolverManager resolveValueForDependency:self candidates:_candidateBuilders];
 }
 
 -(NSString *) description {
