@@ -114,7 +114,7 @@
     logDependencyResolving(@"Injecting %2$lu dependencies into a %1$s defined in %3$@", object_getClassName(object), [self.dependencies count], [self description]);
     for (ALCVariableDependency *dependency in self.dependencies) {
         id value = dependency.value;
-        logDependencyResolving(@"   %s::%s <- %s",object_getClassName(object) , ivar_getName(dependency.variable), object_getClassName(value));
+        logDependencyResolving(@"   Injecting %s::%s <- %s",object_getClassName(object) , ivar_getName(dependency.variable), object_getClassName(value));
         [ALCRuntime injectObject:object variable:dependency.variable withValue:value];
     }
 }

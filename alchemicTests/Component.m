@@ -1,24 +1,16 @@
 //
-//  SingletonObject.m
+//  Component.m
 //  alchemic
 //
-//  Created by Derek Clarkson on 22/02/2015.
+//  Created by Derek Clarkson on 4/06/2015.
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
 #import "Component.h"
-#import "Alchemic.h"
-#import "InjectableObject.h"
-#import "InjectableProtocol.h"
 
 @implementation Component
 
-registerSingleton
-inject(intoVariable(injObj))
-inject(intoVariable(injProto), withClass(InjectableObject))
-
--(void) didResolveDependencies {
-    _awareCalled = YES;
+-(NSString *) description {
+    return @"Component";
 }
-
 @end

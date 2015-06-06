@@ -6,12 +6,12 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "InjectableObject.h"
+#import "SingletonObject.h"
 #import "Alchemic.h"
 @import ObjectiveC;
 
-@implementation InjectableObject
+@implementation SingletonObject
 
-registerSingleton
+registerSingletonWithName(@"Test singleton")
 
 @end

@@ -9,6 +9,6 @@
 @import Foundation;
 #import "InjectableProtocol.h"
 
-@interface InjectableObject : NSObject<InjectableProtocol>
+@interface SingletonObject : NSObject<InjectableProtocol>
 
 @end

@@ -71,6 +71,7 @@
         NSMethodSignature *sig = [factoryObject methodSignatureForSelector:_factorySelector];
         _factoryInvocation = [NSInvocation invocationWithMethodSignature:sig];
         _factoryInvocation.selector = _factorySelector;
+        [_factoryInvocation retainArguments];
     }
     
     // Load the arguments.
@@ -83,7 +84,9 @@
     
     id returnObj;
     [_factoryInvocation getReturnValue:&returnObj];
-    return returnObj;
+    logCreation(@"   Factory created a %s", class_getName([returnObj class]));
+    id cache = returnObj;
+    return cache;
     
 }
 

@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FactoryObject : NSObject
+@interface Factory : NSObject
 
 @end

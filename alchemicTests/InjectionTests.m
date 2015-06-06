@@ -8,28 +8,28 @@
 
 #import "ALCTestCase.h"
 #import "Alchemic.h"
-#import "SimpleObject.h"
+#import "SingletonObject.h"
 
 @import XCTest;
 
-@interface InjectByMatcherTests : ALCTestCase
+@interface InjectionTests : ALCTestCase
 @end
 
-@implementation InjectByMatcherTests {
-    id _simpleObject1;
+@implementation InjectionTests {
+    id _singletonObject;
     id _listSimpleObjects;
 }
 
-inject(intoVariable(_simpleObject1), withName(@"abc"))
-inject(intoVariable(_listSimpleObjects), withClass(SimpleObject))
+inject(intoVariable(_singletonObject), withName(@"Test singleton"))
+inject(intoVariable(_listSimpleObjects), withClass(SingletonObject))
 
 -(void) setUp {
     injectDependencies(self);
 }
 
 -(void) testInjectByName {
-    XCTAssertNotNil(_simpleObject1);
-    XCTAssertTrue([_simpleObject1 isKindOfClass:[SimpleObject class]]);
+    XCTAssertNotNil(_singletonObject);
+    XCTAssertTrue([_singletonObject isKindOfClass:[SingletonObject class]]);
 }
 
 -(void) testInjectByClass {
