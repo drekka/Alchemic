@@ -29,27 +29,6 @@
 
 #pragma mark - Adding dependencies
 
--(void) addInjectionPoint:(NSString *) inj, ... {
-    
-    va_list args;
-    va_start(args, inj);
-    NSMutableSet *finalMatchers;
-    id matcher = va_arg(args, id);
-    while (matcher != nil) {
-        
-        [ALCRuntime validateMatcher:matcher];
-        
-        if (finalMatchers == nil) {
-            finalMatchers = [[NSMutableSet alloc] init];
-        }
-        [finalMatchers addObject:matcher];
-        matcher = va_arg(args, id);
-    }
-    va_end(args);
-    
-    [self addInjectionPoint:inj withMatchers:finalMatchers];
-}
-
 -(void) addInjectionPoint:(NSString *) inj withMatchers:(NSSet *) matchers {
     Class objClass = self.valueType.typeClass;
     Ivar variable = [ALCRuntime class:objClass variableForInjectionPoint:inj];
@@ -106,16 +85,8 @@
 }
 
 -(void) injectDependenciesInto:(id) object {
-    
-    if ([self.dependencies count] == 0) {
-        return;
-    }
-    
-    logDependencyResolving(@"Injecting %2$lu dependencies into a %1$s defined in %3$@", object_getClassName(object), [self.dependencies count], [self description]);
     for (ALCVariableDependency *dependency in self.dependencies) {
-        id value = dependency.value;
-        logDependencyResolving(@"   Injecting %s::%s <- %s",object_getClassName(object) , ivar_getName(dependency.variable), object_getClassName(value));
-        [ALCRuntime injectObject:object variable:dependency.variable withValue:value];
+        [dependency injectInto:object];
     }
 }
 

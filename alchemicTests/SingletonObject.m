@@ -8,10 +8,9 @@
 
 #import "SingletonObject.h"
 #import "Alchemic.h"
-@import ObjectiveC;
 
 @implementation SingletonObject
 
-registerSingletonWithName(@"Test singleton")
+register(isSingleton)
 
 @end

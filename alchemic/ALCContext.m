@@ -13,6 +13,7 @@
 #import "ALCInternal.h"
 #import "ALCInitStrategyInjector.h"
 #import "ALCRuntime.h"
+#import "ALCMatcher.h"
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
@@ -22,6 +23,12 @@
 #import "ALCFactoryMethodBuilder.h"
 #import "ALCDefaultValueResolverManager.h"
 #import "ALCType.h"
+#import "ALCReturnType.h"
+#import "ALCIsSingleton.h"
+#import "ALCFactoryMethodSelector.h"
+#import "ALCIntoVariable.h"
+#import "ALCIsPrimary.h"
+#import "ALCAsName.h"
 
 @implementation ALCContext {
     NSMutableSet *_initialisationStrategyClasses;
@@ -111,14 +118,113 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCClassBuilder *) classBuilder {
-    logRegistration(@"   registering %@ as singleton", classBuilder);
-    classBuilder.singleton = YES;
+-(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder qualifiers:(id) firstQualifier, ... {
+    
+    NSMutableSet *matchers = [[NSMutableSet alloc] init];
+    NSString *intoVariable = nil;
+    
+    va_list qualifiers;
+    va_start(qualifiers, firstQualifier);
+    id qualifier = firstQualifier;
+    while (qualifier != nil) {
+        
+        if ([qualifier isKindOfClass:[ALCIntoVariable class]]) {
+            intoVariable = ((ALCIntoVariable *) qualifier).variableName;
+            
+        } else if ([qualifier conformsToProtocol:@protocol(ALCMatcher)]) {
+            id<ALCMatcher> matcher = (id<ALCMatcher>) qualifier;
+            [ALCRuntime validateMatcher:matcher];
+            [matchers addObject:matcher];
+            
+        } else {
+            @throw [NSException exceptionWithName:@"AlchemicUnexpectedQualifier"
+                                           reason:[NSString stringWithFormat:@"Unexpected qualifier %@ for a variable declaration.", qualifier]
+                                         userInfo:nil];
+        }
+        
+        qualifier = va_arg(qualifiers, id);
+    }
+    va_end(qualifiers);
+    
+    // Add the registration.
+    [classBuilder addInjectionPoint:intoVariable withMatchers:matchers];
+    
 }
 
--(void) registerAsSingleton:(ALCClassBuilder *) classBuilder withName:(NSString *) name {
-    classBuilder.singleton = YES;
-    [_model addBuilder:classBuilder underName:name];
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder qualifiers:(id) firstQualifier, ... {
+    
+    Class returnType = NULL;
+    BOOL isSingleton = NO;
+    BOOL isPrimary = NO;
+    SEL factorySelector = NULL;
+    NSString *name;
+    NSMutableArray *matchers = [[NSMutableArray alloc] init];
+    
+    va_list qualifiers;
+    va_start(qualifiers, firstQualifier);
+    id qualifier = firstQualifier;
+    while (qualifier != nil) {
+        
+        // Now sort out what sort of qualifier we are dealing with.
+        if ([qualifier isKindOfClass:[ALCReturnType class]]) {
+            returnType = ((ALCReturnType *)qualifier).returnType;
+        
+        } else if ([qualifier isKindOfClass:[ALCIntoVariable class]]) {
+            @throw [NSException exceptionWithName:@"AlchemicCannotUseIntoVariableHere"
+                                           reason:[NSString stringWithFormat:@"Cannot use %@ in a class declaration", qualifier]
+                                         userInfo:nil];
+        
+        } else if ([qualifier isKindOfClass:[ALCIsSingleton class]]) {
+            isSingleton = YES;
+        
+        } else if ([qualifier isKindOfClass:[ALCIsPrimary class]]) {
+            isPrimary = YES;
+        
+        } else if ([qualifier isKindOfClass:[ALCAsName class]]) {
+            name = ((ALCAsName *) qualifier).asName;
+        
+        } else if ([qualifier isKindOfClass:[ALCFactoryMethodSelector class]]) {
+            factorySelector = ((ALCFactoryMethodSelector *) qualifier).factorySelector;
+
+        } else if ([qualifier conformsToProtocol:@protocol(ALCMatcher)]) {
+
+            // Validate the matchers, checking any arrays.
+            if ([qualifier isKindOfClass:[NSArray class]]) {
+                for (id nestedQualifier in (NSArray *) qualifier) {
+                    [ALCRuntime validateMatcher:nestedQualifier];
+                }
+            } else {
+                [ALCRuntime validateMatcher:qualifier];
+            }
+            
+            [matchers addObject:qualifier];
+        }
+        
+        qualifier = va_arg(qualifiers, id);
+        
+    }
+    va_end(qualifiers);
+    
+    // Add the registration.
+    id<ALCBuilder> finalBuilder = classBuilder;
+    if (factorySelector != NULL) {
+        
+        [ALCRuntime validateSelector:factorySelector withClass:classBuilder.valueType.typeClass];
+        
+        // Declare a new instance to represent the factory method for dependency resolving.
+        finalBuilder = [_model addMethod:factorySelector
+                               toBuilder:classBuilder
+                              returnType:[ALCType typeForClass:returnType]
+                        argumentMatchers:matchers];
+    }
+    
+    // Set common properties.
+    if (name != nil) {
+        [_model addBuilder:finalBuilder underName:name];
+    }
+    finalBuilder.singleton = isSingleton;
+    finalBuilder.primary = isPrimary;
+    
 }
 
 -(void) registerObject:(id) object withName:(NSString *) name {
@@ -126,81 +232,6 @@
     logRegistration(@"Adding object %@", object);
     instance.singleton = YES;
     instance.value = object;
-}
-
--(void) registerFactory:(ALCClassBuilder *) classBuilder
-        factorySelector:(SEL) factorySelector
-             returnType:(Class) returnTypeClass, ... {
-    
-    // Process the selector arguments
-    va_list args;
-    va_start(args, returnTypeClass);
-    NSMutableArray *argumentMatchers = [[NSMutableArray alloc] init];
-    id argument;
-    while ((argument = va_arg(args, id)) != nil) {
-        [self addMatcherArgument:argument toMatcherArray:argumentMatchers];
-    }
-    va_end(args);
-    
-    [self registerFactory:classBuilder
-                 withName:nil
-          factorySelector:factorySelector
-               returnType:returnTypeClass
-                 matchers:argumentMatchers];
-}
-
--(void) registerFactory:(ALCClassBuilder *) classBuilder
-               withName:(NSString *) name
-        factorySelector:(SEL) factorySelector
-             returnType:(Class) returnTypeClass, ... {
-    
-    // Process the selector arguments
-    va_list args;
-    va_start(args, returnTypeClass);
-    NSMutableArray *argumentMatchers = [[NSMutableArray alloc] init];
-    id argument;
-    while ((argument = va_arg(args, id)) != nil) {
-        [self addMatcherArgument:argument toMatcherArray:argumentMatchers];
-    }
-    va_end(args);
-    
-    [self registerFactory:classBuilder
-                 withName:name
-          factorySelector:factorySelector
-               returnType:returnTypeClass
-                 matchers:argumentMatchers];
-}
-
--(void) registerFactory:(ALCClassBuilder *) classBuilder
-               withName:(NSString *) name
-        factorySelector:(SEL) factorySelector
-             returnType:(Class) returnTypeClass
-               matchers:(NSArray *) argumentMatchers {
-    
-    [ALCRuntime validateSelector:factorySelector withClass:classBuilder.valueType.typeClass];
-    
-    // Declare a new instance to represent the factory method for dependency resolving.
-    ALCFactoryMethodBuilder *factoryBuilder = [_model addMethod:factorySelector
-                                                      toBuilder:classBuilder
-                                                     returnType:[ALCType typeForClass:returnTypeClass]
-                                               argumentMatchers:argumentMatchers];
-    if (name != nil) {
-        [_model addBuilder:factoryBuilder underName:name];
-    }
-}
-
--(void) addMatcherArgument:(id) argument toMatcherArray:(NSMutableArray *) matcherArray {
-    
-    // Validate the matchers, checking any arrays.
-    if ([argument isKindOfClass:[NSArray class]]) {
-        for (id nestedArgument in (NSArray *) argument) {
-            [ALCRuntime validateMatcher:nestedArgument];
-        }
-    } else {
-        [ALCRuntime validateMatcher:argument];
-    }
-    
-    [matcherArray addObject:argument];
 }
 
 @end

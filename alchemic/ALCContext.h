@@ -55,22 +55,10 @@
 
 #pragma mark - Registration call backs
 
--(void) registerAsSingleton:(ALCClassBuilder *) classBuilder;
+-(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder qualifiers:(id) firstQualifier, ...;
 
--(void) registerAsSingleton:(ALCClassBuilder *) classBuilder withName:(NSString *) name;
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder qualifiers:(id) firstQualifier, ...;
 
 -(void) registerObject:(id) object withName:(NSString *) name;
-
-/**
- Registers a factory method with it's return data type and matchers for locating the objects for each argument.
- */
--(void) registerFactory:(ALCClassBuilder *) classBuilder
-        factorySelector:(SEL) factorySelector
-             returnType:(Class) returnTypeClass, ...;
-
--(void) registerFactory:(ALCClassBuilder *) classBuilder
-               withName:(NSString *) name
-        factorySelector:(SEL) factorySelector
-             returnType:(Class) returnTypeClass, ...;
 
 @end

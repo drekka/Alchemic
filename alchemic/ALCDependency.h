@@ -11,9 +11,16 @@
 @class ALCContext;
 
 #import "ALCMatcher.h"
-#import "ALCResolvable.h"
 
-@interface ALCDependency : NSObject<ALCResolvable>
+@interface ALCDependency : NSObject
+
+@property (nonatomic, strong, readonly) id value;
+
+@property (nonatomic, strong, readonly) ALCType *valueType;
+
+#pragma mark - Resolving
+
+-(void) resolve;
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
                       valueType:(ALCType *) valueType

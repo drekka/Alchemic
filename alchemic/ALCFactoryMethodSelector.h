@@ -1,0 +1,17 @@
+//
+//  ALCFactoryMethodSelector.h
+//  alchemic
+//
+//  Created by Derek Clarkson on 7/06/2015.
+//  Copyright (c) 2015 Derek Clarkson. All rights reserved.
+//
+
+@import Foundation;
+
+@interface ALCFactoryMethodSelector : NSObject
+
+@property(nonatomic, assign, readonly) SEL factorySelector;
+
++(instancetype) factoryMethodSelector:(SEL) methodSelector;
+
+@end

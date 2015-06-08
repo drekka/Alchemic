@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
+@import Foundation;
 #import "Factory.h"
 #import "Alchemic.h"
 #import "Component.h"
@@ -14,20 +15,20 @@
     int x;
 }
 
-registerFactoryMethodWithName(@"buildADateString", NSString, makeAString)
+register(asName(@"buildADateString"), returnType(NSString), factorySelector(makeAString))
 
 -(NSString *) makeAString {
     x++;
     return [NSString stringWithFormat:@"Factory string %i", x];
 }
 
-registerFactoryMethod(Component, makeAComponent1)
+//(Component, makeAComponent1)
 
 -(Component *) makeAComponent1 {
     return [[Component alloc] init];
 }
 
-registerFactoryMethod(Component, makeAComponent2)
+//registerFactoryMethod(Component, makeAComponent2)
 
 -(Component *) makeAComponent2 {
     return [[Component alloc] init];

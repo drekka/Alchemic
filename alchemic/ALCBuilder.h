@@ -6,11 +6,10 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCResolvable.h"
-
 @class ALCDependency;
+@class ALCType;
 
-@protocol ALCBuilder <ALCResolvable>
+@protocol ALCBuilder <NSObject>
 
 @property (nonatomic, assign) BOOL primary;
 
@@ -18,6 +17,14 @@
 
 @property (nonatomic, assign) BOOL singleton;
 
+@property (nonatomic, strong, readonly) id value;
+
+@property (nonatomic, strong, readonly) ALCType *valueType;
+
 -(void) addDependency:(ALCDependency *) dependency;
+
+#pragma mark - Resolving
+
+-(void) resolve;
 
 @end

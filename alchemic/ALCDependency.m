@@ -21,11 +21,7 @@
     __weak ALCContext *_context;
     NSSet *_dependencyMatchers;
     NSSet *_candidateBuilders;
-    id _value;
 }
-
-@synthesize valueType = _valueType;
-@synthesize value = _value;
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
                       valueType:(ALCType *) valueType
@@ -92,12 +88,12 @@
 
 -(NSString *) description {
     
-    NSMutableArray *protocols = [[NSMutableArray alloc] initWithCapacity:[self.valueType.typeProtocols count]];
-    [self.valueType.typeProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, BOOL *stop) {
+    NSMutableArray *protocols = [[NSMutableArray alloc] initWithCapacity:[_valueType.typeProtocols count]];
+    [_valueType.typeProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, BOOL *stop) {
         [protocols addObject:NSStringFromProtocol(protocol)];
     }];
     
-    const char *type = self.valueType.typeClass == nil ? "id" : class_getName(self.valueType.typeClass);
+    const char *type = _valueType.typeClass == nil ? "id" : class_getName(_valueType.typeClass);
     return [NSString stringWithFormat:@"Dependency %s<%@>", type, [protocols componentsJoinedByString:@", "]];
     
 }

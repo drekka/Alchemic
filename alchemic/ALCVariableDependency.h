@@ -18,4 +18,6 @@
                       valueType:(ALCType *) valueType
                        matchers:(NSSet *) dependencyMatchers NS_DESIGNATED_INITIALIZER;
 
+-(void) injectInto:(id) object;
+
 @end

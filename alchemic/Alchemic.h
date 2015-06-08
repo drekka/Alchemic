@@ -15,11 +15,30 @@
 #import "ALCProtocolMatcher.h"
 #import "ALCNameMatcher.h"
 #import "ALCLogger.h"
+#import "ALCReturnType.h"
+#import "ALCIsSingleton.h"
+#import "ALCFactoryMethodSelector.h"
+#import "ALCIntoVariable.h"
+#import "ALCAsName.h"
+#import "ALCIsPrimary.h"
+
 @import ObjectiveC;
 
-// Matcher wrapping macros passed to the inject macro.
+#pragma mark - Defining objects
 
-#define intoVariable(_variableName) _alchemic_toNSString(_variableName)
+#define asName(_objectName) [ALCAsName asNameWithName:_objectName]
+
+#define returnType(_returnType) [ALCReturnType returnTypeWithClass:[_returnType class]]
+
+#define factorySelector(_methodSelector) [ALCFactoryMethodSelector factoryMethodSelector:@selector(_methodSelector)]
+
+#define intoVariable(_variableName) [ALCIntoVariable intoVariableWithName:_alchemic_toNSString(_variableName)]
+
+#define isSingleton [[ALCIsSingleton alloc] init]
+
+#define primary [[ALCIsPrimary alloc] init]
+
+#pragma mark - Dependency matching
 
 #define withClass(_className) [ALCClassMatcher matcherWithClass:[_className class]]
 
@@ -30,8 +49,6 @@
 #pragma mark - Injection
 
 #define injectDependencies(object) [[Alchemic mainContext] injectDependencies:object]
-
-#define primary
 
 #pragma mark - Injecting values
 
@@ -45,23 +62,16 @@
 
 // All registration methods must make use of the same signature.
 
+
+#define register(_firstQualifier, ...) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
+    [[Alchemic mainContext] registerClassBuilder:classBuilder qualifiers:_firstQualifier, ## __VA_ARGS__, nil]; \
+}
+
 // Registers an injection point in the current class.
-#define inject(_variable, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInInstance):(ALCClassBuilder *) classBuilder { \
-    [classBuilder addInjectionPoint:_variable, ## __VA_ARGS__, nil]; \
-}
-
-/**
- This macros is used to register a class in Alchemic. Registered classes will be created automatically.
- */
-#define registerSingleton \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCClassBuilder *) classBuilder { \
-    [[Alchemic mainContext] registerAsSingleton:classBuilder]; \
-}
-
-#define registerSingletonWithName(_componentName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassWithInstance):(ALCClassBuilder *) classBuilder { \
-    [[Alchemic mainContext] registerAsSingleton:classBuilder withName:_componentName]; \
+#define inject(_firstQualifier, ...) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
+    [[Alchemic mainContext] registerDependencyInClassBuilder:classBuilder qualifiers:_firstQualifier, ## __VA_ARGS__, nil]; \
 }
 
 /**
@@ -70,30 +80,6 @@
 #define registerObjectWithName(_object, _objectName) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectWithInstance):(ALCClassBuilder *) classBuilder { \
     [[Alchemic mainContext] registerObject:_object withName:_objectName]; \
-}
-
-/**
- This macros is used to specify that this class is a factory for other objects.
- @param factorySelector the signature of the factory selector.
- @param returnType the Class of the return type. Will be used to for resolving dependecies which will use this factory.
- @param ... a args list of criteria which will be used to locate the arguments needed for the factory method. Argments can be several things.
- A single Matcher object.
- An Array of Matcher objects.
- The number of objects passed must match the number of expected arguments.
- */
-#define registerFactoryMethod(_returnTypeClassName, _factorySelector, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCClassBuilder *) classBuilder { \
-    [[Alchemic mainContext] registerFactory:classBuilder \
-                            factorySelector:@selector(_factorySelector) \
-                                 returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \
-}
-
-#define registerFactoryMethodWithName(_componentName, _returnTypeClassName, _factorySelector, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodWithInstance):(ALCClassBuilder *) classBuilder { \
-    [[Alchemic mainContext] registerFactory:classBuilder \
-                                   withName:_componentName \
-                            factorySelector:@selector(_factorySelector) \
-                                 returnType:[_returnTypeClassName class], ## __VA_ARGS__, nil]; \
 }
 
 #pragma mark - The context itself
