@@ -16,25 +16,25 @@
 @end
 
 @implementation InjectionTests {
-    id _singletonObject;
-    id _listSimpleObjects;
+    id _singletonObjectByName;
+    id _singletonObjectByClass;
 }
 
-inject(intoVariable(_singletonObject), withName(@"Test singleton"))
-inject(intoVariable(_listSimpleObjects), withClass(SingletonObject))
+inject(intoVariable(_singletonObjectByName), withName(@"Test Singleton"))
+inject(intoVariable(_singletonObjectByClass), withClass(SingletonObject))
 
 -(void) setUp {
     injectDependencies(self);
 }
 
 -(void) testInjectByName {
-    XCTAssertNotNil(_singletonObject);
-    XCTAssertTrue([_singletonObject isKindOfClass:[SingletonObject class]]);
+    XCTAssertNotNil(_singletonObjectByName);
+    XCTAssertTrue([_singletonObjectByName isKindOfClass:[SingletonObject class]]);
 }
 
 -(void) testInjectByClass {
-    XCTAssertNotNil(_listSimpleObjects);
-    XCTAssertTrue([_listSimpleObjects isKindOfClass:[NSArray class]]);
+    XCTAssertNotNil(_singletonObjectByClass);
+    XCTAssertTrue([_singletonObjectByClass isKindOfClass:[SingletonObject class]]);
 }
 
 @end

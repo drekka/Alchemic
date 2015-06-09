@@ -8,7 +8,7 @@
 
 @import ObjectiveC;
 #import "ALCClassMatcher.h"
-#import "ALCtype.h"
+#import "ALCType.h"
 
 @implementation ALCClassMatcher {
     Class _class;

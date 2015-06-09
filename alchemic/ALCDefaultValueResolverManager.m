@@ -6,10 +6,7 @@
 //
 
 #import "ALCDefaultValueResolverManager.h"
-#import "ALCSimpleValueResolver.h"
-#import "ALCArrayValueResolver.h"
 #import "ALCLogger.h"
-
 #import "ALCArrayValueResolver.h"
 #import "ALCSimpleValueResolver.h"
 

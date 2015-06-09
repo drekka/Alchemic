@@ -9,13 +9,11 @@
 
 #import "ALCDependency.h"
 #import "ALCLogger.h"
-#import "ALCMatcher.h"
-#import "ALCClassBuilder.h"
-#import "ALCDependencyPostProcessor.h"
+#import "ALCContext.h"
 #import "ALCType.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
-#import "ALCValueResolverManager.h"
+#import "NSDictionary+ALCModel.h"
 
 @implementation ALCDependency {
     __weak ALCContext *_context;
@@ -93,8 +91,13 @@
         [protocols addObject:NSStringFromProtocol(protocol)];
     }];
     
+    NSMutableArray *matcherDescs = [[NSMutableArray alloc] init];
+    [_dependencyMatchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
+        [matcherDescs addObject:[matcher description]];
+    }];
+    
     const char *type = _valueType.typeClass == nil ? "id" : class_getName(_valueType.typeClass);
-    return [NSString stringWithFormat:@"Dependency %s<%@>", type, [protocols componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"%s<%@> using %@", type, [protocols componentsJoinedByString:@", "],[matcherDescs componentsJoinedByString:@", "]];
     
 }
 

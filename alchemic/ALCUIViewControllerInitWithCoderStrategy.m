@@ -12,7 +12,6 @@
 @import ObjectiveC;
 
 #import "Alchemic.h"
-#import "ALCClassBuilder.h"
 #import "ALCType.h"
 
 @implementation ALCUIViewControllerInitWithCoderStrategy

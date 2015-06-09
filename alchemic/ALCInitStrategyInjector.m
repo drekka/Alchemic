@@ -16,6 +16,7 @@
 #import "ALCInitStrategy.h"
 #import "ALCClassMatcher.h"
 #import "ALCType.h"
+#import "NSDictionary+ALCModel.h"
 
 @implementation ALCInitStrategyInjector {
     NSSet *_strategyClasses;

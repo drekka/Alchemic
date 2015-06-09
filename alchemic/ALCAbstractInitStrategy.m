@@ -9,10 +9,6 @@
 #import "ALCAbstractInitStrategy.h"
 
 #import "ALCLogger.h"
-#import "ALCClassBuilder.h"
-#import "ALCInternal.h"
-#import "ALCRuntime.h"
-#import "ALCInternal.h"
 #import "ALCType.h"
 
 @import ObjectiveC;

@@ -12,13 +12,9 @@
 @import ObjectiveC;
 
 #import "ALClogger.h"
-#import "ALCDependency.h"
 #import "ALCRuntime.h"
-#import "ALCInternal.h"
 #import "ALCClassBuilder.h"
 #import "ALCFactoryMethodBuilder.h"
-#import "ALCClassBuilder.h"
-
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 #import "ALCType.h"

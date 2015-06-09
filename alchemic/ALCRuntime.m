@@ -13,13 +13,9 @@
 #import "ALCClassBuilder.h"
 #import "ALCLogger.h"
 #import "NSDictionary+ALCModel.h"
-#import "ALCContext.h"
-
 #import "ALCModelClassProcessor.h"
-#import "ALCDependencyPostProcessor.h"
 #import "ALCClassWithProtocolClassProcessor.h"
 #import "ALCResourceLocator.h"
-
 
 @implementation ALCRuntime
 

@@ -24,7 +24,7 @@
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Name matcher: %@", _name];
+    return [NSString stringWithFormat:@"Name matcher: '%@'", _name];
 }
 
 @end

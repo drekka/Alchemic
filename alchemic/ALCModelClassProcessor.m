@@ -10,9 +10,9 @@
 
 #import "ALCModelClassProcessor.h"
 #import "ALCClassBuilder.h"
-#import "ALCContext.h"
 #import "ALCInternal.h"
 #import "ALCLogger.h"
+#import "NSDictionary+ALCModel.h"
 
 @implementation ALCModelClassProcessor
 

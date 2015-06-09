@@ -10,7 +10,6 @@
 #import "ALCLogger.h"
 #import "ALCClassBuilder.h"
 #import "ALCRuntime.h"
-#import "ALCContext.h"
 #import "ALCType.h"
 
 @import ObjectiveC;

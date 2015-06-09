@@ -31,4 +31,9 @@
     [ALCRuntime injectObject:object variable:self.variable withValue:value];
 }
 
+-(NSString *) description {
+    NSString *desc = [super description];
+    return [NSString stringWithFormat:@"%2$s = %1$@", desc, ivar_getName(_variable)];
+}
+
 @end

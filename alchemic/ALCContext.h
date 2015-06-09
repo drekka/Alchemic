@@ -10,9 +10,7 @@
 
 #import "ALCObjectFactory.h"
 #import "ALCInitInjector.h"
-#import "ALCMatcher.h"
 #import "ALCDependencyPostProcessor.h"
-#import "NSDictionary+ALCModel.h"
 #import "ALCValueResolverManager.h"
 
 @class ALCClassBuilder;
