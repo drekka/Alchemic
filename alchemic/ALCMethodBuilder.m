@@ -1,18 +1,16 @@
 //
-//  ALCFactoryMethod.m
-//  alchemic
 //
 //  Created by Derek Clarkson on 9/05/2015.
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCFactoryMethodBuilder.h"
+#import "ALCMethodBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCLogger.h"
 #import "ALCType.h"
 
-@implementation ALCFactoryMethodBuilder {
+@implementation ALCMethodBuilder {
     ALCClassBuilder *_factoryClassBuilder;
     SEL _factorySelector;
     NSInvocation *_factoryInvocation;
@@ -22,7 +20,7 @@
                       valueType:(ALCType *) valueType
             factoryClassBuilder:(ALCClassBuilder *) factoryClassBuilder
                 factorySelector:(SEL) factorySelector
-               argumentMatchers:(NSArray *) argumentMatchers {
+               argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers {
     
     self = [super initWithContext:context valueType:valueType];
     if (self) {
@@ -61,6 +59,13 @@
 }
 
 -(id) value {
+    id value = [self instantiate];
+    ALCContext *strongContext = self.context;
+    [strongContext injectDependencies:value];
+    return value;
+}
+
+-(id) resolveValue {
     
     logCreation(@"Creating object with %@", [self description]);
     
@@ -84,14 +89,13 @@
     
     id returnObj;
     [_factoryInvocation getReturnValue:&returnObj];
-    logCreation(@"   Factory created a %s", class_getName([returnObj class]));
-    id cache = returnObj;
-    return cache;
+    logCreation(@"   Method created a %s", class_getName([returnObj class]));
+    return returnObj;
     
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"method -(%1$s)%1$s::%2$s", class_getName(_factoryClassBuilder.valueType.typeClass), sel_getName(_factorySelector)];
+    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_factoryClassBuilder.valueType.typeClass), sel_getName(_factorySelector)];
 }
 
 @end

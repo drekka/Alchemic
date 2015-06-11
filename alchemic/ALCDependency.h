@@ -24,6 +24,6 @@
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
                       valueType:(ALCType *) valueType
-                       matchers:(NSSet *) dependencyMatchers;
+                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers;
 
 @end

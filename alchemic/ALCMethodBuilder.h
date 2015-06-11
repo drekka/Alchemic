@@ -1,6 +1,4 @@
 //
-//  ALCFactoryMethod.h
-//  alchemic
 //
 //  Created by Derek Clarkson on 9/05/2015.
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
@@ -10,7 +8,7 @@
 
 @class ALCClassBuilder;
 
-@interface ALCFactoryMethodBuilder : ALCAbstractBuilder
+@interface ALCMethodBuilder : ALCAbstractBuilder
 
 @property (nonatomic, strong, readonly) NSArray *argumentMatchers;
 
@@ -18,6 +16,6 @@
                       valueType:(ALCType *) valyeType
             factoryClassBuilder:(ALCClassBuilder *) factoryClassBuilder
                 factorySelector:(SEL) factorySelector
-               argumentMatchers:(NSArray *) argumentMatchers NS_DESIGNATED_INITIALIZER;
+               argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers NS_DESIGNATED_INITIALIZER;
 
 @end

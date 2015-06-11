@@ -14,18 +14,18 @@
 #import "ALCRuntime.h"
 #import "NSDictionary+ALCModel.h"
 #import "ALCClassBuilder.h"
-#import "ALCFactoryMethodBuilder.h"
+#import "ALCMethodBuilder.h"
 #import "ALCDefaultValueResolverManager.h"
 #import "ALCType.h"
 #import "ALCReturnType.h"
-#import "ALCIsSingleton.h"
-#import "ALCFactoryMethodSelector.h"
+#import "ALCIsFactory.h"
+#import "ALCMethodSelector.h"
 #import "ALCIntoVariable.h"
 #import "ALCIsPrimary.h"
 #import "ALCAsName.h"
 
 @implementation ALCContext {
-    NSMutableSet *_initialisationStrategyClasses;
+    NSMutableSet<Class> *_initialisationStrategyClasses;
 }
 
 #pragma mark - Lifecycle
@@ -69,20 +69,19 @@
 }
 
 -(void) instantiateSingletons {
-    
+
+    // This is a two stage process so that all objects are created before dependencies are wired up.
     logCreation(@"---- Instantiating singletons ----");
-    NSMutableSet *singletonClassbuilders = [[NSMutableSet alloc] init];
+    NSMutableSet *singletons = [[NSMutableSet alloc] init];
     [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
-        if (classBuilder.singleton) {
-            if ([classBuilder instantiate] != nil) {
-                [singletonClassbuilders addObject:classBuilder];
-            }
+        if (!classBuilder.isLazy && !classBuilder.isInstantiated) {
+            [singletons addObject:[classBuilder instantiate]];
         }
     }];
     
     logCreation(@"---- Injecting dependencies into singletons ----");
-    [singletonClassbuilders enumerateObjectsUsingBlock:^(ALCClassBuilder *classBuilder, BOOL *stop) {
-        [classBuilder injectDependenciesInto:classBuilder.value];
+    [singletons enumerateObjectsUsingBlock:^(id singleton, BOOL *stop) {
+        [self injectDependencies:singleton];
     }];
     
 }
@@ -112,15 +111,15 @@
 
 #pragma mark - Registration call backs
 
--(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder qualifiers:(id) firstQualifier, ... {
+-(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder, ... {
     
     NSMutableSet *matchers = [[NSMutableSet alloc] init];
     NSString *intoVariable = nil;
     
     va_list qualifiers;
-    va_start(qualifiers, firstQualifier);
-    id qualifier = firstQualifier;
-    while (qualifier != nil) {
+    va_start(qualifiers, classBuilder);
+    id qualifier;
+    while ((qualifier = va_arg(qualifiers, id)) != nil) {
         
         if ([qualifier isKindOfClass:[ALCIntoVariable class]]) {
             intoVariable = ((ALCIntoVariable *) qualifier).variableName;
@@ -135,8 +134,6 @@
                                            reason:[NSString stringWithFormat:@"Unexpected qualifier %@ for a variable declaration.", qualifier]
                                          userInfo:nil];
         }
-        
-        qualifier = va_arg(qualifiers, id);
     }
     va_end(qualifiers);
     
@@ -145,19 +142,19 @@
     
 }
 
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder qualifiers:(id) firstQualifier, ... {
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
     
     Class returnType = NULL;
-    BOOL isSingleton = NO;
+    BOOL isFactory = NO;
     BOOL isPrimary = NO;
-    SEL factorySelector = NULL;
+    SEL methodSelector = NULL;
     NSString *name;
     NSMutableArray *matchers = [[NSMutableArray alloc] init];
     
     va_list qualifiers;
-    va_start(qualifiers, firstQualifier);
-    id qualifier = firstQualifier;
-    while (qualifier != nil) {
+    va_start(qualifiers, classBuilder);
+    id qualifier;
+    while ((qualifier = va_arg(qualifiers, id)) != nil) {
         
         // Now sort out what sort of qualifier we are dealing with.
         if ([qualifier isKindOfClass:[ALCReturnType class]]) {
@@ -168,8 +165,8 @@
                                            reason:[NSString stringWithFormat:@"Cannot use %@ in a class declaration", qualifier]
                                          userInfo:nil];
         
-        } else if ([qualifier isKindOfClass:[ALCIsSingleton class]]) {
-            isSingleton = YES;
+        } else if ([qualifier isKindOfClass:[ALCIsFactory class]]) {
+            isFactory = YES;
         
         } else if ([qualifier isKindOfClass:[ALCIsPrimary class]]) {
             isPrimary = YES;
@@ -177,8 +174,8 @@
         } else if ([qualifier isKindOfClass:[ALCAsName class]]) {
             name = ((ALCAsName *) qualifier).asName;
         
-        } else if ([qualifier isKindOfClass:[ALCFactoryMethodSelector class]]) {
-            factorySelector = ((ALCFactoryMethodSelector *) qualifier).factorySelector;
+        } else if ([qualifier isKindOfClass:[ALCMethodSelector class]]) {
+            methodSelector = ((ALCMethodSelector *) qualifier).factorySelector;
 
         } else if ([qualifier conformsToProtocol:@protocol(ALCMatcher)]) {
 
@@ -194,19 +191,17 @@
             [matchers addObject:qualifier];
         }
         
-        qualifier = va_arg(qualifiers, id);
-        
     }
     va_end(qualifiers);
     
     // Add the registration.
     id<ALCBuilder> finalBuilder = classBuilder;
-    if (factorySelector != NULL) {
+    if (methodSelector != NULL) {
         
-        [ALCRuntime validateSelector:factorySelector withClass:classBuilder.valueType.typeClass];
+        [ALCRuntime validateSelector:methodSelector withClass:classBuilder.valueType.typeClass];
         
         // Declare a new instance to represent the factory method for dependency resolving.
-        finalBuilder = [_model addMethod:factorySelector
+        finalBuilder = [_model addMethod:methodSelector
                                toBuilder:classBuilder
                               returnType:[ALCType typeForClass:returnType]
                         argumentMatchers:matchers];
@@ -216,15 +211,15 @@
     if (name != nil) {
         [_model addBuilder:finalBuilder underName:name];
     }
-    finalBuilder.singleton = isSingleton;
+    finalBuilder.factory = !isFactory;
     finalBuilder.primary = isPrimary;
+    finalBuilder.lazy = NO; // If we are here then this is a class registration.
     
 }
 
 -(void) registerObject:(id) object withName:(NSString *) name {
     ALCClassBuilder *instance = [_model addObject:object inContext:self withName:name];
     logRegistration(@"Adding object %@", object);
-    instance.singleton = YES;
     instance.value = object;
 }
 

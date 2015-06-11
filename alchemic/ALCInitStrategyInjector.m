@@ -19,7 +19,7 @@
 #import "NSDictionary+ALCModel.h"
 
 @implementation ALCInitStrategyInjector {
-    NSSet *_strategyClasses;
+    NSSet<id<ALCInitStrategy>> *_strategyClasses;
 }
 
 static BOOL injected = NO;
@@ -31,7 +31,7 @@ static BOOL injected = NO;
     [self resetRuntime];
 }
 
--(instancetype) initWithStrategyClasses:(NSSet *) strategyClasses {
+-(instancetype) initWithStrategyClasses:(NSSet<id<ALCInitStrategy>> *) strategyClasses {
     self = [super init];
     if (self) {
         _strategyClasses = strategyClasses;
@@ -39,7 +39,7 @@ static BOOL injected = NO;
     return self;
 }
 
--(void) replaceInitsInModelClasses:(NSDictionary *) model {
+-(void) replaceInitsInModelClasses:(NSDictionary<NSString *, id<ALCBuilder>> *) model {
 /*
     if (injected) {
         logRuntime(@"Wrappers already injected into classes");
@@ -57,7 +57,7 @@ static BOOL injected = NO;
  */
 }
 
--(NSArray *) findRootClassBuildersInModel:(NSDictionary *) model {
+-(NSArray *) findRootClassBuildersInModel:(NSDictionary<NSString *, id<ALCBuilder>> *) model {
     
     // First find all instances.
     NSSet *builders = [model buildersWithMatchers:[NSSet setWithObject:[ALCClassMatcher matcherWithClass:[ALCClassBuilder class]]]];

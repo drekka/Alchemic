@@ -15,7 +15,7 @@
 -(instancetype) initWithContext:(__weak ALCContext *) context
                        variable:(Ivar) variable
                       valueType:(ALCType *) valueType
-                       matchers:(NSSet *) dependencyMatchers {
+                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers {
     self = [super initWithContext:context
                         valueType:valueType
                          matchers:dependencyMatchers];

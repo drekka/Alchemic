@@ -14,7 +14,7 @@
 #import "ALClogger.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
-#import "ALCFactoryMethodBuilder.h"
+#import "ALCMethodBuilder.h"
 #import "ALCNameMatcher.h"
 #import "ALCClassMatcher.h"
 #import "ALCType.h"
@@ -23,7 +23,7 @@
 
 #pragma mark - Finding things
 
--(NSSet *) objectsWithMatcherArgs:(id) firstMatcher, ... {
+-(NSSet<id> *) objectsWithMatcherArgs:(id) firstMatcher, ... {
     
     [ALCRuntime validateMatcher:firstMatcher];
     
@@ -31,7 +31,7 @@
     va_list args;
     va_start(args, firstMatcher);
     
-    NSMutableSet *finalMatchers = [[NSMutableSet alloc] init];
+    NSMutableSet<id<ALCMatcher>> *finalMatchers = [[NSMutableSet alloc] init];
     for (id matcher = firstMatcher; matcher != nil; va_arg(args, id)) {
         [ALCRuntime validateMatcher:matcher];
         [finalMatchers addObject:matcher];
@@ -43,30 +43,30 @@
     
 }
 
--(NSSet *) objectsWithMatchers:(NSSet *) matchers {
-    NSMutableSet *objects = [[NSMutableSet alloc] init];
+-(NSSet<id> *) objectsWithMatchers:(NSSet *) matchers {
+    NSMutableSet<id> *objects = [[NSMutableSet alloc] init];
     [[self buildersWithMatchers:matchers filterBlock:NULL] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop) {
         [objects addObject:builder.value];
     }];
     return objects;
 }
 
--(NSSet *) buildersWithMatchers:(NSSet *)matchers {
+-(NSSet<id<ALCBuilder>> *) buildersWithMatchers:(NSSet *)matchers {
     return [self buildersWithMatchers:matchers filterBlock:NULL];
 }
 
 #pragma mark - Internal
 
--(NSSet *) classBuildersWithMatchers:(NSSet *) matchers {
+-(NSSet<ALCClassBuilder *> *) classBuildersWithMatchers:(NSSet *) matchers {
     return [self buildersWithMatchers:matchers
                           filterBlock:^BOOL(id<ALCBuilder> builder) {
                               return [builder isKindOfClass:[ALCClassBuilder class]];
                           }];
 }
 
--(NSSet *) buildersWithMatchers:(NSSet *) matchers filterBlock:(BOOL (^) (id<ALCBuilder> builder)) filterBlock {
+-(NSSet<id<ALCBuilder>> *) buildersWithMatchers:(NSSet<id<ALCMatcher>> *) matchers filterBlock:(BOOL (^) (id<ALCBuilder> builder)) filterBlock {
     
-    NSMutableSet *candidates = [[NSMutableSet alloc] init];
+    NSMutableSet<id<ALCBuilder>> *candidates = [[NSMutableSet alloc] init];
     [self enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCBuilder> builder, BOOL *stop) {
         
         // Run matchers to see if they match. All must accept the candidate object.
@@ -101,7 +101,7 @@
 -(ALCClassBuilder *) findClassBuilderForObject:(id) object {
     
     ALCNameMatcher * nameMatcher = [ALCNameMatcher matcherWithName:NSStringFromClass([object class])];
-    NSSet *classBuilders = [self classBuildersWithMatchers:[NSSet setWithObject:nameMatcher]];
+    NSSet<ALCClassBuilder *> *classBuilders = [self classBuildersWithMatchers:[NSSet setWithObject:nameMatcher]];
     
     if ([classBuilders count] == 0) {
         
@@ -148,25 +148,24 @@
 -(ALCClassBuilder *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name {
     ALCClassBuilder *classBuilder = [self createClassBuilderForClass:object_getClass(finalObject) inContext:context withName:name];
     classBuilder.value = finalObject;
-    classBuilder.singleton = YES;
     return classBuilder;
 }
 
--(ALCFactoryMethodBuilder *) addMethod:(SEL) factorySelector
-                             toBuilder:(ALCClassBuilder *) builder
-                            returnType:(ALCType *) returnType
-                      argumentMatchers:(NSArray *) argumentMatchers {
-
-    ALCFactoryMethodBuilder *factoryMethod = [[ALCFactoryMethodBuilder alloc] initWithContext:builder.context
-                                                                                    valueType:returnType
-                                                                          factoryClassBuilder:builder
-                                                                              factorySelector:factorySelector
-                                                                             argumentMatchers:argumentMatchers];
+-(ALCMethodBuilder *) addMethod:(SEL) factorySelector
+                      toBuilder:(ALCClassBuilder *) builder
+                     returnType:(ALCType *) returnType
+               argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers {
+    
+    ALCMethodBuilder *factoryMethod = [[ALCMethodBuilder alloc] initWithContext:builder.context
+                                                                      valueType:returnType
+                                                            factoryClassBuilder:builder
+                                                                factorySelector:factorySelector
+                                                               argumentMatchers:argumentMatchers];
     
     [self addBuilder:factoryMethod
            underName:[NSString stringWithFormat:@"%s::%s", class_getName(builder.valueType.typeClass), sel_getName(factorySelector)]];
     return factoryMethod;
-
+    
 }
 
 @end

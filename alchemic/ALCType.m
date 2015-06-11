@@ -11,6 +11,13 @@
 
 @implementation ALCType
 
+-(instancetype) init {
+    self = [super init];
+    if (self) {
+    }
+    return self;
+}
+
 -(instancetype) initWithClass:(Class) class {
     self = [super init];
     if (self) {

@@ -9,9 +9,9 @@
 @import Foundation;
 
 /**
- Used to tag registrations that are for singleton instances.
+ Used to tag registrations that are for factories. Ie. every time they are accessed, they create a new instance of the desired object.
  */
 
-@interface ALCIsSingleton : NSObject
+@interface ALCIsFactory : NSObject
 
 @end

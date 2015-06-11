@@ -16,8 +16,8 @@
 #import "ALCNameMatcher.h"
 #import "ALCLogger.h"
 #import "ALCReturnType.h"
-#import "ALCIsSingleton.h"
-#import "ALCFactoryMethodSelector.h"
+#import "ALCIsFactory.h"
+#import "ALCMethodSelector.h"
 #import "ALCIntoVariable.h"
 #import "ALCAsName.h"
 #import "ALCIsPrimary.h"
@@ -30,11 +30,11 @@
 
 #define returnType(_returnType) [ALCReturnType returnTypeWithClass:[_returnType class]]
 
-#define factorySelector(_methodSelector) [ALCFactoryMethodSelector factoryMethodSelector:@selector(_methodSelector)]
+#define createSelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
 
 #define intoVariable(_variableName) [ALCIntoVariable intoVariableWithName:_alchemic_toNSString(_variableName)]
 
-#define isSingleton [[ALCIsSingleton alloc] init]
+#define isFactory [[ALCIsFactory alloc] init]
 
 #define primary [[ALCIsPrimary alloc] init]
 
@@ -61,17 +61,15 @@
 #pragma mark - Registering
 
 // All registration methods must make use of the same signature.
-
-
-#define register(_firstQualifier, ...) \
+#define register(...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
-    [[Alchemic mainContext] registerClassBuilder:classBuilder qualifiers:_firstQualifier, ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
-#define inject(_firstQualifier, ...) \
+#define inject(...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
-    [[Alchemic mainContext] registerDependencyInClassBuilder:classBuilder qualifiers:_firstQualifier, ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] registerDependencyInClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
 /**

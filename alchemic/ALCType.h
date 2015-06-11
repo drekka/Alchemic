@@ -15,13 +15,14 @@
 @interface ALCType : NSObject
 
 @property (nonatomic, assign, readonly) Class typeClass;
-@property (nonatomic, strong, readonly) NSSet *typeProtocols;
+
+@property (nonatomic, strong, readonly) NSSet<Protocol *> *typeProtocols;
 
 +(instancetype) typeForInjection:(Ivar) variable inClass:(Class) class;
 
 +(instancetype) typeForClass:(Class) class;
 
--(instancetype) initWithClass:(Class) class NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithClass:(Class) class; // NS_DESIGNATED_INITIALIZER;
 
 -(void) addProtocol:(Protocol *) protocol;
 

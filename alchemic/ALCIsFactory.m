@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCIsSingleton.h"
+#import "ALCIsFactory.h"
 
-@implementation ALCIsSingleton
+@implementation ALCIsFactory
 
 @end

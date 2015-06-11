@@ -11,6 +11,6 @@
 
 @implementation SingletonObject
 
-register(isSingleton, asName(@"Test Singleton"))
+register(asName(@"Test Singleton"))
 
 @end

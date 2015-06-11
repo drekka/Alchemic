@@ -17,9 +17,9 @@
 
 @interface ALCContext : NSObject
 
-@property (nonatomic, strong, readonly) NSDictionary *model;
-@property (nonatomic, strong, readonly) NSSet *dependencyPostProcessors;
-@property (nonatomic, strong, readonly) NSSet *objectFactories;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, id<ALCBuilder>> *model;
+@property (nonatomic, strong, readonly) NSSet<id<ALCDependencyPostProcessor>> *dependencyPostProcessors;
+@property (nonatomic, strong, readonly) NSSet<id<ALCObjectFactory>> *objectFactories;
 @property (nonatomic, strong, readonly) id<ALCValueResolverManager> valueResolverManager;
 
 #pragma mark - Configuration
@@ -53,9 +53,9 @@
 
 #pragma mark - Registration call backs
 
--(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder qualifiers:(id) firstQualifier, ...;
+-(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder, ...;
 
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder qualifiers:(id) firstQualifier, ...;
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ...;
 
 -(void) registerObject:(id) object withName:(NSString *) name;
 

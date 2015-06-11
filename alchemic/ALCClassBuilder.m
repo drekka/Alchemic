@@ -10,12 +10,13 @@
 @import ObjectiveC;
 
 #import "ALCRuntime.h"
-#import "ALCVariableDependency.h"
 #import "ALCLogger.h"
 #import "ALCType.h"
+#import "ALCVariableDependency.h"
+#import "ALCClassBuilder.h"
 
 @implementation ALCClassBuilder {
-    NSArray *_initialisationStrategies;
+    NSArray<id<ALCInitStrategy>> *_initialisationStrategies;
 }
 
 -(instancetype) initWithContext:(ALCContext *__weak)context valueType:(ALCType *)valueType {
@@ -39,40 +40,21 @@
     [self addDependency:dependency];
 }
 
-#pragma mark - Properties
+#pragma mark - Instantiating
 
 -(id) value {
-    
-    id value = super.value;
-    if (value != nil) {
-        return value;
-    }
-    
-    value = [self instantiate];
+    id value = [self instantiate];
     [self injectDependenciesInto:value];
     return value;
 }
 
--(id) instantiate {
-    
-    // Ignore where another model reference has already created the object.
-    id value = super.value;
-    if (value != nil) {
-        return nil;
-    }
-    
-    logCreation(@"Instantiating %@", self);
-    
+-(id) resolveValue {
+
+    logCreation(@"Instantiating instance using %@", self);
     ALCContext *strongContext = self.context;
     for (id<ALCObjectFactory> objectFactory in strongContext.objectFactories) {
         id newValue = [objectFactory createObjectFromBuilder:self];
         if (newValue != nil) {
-
-            // Set the value if this is not a factory.
-            if (! super.factory) {
-                super.value = newValue;
-            }
-            
             return newValue;
         }
     }
@@ -94,7 +76,7 @@
 }
 
 -(NSString *) description {
-    return [NSStringFromClass(self.valueType.typeClass) stringByAppendingString:self.singleton ? @" (singleton)" : @""];
+    return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueType.typeClass), self.isFactory ? @" (factory)" : @""];
 }
 
 @end

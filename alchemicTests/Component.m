@@ -7,8 +7,11 @@
 //
 
 #import "Component.h"
+#import "Alchemic.h"
 
 @implementation Component
+
+register()
 
 -(NSString *) description {
     return @"Component";

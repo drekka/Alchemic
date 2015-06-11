@@ -11,7 +11,7 @@
 #import "ALCSimpleValueResolver.h"
 
 @implementation ALCDefaultValueResolverManager {
-    NSArray *_resolvers;
+    NSArray<id<ALCValueResolver>> *_resolvers;
 }
 
 -(instancetype) init {
@@ -24,7 +24,7 @@
     return self;
 }
 
--(id) resolveValueForDependency:(ALCDependency *) dependency candidates:(NSSet *) candidates {
+-(id) resolveValueForDependency:(ALCDependency *) dependency candidates:(NSSet<id<ALCBuilder>> *) candidates {
     
     id value;
     for (id<ALCValueResolver> resolver in _resolvers) {

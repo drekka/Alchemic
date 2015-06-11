@@ -9,6 +9,7 @@
 @import Foundation;
 
 @class ALCDependency;
+#import "ALCBuilder.h"
 
 /**
  Protocol for classes that can resolve the final values from the list of candidates in a dependency object.
@@ -18,11 +19,11 @@
 /**
  Used by the factory to decide if this resolver should be used for a specific dependency.
  */
--(BOOL) canResolveValueForDependency:(ALCDependency *) dependency candidates:(NSSet *) candidates;
+-(BOOL) canResolveValueForDependency:(ALCDependency *) dependency candidates:(NSSet<id<ALCBuilder>> *) candidates;
 
 /**
  Returns an object derived from the candidates object resolvers.
  */
--(id) resolveCandidateValues:(NSSet *) candidates;
+-(id) resolveCandidateValues:(NSSet<id<ALCBuilder>> *) candidates;
 
 @end

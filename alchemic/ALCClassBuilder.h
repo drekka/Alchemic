@@ -20,10 +20,6 @@
 
 -(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
 
-#pragma mark - Creation
-
--(id) instantiate;
-
 -(void) injectDependenciesInto:(id) object;
 
 @end

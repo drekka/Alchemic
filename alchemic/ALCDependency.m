@@ -23,10 +23,10 @@
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
                       valueType:(ALCType *) valueType
-                       matchers:(NSSet *) dependencyMatchers {
+                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers {
     
     // If we do not have any matcher passed, derive some from the variables details.
-    NSSet *matchers = dependencyMatchers;
+    NSSet<id<ALCMatcher>> *matchers = dependencyMatchers;
     if (matchers == nil) {
         
         matchers = [[NSMutableSet alloc] init];
@@ -86,12 +86,12 @@
 
 -(NSString *) description {
     
-    NSMutableArray *protocols = [[NSMutableArray alloc] initWithCapacity:[_valueType.typeProtocols count]];
+    NSMutableArray<NSString *> *protocols = [[NSMutableArray alloc] initWithCapacity:[_valueType.typeProtocols count]];
     [_valueType.typeProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, BOOL *stop) {
         [protocols addObject:NSStringFromProtocol(protocol)];
     }];
     
-    NSMutableArray *matcherDescs = [[NSMutableArray alloc] init];
+    NSMutableArray<NSString *> *matcherDescs = [[NSMutableArray alloc] init];
     [_dependencyMatchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
         [matcherDescs addObject:[matcher description]];
     }];

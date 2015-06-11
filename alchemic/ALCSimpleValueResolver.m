@@ -20,13 +20,13 @@
     return YES;
 }
 
--(id) resolveCandidateValues:(NSSet *) candidates {
+-(id) resolveCandidateValues:(NSSet<id<ALCBuilder>> *) candidates {
     
     if ([candidates count] == 1) {
-        return [(id<ALCBuilder>)[candidates anyObject] value];
+        return [[candidates anyObject] value];
     }
     
-    NSMutableArray *candidateDescriptions = [[NSMutableArray alloc] initWithCapacity:[candidates count]];
+    NSMutableArray<NSString *> *candidateDescriptions = [[NSMutableArray alloc] initWithCapacity:[candidates count]];
     for (id<ALCBuilder> builder in candidates) {
         [candidateDescriptions addObject:[builder description]];
     }

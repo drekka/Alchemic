@@ -14,7 +14,7 @@
 -(NSSet *) process:(NSSet *) dependencies {
 
     // Build a list of primary objects.
-    NSMutableSet *primaries = [[NSMutableSet alloc] init];
+    NSMutableSet<id<ALCBuilder>> *primaries = [[NSMutableSet alloc] init];
     for (id<ALCBuilder> candidateBuilder in dependencies) {
         if (candidateBuilder.primary) {
             [primaries addObject:candidateBuilder];

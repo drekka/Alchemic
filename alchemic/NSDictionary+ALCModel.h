@@ -11,7 +11,7 @@
 #import "ALCBuilder.h"
 @class ALCContext;
 @class ALCClassBuilder;
-@class ALCFactoryMethodBuilder;
+@class ALCMethodBuilder;
 
 
 #import "ALCMatcher.h"
@@ -22,15 +22,15 @@
 
 -(ALCClassBuilder *) findClassBuilderForObject:(id) object;
 
--(NSSet *) buildersWithMatchers:(NSSet *) matchers;
+-(NSSet<id<ALCBuilder>> *) buildersWithMatchers:(NSSet *) matchers;
 
 -(void) enumerateClassBuildersWithBlock:(void (^)(NSString *name, ALCClassBuilder *builder, BOOL *stop))block;
 
 #pragma mark - Finding objects
 
--(NSSet *) objectsWithMatcherArgs:(id) firstMatcher, ...;
+-(NSSet<id> *) objectsWithMatcherArgs:(id) firstMatcher, ...;
 
--(NSSet *) objectsWithMatchers:(NSSet *) matchers;
+-(NSSet<id> *) objectsWithMatchers:(NSSet *) matchers;
 
 #pragma mark - Adding builders
 
@@ -42,9 +42,9 @@
 
 -(ALCClassBuilder *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
 
--(ALCFactoryMethodBuilder *) addMethod:(SEL) factorySelector
+-(ALCMethodBuilder *) addMethod:(SEL) factorySelector
                              toBuilder:(ALCClassBuilder *) builder
                             returnType:(ALCType *) returnType
-                      argumentMatchers:(NSArray *) argumentMatchers;
+                      argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers;
 
 @end

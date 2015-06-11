@@ -103,7 +103,6 @@ static Class protocolClass;
     ClassMatchesBlock resourceLocatorBlock = ^(classMatchesBlockArgs){
         ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
         classBuilder.value = [[class alloc] init];
-        classBuilder.singleton = YES;
     };
     
     ClassMatchesBlock objectFactoryBlock = ^(classMatchesBlockArgs){
