@@ -49,6 +49,43 @@
 		6C9ADABC1ADFF51C00A240F2 /* ALCBundleResourceLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9ADABB1ADFF51C00A240F2 /* ALCBundleResourceLocator.m */; };
 		6C9ADABF1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9ADABE1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.m */; };
 		6C9ADAC21ADFF9F700A240F2 /* ALCDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9ADAC11ADFF9F700A240F2 /* ALCDependency.m */; };
+		6CA727F81B2C835200788933 /* ALCAbstractInitStrategy.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C9473061AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.h */; };
+		6CA727F91B2C835200788933 /* ALCInitStrategy.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C94730B1AE7D7CB008EB2E5 /* ALCInitStrategy.h */; };
+		6CA727FA1B2C835200788933 /* ALCNSObjectInitStrategy.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C94730F1AE7D7CB008EB2E5 /* ALCNSObjectInitStrategy.h */; };
+		6CA727FB1B2C835200788933 /* ALCUIViewControllerInitWithCoderStrategy.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C9473111AE7D7CB008EB2E5 /* ALCUIViewControllerInitWithCoderStrategy.h */; };
+		6CA727FC1B2C835200788933 /* ALCUIViewControllerInitWithFrameStrategy.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C9473131AE7D7CB008EB2E5 /* ALCUIViewControllerInitWithFrameStrategy.h */; };
+		6CA727FD1B2C835200788933 /* ALCInitInjector.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C94730A1AE7D7CB008EB2E5 /* ALCInitInjector.h */; };
+		6CA727FE1B2C835200788933 /* ALCInitStrategyInjector.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C94730C1AE7D7CB008EB2E5 /* ALCInitStrategyInjector.h */; };
+		6CA727FF1B2C835200788933 /* ALCMatcher.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C6180761AD26A2500BD7398 /* ALCMatcher.h */; };
+		6CA728001B2C835200788933 /* ALCClassMatcher.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C61807A1AD2BABF00BD7398 /* ALCClassMatcher.h */; };
+		6CA728011B2C835200788933 /* ALCNameMatcher.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C6180801AD2BEBF00BD7398 /* ALCNameMatcher.h */; };
+		6CA728021B2C835200788933 /* ALCProtocolMatcher.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C61807D1AD2BD0000BD7398 /* ALCProtocolMatcher.h */; };
+		6CA728031B2C835200788933 /* ALCType.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB309E61B0E16CF003C1DE6 /* ALCType.h */; };
+		6CA728041B2C835200788933 /* ALCAbstractBuilder.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC54B6F1AFCEAED00D5D634 /* ALCAbstractBuilder.h */; };
+		6CA728051B2C835200788933 /* ALCMethodBuilder.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC54B731AFE3D7B00D5D634 /* ALCMethodBuilder.h */; };
+		6CA728061B2C835200788933 /* ALCBuilder.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB309EB1B11E052003C1DE6 /* ALCBuilder.h */; };
+		6CA728071B2C835200788933 /* ALCAsName.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C781EAC1B2595B8001D86CB /* ALCAsName.h */; };
+		6CA728081B2C835200788933 /* ALCMethodSelector.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C781EA81B24802C001D86CB /* ALCMethodSelector.h */; };
+		6CA728091B2C835200788933 /* ALCIntoVariable.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C781EA51B247B71001D86CB /* ALCIntoVariable.h */; };
+		6CA7280A1B2C835200788933 /* ALCIsFactory.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C781EA21B24258C001D86CB /* ALCIsFactory.h */; };
+		6CA7280B1B2C835200788933 /* ALCReturnType.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C781E9F1B232345001D86CB /* ALCReturnType.h */; };
+		6CA7280C1B2C835200788933 /* ALCIsPrimary.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C781EAF1B25968F001D86CB /* ALCIsPrimary.h */; };
+		6CA7280D1B2C835200788933 /* ALCDependency.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C9ADAC01ADFF9F700A240F2 /* ALCDependency.h */; };
+		6CA7280E1B2C835200788933 /* ALCDependencyPostProcessor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C1C6A6E1AF108F90074BB26 /* ALCDependencyPostProcessor.h */; };
+		6CA7280F1B2C835200788933 /* ALCPrimaryObjectDependencyPostProcessor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C1C6A6F1AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.h */; };
+		6CA728101B2C835200788933 /* ALCVariableDependency.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB309ED1B149976003C1DE6 /* ALCVariableDependency.h */; };
+		6CA728111B2C835200788933 /* ALCArrayValueResolver.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C65A64E1ACD93A3006ADC1F /* ALCArrayValueResolver.h */; };
+		6CA728121B2C835200788933 /* ALCValueResolver.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC54B721AFCEFDA00D5D634 /* ALCValueResolver.h */; };
+		6CA728131B2C835200788933 /* ALCValueResolverManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB309DF1B08BC29003C1DE6 /* ALCValueResolverManager.h */; };
+		6CA728141B2C835200788933 /* ALCDefaultValueResolverManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB309E01B08BD4F003C1DE6 /* ALCDefaultValueResolverManager.h */; };
+		6CA728151B2C835200788933 /* ALCResourceLocator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C9ADAB61ADFEB1500A240F2 /* ALCResourceLocator.h */; };
+		6CA728161B2C835200788933 /* ALCPlistResourceLocator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C9ADAB71ADFEC7D00A240F2 /* ALCPlistResourceLocator.h */; };
+		6CA728171B2C835200788933 /* ALCBundleResourceLocator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C9ADABA1ADFF51C00A240F2 /* ALCBundleResourceLocator.h */; };
+		6CA728181B2C835200788933 /* ALCFileContentsResourceLocator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C9ADABD1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.h */; };
+		6CA728191B2C835200788933 /* ALCClassProcessor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C1C6A731AF3A92F0074BB26 /* ALCClassProcessor.h */; };
+		6CA7281A1B2C835200788933 /* ALCModelClassProcessor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C1C6A741AF3A9480074BB26 /* ALCModelClassProcessor.h */; };
+		6CA7281B1B2C835200788933 /* ALCClassWithProtocolClassProcessor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC54B681AF4F20000D5D634 /* ALCClassWithProtocolClassProcessor.h */; };
+		6CA7281C1B2C835200788933 /* ALCAbstractClass.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC54B6B1AF50DE500D5D634 /* ALCAbstractClass.h */; };
 		6CB309E21B08BD4F003C1DE6 /* ALCDefaultValueResolverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB309E11B08BD4F003C1DE6 /* ALCDefaultValueResolverManager.m */; };
 		6CB309E41B0A1356003C1DE6 /* ALCClassBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB309E31B0A1356003C1DE6 /* ALCClassBuilder.m */; };
 		6CB309E81B0E16CF003C1DE6 /* ALCType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB309E71B0E16CF003C1DE6 /* ALCType.m */; };
@@ -79,6 +116,43 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				6CA727F81B2C835200788933 /* ALCAbstractInitStrategy.h in CopyFiles */,
+				6CA727F91B2C835200788933 /* ALCInitStrategy.h in CopyFiles */,
+				6CA727FA1B2C835200788933 /* ALCNSObjectInitStrategy.h in CopyFiles */,
+				6CA727FB1B2C835200788933 /* ALCUIViewControllerInitWithCoderStrategy.h in CopyFiles */,
+				6CA727FC1B2C835200788933 /* ALCUIViewControllerInitWithFrameStrategy.h in CopyFiles */,
+				6CA727FD1B2C835200788933 /* ALCInitInjector.h in CopyFiles */,
+				6CA727FE1B2C835200788933 /* ALCInitStrategyInjector.h in CopyFiles */,
+				6CA727FF1B2C835200788933 /* ALCMatcher.h in CopyFiles */,
+				6CA728001B2C835200788933 /* ALCClassMatcher.h in CopyFiles */,
+				6CA728011B2C835200788933 /* ALCNameMatcher.h in CopyFiles */,
+				6CA728021B2C835200788933 /* ALCProtocolMatcher.h in CopyFiles */,
+				6CA728031B2C835200788933 /* ALCType.h in CopyFiles */,
+				6CA728041B2C835200788933 /* ALCAbstractBuilder.h in CopyFiles */,
+				6CA728051B2C835200788933 /* ALCMethodBuilder.h in CopyFiles */,
+				6CA728061B2C835200788933 /* ALCBuilder.h in CopyFiles */,
+				6CA728071B2C835200788933 /* ALCAsName.h in CopyFiles */,
+				6CA728081B2C835200788933 /* ALCMethodSelector.h in CopyFiles */,
+				6CA728091B2C835200788933 /* ALCIntoVariable.h in CopyFiles */,
+				6CA7280A1B2C835200788933 /* ALCIsFactory.h in CopyFiles */,
+				6CA7280B1B2C835200788933 /* ALCReturnType.h in CopyFiles */,
+				6CA7280C1B2C835200788933 /* ALCIsPrimary.h in CopyFiles */,
+				6CA7280D1B2C835200788933 /* ALCDependency.h in CopyFiles */,
+				6CA7280E1B2C835200788933 /* ALCDependencyPostProcessor.h in CopyFiles */,
+				6CA7280F1B2C835200788933 /* ALCPrimaryObjectDependencyPostProcessor.h in CopyFiles */,
+				6CA728101B2C835200788933 /* ALCVariableDependency.h in CopyFiles */,
+				6CA728111B2C835200788933 /* ALCArrayValueResolver.h in CopyFiles */,
+				6CA728121B2C835200788933 /* ALCValueResolver.h in CopyFiles */,
+				6CA728131B2C835200788933 /* ALCValueResolverManager.h in CopyFiles */,
+				6CA728141B2C835200788933 /* ALCDefaultValueResolverManager.h in CopyFiles */,
+				6CA728151B2C835200788933 /* ALCResourceLocator.h in CopyFiles */,
+				6CA728161B2C835200788933 /* ALCPlistResourceLocator.h in CopyFiles */,
+				6CA728171B2C835200788933 /* ALCBundleResourceLocator.h in CopyFiles */,
+				6CA728181B2C835200788933 /* ALCFileContentsResourceLocator.h in CopyFiles */,
+				6CA728191B2C835200788933 /* ALCClassProcessor.h in CopyFiles */,
+				6CA7281A1B2C835200788933 /* ALCModelClassProcessor.h in CopyFiles */,
+				6CA7281B1B2C835200788933 /* ALCClassWithProtocolClassProcessor.h in CopyFiles */,
+				6CA7281C1B2C835200788933 /* ALCAbstractClass.h in CopyFiles */,
 				6C65A6321ACD798A006ADC1F /* ALCContext.h in CopyFiles */,
 				6C65A6341ACD798A006ADC1F /* AlchemicAware.h in CopyFiles */,
 				6C65A6351ACD798A006ADC1F /* ALCClassBuilder.h in CopyFiles */,

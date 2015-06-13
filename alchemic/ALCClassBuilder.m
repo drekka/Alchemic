@@ -43,14 +43,17 @@
 #pragma mark - Instantiating
 
 -(id) value {
-    id value = [self instantiate];
-    [self injectDependenciesInto:value];
-    return value;
+    id returnValue = super.value;
+    if (returnValue == nil) {
+        returnValue = [self instantiate];
+        [self injectDependenciesInto:returnValue];
+    }
+    return returnValue;
 }
 
 -(id) resolveValue {
 
-    logCreation(@"Instantiating instance using %@", self);
+    logCreation(@"   instantiating instance using %@", self);
     ALCContext *strongContext = self.context;
     for (id<ALCObjectFactory> objectFactory in strongContext.objectFactories) {
         id newValue = [objectFactory createObjectFromBuilder:self];

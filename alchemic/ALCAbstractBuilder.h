@@ -18,9 +18,6 @@
 
 @property (nonatomic, weak, readonly) ALCContext *context;
 
-// Override so it can be set.
-@property (nonatomic, strong) id value;
-
 @property(nonatomic, strong, readonly) NSArray<ALCDependency *> *dependencies;
 
 -(instancetype) initWithContext:(__weak ALCContext *) context valueType:(ALCType *) valueType;

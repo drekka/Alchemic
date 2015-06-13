@@ -28,12 +28,6 @@
 
 #define asName(_objectName) [ALCAsName asNameWithName:_objectName]
 
-#define returnType(_returnType) [ALCReturnType returnTypeWithClass:[_returnType class]]
-
-#define createSelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
-
-#define intoVariable(_variableName) [ALCIntoVariable intoVariableWithName:_alchemic_toNSString(_variableName)]
-
 #define isFactory [[ALCIsFactory alloc] init]
 
 #define primary [[ALCIsPrimary alloc] init]
@@ -46,21 +40,19 @@
 
 #define withName(_objectName) [ALCNameMatcher matcherWithName:_objectName]
 
+#define returnType(_returnType) [ALCReturnType returnTypeWithClass:[_returnType class]]
+
+#define createUsingSelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
+
+#define intoVariable(_variableName) [ALCIntoVariable intoVariableWithName:_alchemic_toNSString(_variableName)]
+
 #pragma mark - Injection
 
 #define injectDependencies(object) [[Alchemic mainContext] injectDependencies:object]
 
-#pragma mark - Injecting values
-
-// Injects resources which are located via resource locators.
-#define localisedValue(key)
-#define fileContentsValue(filename)
-#define imageValue(imageName, resolution)
-#define plistValue(plistName, keyPath)
-
 #pragma mark - Registering
 
-// All registration methods must make use of the same signature.
+// All registration methods make use of the same signature.
 #define register(...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
     [[Alchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
@@ -70,14 +62,6 @@
 #define inject(...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
     [[Alchemic mainContext] registerDependencyInClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
-}
-
-/**
- Adds a pre-built object to the model.
- */
-#define registerObjectWithName(_object, _objectName) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectWithInstance):(ALCClassBuilder *) classBuilder { \
-    [[Alchemic mainContext] registerObject:_object withName:_objectName]; \
 }
 
 #pragma mark - The context itself

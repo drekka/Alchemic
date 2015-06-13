@@ -11,17 +11,21 @@
 
 @protocol ALCBuilder <NSObject>
 
+@property (nonatomic, assign) BOOL createOnStartup;
+
 @property (nonatomic, assign, getter=isPrimary) BOOL primary;
 
 @property (nonatomic, assign, getter=isFactory) BOOL factory;
 
-@property (nonatomic, assign, getter=isLazy) BOOL lazy;
+@property (nonatomic, strong) id value;
 
-@property (nonatomic, strong, readonly) id value;
-
-@property (nonatomic, assign, readonly, getter=isInstantiated) BOOL instantiated;
+#pragma mark - Querying the builder
 
 @property (nonatomic, strong, readonly) ALCType *valueType;
+
+@property (nonatomic, assign, readonly) BOOL shouldCreateOnStartup;
+
+#pragma mark - Adding dependencies
 
 -(void) addDependency:(ALCDependency *) dependency;
 

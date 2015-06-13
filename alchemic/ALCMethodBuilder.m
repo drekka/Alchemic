@@ -59,10 +59,13 @@
 }
 
 -(id) value {
-    id value = [self instantiate];
-    ALCContext *strongContext = self.context;
-    [strongContext injectDependencies:value];
-    return value;
+    id returnValue = super.value;
+    if (returnValue == nil) {
+        returnValue = [self instantiate];
+        ALCContext *strongContext = self.context;
+        [strongContext injectDependencies:returnValue];
+    }
+    return returnValue;
 }
 
 -(id) resolveValue {

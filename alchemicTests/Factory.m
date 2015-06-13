@@ -15,7 +15,7 @@
     int x;
 }
 
-register(asName(@"buildADateString"), returnType(NSString), createSelector(makeAString))
+register(isFactory, asName(@"buildADateString"), returnType(NSString), createUsingSelector(makeAString))
 
 -(NSString *) makeAString {
     x++;

@@ -18,7 +18,8 @@
 @synthesize valueType = _valueType;
 @synthesize primary = _primary;
 @synthesize factory = _factory;
-@synthesize lazy = _lazy;
+@synthesize createOnStartup = _createOnStartup;
+@synthesize value = _value;
 
 #pragma mark - Lifecycle
 
@@ -28,7 +29,6 @@
         _context = context;
         _valueType = valueType;
         _dependencies = [[NSMutableArray alloc] init];
-        _lazy = YES;
     }
     return self;
 }
@@ -43,16 +43,7 @@
     }
 }
 
--(BOOL) isInstantiated {
-    return _value != nil;
-}
-
 -(id) instantiate {
-    
-    // Value will only have a value if this is not a factory.
-    if (_value != nil) {
-        return _value;
-    }
     
     // Get the value and store it if we are not a factory.
     id newValue = [self resolveValue];
@@ -62,9 +53,8 @@
     return newValue;
 }
 
--(id) value {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+-(BOOL) shouldCreateOnStartup {
+    return _createOnStartup && _value == nil;
 }
 
 -(id) resolveValue {

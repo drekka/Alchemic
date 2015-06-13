@@ -74,7 +74,8 @@
     logCreation(@"---- Instantiating singletons ----");
     NSMutableSet *singletons = [[NSMutableSet alloc] init];
     [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
-        if (!classBuilder.isLazy && !classBuilder.isInstantiated) {
+        if (classBuilder.shouldCreateOnStartup) {
+            logCreation(@"Creating singleton %@ -> %@", name, classBuilder);
             [singletons addObject:[classBuilder instantiate]];
         }
     }];
@@ -211,10 +212,12 @@
     if (name != nil) {
         [_model addBuilder:finalBuilder underName:name];
     }
-    finalBuilder.factory = !isFactory;
+    finalBuilder.factory = isFactory;
     finalBuilder.primary = isPrimary;
-    finalBuilder.lazy = NO; // If we are here then this is a class registration.
-    
+    finalBuilder.createOnStartup = !isFactory;
+
+    logRegistration(@"Setting up: %@, Primary: %@, Factory: %@, Factory Selector: %s, Return type: %s, Name: %@", finalBuilder, isPrimary ? @"YES": @"NO", isFactory ? @"YES": @"NO",sel_getName(methodSelector) , class_getName(returnType), name);
+
 }
 
 -(void) registerObject:(id) object withName:(NSString *) name {
