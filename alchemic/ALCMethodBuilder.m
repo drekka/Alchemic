@@ -48,7 +48,7 @@
         // Setup the dependencies for each argument.
         Class arrayClass = [NSArray class];
         [argumentMatchers enumerateObjectsUsingBlock:^(id matchers, NSUInteger idx, BOOL *stop) {
-            NSSet *matcherSet = object_isClass(arrayClass) ? [NSSet setWithArray:matchers] : [NSSet setWithObject:matchers];
+            NSSet<id<ALCMatcher>> *matcherSet = [matchers isKindOfClass:arrayClass] ? [NSSet setWithArray:matchers] : [NSSet setWithObject:matchers];
             [self addDependency:[[ALCDependency alloc] initWithContext:context
                                                              valueType:nil
                                                               matchers:matcherSet]];

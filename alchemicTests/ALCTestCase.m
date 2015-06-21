@@ -8,12 +8,17 @@
 
 #import "ALCTestCase.h"
 #import "ALCLogger.h"
+#import "Alchemic.h"
 
 @implementation ALCTestCase
 
 +(void)load {
     [ALCLogger turnOnAllLogging];
     [ALCLogger stopLogging:AlchemicLogCategoryRuntime];
+}
+
+- (void)setUp {
+    injectDependencies(self);
 }
 
 @end

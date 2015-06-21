@@ -17,8 +17,8 @@
 
 @implementation ALCDependency {
     __weak ALCContext *_context;
-    NSSet *_dependencyMatchers;
-    NSSet *_candidateBuilders;
+    NSSet<id<ALCMatcher>> *_dependencyMatchers;
+    NSSet<id<ALCBuilder>> *_candidateBuilders;
 }
 
 -(instancetype) initWithContext:(__weak ALCContext *) context

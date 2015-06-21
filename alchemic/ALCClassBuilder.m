@@ -33,6 +33,7 @@
     Class objClass = self.valueType.typeClass;
     Ivar variable = [ALCRuntime class:objClass variableForInjectionPoint:inj];
     ALCType *type = [ALCType typeForInjection:variable inClass:objClass];
+
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithContext:self.context
                                                                               variable:variable
                                                                              valueType:type

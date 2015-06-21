@@ -12,7 +12,6 @@
 
 @implementation Alchemic
 
-
 static __strong ALCContext *__mainContext;
 
 +(ALCContext *) mainContext {
@@ -23,7 +22,7 @@ static __strong ALCContext *__mainContext;
     dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
         @autoreleasepool {
             __mainContext = [[ALCContext alloc] init];
-        [ALCRuntime scanRuntimeWithContext:__mainContext];
+            [ALCRuntime scanRuntimeWithContext:__mainContext];
             [__mainContext start];
         }
     });
