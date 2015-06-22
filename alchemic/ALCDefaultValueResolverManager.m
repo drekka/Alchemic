@@ -6,7 +6,7 @@
 //
 
 #import "ALCDefaultValueResolverManager.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCArrayValueResolver.h"
 #import "ALCSimpleValueResolver.h"
 

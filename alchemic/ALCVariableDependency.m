@@ -8,7 +8,7 @@
 
 #import "ALCVariableDependency.h"
 #import "ALCRuntime.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 
 @implementation ALCVariableDependency
 
@@ -27,7 +27,7 @@
 
 -(void) injectInto:(id) object {
     id value = self.value;
-    logDependencyResolving(@"   Injecting %s::%s <- %s",object_getClassName(object) , ivar_getName(self.variable), object_getClassName(value));
+    log([object class], @"   Injecting %s::%s <- %s",object_getClassName(object) , ivar_getName(self.variable), object_getClassName(value));
     [ALCRuntime injectObject:object variable:self.variable withValue:value];
 }
 

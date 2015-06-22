@@ -7,7 +7,7 @@
 //
 
 #import "ALCArrayValueResolver.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCRuntime.h"
 #import "ALCDependency.h"
 #import "ALCType.h"

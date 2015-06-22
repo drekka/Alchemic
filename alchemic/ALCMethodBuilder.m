@@ -7,7 +7,7 @@
 #import "ALCMethodBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCType.h"
 
 @implementation ALCMethodBuilder {
@@ -70,7 +70,7 @@
 
 -(id) resolveValue {
     
-    logCreation(@"Creating object with %@", [self description]);
+    log([self description], @"Creating object with %@", [self description]);
     
     id factoryObject = _factoryClassBuilder.value;
     
@@ -92,7 +92,7 @@
     
     id returnObj;
     [_factoryInvocation getReturnValue:&returnObj];
-    logCreation(@"   Method created a %s", class_getName([returnObj class]));
+    log([self description], @"   Method created a %s", class_getName([returnObj class]));
     return returnObj;
     
 }

@@ -8,7 +8,7 @@
 
 #import "ALCAbstractInitStrategy.h"
 
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCType.h"
 
 @import ObjectiveC;
@@ -41,10 +41,10 @@
     SEL initSel = self.initSelector;
     const char *initPropertyName = [ALCRuntime concat:_alchemic_toCharPointer(ALCHEMIC_PREFIX) to:sel_getName(initSel)];
 
-    logRuntime(@"Replacing %s::%s with wrapper %2$s", class_getName(_forClass), sel_getName(initSel));
+    log(_forClass, @"Replacing %s::%s with wrapper %2$s", class_getName(_forClass), sel_getName(initSel));
     NSNumber *initAdded = objc_getAssociatedObject(_forClass, initPropertyName);
     if ([initAdded boolValue]) {
-        logRuntime(@"Init method already replaced.");
+        log(_forClass, @"Init method already replaced.");
         return;
     }
 
@@ -61,7 +61,7 @@
     if (originalInitIMP != NULL) {
         // There was an original init method so save it so it can be found.
         SEL alchemicInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
-        logRuntime(@"Storing original init as %s::%s", class_getName(selfClass), sel_getName(alchemicInitSel));
+        log(_forClass, @"Storing original init as %s::%s", class_getName(selfClass), sel_getName(alchemicInitSel));
         class_addMethod(_forClass, alchemicInitSel, originalInitIMP, initTypeEncoding);
     }
  

@@ -7,7 +7,7 @@
 //
 
 #import "ALCSimpleObjectFactory.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCClassBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCType.h"
@@ -26,13 +26,13 @@
     SEL originalInit = [ALCRuntime alchemicSelectorForSelector:@selector(init)];
     if (class_respondsToSelector(objClass, originalInit)) {
     
-        logRuntime(@"   using original %s::%s", class_getName(objClass), sel_getName(originalInit));
+        log(objClass, @"   using original %s::%s", class_getName(objClass), sel_getName(originalInit));
         return ((id (*)(id, SEL))objc_msgSend)(obj, originalInit);
 
     } else {
         
         struct objc_super superData = {obj, class_getSuperclass(objClass)};
-        logRuntime(@"   using super %s::%s", class_getName(superData.super_class), sel_getName(initSel));
+        log(objClass, @"   using super %s::%s", class_getName(superData.super_class), sel_getName(initSel));
         return ((id (*)(struct objc_super *, SEL))objc_msgSendSuper)(&superData, initSel);
     }
 }

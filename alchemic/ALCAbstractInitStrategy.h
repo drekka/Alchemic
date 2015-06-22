@@ -37,7 +37,7 @@ self = ((id (*)(id, SEL _initArgTypes_))objc_msgSend)(self, relocatedInitSel _in
 struct objc_super superData = {self, class_getSuperclass(selfClass)}; \
 self = ((id (*)(struct objc_super *, SEL _initArgTypes_))objc_msgSendSuper)(&superData, initSel _initArgs_); \
 } \
-logRuntime(@"Triggering dependency injection from %s::%s", class_getName(selfClass), sel_getName(initSel)); \
+log(selfClass, @"Triggering dependency injection from %s::%s", class_getName(selfClass), sel_getName(initSel)); \
 [[Alchemic mainContext] injectDependencies:self]; \
 return self
 

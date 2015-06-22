@@ -8,7 +8,7 @@
 @import ObjectiveC;
 
 #import "ALCDependency.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCContext.h"
 #import "ALCType.h"
 #import "ALCClassMatcher.h"
@@ -46,7 +46,7 @@
     self = [super init];
     if (self) {
         [matchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
-            logRegistration(@"      %@", matcher);
+            log(valueType.typeClass, @"Adding a %@", matcher);
         }];
         _context = context;
         _valueType = valueType;
@@ -57,7 +57,7 @@
 
 -(void) resolve {
 
-    logDependencyResolving(@"   resolving %@", self);
+    log(self.valueType.typeClass, @"   resolving %@", self);
     ALCContext *strongContext = _context;
     _candidateBuilders = [strongContext.model buildersWithMatchers:_dependencyMatchers];
     
@@ -68,7 +68,7 @@
         }
     }
     
-    logDependencyResolving(@"   found %lu candidates", [_candidateBuilders count]);
+    log(self.valueType.typeClass, @"   found %lu candidates", [_candidateBuilders count]);
     
     // If there are no candidates left then error.
     if ([_candidateBuilders count] == 0) {

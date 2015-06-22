@@ -7,7 +7,7 @@
 //
 
 #import "ALCAbstractBuilder.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCContext.h"
 #import "ALCDependency.h"
 #import "ALCVariableDependency.h"

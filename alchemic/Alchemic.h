@@ -14,7 +14,7 @@
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
 #import "ALCNameMatcher.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCReturnType.h"
 #import "ALCIsFactory.h"
 #import "ALCMethodSelector.h"

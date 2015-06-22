@@ -11,7 +11,7 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import "ALClogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
@@ -130,7 +130,7 @@
                                      userInfo:nil];
     }
     
-    logRegistration(@"Registering '%@' %@", finalName, builder);
+    log(finalName, @"Registering '%@' %@", finalName, builder);
     self[finalName] = builder;
 }
 

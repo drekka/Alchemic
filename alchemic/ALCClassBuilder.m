@@ -10,7 +10,7 @@
 @import ObjectiveC;
 
 #import "ALCRuntime.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCType.h"
 #import "ALCVariableDependency.h"
 #import "ALCClassBuilder.h"
@@ -54,7 +54,7 @@
 
 -(id) resolveValue {
 
-    logCreation(@"   instantiating instance using %@", self);
+    log(self.valueType.typeClass, @"   instantiating instance using %@", self);
     ALCContext *strongContext = self.context;
     for (id<ALCObjectFactory> objectFactory in strongContext.objectFactories) {
         id newValue = [objectFactory createObjectFromBuilder:self];

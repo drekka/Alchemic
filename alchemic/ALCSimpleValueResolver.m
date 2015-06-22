@@ -11,7 +11,7 @@
 @import ObjectiveC;
 
 #import "ALCDependency.h"
-#import "ALCLogger.h"
+#import <StoryTeller/StoryTeller.h>
 #import "ALCType.h"
 
 @implementation ALCSimpleValueResolver
