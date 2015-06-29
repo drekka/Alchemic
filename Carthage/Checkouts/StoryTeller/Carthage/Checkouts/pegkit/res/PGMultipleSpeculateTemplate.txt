@@ -1,0 +1,2 @@
+{%for i in 1 to depth %}    {%/for%}do {
+{{childString}}{%for i in 1 to depth %}    {%/for%}} while ([self speculate:^{ {{ifTest}}}]);

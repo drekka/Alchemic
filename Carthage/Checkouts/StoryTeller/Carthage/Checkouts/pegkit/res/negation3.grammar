@@ -1,0 +1,20 @@
+@before {
+        PKTokenizer *t = self.tokenizer;
+
+        // symbols
+        [t.symbolState add:@"{%"];
+        [t.symbolState add:@"%}"];
+}
+
+document = any+;
+any      = tag | text;
+
+text     = ~tagStart;
+
+tag      = tagStart tagContent* tagEnd;
+
+tagStart    = '{%';
+tagEnd      = '%}';
+
+tagContent  = in | ~tagEnd;
+in          = 'in';

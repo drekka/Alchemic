@@ -1,0 +1,10 @@
+@before {
+    PKTokenizer *t = self.tokenizer;
+
+    [t setTokenizerState:t.symbolState from:'"' to:'"'];
+}
+
+start = (none | quote | block)+;
+none = 'none' | 'NONE' | 'None';
+quote = '"'! Word '"'!;
+block = '|' Word '|';
