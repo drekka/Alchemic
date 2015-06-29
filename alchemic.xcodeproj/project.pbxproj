@@ -98,6 +98,8 @@
 		6C36D7C31B3853F20073C4FB /* ALCClassWithProtocolClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC54B681AF4F20000D5D634 /* ALCClassWithProtocolClassProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C36D7C41B3853F20073C4FB /* ALCAbstractClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC54B6B1AF50DE500D5D634 /* ALCAbstractClass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C36D7C51B3854080073C4FB /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
+		6C8FD1AF1B4183CD0012DF18 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C8FD1AD1B4183CD0012DF18 /* PEGKit.framework */; };
+		6C8FD1B01B4183CD0012DF18 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C8FD1AE1B4183CD0012DF18 /* StoryTeller.framework */; };
 		6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C91F9EE1B399009002DF241 /* ALCMacros.h */; };
 /* End PBXBuildFile section */
 
@@ -109,21 +111,19 @@
 			remoteGlobalIDString = 6C36D74E1B3851680073C4FB;
 			remoteInfo = alchemic;
 		};
-		6C8FD1A41B417BE60012DF18 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6CE5C3EF1B329BD100F0A470;
-			remoteInfo = StoryTellerTests;
-		};
-		6C8FD1A61B417BE60012DF18 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6C158E141B38269D00119725;
-			remoteInfo = StoryTeller;
-		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6C8FD1AA1B41838D0012DF18 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		6C1C6A6E1AF108F90074BB26 /* ALCDependencyPostProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependencyPostProcessor.h; sourceTree = "<group>"; };
@@ -185,7 +185,8 @@
 		6C7BFFDA1AC2D9A500456536 /* ALCSimpleValueResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCSimpleValueResolver.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C7BFFDC1AC2E7AB00456536 /* FactoryMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactoryMethods.h; sourceTree = "<group>"; };
 		6C7BFFDD1AC2E7AB00456536 /* FactoryMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactoryMethods.m; sourceTree = "<group>"; };
-		6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = StoryTeller.xcodeproj; path = Carthage/Checkouts/StoryTeller/StoryTeller.xcodeproj; sourceTree = "<group>"; };
+		6C8FD1AD1B4183CD0012DF18 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
+		6C8FD1AE1B4183CD0012DF18 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6C91F9EE1B399009002DF241 /* ALCMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMacros.h; sourceTree = "<group>"; };
 		6C9473061AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractInitStrategy.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C9473071AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractInitStrategy.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -234,6 +235,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C8FD1AF1B4183CD0012DF18 /* PEGKit.framework in Frameworks */,
+				6C8FD1B01B4183CD0012DF18 /* StoryTeller.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,7 +295,8 @@
 		6C66DC251A8B82C3009F9D94 = {
 			isa = PBXGroup;
 			children = (
-				6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */,
+				6C8FD1AD1B4183CD0012DF18 /* PEGKit.framework */,
+				6C8FD1AE1B4183CD0012DF18 /* StoryTeller.framework */,
 				6C66DC301A8B82C3009F9D94 /* alchemic */,
 				6C66DC3D1A8B82C3009F9D94 /* Unit tests */,
 				6C66DC2F1A8B82C3009F9D94 /* Products */,
@@ -379,15 +383,6 @@
 				6CB309E11B08BD4F003C1DE6 /* ALCDefaultValueResolverManager.m */,
 			);
 			name = Values;
-			sourceTree = "<group>";
-		};
-		6C8FD1A01B417BE60012DF18 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6C8FD1A51B417BE60012DF18 /* StoryTellerTests.xctest */,
-				6C8FD1A71B417BE60012DF18 /* StoryTeller.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		6C9473051AE7D797008EB2E5 /* Initialisation */ = {
@@ -563,6 +558,7 @@
 				6C36D74B1B3851680073C4FB /* Frameworks */,
 				6C36D74C1B3851680073C4FB /* Headers */,
 				6C36D74D1B3851680073C4FB /* Resources */,
+				6C8FD1AA1B41838D0012DF18 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -618,12 +614,6 @@
 			mainGroup = 6C66DC251A8B82C3009F9D94;
 			productRefGroup = 6C66DC2F1A8B82C3009F9D94 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 6C8FD1A01B417BE60012DF18 /* Products */;
-					ProjectRef = 6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				6C66DC381A8B82C3009F9D94 /* Alchemic tests */,
@@ -631,23 +621,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		6C8FD1A51B417BE60012DF18 /* StoryTellerTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = StoryTellerTests.xctest;
-			remoteRef = 6C8FD1A41B417BE60012DF18 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		6C8FD1A71B417BE60012DF18 /* StoryTeller.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = StoryTeller.framework;
-			remoteRef = 6C8FD1A61B417BE60012DF18 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6C36D74D1B3851680073C4FB /* Resources */ = {
