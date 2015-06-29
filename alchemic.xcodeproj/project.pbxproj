@@ -99,7 +99,6 @@
 		6C36D7C41B3853F20073C4FB /* ALCAbstractClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC54B6B1AF50DE500D5D634 /* ALCAbstractClass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C36D7C51B3854080073C4FB /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C91F9EE1B399009002DF241 /* ALCMacros.h */; };
-		6CA3EE251B384E5300BFE716 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C8A96F01B36E21300066A0C /* StoryTeller.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,26 +109,19 @@
 			remoteGlobalIDString = 6C36D74E1B3851680073C4FB;
 			remoteInfo = alchemic;
 		};
-		6C36D7C61B38567A0073C4FB /* PBXContainerItemProxy */ = {
+		6C8FD1A41B417BE60012DF18 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6C8A96EA1B36E21300066A0C /* StoryTeller.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 6C158E131B38269D00119725;
-			remoteInfo = StoryTeller;
-		};
-		6C8A96EF1B36E21300066A0C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6C8A96EA1B36E21300066A0C /* StoryTeller.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6CE5C3E41B329BD100F0A470;
-			remoteInfo = StoryTeller;
-		};
-		6C8A96F11B36E21300066A0C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6C8A96EA1B36E21300066A0C /* StoryTeller.xcodeproj */;
+			containerPortal = 6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 6CE5C3EF1B329BD100F0A470;
 			remoteInfo = StoryTellerTests;
+		};
+		6C8FD1A61B417BE60012DF18 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6C158E141B38269D00119725;
+			remoteInfo = StoryTeller;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -193,7 +185,7 @@
 		6C7BFFDA1AC2D9A500456536 /* ALCSimpleValueResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCSimpleValueResolver.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C7BFFDC1AC2E7AB00456536 /* FactoryMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactoryMethods.h; sourceTree = "<group>"; };
 		6C7BFFDD1AC2E7AB00456536 /* FactoryMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactoryMethods.m; sourceTree = "<group>"; };
-		6C8A96EA1B36E21300066A0C /* StoryTeller.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = StoryTeller.xcodeproj; path = "submodules/Story Teller/StoryTeller.xcodeproj"; sourceTree = "<group>"; };
+		6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = StoryTeller.xcodeproj; path = Carthage/Checkouts/StoryTeller/StoryTeller.xcodeproj; sourceTree = "<group>"; };
 		6C91F9EE1B399009002DF241 /* ALCMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMacros.h; sourceTree = "<group>"; };
 		6C9473061AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractInitStrategy.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C9473071AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractInitStrategy.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -211,8 +203,8 @@
 		6C9ADAB61ADFEB1500A240F2 /* ALCResourceLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALCResourceLocator.h; path = alchemic/ALCResourceLocator.h; sourceTree = "<group>"; };
 		6C9ADAB71ADFEC7D00A240F2 /* ALCPlistResourceLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALCPlistResourceLocator.h; path = alchemic/ALCPlistResourceLocator.h; sourceTree = "<group>"; };
 		6C9ADAB81ADFEC7D00A240F2 /* ALCPlistResourceLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCPlistResourceLocator.m; path = alchemic/ALCPlistResourceLocator.m; sourceTree = "<group>"; };
-		6C9ADABA1ADFF51C00A240F2 /* ALCBundleResourceLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCBundleResourceLocator.h; sourceTree = "<group>"; };
-		6C9ADABB1ADFF51C00A240F2 /* ALCBundleResourceLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCBundleResourceLocator.m; sourceTree = "<group>"; };
+		6C9ADABA1ADFF51C00A240F2 /* ALCBundleResourceLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALCBundleResourceLocator.h; path = alchemic/ALCBundleResourceLocator.h; sourceTree = "<group>"; };
+		6C9ADABB1ADFF51C00A240F2 /* ALCBundleResourceLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCBundleResourceLocator.m; path = alchemic/ALCBundleResourceLocator.m; sourceTree = "<group>"; };
 		6C9ADABD1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALCFileContentsResourceLocator.h; path = alchemic/ALCFileContentsResourceLocator.h; sourceTree = "<group>"; };
 		6C9ADABE1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCFileContentsResourceLocator.m; path = alchemic/ALCFileContentsResourceLocator.m; sourceTree = "<group>"; };
 		6C9ADAC01ADFF9F700A240F2 /* ALCDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependency.h; sourceTree = "<group>"; };
@@ -250,7 +242,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C36D7C51B3854080073C4FB /* Alchemic.framework in Frameworks */,
-				6CA3EE251B384E5300BFE716 /* StoryTeller.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,7 +292,7 @@
 		6C66DC251A8B82C3009F9D94 = {
 			isa = PBXGroup;
 			children = (
-				6C8A96EA1B36E21300066A0C /* StoryTeller.xcodeproj */,
+				6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */,
 				6C66DC301A8B82C3009F9D94 /* alchemic */,
 				6C66DC3D1A8B82C3009F9D94 /* Unit tests */,
 				6C66DC2F1A8B82C3009F9D94 /* Products */,
@@ -390,11 +381,11 @@
 			name = Values;
 			sourceTree = "<group>";
 		};
-		6C8A96EB1B36E21300066A0C /* Products */ = {
+		6C8FD1A01B417BE60012DF18 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6C8A96F21B36E21300066A0C /* StoryTellerTests.xctest */,
-				6C8A96F01B36E21300066A0C /* StoryTeller.framework */,
+				6C8FD1A51B417BE60012DF18 /* StoryTellerTests.xctest */,
+				6C8FD1A71B417BE60012DF18 /* StoryTeller.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -576,7 +567,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6C36D7C71B38567A0073C4FB /* PBXTargetDependency */,
 			);
 			name = Alchemic;
 			productName = alchemic;
@@ -630,8 +620,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 6C8A96EB1B36E21300066A0C /* Products */;
-					ProjectRef = 6C8A96EA1B36E21300066A0C /* StoryTeller.xcodeproj */;
+					ProductGroup = 6C8FD1A01B417BE60012DF18 /* Products */;
+					ProjectRef = 6C8FD19F1B417BE60012DF18 /* StoryTeller.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -643,18 +633,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		6C8A96F01B36E21300066A0C /* StoryTeller.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = StoryTeller.framework;
-			remoteRef = 6C8A96EF1B36E21300066A0C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		6C8A96F21B36E21300066A0C /* StoryTellerTests.xctest */ = {
+		6C8FD1A51B417BE60012DF18 /* StoryTellerTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = StoryTellerTests.xctest;
-			remoteRef = 6C8A96F11B36E21300066A0C /* PBXContainerItemProxy */;
+			remoteRef = 6C8FD1A41B417BE60012DF18 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6C8FD1A71B417BE60012DF18 /* StoryTeller.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = StoryTeller.framework;
+			remoteRef = 6C8FD1A61B417BE60012DF18 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -741,11 +731,6 @@
 			isa = PBXTargetDependency;
 			target = 6C36D74E1B3851680073C4FB /* Alchemic */;
 			targetProxy = 6C36D7661B3852710073C4FB /* PBXContainerItemProxy */;
-		};
-		6C36D7C71B38567A0073C4FB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = StoryTeller;
-			targetProxy = 6C36D7C61B38567A0073C4FB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
