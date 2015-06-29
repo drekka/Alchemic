@@ -8,9 +8,8 @@
 
 @import Foundation;
 
-#import "ALCInitStrategy.h"
-#import "ALCContext.h"
 #import "ALCAbstractBuilder.h"
+#import "ALCInitStrategy.h"
 
 @interface ALCClassBuilder : ALCAbstractBuilder
 

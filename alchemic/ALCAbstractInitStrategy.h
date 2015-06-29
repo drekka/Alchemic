@@ -7,10 +7,11 @@
 //
 
 @import Foundation;
+@import ObjectiveC;
+#import <StoryTeller/StoryTeller.h>
 
 #import "ALCAbstractClass.h"
 #import "ALCInitStrategy.h"
-#import "Alchemic.h"
 #import "ALCRuntime.h"
 
 // Use this macro with the initLogic macro to safely wrap up the args. This allows us to passed multiple

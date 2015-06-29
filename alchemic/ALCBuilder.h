@@ -13,9 +13,9 @@
 
 @property (nonatomic, assign) BOOL createOnStartup;
 
-@property (nonatomic, assign, getter=isPrimary) BOOL primary;
+@property (nonatomic, assign) BOOL primary;
 
-@property (nonatomic, assign, getter=isFactory) BOOL factory;
+@property (nonatomic, assign) BOOL factory;
 
 @property (nonatomic, strong) id value;
 

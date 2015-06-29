@@ -12,6 +12,8 @@
 @import ObjectiveC;
 
 #import "ALCType.h"
+#import "ALCClassBuilder.h"
+#import "ALCContext.h"
 
 @implementation ALCNSObjectInitStrategy
 

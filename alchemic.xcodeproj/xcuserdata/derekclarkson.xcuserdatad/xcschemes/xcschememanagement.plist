@@ -9,9 +9,24 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>alchemicTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>6C36D74E1B3851680073C4FB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6C36D7571B3851690073C4FB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>6C45ADBA1AC978E500D9BF7C</key>
 		<dict>
 			<key>primary</key>

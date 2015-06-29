@@ -8,70 +8,49 @@
 
 @import Foundation;
 
+#import <Alchemic/ALCMacros.h>
 #import "ALCInternal.h"
 #import "ALCClassBuilder.h"
 #import "ALCContext.h"
 #import "ALCClassMatcher.h"
 #import "ALCProtocolMatcher.h"
 #import "ALCNameMatcher.h"
-#import <StoryTeller/StoryTeller.h>
 #import "ALCReturnType.h"
 #import "ALCIsFactory.h"
 #import "ALCMethodSelector.h"
 #import "ALCIntoVariable.h"
 #import "ALCAsName.h"
 #import "ALCIsPrimary.h"
-
-@import ObjectiveC;
-
-#pragma mark - Defining objects
-
-#define asName(_objectName) [ALCAsName asNameWithName:_objectName]
-
-#define isFactory [[ALCIsFactory alloc] init]
-
-#define primary [[ALCIsPrimary alloc] init]
-
-#pragma mark - Dependency matching
-
-#define withClass(_className) [ALCClassMatcher matcherWithClass:[_className class]]
-
-#define withProtocol(_protocolName) [ALCProtocolMatcher matcherWithProtocol:@protocol(_protocolName)]
-
-#define withName(_objectName) [ALCNameMatcher matcherWithName:_objectName]
-
-#define returnType(_returnType) [ALCReturnType returnTypeWithClass:[_returnType class]]
-
-#define createUsingSelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
-
-#define intoVariable(_variableName) [ALCIntoVariable intoVariableWithName:_alchemic_toNSString(_variableName)]
-
-#pragma mark - Injection
-
-#define injectDependencies(object) [[Alchemic mainContext] injectDependencies:object]
-
-#pragma mark - Registering
-
-// All registration methods make use of the same signature.
-#define register(...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
-    [[Alchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
-}
-
-// Registers an injection point in the current class.
-#define inject(...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
-    [[Alchemic mainContext] registerDependencyInClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
-}
-
-#pragma mark - The context itself
+#import "ALCAbstractClass.h"
+#import "ALCAbstractInitStrategy.h"
+#import "ALCArrayValueResolver.h"
+#import "ALCBundleResourceLocator.h"
+#import "ALCClassProcessor.h"
+#import "ALCClassWithProtocolClassProcessor.h"
+#import "ALCDefaultValueResolverManager.h"
+#import "ALCFileContentsResourceLocator.h"
+#import "ALCInitStrategyInjector.h"
+#import "ALCMethodBuilder.h"
+#import "ALCModelClassProcessor.h"
+#import "ALCNSObjectInitStrategy.h"
+#import "ALCPlistResourceLocator.h"
+#import "ALCPrimaryObjectDependencyPostProcessor.h"
+#import "ALCResourceLocator.h"
+#import "ALCRuntime.h"
+#import "ALCSimpleObjectFactory.h"
+#import "ALCSimpleValueResolver.h"
+#import "ALCType.h"
+#import "ALCUIViewControllerInitWithCoderStrategy.h"
+#import "ALCUIViewControllerInitWithFrameStrategy.h"
+#import "ALCVariableDependency.h"
+#import "AlchemicAware.h"
+#import "NSDictionary+ALCModel.h"
 
 @interface Alchemic : NSObject
 
 /**
  Returns the main context.
- 
- @return An instance of ALCContext.
+ @return The current instance of ALCContext.
  */
 +(ALCContext *) mainContext;
 

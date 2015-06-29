@@ -9,8 +9,6 @@
 @import Foundation;
 
 #import "ALCInitStrategy.h"
-
-@class ALCContext;
 #import "ALCBuilder.h"
 
 /**

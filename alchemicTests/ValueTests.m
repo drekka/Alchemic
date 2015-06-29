@@ -18,6 +18,6 @@
     int _intValue;
 }
 
-injectValue(intoVariable(intValue), plistValue("", ""))
+//injectValue(intoVariable(intValue), plistValue("", ""))
 
 @end

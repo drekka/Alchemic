@@ -7,13 +7,16 @@
 //
 
 #import "ALCClassBuilder.h"
+
 @import ObjectiveC;
+#import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntime.h"
-#import <StoryTeller/StoryTeller.h>
 #import "ALCType.h"
 #import "ALCVariableDependency.h"
 #import "ALCClassBuilder.h"
+#import "ALCObjectFactory.h"
+#import "ALCContext.h"
 
 @implementation ALCClassBuilder {
     NSArray<id<ALCInitStrategy>> *_initialisationStrategies;
@@ -80,7 +83,7 @@
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueType.typeClass), self.isFactory ? @" (factory)" : @""];
+    return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueType.typeClass), self.factory ? @" (factory)" : @""];
 }
 
 @end

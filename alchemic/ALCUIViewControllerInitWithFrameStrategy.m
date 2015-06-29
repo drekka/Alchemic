@@ -10,10 +10,10 @@
 
 #import "ALCUIViewControllerInitWithFrameStrategy.h"
 
-@import ObjectiveC;
-
+#import "ALCClassBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCType.h"
+#import "ALCContext.h"
 
 @implementation ALCUIViewControllerInitWithFrameStrategy
 

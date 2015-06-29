@@ -6,12 +6,13 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractInitStrategy.h"
-
-#import <StoryTeller/StoryTeller.h>
-#import "ALCType.h"
-
 @import ObjectiveC;
+#import <StoryTeller/StoryTeller.h>
+
+#import "ALCAbstractInitStrategy.h"
+#import "ALCType.h"
+#import "ALCClassBuilder.h"
+#import "ALCInternal.h"
 
 @implementation ALCAbstractInitStrategy {
     Class _forClass;

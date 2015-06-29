@@ -7,12 +7,13 @@
 //
 
 @import ObjectiveC;
+#import <StoryTeller/StoryTeller.h>
 
 #import "ALCModelClassProcessor.h"
 #import "ALCClassBuilder.h"
 #import "ALCInternal.h"
-#import <StoryTeller/StoryTeller.h>
 #import "NSDictionary+ALCModel.h"
+#import "ALCContext.h"
 
 @implementation ALCModelClassProcessor
 

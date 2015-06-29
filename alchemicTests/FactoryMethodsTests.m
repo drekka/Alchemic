@@ -6,7 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "Alchemic.h"
+#import <Alchemic/Alchemic.h>
+
 #import "Component.h"
 #import "ALCTestCase.h"
 
