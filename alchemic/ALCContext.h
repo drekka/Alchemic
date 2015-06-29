@@ -8,38 +8,35 @@
 
 @import Foundation;
 
-#import "ALCDependencyResolver.h"
-#import "ALCInitialisationInjector.h"
 #import "ALCObjectFactory.h"
-#import "ALCDependencyInjector.h"
+#import "ALCInitInjector.h"
+#import "ALCDependencyPostProcessor.h"
+#import "ALCValueResolverManager.h"
 
-@class ALCInstance;
+@class ALCClassBuilder;
 
 @interface ALCContext : NSObject
+
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, id<ALCBuilder>> *model;
+@property (nonatomic, strong, readonly) NSSet<id<ALCDependencyPostProcessor>> *dependencyPostProcessors;
+@property (nonatomic, strong, readonly) NSSet<id<ALCObjectFactory>> *objectFactories;
+@property (nonatomic, strong, readonly) id<ALCValueResolverManager> valueResolverManager;
 
 #pragma mark - Configuration
 
 /**
- Specifies the class used to inject dependencies into the runtime. Normally this doesn't been to be changed from the default.
+ Specifies the class used to inject init method wrappers into the runtime. Normally this doesn't been to be changed from the default.
  @discussion By default this is AlchemicRuntimeInjector.
  */
-@property (nonatomic, strong) id<ALCInitialisationInjector> runtimeInjector;
+@property (nonatomic, strong) id<ALCInitInjector> runtimeInitInjector;
 
 /**
  Adds an additional initialisation strategy to the built in ones.
  Strategies are run in reverse order from last registered through to the builtin ones.
  */
--(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy;
+-(void) addInitStrategy:(Class) initialisationStrategyClass;
 
-/**
- Adds a ALCDependencyResolver to the list of resolvers.
- */
--(void) addDependencyResolver:(id<ALCDependencyResolver>) dependencyResolver;
-
-/**
- Adds a ALCDependencyInjector to the list of injectors.
- */
--(void) addDependencyInjector:(id<ALCDependencyInjector>) dependencyinjector;
+-(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor;
 
 /**
  Adds a ALCObjectFactory to the list of object factories. Factories are checked in reverse order. The last registered object factory is the one asked first for an object.
@@ -50,28 +47,16 @@
 
 -(void) start;
 
-#pragma mark - Registering classes
-
--(void) registerClass:(Class) class;
-
--(void) registerClass:(Class) class withName:(NSString *) name;
-
-#pragma mark - Registering injections
-
--(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ...;
-
--(void) registerClass:(Class) class injectionPoint:(NSString *) inj withQualifier:(NSString *) qualifier;
-
-#pragma mark - Directly adding objects
-
--(void) registerObject:(id) finalObject withName:(NSString *) name;
-
-#pragma mark - Retrieving objects
-
--(id) objectWithName:(NSString *) name;
-
 #pragma mark - Manually injecting dependencies
 
 -(void) injectDependencies:(id) object;
+
+#pragma mark - Registration call backs
+
+-(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder, ...;
+
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ...;
+
+-(void) registerObject:(id) object withName:(NSString *) name;
 
 @end

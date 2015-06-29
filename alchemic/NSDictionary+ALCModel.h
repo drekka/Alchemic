@@ -8,10 +8,43 @@
 
 @import Foundation;
 
+#import "ALCBuilder.h"
+@class ALCContext;
+@class ALCClassBuilder;
+@class ALCMethodBuilder;
+
+
+#import "ALCMatcher.h"
+
 @interface NSDictionary (ALCModel)
 
--(NSDictionary *) objectDescriptionsForClass:(Class) class;
+#pragma mark - Finding builders
 
--(NSDictionary *) objectDescriptionsWithProtocol:(Protocol *) protocol;
+-(ALCClassBuilder *) findClassBuilderForObject:(id) object;
+
+-(NSSet<id<ALCBuilder>> *) buildersWithMatchers:(NSSet *) matchers;
+
+-(void) enumerateClassBuildersWithBlock:(void (^)(NSString *name, ALCClassBuilder *builder, BOOL *stop))block;
+
+#pragma mark - Finding objects
+
+-(NSSet<id> *) objectsWithMatcherArgs:(id) firstMatcher, ...;
+
+-(NSSet<id> *) objectsWithMatchers:(NSSet *) matchers;
+
+#pragma mark - Adding builders
+
+-(void) addBuilder:(id<ALCBuilder>) builder underName:(NSString *) name;
+
+-(ALCClassBuilder *) createClassBuilderForClass:(Class) class inContext:(ALCContext *) context;
+
+-(ALCClassBuilder *) createClassBuilderForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name;
+
+-(ALCClassBuilder *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
+
+-(ALCMethodBuilder *) addMethod:(SEL) factorySelector
+                             toBuilder:(ALCClassBuilder *) builder
+                            returnType:(ALCType *) returnType
+                      argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers;
 
 @end

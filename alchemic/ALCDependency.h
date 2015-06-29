@@ -1,32 +1,29 @@
 //
-//  ALCDependency.h
+//  ALCResolver.h
 //  alchemic
 //
-//  Created by Derek Clarkson on 22/02/2015.
+//  Created by Derek Clarkson on 17/04/2015.
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
 @import Foundation;
 
-@class ALCInstance;
-#import <objc/runtime.h>
+@class ALCContext;
 
-/**
- Container object for information about an injection.
- */
+#import "ALCMatcher.h"
+
 @interface ALCDependency : NSObject
 
-@property (nonatomic, assign, readonly) Ivar variable;
-@property (nonatomic, strong, readonly) NSString *variableQualifier;
-@property (nonatomic, assign, readonly) Class variableClass;
-@property (nonatomic, strong, readonly) NSString *variableTypeEncoding;
-@property (nonatomic, strong, readonly) NSArray *variableProtocols;
-@property (nonatomic, strong, readonly) NSDictionary *candidateObjectDescriptions;
+@property (nonatomic, strong, readonly) id value;
 
--(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier;
+@property (nonatomic, strong, readonly) ALCType *valueType;
 
--(void) resolveUsingResolvers:(NSArray *) resolvers;
+#pragma mark - Resolving
 
--(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors;
+-(void) resolve;
+
+-(instancetype) initWithContext:(__weak ALCContext *) context
+                      valueType:(ALCType *) valueType
+                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers;
 
 @end

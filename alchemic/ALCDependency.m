@@ -1,87 +1,104 @@
 //
-//  ALCDependency.m
 //  alchemic
 //
-//  Created by Derek Clarkson on 22/02/2015.
+//  Created by Derek Clarkson on 17/04/2015.
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
+@import ObjectiveC;
+
 #import "ALCDependency.h"
-#import "ALCLogger.h"
-#import "ALCDependencyResolver.h"
-#import "ALCDependencyInjector.h"
+#import <StoryTeller/StoryTeller.h>
+#import "ALCContext.h"
+#import "ALCType.h"
+#import "ALCClassMatcher.h"
+#import "ALCProtocolMatcher.h"
+#import "NSDictionary+ALCModel.h"
 
-@implementation ALCDependency
+@implementation ALCDependency {
+    __weak ALCContext *_context;
+    NSSet<id<ALCMatcher>> *_dependencyMatchers;
+    NSSet<id<ALCBuilder>> *_candidateBuilders;
+}
 
--(instancetype) initWithVariable:(Ivar) variable qualifier:(NSString *) qualifier {
+-(instancetype) initWithContext:(__weak ALCContext *) context
+                      valueType:(ALCType *) valueType
+                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers {
+    
+    // If we do not have any matcher passed, derive some from the variables details.
+    NSSet<id<ALCMatcher>> *matchers = dependencyMatchers;
+    if (matchers == nil) {
+        
+        matchers = [[NSMutableSet alloc] init];
+        
+        if (valueType.typeClass != nil) {
+            id<ALCMatcher> matcher = [ALCClassMatcher matcherWithClass:valueType.typeClass];
+            [(NSMutableSet *)matchers addObject:matcher];
+        }
+        
+        [valueType.typeProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, BOOL *stop) {
+            id<ALCMatcher> matcher = [ALCProtocolMatcher matcherWithProtocol:protocol];
+            [(NSMutableSet *)matchers addObject:matcher];
+        }];
+        
+    }
+    
     self = [super init];
     if (self) {
-        _variableQualifier = qualifier;
-        _variable = variable;
-        _variableProtocols = [[NSMutableArray alloc] init];
-        [self loadVariableDetails];
+        [matchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
+            log(valueType.typeClass, @"Adding a %@", matcher);
+        }];
+        _context = context;
+        _valueType = valueType;
+        _dependencyMatchers = matchers;
     }
     return self;
 }
 
--(void) loadVariableDetails {
-    
-    // Get the type.
-    const char *encoding = ivar_getTypeEncoding(_variable);
-    _variableTypeEncoding = [NSString stringWithCString:encoding encoding:NSUTF8StringEncoding];
-    
-    if ([_variableTypeEncoding hasPrefix:@"@"]) {
-        
-        NSArray *defs = [_variableTypeEncoding componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\",<>"]];
-        
-        // If there is no more than 2 in the array then the dependency is an id.
-        for (int i = 2; i < [defs count]; i ++) {
-            if ([defs[i] length] > 0) {
-                if (i == 2) {
-                    _variableClass = objc_lookUpClass([defs[2] cStringUsingEncoding:NSUTF8StringEncoding]);
-                } else {
-                    [(NSMutableArray *)_variableProtocols addObject:NSProtocolFromString(defs[i])];
-                }
-            }
-        }
-    }
-}
+-(void) resolve {
 
--(void) resolveUsingResolvers:(NSArray *) resolvers {
+    log(self.valueType.typeClass, @"   resolving %@", self);
+    ALCContext *strongContext = _context;
+    _candidateBuilders = [strongContext.model buildersWithMatchers:_dependencyMatchers];
     
-    NSDictionary *candidates;
-    for (id<ALCDependencyResolver> resolver in resolvers) {
-        logDependencyResolving(@"Asking %s to resolve %s", class_getName([resolver class]), ivar_getName(_variable));
-        candidates = [resolver resolveDependencyWithClass:_variableClass protocols:_variableProtocols name:_variableQualifier];
-        if (candidates != nil) {
+    for (id<ALCDependencyPostProcessor> postProcessor in strongContext.dependencyPostProcessors) {
+        _candidateBuilders = [postProcessor process:_candidateBuilders];
+        if ([_candidateBuilders count] == 0) {
             break;
         }
     }
     
-    _candidateObjectDescriptions = candidates;
-    if (_candidateObjectDescriptions == nil) {
+    log(self.valueType.typeClass, @"   found %lu candidates", [_candidateBuilders count]);
+    
+    // If there are no candidates left then error.
+    if ([_candidateBuilders count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency for: %s", ivar_getName(_variable)]
+                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency: %s", class_getName(_valueType.typeClass)]
                                      userInfo:nil];
     }
-    logDependencyResolving(@"Resolved dependency");
     
 }
 
+-(id) value {
+    ALCContext *strongContext = _context;
+    return [strongContext.valueResolverManager resolveValueForDependency:self candidates:_candidateBuilders];
+}
 
-
--(void) injectObject:(id) finalObject usingInjectors:(NSArray *) injectors {
-
-    for (id<ALCDependencyInjector> injector in injectors) {
-        if ([injector injectObject:finalObject dependency:self]) {
-            return;
-        }
-    }
-
-    @throw [NSException exceptionWithName:@"AlchemicValueNotInjected"
-                                   reason:[NSString stringWithFormat:@"Unable to inject any candidateobjects for: %s", ivar_getName(_variable)]
-                                 userInfo:nil];
-
+-(NSString *) description {
+    
+    NSMutableArray<NSString *> *protocols = [[NSMutableArray alloc] initWithCapacity:[_valueType.typeProtocols count]];
+    [_valueType.typeProtocols enumerateObjectsUsingBlock:^(Protocol *protocol, BOOL *stop) {
+        [protocols addObject:NSStringFromProtocol(protocol)];
+    }];
+    
+    NSMutableArray<NSString *> *matcherDescs = [[NSMutableArray alloc] init];
+    [_dependencyMatchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
+        [matcherDescs addObject:[matcher description]];
+    }];
+    
+    const char *type = _valueType.typeClass == nil ? "id" : class_getName(_valueType.typeClass);
+    return [NSString stringWithFormat:@"%s<%@> using %@", type, [protocols componentsJoinedByString:@", "],[matcherDescs componentsJoinedByString:@", "]];
+    
 }
 
 @end

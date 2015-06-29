@@ -7,27 +7,34 @@
 //
 
 #import "ALCSimpleObjectFactory.h"
-#import "ALCLogger.h"
-#import "ALCInstance.h"
-#import "ALCContext.h"
+#import <StoryTeller/StoryTeller.h>
+#import "ALCClassBuilder.h"
+#import "ALCRuntime.h"
+#import "ALCType.h"
 
-#import <objc/runtime.h>
+@import ObjectiveC;
 
-@implementation ALCSimpleObjectFactory {
-    __weak ALCContext *_context;
-}
+@implementation ALCSimpleObjectFactory
 
--(instancetype) initWithContext:(ALCContext *) context {
-    self = [super init];
-    if (self) {
-        _context = context;
+-(id) createObjectFromBuilder:(ALCClassBuilder *) builder {
+    
+    Class objClass = builder.valueType.typeClass;
+    id obj = [objClass alloc];
+    SEL initSel = @selector(init);
+    
+    // Because any known class will have an overridden init which does DI for when an object is created outside of Alchemic, we need to call the original code or super init.
+    SEL originalInit = [ALCRuntime alchemicSelectorForSelector:@selector(init)];
+    if (class_respondsToSelector(objClass, originalInit)) {
+    
+        log(objClass, @"   using original %s::%s", class_getName(objClass), sel_getName(originalInit));
+        return ((id (*)(id, SEL))objc_msgSend)(obj, originalInit);
+
+    } else {
+        
+        struct objc_super superData = {obj, class_getSuperclass(objClass)};
+        log(objClass, @"   using super %s::%s", class_getName(superData.super_class), sel_getName(initSel));
+        return ((id (*)(struct objc_super *, SEL))objc_msgSendSuper)(&superData, initSel);
     }
-    return self;
-}
-
--(id) createObjectFromObjectDescription:(ALCInstance *) objectDescription {
-    logCreation(@"Creating instance using %s::init", class_getName(objectDescription.forClass));
-    return [[objectDescription.forClass alloc] init];
 }
 
 @end

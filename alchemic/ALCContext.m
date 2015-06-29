@@ -6,43 +6,26 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <objc/runtime.h>
+@import ObjectiveC;
 
-#import "Alchemic.h"
 #import "ALCContext.h"
-#import "ALCLogger.h"
-
+#import <StoryTeller/StoryTeller.h>
+#import "ALCInitStrategyInjector.h"
 #import "ALCRuntime.h"
-
-#import "AlchemicAware.h"
-
-#import "ALCInstance.h"
-#import "ALCInitialisationStrategyInjector.h"
-
-#import "ALCClassDependencyResolver.h"
-#import "ALCProtocolDependencyResolver.h"
-#import "ALCNameDependencyResolver.h"
-
-#import "ALCDependency.h"
-
-#import "ALCSimpleDependencyInjector.h"
-
-#import "ALCObjectFactory.h"
-#import "ALCSimpleObjectFactory.h"
-
-#import "ALCNSObjectInitStrategy.h"
-#import "ALCUIViewControllerInitWithCoderStrategy.h"
-#import "ALCUIViewControllerInitWithFrameStrategy.h"
-
 #import "NSDictionary+ALCModel.h"
+#import "ALCClassBuilder.h"
+#import "ALCMethodBuilder.h"
+#import "ALCDefaultValueResolverManager.h"
+#import "ALCType.h"
+#import "ALCReturnType.h"
+#import "ALCIsFactory.h"
+#import "ALCMethodSelector.h"
+#import "ALCIntoVariable.h"
+#import "ALCIsPrimary.h"
+#import "ALCAsName.h"
 
 @implementation ALCContext {
-    NSMutableArray *_initialisationStrategies;
-    NSMutableArray *_dependencyResolvers;
-    NSMutableArray *_dependencyInjectors;
-    NSMutableArray *_objectFactories;
-    NSMutableDictionary *_model;
-    NSMutableDictionary *_objects;
+    NSMutableSet<Class> *_initialisationStrategyClasses;
 }
 
 #pragma mark - Lifecycle
@@ -50,193 +33,197 @@
 -(instancetype) init {
     self = [super init];
     if (self) {
-        
-        logConfig(@"Initing context");
-        
-        // Create storage for objects.
         _model = [[NSMutableDictionary alloc] init];
-        _objects = [[NSMutableDictionary alloc] init];
-        
-        _initialisationStrategies = [[NSMutableArray alloc] init];
-        [self addInitialisationStrategy:[[ALCNSObjectInitStrategy alloc] init]];
-        [self addInitialisationStrategy:[[ALCUIViewControllerInitWithCoderStrategy alloc] init]];
-        [self addInitialisationStrategy:[[ALCUIViewControllerInitWithFrameStrategy alloc] init]];
-        
-        _objectFactories = [[NSMutableArray alloc] init];
-        [self addObjectFactory:[[ALCSimpleObjectFactory alloc] initWithContext:self]];
-        
-        _dependencyResolvers = [[NSMutableArray alloc] init];
-        [self addDependencyResolver:[[ALCProtocolDependencyResolver alloc] initWithModel:_model]];
-        [self addDependencyResolver:[[ALCClassDependencyResolver alloc] initWithModel:_model]];
-        [self addDependencyResolver:[[ALCNameDependencyResolver alloc] initWithModel:_model]];
-        
-        _dependencyInjectors = [[NSMutableArray alloc] init];
-        [self addDependencyInjector:[[ALCSimpleDependencyInjector alloc] init]];
-        
+        _initialisationStrategyClasses = [[NSMutableSet alloc] init];
+        _dependencyPostProcessors = [[NSMutableSet alloc] init];
+        _objectFactories = [[NSMutableSet alloc] init];
+        _valueResolverManager = [[ALCDefaultValueResolverManager alloc] init];
     }
     return self;
 }
 
 -(void) start {
-    
-    logRuntime(@"Starting alchemic");
-    
+
+    log(@"Alchemic", @"Starting alchemic ...");
+
     // Set defaults.
-    if (self.runtimeInjector == nil) {
-        self.runtimeInjector = [[ALCInitialisationStrategyInjector alloc] initWithStrategies:_initialisationStrategies];
+    if (self.runtimeInitInjector == nil) {
+        self.runtimeInitInjector = [[ALCInitStrategyInjector alloc] initWithStrategyClasses:_initialisationStrategyClasses];
     }
-    
-    // Inject wrappers into the singletons that have registered for dependency injection.
-    [_runtimeInjector executeStrategiesOnObjects:_objects withContext:self];
-    
-    // Now boot up the model.
-    [self resolveDependencies];
-    [self instantiateObjects];
-    [self injectModelDependencies];
-    
+
+    // Inject init wrappers into classes that have registered for dependency injection.
+    [_runtimeInitInjector replaceInitsInModelClasses:_model];
+
+    [self resolveBuilderDependencies];
+
+    log(@"Alchemic", @"Creating singletons ...");
+    [self instantiateSingletons];
 }
 
--(void) resolveDependencies {
-    logDependencyResolving(@"Resolving dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop){
-        logDependencyResolving(@"Resolving dependencies in '%@' (%s)", name, class_getName(description.forClass));
-        Class class = description.forClass;
-        [ALCRuntime class:class resolveDependenciesWithResolvers:_dependencyResolvers];
+-(void) resolveBuilderDependencies {
+    log(@"Alchemic", @"---- Resolving dependencies ----");
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCBuilder> builder, BOOL *stop){
+        log(name, @"Resolving '%@' (%s)", name, class_getName(builder.valueType.typeClass));
+        [builder resolve];
     }];
 }
 
--(void) instantiateObjects {
-    
-    logCreation(@"Instantiating objects ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop) {
-        
-        if (description.finalObject == nil) { // Allow for pre-built objects.
-            
-            logCreation(@"Instantiating '%@' (%s)", name, class_getName(description.forClass));
-            for (id<ALCObjectFactory> objectFactory in _objectFactories) {
-                description.finalObject = [objectFactory createObjectFromObjectDescription:description];
-                if (description.finalObject != nil) {
-                    break;
-                }
-            }
-            
-            if (description.finalObject == nil) {
-                @throw [NSException exceptionWithName:@"AlchemicUnableToCreateInstance"
-                                               reason:[NSString stringWithFormat:@"Unable to create an instance of %s", class_getName(description.forClass)]
-                                             userInfo:nil];
-            }
-            
+-(void) instantiateSingletons {
+
+    // This is a two stage process so that all objects are created before dependencies are wired up.
+    log(@"Alchemic", @"---- Instantiating singletons ----");
+    NSMutableSet *singletons = [[NSMutableSet alloc] init];
+    [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
+        if (classBuilder.shouldCreateOnStartup) {
+            log(name, @"Creating singleton %@ -> %@", name, classBuilder);
+            [singletons addObject:[classBuilder instantiate]];
         }
     }];
-}
 
--(void) injectModelDependencies {
-    logDependencyResolving(@"Injecting dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, ALCInstance *description, BOOL *stop) {
-        logDependencyResolving(@"Injecting dependencies into '%@'", name);
-        [ALCRuntime object:description.finalObject injectUsingDependencyInjectors:_dependencyInjectors];
+    log(@"Alchemic", @"---- Injecting dependencies into singletons ----");
+    [singletons enumerateObjectsUsingBlock:^(id singleton, BOOL *stop) {
+        [self injectDependencies:singleton];
     }];
+
 }
 
 -(void) injectDependencies:(id) object {
-    logDependencyResolving(@"Resolving dependencies for a %s", class_getName([object class]));
-    [ALCRuntime class:[object class] resolveDependenciesWithResolvers:_dependencyResolvers];
-    logDependencyResolving(@"Injecting dependencies into a %s", class_getName([object class]));
-    [ALCRuntime object:object injectUsingDependencyInjectors:_dependencyInjectors];
-}
-
-#pragma mark - Declaring injections
-
--(void) registerClass:(Class) class injectionPoints:(NSString *) injs, ... {
-    va_list args;
-    va_start(args, injs);
-    for (NSString *inj = injs; inj != nil; inj = va_arg(args, NSString *)) {
-        [self registerClass:class injectionPoint:inj qualifier:nil];
-    }
-    va_end(args);
-}
-
--(void) registerClass:(Class) class injectionPoint:(NSString *) inj withQualifier:(NSString *) qualifier {
-    [self registerClass:class injectionPoint:inj qualifier:qualifier];
-}
-
--(void) registerClass:(Class) class injectionPoint:(NSString *) inj qualifier:(NSString *) qualifier {
-    if (![ALCRuntime isClassDecorated:class]) {
-        [ALCRuntime decorateClass:class];
-    }
-    [ALCRuntime class:class addInjection:inj withQualifier:qualifier];
-}
-
-#pragma mark - Registering classes
-
--(void) registerClass:(Class)class {
-    [self objectDescriptionForClass:class withQualifier:NSStringFromClass(class)];
-}
-
--(void) registerClass:(Class)class withName:(NSString *) name {
-    [self objectDescriptionForClass:class withQualifier:name];
-}
-
--(ALCInstance *) objectDescriptionForClass:(Class) class withQualifier:(NSString *) qualifier {
-    ALCInstance *description = _model[qualifier];
-    if (description == nil) {
-        logRegistration(@"Creating info for '%2$s' (%1$@)", qualifier, class_getName(class));
-        [ALCRuntime decorateClass:class];
-        description = [[ALCInstance alloc] initWithClass:class];
-        _model[qualifier] = description;
-    }
-    return description;
-}
-
-#pragma mark - Registering objects directly
-
--(void) registerObject:(id) finalObject withName:(NSString *) name {
-    logCreation(@"Storing '%@' (%s)", name, class_getName([finalObject class]));
-    ALCInstance *description = [self objectDescriptionForClass:[finalObject class] withQualifier:name];
-    description.finalObject = finalObject;
-}
-
-#pragma mark - Objects
-
--(void) addObject:(id) object {
-    [self addObject:object withName:NSStringFromClass([object class])];
-}
-
--(void) addObject:(id) object withName:(NSString *)name {
-    if (_objects[name] != nil) {
-        @throw [NSException exceptionWithName:@"AlchemicDuplicateObjectName"
-                                       reason:[NSString stringWithFormat:@"Cannot register more than one object with name: %@", name]
-                                     userInfo:nil];
-    }
-    _objects[name] = object;
-}
-
-#pragma mark - Retrieving objects
-
--(id) objectWithName:(NSString *) name {
-    return ((ALCInstance *)_model[name]).finalObject;
+    log([object class], @"Injecting dependencies into a %s", object_getClassName(object));
+    ALCClassBuilder *classBuilder = [_model findClassBuilderForObject:object];
+    [classBuilder injectDependenciesInto:object];
 }
 
 #pragma mark - Configuration
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
-    logConfig(@"Adding object factory: %s", class_getName([objectFactory class]));
-    [_objectFactories insertObject:objectFactory atIndex:0];
+    log(@"Alchemic", @"Adding object factory: %s", object_getClassName(objectFactory));
+    [(NSMutableSet *)_objectFactories addObject:objectFactory];
 }
 
--(void) addInitialisationStrategy:(id<ALCInitialisationStrategy>) initialisationStrategy {
-    logConfig(@"Adding init strategy: %s", class_getName([initialisationStrategy class]));
-    [_initialisationStrategies insertObject:initialisationStrategy atIndex:0];
+-(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor {
+    log(@"Alchemic", @"Adding dependency post processor: %s", object_getClassName(postProcessor));
+    [(NSMutableSet *)_dependencyPostProcessors addObject:postProcessor];
 }
 
--(void) addDependencyResolver:(id<ALCDependencyResolver>) dependencyResolver {
-    logConfig(@"Adding dependency resolver: %s", class_getName([dependencyResolver class]));
-    [_dependencyResolvers insertObject:dependencyResolver atIndex:0];
+-(void) addInitStrategy:(Class) initialisationStrategyClass {
+    log(@"Alchemic", @"Adding init strategy: %s", class_getName(initialisationStrategyClass));
+    [_initialisationStrategyClasses addObject:initialisationStrategyClass];
 }
 
--(void) addDependencyInjector:(id<ALCDependencyInjector>) dependencyinjector {
-    logConfig(@"Adding dependency injector: %s", class_getName([dependencyinjector class]));
-    [_dependencyInjectors insertObject:dependencyinjector atIndex:0];
+#pragma mark - Registration call backs
+
+-(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder, ... {
+
+    NSMutableSet *matchers = [[NSMutableSet alloc] init];
+    NSString *intoVariable = nil;
+
+    va_list qualifiers;
+    va_start(qualifiers, classBuilder);
+    id qualifier;
+    while ((qualifier = va_arg(qualifiers, id)) != nil) {
+
+        if ([qualifier isKindOfClass:[ALCIntoVariable class]]) {
+            intoVariable = ((ALCIntoVariable *) qualifier).variableName;
+
+        } else if ([qualifier conformsToProtocol:@protocol(ALCMatcher)]) {
+            id<ALCMatcher> matcher = (id<ALCMatcher>) qualifier;
+            [ALCRuntime validateMatcher:matcher];
+            [matchers addObject:matcher];
+
+        } else {
+            @throw [NSException exceptionWithName:@"AlchemicUnexpectedQualifier"
+                                           reason:[NSString stringWithFormat:@"Unexpected qualifier %@ for a variable declaration.", qualifier]
+                                         userInfo:nil];
+        }
+    }
+    va_end(qualifiers);
+
+    // Add the registration.
+    [classBuilder addInjectionPoint:intoVariable withMatchers:[matchers count] == 0 ? nil : matchers];
+
+}
+
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
+
+    Class returnType = NULL;
+    BOOL isFactory = NO;
+    BOOL isPrimary = NO;
+    SEL methodSelector = NULL;
+    NSString *name;
+    NSMutableArray *matchers = [[NSMutableArray alloc] init];
+
+    va_list qualifiers;
+    va_start(qualifiers, classBuilder);
+    id qualifier;
+    while ((qualifier = va_arg(qualifiers, id)) != nil) {
+
+        // Now sort out what sort of qualifier we are dealing with.
+        if ([qualifier isKindOfClass:[ALCReturnType class]]) {
+            returnType = ((ALCReturnType *)qualifier).returnType;
+
+        } else if ([qualifier isKindOfClass:[ALCIntoVariable class]]) {
+            @throw [NSException exceptionWithName:@"AlchemicCannotUseIntoVariableHere"
+                                           reason:[NSString stringWithFormat:@"Cannot use %@ in a class declaration", qualifier]
+                                         userInfo:nil];
+
+        } else if ([qualifier isKindOfClass:[ALCIsFactory class]]) {
+            isFactory = YES;
+
+        } else if ([qualifier isKindOfClass:[ALCIsPrimary class]]) {
+            isPrimary = YES;
+
+        } else if ([qualifier isKindOfClass:[ALCAsName class]]) {
+            name = ((ALCAsName *) qualifier).asName;
+
+        } else if ([qualifier isKindOfClass:[ALCMethodSelector class]]) {
+            methodSelector = ((ALCMethodSelector *) qualifier).factorySelector;
+
+        } else if ([qualifier conformsToProtocol:@protocol(ALCMatcher)]) {
+
+            // Validate the matchers, checking any arrays.
+            if ([qualifier isKindOfClass:[NSArray class]]) {
+                for (id nestedQualifier in (NSArray *) qualifier) {
+                    [ALCRuntime validateMatcher:nestedQualifier];
+                }
+            } else {
+                [ALCRuntime validateMatcher:qualifier];
+            }
+
+            [matchers addObject:qualifier];
+        }
+
+    }
+    va_end(qualifiers);
+
+    // Add the registration.
+    id<ALCBuilder> finalBuilder = classBuilder;
+    if (methodSelector != NULL) {
+
+        [ALCRuntime validateSelector:methodSelector withClass:classBuilder.valueType.typeClass];
+
+        // Declare a new instance to represent the factory method for dependency resolving.
+        finalBuilder = [_model addMethod:methodSelector
+                               toBuilder:classBuilder
+                              returnType:[ALCType typeForClass:returnType]
+                        argumentMatchers:matchers];
+    }
+
+    // Set common properties.
+    if (name != nil) {
+        [_model addBuilder:finalBuilder underName:name];
+    }
+    finalBuilder.factory = isFactory;
+    finalBuilder.primary = isPrimary;
+    finalBuilder.createOnStartup = !isFactory;
+
+    log(@"Alchemic", @"Setting up: %@, Primary: %@, Factory: %@, Factory Selector: %s, Return type: %s, Name: %@", finalBuilder, isPrimary ? @"YES": @"NO", isFactory ? @"YES": @"NO",sel_getName(methodSelector) , class_getName(returnType), name);
+
+}
+
+-(void) registerObject:(id) object withName:(NSString *) name {
+    ALCClassBuilder *instance = [_model addObject:object inContext:self withName:name];
+    log([object class], @"Adding object %@", object);
+    instance.value = object;
 }
 
 @end

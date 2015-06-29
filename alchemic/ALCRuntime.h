@@ -7,27 +7,38 @@
 //
 
 @import Foundation;
-#import <objc/runtime.h>
+@import ObjectiveC;
+
+@class ALCClassBuilder;
+@class ALCContext;
 
 @interface ALCRuntime : NSObject
 
 #pragma mark - General
 
-+(BOOL) class:(Class) child extends:(Class) parent;
++(const char *) concat:(const char *) left to:(const char *) right;
+
++(SEL) alchemicSelectorForSelector:(SEL) selector;
 
 +(Ivar) class:(Class) class withName:(NSString *) name;
+
++(BOOL) classIsProtocol:(Class) possiblePrototocol;
+
++(void) validateMatcher:(id) object;
+
++(void) validateSelector:(SEL) selector withClass:(Class) class;
+
++(void) injectObject:(id) object variable:(Ivar) variable withValue:(id) value;
+
++(BOOL) class:(Class) class isKindOfClass:(Class) otherClass;
 
 #pragma mark - Alchemic
 
 /**
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
- @discussion Once found, the method is called to register the class and variable.
+ @discussion Once found, the block is called to finish the registration of the class.
  */
-+(void) scanForMacros;
-
-+(BOOL) isClassDecorated:(Class) class;
-
-+(void) decorateClass:(Class) class;
++(void) scanRuntimeWithContext:(ALCContext *) context;
 
 /**
  Scans a class to find the actual variable used.
@@ -41,11 +52,5 @@
  @throw an exception if no matching variable is found.
  */
 +(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj;
-
-+(void) class:(Class) class addInjection:(NSString *) inj withQualifier:(NSString *) qualifier;
-
-+(void) class:(Class) class resolveDependenciesWithResolvers:(NSArray *) dependencyResolvers;
-
-+(void) object:(id) object injectUsingDependencyInjectors:(NSArray *) dependencyInjectors;
 
 @end

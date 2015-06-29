@@ -9,48 +9,28 @@
 #import "ALCUIViewControllerInitWithCoderStrategy.h"
 
 @import UIKit;
-@import Foundation;
+@import ObjectiveC;
 
-#import <objc/runtime.h>
-#import <objc/message.h>
-
-#import "Alchemic.h"
-#import "ALCLogger.h"
-#import "ALCRuntime.h"
+#import "ALCClassBuilder.h"
+#import "ALCType.h"
 #import "ALCContext.h"
-#import "ALCInitDetails.h"
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
--(BOOL) canWrapInitInClass:(Class) class {
-    return [ALCRuntime class:class extends:[UIViewController class]];
++(BOOL) canWrapInit:(ALCClassBuilder *) instance {
+    return [instance.valueType.typeClass isSubclassOfClass:[UIViewController class]];
 }
 
--(SEL) wrapperSelector {
-    return @selector(initWithCoderWrapper:);
+-(SEL) replacementInitSelector {
+    return @selector(initWithCoderReplacement:);
 }
 
 -(SEL) initSelector {
     return @selector(initWithCoder:);
 }
 
--(id) initWithCoderWrapper:(NSCoder *) aDecoder {
-
-    Class selfClass = [self class];
-    // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    ALCInitDetails *initDetails = [ALCUIViewControllerInitWithCoderStrategy initDetailsForClass:selfClass initSelector:_cmd];
-    
-    if (initDetails.initIMP == NULL) {
-        struct objc_super superData = {self, class_getSuperclass(selfClass)};
-        self = ((id (*)(struct objc_super *, SEL, NSCoder *))objc_msgSendSuper)(&superData, @selector(initWithCoder:), aDecoder);
-    } else {
-        self = ((id (*)(id, SEL, NSCoder *))initDetails.initIMP)(self, initDetails.initSelector, aDecoder);
-    }
-    
-    logRuntime(@"Triggering dependency injection in %s::initWithCoder:", class_getName(selfClass));
-    //[[Alchemic mainContext] resolveDependencies:self];
-
-    return self;
+-(id) initWithCoderReplacement:(NSCoder *) aDecoder {
+    initLogic(init, initLogicArg(NSCoder *),  initLogicArg(aDecoder));
 }
 
 @end

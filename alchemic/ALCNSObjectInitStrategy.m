@@ -9,47 +9,28 @@
 #import "ALCNSObjectInitStrategy.h"
 
 @import UIKit;
+@import ObjectiveC;
 
-#import <objc/runtime.h>
-#import <objc/message.h>
-
-#import "ALCLogger.h"
-#import "ALCRuntime.h"
-#import "ALCInitDetails.h"
+#import "ALCType.h"
+#import "ALCClassBuilder.h"
 #import "ALCContext.h"
-#import "Alchemic.h"
 
 @implementation ALCNSObjectInitStrategy
 
--(BOOL) canWrapInitInClass:(Class) class {
-    return ! [ALCRuntime class:class extends:[UIViewController class]];
-}
-
--(SEL) wrapperSelector {
-    return @selector(initWrapper);
++(BOOL) canWrapInit:(ALCClassBuilder *) classBuilder {
+    return ! [classBuilder.valueType.typeClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) initSelector {
     return @selector(init);
 }
 
--(id) initWrapper {
-    
-    // Get the original init's IMP and call it or the default if no IMP has been stored (because there wasn't one).
-    Class selfClass = [self class];
-    ALCInitDetails *initDetails = [ALCNSObjectInitStrategy initDetailsForClass:selfClass initSelector:_cmd];
-    
-    if (initDetails.initIMP == NULL) {
-        struct objc_super superData = {self, class_getSuperclass(selfClass)};
-        self = ((id (*)(struct objc_super *, SEL))objc_msgSendSuper)(&superData, @selector(init));
-    } else {
-        self = ((id (*)(id, SEL))initDetails.initIMP)(self, initDetails.initSelector);
-    }
-    
-    logRuntime(@"Triggering dependency injection from %s::init", class_getName(selfClass));
-    //[[Alchemic mainContext] resolveDependencies:self];
-    
-    return self;
+-(SEL) replacementInitSelector {
+    return @selector(initReplacement);
+}
+
+-(instancetype) initReplacement {
+    initLogic(init,,);
 }
 
 @end

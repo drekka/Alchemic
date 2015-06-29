@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:alchemic.xcodeproj">
+      location = "self:/Users/derekclarkson/projects/alchemic/Alchemic.xcodeproj">
    </FileRef>
 </Workspace>

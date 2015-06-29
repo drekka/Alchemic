@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractInitialisationStrategy.h"
+#import "ALCAbstractInitStrategy.h"
 
-@interface ALCUIViewControllerInitWithCoderStrategy : ALCAbstractInitialisationStrategy
+@interface ALCUIViewControllerInitWithCoderStrategy : ALCAbstractInitStrategy
 
 @end

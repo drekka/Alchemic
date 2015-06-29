@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0620"
+   LastUpgradeVersion = "0700"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,24 +14,24 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6C66DC2D1A8B82C3009F9D94"
-               BuildableName = "libalchemic.a"
-               BlueprintName = "alchemic"
-               ReferencedContainer = "container:alchemic.xcodeproj">
+               BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
+               BuildableName = "Alchemic.framework"
+               BlueprintName = "Alchemic"
+               ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
+            buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-               BuildableName = "Injection by class.xctest"
-               BlueprintName = "Injection by class"
-               ReferencedContainer = "container:alchemic.xcodeproj">
+               BuildableName = "Alchemic tests.xctest"
+               BlueprintName = "Alchemic tests"
+               ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -40,6 +40,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES"
       buildConfiguration = "Debug">
       <Testables>
          <TestableReference
@@ -47,21 +48,23 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-               BuildableName = "Injection by class.xctest"
-               BlueprintName = "Injection by class"
-               ReferencedContainer = "container:alchemic.xcodeproj">
+               BuildableName = "Alchemic tests.xctest"
+               BlueprintName = "Alchemic tests"
+               ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C66DC2D1A8B82C3009F9D94"
-            BuildableName = "libalchemic.a"
-            BlueprintName = "alchemic"
-            ReferencedContainer = "container:alchemic.xcodeproj">
+            BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
+            BuildableName = "Alchemic.framework"
+            BlueprintName = "Alchemic"
+            ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -71,14 +74,15 @@
       buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C66DC2D1A8B82C3009F9D94"
-            BuildableName = "libalchemic.a"
-            BlueprintName = "alchemic"
-            ReferencedContainer = "container:alchemic.xcodeproj">
+            BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
+            BuildableName = "Alchemic.framework"
+            BlueprintName = "Alchemic"
+            ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -93,10 +97,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C66DC2D1A8B82C3009F9D94"
-            BuildableName = "libalchemic.a"
-            BlueprintName = "alchemic"
-            ReferencedContainer = "container:alchemic.xcodeproj">
+            BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
+            BuildableName = "Alchemic.framework"
+            BlueprintName = "Alchemic"
+            ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
