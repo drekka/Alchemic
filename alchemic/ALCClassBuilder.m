@@ -57,7 +57,7 @@
 
 -(id) resolveValue {
 
-    STLog(self.valueType.typeClass, @"   instantiating instance using %@", self);
+    STLog(self.valueType.typeClass, @"Instantiating instance using %@", self);
     ALCContext *strongContext = self.context;
     for (id<ALCObjectFactory> objectFactory in strongContext.objectFactories) {
         id newValue = [objectFactory createObjectFromBuilder:self];

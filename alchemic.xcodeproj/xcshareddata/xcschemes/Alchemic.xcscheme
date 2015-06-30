@@ -87,7 +87,7 @@
       </MacroExpansion>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "activeLogs=&quot;Alchemic&quot;"
+            argument = "activeLogs=&quot;[SingletonObject]&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

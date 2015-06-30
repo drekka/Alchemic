@@ -8,6 +8,7 @@
 
 #import "ALCTestCase.h"
 #import <Alchemic/Alchemic.h>
+#import <StoryTeller/StoryTeller.h>
 
 #import "SingletonObject.h"
 #import "InjectableProtocol.h"
@@ -28,6 +29,9 @@ ACInject(ACIntoVariable(_singletonObjectByClass), ACWithClass(SingletonObject))
 ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectableProtocol))
 
 -(void) setUp {
+    STStartLogging(@"[ALCClassBuilder]");
+    STStartLogging(@"[SingletonObject]");
+    STStartLogging(@"<ALCBuilder>.valueType.typeClass == SingletonObject");
     ACInjectDependencies(self);
 }
 
