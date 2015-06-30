@@ -47,8 +47,8 @@
         for (NSUInteger i = 2; i < [defs count]; i ++) {
             if ([defs[i] length] > 0) {
                 if (i == 2) {
-                    Class class = objc_lookUpClass([defs[2] cStringUsingEncoding:NSUTF8StringEncoding]);
-                    info = [[ALCType alloc] initWithClass:class];
+                    Class depClass = objc_lookUpClass([defs[2] cStringUsingEncoding:NSUTF8StringEncoding]);
+                    info = [[ALCType alloc] initWithClass:depClass];
                 } else {
                     if (info == nil) {
                         info = [[ALCType alloc] initWithClass:NULL];

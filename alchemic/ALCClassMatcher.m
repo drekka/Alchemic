@@ -7,7 +7,7 @@
 //
 
 @import ObjectiveC;
-#import "ALCClassMatcher.h"
+#import <Alchemic/ALCClassMatcher.h>
 #import "ALCType.h"
 
 @implementation ALCClassMatcher {

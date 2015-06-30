@@ -8,10 +8,11 @@
 
 @import Foundation;
 
-#import "ALCObjectFactory.h"
-#import "ALCInitInjector.h"
-#import "ALCDependencyPostProcessor.h"
-#import "ALCValueResolverManager.h"
+#import <Alchemic/ALCBuilder.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCInitInjector.h>
+#import <Alchemic/ALCDependencyPostProcessor.h>
+#import <Alchemic/ALCValueResolverManager.h>
 
 @class ALCClassBuilder;
 

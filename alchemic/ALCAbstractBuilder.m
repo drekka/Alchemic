@@ -8,8 +8,8 @@
 
 #import "ALCAbstractBuilder.h"
 #import <StoryTeller/StoryTeller.h>
-#import "ALCContext.h"
-#import "ALCDependency.h"
+#import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCDependency.h>
 #import "ALCVariableDependency.h"
 
 @implementation ALCAbstractBuilder

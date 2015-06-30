@@ -11,9 +11,9 @@
 
 #import "ALCModelClassProcessor.h"
 #import "ALCClassBuilder.h"
-#import "ALCInternal.h"
+#import <Alchemic/ALCInternal.h>
 #import "NSDictionary+ALCModel.h"
-#import "ALCContext.h"
+#import <Alchemic/ALCContext.h>
 
 @implementation ALCModelClassProcessor
 

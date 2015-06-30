@@ -11,8 +11,8 @@
 @class ALCType;
 @class ALCContext;
 
-#import "ALCBuilder.h"
-#import "ALCDependency.h"
+#import <Alchemic/ALCBuilder.h>
+#import <Alchemic/ALCDependency.h>
 
 @interface ALCAbstractBuilder : NSObject<ALCBuilder>
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCIsPrimary.h"
+#import <Alchemic/ALCIsPrimary.h>
 
 @implementation ALCIsPrimary
 

@@ -7,7 +7,8 @@
 //
 
 #import "FactoryObject.h"
-#import "Alchemic.h"
+#import <Alchemic/Alchemic.h>
+
 
 @implementation FactoryObject
 

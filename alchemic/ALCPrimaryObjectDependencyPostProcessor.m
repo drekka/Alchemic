@@ -7,7 +7,7 @@
 //
 
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
-#import "ALCBuilder.h"
+#import <Alchemic/ALCBuilder.h>
 
 @implementation ALCPrimaryObjectDependencyPostProcessor
 

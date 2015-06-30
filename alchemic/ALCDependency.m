@@ -7,12 +7,12 @@
 
 @import ObjectiveC;
 
-#import "ALCDependency.h"
+#import <Alchemic/ALCDependency.h>
 #import <StoryTeller/StoryTeller.h>
-#import "ALCContext.h"
+#import <Alchemic/ALCContext.h>
 #import "ALCType.h"
-#import "ALCClassMatcher.h"
-#import "ALCProtocolMatcher.h"
+#import <Alchemic/ALCClassMatcher.h>
+#import <Alchemic/ALCProtocolMatcher.h>
 #import "NSDictionary+ALCModel.h"
 
 @implementation ALCDependency {

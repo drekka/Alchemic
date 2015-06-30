@@ -7,7 +7,7 @@
 //
 
 #import "Component.h"
-#import "Alchemic.h"
+#import <Alchemic/Alchemic.h>
 
 @implementation Component
 

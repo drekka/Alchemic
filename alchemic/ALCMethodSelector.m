@@ -4,7 +4,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCMethodSelector.h"
+#import <Alchemic/ALCMethodSelector.h>
 
 @implementation ALCMethodSelector
 

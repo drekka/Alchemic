@@ -10,7 +10,7 @@
 
 @import ObjectiveC;
 
-#import "ALCDependency.h"
+#import <Alchemic/ALCDependency.h>
 #import <StoryTeller/StoryTeller.h>
 #import "ALCType.h"
 
@@ -32,7 +32,7 @@
     }
     
     @throw [NSException exceptionWithName:@"AlchemicTooManyCandidates"
-                                   reason:[NSString stringWithFormat:@"Expecting 1 object, but found %lu: %@", [candidates count], [candidateDescriptions componentsJoinedByString:@", "]]
+                                   reason:[NSString stringWithFormat:@"Expecting 1 object, but found %lu: %@", (unsigned long)[candidates count], [candidateDescriptions componentsJoinedByString:@", "]]
                                  userInfo:nil];
 }
 

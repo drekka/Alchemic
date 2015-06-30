@@ -8,8 +8,8 @@
 
 @import Foundation;
 
-#import "ALCInitStrategy.h"
-#import "ALCBuilder.h"
+#import <Alchemic/ALCInitStrategy.h>
+#import <Alchemic/ALCBuilder.h>
 
 /**
  Protocol of classes that can perform injection of Alchemic startup code into the Objective C runtime.

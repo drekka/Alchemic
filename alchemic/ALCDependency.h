@@ -10,7 +10,7 @@
 
 @class ALCContext;
 
-#import "ALCMatcher.h"
+#import <Alchemic/ALCMatcher.h>
 
 @interface ALCDependency : NSObject
 

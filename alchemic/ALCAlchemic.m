@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "Alchemic.h"
+#import <Alchemic/ALCAlchemic.h>
 #import "ALCRuntime.h"
-#import "ALCContext.h"
+#import <Alchemic/ALCContext.h>
 
-@implementation Alchemic
+@implementation ALCAlchemic
 
 static __strong ALCContext *__mainContext;
 

@@ -13,7 +13,7 @@
 
 #import "ALCClassBuilder.h"
 #import "ALCType.h"
-#import "ALCContext.h"
+#import <Alchemic/ALCContext.h>
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCNameMatcher.h"
+#import <Alchemic/ALCNameMatcher.h>
 #import "ALCClassBuilder.h"
 
 @implementation ALCNameMatcher {

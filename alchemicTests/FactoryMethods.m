@@ -7,14 +7,14 @@
 //
 
 #import "FactoryMethods.h"
-#import "Alchemic.h"
 #import "Component.h"
+#import <Alchemic/Alchemic.h>
 
 @implementation FactoryMethods {
     int x;
 }
 
-register(isFactory, asName(@"buildAString"), returnType(NSString), createUsingSelector(makeAString))
+register(isFactory, asName(@"buildAString"), returnType(NSString), createUsingSelector(makeAString));
 -(NSString *) makeAString {
     x++;
     return [NSString stringWithFormat:@"Factory string %i", x];

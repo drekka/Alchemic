@@ -9,8 +9,8 @@
 @import ObjectiveC;
 
 #import "ALCRuntime.h"
-#import "ALCInternal.h"
-#import "ALCContext.h"
+#import <Alchemic/ALCInternal.h>
+#import <Alchemic/ALCContext.h>
 #import "ALCClassBuilder.h"
 #import <StoryTeller/StoryTeller.h>
 #import "NSDictionary+ALCModel.h"

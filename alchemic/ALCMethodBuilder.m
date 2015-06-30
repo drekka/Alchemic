@@ -10,7 +10,7 @@
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCType.h"
-#import "ALCContext.h"
+#import <Alchemic/ALCContext.h>
 
 @implementation ALCMethodBuilder {
     ALCClassBuilder *_factoryClassBuilder;
@@ -40,7 +40,7 @@
         unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
         if (nbrArgs != [argumentMatchers count]) {
             @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
-                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu", object_getClassName(factoryClassBuilder.valueType.typeClass), sel_getName(factorySelector), nbrArgs, [argumentMatchers count]]
+                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu", object_getClassName(factoryClassBuilder.valueType.typeClass), sel_getName(factorySelector), nbrArgs, (unsigned long)[argumentMatchers count]]
                                          userInfo:nil];
         }
         

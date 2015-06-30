@@ -11,9 +11,8 @@
 #import "ALCUIViewControllerInitWithFrameStrategy.h"
 
 #import "ALCClassBuilder.h"
-#import "ALCRuntime.h"
 #import "ALCType.h"
-#import "ALCContext.h"
+#import <Alchemic/ALCContext.h>
 
 @implementation ALCUIViewControllerInitWithFrameStrategy
 

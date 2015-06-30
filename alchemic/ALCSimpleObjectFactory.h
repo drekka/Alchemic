@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-#import "ALCObjectFactory.h"
+#import <Alchemic/ALCObjectFactory.h>
 
 @interface ALCSimpleObjectFactory : NSObject<ALCObjectFactory>
 

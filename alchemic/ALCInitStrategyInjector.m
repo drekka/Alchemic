@@ -14,8 +14,8 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCClassBuilder.h"
-#import "ALCInitStrategy.h"
-#import "ALCClassMatcher.h"
+#import <Alchemic/ALCInitStrategy.h>
+#import <Alchemic/ALCClassMatcher.h>
 #import "ALCType.h"
 #import "NSDictionary+ALCModel.h"
 

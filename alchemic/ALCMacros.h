@@ -6,12 +6,6 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-//! Project version number for alchemic.
-FOUNDATION_EXPORT double alchemicVersionNumber;
-
-//! Project version string for alchemic.
-FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
-
 #pragma mark - Defining objects
 
 #define asName(_objectName) [ALCAsName asNameWithName:_objectName]
@@ -36,18 +30,18 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 
 #pragma mark - Injection
 
-#define injectDependencies(object) [[Alchemic mainContext] injectDependencies:object]
+#define injectDependencies(object) [[ALCAlchemic mainContext] injectDependencies:object]
 
 #pragma mark - Registering
 
 // All registration methods make use of the same signature.
 #define register(...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[Alchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
 #define inject(...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[Alchemic mainContext] registerDependencyInClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerDependencyInClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }

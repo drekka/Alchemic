@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCReturnType.h"
+#import <Alchemic/ALCReturnType.h>
 
 @implementation ALCReturnType 
 

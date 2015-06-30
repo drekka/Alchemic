@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCProtocolMatcher.h"
+#import <Alchemic/ALCProtocolMatcher.h>
 #import "ALCClassBuilder.h"
 @import ObjectiveC;
 #import "ALCType.h"

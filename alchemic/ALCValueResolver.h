@@ -9,7 +9,7 @@
 @import Foundation;
 
 @class ALCDependency;
-#import "ALCBuilder.h"
+#import <Alchemic/ALCBuilder.h>
 
 /**
  Protocol for classes that can resolve the final values from the list of candidates in a dependency object.

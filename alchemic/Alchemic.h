@@ -1,57 +1,37 @@
 //
-//  alchemic.h
+//  Alchemic.h
 //  alchemic
 //
-//  Created by Derek Clarkson on 11/02/2015.
-//  Copyright (c) 2015 Derek Clarkson. All rights reserved.
+//  Created by Derek Clarkson on 30/06/2015.
+//  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
 @import Foundation;
 
+//! Project version number for alchemic.
+FOUNDATION_EXPORT double alchemicVersionNumber;
+
+//! Project version string for alchemic.
+FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
+
 #import <Alchemic/ALCMacros.h>
-#import "ALCInternal.h"
-#import "ALCClassBuilder.h"
-#import "ALCContext.h"
-#import "ALCClassMatcher.h"
-#import "ALCProtocolMatcher.h"
-#import "ALCNameMatcher.h"
-#import "ALCReturnType.h"
-#import "ALCIsFactory.h"
-#import "ALCMethodSelector.h"
-#import "ALCIntoVariable.h"
-#import "ALCAsName.h"
-#import "ALCIsPrimary.h"
-#import "ALCAbstractClass.h"
-#import "ALCAbstractInitStrategy.h"
-#import "ALCArrayValueResolver.h"
-#import "ALCBundleResourceLocator.h"
-#import "ALCClassProcessor.h"
-#import "ALCClassWithProtocolClassProcessor.h"
-#import "ALCDefaultValueResolverManager.h"
-#import "ALCFileContentsResourceLocator.h"
-#import "ALCInitStrategyInjector.h"
-#import "ALCMethodBuilder.h"
-#import "ALCModelClassProcessor.h"
-#import "ALCNSObjectInitStrategy.h"
-#import "ALCPlistResourceLocator.h"
-#import "ALCPrimaryObjectDependencyPostProcessor.h"
-#import "ALCResourceLocator.h"
-#import "ALCRuntime.h"
-#import "ALCSimpleObjectFactory.h"
-#import "ALCSimpleValueResolver.h"
-#import "ALCType.h"
-#import "ALCUIViewControllerInitWithCoderStrategy.h"
-#import "ALCUIViewControllerInitWithFrameStrategy.h"
-#import "ALCVariableDependency.h"
-#import "AlchemicAware.h"
-#import "NSDictionary+ALCModel.h"
-
-@interface Alchemic : NSObject
-
-/**
- Returns the main context.
- @return The current instance of ALCContext.
- */
-+(ALCContext *) mainContext;
-
-@end
+#import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCAlchemic.h>
+#import <Alchemic/ALCAsName.h>
+#import <Alchemic/ALCIntoVariable.h>
+#import <Alchemic/ALCIsFactory.h>
+#import <Alchemic/ALCIsPrimary.h>
+#import <Alchemic/ALCMethodSelector.h>
+#import <Alchemic/ALCBuilder.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCInitInjector.h>
+#import <Alchemic/ALCDependencyPostProcessor.h>
+#import <Alchemic/ALCValueResolverManager.h>
+#import <Alchemic/ALCInitStrategy.h>
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/ALCMatcher.h>
+#import <Alchemic/ALCReturnType.h>
+#import <Alchemic/ALCClassMatcher.h>
+#import <Alchemic/ALCProtocolMatcher.h>
+#import <Alchemic/ALCNameMatcher.h>
+#import <Alchemic/ALCInternal.h>

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCBuilder.h"
+#import <Alchemic/ALCBuilder.h>
 
 /**
  Implement to define a matcher for selectinign injections.

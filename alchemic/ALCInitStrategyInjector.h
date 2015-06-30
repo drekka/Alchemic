@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-#import "ALCInitInjector.h"
+#import <Alchemic/ALCInitInjector.h>
 
 /**
  This class handles self injection into the iOS runtime.

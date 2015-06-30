@@ -8,7 +8,8 @@
 
 #import "FactoryObject.h"
 #import "ALCTestCase.h"
-#import "Alchemic.h"
+#import <Alchemic/Alchemic.h>
+
 
 @interface FactoryObjectTests : ALCTestCase
 @end

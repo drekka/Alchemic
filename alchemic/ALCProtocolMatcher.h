@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCMatcher.h"
+#import <Alchemic/ALCMatcher.h>
 
 @interface ALCProtocolMatcher : NSObject<ALCMatcher>
 

@@ -8,13 +8,13 @@
 
 @import Foundation;
 
-#import "ALCBuilder.h"
+#import <Alchemic/ALCBuilder.h>
 @class ALCContext;
 @class ALCClassBuilder;
 @class ALCMethodBuilder;
 
 
-#import "ALCMatcher.h"
+#import <Alchemic/ALCMatcher.h>
 
 @interface NSDictionary (ALCModel)
 

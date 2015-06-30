@@ -8,8 +8,8 @@
 
 @import Foundation;
 
-#import "ALCDependency.h"
-#import "ALCBuilder.h"
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/ALCBuilder.h>
 
 /**
  A factory for find the particular object resolver for a dependency.

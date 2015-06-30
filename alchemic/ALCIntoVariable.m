@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCIntoVariable.h"
+#import <Alchemic/ALCIntoVariable.h>
 
 @implementation ALCIntoVariable
 

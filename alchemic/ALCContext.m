@@ -8,7 +8,7 @@
 
 @import ObjectiveC;
 
-#import "ALCContext.h"
+#import <Alchemic/ALCContext.h>
 #import <StoryTeller/StoryTeller.h>
 #import "ALCInitStrategyInjector.h"
 #import "ALCRuntime.h"
@@ -17,12 +17,12 @@
 #import "ALCMethodBuilder.h"
 #import "ALCDefaultValueResolverManager.h"
 #import "ALCType.h"
-#import "ALCReturnType.h"
+#import <Alchemic/ALCReturnType.h>
 #import "ALCIsFactory.h"
-#import "ALCMethodSelector.h"
-#import "ALCIntoVariable.h"
-#import "ALCIsPrimary.h"
-#import "ALCAsName.h"
+#import <Alchemic/ALCMethodSelector.h>
+#import <Alchemic/ALCIntoVariable.h>
+#import <Alchemic/ALCIsPrimary.h>
+#import <Alchemic/ALCAsName.h>
 
 @implementation ALCContext {
     NSMutableSet<Class> *_initialisationStrategyClasses;

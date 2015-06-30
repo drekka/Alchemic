@@ -9,7 +9,7 @@
 #import "ALCArrayValueResolver.h"
 #import <StoryTeller/StoryTeller.h>
 #import "ALCRuntime.h"
-#import "ALCDependency.h"
+#import <Alchemic/ALCDependency.h>
 #import "ALCType.h"
 
 @implementation ALCArrayValueResolver

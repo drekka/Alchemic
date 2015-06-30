@@ -9,7 +9,7 @@
 @import Foundation;
 #import "ALCClassProcessor.h"
 
-#define classMatchesBlockArgs ALCContext *context, Class class
+#define classMatchesBlockArgs ALCContext *alcContext, Class class
 typedef void(^ClassMatchesBlock)(classMatchesBlockArgs);
 
 @interface ALCClassWithProtocolClassProcessor : NSObject<ALCClassProcessor>

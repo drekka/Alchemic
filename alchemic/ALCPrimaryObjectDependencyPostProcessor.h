@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-#import "ALCDependencyPostProcessor.h"
+#import <Alchemic/ALCDependencyPostProcessor.h>
 
 @interface ALCPrimaryObjectDependencyPostProcessor : NSObject<ALCDependencyPostProcessor>
 

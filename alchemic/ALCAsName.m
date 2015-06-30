@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAsName.h"
+#import <Alchemic/ALCAsName.h>
 
 @implementation ALCAsName
 

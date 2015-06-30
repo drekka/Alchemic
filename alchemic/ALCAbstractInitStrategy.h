@@ -11,8 +11,9 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCAbstractClass.h"
-#import "ALCInitStrategy.h"
+#import <Alchemic/ALCInitStrategy.h>
 #import "ALCRuntime.h"
+#import <Alchemic/ALCAlchemic.h>
 
 // Use this macro with the initLogic macro to safely wrap up the args. This allows us to passed multiple
 // comma delimited arguments such as type declarations.
@@ -39,7 +40,7 @@ struct objc_super superData = {self, class_getSuperclass(selfClass)}; \
 self = ((id (*)(struct objc_super *, SEL _initArgTypes_))objc_msgSendSuper)(&superData, initSel _initArgs_); \
 } \
 log(selfClass, @"Triggering dependency injection from %s::%s", class_getName(selfClass), sel_getName(initSel)); \
-[[Alchemic mainContext] injectDependencies:self]; \
+[[ALCAlchemic mainContext] injectDependencies:self]; \
 return self
 
 @interface ALCAbstractInitStrategy : NSObject<ALCInitStrategy, ALCAbstractClass>

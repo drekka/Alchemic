@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCDependency.h"
+#import <Alchemic/ALCDependency.h>
 @import ObjectiveC;
 
 @interface ALCVariableDependency : ALCDependency

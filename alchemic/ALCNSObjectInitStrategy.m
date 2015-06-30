@@ -13,7 +13,7 @@
 
 #import "ALCType.h"
 #import "ALCClassBuilder.h"
-#import "ALCContext.h"
+#import <Alchemic/ALCContext.h>
 
 @implementation ALCNSObjectInitStrategy
 

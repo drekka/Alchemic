@@ -15,8 +15,8 @@
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
-#import "ALCNameMatcher.h"
-#import "ALCClassMatcher.h"
+#import <Alchemic/ALCNameMatcher.h>
+#import <Alchemic/ALCClassMatcher.h>
 #import "ALCType.h"
 
 @implementation NSMutableDictionary (ALCModel)

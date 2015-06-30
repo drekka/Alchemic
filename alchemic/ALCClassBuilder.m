@@ -15,8 +15,8 @@
 #import "ALCType.h"
 #import "ALCVariableDependency.h"
 #import "ALCClassBuilder.h"
-#import "ALCObjectFactory.h"
-#import "ALCContext.h"
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCContext.h>
 
 @implementation ALCClassBuilder {
     NSArray<id<ALCInitStrategy>> *_initialisationStrategies;

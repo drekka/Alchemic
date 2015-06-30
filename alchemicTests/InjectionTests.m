@@ -7,7 +7,8 @@
 //
 
 #import "ALCTestCase.h"
-#import "Alchemic.h"
+#import <Alchemic/Alchemic.h>
+
 #import "SingletonObject.h"
 #import "InjectableProtocol.h"
 
