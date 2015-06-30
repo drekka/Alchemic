@@ -1,3 +1,0 @@
-{%for i in 1 to depth %}    {%/for%}[self tryAndRecover:{{tokenKind.name}} block:^{ 
-{{childString}}{%for i in 1 to depth %}    {%/for%}} completion:^{ 
-{{terminalCallString}}{%for i in 1 to depth %}    {%/for%}}];

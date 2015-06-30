@@ -1,6 +1,0 @@
-framework module StoryTeller {
-  umbrella header "StoryTeller.h"
-
-  export *
-  module * { export * }
-}

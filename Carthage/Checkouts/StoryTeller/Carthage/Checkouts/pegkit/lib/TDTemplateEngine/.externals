@@ -1,7 +1,0 @@
-[.]
-scm = git
-
-[lib/pegkit]
-repository = git@github.com:itod/pegkit.git
-scm = git
-path = lib/pegkit
