@@ -42,10 +42,10 @@
     SEL initSel = self.initSelector;
     const char *initPropertyName = [ALCRuntime concat:_alchemic_toCharPointer(ALCHEMIC_PREFIX) to:sel_getName(initSel)];
 
-    log(_forClass, @"Replacing %s::%s with wrapper %2$s", class_getName(_forClass), sel_getName(initSel));
+    STLog(_forClass, @"Replacing %s::%s with wrapper %2$s", class_getName(_forClass), sel_getName(initSel));
     NSNumber *initAdded = objc_getAssociatedObject(_forClass, initPropertyName);
     if ([initAdded boolValue]) {
-        log(_forClass, @"Init method already replaced.");
+        STLog(_forClass, @"Init method already replaced.");
         return;
     }
 
@@ -62,7 +62,7 @@
     if (originalInitIMP != NULL) {
         // There was an original init method so save it so it can be found.
         SEL alchemicInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
-        log(_forClass, @"Storing original init as %s::%s", class_getName(selfClass), sel_getName(alchemicInitSel));
+        STLog(_forClass, @"Storing original init as %s::%s", class_getName(selfClass), sel_getName(alchemicInitSel));
         class_addMethod(_forClass, alchemicInitSel, originalInitIMP, initTypeEncoding);
     }
  

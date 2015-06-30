@@ -46,7 +46,7 @@
     self = [super init];
     if (self) {
         [matchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
-            log(valueType.typeClass, @"Adding a %@", matcher);
+            STLog(valueType.typeClass, @"Adding a %@", matcher);
         }];
         _context = context;
         _valueType = valueType;
@@ -57,7 +57,7 @@
 
 -(void) resolve {
 
-    log(self.valueType.typeClass, @"   resolving %@", self);
+    STLog(self.valueType.typeClass, @"   resolving %@", self);
     ALCContext *strongContext = _context;
     _candidateBuilders = [strongContext.model buildersWithMatchers:_dependencyMatchers];
     
@@ -68,7 +68,7 @@
         }
     }
     
-    log(self.valueType.typeClass, @"   found %lu candidates", [_candidateBuilders count]);
+    STLog(self.valueType.typeClass, @"   found %lu candidates", [_candidateBuilders count]);
     
     // If there are no candidates left then error.
     if ([_candidateBuilders count] == 0) {

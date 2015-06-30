@@ -72,7 +72,7 @@
 
 -(id) resolveValue {
     
-    log([self description], @"Creating object with %@", [self description]);
+    STLog([self description], @"Creating object with %@", [self description]);
     
     id factoryObject = _factoryClassBuilder.value;
     
@@ -94,7 +94,7 @@
     
     id returnObj;
     [_factoryInvocation getReturnValue:&returnObj];
-    log([self description], @"   Method created a %s", class_getName([returnObj class]));
+    STLog([self description], @"   Method created a %s", class_getName([returnObj class]));
     return returnObj;
     
 }

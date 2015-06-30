@@ -130,7 +130,7 @@
                                      userInfo:nil];
     }
     
-    log(finalName, @"Registering '%@' %@", finalName, builder);
+    STLog(finalName, @"Registering '%@' %@", finalName, builder);
     self[finalName] = builder;
 }
 

@@ -8,8 +8,9 @@
 
 @import ObjectiveC;
 
-#import <Alchemic/ALCContext.h>
+#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
+
 #import "ALCInitStrategyInjector.h"
 #import "ALCRuntime.h"
 #import "NSDictionary+ALCModel.h"
@@ -17,12 +18,8 @@
 #import "ALCMethodBuilder.h"
 #import "ALCDefaultValueResolverManager.h"
 #import "ALCType.h"
-#import <Alchemic/ALCReturnType.h>
 #import "ALCIsFactory.h"
-#import <Alchemic/ALCMethodSelector.h>
-#import <Alchemic/ALCIntoVariable.h>
-#import <Alchemic/ALCIsPrimary.h>
-#import <Alchemic/ALCAsName.h>
+
 
 @implementation ALCContext {
     NSMutableSet<Class> *_initialisationStrategyClasses;
@@ -44,7 +41,7 @@
 
 -(void) start {
 
-    log(@"Alchemic", @"Starting alchemic ...");
+    STLog(ALCHEMIC_LOG, @"Starting alchemic ...");
 
     // Set defaults.
     if (self.runtimeInitInjector == nil) {
@@ -56,14 +53,14 @@
 
     [self resolveBuilderDependencies];
 
-    log(@"Alchemic", @"Creating singletons ...");
+    STLog(ALCHEMIC_LOG, @"Creating singletons ...");
     [self instantiateSingletons];
 }
 
 -(void) resolveBuilderDependencies {
-    log(@"Alchemic", @"---- Resolving dependencies ----");
+    STLog(ALCHEMIC_LOG, @"---- Resolving dependencies ----");
     [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCBuilder> builder, BOOL *stop){
-        log(name, @"Resolving '%@' (%s)", name, class_getName(builder.valueType.typeClass));
+        STLog(name, @"Resolving '%@' (%s)", name, class_getName(builder.valueType.typeClass));
         [builder resolve];
     }];
 }
@@ -71,16 +68,16 @@
 -(void) instantiateSingletons {
 
     // This is a two stage process so that all objects are created before dependencies are wired up.
-    log(@"Alchemic", @"---- Instantiating singletons ----");
+    STLog(ALCHEMIC_LOG, @"---- Instantiating singletons ----");
     NSMutableSet *singletons = [[NSMutableSet alloc] init];
     [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
         if (classBuilder.shouldCreateOnStartup) {
-            log(name, @"Creating singleton %@ -> %@", name, classBuilder);
+            STLog(name, @"Creating singleton %@ -> %@", name, classBuilder);
             [singletons addObject:[classBuilder instantiate]];
         }
     }];
 
-    log(@"Alchemic", @"---- Injecting dependencies into singletons ----");
+    STLog(ALCHEMIC_LOG, @"---- Injecting dependencies into singletons ----");
     [singletons enumerateObjectsUsingBlock:^(id singleton, BOOL *stop) {
         [self injectDependencies:singleton];
     }];
@@ -88,7 +85,7 @@
 }
 
 -(void) injectDependencies:(id) object {
-    log([object class], @"Injecting dependencies into a %s", object_getClassName(object));
+    STLog([object class], @"Injecting dependencies into a %s", object_getClassName(object));
     ALCClassBuilder *classBuilder = [_model findClassBuilderForObject:object];
     [classBuilder injectDependenciesInto:object];
 }
@@ -96,17 +93,17 @@
 #pragma mark - Configuration
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
-    log(@"Alchemic", @"Adding object factory: %s", object_getClassName(objectFactory));
+    STLog(ALCHEMIC_LOG, @"Adding object factory: %s", object_getClassName(objectFactory));
     [(NSMutableSet *)_objectFactories addObject:objectFactory];
 }
 
 -(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor {
-    log(@"Alchemic", @"Adding dependency post processor: %s", object_getClassName(postProcessor));
+    STLog(ALCHEMIC_LOG, @"Adding dependency post processor: %s", object_getClassName(postProcessor));
     [(NSMutableSet *)_dependencyPostProcessors addObject:postProcessor];
 }
 
 -(void) addInitStrategy:(Class) initialisationStrategyClass {
-    log(@"Alchemic", @"Adding init strategy: %s", class_getName(initialisationStrategyClass));
+    STLog(ALCHEMIC_LOG, @"Adding init strategy: %s", class_getName(initialisationStrategyClass));
     [_initialisationStrategyClasses addObject:initialisationStrategyClass];
 }
 
@@ -216,13 +213,13 @@
     finalBuilder.primary = isPrimary;
     finalBuilder.createOnStartup = !isFactory;
 
-    log(@"Alchemic", @"Setting up: %@, Primary: %@, Factory: %@, Factory Selector: %s, Return type: %s, Name: %@", finalBuilder, isPrimary ? @"YES": @"NO", isFactory ? @"YES": @"NO",sel_getName(methodSelector) , class_getName(returnType), name);
+    STLog(ALCHEMIC_LOG, @"Setting up: %@, Primary: %@, Factory: %@, Factory Selector: %s, Return type: %s, Name: %@", finalBuilder, isPrimary ? @"YES": @"NO", isFactory ? @"YES": @"NO",sel_getName(methodSelector) , class_getName(returnType), name);
 
 }
 
 -(void) registerObject:(id) object withName:(NSString *) name {
     ALCClassBuilder *instance = [_model addObject:object inContext:self withName:name];
-    log([object class], @"Adding object %@", object);
+    STLog([object class], @"Adding object %@", object);
     instance.value = object;
 }
 

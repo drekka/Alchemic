@@ -19,8 +19,8 @@
     FactoryObject *_of2;
 }
 
-inject(intoVariable(_of1))
-inject(intoVariable(_of2), withClass(FactoryObject))
+ACInject(ACIntoVariable(_of1))
+ACInject(ACIntoVariable(_of2), ACWithClass(FactoryObject))
 
 -(void) testFactory {
     XCTAssertNotNil(_of1);

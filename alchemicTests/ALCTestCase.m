@@ -21,7 +21,7 @@
 }
 
 - (void)setUp {
-    injectDependencies(self);
+    ACInjectDependencies(self);
 }
 
 @end

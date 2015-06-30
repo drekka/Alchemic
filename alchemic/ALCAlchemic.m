@@ -7,8 +7,12 @@
 //
 
 #import <Alchemic/ALCAlchemic.h>
-#import "ALCRuntime.h"
 #import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCInternal.h>
+
+#import "ALCRuntime.h"
+
+#import <StoryTeller/StoryTeller.h>
 
 @implementation ALCAlchemic
 
@@ -21,6 +25,7 @@ static __strong ALCContext *__mainContext;
 +(void) load {
     dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
         @autoreleasepool {
+            STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
             __mainContext = [[ALCContext alloc] init];
             [ALCRuntime scanRuntimeWithContext:__mainContext];
             [__mainContext start];

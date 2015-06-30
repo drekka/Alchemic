@@ -21,10 +21,10 @@
     NSString *string4;
 }
 
-inject(intoVariable(string1), withName(@"buildAString"))
-inject(intoVariable(string2), withName(@"buildAString"))
-inject(intoVariable(string3), withName(@"buildAComponentString"))
-inject(intoVariable(string4), withName(@"buildAComponentString"))
+ACInject(ACIntoVariable(string1), ACWithName(@"buildAString"))
+ACInject(ACIntoVariable(string2), ACWithName(@"buildAString"))
+ACInject(ACIntoVariable(string3), ACWithName(@"buildAComponentString"))
+ACInject(ACIntoVariable(string4), ACWithName(@"buildAComponentString"))
 
 - (void)testSimpleFactoryMethod {
     XCTAssertTrue([string1 hasPrefix:@"Factory string"]);

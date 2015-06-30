@@ -26,13 +26,13 @@
     SEL originalInit = [ALCRuntime alchemicSelectorForSelector:@selector(init)];
     if (class_respondsToSelector(objClass, originalInit)) {
     
-        log(objClass, @"   using original %s::%s", class_getName(objClass), sel_getName(originalInit));
+        STLog(objClass, @"   using original %s::%s", class_getName(objClass), sel_getName(originalInit));
         return ((id (*)(id, SEL))objc_msgSend)(obj, originalInit);
 
     } else {
         
         struct objc_super superData = {obj, class_getSuperclass(objClass)};
-        log(objClass, @"   using super %s::%s", class_getName(superData.super_class), sel_getName(initSel));
+        STLog(objClass, @"   using super %s::%s", class_getName(superData.super_class), sel_getName(initSel));
         return ((id (*)(struct objc_super *, SEL))objc_msgSendSuper)(&superData, initSel);
     }
 }

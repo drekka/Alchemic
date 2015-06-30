@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
+#define ALCHEMIC_LOG @"Alchemic"
+
 #define ALCHEMIC_PREFIX _alchemic_
 
 // Used to assemble two strings. We use double macros to ensure any

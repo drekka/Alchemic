@@ -124,7 +124,7 @@ static Class protocolClass;
     
     for (NSBundle *bundle in [NSBundle allBundles]) {
         
-        log(@"Alchemic", @"Scanning bundle %@", bundle);
+        STLog(ALCHEMIC_LOG, @"Scanning bundle %@", bundle);
         unsigned int count = 0;
         const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
         
@@ -157,7 +157,7 @@ static Class protocolClass;
                                      userInfo:nil];
     }
     
-    log(class, @"   Injection %@ -> variable: %s", inj, ivar_getName(var));
+    STLog(class, @"   Injection %@ -> variable: %s", inj, ivar_getName(var));
     return var;
 }
 

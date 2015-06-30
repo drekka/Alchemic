@@ -23,12 +23,12 @@
     id _singletonObjectByProtocol;
 }
 
-inject(intoVariable(_singletonObjectByName), withName(@"Test Singleton"))
-inject(intoVariable(_singletonObjectByClass), withClass(SingletonObject))
-inject(intoVariable(_singletonObjectByProtocol), withProtocol(InjectableProtocol))
+ACInject(ACIntoVariable(_singletonObjectByName), ACWithName(@"Test Singleton"))
+ACInject(ACIntoVariable(_singletonObjectByClass), ACWithClass(SingletonObject))
+ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectableProtocol))
 
 -(void) setUp {
-    injectDependencies(self);
+    ACInjectDependencies(self);
 }
 
 -(void) testInjectByName {

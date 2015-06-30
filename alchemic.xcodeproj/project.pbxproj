@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C199CD61B427143009BFEAD /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C199CD51B427143009BFEAD /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C36D7681B38531E0073C4FB /* ALCContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C66DC5E1A903204009F9D94 /* ALCContext.m */; };
 		6C36D7691B38531E0073C4FB /* ALCAlchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C66DC331A8B82C3009F9D94 /* ALCAlchemic.m */; };
 		6C36D76A1B38531E0073C4FB /* ALCAbstractInitStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9473071AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.m */; };
@@ -117,21 +118,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		6C8FD1AA1B41838D0012DF18 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6CAE806C1B424DD600217F9D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				6C199CD61B427143009BFEAD /* PEGKit.framework in CopyFiles */,
 				6CAE80721B42538300217F9D /* Alchemic.framework in CopyFiles */,
 				6CAE80711B42537D00217F9D /* StoryTeller.framework in CopyFiles */,
 			);
@@ -140,6 +133,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6C199CD51B427143009BFEAD /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
 		6C1C6A6E1AF108F90074BB26 /* ALCDependencyPostProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependencyPostProcessor.h; sourceTree = "<group>"; };
 		6C1C6A6F1AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCPrimaryObjectDependencyPostProcessor.h; sourceTree = "<group>"; };
 		6C1C6A701AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCPrimaryObjectDependencyPostProcessor.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -309,6 +303,7 @@
 		6C66DC251A8B82C3009F9D94 = {
 			isa = PBXGroup;
 			children = (
+				6C199CD51B427143009BFEAD /* PEGKit.framework */,
 				6C66DC3F1A8B82C3009F9D94 /* Info.plist */,
 				6CAE80691B424DA100217F9D /* StoryTeller.framework */,
 				6C66DC301A8B82C3009F9D94 /* Alchemic */,
@@ -574,7 +569,6 @@
 				6C36D74B1B3851680073C4FB /* Frameworks */,
 				6C36D74C1B3851680073C4FB /* Headers */,
 				6C36D74D1B3851680073C4FB /* Resources */,
-				6C8FD1AA1B41838D0012DF18 /* CopyFiles */,
 			);
 			buildRules = (
 			);

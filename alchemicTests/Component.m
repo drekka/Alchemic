@@ -11,7 +11,7 @@
 
 @implementation Component
 
-register()
+ACRegister()
 
 -(NSString *) description {
     return @"Component";

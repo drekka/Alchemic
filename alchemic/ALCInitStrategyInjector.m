@@ -85,7 +85,7 @@ static BOOL injected = NO;
         
         // If we are here and the parent is NULL then we are safe to add the class to the final list.
         if (parentClass == NULL) {
-            log(builder.valueType.typeClass, @"Scheduling %s for init wrapper injection", class_getName(builder.valueType.typeClass));
+            STLog(builder.valueType.typeClass, @"Scheduling %s for init wrapper injection", class_getName(builder.valueType.typeClass));
             [rootBuilders addObject:builder];
         }
         
