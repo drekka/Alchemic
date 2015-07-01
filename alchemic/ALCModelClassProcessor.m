@@ -41,9 +41,9 @@ static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREF
             currentClassInstance = [context.model createClassBuilderForClass:class inContext:context];
         }
         
-        STLog(class, @"Executing %s::%s ...", class_getName(class), methodName);
         // Note cast because of XCode 6
         // If this returns a new ALCInstance it is assumed to be a new model object and is added.
+        STLog(class, @"Executing %s::%s ...", class_getName(class), methodName);
         ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(class, sel, currentClassInstance);
         
     }
