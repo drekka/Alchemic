@@ -26,7 +26,7 @@
 
 +(void) initialize {
     STStartLogging(@"LogAll");
-    STStartLogging(@"[SingletonObject]");
+    //STStartLogging(@"[SingletonObject]");
 }
 
 ACInject(ACIntoVariable(_singletonObjectByName), ACWithName(@"Test Singleton"))
