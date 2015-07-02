@@ -22,7 +22,6 @@ static __strong ALCContext *__mainContext;
     return __mainContext;
 }
 
-
 +(void) load {
     dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
         @autoreleasepool {

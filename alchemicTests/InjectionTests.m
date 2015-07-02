@@ -9,7 +9,7 @@
 #import "ALCTestCase.h"
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
-
+#import <OCMock/OCMock.h>
 #import "SingletonObject.h"
 #import "InjectableProtocol.h"
 
@@ -22,6 +22,7 @@
     id _singletonObjectByName;
     id _singletonObjectByClass;
     id _singletonObjectByProtocol;
+    id _mockAlchemic;
 }
 
 +(void) initialize {
@@ -34,6 +35,14 @@ ACInject(ACIntoVariable(_singletonObjectByClass), ACWithClass(SingletonObject))
 ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectableProtocol))
 
 -(void) setUp {
+
+    _mockAlchemic =
+
+
+    ALCContext *context = [[ALCContext alloc] init];
+    SingletonObject *singletonObject = [[SingletonObject alloc] init];
+    [context registerObject:singletonObject withName:@"Test Singleton"];
+
     ACInjectDependencies(self);
 }
 
