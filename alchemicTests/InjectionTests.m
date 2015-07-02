@@ -36,13 +36,16 @@ ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectablePr
 
 -(void) setUp {
 
-    _mockAlchemic =
-
-
     ALCContext *context = [[ALCContext alloc] init];
+
+    _mockAlchemic = OCMClassMock([ALCAlchemic class]);
+    OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(context);
+
+    ALCContext *c2 = [ALCAlchemic mainContext];
+    NSLog(@"%@", c2);
+
     SingletonObject *singletonObject = [[SingletonObject alloc] init];
     [context registerObject:singletonObject withName:@"Test Singleton"];
-
     ACInjectDependencies(self);
 }
 

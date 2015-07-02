@@ -9,10 +9,10 @@
 @import Foundation;
 
 #import <Alchemic/ALCBuilder.h>
+
 @class ALCContext;
 @class ALCClassBuilder;
 @class ALCMethodBuilder;
-
 
 #import <Alchemic/ALCMatcher.h>
 

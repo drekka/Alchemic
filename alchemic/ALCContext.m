@@ -20,9 +20,9 @@
 #import "ALCType.h"
 #import "ALCIsFactory.h"
 
-
 @implementation ALCContext {
     NSMutableSet<Class> *_initialisationStrategyClasses;
+    NSDictionary<NSString *, NSSet<id<ALCBuilder>> *> *_model;
 }
 
 #pragma mark - Lifecycle
@@ -38,6 +38,8 @@
     }
     return self;
 }
+
+#pragma mark - Initialisation
 
 -(void) start {
 
@@ -55,33 +57,6 @@
 
     STLog(ALCHEMIC_LOG, @"Creating singletons ...");
     [self instantiateSingletons];
-}
-
--(void) resolveBuilderDependencies {
-    STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
-    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCBuilder> builder, BOOL *stop){
-        STLog(builder, @"Resolving '%@' (%s)", name, class_getName(builder.valueType.typeClass));
-        [builder resolve];
-    }];
-}
-
--(void) instantiateSingletons {
-
-    // This is a two stage process so that all objects are created before dependencies are wired up.
-    STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
-    NSMutableSet *singletons = [[NSMutableSet alloc] init];
-    [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
-        if (classBuilder.shouldCreateOnStartup) {
-            STLog(classBuilder, @"Creating singleton %@ -> %@", name, classBuilder);
-            [singletons addObject:[classBuilder instantiate]];
-        }
-    }];
-
-    STLog(ALCHEMIC_LOG, @"Injecting dependencies into singletons ...");
-    [singletons enumerateObjectsUsingBlock:^(id singleton, BOOL *stop) {
-        [self injectDependencies:singleton];
-    }];
-
 }
 
 -(void) injectDependencies:(id) object {
@@ -221,6 +196,35 @@
     ALCClassBuilder *instance = [_model addObject:object inContext:self withName:name];
     STLog(instance, @"Adding object %@", object);
     instance.value = object;
+}
+
+#pragma mark - Internal
+
+-(void) resolveBuilderDependencies {
+    STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
+    [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCBuilder> builder, BOOL *stop){
+        STLog(builder, @"Resolving '%@' (%s)", name, class_getName(builder.valueType.typeClass));
+        [builder resolve];
+    }];
+}
+
+-(void) instantiateSingletons {
+
+    // This is a two stage process so that all objects are created before dependencies are wired up.
+    STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
+    NSMutableSet *singletons = [[NSMutableSet alloc] init];
+    [_model enumerateClassBuildersWithBlock:^(NSString *name, ALCClassBuilder *classBuilder, BOOL *stop) {
+        if (classBuilder.shouldCreateOnStartup) {
+            STLog(classBuilder, @"Creating singleton %@ -> %@", name, classBuilder);
+            [singletons addObject:[classBuilder instantiate]];
+        }
+    }];
+
+    STLog(ALCHEMIC_LOG, @"Injecting dependencies into singletons ...");
+    [singletons enumerateObjectsUsingBlock:^(id singleton, BOOL *stop) {
+        [self injectDependencies:singleton];
+    }];
+    
 }
 
 @end
