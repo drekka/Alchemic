@@ -31,7 +31,7 @@ ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectablePr
 -(void) setUp {
     STStartLogging(@"[ALCClassBuilder]");
     STStartLogging(@"[SingletonObject]");
-    STStartLogging(@"<ALCBuilder>.valueType.typeClass == SingletonObject");
+    STStartLogging(@"<ALCBuilder>.valueType.typeClass == [SingletonObject]");
     ACInjectDependencies(self);
 }
 
