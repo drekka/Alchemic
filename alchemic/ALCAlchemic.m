@@ -22,15 +22,23 @@ static __strong ALCContext *__mainContext;
     return __mainContext;
 }
 
+
 +(void) load {
     dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
         @autoreleasepool {
-            STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
-            __mainContext = [[ALCContext alloc] init];
-            [ALCRuntime scanRuntimeWithContext:__mainContext];
-            [__mainContext start];
+            NSProcessInfo *processInfo = [NSProcessInfo processInfo];
+            if (! [processInfo.arguments containsObject:@"--alchemic-nostart"]) {
+                [self start];
+            }
         }
     });
+}
+
++(void) start {
+    STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
+    __mainContext = [[ALCContext alloc] init];
+    [ALCRuntime scanRuntimeWithContext:__mainContext];
+    [__mainContext start];
 }
 
 @end

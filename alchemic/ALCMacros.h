@@ -24,7 +24,7 @@
 
 #define ACReturnType(_returnType) [ALCReturnType returnTypeWithClass:[_returnType class]]
 
-#define ACCreateUsingSelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
+#define ACFactorySelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
 
 #define ACIntoVariable(_variableName) [ALCIntoVariable intoVariableWithName:_alchemic_toNSString(_variableName)]
 

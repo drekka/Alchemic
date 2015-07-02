@@ -46,7 +46,7 @@
     self = [super init];
     if (self) {
         [matchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
-            STLog(valueType.typeClass, @"Adding a %@", matcher);
+            STLog(valueType, @"Adding a %@", matcher);
         }];
         _context = context;
         _valueType = valueType;
