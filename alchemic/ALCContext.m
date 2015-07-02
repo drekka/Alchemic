@@ -86,7 +86,7 @@
 
 -(void) injectDependencies:(id) object {
     ALCClassBuilder *classBuilder = [_model findClassBuilderForObject:object];
-    STLog(classBuilder, @"Injecting dependencies into a %s", object_getClassName(object));
+    STLog(classBuilder, @"Injecting dependencies into a %s", [object class]);
     [classBuilder injectDependenciesInto:object];
 }
 
@@ -103,7 +103,7 @@
 }
 
 -(void) addInitStrategy:(Class) initialisationStrategyClass {
-    STLog(ALCHEMIC_LOG, @"Adding init strategy: %s", class_getName(initialisationStrategyClass));
+    STLog(ALCHEMIC_LOG, @"Adding init strategy: %s", object_getClassName(initialisationStrategyClass));
     [_initialisationStrategyClasses addObject:initialisationStrategyClass];
 }
 

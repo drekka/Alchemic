@@ -106,7 +106,7 @@
     if ([classBuilders count] == 0) {
         
         // Now Look for any instances based on the class.
-        ALCClassMatcher *classMatcher = [ALCClassMatcher matcherWithClass:object_getClass(object)];
+        ALCClassMatcher *classMatcher = [ALCClassMatcher matcherWithClass:[object class]];
         classBuilders = [self classBuildersWithMatchers:[NSSet setWithObject:classMatcher]];
         if ([classBuilders count] > 0) {
             @throw [NSException exceptionWithName:@"AlchemicUnableToLocateBuilder"
@@ -130,7 +130,7 @@
                                      userInfo:nil];
     }
     
-    STLog(finalName, @"Registering '%@' %@", finalName, builder);
+    STLog(builder.valueType.typeClass, @"Registering '%@' %@", finalName, builder);
     self[finalName] = builder;
 }
 
@@ -139,14 +139,14 @@
 }
 
 -(ALCClassBuilder *) createClassBuilderForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name {
-    ALCType *type = [[ALCType alloc] initWithClass:class];
+    ALCType *type = [ALCType typeForClass:class];
     ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithContext:context valueType:type];
     [self addBuilder:classBuilder underName:name];
     return classBuilder;
 }
 
 -(ALCClassBuilder *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name {
-    ALCClassBuilder *classBuilder = [self createClassBuilderForClass:object_getClass(finalObject) inContext:context withName:name];
+    ALCClassBuilder *classBuilder = [self createClassBuilderForClass:[finalObject class] inContext:context withName:name];
     classBuilder.value = finalObject;
     return classBuilder;
 }

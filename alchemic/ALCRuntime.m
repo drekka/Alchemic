@@ -20,10 +20,10 @@
 
 @implementation ALCRuntime
 
-static Class protocolClass;
+static Class __protocolClass;
 
 +(void) initialize {
-    protocolClass = objc_getClass("Protocol");
+    __protocolClass = objc_getClass("Protocol");
 }
 
 #pragma mark - General
@@ -40,7 +40,7 @@ static Class protocolClass;
 }
 
 +(BOOL) classIsProtocol:(Class) possiblePrototocol {
-    return protocolClass == possiblePrototocol;
+    return __protocolClass == possiblePrototocol;
 }
 
 +(Ivar) class:(Class) class withName:(NSString *) name {

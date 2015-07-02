@@ -40,7 +40,7 @@
         unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
         if (nbrArgs != [argumentMatchers count]) {
             @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
-                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu", object_getClassName(factoryClassBuilder.valueType.typeClass), sel_getName(factorySelector), nbrArgs, (unsigned long)[argumentMatchers count]]
+                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu", class_getName(factoryClassBuilder.valueType.typeClass), sel_getName(factorySelector), nbrArgs, (unsigned long)[argumentMatchers count]]
                                          userInfo:nil];
         }
         

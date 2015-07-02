@@ -98,13 +98,14 @@
 		6C36D7C31B3853F20073C4FB /* ALCClassWithProtocolClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC54B681AF4F20000D5D634 /* ALCClassWithProtocolClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7C41B3853F20073C4FB /* ALCAbstractClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC54B6B1AF50DE500D5D634 /* ALCAbstractClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7C51B3854080073C4FB /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
-		6C7145641B44288F00EBC055 /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C7145601B44238900EBC055 /* StoryTellerConfig.json */; };
+		6C7145641B44288F00EBC055 /* StoryTellerConfigssss.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C7145601B44238900EBC055 /* StoryTellerConfigssss.json */; };
 		6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C91F9EE1B399009002DF241 /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CAE806A1B424DA100217F9D /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CAE80691B424DA100217F9D /* StoryTeller.framework */; };
 		6CAE806B1B424DCC00217F9D /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CAE80691B424DA100217F9D /* StoryTeller.framework */; };
 		6CAE80701B42535A00217F9D /* Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CAE806D1B424F8A00217F9D /* Alchemic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CAE80711B42537D00217F9D /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CAE80691B424DA100217F9D /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CAE80721B42538300217F9D /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CFFAED91B44F2F70084A368 /* ALCTypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFAED81B44F2F70084A368 /* ALCTypeTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -170,7 +171,7 @@
 		6C66DC5D1A903204009F9D94 /* ALCContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCContext.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C66DC5E1A903204009F9D94 /* ALCContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCContext.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C6D00A81AB70BB500984CF7 /* AlchemicAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlchemicAware.h; sourceTree = "<group>"; };
-		6C7145601B44238900EBC055 /* StoryTellerConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = StoryTellerConfig.json; sourceTree = "<group>"; };
+		6C7145601B44238900EBC055 /* StoryTellerConfigssss.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = StoryTellerConfigssss.json; sourceTree = "<group>"; };
 		6C781E9A1B2080A4001D86CB /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Component.h; sourceTree = "<group>"; };
 		6C781E9B1B2080A4001D86CB /* Component.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Component.m; sourceTree = "<group>"; };
 		6C781E9F1B232345001D86CB /* ALCReturnType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCReturnType.h; sourceTree = "<group>"; };
@@ -235,6 +236,7 @@
 		6CC54B731AFE3D7B00D5D634 /* ALCMethodBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMethodBuilder.h; sourceTree = "<group>"; };
 		6CC54B741AFE3D7B00D5D634 /* ALCMethodBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMethodBuilder.m; sourceTree = "<group>"; };
 		6CF341B31ADD5A9100A9B76B /* ValueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueTests.m; sourceTree = "<group>"; };
+		6CFFAED81B44F2F70084A368 /* ALCTypeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCTypeTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -273,7 +275,7 @@
 			name = Runtime;
 			sourceTree = "<group>";
 		};
-		6C214EFF1B319B4E00C1D33D /* Model */ = {
+		6C214EFF1B319B4E00C1D33D /* Unit test model */ = {
 			isa = PBXGroup;
 			children = (
 				6C978BF41AAC08C200C2D48D /* InjectableProtocol.h */,
@@ -286,7 +288,7 @@
 				6C214F001B319C4B00C1D33D /* FactoryObject.h */,
 				6C214F011B319C4B00C1D33D /* FactoryObject.m */,
 			);
-			name = Model;
+			name = "Unit test model";
 			sourceTree = "<group>";
 		};
 		6C418BBC1AA48ED8003D2C90 /* Object factories */ = {
@@ -302,7 +304,7 @@
 		6C66DC251A8B82C3009F9D94 = {
 			isa = PBXGroup;
 			children = (
-				6C7145601B44238900EBC055 /* StoryTellerConfig.json */,
+				6C7145601B44238900EBC055 /* StoryTellerConfigssss.json */,
 				6C66DC3F1A8B82C3009F9D94 /* Info.plist */,
 				6CAE80691B424DA100217F9D /* StoryTeller.framework */,
 				6C66DC301A8B82C3009F9D94 /* Alchemic */,
@@ -345,12 +347,13 @@
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;
 			children = (
+				6CFFAED71B44F2E50084A368 /* Model */,
 				6C37A6EF1A9B339500ACD0F8 /* ALCTestCase.h */,
 				6C37A6F01A9B339500ACD0F8 /* ALCTestCase.m */,
 				6C7827041B039512009EAE27 /* FactoryMethodsTests.m */,
 				6C214F031B319D1F00C1D33D /* FactoryObjectTests.m */,
 				6C45ADC91AC97A4800D9BF7C /* InjectionTests.m */,
-				6C214EFF1B319B4E00C1D33D /* Model */,
+				6C214EFF1B319B4E00C1D33D /* Unit test model */,
 				6C66DC3E1A8B82C3009F9D94 /* Supporting Files */,
 				6CF341B31ADD5A9100A9B76B /* ValueTests.m */,
 			);
@@ -496,6 +499,14 @@
 				6C781EB01B25968F001D86CB /* ALCIsPrimary.m */,
 			);
 			name = Declarations;
+			sourceTree = "<group>";
+		};
+		6CFFAED71B44F2E50084A368 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6CFFAED81B44F2F70084A368 /* ALCTypeTests.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -644,7 +655,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C7145641B44288F00EBC055 /* StoryTellerConfig.json in Resources */,
+				6C7145641B44288F00EBC055 /* StoryTellerConfigssss.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -696,6 +707,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CFFAED91B44F2F70084A368 /* ALCTypeTests.m in Sources */,
 				6C36D7921B38533C0073C4FB /* SingletonObject.m in Sources */,
 				6C36D7941B38533C0073C4FB /* FactoryObject.m in Sources */,
 				6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */,

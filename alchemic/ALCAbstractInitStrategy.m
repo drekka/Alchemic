@@ -49,7 +49,7 @@
         return;
     }
 
-    Class selfClass = object_getClass(self);
+    Class selfClass = [self class];
     SEL replacementInitSel = self.replacementInitSelector;
 
     // Get the new methods details.

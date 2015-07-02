@@ -14,21 +14,19 @@
  */
 @interface ALCType : NSObject
 
-@property (nonatomic, assign, readonly) Class typeClass;
+@property (nonatomic, assign) Class __nonnull typeClass;
 
-@property (nonatomic, strong, readonly) NSSet<Protocol *> *typeProtocols;
+@property (nonatomic, strong, readonly, nonnull) NSSet<Protocol *> *typeProtocols;
 
-+(instancetype) typeForInjection:(Ivar) variable inClass:(Class) class;
++(nonnull instancetype) typeForInjection:(Ivar __nonnull) variable inClass:(Class __nonnull) class;
 
-+(instancetype) typeForClass:(Class) class;
++(nonnull instancetype) typeForClass:(Class __nonnull) class;
 
--(instancetype) initWithClass:(Class) class; // NS_DESIGNATED_INITIALIZER;
+-(void) addProtocol:(Protocol __nonnull *) protocol;
 
--(void) addProtocol:(Protocol *) protocol;
+-(BOOL) typeIsKindOfClass:(Class __nonnull) aClass;
 
--(BOOL) typeIsKindOfClass:(Class)aClass;
-
--(BOOL) typeConformsToProtocol:(Protocol *)aProtocol;
+-(BOOL) typeConformsToProtocol:(Protocol __nonnull *) aProtocol;
 
 
 @end

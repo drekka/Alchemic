@@ -24,14 +24,16 @@
     id _singletonObjectByProtocol;
 }
 
++(void) initialize {
+    STStartLogging(@"LogAll");
+    STStartLogging(@"[SingletonObject]");
+}
+
 ACInject(ACIntoVariable(_singletonObjectByName), ACWithName(@"Test Singleton"))
 ACInject(ACIntoVariable(_singletonObjectByClass), ACWithClass(SingletonObject))
 ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectableProtocol))
 
 -(void) setUp {
-    STStartLogging(@"[ALCClassBuilder]");
-    STStartLogging(@"[SingletonObject]");
-    STStartLogging(@"<ALCBuilder>.valueType.typeClass == [SingletonObject]");
     ACInjectDependencies(self);
 }
 

@@ -30,7 +30,7 @@
  @param _initArgArgs_ zero or more argument values as would be passed to the objc_msgSend call.
  */
 #define initLogic(_initSelectorName_, _initArgTypes_, _initArgs_) \
-Class selfClass = object_getClass(self); \
+Class selfClass = [self class]; \
 SEL initSel = @selector(_initSelectorName_); \
 SEL relocatedInitSel = [ALCRuntime alchemicSelectorForSelector:initSel]; \
 if ([self respondsToSelector:relocatedInitSel]) { \
