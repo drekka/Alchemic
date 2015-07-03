@@ -16,7 +16,7 @@
                                variable:(Ivar __nonnull) variable
                                matchers:(NSSet<id<ALCMatcher>> __nonnull *) dependencyMatchers {
     self = [super initWithContext:context
-                       valueClass:[ALCRuntime iVarClass:variable]
+                       valueClass:[ALCRuntime classForIVar:variable]
                          matchers:dependencyMatchers];
     if (self) {
         _variable = variable;
@@ -26,7 +26,7 @@
 
 -(void) injectInto:(id) object {
     id value = self.value;
-    STLog([object class], @"   Injecting %s::%s <- %s",object_getClassName(object) , ivar_getName(self.variable), object_getClassName(value));
+    STLog([object class], @"Injecting %s::%s <- %s",object_getClassName(object) , ivar_getName(self.variable), object_getClassName(value));
     [ALCRuntime injectObject:object variable:self.variable withValue:value];
 }
 
@@ -34,6 +34,5 @@
     NSString *desc = [super description];
     return [NSString stringWithFormat:@"%2$s = %1$@", desc, ivar_getName(_variable)];
 }
-
 
 @end

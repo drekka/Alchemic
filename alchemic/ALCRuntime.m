@@ -28,14 +28,10 @@ static Class __protocolClass;
 
 #pragma mark - General
 
-+(nonnull const char *) concat:(const char __nonnull *) left to:(const char __nonnull *) right {
-    return [NSString stringWithFormat:@"%s%s", left, right].UTF8String;
-}
-
 +(SEL) alchemicSelectorForSelector:(SEL) selector {
     const char * prefix = _alchemic_toCharPointer(ALCHEMIC_PREFIX);
     const char * selName = sel_getName(selector);
-    const char * newSelectorName = [self concat:prefix to:selName];
+    const char * newSelectorName = [NSString stringWithFormat:@"%s%s", prefix, selName].UTF8String;
     return sel_registerName(newSelectorName);
 }
 
@@ -75,7 +71,11 @@ static Class __protocolClass;
     return NO;
 }
 
-+(nullable Class) iVarClass:(Ivar __nonnull) ivar {
++(BOOL) class:(Class __nonnull) class conformsToProtocol:(Protocol __nonnull *) protocol {
+    return class_conformsToProtocol(class, protocol);
+}
+
++(nullable Class) classForIVar:(Ivar __nonnull) ivar {
     NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];
     if ([variableTypeEncoding hasPrefix:@"@"]) {
         NSArray<NSString *> *defs = [variableTypeEncoding componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\",<>"]];

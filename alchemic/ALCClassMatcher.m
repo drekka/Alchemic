@@ -8,7 +8,7 @@
 
 @import ObjectiveC;
 #import <Alchemic/ALCClassMatcher.h>
-#import "ALCType.h"
+#import "ALCRuntime.h"
 
 @implementation ALCClassMatcher {
     Class _class;
@@ -21,7 +21,7 @@
 }
 
 -(BOOL) matches:(id <ALCBuilder>) builder withName:(NSString *) name {
-    return [builder.valueType forClassIsKindOfClass:_class];
+    return [ALCRuntime class:builder.valueClass isKindOfClass:_class];
 }
 
 -(NSString *) description {

@@ -8,8 +8,8 @@
 
 #import <Alchemic/ALCProtocolMatcher.h>
 #import "ALCClassBuilder.h"
+#import "ALCRuntime.h"
 @import ObjectiveC;
-#import "ALCType.h"
 
 @implementation ALCProtocolMatcher {
     Protocol *_protocol;
@@ -22,7 +22,7 @@
 }
 
 -(BOOL) matches:(id <ALCBuilder>) builder withName:(NSString *) name {
-    return [builder.valueType forClassConformsToProtocol:_protocol];
+    return [ALCRuntime class:builder.valueClass conformsToProtocol:_protocol];
 }
 
 -(NSString *) description {

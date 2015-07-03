@@ -16,7 +16,6 @@
 #import "ALCClassBuilder.h"
 #import <Alchemic/ALCInitStrategy.h>
 #import <Alchemic/ALCClassMatcher.h>
-#import "ALCType.h"
 #import "NSDictionary+ALCModel.h"
 
 @implementation ALCInitStrategyInjector {
@@ -66,7 +65,7 @@ static BOOL injected = NO;
     // Copy all the classes into an array
     NSMutableSet *builderClasses = [[NSMutableSet alloc] initWithCapacity:[builders count]];
     for (ALCClassBuilder *builder in builders) {
-        [builderClasses addObject:builder.valueType.forClass];
+        [builderClasses addObject:builder.valueClass];
     }
 
     // Work out which classes we need to inject hooks into
@@ -74,7 +73,7 @@ static BOOL injected = NO;
     for (ALCClassBuilder *builder in builders) {
         
         // Check each ancestor class in turn. If any are in the list, then ignore the current class.
-        Class parentClass = class_getSuperclass(builder.valueType.forClass);
+        Class parentClass = class_getSuperclass(builder.valueClass);
         while (parentClass != NULL) {
             if ([builderClasses containsObject:parentClass]) {
                 // The parent is in the model too so stop looking.
@@ -85,7 +84,7 @@ static BOOL injected = NO;
         
         // If we are here and the parent is NULL then we are safe to add the class to the final list.
         if (parentClass == NULL) {
-            STLog(builder.valueType.forClass, @"Scheduling %s for init wrapper injection", class_getName(builder.valueType.forClass));
+            STLog(builder.valueClass, @"Scheduling %s for init wrapper injection", class_getName(builder.valueClass));
             [rootBuilders addObject:builder];
         }
         

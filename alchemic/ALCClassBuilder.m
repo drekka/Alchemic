@@ -12,7 +12,6 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntime.h"
-#import "ALCType.h"
 #import "ALCVariableDependency.h"
 #import "ALCClassBuilder.h"
 #import <Alchemic/ALCObjectFactory.h>
@@ -22,8 +21,8 @@
     NSArray<id<ALCInitStrategy>> *_initialisationStrategies;
 }
 
--(instancetype) initWithContext:(ALCContext *__weak)context valueType:(ALCType *)valueType {
-    self = [super initWithContext:context valueType:valueType];
+-(instancetype) initWithContext:(ALCContext *__weak)context valueClass:(__unsafe_unretained Class) valueClass {
+    self = [super initWithContext:context valueClass:valueClass];
     if (self) {
         _initialisationStrategies = @[];
     }
@@ -33,13 +32,11 @@
 #pragma mark - Adding dependencies
 
 -(void) addInjectionPoint:(NSString *) inj withMatchers:(NSSet *) matchers {
-    Class objClass = self.valueType.forClass;
+    Class objClass = self.valueClass;
     Ivar variable = [ALCRuntime class:objClass variableForInjectionPoint:inj];
-    ALCType *type = [ALCType typeForClass:objClass injection:variable];
 
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithContext:self.context
                                                                               variable:variable
-                                                                             valueType:type
                                                                               matchers:matchers];
     [self addDependency:dependency];
 }
@@ -57,7 +54,7 @@
 
 -(id) resolveValue {
 
-    STLog(self.valueType.forClass, @"Instantiating instance using %@", self);
+    STLog(self.valueClass, @"Instantiating instance using %@", self);
     ALCContext *strongContext = self.context;
     for (id<ALCObjectFactory> objectFactory in strongContext.objectFactories) {
         id newValue = [objectFactory createObjectFromBuilder:self];
@@ -83,7 +80,7 @@
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueType.forClass), self.factory ? @" (factory)" : @""];
+    return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueClass), self.factory ? @" (factory)" : @""];
 }
 
 #pragma mark - Internal

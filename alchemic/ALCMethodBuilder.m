@@ -9,7 +9,6 @@
 #import "ALCMethodBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
-#import "ALCType.h"
 #import <Alchemic/ALCContext.h>
 
 @implementation ALCMethodBuilder {
@@ -19,15 +18,15 @@
 }
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
-                     buildClass:(Class) buildClass
+                     valueClass:(Class) valueClass
             factoryClassBuilder:(ALCClassBuilder *) factoryClassBuilder
                 factorySelector:(SEL) factorySelector
                argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers {
     
-    self = [super initWithContext:context buildClass:buildClass];
+    self = [super initWithContext:context valueClass:valueClass];
     if (self) {
         
-        Class factoryClass = factoryClassBuilder.buildClass;
+        Class factoryClass = factoryClassBuilder.valueClass;
         [ALCRuntime validateSelector:factorySelector withClass:factoryClass];
         
         // Locate the method.
@@ -40,7 +39,11 @@
         unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
         if (nbrArgs != [argumentMatchers count]) {
             @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
-                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu", class_getName(factoryClassBuilder.buildClass), sel_getName(factorySelector), nbrArgs, (unsigned long)[argumentMatchers count]]
+                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu",
+                                                   class_getName(factoryClassBuilder.valueClass),
+                                                   sel_getName(factorySelector),
+                                                   nbrArgs,
+                                                   (unsigned long)[argumentMatchers count]]
                                          userInfo:nil];
         }
         
@@ -52,7 +55,7 @@
         [argumentMatchers enumerateObjectsUsingBlock:^(id matchers, NSUInteger idx, BOOL *stop) {
             NSSet<id<ALCMatcher>> *matcherSet = [matchers isKindOfClass:arrayClass] ? [NSSet setWithArray:matchers] : [NSSet setWithObject:matchers];
             [self addDependency:[[ALCDependency alloc] initWithContext:context
-                                                             valueType:nil
+                                                            valueClass:[NSObject class]
                                                               matchers:matcherSet]];
         }];
         
@@ -100,7 +103,7 @@
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_factoryClassBuilder.buildClass), sel_getName(_factorySelector)];
+    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_factoryClassBuilder.valueClass), sel_getName(_factorySelector)];
 }
 
 @end

@@ -17,7 +17,6 @@
 #import "ALCMethodBuilder.h"
 #import <Alchemic/ALCNameMatcher.h>
 #import <Alchemic/ALCClassMatcher.h>
-#import "ALCType.h"
 
 @implementation NSMutableDictionary (ALCModel)
 
@@ -122,7 +121,7 @@
 
 -(void) addBuilder:(id<ALCBuilder>)builder underName:(NSString *)name {
     
-    NSString *finalName = name == nil ? NSStringFromClass(builder.valueType.forClass) : name;
+    NSString *finalName = name == nil ? NSStringFromClass(builder.valueClass) : name;
     
     if (self[finalName] != nil) {
         @throw [NSException exceptionWithName:@"AlchemicBuilderAlreadyIndexed"
@@ -130,7 +129,7 @@
                                      userInfo:nil];
     }
     
-    STLog(builder.valueType.forClass, @"Registering '%@' %@", finalName, builder);
+    STLog(builder.valueClass, @"Registering '%@' %@", finalName, builder);
     self[finalName] = builder;
 }
 
@@ -139,8 +138,7 @@
 }
 
 -(ALCClassBuilder *) createClassBuilderForClass:(Class) class inContext:(ALCContext *) context withName:(NSString *) name {
-    ALCType *type = [ALCType typeForClass:class];
-    ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithContext:context valueType:type];
+    ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithContext:context valueClass:class];
     [self addBuilder:classBuilder underName:name];
     return classBuilder;
 }
@@ -153,17 +151,17 @@
 
 -(ALCMethodBuilder *) addMethod:(SEL) factorySelector
                       toBuilder:(ALCClassBuilder *) builder
-                     returnType:(ALCType *) returnType
+                    returnClass:(Class) returnClass
                argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers {
-    
+
     ALCMethodBuilder *factoryMethod = [[ALCMethodBuilder alloc] initWithContext:builder.context
-                                                                      valueType:returnType
+                                                                     valueClass:returnClass
                                                             factoryClassBuilder:builder
                                                                 factorySelector:factorySelector
                                                                argumentMatchers:argumentMatchers];
     
     [self addBuilder:factoryMethod
-           underName:[NSString stringWithFormat:@"%s::%s", class_getName(builder.valueType.forClass), sel_getName(factorySelector)]];
+           underName:[NSString stringWithFormat:@"%s::%s", class_getName(builder.valueClass), sel_getName(factorySelector)]];
     return factoryMethod;
     
 }

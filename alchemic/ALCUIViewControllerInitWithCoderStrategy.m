@@ -12,13 +12,13 @@
 @import ObjectiveC;
 
 #import "ALCClassBuilder.h"
-#import "ALCType.h"
 #import <Alchemic/ALCContext.h>
+#import "ALCRuntime.h"
 
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
 +(BOOL) canWrapInit:(ALCClassBuilder *) instance {
-    return [instance.valueType.forClass isSubclassOfClass:[UIViewController class]];
+    return [ALCRuntime class:instance.valueClass isKindOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

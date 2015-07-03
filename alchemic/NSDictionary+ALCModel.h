@@ -43,8 +43,8 @@
 -(ALCClassBuilder *) addObject:(id) finalObject inContext:(ALCContext *) context withName:(NSString *) name;
 
 -(ALCMethodBuilder *) addMethod:(SEL) factorySelector
-                             toBuilder:(ALCClassBuilder *) builder
-                            returnType:(ALCType *) returnType
-                      argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers;
+                      toBuilder:(ALCClassBuilder *) builder
+                    returnClass:(Class) returnClass
+               argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers;
 
 @end

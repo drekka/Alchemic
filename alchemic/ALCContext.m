@@ -17,7 +17,6 @@
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
 #import "ALCDefaultValueResolverManager.h"
-#import "ALCType.h"
 #import "ALCIsFactory.h"
 
 @implementation ALCContext {
@@ -170,12 +169,12 @@
     id<ALCBuilder> finalBuilder = classBuilder;
     if (methodSelector != NULL) {
 
-        [ALCRuntime validateSelector:methodSelector withClass:classBuilder.valueType.forClass];
+        [ALCRuntime validateSelector:methodSelector withClass:classBuilder.valueClass];
 
         // Declare a new instance to represent the factory method for dependency resolving.
         finalBuilder = [_model addMethod:methodSelector
                                toBuilder:classBuilder
-                              returnType:[ALCType typeForClass:returnType]
+                              returnClass:returnType
                         argumentMatchers:matchers];
     }
 
@@ -202,7 +201,7 @@
 -(void) resolveBuilderDependencies {
     STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
     [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCBuilder> builder, BOOL *stop){
-        STLog(builder, @"Resolving '%@' (%s)", name, class_getName(builder.valueType.forClass));
+        STLog(builder, @"Resolving '%@' (%s)", name, class_getName(builder.valueClass));
         [builder resolve];
     }];
 }

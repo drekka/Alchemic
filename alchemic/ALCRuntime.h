@@ -15,13 +15,9 @@
 
 #pragma mark - General
 
-+(nonnull const char *) concat:(const char __nonnull *) left to:(const char __nonnull *) right;
-
 +(nonnull SEL) alchemicSelectorForSelector:(SEL __nonnull) selector;
 
 +(BOOL) classIsProtocol:(Class __nonnull) possiblePrototocol;
-
-+(void) validateMatcher:(id __nonnull) object;
 
 +(void) validateSelector:(SEL __nonnull) selector withClass:(Class __nonnull) class;
 
@@ -29,13 +25,9 @@
 
 +(BOOL) class:(Class __nonnull) class isKindOfClass:(Class __nonnull) otherClass;
 
-+(nonnull NSSet<Protocol *> *) protocolsOnClass:(Class __nonnull) class;
++(BOOL) class:(Class __nonnull) class conformsToProtocol:(Protocol __nonnull *) protocol;
 
-/**
- Scans the classes in the runtime, looking for Alchemic signatures and declarations.
- @discussion Once found, the block is called to finish the registration of the class.
- */
-+(void) scanRuntimeWithContext:(ALCContext __nonnull *) context;
++(nonnull NSSet<Protocol *> *) protocolsOnClass:(Class __nonnull) class;
 
 /**
  Scans a class to find the actual variable used.
@@ -50,10 +42,22 @@
  */
 +(nullable Ivar) class:(Class __nonnull) class variableForInjectionPoint:(NSString __nonnull *) inj;
 
-+(nullable Class) iVarClass:(Ivar __nonnull) ivar;
++(nullable Class) classForIVar:(Ivar __nonnull) ivar;
+
+#pragma mark - Matchers
+
++(void) validateMatcher:(id __nonnull) object;
 
 +(nonnull NSSet<id<ALCMatcher>> *) matchersForClass:(Class __nonnull) class;
 
 +(nonnull NSSet<id<ALCMatcher>> *) matchersForIVar:(Ivar __nonnull) variable;
+
+#pragma mark - Runtime scanning
+
+/**
+ Scans the classes in the runtime, looking for Alchemic signatures and declarations.
+ @discussion Once found, the block is called to finish the registration of the class.
+ */
++(void) scanRuntimeWithContext:(ALCContext __nonnull *) context;
 
 @end

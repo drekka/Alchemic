@@ -12,7 +12,6 @@
 #import "ALCAbstractInitStrategy.h"
 #import "ALCClassBuilder.h"
 #import <Alchemic/ALCInternal.h>
-#import "ALCType.h"
 
 @implementation ALCAbstractInitStrategy {
     Class _forClass;
@@ -30,7 +29,7 @@
 -(instancetype) initWithClassBuilder:(ALCClassBuilder *)classBuilder {
     self = [super init];
     if (self) {
-        _forClass = classBuilder.valueType.forClass;
+        _forClass = classBuilder.valueClass;
         [self wrapInit];
     }
     return self;
@@ -40,7 +39,7 @@
     
     // Check to see if the class has already been modified for this init.
     SEL initSel = self.initSelector;
-    const char *initPropertyName = [ALCRuntime concat:_alchemic_toCharPointer(ALCHEMIC_PREFIX) to:sel_getName(initSel)];
+    const char *initPropertyName = [NSString stringWithFormat:@"%s%s", _alchemic_toCharPointer(ALCHEMIC_PREFIX), sel_getName(initSel)].UTF8String;
 
     STLog(_forClass, @"Replacing %s::%s with wrapper %2$s", class_getName(_forClass), sel_getName(initSel));
     NSNumber *initAdded = objc_getAssociatedObject(_forClass, initPropertyName);
