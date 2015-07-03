@@ -10,7 +10,6 @@
 #import <StoryTeller/StoryTeller.h>
 #import "ALCClassBuilder.h"
 #import "ALCRuntime.h"
-#import "ALCType.h"
 
 @import ObjectiveC;
 
@@ -18,7 +17,7 @@
 
 -(id) createObjectFromBuilder:(ALCClassBuilder *) builder {
     
-    Class objClass = builder.valueType.typeClass;
+    Class objClass = builder.valueClass;
     id obj = [objClass alloc];
     SEL initSel = @selector(init);
     

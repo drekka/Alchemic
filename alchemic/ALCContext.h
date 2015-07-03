@@ -18,6 +18,7 @@
 
 @interface ALCContext : NSObject
 
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, id<ALCBuilder>> *model;
 @property (nonatomic, strong, readonly) NSSet<id<ALCDependencyPostProcessor>> *dependencyPostProcessors;
 @property (nonatomic, strong, readonly) NSSet<id<ALCObjectFactory>> *objectFactories;
 @property (nonatomic, strong, readonly) id<ALCValueResolverManager> valueResolverManager;

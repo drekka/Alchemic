@@ -66,7 +66,7 @@ static BOOL injected = NO;
     // Copy all the classes into an array
     NSMutableSet *builderClasses = [[NSMutableSet alloc] initWithCapacity:[builders count]];
     for (ALCClassBuilder *builder in builders) {
-        [builderClasses addObject:builder.valueType.typeClass];
+        [builderClasses addObject:builder.valueType.forClass];
     }
 
     // Work out which classes we need to inject hooks into
@@ -74,7 +74,7 @@ static BOOL injected = NO;
     for (ALCClassBuilder *builder in builders) {
         
         // Check each ancestor class in turn. If any are in the list, then ignore the current class.
-        Class parentClass = class_getSuperclass(builder.valueType.typeClass);
+        Class parentClass = class_getSuperclass(builder.valueType.forClass);
         while (parentClass != NULL) {
             if ([builderClasses containsObject:parentClass]) {
                 // The parent is in the model too so stop looking.
@@ -85,7 +85,7 @@ static BOOL injected = NO;
         
         // If we are here and the parent is NULL then we are safe to add the class to the final list.
         if (parentClass == NULL) {
-            STLog(builder.valueType.typeClass, @"Scheduling %s for init wrapper injection", class_getName(builder.valueType.typeClass));
+            STLog(builder.valueType.forClass, @"Scheduling %s for init wrapper injection", class_getName(builder.valueType.forClass));
             [rootBuilders addObject:builder];
         }
         

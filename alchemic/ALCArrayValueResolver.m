@@ -16,7 +16,7 @@
 
 -(BOOL) canResolveValueForDependency:(ALCDependency *)dependency
                           candidates:(NSSet<id<ALCBuilder>> *)candidates {
-    Class typeClass = dependency.valueType.typeClass;
+    Class typeClass = dependency.valueType.forClass;
     return (typeClass == NULL && [candidates count] > 1)
     || [ALCRuntime class:typeClass isKindOfClass:[NSArray class]];
 }

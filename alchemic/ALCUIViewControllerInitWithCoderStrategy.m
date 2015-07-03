@@ -18,7 +18,7 @@
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
 +(BOOL) canWrapInit:(ALCClassBuilder *) instance {
-    return [instance.valueType.typeClass isSubclassOfClass:[UIViewController class]];
+    return [instance.valueType.forClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

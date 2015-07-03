@@ -19,15 +19,15 @@
 }
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
-                      valueType:(ALCType *) valueType
+                     buildClass:(Class) buildClass
             factoryClassBuilder:(ALCClassBuilder *) factoryClassBuilder
                 factorySelector:(SEL) factorySelector
                argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers {
     
-    self = [super initWithContext:context valueType:valueType];
+    self = [super initWithContext:context buildClass:buildClass];
     if (self) {
         
-        Class factoryClass = factoryClassBuilder.valueType.typeClass;
+        Class factoryClass = factoryClassBuilder.buildClass;
         [ALCRuntime validateSelector:factorySelector withClass:factoryClass];
         
         // Locate the method.
@@ -40,7 +40,7 @@
         unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
         if (nbrArgs != [argumentMatchers count]) {
             @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
-                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu", class_getName(factoryClassBuilder.valueType.typeClass), sel_getName(factorySelector), nbrArgs, (unsigned long)[argumentMatchers count]]
+                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu", class_getName(factoryClassBuilder.buildClass), sel_getName(factorySelector), nbrArgs, (unsigned long)[argumentMatchers count]]
                                          userInfo:nil];
         }
         
@@ -100,7 +100,7 @@
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_factoryClassBuilder.valueType.typeClass), sel_getName(_factorySelector)];
+    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_factoryClassBuilder.buildClass), sel_getName(_factorySelector)];
 }
 
 @end

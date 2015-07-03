@@ -22,7 +22,6 @@
 
 @implementation ALCContext {
     NSMutableSet<Class> *_initialisationStrategyClasses;
-    NSDictionary<NSString *, NSSet<id<ALCBuilder>> *> *_model;
 }
 
 #pragma mark - Lifecycle
@@ -171,7 +170,7 @@
     id<ALCBuilder> finalBuilder = classBuilder;
     if (methodSelector != NULL) {
 
-        [ALCRuntime validateSelector:methodSelector withClass:classBuilder.valueType.typeClass];
+        [ALCRuntime validateSelector:methodSelector withClass:classBuilder.valueType.forClass];
 
         // Declare a new instance to represent the factory method for dependency resolving.
         finalBuilder = [_model addMethod:methodSelector
@@ -203,7 +202,7 @@
 -(void) resolveBuilderDependencies {
     STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
     [_model enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCBuilder> builder, BOOL *stop){
-        STLog(builder, @"Resolving '%@' (%s)", name, class_getName(builder.valueType.typeClass));
+        STLog(builder, @"Resolving '%@' (%s)", name, class_getName(builder.valueType.forClass));
         [builder resolve];
     }];
 }

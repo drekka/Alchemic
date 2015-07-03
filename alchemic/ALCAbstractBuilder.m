@@ -15,7 +15,7 @@
 @implementation ALCAbstractBuilder
 
 // Properties from protocol
-@synthesize valueType = _valueType;
+@synthesize buildClass = _buildClass;
 @synthesize primary = _primary;
 @synthesize factory = _factory;
 @synthesize createOnStartup = _createOnStartup;
@@ -23,11 +23,11 @@
 
 #pragma mark - Lifecycle
 
--(instancetype) initWithContext:(__weak ALCContext *) context valueType:(ALCType *) valueType {
+-(instancetype) initWithContext:(__weak ALCContext *) context buildClass:(Class) buildClass {
     self = [super init];
     if (self) {
         _context = context;
-        _valueType = valueType;
+        _buildClass = buildClass;
         _dependencies = [[NSMutableArray alloc] init];
     }
     return self;

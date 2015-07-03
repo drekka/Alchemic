@@ -12,12 +12,11 @@
 
 @implementation ALCVariableDependency
 
--(instancetype) initWithContext:(__weak ALCContext *) context
-                       variable:(Ivar) variable
-                      valueType:(ALCType *) valueType
-                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers {
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                               variable:(Ivar __nonnull) variable
+                               matchers:(NSSet<id<ALCMatcher>> __nonnull *) dependencyMatchers {
     self = [super initWithContext:context
-                        valueType:valueType
+                       valueClass:[ALCRuntime iVarClass:variable]
                          matchers:dependencyMatchers];
     if (self) {
         _variable = variable;
@@ -35,5 +34,6 @@
     NSString *desc = [super description];
     return [NSString stringWithFormat:@"%2$s = %1$@", desc, ivar_getName(_variable)];
 }
+
 
 @end

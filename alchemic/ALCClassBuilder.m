@@ -33,9 +33,9 @@
 #pragma mark - Adding dependencies
 
 -(void) addInjectionPoint:(NSString *) inj withMatchers:(NSSet *) matchers {
-    Class objClass = self.valueType.typeClass;
+    Class objClass = self.valueType.forClass;
     Ivar variable = [ALCRuntime class:objClass variableForInjectionPoint:inj];
-    ALCType *type = [ALCType typeForInjection:variable inClass:objClass];
+    ALCType *type = [ALCType typeForClass:objClass injection:variable];
 
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithContext:self.context
                                                                               variable:variable
@@ -57,7 +57,7 @@
 
 -(id) resolveValue {
 
-    STLog(self.valueType.typeClass, @"Instantiating instance using %@", self);
+    STLog(self.valueType.forClass, @"Instantiating instance using %@", self);
     ALCContext *strongContext = self.context;
     for (id<ALCObjectFactory> objectFactory in strongContext.objectFactories) {
         id newValue = [objectFactory createObjectFromBuilder:self];
@@ -83,7 +83,10 @@
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueType.typeClass), self.factory ? @" (factory)" : @""];
+    return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueType.forClass), self.factory ? @" (factory)" : @""];
 }
+
+#pragma mark - Internal
+
 
 @end

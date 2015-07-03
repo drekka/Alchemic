@@ -13,7 +13,7 @@
 @property (nonatomic, strong, readonly) NSArray *argumentMatchers;
 
 -(instancetype) initWithContext:(__weak ALCContext *) context
-                      valueType:(ALCType *) valyeType
+                     buildClass:(Class) buildClass
             factoryClassBuilder:(ALCClassBuilder *) factoryClassBuilder
                 factorySelector:(SEL) factorySelector
                argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers NS_DESIGNATED_INITIALIZER;

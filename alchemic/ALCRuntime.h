@@ -9,36 +9,33 @@
 @import Foundation;
 @import ObjectiveC;
 
-@class ALCClassBuilder;
-@class ALCContext;
+#import <Alchemic/Alchemic.h>
 
 @interface ALCRuntime : NSObject
 
 #pragma mark - General
 
-+(const char *) concat:(const char *) left to:(const char *) right;
++(nonnull const char *) concat:(const char __nonnull *) left to:(const char __nonnull *) right;
 
-+(SEL) alchemicSelectorForSelector:(SEL) selector;
++(nonnull SEL) alchemicSelectorForSelector:(SEL __nonnull) selector;
 
-+(Ivar) class:(Class) class withName:(NSString *) name;
++(BOOL) classIsProtocol:(Class __nonnull) possiblePrototocol;
 
-+(BOOL) classIsProtocol:(Class) possiblePrototocol;
++(void) validateMatcher:(id __nonnull) object;
 
-+(void) validateMatcher:(id) object;
++(void) validateSelector:(SEL __nonnull) selector withClass:(Class __nonnull) class;
 
-+(void) validateSelector:(SEL) selector withClass:(Class) class;
++(void) injectObject:(id __nonnull) object variable:(Ivar __nonnull) variable withValue:(id __nullable) value;
 
-+(void) injectObject:(id) object variable:(Ivar) variable withValue:(id) value;
++(BOOL) class:(Class __nonnull) class isKindOfClass:(Class __nonnull) otherClass;
 
-+(BOOL) class:(Class) class isKindOfClass:(Class) otherClass;
-
-#pragma mark - Alchemic
++(nonnull NSSet<Protocol *> *) protocolsOnClass:(Class __nonnull) class;
 
 /**
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
  @discussion Once found, the block is called to finish the registration of the class.
  */
-+(void) scanRuntimeWithContext:(ALCContext *) context;
++(void) scanRuntimeWithContext:(ALCContext __nonnull *) context;
 
 /**
  Scans a class to find the actual variable used.
@@ -51,6 +48,12 @@
  @return the Ivar for the variable.
  @throw an exception if no matching variable is found.
  */
-+(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj;
++(nullable Ivar) class:(Class __nonnull) class variableForInjectionPoint:(NSString __nonnull *) inj;
+
++(nullable Class) iVarClass:(Ivar __nonnull) ivar;
+
++(nonnull NSSet<id<ALCMatcher>> *) matchersForClass:(Class __nonnull) class;
+
++(nonnull NSSet<id<ALCMatcher>> *) matchersForIVar:(Ivar __nonnull) variable;
 
 @end

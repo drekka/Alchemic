@@ -21,7 +21,7 @@
 }
 
 -(BOOL) matches:(id <ALCBuilder>) builder withName:(NSString *) name {
-    return [builder.valueType typeIsKindOfClass:_class];
+    return [builder.valueType forClassIsKindOfClass:_class];
 }
 
 -(NSString *) description {

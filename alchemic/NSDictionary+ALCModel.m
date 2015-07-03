@@ -122,7 +122,7 @@
 
 -(void) addBuilder:(id<ALCBuilder>)builder underName:(NSString *)name {
     
-    NSString *finalName = name == nil ? NSStringFromClass(builder.valueType.typeClass) : name;
+    NSString *finalName = name == nil ? NSStringFromClass(builder.valueType.forClass) : name;
     
     if (self[finalName] != nil) {
         @throw [NSException exceptionWithName:@"AlchemicBuilderAlreadyIndexed"
@@ -130,7 +130,7 @@
                                      userInfo:nil];
     }
     
-    STLog(builder.valueType.typeClass, @"Registering '%@' %@", finalName, builder);
+    STLog(builder.valueType.forClass, @"Registering '%@' %@", finalName, builder);
     self[finalName] = builder;
 }
 
@@ -163,7 +163,7 @@
                                                                argumentMatchers:argumentMatchers];
     
     [self addBuilder:factoryMethod
-           underName:[NSString stringWithFormat:@"%s::%s", class_getName(builder.valueType.typeClass), sel_getName(factorySelector)]];
+           underName:[NSString stringWithFormat:@"%s::%s", class_getName(builder.valueType.forClass), sel_getName(factorySelector)]];
     return factoryMethod;
     
 }

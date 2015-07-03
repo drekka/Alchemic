@@ -14,16 +14,16 @@
 
 @interface ALCDependency : NSObject
 
-@property (nonatomic, strong, readonly) id value;
+@property (nonatomic, strong, readonly, nonnull) id value;
 
-@property (nonatomic, strong, readonly) ALCType *valueType;
+@property (nonatomic, strong, readonly, nonnull) Class valueClass;
 
 #pragma mark - Resolving
 
 -(void) resolve;
 
--(instancetype) initWithContext:(__weak ALCContext *) context
-                      valueType:(ALCType *) valueType
-                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers;
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                             valueClass:(Class __nonnull) valueClass
+                               matchers:(NSSet<id<ALCMatcher>> __nullable *) dependencyMatchers;
 
 @end

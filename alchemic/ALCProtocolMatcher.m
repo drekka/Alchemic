@@ -22,7 +22,7 @@
 }
 
 -(BOOL) matches:(id <ALCBuilder>) builder withName:(NSString *) name {
-    return [builder.valueType typeConformsToProtocol:_protocol];
+    return [builder.valueType forClassConformsToProtocol:_protocol];
 }
 
 -(NSString *) description {

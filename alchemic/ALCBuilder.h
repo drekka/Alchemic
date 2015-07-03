@@ -21,7 +21,7 @@
 
 #pragma mark - Querying the builder
 
-@property (nonatomic, strong, readonly) ALCType *valueType;
+@property (nonatomic, strong, readonly) Class valueClass;
 
 @property (nonatomic, assign, readonly) BOOL shouldCreateOnStartup;
 

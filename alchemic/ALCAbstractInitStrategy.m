@@ -10,9 +10,9 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCAbstractInitStrategy.h"
-#import "ALCType.h"
 #import "ALCClassBuilder.h"
 #import <Alchemic/ALCInternal.h>
+#import "ALCType.h"
 
 @implementation ALCAbstractInitStrategy {
     Class _forClass;
@@ -30,7 +30,7 @@
 -(instancetype) initWithClassBuilder:(ALCClassBuilder *)classBuilder {
     self = [super init];
     if (self) {
-        _forClass = classBuilder.valueType.typeClass;
+        _forClass = classBuilder.valueType.forClass;
         [self wrapInit];
     }
     return self;

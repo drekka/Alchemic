@@ -17,7 +17,7 @@
 @implementation ALCUIViewControllerInitWithFrameStrategy
 
 +(BOOL) canWrapInit:(ALCClassBuilder *) classBuilder {
-    return [classBuilder.valueType.typeClass isSubclassOfClass:[UIViewController class]];
+    return [classBuilder.valueType.forClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

@@ -18,26 +18,23 @@
 @implementation ALCTypeTests
 
 -(void) testTypeForInjectionIdProperty {
-    ALCType *type = [ALCType typeForInjection:class_getInstanceVariable([self class], "_idVar")
-                                      inClass:[self class]];
-    XCTAssertEqual(type.typeClass, NULL);
-    XCTAssertEqual(0u, [type.typeProtocols count]);
+    ALCType *type = [ALCType typeForClass:[self class] injection:class_getInstanceVariable([self class], "_idVar")];
+    XCTAssertEqual(type.forClass, NULL);
+    XCTAssertEqual(0u, [type.withProtocols count]);
 }
 
 -(void) testTypeForInjectionClassProperty {
-    ALCType *type = [ALCType typeForInjection:class_getInstanceVariable([self class], "_stringVar")
-                                      inClass:[self class]];
-    XCTAssertEqual(type.typeClass, [NSString class]);
-    XCTAssertEqual(0u, [type.typeProtocols count]);
+    ALCType *type = [ALCType typeForClass:[self class] injection:class_getInstanceVariable([self class], "_stringVar")];
+    XCTAssertEqual(type.forClass, [NSString class]);
+    XCTAssertEqual(0u, [type.withProtocols count]);
 }
 
 -(void) testTypeForInjectionProtocolProperty {
-    ALCType *type = [ALCType typeForInjection:class_getInstanceVariable([self class], "_protocolVar")
-                                      inClass:[self class]];
-    XCTAssertEqual(type.typeClass, NULL);
-    XCTAssertEqual(2u, [type.typeProtocols count]);
-    XCTAssertTrue([type.typeProtocols containsObject:@protocol(NSCopying)]);
-    XCTAssertTrue([type.typeProtocols containsObject:@protocol(NSFastEnumeration)]);
+    ALCType *type = [ALCType typeForClass:[self class] injection:class_getInstanceVariable([self class], "_protocolVar")];
+    XCTAssertEqual(type.forClass, NULL);
+    XCTAssertEqual(2u, [type.withProtocols count]);
+    XCTAssertTrue([type.withProtocols containsObject:@protocol(NSCopying)]);
+    XCTAssertTrue([type.withProtocols containsObject:@protocol(NSFastEnumeration)]);
 }
 
 @end

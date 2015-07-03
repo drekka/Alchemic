@@ -20,7 +20,7 @@
 
 @property(nonatomic, strong, readonly) NSArray<ALCDependency *> *dependencies;
 
--(instancetype) initWithContext:(__weak ALCContext *) context valueType:(ALCType *) valueType;
+-(instancetype) initWithContext:(__weak ALCContext *) context buildClass:(Class) buildClass;
 
 -(id) resolveValue;
 
