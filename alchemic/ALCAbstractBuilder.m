@@ -20,30 +20,27 @@
 @synthesize factory = _factory;
 @synthesize createOnStartup = _createOnStartup;
 @synthesize value = _value;
+@synthesize name = _name;
 
 #pragma mark - Lifecycle
 
--(instancetype) initWithContext:(__weak ALCContext *) context valueClass:(Class) valueClass {
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                             valueClass:(Class __nonnull) valueClass
+                                   name:(NSString __nonnull *) name {
     self = [super init];
     if (self) {
+        _name = name;
         _context = context;
         _valueClass = valueClass;
-        _dependencies = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
--(void) addDependency:(ALCDependency *) dependency {
-    [(NSMutableArray *) self.dependencies addObject:dependency];
-}
-
 -(void) resolve {
-    for (ALCDependency *dependency in self.dependencies) {
-        [dependency resolve];
-    }
+    [self doesNotRecognizeSelector:_cmd];
 }
 
--(id) instantiate {
+-(nonnull id) instantiate {
     
     // Get the value and store it if we are not a factory.
     id newValue = [self resolveValue];
@@ -53,11 +50,11 @@
     return newValue;
 }
 
--(BOOL) shouldCreateOnStartup {
+-(BOOL) createOnStartup {
     return _createOnStartup && _value == nil;
 }
 
--(id) resolveValue {
+-(nullable id) resolveValue {
     [self doesNotRecognizeSelector:_cmd];
     return nil;
 }

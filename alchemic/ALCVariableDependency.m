@@ -14,10 +14,10 @@
 
 -(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
                                variable:(Ivar __nonnull) variable
-                               matchers:(NSSet<id<ALCMatcher>> __nonnull *) dependencyMatchers {
+                             qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
     self = [super initWithContext:context
                        valueClass:[ALCRuntime classForIVar:variable]
-                         matchers:dependencyMatchers];
+                       qualifiers:qualifiers];
     if (self) {
         _variable = variable;
     }

@@ -11,6 +11,8 @@
 #import <Alchemic/ALCInitStrategy.h>
 #import <Alchemic/ALCBuilder.h>
 
+@class ALCModel;
+
 /**
  Protocol of classes that can perform injection of Alchemic startup code into the Objective C runtime.
  */
@@ -26,7 +28,7 @@
 /**
  Inject hooks into the runtime.
  */
--(void) replaceInitsInModelClasses:(NSDictionary<NSString *, id<ALCBuilder>> *) model;
+-(void) replaceInitsInModelClasses:(ALCModel *) model;
 
 /**
  Reset the runtime back to it's original state.

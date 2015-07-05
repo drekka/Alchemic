@@ -15,7 +15,7 @@
 
 -(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
                                variable:(Ivar __nonnull) variable
-                               matchers:(NSSet<id<ALCMatcher>> __nonnull *) dependencyMatchers NS_DESIGNATED_INITIALIZER;
+                               qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers NS_DESIGNATED_INITIALIZER;
 
 -(void) injectInto:(id __nonnull) object;
 

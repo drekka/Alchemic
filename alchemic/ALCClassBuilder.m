@@ -19,26 +19,29 @@
 
 @implementation ALCClassBuilder {
     NSArray<id<ALCInitStrategy>> *_initialisationStrategies;
+    NSMutableSet<ALCVariableDependency*> *_dependencies;
 }
 
--(instancetype) initWithContext:(ALCContext *__weak)context valueClass:(__unsafe_unretained Class) valueClass {
-    self = [super initWithContext:context valueClass:valueClass];
+-(instancetype) initWithContext:(ALCContext *__weak)context
+                     valueClass:(__unsafe_unretained Class) valueClass
+                           name:(NSString * __nonnull)name {
+    self = [super initWithContext:context valueClass:valueClass name:name];
     if (self) {
         _initialisationStrategies = @[];
+        _dependencies = [[NSMutableSet alloc] init];
     }
     return self;
 }
 
 #pragma mark - Adding dependencies
 
--(void) addInjectionPoint:(NSString *) inj withMatchers:(NSSet *) matchers {
-    Class objClass = self.valueClass;
-    Ivar variable = [ALCRuntime class:objClass variableForInjectionPoint:inj];
+-(void) addInjectionPoint:(NSString *) inj withQualifiers:(NSSet *) qualifiers {
 
+    Ivar variable = [ALCRuntime class:self.valueClass variableForInjectionPoint:inj];
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithContext:self.context
                                                                               variable:variable
-                                                                              matchers:matchers];
-    [self addDependency:dependency];
+                                                                            qualifiers:qualifiers];
+    [_dependencies addObject:dependency];
 }
 
 #pragma mark - Instantiating
@@ -70,7 +73,7 @@
 }
 
 -(void) injectDependenciesInto:(id) object {
-    for (ALCVariableDependency *dependency in self.dependencies) {
+    for (ALCVariableDependency *dependency in _dependencies) {
         [dependency injectInto:object];
     }
 }
@@ -82,8 +85,5 @@
 -(NSString *) description {
     return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueClass), self.factory ? @" (factory)" : @""];
 }
-
-#pragma mark - Internal
-
 
 @end

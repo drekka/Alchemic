@@ -13,7 +13,6 @@
 #import <Alchemic/ALCContext.h>
 #import "ALCClassBuilder.h"
 #import <StoryTeller/StoryTeller.h>
-#import "NSDictionary+ALCModel.h"
 #import "ALCModelClassProcessor.h"
 #import "ALCClassWithProtocolClassProcessor.h"
 #import "ALCResourceLocator.h"
@@ -41,15 +40,6 @@ static Class __protocolClass;
 
 +(void) injectObject:(id __nonnull) object variable:(Ivar __nonnull) variable withValue:(id __nullable) value {
     object_setIvar(object, variable, value);
-}
-
-+(void) validateMatcher:(id __nonnull) object {
-    if ([object conformsToProtocol:@protocol(ALCMatcher)]) {
-        return;
-    }
-    @throw [NSException exceptionWithName:@"AlchemicNotAMatcher"
-                                   reason:[NSString stringWithFormat:@"Passed matcher %s does not conform to the ALCMatcher protocol", object_getClassName(object)]
-                                 userInfo:nil];
 }
 
 +(void) validateSelector:(SEL __nonnull) selector withClass:(Class __nonnull) class {
@@ -167,18 +157,20 @@ static Class __protocolClass;
     return var;
 }
 
-+(nonnull NSSet<id<ALCMatcher>> *) matchersForClass:(Class __nonnull) class {
-    NSMutableSet<id<ALCMatcher>> * matchers = [[NSMutableSet<id<ALCMatcher>> alloc] init];
+#pragma mark - Qualifiers
+
++(nonnull NSSet<ALCQualifier *> *) qualifiersForClass:(Class __nonnull) class {
+    NSMutableSet<ALCQualifier *> * qualifiers = [[NSMutableSet<ALCQualifier *> alloc] init];
     [matchers addObject:[ALCClassMatcher matcherWithClass:class]];
     for (Protocol *protocol in [self protocolsOnClass:class]) {
-        [matchers addObject:[ALCProtocolMatcher matcherWithProtocol:protocol]];
+        [qualifiers addObject:[ALCQualifier qualifierWithValue:protocol]];
     }
-    return matchers;
+    return qualifiers;
 }
 
-+(nonnull NSSet<id<ALCMatcher>> *) matchersForIVar:(Ivar __nonnull) variable {
++(nonnull NSSet<ALCQualifier *> *) qualifiersForVariable:(Ivar __nonnull)variable {
 
-    NSMutableSet<id<ALCMatcher>> * matchers = [[NSMutableSet<id<ALCMatcher>> alloc] init];
+    NSMutableSet<ALCQualifier *> * qualifiers = [[NSMutableSet<ALCQualifier *> alloc] init];
 
     // Get the type.
     NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(variable)];
@@ -192,10 +184,10 @@ static Class __protocolClass;
             if ([defs[i] length] > 0) {
                 if (i == 2) {
                     Class depClass = objc_lookUpClass(defs[2].UTF8String);
-                    [matchers addObject:[ALCClassMatcher matcherWithClass:depClass]];
+                    [qualifiers addObject:[ALCQualifier qualifierWithValue:depClass]];
                 } else {
                     Protocol *protocol = objc_getProtocol(defs[i].UTF8String);
-                    [matchers addObject:[ALCProtocolMatcher matcherWithProtocol:protocol]];
+                    [qualifiers addObject:[ALCQualifier qualifierWithValue:protocol]];
                 }
             }
         }
@@ -204,7 +196,7 @@ static Class __protocolClass;
         // Non object variable.
     }
     
-    return matchers;
+    return qualifiers;
 }
 
 @end

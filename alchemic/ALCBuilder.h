@@ -11,6 +11,8 @@
 
 @protocol ALCBuilder <NSObject>
 
+@property (nonatomic, strong, readonly) NSString *name;
+
 @property (nonatomic, assign) BOOL createOnStartup;
 
 @property (nonatomic, assign) BOOL primary;
@@ -22,12 +24,6 @@
 #pragma mark - Querying the builder
 
 @property (nonatomic, strong, readonly) Class valueClass;
-
-@property (nonatomic, assign, readonly) BOOL shouldCreateOnStartup;
-
-#pragma mark - Adding dependencies
-
--(void) addDependency:(ALCDependency *) dependency;
 
 #pragma mark - Resolving
 

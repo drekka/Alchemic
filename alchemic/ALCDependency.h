@@ -10,7 +10,7 @@
 
 @class ALCContext;
 
-#import <Alchemic/ALCMatcher.h>
+#import <Alchemic/ALCQualifier.h>
 
 @interface ALCDependency : NSObject
 
@@ -24,6 +24,6 @@
 
 -(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
                              valueClass:(Class __nonnull) valueClass
-                               matchers:(NSSet<id<ALCMatcher>> __nullable *) dependencyMatchers;
+                             qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers;
 
 @end

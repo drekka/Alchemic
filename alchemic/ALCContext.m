@@ -13,14 +13,19 @@
 
 #import "ALCInitStrategyInjector.h"
 #import "ALCRuntime.h"
-#import "NSDictionary+ALCModel.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
 #import "ALCDefaultValueResolverManager.h"
 #import "ALCIsFactory.h"
+#import "ALCModel.h"
 
 @implementation ALCContext {
+    ALCModel *_model;
+    NSDictionary<NSString *, id<ALCBuilder>> *model;
     NSMutableSet<Class> *_initialisationStrategyClasses;
+    NSSet<id<ALCDependencyPostProcessor>> *_dependencyPostProcessors;
+    NSSet<id<ALCObjectFactory>> *_objectFactories;
+    id<ALCValueResolverManager> _valueResolverManager;
 }
 
 #pragma mark - Lifecycle
@@ -28,7 +33,7 @@
 -(instancetype) init {
     self = [super init];
     if (self) {
-        _model = [[NSMutableDictionary alloc] init];
+        _model = [[ALCModel alloc] init];
         _initialisationStrategyClasses = [[NSMutableSet alloc] init];
         _dependencyPostProcessors = [[NSMutableSet alloc] init];
         _objectFactories = [[NSMutableSet alloc] init];
@@ -49,7 +54,7 @@
     }
 
     // Inject init wrappers into classes that have registered for dependency injection.
-    [_runtimeInitInjector replaceInitsInModelClasses:_model];
+    //[_runtimeInitInjector replaceInitsInModelClasses:_model];
 
     [self resolveBuilderDependencies];
 
@@ -58,6 +63,7 @@
 }
 
 -(void) injectDependencies:(id) object {
+    NSSet<id<ALCBuilder>> builders = [_model buildersWithClass:[object class]];
     ALCClassBuilder *classBuilder = [_model findClassBuilderForObject:object];
     STLog(classBuilder, @"Injecting dependencies into a %s", [object class]);
     [classBuilder injectDependenciesInto:object];

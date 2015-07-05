@@ -14,9 +14,8 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCClassBuilder.h"
-#import <Alchemic/ALCInitStrategy.h>
-#import <Alchemic/ALCClassMatcher.h>
-#import "NSDictionary+ALCModel.h"
+#import <Alchemic/Alchemic.h>
+#import "ALCModel.h"
 
 @implementation ALCInitStrategyInjector {
     NSSet<id<ALCInitStrategy>> *_strategyClasses;
@@ -39,7 +38,7 @@ static BOOL injected = NO;
     return self;
 }
 
--(void) replaceInitsInModelClasses:(NSDictionary<NSString *, id<ALCBuilder>> *) model {
+-(void) replaceInitsInModelClasses:(ALCModel *) model {
 /*
     if (injected) {
         logRuntime(@"Wrappers already injected into classes");
@@ -57,20 +56,20 @@ static BOOL injected = NO;
  */
 }
 
--(NSArray *) findRootClassBuildersInModel:(NSDictionary<NSString *, id<ALCBuilder>> *) model {
+-(nonnull NSSet<id<ALCBuilder>> *) findRootClassBuildersInModel:(ALCModel *) model {
     
     // First find all instances.
-    NSSet *builders = [model buildersWithMatchers:[NSSet setWithObject:[ALCClassMatcher matcherWithClass:[ALCClassBuilder class]]]];
+    NSSet<id<ALCBuilder>> *builders = [model buildersWithClass:[ALCClassBuilder class]];
     
     // Copy all the classes into an array
-    NSMutableSet *builderClasses = [[NSMutableSet alloc] initWithCapacity:[builders count]];
-    for (ALCClassBuilder *builder in builders) {
+    NSMutableSet<Class> *builderClasses = [[NSMutableSet<Class> alloc] initWithCapacity:[builders count]];
+    for (id<ALCBuilder> builder in builders) {
         [builderClasses addObject:builder.valueClass];
     }
 
     // Work out which classes we need to inject hooks into
-    NSMutableArray *rootBuilders = [[NSMutableArray alloc] init];
-    for (ALCClassBuilder *builder in builders) {
+    NSMutableSet<id<ALCBuilder>> *rootBuilders = [[NSMutableSet<id<ALCBuilder>> alloc] init];
+    for (id<ALCBuilder> builder in builders) {
         
         // Check each ancestor class in turn. If any are in the list, then ignore the current class.
         Class parentClass = class_getSuperclass(builder.valueClass);

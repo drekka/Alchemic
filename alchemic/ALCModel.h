@@ -33,4 +33,22 @@
  */
 -(nonnull NSSet<id<ALCBuilder>> *) buildersWithClass:(Class __nonnull) class;
 
+/**
+ FInds all builders which build objects with a passed protocol.
+
+ @param protocol the protocol to look for.
+
+ @return a NSSet of builders that will builds objects with the protocol.
+ */
+-(nonnull NSSet<id<ALCBuilder>> *) buildersWithProtocol:(Protocol __nonnull *) protocol;
+
+/**
+ Finds all builders with a passed name.
+
+ @param name the name to search for.
+
+ @return a NSSet containing all the builders that use the name.
+ */
+-(nonnull NSSet<id<ALCBuilder>> *) buildersWithName:(NSString __nonnull *) name;
+
 @end

@@ -7,28 +7,24 @@
 
 @import ObjectiveC;
 
-#import <Alchemic/ALCDependency.h>
+#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
-#import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCClassMatcher.h>
-#import <Alchemic/ALCProtocolMatcher.h>
-#import "NSDictionary+ALCModel.h"
 #import "ALCRuntime.h"
 
 @implementation ALCDependency {
     __weak ALCContext __nonnull *_context;
-    NSSet<id<ALCMatcher>> __nonnull *_dependencyMatchers;
+    NSSet<ALCQualifier *> __nonnull *_qualifiers;
     NSSet<id<ALCBuilder>> __nonnull *_candidateBuilders;
 }
 
 -(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
                              valueClass:(Class __nonnull) valueClass
-                               matchers:(NSSet<id<ALCMatcher>> __nullable *) dependencyMatchers {
+                             qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
     self = [super init];
     if (self) {
         _context = context;
         _valueClass = valueClass;
-        _dependencyMatchers = dependencyMatchers == nil || [dependencyMatchers count] == 0 ? [ALCRuntime matchersForClass:valueClass] : dependencyMatchers;
+        _qualifiers = qualifiers == nil || [qualifiers count] == 0 ? [ALCRuntime qualifiersForClass:valueClass] : qualifiers;
     }
     return self;
 }
@@ -63,11 +59,11 @@
 }
 
 -(NSString *) description {
-    NSMutableArray<NSString *> *matcherDescs = [[NSMutableArray alloc] init];
-    [_dependencyMatchers enumerateObjectsUsingBlock:^(id<ALCMatcher> matcher, BOOL *stop) {
-        [matcherDescs addObject:[matcher description]];
+    NSMutableArray<NSString *> *qualifierDescs = [[NSMutableArray alloc] init];
+    [_qualifiers enumerateObjectsUsingBlock:^(ALCQualifier *qualifier, BOOL *stop) {
+        [qualifierDescs addObject:[qualifier description]];
     }];
-    return [NSString stringWithFormat:@"%s using %@", class_getName(_valueClass), [matcherDescs componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"%s using %@", class_getName(_valueClass), [qualifierDescs componentsJoinedByString:@", "]];
 }
 
 @end

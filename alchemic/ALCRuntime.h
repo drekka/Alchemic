@@ -46,11 +46,9 @@
 
 #pragma mark - Matchers
 
-+(void) validateMatcher:(id __nonnull) object;
++(nonnull NSSet<ALCQualifier *> *) qualifiersForClass:(Class __nonnull) class;
 
-+(nonnull NSSet<id<ALCMatcher>> *) matchersForClass:(Class __nonnull) class;
-
-+(nonnull NSSet<id<ALCMatcher>> *) matchersForIVar:(Ivar __nonnull) variable;
++(nonnull NSSet<ALCQualifier *> *) qualifiersForVariable:(Ivar __nonnull) variable;
 
 #pragma mark - Runtime scanning
 
