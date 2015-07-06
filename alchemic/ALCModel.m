@@ -52,19 +52,30 @@
 
 -(nonnull NSSet<id<ALCBuilder>> *) buildersMatchingQualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
 
+    // Quick short cut for single qualifier queries. Saves building a new set.
+    if ([qualifiers count] == 1) {
+        ALCQualifier *qualifier = [qualifiers anyObject];
+        return [self buildersWithCacheId:qualifier.value
+                            searchBlock:^BOOL(id<ALCBuilder> builder) {
+                                return [qualifier matchesBuilder:builder];
+                            }];
+    }
+
     NSMutableSet<id<ALCBuilder>> *results;
     for (ALCQualifier *qualifier in qualifiers) {
+        NSSet<id<ALCBuilder>> *builders = [self buildersWithCacheId:qualifier.value
+                      searchBlock:^BOOL(id<ALCBuilder> builder) {
+                          return [qualifier matchesBuilder:builder];
+                      }];
         if (results == nil) {
-            results = [NSMutableSet setWithSet:[self buildersWithCacheId:qualifier.value
-                                                             searchBlock:^BOOL(id<ALCBuilder> builder) {
-                                                                 return [qualifier matchesBuilder:builder];
-                                                             }]];
+            // No results yet to go with the set as a base set.
+            results = [NSMutableSet setWithSet:builders];
         } else {
-            [results intersectSet:[self buildersWithCacheId:qualifier.value
-                                                searchBlock:^BOOL(id<ALCBuilder> builder) {
-                                                    return [qualifier matchesBuilder:builder];
-                                                }]];
+            // Remove any members which are not in the next qualifiers set.
+            [results intersectSet:builders];
         }
+
+        // Opps, run out of builders.
         if ([results count] == 0) {
             break;
         }

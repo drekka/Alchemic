@@ -28,7 +28,8 @@ static Class __protocolClass;
 #pragma mark - Checking
 
 +(BOOL) objectIsAClass:(id __nonnull) possibleClass {
-    return class_isMetaClass([possibleClass class]);
+    // Must use getClass here to access the meta class which is how we detect class objects.
+    return class_isMetaClass(object_getClass(possibleClass));
 }
 
 +(BOOL) objectIsAProtocol:(id __nonnull) possiblePrototocol {

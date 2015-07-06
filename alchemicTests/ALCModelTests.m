@@ -33,18 +33,27 @@
     _builder = [[ALCClassBuilder alloc] initWithContext:_mockContext
                                                              valueClass:[NSString class]
                                                                    name:@"abc"];
+    [_model addBuilder:_builder];
 }
 
 -(void) testSimpleQuery {
-    [_model addBuilder:_builder];
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"abc"];
     NSSet<id<ALCBuilder>> *result = [_model buildersMatchingQualifiers:[NSSet setWithObject:qualifier]];
     XCTAssertEqual(1u, [result count]);
     XCTAssertEqual([NSString class], [result anyObject].valueClass);
+    XCTAssertEqual(@"abc", [result anyObject].name);
+}
+
+-(void) testComplexQuery {
+    ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:@"abc"];
+    ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:[NSString class]];
+    NSSet<id<ALCBuilder>> *result = [_model buildersMatchingQualifiers:[NSSet setWithObjects:qualifier1, qualifier2, nil]];
+    XCTAssertEqual(1u, [result count]);
+    XCTAssertEqual([NSString class], [result anyObject].valueClass);
+    XCTAssertEqual(@"abc", [result anyObject].name);
 }
 
 -(void) testSecondQueryReturnsCachedResults {
-    [_model addBuilder:_builder];
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"abc"];
     NSSet<id<ALCBuilder>> *result1 = [_model buildersMatchingQualifiers:[NSSet setWithObject:qualifier]];
     NSSet<id<ALCBuilder>> *result2 = [_model buildersMatchingQualifiers:[NSSet setWithObject:qualifier]];
