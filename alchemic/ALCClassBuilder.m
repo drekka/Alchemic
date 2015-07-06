@@ -38,7 +38,7 @@
 
 -(void) addInjectionPoint:(NSString *) inj withQualifiers:(NSSet *) qualifiers {
 
-    Ivar variable = [ALCRuntime class:self.valueClass variableForInjectionPoint:inj];
+    Ivar variable = [ALCRuntime aClass:self.valueClass variableForInjectionPoint:inj];
     NSSet<ALCQualifier *>* finalQualifiers = qualifiers == nil || [qualifiers count] == 0 ? [ALCRuntime qualifiersForVariable:variable] : qualifiers;
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithContext:self.context
                                                                               variable:variable

@@ -17,7 +17,7 @@
                           candidates:(NSSet<id<ALCBuilder>> *)candidates {
     Class typeClass = dependency.valueClass;
     return (typeClass == NULL && [candidates count] > 1)
-    || [ALCRuntime class:typeClass isKindOfClass:[NSArray class]];
+    || [ALCRuntime aClass:typeClass isKindOfClass:[NSArray class]];
 }
 
 -(id) resolveCandidateValues:(NSSet<id<ALCBuilder>> *) candidates {

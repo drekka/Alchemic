@@ -40,11 +40,11 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
         // sort of the check block.
         if ([ALCRuntime objectIsAClass:value]) {
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
-                return [ALCRuntime class:builder.valueClass isKindOfClass:value];
+                return [ALCRuntime aClass:builder.valueClass isKindOfClass:value];
             };
         } else if ([ALCRuntime objectIsAProtocol:value]) {
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
-                return [ALCRuntime class:builder.valueClass conformsToProtocol:value];
+                return [ALCRuntime aClass:builder.valueClass conformsToProtocol:value];
             };
         } else {
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {

@@ -18,7 +18,7 @@
 @implementation ALCUIViewControllerInitWithCoderStrategy
 
 +(BOOL) canWrapInit:(ALCClassBuilder *) instance {
-    return [ALCRuntime class:instance.valueClass isKindOfClass:[UIViewController class]];
+    return [ALCRuntime aClass:instance.valueClass isKindOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

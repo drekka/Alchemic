@@ -36,8 +36,8 @@ static Class __protocolClass;
     return __protocolClass == [possiblePrototocol class];
 }
 
-+(BOOL) class:(Class __nonnull) class isKindOfClass:(Class __nonnull) otherClass {
-    Class nextClass = class;
++(BOOL) aClass:(Class __nonnull) aClass isKindOfClass:(Class __nonnull) otherClass {
+    Class nextClass = aClass;
     while (nextClass != nil) {
         if (nextClass == otherClass) {
             return YES;
@@ -47,8 +47,8 @@ static Class __protocolClass;
     return NO;
 }
 
-+(BOOL) class:(Class __nonnull) class conformsToProtocol:(Protocol __nonnull *) protocol {
-    return class_conformsToProtocol(class, protocol);
++(BOOL) aClass:(Class __nonnull) aClass conformsToProtocol:(Protocol __nonnull *) protocol {
+    return class_conformsToProtocol(aClass, protocol);
 }
 
 #pragma mark - General
@@ -143,26 +143,26 @@ static Class __protocolClass;
     }
 }
 
-+(nullable Ivar) class:(Class __nonnull) class variableForInjectionPoint:(NSString __nonnull *) inj {
++(nullable Ivar) aClass:(Class __nonnull) aClass variableForInjectionPoint:(NSString __nonnull *) inj {
 
     const char * charName = [inj UTF8String];
-    Ivar var = class_getInstanceVariable(class, charName);
+    Ivar var = class_getInstanceVariable(aClass, charName);
     if (var == NULL) {
         // It may be a class variable.
-        var = class_getClassVariable(class, charName);
+        var = class_getClassVariable(aClass, charName);
         if (var == NULL) {
             // It may be a property we have been passed so look for a '_' var.
-            var = class_getInstanceVariable(class, [[@"_" stringByAppendingString:inj] UTF8String]);
+            var = class_getInstanceVariable(aClass, [[@"_" stringByAppendingString:inj] UTF8String]);
         }
     }
 
     if (var == NULL) {
         @throw [NSException exceptionWithName:@"AlchemicInjectionNotFound"
-                                       reason:[NSString stringWithFormat:@"Cannot find variable/property '%@' in class %s", inj, class_getName(class)]
+                                       reason:[NSString stringWithFormat:@"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass)]
                                      userInfo:nil];
     }
 
-    STLog(class, @"   Injection %@ -> variable: %s", inj, ivar_getName(var));
+    STLog(aClass, @"   Injection %@ -> variable: %s", inj, ivar_getName(var));
     return var;
 }
 

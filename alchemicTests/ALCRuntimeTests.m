@@ -7,14 +7,19 @@
 //
 
 @import XCTest;
+@import ObjectiveC;
+
 #import <Alchemic/Alchemic.h>
+
 #import "ALCRuntime.h"
 
 @interface ALCRuntimeTests : XCTestCase
 
 @end
 
-@implementation ALCRuntimeTests
+@implementation ALCRuntimeTests {
+    NSString *_aStringVariable;
+}
 
 #pragma mark - Type checks
 
@@ -59,30 +64,48 @@
 }
 
 -(void) testClassIsKindOfClassStringString {
-    XCTAssertTrue([ALCRuntime class:[NSString class] isKindOfClass:[NSString class]]);
+    XCTAssertTrue([ALCRuntime aClass:[NSString class] isKindOfClass:[NSString class]]);
 }
 
 -(void) testClassIsKindOfClassMutableStringString {
-    XCTAssertTrue([ALCRuntime class:[NSMutableString class] isKindOfClass:[NSString class]]);
+    XCTAssertTrue([ALCRuntime aClass:[NSMutableString class] isKindOfClass:[NSString class]]);
 }
 
 -(void) testClassIsKindOfClassStringMutableString {
-    XCTAssertFalse([ALCRuntime class:[NSString class] isKindOfClass:[NSMutableString class]]);
+    XCTAssertFalse([ALCRuntime aClass:[NSString class] isKindOfClass:[NSMutableString class]]);
 }
 
 -(void) testClassConformsToProtocolWhenConforming {
-    XCTAssertTrue([ALCRuntime class:[NSString class] conformsToProtocol:@protocol(NSCopying)]);
+    XCTAssertTrue([ALCRuntime aClass:[NSString class] conformsToProtocol:@protocol(NSCopying)]);
 }
 
 -(void) testClassConformsToProtocolWhenNotConforming {
-    XCTAssertFalse([ALCRuntime class:[NSString class] conformsToProtocol:@protocol(NSFastEnumeration)]);
+    XCTAssertFalse([ALCRuntime aClass:[NSString class] conformsToProtocol:@protocol(NSFastEnumeration)]);
 }
 
 #pragma mark - General
 
 -(void) testAlchemicSelector {
     SEL alcSel = [ALCRuntime alchemicSelectorForSelector:@selector(testAlchemicSelector)];
-    XCTAssertEqualObjects(@"_alchemic_testAlchemicSelector", NSStringFromSelector(alcSel));
+    XCTAssertEqualObjects(@"_alchemic_testAlchemicSelector", NSStringFromSelector(@selector(testAlchemicSelector)));
+}
+
+-(void) testValidateSelectorValid {
+    [ALCRuntime validateSelector:@selector(testValidateSelectorValid) withClass:[self class]];
+}
+
+-(void) testValidateSelectorInValid {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+        XCTAssertThrowsSpecificNamed([ALCRuntime validateSelector:@selector(abc) withClass:[self class]],
+                                     NSException,
+                                     @"AlchemicSelectorNotFound");
+#pragma clang diagnostic pop
+}
+
+-(void) testVariableForInjectionPoint {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionpoint:@"aStringVariable"];
+    XCTAssertNotNil(var);
 }
 
 @end

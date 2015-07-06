@@ -20,9 +20,9 @@
 
 +(BOOL) objectIsAProtocol:(id __nonnull) possiblePrototocol;
 
-+(BOOL) class:(Class __nonnull) class isKindOfClass:(Class __nonnull) otherClass;
++(BOOL) aClass:(Class __nonnull) aClass isKindOfClass:(Class __nonnull) otherClass;
 
-+(BOOL) class:(Class __nonnull) class conformsToProtocol:(Protocol __nonnull *) protocol;
++(BOOL) aClass:(Class __nonnull) aClass conformsToProtocol:(Protocol __nonnull *) protocol;
 
 #pragma mark - General
 
@@ -46,7 +46,7 @@
  @return the Ivar for the variable.
  @throw an exception if no matching variable is found.
  */
-+(nullable Ivar) class:(Class __nonnull) class variableForInjectionPoint:(NSString __nonnull *) inj;
++(nullable Ivar) aClass:(Class __nonnull) aClass variableForInjectionPoint:(NSString __nonnull *) inj;
 
 +(nullable Class) classForIVar:(Ivar __nonnull) ivar;
 

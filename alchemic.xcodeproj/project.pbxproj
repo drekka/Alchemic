@@ -88,29 +88,27 @@
 		6C36D7C21B3853F20073C4FB /* ALCModelClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1C6A741AF3A9480074BB26 /* ALCModelClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7C31B3853F20073C4FB /* ALCClassWithProtocolClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC54B681AF4F20000D5D634 /* ALCClassWithProtocolClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7C41B3853F20073C4FB /* ALCAbstractClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC54B6B1AF50DE500D5D634 /* ALCAbstractClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C36D7C51B3854080073C4FB /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
+		6C4F34F11B4AB8CF005E19A0 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
+		6C6F63FD1B4ABE460075CA58 /* Alchemic.framework in Resources */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C91F9EE1B399009002DF241 /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CAC88771B4A11B200AFB8E4 /* ALCQualifierTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAC88761B4A11B200AFB8E4 /* ALCQualifierTests.m */; };
 		6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CF46EC81B4610EE0009007A /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CAC887C1B4A5AA000AFB8E4 /* ALCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46EC91B4610EE0009007A /* ALCModel.m */; };
 		6CAC887E1B4A60BE00AFB8E4 /* ALCContext+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CAC88781B4A2E9900AFB8E4 /* ALCContext+Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAC88801B4A6C6000AFB8E4 /* ALCRuntimeTests.m */; };
-		6CAE806A1B424DA100217F9D /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CAE80691B424DA100217F9D /* StoryTeller.framework */; };
 		6CAE806B1B424DCC00217F9D /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CAE80691B424DA100217F9D /* StoryTeller.framework */; };
-		6CAE80701B42535A00217F9D /* Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CAE806D1B424F8A00217F9D /* Alchemic.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6CAE80711B42537D00217F9D /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CAE80691B424DA100217F9D /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6CAE80721B42538300217F9D /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CAE80701B42535A00217F9D /* Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CAE806D1B424F8A00217F9D /* Alchemic.h */; };
 		6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46ECB1B4618630009007A /* ALCModelTests.m */; };
 		6CFD6E981B456D27008B6695 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6C36D7661B3852710073C4FB /* PBXContainerItemProxy */ = {
+		6C4F34EF1B4AB8B0005E19A0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6C66DC261A8B82C3009F9D94 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 6C36D74E1B3851680073C4FB;
-			remoteInfo = alchemic;
+			remoteInfo = Alchemic;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -121,8 +119,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6CAE80721B42538300217F9D /* Alchemic.framework in CopyFiles */,
-				6CAE80711B42537D00217F9D /* StoryTeller.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,7 +233,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CAE806A1B424DA100217F9D /* StoryTeller.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,9 +240,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C4F34F11B4AB8CF005E19A0 /* Alchemic.framework in Frameworks */,
 				6CFD6E981B456D27008B6695 /* libOCMock.a in Frameworks */,
 				6CAE806B1B424DCC00217F9D /* StoryTeller.framework in Frameworks */,
-				6C36D7C51B3854080073C4FB /* Alchemic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,7 +592,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				6C36D7671B3852710073C4FB /* PBXTargetDependency */,
+				6C4F34F01B4AB8B0005E19A0 /* PBXTargetDependency */,
 			);
 			name = "Alchemic tests";
 			productName = alchemicTests;
@@ -644,6 +639,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C6F63FD1B4ABE460075CA58 /* Alchemic.framework in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -717,10 +713,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6C36D7671B3852710073C4FB /* PBXTargetDependency */ = {
+		6C4F34F01B4AB8B0005E19A0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6C36D74E1B3851680073C4FB /* Alchemic */;
-			targetProxy = 6C36D7661B3852710073C4FB /* PBXContainerItemProxy */;
+			targetProxy = 6C4F34EF1B4AB8B0005E19A0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -738,7 +734,7 @@
 				INSTALL_PATH = "@rpath";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.alchemic;
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -760,7 +756,7 @@
 				INSTALL_PATH = "@rpath";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.alchemic;
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -902,7 +898,10 @@
 					"$(inherited)",
 				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/OCMock-3.1.2/iOS";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
+					PrivateHeaders,
+				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -922,7 +921,10 @@
 					"$(inherited)",
 				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/OCMock-3.1.2/iOS";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
+					PrivateHeaders,
+				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
