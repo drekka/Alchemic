@@ -25,20 +25,8 @@ typedef void (^ProcessBuilderBlock)(NSSet<id<ALCBuilder>> __nonnull *);
 
 -(nonnull id) instantiateObjectFromBuilder:(id<ALCBuilder> __nonnull) builder;
 
--(nonnull NSSet<id<ALCBuilder>> *) postProcessCandidateBuilders:(NSSet<id<ALCBuilder>> __nonnull *) builders;
-
 #pragma mark - Resolving
 
-/**
- This needs to get rolled into the post processing or visa versa.
-
- //TODO refactor.
-
- @param dependency	<#dependency description#>
- @param candidates	<#candidates description#>
-
- @return <#return value description#>
- */
 -(nonnull id) resolveValueForDependency:(ALCDependency __nonnull *) dependency candidates:(NSSet<id<ALCBuilder>> __nonnull *)candidates;
 
 #pragma mark - Registration call backs

@@ -34,13 +34,31 @@
     return self;
 }
 
--(void) resolve {
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> __nonnull *) postProcessors {
+
     STLog(_valueClass, @"Resolving %@", self);
     ALCContext *strongContext = _context;
     [strongContext executeOnBuildersWithQualifiers:_qualifiers
                            processingBuildersBlock:^(NSSet<id<ALCBuilder>> * __nonnull builders) {
-                               self->_candidateBuilders = [strongContext postProcessCandidateBuilders:builders];
+
+                               NSSet<id<ALCBuilder>> *finalBuilders = builders;
+                               for (id<ALCDependencyPostProcessor> postProcessor in postProcessors) {
+                                   finalBuilders = [postProcessor process:finalBuilders];
+                                   if ([finalBuilders count] == 0) {
+                                       break;
+                                   }
+                               }
+
+                               STLog(ALCHEMIC_LOG, @"Found %lu candidates", [finalBuilders count]);
+                               self->_candidateBuilders = finalBuilders;
                            }];
+
+    // If there are no candidates left then error.
+    if ([_candidateBuilders count] == 0) {
+        @throw [NSException exceptionWithName:@"AlchemicNoCandidateBuildersFound"
+                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency, no builders found."]
+                                     userInfo:nil];
+    }
 }
 
 -(id) value {

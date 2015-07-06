@@ -11,6 +11,7 @@
 @class ALCContext;
 
 #import <Alchemic/ALCQualifier.h>
+#import <Alchemic/ALCDependencyPostProcessor.h>
 
 @interface ALCDependency : NSObject
 
@@ -20,7 +21,7 @@
 
 #pragma mark - Resolving
 
--(void) resolve;
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> __nonnull *) postProcessors;
 
 -(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
                              valueClass:(Class __nonnull) valueClass

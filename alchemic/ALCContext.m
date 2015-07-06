@@ -224,27 +224,6 @@
 
 }
 
--(nonnull NSSet<id<ALCBuilder>> *) postProcessCandidateBuilders:(NSSet<id<ALCBuilder>> __nonnull *) builders {
-
-    NSSet<id<ALCBuilder>> *finalBuilders = builders;
-    for (id<ALCDependencyPostProcessor> postProcessor in _dependencyPostProcessors) {
-        finalBuilders = [postProcessor process:finalBuilders];
-        if ([finalBuilders count] == 0) {
-            break;
-        }
-    }
-
-    STLog(ALCHEMIC_LOG, @"Found %lu candidates", [finalBuilders count]);
-
-    // If there are no candidates left then error.
-    if ([finalBuilders count] == 0) {
-        @throw [NSException exceptionWithName:@"AlchemicNoCandidateBuildersFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency, no builders found."]
-                                     userInfo:nil];
-    }
-    return finalBuilders;
-}
-
 -(nonnull id) resolveValueForDependency:(ALCDependency __nonnull *) dependency candidates:(NSSet<id<ALCBuilder>> __nonnull *)candidates {
     return [_valueResolverManager resolveValueForDependency:dependency candidates:candidates];
 }
