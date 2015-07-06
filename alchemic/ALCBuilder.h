@@ -11,7 +11,7 @@
 
 @protocol ALCBuilder <NSObject>
 
-@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, strong) NSString *name;
 
 @property (nonatomic, assign) BOOL createOnStartup;
 

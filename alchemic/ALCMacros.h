@@ -6,6 +6,9 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
+#import <Alchemic/ALCInternal.h>
+#import <Alchemic/ALCContext.h>
+
 #pragma mark - Defining objects
 
 #define ACAsName(_objectName) [ALCAsName asNameWithName:_objectName]

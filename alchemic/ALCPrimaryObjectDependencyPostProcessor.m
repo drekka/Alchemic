@@ -11,7 +11,7 @@
 
 @implementation ALCPrimaryObjectDependencyPostProcessor
 
--(NSSet *) process:(NSSet *) dependencies {
+-(nonnull NSSet<id<ALCBuilder>> *) process:(NSSet<id<ALCBuilder>> __nonnull *) dependencies {
 
     // Build a list of primary objects.
     NSMutableSet<id<ALCBuilder>> *primaries = [[NSMutableSet alloc] init];

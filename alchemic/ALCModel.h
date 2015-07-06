@@ -9,6 +9,7 @@
 @import Foundation;
 
 #import "ALCBuilder.h"
+#import "ALCClassBuilder.h"
 
 /**
  Core object management.
@@ -22,33 +23,19 @@
  */
 -(void) addBuilder:(id<ALCBuilder> __nonnull) builder;
 
+#pragma mark - Querying
+
+-(nonnull NSSet<id<ALCBuilder>> *) allBuilders;
+
+-(nonnull NSSet<ALCClassBuilder *> *) allClassBuilders;
+
 /**
- Finds all builder which build objects of the passed class. 
+ Finds all builder which are matched by the passed list of qualifiers.
  
- Note that any builder that builds the class or a decendant of the class will be returned.
-
- @param class	the class to search on.
-
  @return a NSSet of builders that return objects of the class.
  */
--(nonnull NSSet<id<ALCBuilder>> *) buildersWithClass:(Class __nonnull) class;
+-(nonnull NSSet<id<ALCBuilder>> *) buildersMatchingQualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers;
 
-/**
- FInds all builders which build objects with a passed protocol.
-
- @param protocol the protocol to look for.
-
- @return a NSSet of builders that will builds objects with the protocol.
- */
--(nonnull NSSet<id<ALCBuilder>> *) buildersWithProtocol:(Protocol __nonnull *) protocol;
-
-/**
- Finds all builders with a passed name.
-
- @param name the name to search for.
-
- @return a NSSet containing all the builders that use the name.
- */
--(nonnull NSSet<id<ALCBuilder>> *) buildersWithName:(NSString __nonnull *) name;
+-(nonnull NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> __nonnull *) builders;
 
 @end

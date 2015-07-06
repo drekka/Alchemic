@@ -11,7 +11,6 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCAbstractClass.h"
-#import <Alchemic/ALCInitStrategy.h>
 #import "ALCRuntime.h"
 #import <Alchemic/ALCAlchemic.h>
 

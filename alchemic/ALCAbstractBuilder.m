@@ -29,7 +29,7 @@
                                    name:(NSString __nonnull *) name {
     self = [super init];
     if (self) {
-        _name = name;
+        _name = name == nil ? NSStringFromClass(valueClass) : name;
         _context = context;
         _valueClass = valueClass;
     }

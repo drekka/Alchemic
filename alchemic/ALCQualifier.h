@@ -4,6 +4,7 @@
 //
 
 @import Foundation;
+#import <Alchemic/ALCBuilder.h>
 
 /**
  Wraps an argument so that it can be conveniantly passed around. 
@@ -15,5 +16,7 @@
 @property (nonatomic, strong, readonly, nonnull) id value;
 
 +(nonnull instancetype) qualifierWithValue:(id __nonnull) value;
+
+-(BOOL) matchesBuilder:(id<ALCBuilder> __nonnull) builder;
 
 @end

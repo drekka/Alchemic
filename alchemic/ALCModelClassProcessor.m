@@ -8,15 +8,14 @@
 
 @import ObjectiveC;
 #import <StoryTeller/StoryTeller.h>
-
-#import "ALCModelClassProcessor.h"
-#import "ALCClassBuilder.h"
 #import <Alchemic/ALCInternal.h>
 #import <Alchemic/ALCContext.h>
 
-@implementation ALCModelClassProcessor
+#import "ALCModelClassProcessor.h"
+#import "ALCClassBuilder.h"
+#import "ALCContext+Internal.h"
 
-static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREFIX));
+@implementation ALCModelClassProcessor
 
 -(void) processClass:(Class)class withContext:(ALCContext *)context {
     
@@ -25,25 +24,27 @@ static const size_t _prefixLength = strlen(_alchemic_toCharPointer(ALCHEMIC_PREF
     Method *classMethods = class_copyMethodList(object_getClass(class), &methodCount);
     
     // Search the methods for registration methods.
-    ALCClassBuilder *currentClassInstance = nil;
+    ALCClassBuilder *currentClassBuilder = nil;
+    NSString *alchemicMethodPrefix = _alchemic_toNSString(ALCHEMIC_PREFIX);
     for (size_t idx = 0; idx < methodCount; ++idx) {
         
         // If the method is not an alchemic one, then ignore it.
         SEL sel = method_getName(classMethods[idx]);
-        const char * methodName = sel_getName(sel);
-        if (strncmp(methodName, _alchemic_toCharPointer(ALCHEMIC_PREFIX), _prefixLength) != 0) {
+        if (![NSStringFromSelector(sel) hasPrefix:alchemicMethodPrefix]) {
             continue;
         }
         
-        // If we are here then we have an alchemic method to process.
-        if (currentClassInstance == nil) {
-            currentClassInstance = [context.model createClassBuilderForClass:class inContext:context];
+        // If we are here then we have an alchemic method to process, so create a class builder for for the class.
+        if (currentClassBuilder == nil) {
+            currentClassBuilder = [[ALCClassBuilder alloc] initWithContext:context
+                                                                 valueClass:class
+                                                                       name:NSStringFromClass(class)];
+            [context addBuilderToModel:currentClassBuilder];
         }
-        
-        // Note cast because of XCode 6
-        // If this returns a new ALCInstance it is assumed to be a new model object and is added.
-        STLog(class, @"Executing %s::%s ...", class_getName(class), methodName);
-        ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(class, sel, currentClassInstance);
+
+        // Call the method, passing it the current class builder.
+        STLog(class, @"Executing %s::%s ...", class_getName(class), sel_getName(sel));
+        ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(class, sel, currentClassBuilder);
         
     }
     

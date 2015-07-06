@@ -17,6 +17,7 @@
     NSInvocation *_inv;
     NSMutableArray<ALCDependency *> *_invArgumentDependencies;
     BOOL _useClassMethod;
+
 }
 
 -(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
@@ -26,7 +27,7 @@
                                selector:(SEL __nonnull) selector
                              qualifiers:(NSArray __nonnull *) qualifiers {
 
-    self = [super initWithContext:context valueClass:valueClass name:@"X"];
+    self = [super initWithContext:context valueClass:valueClass name:name];
     if (self) {
 
         Class parentClass = parentClassBuilder.valueClass;
@@ -82,33 +83,33 @@
 
     STLog([self description], @"Creating object with %@", [self description]);
 
-    id factoryObject = _factoryClassBuilder.value;
+    id factoryObject = _parentClassBuilder.value;
 
     // Get an invocation ready.
-    if (_factoryInvocation == nil) {
-        NSMethodSignature *sig = [factoryObject methodSignatureForSelector:_factorySelector];
-        _factoryInvocation = [NSInvocation invocationWithMethodSignature:sig];
-        _factoryInvocation.selector = _factorySelector;
-        [_factoryInvocation retainArguments];
+    if (_inv == nil) {
+        NSMethodSignature *sig = [factoryObject methodSignatureForSelector:_selector];
+        _inv = [NSInvocation invocationWithMethodSignature:sig];
+        _inv.selector = _selector;
+        [_inv retainArguments];
     }
 
     // Load the arguments.
-    [self.dependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
-        id argument = dependency.value;
-        [self->_factoryInvocation setArgument:&argument atIndex:(NSInteger)idx];
+    [_invArgumentDependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
+        id argumentValue = dependency.value;
+        [self->_inv setArgument:&argumentValue atIndex:(NSInteger)idx];
     }];
 
-    [_factoryInvocation invokeWithTarget:factoryObject];
+    [_inv invokeWithTarget:factoryObject];
 
     id returnObj;
-    [_factoryInvocation getReturnValue:&returnObj];
+    [_inv getReturnValue:&returnObj];
     STLog([self description], @"   Method created a %s", class_getName([returnObj class]));
     return returnObj;
 
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_factoryClassBuilder.valueClass), sel_getName(_factorySelector)];
+    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_parentClassBuilder.valueClass), sel_getName(_selector)];
 }
 
 @end

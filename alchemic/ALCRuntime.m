@@ -25,29 +25,14 @@ static Class __protocolClass;
     __protocolClass = objc_getClass("Protocol");
 }
 
-#pragma mark - General
+#pragma mark - Checking
 
-+(SEL) alchemicSelectorForSelector:(SEL) selector {
-    const char * prefix = _alchemic_toCharPointer(ALCHEMIC_PREFIX);
-    const char * selName = sel_getName(selector);
-    const char * newSelectorName = [NSString stringWithFormat:@"%s%s", prefix, selName].UTF8String;
-    return sel_registerName(newSelectorName);
++(BOOL) objectIsAClass:(id __nonnull) possibleClass {
+    return class_isMetaClass([possibleClass class]);
 }
 
-+(BOOL) classIsProtocol:(Class __nonnull) possiblePrototocol {
-    return __protocolClass == possiblePrototocol;
-}
-
-+(void) injectObject:(id __nonnull) object variable:(Ivar __nonnull) variable withValue:(id __nullable) value {
-    object_setIvar(object, variable, value);
-}
-
-+(void) validateSelector:(SEL __nonnull) selector withClass:(Class __nonnull) class {
-    if (! class_respondsToSelector(class, selector)) {
-        @throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"
-                                       reason:[NSString stringWithFormat:@"Faciled to find selector %s::%s", class_getName(class), sel_getName(selector)]
-                                     userInfo:nil];
-    }
++(BOOL) objectIsAProtocol:(id __nonnull) possiblePrototocol {
+    return __protocolClass == [possiblePrototocol class];
 }
 
 +(BOOL) class:(Class __nonnull) class isKindOfClass:(Class __nonnull) otherClass {
@@ -63,6 +48,27 @@ static Class __protocolClass;
 
 +(BOOL) class:(Class __nonnull) class conformsToProtocol:(Protocol __nonnull *) protocol {
     return class_conformsToProtocol(class, protocol);
+}
+
+#pragma mark - General
+
++(void) injectObject:(id __nonnull) object variable:(Ivar __nonnull) variable withValue:(id __nullable) value {
+    object_setIvar(object, variable, value);
+}
+
++(SEL) alchemicSelectorForSelector:(SEL) selector {
+    const char * prefix = _alchemic_toCharPointer(ALCHEMIC_PREFIX);
+    const char * selName = sel_getName(selector);
+    const char * newSelectorName = [NSString stringWithFormat:@"%s%s", prefix, selName].UTF8String;
+    return sel_registerName(newSelectorName);
+}
+
++(void) validateSelector:(SEL __nonnull) selector withClass:(Class __nonnull) class {
+    if (! class_respondsToSelector(class, selector)) {
+        @throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"
+                                       reason:[NSString stringWithFormat:@"Faciled to find selector %s::%s", class_getName(class), sel_getName(selector)]
+                                     userInfo:nil];
+    }
 }
 
 +(nullable Class) classForIVar:(Ivar __nonnull) ivar {
@@ -99,10 +105,12 @@ static Class __protocolClass;
         [context addDependencyPostProcessor:[[class alloc] init]];
     };
 
+    /*
     ClassMatchesBlock resourceLocatorBlock = ^(classMatchesBlockArgs){
         ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
         classBuilder.value = [[class alloc] init];
     };
+     */
 
     ClassMatchesBlock objectFactoryBlock = ^(classMatchesBlockArgs){
         [context addObjectFactory:[[class alloc] init]];
@@ -114,8 +122,8 @@ static Class __protocolClass;
                                                                                                whenMatches:initStrategiesBlock],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCDependencyPostProcessor)
                                                                                                whenMatches:resolverPostProcessorBlock],
-                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResourceLocator)
-                                                                                               whenMatches:resourceLocatorBlock],
+                                             // [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResourceLocator)
+                                              //                                                 whenMatches:resourceLocatorBlock],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCObjectFactory)
                                                                                                whenMatches:objectFactoryBlock]
                                               ]];
@@ -161,7 +169,7 @@ static Class __protocolClass;
 
 +(nonnull NSSet<ALCQualifier *> *) qualifiersForClass:(Class __nonnull) class {
     NSMutableSet<ALCQualifier *> * qualifiers = [[NSMutableSet<ALCQualifier *> alloc] init];
-    [matchers addObject:[ALCClassMatcher matcherWithClass:class]];
+    [qualifiers addObject:[ALCQualifier qualifierWithValue:class]];
     for (Protocol *protocol in [self protocolsOnClass:class]) {
         [qualifiers addObject:[ALCQualifier qualifierWithValue:protocol]];
     }

@@ -7,13 +7,14 @@
 //
 
 @import Foundation;
-@class ALCDependency;
+
+#import <Alchemic/ALCBuilder.h>
 
 @protocol ALCDependencyPostProcessor <NSObject>
 
 /**
  @return a new list of candidates objects or nil if the list is not changed.
  */
--(NSSet *) process:(NSSet *) dependencies;
+-(nonnull NSSet<id<ALCBuilder>> *) process:(NSSet<id<ALCBuilder>> __nonnull *) dependencies;
 
 @end

@@ -9,6 +9,8 @@
 #import <StoryTeller/StoryTeller.h>
 #import "ALCModel.h"
 #import "ALCRuntime.h"
+#import "ALCClassBuilder.h"
+#import "ALCInternal.h"
 
 @implementation ALCModel {
     NSMutableSet<id<ALCBuilder>> *_model;
@@ -37,34 +39,48 @@
 
 #pragma mark - Querying
 
--(nonnull NSSet<id<ALCBuilder>> *) buildersWithClass:(Class __nonnull) class {
-    STLog(ALCHEMIC_LOG, @"Querying for builders for class: %@ ...", NSStringFromClass(class));
-    return [self buildersWithCacheId:class
-                      includeIfBlock:^BOOL(id<ALCBuilder> builder) {
-                          return [ALCRuntime class:builder.valueClass isKindOfClass:class];
-                      }];
+-(nonnull NSSet<id<ALCBuilder>> *) allBuilders {
+    return _model;
 }
 
--(nonnull NSSet<id<ALCBuilder>> *) buildersWithProtocol:(Protocol __nonnull *) protocol {
-    STLog(ALCHEMIC_LOG, @"Querying for builders for protocol: %@ ...", NSStringFromProtocol(protocol));
-    return [self buildersWithCacheId:protocol
-                      includeIfBlock:^BOOL(id<ALCBuilder> builder) {
-                          return [ALCRuntime class:builder.valueClass conformsToProtocol:protocol];
-                      }];
+-(nonnull NSSet<ALCClassBuilder *> *) allClassBuilders {
+    return [self buildersWithCacheId:[ALCClassBuilder class]
+                         searchBlock:^BOOL(id<ALCBuilder> builder) {
+                             return [builder isKindOfClass:[ALCClassBuilder class]];
+                         }];
 }
 
--(nonnull NSSet<id<ALCBuilder>> *) buildersWithName:(NSString __nonnull *) name {
-    STLog(ALCHEMIC_LOG, @"Querying for builders with name: %@ ...", name);
-    return [self buildersWithCacheId:name
-                      includeIfBlock:^BOOL(id<ALCBuilder> builder) {
-                          return [name isEqualToString:builder.name];
-                      }];
+-(nonnull NSSet<id<ALCBuilder>> *) buildersMatchingQualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
+
+    NSMutableSet<id<ALCBuilder>> *results;
+    for (ALCQualifier *qualifier in qualifiers) {
+        if (results == nil) {
+            results = [NSMutableSet setWithSet:[self buildersWithCacheId:qualifier.value
+                                                             searchBlock:^BOOL(id<ALCBuilder> builder) {
+                                                                 return [qualifier matchesBuilder:builder];
+                                                             }]];
+        } else {
+            [results intersectSet:[self buildersWithCacheId:qualifier.value
+                                                searchBlock:^BOOL(id<ALCBuilder> builder) {
+                                                    return [qualifier matchesBuilder:builder];
+                                                }]];
+        }
+        if ([results count] == 0) {
+            break;
+        }
+    }
+    return results;
+}
+
+-(nonnull NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> __nonnull *) builders {
+    return (NSSet<ALCClassBuilder *> *)[builders objectsPassingTest:^BOOL(id<ALCBuilder>  __nonnull builder, BOOL * __nonnull stop) {
+        return [builder isKindOfClass:[ALCClassBuilder class]];
+    }];
 }
 
 #pragma mark - Internal
 
--(nonnull NSSet<id<ALCBuilder>> *) buildersWithCacheId:(id __nonnull) cacheId
-                                        includeIfBlock:(BOOL (^)(id<ALCBuilder> builder)) includeIfBlock {
+-(nonnull NSSet<id<ALCBuilder>> *) buildersWithCacheId:(id __nonnull) cacheId searchBlock:(BOOL (^ __nonnull)(id<ALCBuilder> builder)) searchBlock {
 
     // Check the cache
     NSSet<id<ALCBuilder>> *cachedBuilders = [_queryCache objectForKey:cacheId];
@@ -73,14 +89,14 @@
         return cachedBuilders;
     }
 
-    // Find the objects.
-    NSMutableSet<id<ALCBuilder>> *builders = [[NSMutableSet<id<ALCBuilder>> alloc]  init];
-    for (id<ALCBuilder> builder in _model) {
-        if (includeIfBlock(builder)) {
+    // Find the builders that match the qualifier.
+    NSSet<id<ALCBuilder>> *builders = [_model objectsPassingTest:^BOOL(id<ALCBuilder>  __nonnull builder, BOOL * __nonnull stop) {
+        if (searchBlock(builder)) {
             STLog(ALCHEMIC_LOG, @"Adding builder for a %@", NSStringFromClass(builder.valueClass));
-            [builders addObject:builder];
+            return YES;
         }
-    }
+        return NO;
+    }];
 
     // Store and return.
     [_queryCache setObject:builders forKey:cacheId];

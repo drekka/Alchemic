@@ -7,9 +7,9 @@
 
 @import ObjectiveC;
 
-#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 #import "ALCRuntime.h"
+#import "ALCContext+Internal.h"
 
 @implementation ALCDependency {
     __weak ALCContext __nonnull *_context;
@@ -24,38 +24,27 @@
     if (self) {
         _context = context;
         _valueClass = valueClass;
-        _qualifiers = qualifiers == nil || [qualifiers count] == 0 ? [ALCRuntime qualifiersForClass:valueClass] : qualifiers;
+        _qualifiers = qualifiers;
+        if ([_candidateBuilders count] == 0) {
+            @throw [NSException exceptionWithName:@"AlchemicMissingQualifiers"
+                                           reason:[NSString stringWithFormat:@"No qualifiers passed"]
+                                         userInfo:nil];
+        }
     }
     return self;
 }
 
 -(void) resolve {
-
     STLog(_valueClass, @"Resolving %@", self);
     ALCContext *strongContext = _context;
-    _candidateBuilders = [strongContext.model buildersWithMatchers:_dependencyMatchers];
-    
-    for (id<ALCDependencyPostProcessor> postProcessor in strongContext.dependencyPostProcessors) {
-        _candidateBuilders = [postProcessor process:_candidateBuilders];
-        if ([_candidateBuilders count] == 0) {
-            break;
-        }
-    }
-    
-    STLog(_valueClass, @"Found %lu candidates", [_candidateBuilders count]);
-    
-    // If there are no candidates left then error.
-    if ([_candidateBuilders count] == 0) {
-        @throw [NSException exceptionWithName:@"AlchemicDependencyNotFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency: %s", class_getName(_valueClass)]
-                                     userInfo:nil];
-    }
-    
+    [strongContext executeOnBuildersWithQualifiers:_qualifiers
+                           processingBuildersBlock:^(NSSet<id<ALCBuilder>> * __nonnull builders) {
+                               self->_candidateBuilders = [strongContext postProcessCandidateBuilders:builders];
+                           }];
 }
 
 -(id) value {
-    ALCContext *strongContext = _context;
-    return [strongContext.valueResolverManager resolveValueForDependency:self candidates:_candidateBuilders];
+    return [_context resolveValueForDependency:self candidates:_candidateBuilders];
 }
 
 -(NSString *) description {

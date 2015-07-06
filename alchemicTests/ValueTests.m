@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <Alchemic/ALCAlchemic.h>
+#import <Alchemic/Alchemic.h>
 
 @interface ValueTests : XCTestCase
 

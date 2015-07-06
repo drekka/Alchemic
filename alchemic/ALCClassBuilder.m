@@ -16,6 +16,7 @@
 #import "ALCClassBuilder.h"
 #import <Alchemic/ALCObjectFactory.h>
 #import <Alchemic/ALCContext.h>
+#import "ALCContext+Internal.h"
 
 @implementation ALCClassBuilder {
     NSArray<id<ALCInitStrategy>> *_initialisationStrategies;
@@ -38,9 +39,10 @@
 -(void) addInjectionPoint:(NSString *) inj withQualifiers:(NSSet *) qualifiers {
 
     Ivar variable = [ALCRuntime class:self.valueClass variableForInjectionPoint:inj];
+    NSSet<ALCQualifier *>* finalQualifiers = qualifiers == nil || [qualifiers count] == 0 ? [ALCRuntime qualifiersForVariable:variable] : qualifiers;
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithContext:self.context
                                                                               variable:variable
-                                                                            qualifiers:qualifiers];
+                                                                            qualifiers:finalQualifiers];
     [_dependencies addObject:dependency];
 }
 
@@ -56,23 +58,12 @@
 }
 
 -(id) resolveValue {
-
-    STLog(self.valueClass, @"Instantiating instance using %@", self);
     ALCContext *strongContext = self.context;
-    for (id<ALCObjectFactory> objectFactory in strongContext.objectFactories) {
-        id newValue = [objectFactory createObjectFromBuilder:self];
-        if (newValue != nil) {
-            return newValue;
-        }
-    }
-    
-    // Trigger an exception if we don't create anything.
-    @throw [NSException exceptionWithName:@"AlchemicUnableToCreateInstance"
-                                   reason:[NSString stringWithFormat:@"Unable to create an instance of %@", [self description]]
-                                 userInfo:nil];
+    return [strongContext instantiateObjectFromBuilder:self];
 }
 
 -(void) injectDependenciesInto:(id) object {
+    STLog(self, @"Injecting dependencies into a %s", [object class]);
     for (ALCVariableDependency *dependency in _dependencies) {
         [dependency injectInto:object];
     }

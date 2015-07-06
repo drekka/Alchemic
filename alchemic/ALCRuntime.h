@@ -9,23 +9,29 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/Alchemic.h>
+#import <Alchemic/ALCQualifier.h>
+#import <Alchemic/ALCContext.h>
 
 @interface ALCRuntime : NSObject
+
+#pragma mark - Checking
+
++(BOOL) objectIsAClass:(id __nonnull) possibleClass;
+
++(BOOL) objectIsAProtocol:(id __nonnull) possiblePrototocol;
+
++(BOOL) class:(Class __nonnull) class isKindOfClass:(Class __nonnull) otherClass;
+
++(BOOL) class:(Class __nonnull) class conformsToProtocol:(Protocol __nonnull *) protocol;
 
 #pragma mark - General
 
 +(nonnull SEL) alchemicSelectorForSelector:(SEL __nonnull) selector;
 
-+(BOOL) classIsProtocol:(Class __nonnull) possiblePrototocol;
-
 +(void) validateSelector:(SEL __nonnull) selector withClass:(Class __nonnull) class;
 
 +(void) injectObject:(id __nonnull) object variable:(Ivar __nonnull) variable withValue:(id __nullable) value;
 
-+(BOOL) class:(Class __nonnull) class isKindOfClass:(Class __nonnull) otherClass;
-
-+(BOOL) class:(Class __nonnull) class conformsToProtocol:(Protocol __nonnull *) protocol;
 
 +(nonnull NSSet<Protocol *> *) protocolsOnClass:(Class __nonnull) class;
 

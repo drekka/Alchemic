@@ -14,7 +14,6 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCClassBuilder.h"
-#import <Alchemic/Alchemic.h>
 #import "ALCModel.h"
 
 @implementation ALCInitStrategyInjector {
@@ -58,8 +57,8 @@ static BOOL injected = NO;
 
 -(nonnull NSSet<id<ALCBuilder>> *) findRootClassBuildersInModel:(ALCModel *) model {
     
-    // First find all instances.
-    NSSet<id<ALCBuilder>> *builders = [model buildersWithClass:[ALCClassBuilder class]];
+    // First find all class builders.
+    NSSet<id<ALCBuilder>> *builders = [model allClassBuilders];
     
     // Copy all the classes into an array
     NSMutableSet<Class> *builderClasses = [[NSMutableSet<Class> alloc] initWithCapacity:[builders count]];

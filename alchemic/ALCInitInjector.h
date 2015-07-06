@@ -9,7 +9,6 @@
 @import Foundation;
 
 #import <Alchemic/ALCInitStrategy.h>
-#import <Alchemic/ALCBuilder.h>
 
 @class ALCModel;
 
