@@ -27,6 +27,26 @@
 }
 @synthesize aFunnyStringProperty = __myFunnyImplVariableName;
 
+#pragma mark - Runtime exploration tests
+
+-(void) testNSObjectProtocolImplements {
+
+    Protocol *nsObjectP = @protocol(NSObject);
+    Protocol *nsFastEnumerationP = @protocol(NSFastEnumeration);
+
+    // Runtime functions do not handle hierarchy testing and nsobject is on a parent class.
+    // So use NSObject conformsToProtocol: instead.
+    BOOL implements = class_conformsToProtocol([self class], nsObjectP);
+    XCTAssertFalse(implements);
+
+    implements = [[self class] conformsToProtocol:nsObjectP];
+    XCTAssertTrue(implements);
+
+    implements = [[NSString class] conformsToProtocol:nsFastEnumerationP];
+    XCTAssertFalse(implements);
+
+}
+
 #pragma mark - Querying
 
 -(void) testObjectIsAClassWithStringClass {

@@ -7,7 +7,9 @@
 //
 
 #import <Alchemic/ALCQualifier.h>
+#import <Alchemic/ALCInternal.h>
 #import "ALCRuntime.h"
+#import <StoryTeller/StoryTeller.h>
 
 /**
  Block type for checking this qualifier against a builder to see if it applies.
@@ -39,16 +41,21 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 
         // sort of the check block.
         if ([ALCRuntime objectIsAClass:value]) {
+            STLog(value, @"Creating qualifier for class: %@", NSStringFromClass(value));
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
                 return [ALCRuntime aClass:builder.valueClass isKindOfClass:value];
             };
+
         } else if ([ALCRuntime objectIsAProtocol:value]) {
+            STLog(value, @"Creating qualifier for protocol: %@", NSStringFromProtocol(value));
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
                 return [ALCRuntime aClass:builder.valueClass conformsToProtocol:value];
             };
+
         } else {
+            STLog(value, @"Creating qualifier for name: %@", value);
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
-                return [value isEqualToString:builder.name];
+                return [builder.name isEqualToString:value];
             };
         }
     }

@@ -25,7 +25,7 @@
         _context = context;
         _valueClass = valueClass;
         _qualifiers = qualifiers;
-        if ([_candidateBuilders count] == 0) {
+        if ([_qualifiers count] == 0) {
             @throw [NSException exceptionWithName:@"AlchemicMissingQualifiers"
                                            reason:[NSString stringWithFormat:@"No qualifiers passed"]
                                          userInfo:nil];

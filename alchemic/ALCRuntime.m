@@ -39,18 +39,19 @@ static NSCharacterSet *__typeEncodingDelimiters;
 }
 
 +(BOOL) aClass:(Class __nonnull) aClass isKindOfClass:(Class __nonnull) otherClass {
-    Class nextClass = aClass;
-    while (nextClass != nil) {
-        if (nextClass == otherClass) {
-            return YES;
-        }
-        nextClass = class_getSuperclass(nextClass);
-    }
-    return NO;
+    return [aClass isKindOfClass:otherClass];
+//    Class nextClass = aClass;
+//    while (nextClass != nil) {
+//        if (nextClass == otherClass) {
+//            return YES;
+//        }
+//        nextClass = class_getSuperclass(nextClass);
+//    }
+//    return NO;
 }
 
 +(BOOL) aClass:(Class __nonnull) aClass conformsToProtocol:(Protocol __nonnull *) protocol {
-    return class_conformsToProtocol(aClass, protocol);
+    return [aClass conformsToProtocol:protocol];
 }
 
 +(void) aClass:(Class __nonnull) class validateSelector:(SEL __nonnull) selector {
@@ -185,7 +186,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
                                      userInfo:nil];
     }
 
-    STLog(aClass, @"   Injection %@ -> variable: %s", inj, ivar_getName(var));
+    STLog(aClass, @"Injection %@ -> variable: %s", inj, ivar_getName(var));
     return var;
 }
 

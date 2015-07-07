@@ -26,11 +26,11 @@
     return self;
 }
 
--(void) processClass:(Class)class withContext:(ALCContext *)context {
+-(void) processClass:(Class) aClass withContext:(ALCContext *)context {
     // Use the runtime call for checking for abstracts because only want to check the current class. Use the class object conforms to protocol because we want to check the entire heirarchy.
-    if (!class_conformsToProtocol(class, _abstract)
-        && [class conformsToProtocol:_protocol]) {
-        _matchesBlock(context, class);
+    if (!class_conformsToProtocol(aClass, _abstract)
+        && [aClass conformsToProtocol:_protocol]) {
+        _matchesBlock(context, aClass);
     }
 }
 

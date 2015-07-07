@@ -69,9 +69,11 @@
                       }];
         if (results == nil) {
             // No results yet to go with the set as a base set.
+            STLog(ALCHEMIC_LOG, @"Found %lu initial builders for qualifier %@", [builders count], qualifier);
             results = [NSMutableSet setWithSet:builders];
         } else {
             // Remove any members which are not in the next qualifiers set.
+            STLog(ALCHEMIC_LOG, @"Filtering with %lu builders for qualifier %@", [builders count], qualifier);
             [results intersectSet:builders];
         }
 
@@ -92,6 +94,8 @@
 #pragma mark - Internal
 
 -(nonnull NSSet<id<ALCBuilder>> *) buildersWithCacheId:(id __nonnull) cacheId searchBlock:(BOOL (^ __nonnull)(id<ALCBuilder> builder)) searchBlock {
+
+    STLog(ALCHEMIC_LOG, @"Searching for builders using cache Id: %@", cacheId);
 
     // Check the cache
     NSSet<id<ALCBuilder>> *cachedBuilders = [_queryCache objectForKey:cacheId];

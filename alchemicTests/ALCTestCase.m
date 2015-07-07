@@ -40,6 +40,7 @@
 
 -(void) scanClassIntoContext:(Class __nonnull) aClass {
     NSAssert(self.context != nil, @"Context must be setup first");
+    STStartScope(aClass);
     ALCModelClassProcessor *classProcessor = [[ALCModelClassProcessor alloc] init];
     [classProcessor processClass:aClass withContext:self.context];
 }

@@ -17,11 +17,11 @@
 
 @implementation ALCModelClassProcessor
 
--(void) processClass:(Class)class withContext:(ALCContext *)context {
+-(void) processClass:(Class) aClass withContext:(ALCContext *)context {
     
     // Get the class methods. We need to get the class of the class for them.
     unsigned int methodCount;
-    Method *classMethods = class_copyMethodList(object_getClass(class), &methodCount);
+    Method *classMethods = class_copyMethodList(object_getClass(aClass), &methodCount);
     
     // Search the methods for registration methods.
     ALCClassBuilder *currentClassBuilder = nil;
@@ -37,14 +37,14 @@
         // If we are here then we have an alchemic method to process, so create a class builder for for the class.
         if (currentClassBuilder == nil) {
             currentClassBuilder = [[ALCClassBuilder alloc] initWithContext:context
-                                                                 valueClass:class
-                                                                       name:NSStringFromClass(class)];
+                                                                 valueClass:aClass
+                                                                       name:NSStringFromClass(aClass)];
             [context addBuilderToModel:currentClassBuilder];
         }
 
         // Call the method, passing it the current class builder.
-        STLog(class, @"Executing %s::%s ...", class_getName(class), sel_getName(sel));
-        ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(class, sel, currentClassBuilder);
+        STLog(aClass, @"Executing %s::%s ...", class_getName(aClass), sel_getName(sel));
+        ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(aClass, sel, currentClassBuilder);
         
     }
     

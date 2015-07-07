@@ -26,7 +26,7 @@
 
 +(void) initialize {
     STStartLogging(@"Alchemic");
-    //STStartLogging(@"[SingletonObject]");
+    STStartLogging(@"is [InjectionTests]");
 }
 
 ACInject(ACIntoVariable(_singletonObjectByName), ACWithName(@"Test Singleton"))

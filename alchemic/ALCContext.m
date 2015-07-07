@@ -22,7 +22,6 @@
 
 @implementation ALCContext {
     ALCModel *_model;
-    NSDictionary<NSString *, id<ALCBuilder>> *model;
     NSMutableSet<Class> *_initialisationStrategyClasses;
     NSSet<id<ALCDependencyPostProcessor>> *_dependencyPostProcessors;
     NSSet<id<ALCObjectFactory>> *_objectFactories;
@@ -64,6 +63,7 @@
 }
 
 -(void) injectDependencies:(id) object {
+    STLog([object class], @"Injecting dependencies into a %@", NSStringFromClass([object class]));
     NSSet<ALCQualifier *> *qualifiers = [ALCRuntime qualifiersForClass:[object class]];
     NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersMatchingQualifiers:qualifiers]];
     ALCClassBuilder *classBuilder = [builders anyObject];

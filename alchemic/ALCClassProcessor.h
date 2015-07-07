@@ -14,6 +14,6 @@
 /**
  Process the class.
  */
--(void) processClass:(Class) class withContext:(ALCContext *) context;
+-(void) processClass:(Class) aClass withContext:(ALCContext *) context;
 
 @end
