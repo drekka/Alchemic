@@ -22,11 +22,10 @@
     id _singletonObjectByName;
     id _singletonObjectByClass;
     id _singletonObjectByProtocol;
-    id _mockAlchemic;
 }
 
 +(void) initialize {
-    STStartLogging(@"LogAll");
+    STStartLogging(@"Alchemic");
     //STStartLogging(@"[SingletonObject]");
 }
 
@@ -35,18 +34,13 @@ ACInject(ACIntoVariable(_singletonObjectByClass), ACWithClass(SingletonObject))
 ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectableProtocol))
 
 -(void) setUp {
+    [super setUpALCContext];
 
-    ALCContext *context = [[ALCContext alloc] init];
-
-    _mockAlchemic = OCMClassMock([ALCAlchemic class]);
-    OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(context);
-
-    ALCContext *c2 = [ALCAlchemic mainContext];
-    NSLog(@"%@", c2);
+    [self scanClassIntoContext:[self class]];
 
     SingletonObject *singletonObject = [[SingletonObject alloc] init];
-    [context registerObject:singletonObject withName:@"Test Singleton"];
-    ACInjectDependencies(self);
+    [self.context registerObject:singletonObject withName:@"Test Singleton"];
+    [super setUp];
 }
 
 -(void) testInjectByName {

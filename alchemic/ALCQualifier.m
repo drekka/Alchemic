@@ -60,7 +60,7 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 }
 
 -(NSString *) description {
-    return [@"Arg: %s" stringByAppendingString:[_value description]];
+    return [@"Arg: " stringByAppendingString:[_value description]];
 }
 
 @end

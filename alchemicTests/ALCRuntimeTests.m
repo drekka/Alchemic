@@ -16,6 +16,10 @@
 @interface ALCRuntimeTests : XCTestCase
 @property(nonatomic, strong, nonnull) NSString *aStringProperty;
 @property(nonatomic, strong, nonnull) NSString *aFunnyStringProperty;
+@property(nonatomic, strong, nonnull) id aIdProperty;
+@property(nonatomic, assign) int aIntProperty;
+@property(nonatomic, strong, nonnull) id<NSCopying> aProtocolProperty;
+@property(nonatomic, strong, nonnull) NSString<NSFastEnumeration> *aClassProtocolProperty;
 @end
 
 @implementation ALCRuntimeTests {
@@ -135,6 +139,36 @@
     XCTAssertTrue([protocols containsObject:@protocol(NSMutableCopying)]);
     XCTAssertTrue([protocols containsObject:@protocol(NSSecureCoding)]);
     XCTAssertTrue([protocols containsObject:@protocol(NSObject)]);
+}
+
+-(void) testIVarClassNSString {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringProperty"];
+    Class iVarClass = [ALCRuntime iVarClass:var];
+    XCTAssertEqual([NSString class], iVarClass);
+}
+
+-(void) testIVarClassId {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aIdProperty"];
+    Class iVarClass = [ALCRuntime iVarClass:var];
+    XCTAssertEqual([NSObject class], iVarClass);
+}
+
+-(void) testIVarClassProtocol {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aProtocolProperty"];
+    Class iVarClass = [ALCRuntime iVarClass:var];
+    XCTAssertEqual([NSObject class], iVarClass);
+}
+
+-(void) testIVarClassNSStringProtocol {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
+    Class iVarClass = [ALCRuntime iVarClass:var];
+    XCTAssertEqual([NSString class], iVarClass);
+}
+
+-(void) testIVarClassInt {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aIntProperty"];
+    Class iVarClass = [ALCRuntime iVarClass:var];
+    XCTAssertNil(iVarClass);
 }
 
 #pragma mark - General

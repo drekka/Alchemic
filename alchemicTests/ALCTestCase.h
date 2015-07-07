@@ -8,8 +8,14 @@
 
 @import XCTest;
 
+#import <Alchemic/Alchemic.h>
+
 @interface ALCTestCase : XCTestCase
 
+@property (nonatomic, strong, readonly, nullable) ALCContext *context;
 
+-(void) setUpALCContext;
+
+-(void) scanClassIntoContext:(Class __nonnull) aClass;
 
 @end

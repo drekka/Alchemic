@@ -20,9 +20,11 @@
 @implementation ALCRuntime
 
 static Class __protocolClass;
+static NSCharacterSet *__typeEncodingDelimiters;
 
 +(void) initialize {
     __protocolClass = objc_getClass("Protocol");
+    __typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
 }
 
 #pragma mark - Checking and querying
@@ -60,14 +62,15 @@ static Class __protocolClass;
 }
 
 +(nullable Class) iVarClass:(Ivar __nonnull) ivar {
-    NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];
-    if ([variableTypeEncoding hasPrefix:@"@"]) {
-        NSArray<NSString *> *defs = [variableTypeEncoding componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\",<>"]];
-        return [defs[2] length] > 0 ? objc_lookUpClass(defs[2].UTF8String) : [NSObject class];
-    } else {
-        // Non object variable.
+
+    // Get the type.
+    NSArray *iVarTypes = [self typesForIVar:ivar];
+    if (iVarTypes == nil) {
         return nil;
     }
+
+    // Must have some type information returned.
+    return iVarTypes[0];
 }
 
 +(nonnull NSSet<Protocol *> *) aClassProtocols:(Class __nonnull) aClass {
@@ -202,30 +205,48 @@ static Class __protocolClass;
     NSMutableSet<ALCQualifier *> * qualifiers = [[NSMutableSet<ALCQualifier *> alloc] init];
 
     // Get the type.
-    NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(variable)];
+    NSArray *iVarTypes = [self typesForIVar:variable];
+    if (iVarTypes == nil) {
+        return qualifiers;
+    }
+
+    // Must have some type information returned.
+    [qualifiers addObject:[ALCQualifier qualifierWithValue:iVarTypes[0]]];
+    for (unsigned long i = 1; i < [iVarTypes count];i++) {
+        [qualifiers addObject:[ALCQualifier qualifierWithValue:iVarTypes[i]]];
+    }
+    return qualifiers;
+}
+
++(nullable NSArray *) typesForIVar:(Ivar __nonnull) iVar {
+
+    // Get the type.
+    NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(iVar)];
     if ([variableTypeEncoding hasPrefix:@"@"]) {
 
+        // Start with a result that indicates an Id. We map Ids as NSObjects.
+        NSMutableArray *results = [NSMutableArray arrayWithObject:[NSObject class]];
+
         // Object type.
-        NSArray<NSString *> *defs = [variableTypeEncoding componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\",<>"]];
+        NSArray<NSString *> *defs = [variableTypeEncoding componentsSeparatedByCharactersInSet:__typeEncodingDelimiters];
 
         // If there is no more than 2 in the array then the dependency is an id.
+        // Position 3 will be a class name, positions beyond that will be protocols.
         for (NSUInteger i = 2; i < [defs count]; i ++) {
             if ([defs[i] length] > 0) {
                 if (i == 2) {
-                    Class depClass = objc_lookUpClass(defs[2].UTF8String);
-                    [qualifiers addObject:[ALCQualifier qualifierWithValue:depClass]];
+                    results[0] = objc_lookUpClass(defs[2].UTF8String);
                 } else {
-                    Protocol *protocol = objc_getProtocol(defs[i].UTF8String);
-                    [qualifiers addObject:[ALCQualifier qualifierWithValue:protocol]];
+                    [results addObject:objc_getProtocol(defs[i].UTF8String)];
                 }
             }
         }
-        
-    } else {
-        // Non object variable.
+        return results;
     }
-    
-    return qualifiers;
+
+    // Non object variable.
+    return nil;
+
 }
 
 /**
