@@ -91,6 +91,7 @@
 		6C4F34F11B4AB8CF005E19A0 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C7F24EA1B4B564B007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
 		6C7F24EB1B4B565E007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
+		6C7F24ED1B4B5A9F007A44C8 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C91F9EE1B399009002DF241 /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CAC88771B4A11B200AFB8E4 /* ALCQualifierTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAC88761B4A11B200AFB8E4 /* ALCQualifierTests.m */; };
 		6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CF46EC81B4610EE0009007A /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -119,6 +120,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				6C7F24ED1B4B5A9F007A44C8 /* StoryTeller.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -900,7 +902,7 @@
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					PrivateHeaders,
+					"$(inherited)",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -923,7 +925,7 @@
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					PrivateHeaders,
+					"$(inherited)",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
