@@ -107,10 +107,10 @@ static Class __protocolClass;
     };
 
     /*
-    ClassMatchesBlock resourceLocatorBlock = ^(classMatchesBlockArgs){
-        ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
-        classBuilder.value = [[class alloc] init];
-    };
+     ClassMatchesBlock resourceLocatorBlock = ^(classMatchesBlockArgs){
+     ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
+     classBuilder.value = [[class alloc] init];
+     };
      */
 
     ClassMatchesBlock objectFactoryBlock = ^(classMatchesBlockArgs){
@@ -123,7 +123,7 @@ static Class __protocolClass;
                                                                                                whenMatches:initStrategiesBlock],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCDependencyPostProcessor)
                                                                                                whenMatches:resolverPostProcessorBlock],
-                                             // [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResourceLocator)
+                                              // [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResourceLocator)
                                               //                                                 whenMatches:resourceLocatorBlock],
                                               [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCObjectFactory)
                                                                                                whenMatches:objectFactoryBlock]
@@ -148,11 +148,22 @@ static Class __protocolClass;
     const char * charName = [inj UTF8String];
     Ivar var = class_getInstanceVariable(aClass, charName);
     if (var == NULL) {
-        // It may be a class variable.
-        var = class_getClassVariable(aClass, charName);
+
+        // try for a property which may have a completely different variable name.
+        objc_property_t prop = class_getProperty(aClass, charName);
+        if (prop != NULL) {
+            const char *propVarName = property_copyAttributeValue(prop, "V");
+            var = class_getInstanceVariable(aClass, propVarName);
+        }
+
         if (var == NULL) {
-            // It may be a property we have been passed so look for a '_' var.
-            var = class_getInstanceVariable(aClass, [[@"_" stringByAppendingString:inj] UTF8String]);
+            // Not a property so it may be a class variable.
+            var = class_getClassVariable(aClass, charName);
+
+            if (var == NULL) {
+                // Still no luck so try for an underscore prefixed variable.
+                var = class_getInstanceVariable(aClass, [[@"_" stringByAppendingString:inj] UTF8String]);
+            }
         }
     }
 
@@ -200,7 +211,7 @@ static Class __protocolClass;
                 }
             }
         }
-
+        
     } else {
         // Non object variable.
     }

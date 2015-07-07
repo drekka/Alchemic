@@ -14,12 +14,14 @@
 #import "ALCRuntime.h"
 
 @interface ALCRuntimeTests : XCTestCase
-
+@property(nonatomic, strong, nonnull) NSString *aStringProperty;
+@property(nonatomic, strong, nonnull) NSString *aFunnyStringProperty;
 @end
 
 @implementation ALCRuntimeTests {
     NSString *_aStringVariable;
 }
+@synthesize aFunnyStringProperty = __myFunnyImplVariableName;
 
 #pragma mark - Type checks
 
@@ -103,9 +105,34 @@
 #pragma clang diagnostic pop
 }
 
--(void) testVariableForInjectionPoint {
+-(void) testVariableForInjectionPointExactMatch {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringVariable"];
+    Ivar expected = class_getInstanceVariable([self class], "_aStringVariable");
+    XCTAssertEqual(expected, var);
+}
+
+-(void) testVariableForInjectionPointWithoutUnderscorePrefix {
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringVariable"];
-    XCTAssertTrue(var != NULL);
+    Ivar expected = class_getInstanceVariable([self class], "_aStringVariable");
+    XCTAssertEqual(expected, var);
+}
+
+-(void) testVariableForInjectionPointProperty {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringProperty"];
+    Ivar expected = class_getInstanceVariable([self class], "_aStringProperty");
+    XCTAssertEqual(expected, var);
+}
+
+-(void) testVariableForInjectionPointPrivatePropertyVariable {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringProperty"];
+    Ivar expected = class_getInstanceVariable([self class], "_aStringProperty");
+    XCTAssertEqual(expected, var);
+}
+
+-(void) testVariableForInjectionPointPropertyWithDifferentVariableName {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aFunnyStringProperty"];
+    Ivar expected = class_getInstanceVariable([self class], "__myFunnyImplVariableName");
+    XCTAssertEqual(expected, var);
 }
 
 @end
