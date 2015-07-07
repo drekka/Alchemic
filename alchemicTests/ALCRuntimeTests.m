@@ -31,19 +31,36 @@
 
 -(void) testNSObjectProtocolImplements {
 
+    Class stringClass = [NSString class];
     Protocol *nsObjectP = @protocol(NSObject);
     Protocol *nsFastEnumerationP = @protocol(NSFastEnumeration);
 
     // Runtime functions do not handle hierarchy testing and nsobject is on a parent class.
     // So use NSObject conformsToProtocol: instead.
-    BOOL implements = class_conformsToProtocol([self class], nsObjectP);
+    BOOL implements = class_conformsToProtocol(stringClass, nsObjectP);
     XCTAssertFalse(implements);
 
-    implements = [[self class] conformsToProtocol:nsObjectP];
+    implements = [stringClass conformsToProtocol:nsObjectP];
     XCTAssertTrue(implements);
 
-    implements = [[NSString class] conformsToProtocol:nsFastEnumerationP];
+    implements = [stringClass conformsToProtocol:nsFastEnumerationP];
     XCTAssertFalse(implements);
+
+}
+
+-(void) testNSObjectClassIsKindOfClass {
+
+    Class stringClass = [NSString class];
+    Class mutableStringClass = [NSMutableString class];
+
+    BOOL implements = [stringClass isSubclassOfClass:mutableStringClass];
+    XCTAssertFalse(implements);
+
+    implements = [mutableStringClass isSubclassOfClass:stringClass];
+    XCTAssertTrue(implements);
+
+    implements = [stringClass isSubclassOfClass:stringClass];
+    XCTAssertTrue(implements);
 
 }
 
@@ -87,26 +104,6 @@
 
 -(void) testObjectIsAProtocolWithNumberObject {
     XCTAssertFalse([ALCRuntime objectIsAProtocol:@12]);
-}
-
--(void) testClassIsKindOfClassStringString {
-    XCTAssertTrue([ALCRuntime aClass:[NSString class] isKindOfClass:[NSString class]]);
-}
-
--(void) testClassIsKindOfClassMutableStringString {
-    XCTAssertTrue([ALCRuntime aClass:[NSMutableString class] isKindOfClass:[NSString class]]);
-}
-
--(void) testClassIsKindOfClassStringMutableString {
-    XCTAssertFalse([ALCRuntime aClass:[NSString class] isKindOfClass:[NSMutableString class]]);
-}
-
--(void) testClassConformsToProtocolWhenConforming {
-    XCTAssertTrue([ALCRuntime aClass:[NSString class] conformsToProtocol:@protocol(NSCopying)]);
-}
-
--(void) testClassConformsToProtocolWhenNotConforming {
-    XCTAssertFalse([ALCRuntime aClass:[NSString class] conformsToProtocol:@protocol(NSFastEnumeration)]);
 }
 
 -(void) testValidateSelectorValid {

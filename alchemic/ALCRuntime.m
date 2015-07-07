@@ -38,22 +38,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return __protocolClass == [possiblePrototocol class];
 }
 
-+(BOOL) aClass:(Class __nonnull) aClass isKindOfClass:(Class __nonnull) otherClass {
-    return [aClass isKindOfClass:otherClass];
-//    Class nextClass = aClass;
-//    while (nextClass != nil) {
-//        if (nextClass == otherClass) {
-//            return YES;
-//        }
-//        nextClass = class_getSuperclass(nextClass);
-//    }
-//    return NO;
-}
-
-+(BOOL) aClass:(Class __nonnull) aClass conformsToProtocol:(Protocol __nonnull *) protocol {
-    return [aClass conformsToProtocol:protocol];
-}
-
 +(void) aClass:(Class __nonnull) class validateSelector:(SEL __nonnull) selector {
     if (! class_respondsToSelector(class, selector)) {
         @throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"

@@ -20,10 +20,6 @@
 
 +(BOOL) objectIsAProtocol:(id __nonnull) possiblePrototocol;
 
-+(BOOL) aClass:(Class __nonnull) aClass isKindOfClass:(Class __nonnull) otherClass;
-
-+(BOOL) aClass:(Class __nonnull) aClass conformsToProtocol:(Protocol __nonnull *) protocol;
-
 +(void) aClass:(Class __nonnull) aClass validateSelector:(SEL __nonnull) selector;
 
 +(nonnull NSSet<Protocol *> *) aClassProtocols:(Class __nonnull) aClass;

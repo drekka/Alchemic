@@ -10,13 +10,13 @@
 @import XCTest;
 #import <OCMock/OCMock.h>
 #import <Alchemic/Alchemic.h>
+#import <StoryTeller/StoryTeller.h>
 
 #import "ALCQualifier.h"
 #import "ALCClassBuilder.h"
 
 
 @interface ALCQualifierTests : XCTestCase
-
 @end
 
 @implementation ALCQualifierTests {
@@ -42,6 +42,7 @@
 }
 
 -(void) testClassQualifierMatches {
+    STStartLogging(@"is [NSString]");
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:[NSString class]];
     XCTAssertTrue([qualifier matchesBuilder:_builder]);
 }
