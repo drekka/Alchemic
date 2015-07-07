@@ -14,6 +14,7 @@
 #import "ALCModel.h"
 #import "ALCBuilder.h"
 #import "ALCClassBuilder.h"
+#import "ALCMethodBuilder.h"
 #import <Alchemic/Alchemic.h>
 
 @interface ALCModelTests : XCTestCase
@@ -23,34 +24,42 @@
 @implementation ALCModelTests {
     ALCModel *_model;
     id _mockContext;
-    ALCClassBuilder *_builder;
+    id<ALCBuilder> _builder1;
+    id<ALCBuilder> _builder2;
 }
 
 -(void) setUp {
     STStartLogging(ALCHEMIC_LOG);
     _model = [[ALCModel alloc] init];
     _mockContext = OCMClassMock([ALCContext class]);
-    _builder = [[ALCClassBuilder alloc] initWithContext:_mockContext
-                                                             valueClass:[NSString class]
-                                                                   name:@"abc"];
-    [_model addBuilder:_builder];
+    _builder1 = [[ALCClassBuilder alloc] initWithContext:_mockContext
+                                              valueClass:[ALCModelTests class]
+                                                    name:@"abc"];
+    _builder2 = [[ALCMethodBuilder alloc] initWithContext:_mockContext
+                                               valueClass:[NSString class]
+                                                     name:@"def"
+                                       parentClassBuilder:_builder1
+                                                 selector:@selector(someMethod)
+                                               qualifiers:@[]];
+    [_model addBuilder:_builder1];
+    [_model addBuilder:_builder2];
 }
 
 -(void) testSimpleQuery {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"abc"];
-    NSSet<id<ALCBuilder>> *result = [_model buildersMatchingQualifiers:[NSSet setWithObject:qualifier]];
-    XCTAssertEqual(1u, [result count]);
-    XCTAssertEqual([NSString class], [result anyObject].valueClass);
-    XCTAssertEqual(@"abc", [result anyObject].name);
+    NSSet<id<ALCBuilder>> *results = [_model buildersMatchingQualifiers:[NSSet setWithObject:qualifier]];
+    XCTAssertEqual(1u, [results count]);
+    XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
+    XCTAssertEqual(@"abc", [results anyObject].name);
 }
 
 -(void) testComplexQuery {
     ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:@"abc"];
-    ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:[NSString class]];
-    NSSet<id<ALCBuilder>> *result = [_model buildersMatchingQualifiers:[NSSet setWithObjects:qualifier1, qualifier2, nil]];
-    XCTAssertEqual(1u, [result count]);
-    XCTAssertEqual([NSString class], [result anyObject].valueClass);
-    XCTAssertEqual(@"abc", [result anyObject].name);
+    ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:[ALCModelTests class]];
+    NSSet<id<ALCBuilder>> *results = [_model buildersMatchingQualifiers:[NSSet setWithObjects:qualifier1, qualifier2, nil]];
+    XCTAssertEqual(1u, [results count]);
+    XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
+    XCTAssertEqual(@"abc", [results anyObject].name);
 }
 
 -(void) testSecondQueryReturnsCachedResults {
@@ -60,5 +69,23 @@
     XCTAssertEqual(result1, result2);
 }
 
+-(void) testAllBuilders {
+    NSSet<id<ALCBuilder>> *results = [_model allBuilders];
+    XCTAssertEqual(2u, [results count]);
+    XCTAssertTrue([results containsObject:_builder1]);
+    XCTAssertTrue([results containsObject:_builder2]);
+}
+
+-(void) testClassBuildersFromBuilders {
+    NSSet<id<ALCBuilder>> *results = [_model classBuildersFromBuilders:[_model allBuilders]];
+    XCTAssertEqual(1u, [results count]);
+    XCTAssertTrue([results containsObject:_builder1]);
+}
+
+#pragma mark - Internal
+
+-(NSString *) someMethod {
+    return @"xyc";
+}
 
 @end
