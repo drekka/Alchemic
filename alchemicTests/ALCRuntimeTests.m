@@ -23,7 +23,7 @@
 }
 @synthesize aFunnyStringProperty = __myFunnyImplVariableName;
 
-#pragma mark - Type checks
+#pragma mark - Querying
 
 -(void) testObjectIsAClassWithStringClass {
     XCTAssertTrue([ALCRuntime objectIsAClass:[NSString class]]);
@@ -85,6 +85,58 @@
     XCTAssertFalse([ALCRuntime aClass:[NSString class] conformsToProtocol:@protocol(NSFastEnumeration)]);
 }
 
+-(void) testValidateSelectorValid {
+    [ALCRuntime aClass:[self class] validateSelector:@selector(testValidateSelectorValid)];
+}
+
+-(void) testValidateSelectorInValid {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    XCTAssertThrowsSpecificNamed([ALCRuntime  aClass:[self class] validateSelector:@selector(abc)],
+                                 NSException,
+                                 @"AlchemicSelectorNotFound");
+#pragma clang diagnostic pop
+}
+
+-(void) testClassVariableForInjectionPointExactMatch {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringVariable"];
+    Ivar expected = class_getInstanceVariable([self class], "_aStringVariable");
+    XCTAssertEqual(expected, var);
+}
+
+-(void) testClassVariableForInjectionPointWithoutUnderscorePrefix {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringVariable"];
+    Ivar expected = class_getInstanceVariable([self class], "_aStringVariable");
+    XCTAssertEqual(expected, var);
+}
+
+-(void) testClassVariableForInjectionPointProperty {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringProperty"];
+    Ivar expected = class_getInstanceVariable([self class], "_aStringProperty");
+    XCTAssertEqual(expected, var);
+}
+
+-(void) testClassVariableForInjectionPointPrivatePropertyVariable {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringProperty"];
+    Ivar expected = class_getInstanceVariable([self class], "_aStringProperty");
+    XCTAssertEqual(expected, var);
+}
+
+-(void) testClassVariableForInjectionPointPropertyWithDifferentVariableName {
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aFunnyStringProperty"];
+    Ivar expected = class_getInstanceVariable([self class], "__myFunnyImplVariableName");
+    XCTAssertEqual(expected, var);
+}
+
+-(void) testClassProtocols {
+    NSSet<Protocol *> *protocols = [ALCRuntime aClassProtocols:[NSString class]];
+    XCTAssertEqual(4u, [protocols count]);
+    XCTAssertTrue([protocols containsObject:@protocol(NSCopying)]);
+    XCTAssertTrue([protocols containsObject:@protocol(NSMutableCopying)]);
+    XCTAssertTrue([protocols containsObject:@protocol(NSSecureCoding)]);
+    XCTAssertTrue([protocols containsObject:@protocol(NSObject)]);
+}
+
 #pragma mark - General
 
 -(void) testAlchemicSelector {
@@ -92,47 +144,10 @@
     XCTAssertEqualObjects(@"_alchemic_testAlchemicSelector", NSStringFromSelector(alcSel));
 }
 
--(void) testValidateSelectorValid {
-    [ALCRuntime validateSelector:@selector(testValidateSelectorValid) withClass:[self class]];
-}
-
--(void) testValidateSelectorInValid {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-        XCTAssertThrowsSpecificNamed([ALCRuntime validateSelector:@selector(abc) withClass:[self class]],
-                                     NSException,
-                                     @"AlchemicSelectorNotFound");
-#pragma clang diagnostic pop
-}
-
--(void) testVariableForInjectionPointExactMatch {
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringVariable"];
-    Ivar expected = class_getInstanceVariable([self class], "_aStringVariable");
-    XCTAssertEqual(expected, var);
-}
-
--(void) testVariableForInjectionPointWithoutUnderscorePrefix {
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringVariable"];
-    Ivar expected = class_getInstanceVariable([self class], "_aStringVariable");
-    XCTAssertEqual(expected, var);
-}
-
--(void) testVariableForInjectionPointProperty {
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringProperty"];
-    Ivar expected = class_getInstanceVariable([self class], "_aStringProperty");
-    XCTAssertEqual(expected, var);
-}
-
--(void) testVariableForInjectionPointPrivatePropertyVariable {
+-(void) testInjectVariableValue {
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringProperty"];
-    Ivar expected = class_getInstanceVariable([self class], "_aStringProperty");
-    XCTAssertEqual(expected, var);
-}
-
--(void) testVariableForInjectionPointPropertyWithDifferentVariableName {
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aFunnyStringProperty"];
-    Ivar expected = class_getInstanceVariable([self class], "__myFunnyImplVariableName");
-    XCTAssertEqual(expected, var);
+    [ALCRuntime object:self injectVariable:var withValue:@"abc"];
+    XCTAssertEqualObjects(@"abc", self.aStringProperty);
 }
 
 @end

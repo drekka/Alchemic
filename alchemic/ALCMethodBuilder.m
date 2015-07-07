@@ -31,7 +31,7 @@
     if (self) {
 
         Class parentClass = parentClassBuilder.valueClass;
-        [ALCRuntime validateSelector:selector withClass:parentClass];
+        [ALCRuntime aClass:parentClass validateSelector:selector];
 
         // Locate the method.
         Method method = class_getInstanceMethod(parentClass, selector);

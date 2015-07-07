@@ -16,7 +16,7 @@
                                variable:(Ivar __nonnull) variable
                              qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
     self = [super initWithContext:context
-                       valueClass:[ALCRuntime classForIVar:variable]
+                       valueClass:[ALCRuntime iVarClass:variable]
                        qualifiers:qualifiers];
     if (self) {
         _variable = variable;
@@ -27,7 +27,7 @@
 -(void) injectInto:(id) object {
     id value = self.value;
     STLog([object class], @"Injecting %s::%s <- %s",object_getClassName(object) , ivar_getName(self.variable), object_getClassName(value));
-    [ALCRuntime injectObject:object variable:self.variable withValue:value];
+    [ALCRuntime object:object injectVariable:self.variable withValue:value];
 }
 
 -(NSString *) description {

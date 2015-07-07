@@ -14,7 +14,7 @@
 
 @interface ALCRuntime : NSObject
 
-#pragma mark - Checking
+#pragma mark - Checking and Querying
 
 +(BOOL) objectIsAClass:(id __nonnull) possibleClass;
 
@@ -24,33 +24,32 @@
 
 +(BOOL) aClass:(Class __nonnull) aClass conformsToProtocol:(Protocol __nonnull *) protocol;
 
-#pragma mark - General
++(void) aClass:(Class __nonnull) aClass validateSelector:(SEL __nonnull) selector;
 
-+(nonnull SEL) alchemicSelectorForSelector:(SEL __nonnull) selector;
++(nonnull NSSet<Protocol *> *) aClassProtocols:(Class __nonnull) aClass;
 
-+(void) validateSelector:(SEL __nonnull) selector withClass:(Class __nonnull) class;
-
-+(void) injectObject:(id __nonnull) object variable:(Ivar __nonnull) variable withValue:(id __nullable) value;
-
-
-+(nonnull NSSet<Protocol *> *) protocolsOnClass:(Class __nonnull) class;
++(nullable Class) iVarClass:(Ivar __nonnull) ivar;
 
 /**
  Scans a class to find the actual variable used.
  @discussion The passed injection point is used to locate one of three possibilities.
  Either a matching instance variable with the same name, a class variable of the same name or a property whose variable uses the name. When looking for the variable behind a property, a '_' is prefixed.
- 
+
  @param class the class to look at.
  @param inj   The name of the variable.
- 
+
  @return the Ivar for the variable.
  @throw an exception if no matching variable is found.
  */
 +(nullable Ivar) aClass:(Class __nonnull) aClass variableForInjectionPoint:(NSString __nonnull *) inj;
 
-+(nullable Class) classForIVar:(Ivar __nonnull) ivar;
+#pragma mark - General
 
-#pragma mark - Matchers
++(nonnull SEL) alchemicSelectorForSelector:(SEL __nonnull) selector;
+
++(void) object:(id __nonnull) object injectVariable:(Ivar __nonnull) variable withValue:(id __nullable) value;
+
+#pragma mark - Getting qualifiers
 
 +(nonnull NSSet<ALCQualifier *> *) qualifiersForClass:(Class __nonnull) class;
 

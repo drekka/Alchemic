@@ -25,7 +25,7 @@ static Class __protocolClass;
     __protocolClass = objc_getClass("Protocol");
 }
 
-#pragma mark - Checking
+#pragma mark - Checking and querying
 
 +(BOOL) objectIsAClass:(id __nonnull) possibleClass {
     // Must use getClass here to access the meta class which is how we detect class objects.
@@ -51,20 +51,7 @@ static Class __protocolClass;
     return class_conformsToProtocol(aClass, protocol);
 }
 
-#pragma mark - General
-
-+(void) injectObject:(id __nonnull) object variable:(Ivar __nonnull) variable withValue:(id __nullable) value {
-    object_setIvar(object, variable, value);
-}
-
-+(SEL) alchemicSelectorForSelector:(SEL) selector {
-    const char * prefix = _alchemic_toCharPointer(ALCHEMIC_PREFIX);
-    const char * selName = sel_getName(selector);
-    const char * newSelectorName = [NSString stringWithFormat:@"%s%s", prefix, selName].UTF8String;
-    return sel_registerName(newSelectorName);
-}
-
-+(void) validateSelector:(SEL __nonnull) selector withClass:(Class __nonnull) class {
++(void) aClass:(Class __nonnull) class validateSelector:(SEL __nonnull) selector {
     if (! class_respondsToSelector(class, selector)) {
         @throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"
                                        reason:[NSString stringWithFormat:@"Faciled to find selector %s::%s", class_getName(class), sel_getName(selector)]
@@ -72,7 +59,7 @@ static Class __protocolClass;
     }
 }
 
-+(nullable Class) classForIVar:(Ivar __nonnull) ivar {
++(nullable Class) iVarClass:(Ivar __nonnull) ivar {
     NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];
     if ([variableTypeEncoding hasPrefix:@"@"]) {
         NSArray<NSString *> *defs = [variableTypeEncoding componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@\",<>"]];
@@ -83,18 +70,40 @@ static Class __protocolClass;
     }
 }
 
-+(nonnull NSSet<Protocol *> *) protocolsOnClass:(Class __nonnull) class {
++(nonnull NSSet<Protocol *> *) aClassProtocols:(Class __nonnull) aClass {
+
     NSMutableSet<Protocol *> *protocols = [[NSMutableSet<Protocol *> alloc] init];
-    unsigned int protocolCount;
-    Protocol * __unsafe_unretained *protocolList = class_copyProtocolList(class, &protocolCount);
-    if (protocolCount > 0) {
-        for (unsigned int i = 0; i < protocolCount; i++) {
-            [protocols addObject:protocolList[i]];
+
+    [self aClass:aClass executeOnHierarchy:^BOOL(__unsafe_unretained Class nextClass) {
+        unsigned int protocolCount;
+        Protocol * __unsafe_unretained *protocolList = class_copyProtocolList(nextClass, &protocolCount);
+        if (protocolCount > 0) {
+            for (unsigned int i = 0; i < protocolCount; i++) {
+                [protocols addObject:protocolList[i]];
+            }
+            free(protocolList);
         }
-        free(protocolList);
-    }
+        return NO;
+    }];
+
+
     return protocols;
 }
+
+
+#pragma mark - General
+
++(void) object:(id __nonnull) object injectVariable:(Ivar __nonnull) variable withValue:(id __nullable) value {
+    object_setIvar(object, variable, value);
+}
+
++(SEL) alchemicSelectorForSelector:(SEL) selector {
+    const char * prefix = _alchemic_toCharPointer(ALCHEMIC_PREFIX);
+    const char * selName = sel_getName(selector);
+    const char * newSelectorName = [NSString stringWithFormat:@"%s%s", prefix, selName].UTF8String;
+    return sel_registerName(newSelectorName);
+}
+
 
 +(void) scanRuntimeWithContext:(ALCContext __nonnull *) context {
 
@@ -182,7 +191,7 @@ static Class __protocolClass;
 +(nonnull NSSet<ALCQualifier *> *) qualifiersForClass:(Class __nonnull) class {
     NSMutableSet<ALCQualifier *> * qualifiers = [[NSMutableSet<ALCQualifier *> alloc] init];
     [qualifiers addObject:[ALCQualifier qualifierWithValue:class]];
-    for (Protocol *protocol in [self protocolsOnClass:class]) {
+    for (Protocol *protocol in [self aClassProtocols:class]) {
         [qualifiers addObject:[ALCQualifier qualifierWithValue:protocol]];
     }
     return qualifiers;
@@ -217,6 +226,19 @@ static Class __protocolClass;
     }
     
     return qualifiers;
+}
+
+/**
+ Executes a block on the class hierarchy starting with the current class and working through the super class structure.
+
+ @param aClass				the class to start with.
+ @param executeBlock	the block to execute. Return a YES from this block to stop processing.
+ */
++(void) aClass:(Class __nonnull) aClass executeOnHierarchy:(BOOL (^ __nonnull)(Class nextClass)) executeBlock {
+    Class nextClass = aClass;
+    while (nextClass != nil && ! executeBlock(nextClass)) {
+        nextClass = class_getSuperclass(nextClass);
+    }
 }
 
 @end

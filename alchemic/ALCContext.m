@@ -165,7 +165,7 @@
     id<ALCBuilder> finalBuilder = classBuilder;
     if (selector != NULL) {
         // Dealing with a factory method registration so create a new entry in the model for the method.
-        [ALCRuntime validateSelector:selector withClass:classBuilder.valueClass];
+        [ALCRuntime aClass:classBuilder.valueClass validateSelector:selector];
         NSString *finalName = name == nil ? [NSString stringWithFormat:@"%@::%@", NSStringFromClass(returnType), NSStringFromSelector(selector)]: name;
         finalBuilder = [[ALCMethodBuilder alloc] initWithContext:self
                                                       valueClass:returnType
