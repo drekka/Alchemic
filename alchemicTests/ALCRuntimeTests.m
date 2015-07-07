@@ -87,7 +87,7 @@
 
 -(void) testAlchemicSelector {
     SEL alcSel = [ALCRuntime alchemicSelectorForSelector:@selector(testAlchemicSelector)];
-    XCTAssertEqualObjects(@"_alchemic_testAlchemicSelector", NSStringFromSelector(@selector(testAlchemicSelector)));
+    XCTAssertEqualObjects(@"_alchemic_testAlchemicSelector", NSStringFromSelector(alcSel));
 }
 
 -(void) testValidateSelectorValid {
@@ -104,8 +104,8 @@
 }
 
 -(void) testVariableForInjectionPoint {
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionpoint:@"aStringVariable"];
-    XCTAssertNotNil(var);
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringVariable"];
+    XCTAssertTrue(var != NULL);
 }
 
 @end
