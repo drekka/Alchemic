@@ -8,6 +8,8 @@
 
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
 #import <Alchemic/ALCBuilder.h>
+#import <Alchemic/ALCInternal.h>
+#import <StoryTeller/StoryTeller.h>
 
 @implementation ALCPrimaryObjectDependencyPostProcessor
 
@@ -22,6 +24,7 @@
     }
     
     // Replace the list if primaries are present.
+    STLog(ALCHEMIC_LOG, @"Primary objects %@", [primaries count] > 0 ? @"detected": @"not found");
     return [primaries count] > 0 ? primaries : dependencies;
 }
 

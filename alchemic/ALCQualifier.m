@@ -41,19 +41,19 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 
         // sort of the check block.
         if ([ALCRuntime objectIsAClass:value]) {
-            STLog(value, @"Creating qualifier for class: %@", NSStringFromClass(value));
+            STLog(value, @"Qualifier [%@]", NSStringFromClass(value));
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
                 return [builder.valueClass isSubclassOfClass:value];
             };
 
         } else if ([ALCRuntime objectIsAProtocol:value]) {
-            STLog(value, @"Creating qualifier for protocol: %@", NSStringFromProtocol(value));
+            STLog(value, @"Qualifier <%@>", NSStringFromProtocol(value));
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
                 return [builder.valueClass conformsToProtocol:value];
             };
 
         } else {
-            STLog(value, @"Creating qualifier for name: %@", value);
+            STLog(value, @"Qualifier '%@'", value);
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
                 return [builder.name isEqualToString:value];
             };

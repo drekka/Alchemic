@@ -16,7 +16,7 @@
 }
 
 +(void)load {
-    [STStoryTeller storyTeller].logger.showMethodDetails = NO;
+    [STStoryTeller storyTeller].logger.showMethodDetails = YES;
     [STStoryTeller storyTeller].logger.showTime = NO;
     [STStoryTeller storyTeller].logger.showThreadId = NO;
     [STStoryTeller storyTeller].logger.showKey = YES;

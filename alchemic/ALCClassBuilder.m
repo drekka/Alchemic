@@ -63,7 +63,7 @@
 }
 
 -(void) injectDependenciesInto:(id) object {
-    STLog(self, @"Injecting dependencies into a %s", [object class]);
+    STLog([object class], @"Injecting dependencies into a %s", object_getClassName(object));
     for (ALCVariableDependency *dependency in _dependencies) {
         [dependency injectInto:object];
     }

@@ -12,6 +12,7 @@
 #import <OCMock/OCMock.h>
 #import "SingletonObject.h"
 #import "InjectableProtocol.h"
+#import "ALCContext+Internal.h"
 
 @import XCTest;
 
@@ -25,7 +26,7 @@
 }
 
 +(void) initialize {
-    STStartLogging(@"Alchemic");
+    //STStartLogging(@"Alchemic");
     STStartLogging(@"is [InjectionTests]");
 }
 
@@ -35,11 +36,12 @@ ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectablePr
 
 -(void) setUp {
     [super setUpALCContext];
-
     [self scanClassIntoContext:[self class]];
+    [self.context resolveBuilderDependencies];
 
     SingletonObject *singletonObject = [[SingletonObject alloc] init];
     [self.context registerObject:singletonObject withName:@"Test Singleton"];
+
     [super setUp];
 }
 

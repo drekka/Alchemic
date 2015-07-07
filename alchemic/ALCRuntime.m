@@ -63,6 +63,12 @@ static NSCharacterSet *__typeEncodingDelimiters;
     NSMutableSet<Protocol *> *protocols = [[NSMutableSet<Protocol *> alloc] init];
 
     [self aClass:aClass executeOnHierarchy:^BOOL(__unsafe_unretained Class nextClass) {
+
+        // Ignore and exit on NSObject.
+        if (nextClass == [NSObject class]) {
+            return YES;
+        }
+
         unsigned int protocolCount;
         Protocol * __unsafe_unretained *protocolList = class_copyProtocolList(nextClass, &protocolCount);
         if (protocolCount > 0) {
@@ -177,6 +183,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Qualifiers
 
 +(nonnull NSSet<ALCQualifier *> *) qualifiersForClass:(Class __nonnull) class {
+    STLog(class, @"Generating search qualifiers for class: %@", NSStringFromClass(class));
     NSMutableSet<ALCQualifier *> * qualifiers = [[NSMutableSet<ALCQualifier *> alloc] init];
     [qualifiers addObject:[ALCQualifier qualifierWithValue:class]];
     for (Protocol *protocol in [self aClassProtocols:class]) {
@@ -187,6 +194,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(nonnull NSSet<ALCQualifier *> *) qualifiersForVariable:(Ivar __nonnull)variable {
 
+    STLog(ALCHEMIC_LOG, @"Generating qualifiers for class: %s", ivar_getName(variable));
     NSMutableSet<ALCQualifier *> * qualifiers = [[NSMutableSet<ALCQualifier *> alloc] init];
 
     // Get the type.

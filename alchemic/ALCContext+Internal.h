@@ -29,6 +29,8 @@ typedef void (^ProcessBuilderBlock)(NSSet<id<ALCBuilder>> __nonnull *);
 
 -(nonnull id) resolveValueForDependency:(ALCDependency __nonnull *) dependency candidates:(NSSet<id<ALCBuilder>> __nonnull *)candidates;
 
+-(void) resolveBuilderDependencies;
+
 #pragma mark - Registration call backs
 
 -(void) registerDependencyInClassBuilder:(ALCClassBuilder __nonnull *) classBuilder, ...;

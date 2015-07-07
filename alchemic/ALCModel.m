@@ -86,9 +86,12 @@
 }
 
 -(nonnull NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> __nonnull *) builders {
-    return (NSSet<ALCClassBuilder *> *)[builders objectsPassingTest:^BOOL(id<ALCBuilder>  __nonnull builder, BOOL * __nonnull stop) {
+    STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
+    NSSet<ALCClassBuilder *> *newBuilders = (NSSet<ALCClassBuilder *> *)[builders objectsPassingTest:^BOOL(id<ALCBuilder>  __nonnull builder, BOOL * __nonnull stop) {
         return [builder isKindOfClass:[ALCClassBuilder class]];
     }];
+    STLog(ALCHEMIC_LOG, @"Returning %lu builders", [newBuilders count]);
+    return newBuilders;
 }
 
 #pragma mark - Internal
