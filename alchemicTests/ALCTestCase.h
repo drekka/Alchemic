@@ -14,8 +14,6 @@
 
 @property (nonatomic, strong, readonly, nullable) ALCContext *context;
 
--(void) setUpALCContext;
-
--(void) scanClassIntoContext:(Class __nonnull) aClass;
+-(void) setUpALCContextWithClasses:(NSArray<Class> __nonnull *) classes;
 
 @end

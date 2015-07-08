@@ -8,6 +8,7 @@
 
 #import <Alchemic/ALCInternal.h>
 #import <Alchemic/ALCContext.h>
+#import "ALCContext+Internal.h"
 
 #pragma mark - Defining objects
 

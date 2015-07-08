@@ -16,6 +16,8 @@
  */
 @interface ALCModel : NSObject
 
+@property (nonatomic, assign, readonly) NSUInteger numberBuilders;
+
 /**
  Adds a builder to the model.
 

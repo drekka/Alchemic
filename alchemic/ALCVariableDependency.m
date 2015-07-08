@@ -19,6 +19,7 @@
                        valueClass:[ALCRuntime iVarClass:variable]
                        qualifiers:qualifiers];
     if (self) {
+        STLog(self.valueClass, @"Adding dependency for variable: %s with qualifiers: %@", ivar_getName(variable), qualifiers);
         _variable = variable;
     }
     return self;

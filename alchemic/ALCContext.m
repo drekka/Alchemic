@@ -78,7 +78,7 @@
 }
 
 -(void) resolveBuilderDependencies {
-    STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
+    STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
     [[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop){
         STLog(builder.valueClass, @"Resolving '%@' (%s)", builder.name, class_getName(builder.valueClass));
         [builder resolveDependencies];
@@ -241,19 +241,20 @@
 
 -(void) instantiateSingletons {
 
-    // This is a two stage process so that all objects are created before dependencies are wired up.
+    // This is a two stage process so that all objects are created before dependencies are injected.
     STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
     NSMutableSet *singletons = [[NSMutableSet alloc] init];
     [[_model allClassBuilders] enumerateObjectsUsingBlock:^(ALCClassBuilder *classBuilder, BOOL *stop) {
         if (classBuilder.createOnStartup) {
             STLog(classBuilder, @"Creating singleton %@ -> %@", classBuilder.name, classBuilder);
-            [singletons addObject:[classBuilder instantiate]];
+            [singletons addObject:classBuilder];
+            [classBuilder instantiate];
         }
     }];
 
-    STLog(ALCHEMIC_LOG, @"Injecting dependencies into singletons ...");
-    [singletons enumerateObjectsUsingBlock:^(id singleton, BOOL *stop) {
-        [self injectDependencies:singleton];
+    STLog(ALCHEMIC_LOG, @"Injecting dependencies into %lu singletons ...", [singletons count]);
+    [singletons enumerateObjectsUsingBlock:^(ALCClassBuilder *singleton, BOOL *stop) {
+        [singleton injectObjectDependencies:singleton.value];
     }];
     
 }

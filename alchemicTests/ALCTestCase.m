@@ -21,23 +21,25 @@
     [STStoryTeller storyTeller].logger.showMethodDetails = YES;
     [STStoryTeller storyTeller].logger.showTime = NO;
     [STStoryTeller storyTeller].logger.showThreadId = NO;
-    [STStoryTeller storyTeller].logger.showKey = YES;
-}
-
--(void) setUp {
-    [super setUp];
-    ACInjectDependencies(self);
+    [STStoryTeller storyTeller].logger.showKey = NO;
+    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
+    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor redColor];
+    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).lineDetailsColour = [UIColor colorWithRed:0.3 green:0.8 blue:0.8 alpha:1.0];
 }
 
 -(void) tearDown {
     // Stop the mocking.
     _mockAlchemic = nil;
+    [[STStoryTeller storyTeller] reset];
 }
 
--(void) setUpALCContext {
+-(void) setUpALCContextWithClasses:(NSArray<Class> __nonnull *) classes {
 
     // Set context up with minimal objects from runtime.
     _context = [[ALCContext alloc] init];
+    _mockAlchemic = OCMClassMock([ALCAlchemic class]);
+    OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
+
     NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
                                                                  //[ALCRuntimeScanner modelScanner],
                                                                  [ALCRuntimeScanner dependencyPostProcessorScanner],
@@ -46,17 +48,14 @@
                                                                  [ALCRuntimeScanner resourceLocatorScanner]
                                                                  ]];
     [ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
+
+    ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
+    [classes enumerateObjectsUsingBlock:^(Class  __nonnull aClass, NSUInteger idx, BOOL * __nonnull stop) {
+        modelScanner.processor(self.context, aClass);
+    }];
+    
     [_context start];
 
-    _mockAlchemic = OCMClassMock([ALCAlchemic class]);
-    OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
-}
-
--(void) scanClassIntoContext:(Class __nonnull) aClass {
-    NSAssert(self.context != nil, @"Context must be setup first");
-    STStartScope(aClass);
-    ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
-    modelScanner.processor(self.context, aClass);
 }
 
 @end

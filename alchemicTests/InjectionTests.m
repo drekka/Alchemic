@@ -27,7 +27,7 @@
 
 +(void) initialize {
     //STStartLogging(@"Alchemic");
-    //STStartLogging(@"is [InjectionTests]");
+    STStartLogging(@"is [InjectionTests]");
 }
 
 ACInject(ACIntoVariable(_singletonObjectByName), ACWithName(@"Test Singleton"))
@@ -35,15 +35,9 @@ ACInject(ACIntoVariable(_singletonObjectByClass), ACWithClass(SingletonObject))
 ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectableProtocol))
 
 -(void) setUp {
-    [super setUpALCContext];
-    [self scanClassIntoContext:[self class]];
-    [self scanClassIntoContext:[SingletonObject class]];
-    [self.context start];
-
-    //SingletonObject *singletonObject = [[SingletonObject alloc] init];
-    //[self.context registerObject:singletonObject withName:@"Test Singleton"];
-
-    [super setUp];
+    STStartScope([self class]);
+    [self setUpALCContextWithClasses:@[[self class],[SingletonObject class]]];
+    ACInjectDependencies(self);
 }
 
 -(void) testInjectByName {

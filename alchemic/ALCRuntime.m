@@ -109,7 +109,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
     // Define a block for processing a class.
     void (^classScanners)(ALCContext __nonnull *, Class __nonnull) = ^(ALCContext __nonnull *scanContext, Class __nonnull scanClass) {
-        STLog(ALCHEMIC_LOG, @"Checking class %@", NSStringFromClass(scanClass));
         for (ALCRuntimeScanner *scanner in runtimeScanners) {
             if (scanner.selector(scanClass)) {
                 scanner.processor(scanContext, scanClass);

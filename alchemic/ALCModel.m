@@ -29,6 +29,10 @@
     return self;
 }
 
+-(NSUInteger) numberBuilders {
+    return [_model count];
+}
+
 #pragma mark - Updating
 
 -(void) addBuilder:(id<ALCBuilder> __nonnull) builder {
