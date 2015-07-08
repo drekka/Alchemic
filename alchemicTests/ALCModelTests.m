@@ -29,7 +29,6 @@
 }
 
 -(void) setUp {
-    STStartLogging(ALCHEMIC_LOG);
     _model = [[ALCModel alloc] init];
     _mockContext = OCMClassMock([ALCContext class]);
     _builder1 = [[ALCClassBuilder alloc] initWithContext:_mockContext

@@ -14,6 +14,7 @@
 #import "ALCClassBuilder.h"
 #import <StoryTeller/StoryTeller.h>
 #import "ALCRuntimeScanner.h"
+#import "ALCConfig.h"
 
 @implementation ALCRuntime
 
@@ -102,20 +103,58 @@ static NSCharacterSet *__typeEncodingDelimiters;
     NSArray<NSBundle *> *appBundles = [NSBundle allBundles];
     appBundles = [appBundles arrayByAddingObject:[NSBundle bundleForClass:[ALCContext class]]];
 
-    for (NSBundle *bundle in appBundles) {
+    // Now do a secondary scan of the bundles included any additional bundles with configs.
+    NSMutableSet<NSBundle *> *scannedBundles = [NSMutableSet setWithArray:appBundles];
+    Protocol *configProtocol = @protocol(ALCConfig);
 
-        STLog(ALCHEMIC_LOG, @"Scanning bundle %@", bundle);
+    // Define a block for processing a class.
+    void (^classScanners)(ALCContext __nonnull *, Class __nonnull) = ^(ALCContext __nonnull *scanContext, Class __nonnull scanClass) {
+        STLog(ALCHEMIC_LOG, @"Checking class %@", NSStringFromClass(scanClass));
+        for (ALCRuntimeScanner *scanner in runtimeScanners) {
+            if (scanner.selector(scanClass)) {
+                scanner.processor(scanContext, scanClass);
+            }
+        }
+    };
+
+    [self scanBundles:appBundles withClassBlock:^(Class  __nonnull __unsafe_unretained aClass) {
+
+        // Process each class.
+        classScanners(context, aClass);
+
+        // Now check for config classes which define additional bundles.
+        if ([aClass conformsToProtocol:configProtocol]) {
+
+            // Found a config so get the classes that define additional bundles and load them up.
+            NSArray<Class> *configClasses = [((id<ALCConfig>)aClass) scanBundlesWithClasses];
+
+            [configClasses enumerateObjectsUsingBlock:^(Class  __nonnull configClass, NSUInteger idx, BOOL * __nonnull stop) {
+
+                // If the config bundle is not already scanned then do so.
+                NSBundle *additionalBundle = [NSBundle bundleForClass:configClass];
+                if (![scannedBundles containsObject:additionalBundle]) {
+
+                    [scannedBundles addObject:additionalBundle];
+
+                    [self scanBundles:@[additionalBundle]
+                       withClassBlock:^(Class  __nonnull __unsafe_unretained additionalClass) {
+                           classScanners(context, additionalClass);
+                       }];
+                }
+            }];
+        }
+
+    }];
+
+}
+
++(void) scanBundles:(NSArray<NSBundle *> __nonnull *) bundles withClassBlock:(void(^)(Class __nonnull aClass)) classBlock {
+    for (NSBundle *bundle in bundles) {
+        STLog(ALCHEMIC_LOG, @"Scanning bundle %@", bundle.bundlePath.lastPathComponent);
         unsigned int count = 0;
         const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
-
         for(unsigned int i = 0;i < count;i++){
-            Class nextClass = objc_getClass(classes[i]);
-            STLog(ALCHEMIC_LOG, @"Checking class %@", NSStringFromClass(nextClass));
-            for (ALCRuntimeScanner *scanner in runtimeScanners) {
-                if (scanner.selector(nextClass)) {
-                    scanner.processor(context, nextClass);
-                }
-            }
+            classBlock(objc_getClass(classes[i]));
         }
     }
 }

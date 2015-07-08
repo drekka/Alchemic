@@ -96,6 +96,7 @@
 		6CAE80701B42535A00217F9D /* Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CAE806D1B424F8A00217F9D /* Alchemic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB074091B4D000A00CA9002 /* ALCRuntimeScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB074071B4CF49D00CA9002 /* ALCRuntimeScanner.m */; };
 		6CB0740A1B4D000F00CA9002 /* ALCRuntimeScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB074061B4CF49D00CA9002 /* ALCRuntimeScanner.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CB0740F1B4D078C00CA9002 /* ALCConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB0740B1B4D066200CA9002 /* ALCConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46ECB1B4618630009007A /* ALCModelTests.m */; };
 		6CFD6E981B456D27008B6695 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
 /* End PBXBuildFile section */
@@ -204,6 +205,7 @@
 		6CAE806D1B424F8A00217F9D /* Alchemic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alchemic.h; sourceTree = "<group>"; };
 		6CB074061B4CF49D00CA9002 /* ALCRuntimeScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCRuntimeScanner.h; sourceTree = "<group>"; };
 		6CB074071B4CF49D00CA9002 /* ALCRuntimeScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCRuntimeScanner.m; sourceTree = "<group>"; };
+		6CB0740B1B4D066200CA9002 /* ALCConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCConfig.h; sourceTree = "<group>"; };
 		6CB309DF1B08BC29003C1DE6 /* ALCValueResolverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCValueResolverManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6CB309E01B08BD4F003C1DE6 /* ALCDefaultValueResolverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDefaultValueResolverManager.h; sourceTree = "<group>"; };
 		6CB309E11B08BD4F003C1DE6 /* ALCDefaultValueResolverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCDefaultValueResolverManager.m; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				6C418BBC1AA48ED8003D2C90 /* Object factories */,
 				6C9ADAB51ADFEAD200A240F2 /* Resources */,
 				6C1C6A721AF3A8770074BB26 /* Runtime */,
+				6CB0740B1B4D066200CA9002 /* ALCConfig.h */,
 			);
 			name = Alchemic;
 			path = alchemic;
@@ -505,6 +508,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CAE80701B42535A00217F9D /* Alchemic.h in Headers */,
+				6CB0740F1B4D078C00CA9002 /* ALCConfig.h in Headers */,
 				6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */,
 				6C36D7961B3853F10073C4FB /* ALCContext.h in Headers */,
 				6CAC887E1B4A60BE00AFB8E4 /* ALCContext+Internal.h in Headers */,

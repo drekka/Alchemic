@@ -76,7 +76,7 @@
                 return [aClass conformsToProtocol:@protocol(ALCDependencyPostProcessor)];
             }
             processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
-                STLog(ALCHEMIC_LOG, @"Adding config %@", NSStringFromClass(aClass));
+                STLog(ALCHEMIC_LOG, @"Adding dependency post processor %@", NSStringFromClass(aClass));
                 [context addDependencyPostProcessor:[[aClass alloc] init]];
             }];
 }
@@ -87,7 +87,7 @@
                 return [aClass conformsToProtocol:@protocol(ALCObjectFactory)];
             }
             processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
-                STLog(ALCHEMIC_LOG, @"Adding config %@", NSStringFromClass(aClass));
+                STLog(ALCHEMIC_LOG, @"Adding object factory %@", NSStringFromClass(aClass));
                 [context addObjectFactory:[[aClass alloc] init]];
             }];
 }
@@ -98,7 +98,7 @@
                 return [aClass conformsToProtocol:@protocol(ALCInitStrategy)];
             }
             processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
-                STLog(ALCHEMIC_LOG, @"Adding config %@", NSStringFromClass(aClass));
+                STLog(ALCHEMIC_LOG, @"Adding init strategy %@", NSStringFromClass(aClass));
                 [context addInitStrategy:aClass];
             }];
 }
@@ -109,7 +109,7 @@
                 return [aClass conformsToProtocol:@protocol(ALCResourceLocator)];
             }
             processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
-                STLog(ALCHEMIC_LOG, @"Adding config %@", NSStringFromClass(aClass));
+                STLog(ALCHEMIC_LOG, @"Adding resource locator %@", NSStringFromClass(aClass));
                 //ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
                 //classBuilder.value = [[aClass alloc] init];
             }];
