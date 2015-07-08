@@ -36,27 +36,43 @@
     return self;
 }
 
--(void) resolve {
-    [self doesNotRecognizeSelector:_cmd];
+-(BOOL) createOnStartup {
+    return _createOnStartup && _value == nil;
 }
 
+-(id) value {
+    // Value will be populated if this is not a factory.
+    if (_value == nil) {
+        id newValue = [self instantiate];
+        [self injectObjectDependencies:newValue];
+        return newValue;
+    } else {
+        return _value;
+    }
+
+}
+
+
 -(nonnull id) instantiate {
-    
-    // Get the value and store it if we are not a factory.
-    id newValue = [self resolveValue];
+    id newValue = [self instantiateObject];
     if (!_factory) {
+        // Only store the value if this is not a factory.
         _value = newValue;
     }
     return newValue;
 }
 
--(BOOL) createOnStartup {
-    return _createOnStartup && _value == nil;
+-(void) resolveDependencies {
+    [self doesNotRecognizeSelector:_cmd];
 }
 
--(nullable id) resolveValue {
+-(nonnull id) instantiateObject {
     [self doesNotRecognizeSelector:_cmd];
     return nil;
+}
+
+-(void) injectObjectDependencies:(id) object {
+    [self doesNotRecognizeSelector:_cmd];
 }
 
 @end

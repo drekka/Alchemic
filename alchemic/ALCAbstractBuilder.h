@@ -22,6 +22,14 @@
                              valueClass:(Class __nonnull) valueClass
                                    name:(NSString __nonnull *) name;
 
--(nullable id) resolveValue;
+/**
+ Called to create the object.
+ */
+-(nonnull id) instantiateObject;
+
+/**
+ Called to resolve dependencies after the value has been created.
+ */
+-(void) injectObjectDependencies:(id __nonnull) object;
 
 @end

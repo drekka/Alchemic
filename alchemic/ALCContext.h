@@ -41,7 +41,14 @@
 
 -(void) start;
 
-#pragma mark - Manually injecting dependencies
+#pragma mark - Dependencies
+
+/**
+ Called by builders when resolving their dependencies.
+ 
+ @param dependency the dependency to be resolved.
+ */
+-(void) resolveDependency:(ALCDependency __nonnull *) dependency;
 
 -(void) injectDependencies:(id __nonnull) object;
 

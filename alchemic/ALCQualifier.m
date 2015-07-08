@@ -26,6 +26,7 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 
 @implementation ALCQualifier {
     QualifierCheck __nonnull _checkBlock;
+    NSString *_descTemplate;
 }
 
 +(nonnull instancetype) qualifierWithValue:(id __nonnull) value {
@@ -41,19 +42,22 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 
         // sort of the check block.
         if ([ALCRuntime objectIsAClass:value]) {
-            STLog(value, @"Qualifier [%@]", NSStringFromClass(value));
+            _descTemplate = @"Qualifier [%@]";
+            STLog(value, _descTemplate, NSStringFromClass(value));
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
                 return [builder.valueClass isSubclassOfClass:value];
             };
 
         } else if ([ALCRuntime objectIsAProtocol:value]) {
-            STLog(value, @"Qualifier <%@>", NSStringFromProtocol(value));
+            _descTemplate = @"Qualifier <%@>";
+            STLog(value, _descTemplate, NSStringFromProtocol(value));
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
                 return [builder.valueClass conformsToProtocol:value];
             };
 
         } else {
-            STLog(value, @"Qualifier '%@'", value);
+            _descTemplate = @"Qualifier '%@'";
+            STLog(value, _descTemplate, value);
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
                 return [builder.name isEqualToString:value];
             };
@@ -67,7 +71,7 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 }
 
 -(NSString *) description {
-    return [@"Arg: " stringByAppendingString:[_value description]];
+    return [NSString stringWithFormat:_descTemplate, [_value description]];
 }
 
 @end

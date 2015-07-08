@@ -55,8 +55,14 @@
 
     // If there are no candidates left then error.
     if ([_candidateBuilders count] == 0) {
+
+        NSMutableArray<NSString *> *qualifierDescs = [[NSMutableArray alloc] initWithCapacity:[_qualifiers count]];
+        [_qualifiers enumerateObjectsUsingBlock:^(ALCQualifier * __nonnull qualifier, BOOL * __nonnull stop) {
+            [qualifierDescs addObject:[qualifier description]];
+        }];
+
         @throw [NSException exceptionWithName:@"AlchemicNoCandidateBuildersFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency, no builders found."]
+                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency %@ using %@ - no builders found.", NSStringFromClass(_valueClass), [qualifierDescs componentsJoinedByString:@", "]]
                                      userInfo:nil];
     }
 }

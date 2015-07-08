@@ -62,13 +62,27 @@
     [self instantiateSingletons];
 }
 
+#pragma mark - Dependencies
+
 -(void) injectDependencies:(id) object {
     STStartScope([object class]);
     STLog([object class], @"Locating class builder for a %@", NSStringFromClass([object class]));
     NSSet<ALCQualifier *> *qualifiers = [ALCRuntime qualifiersForClass:[object class]];
     NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersMatchingQualifiers:qualifiers]];
     ALCClassBuilder *classBuilder = [builders anyObject];
-    [classBuilder injectDependenciesInto:object];
+    [classBuilder injectObjectDependencies:object];
+}
+
+-(void) resolveDependency:(ALCDependency __nonnull *) dependency {
+    [dependency resolveWithPostProcessors:_dependencyPostProcessors];
+}
+
+-(void) resolveBuilderDependencies {
+    STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
+    [[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop){
+        STLog(builder.valueClass, @"Resolving '%@' (%s)", builder.name, class_getName(builder.valueClass));
+        [builder resolveDependencies];
+    }];
 }
 
 #pragma mark - Configuration
@@ -194,8 +208,6 @@
     [self addBuilderToModel:instance];
 }
 
-#pragma mark - Internal category
-
 -(void) addBuilderToModel:(id<ALCBuilder> __nonnull) builder {
     [_model addBuilder:builder];
 }
@@ -207,6 +219,8 @@
         processBuildersBlock(builders);
     }
 }
+
+#pragma mark - Objects
 
 -(nonnull id) instantiateObjectFromBuilder:(id<ALCBuilder> __nonnull) builder {
 
@@ -229,13 +243,6 @@
     return [_valueResolverManager resolveValueForDependency:dependency candidates:candidates];
 }
 
--(void) resolveBuilderDependencies {
-    STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
-    [[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop){
-        STLog(builder.valueClass, @"Resolving '%@' (%s)", builder.name, class_getName(builder.valueClass));
-        [builder resolve];
-    }];
-}
 
 #pragma mark - Internal
 

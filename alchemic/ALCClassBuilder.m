@@ -23,8 +23,8 @@
     NSMutableSet<ALCVariableDependency*> *_dependencies;
 }
 
--(instancetype) initWithContext:(ALCContext *__weak)context
-                     valueClass:(__unsafe_unretained Class) valueClass
+-(instancetype) initWithContext:(ALCContext *__weak __nonnull)context
+                     valueClass:(__unsafe_unretained __nonnull Class) valueClass
                            name:(NSString * __nonnull)name {
     self = [super initWithContext:context valueClass:valueClass name:name];
     if (self) {
@@ -36,7 +36,7 @@
 
 #pragma mark - Adding dependencies
 
--(void) addInjectionPoint:(NSString *) inj withQualifiers:(NSSet *) qualifiers {
+-(void) addInjectionPoint:(NSString __nonnull *) inj withQualifiers:(NSSet __nonnull *) qualifiers {
 
     Ivar variable = [ALCRuntime aClass:self.valueClass variableForInjectionPoint:inj];
     NSSet<ALCQualifier *>* finalQualifiers = qualifiers == nil || [qualifiers count] == 0 ? [ALCRuntime qualifiersForVariable:variable] : qualifiers;
@@ -48,32 +48,33 @@
 
 #pragma mark - Instantiating
 
--(id) value {
-    id returnValue = super.value;
-    if (returnValue == nil) {
-        returnValue = [self instantiate];
-        [self injectDependenciesInto:returnValue];
-    }
-    return returnValue;
+-(void) resolveDependencies {
+    ALCContext *strongContext = self.context;
+    [_dependencies enumerateObjectsUsingBlock:^(ALCVariableDependency * __nonnull dependency, BOOL * __nonnull stop) {
+        [strongContext resolveDependency:dependency];
+    }];
 }
 
--(id) resolveValue {
+-(nonnull id) instantiateObject {
+    STLog(self.valueClass, @"Creating a %@", NSStringFromClass(self.valueClass));
     ALCContext *strongContext = self.context;
     return [strongContext instantiateObjectFromBuilder:self];
 }
 
--(void) injectDependenciesInto:(id) object {
+-(void) injectObjectDependencies:(id __nonnull) object {
     STLog([object class], @"Injecting dependencies into a %s", object_getClassName(object));
     for (ALCVariableDependency *dependency in _dependencies) {
         [dependency injectInto:object];
     }
 }
 
--(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy {
+#pragma mark - Init strategies
+
+-(void) addInitStrategy:(id<ALCInitStrategy> __nonnull) initialisationStrategy {
     _initialisationStrategies = [_initialisationStrategies arrayByAddingObject:initialisationStrategy];
 }
 
--(NSString *) description {
+-(nonnull NSString *) description {
     return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueClass), self.factory ? @" (factory)" : @""];
 }
 

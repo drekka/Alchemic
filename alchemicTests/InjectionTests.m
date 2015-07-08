@@ -37,6 +37,7 @@ ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectablePr
 -(void) setUp {
     [super setUpALCContext];
     [self scanClassIntoContext:[self class]];
+    [self scanClassIntoContext:[SingletonObject class]];
     [self.context resolveBuilderDependencies];
 
     SingletonObject *singletonObject = [[SingletonObject alloc] init];

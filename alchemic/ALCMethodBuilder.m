@@ -69,17 +69,7 @@
     return self;
 }
 
--(id) value {
-    id returnValue = super.value;
-    if (returnValue == nil) {
-        returnValue = [self instantiate];
-        ALCContext *strongContext = self.context;
-        [strongContext injectDependencies:returnValue];
-    }
-    return returnValue;
-}
-
--(id) resolveValue {
+-(nonnull id) instantiateObject {
 
     STLog([self description], @"Creating object with %@", [self description]);
 
@@ -105,10 +95,21 @@
     [_inv getReturnValue:&returnObj];
     STLog([self description], @"   Method created a %s", class_getName([returnObj class]));
     return returnObj;
-
 }
 
--(NSString *) description {
+-(void) resolveDependencies {
+    ALCContext *strongContext = self.context;
+    [_invArgumentDependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
+        [strongContext resolveDependency:dependency];
+    }];
+}
+
+-(void) injectObjectDependencies:(id __nonnull) object {
+    STLog([object class], @"Injecting dependencies into a %s", object_getClassName(object));
+    [self.context injectDependencies:object];
+}
+
+-(nonnull NSString *) description {
     return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_parentClassBuilder.valueClass), sel_getName(_selector)];
 }
 
