@@ -151,11 +151,12 @@
 
 -(void) testClassProtocols {
     NSSet<Protocol *> *protocols = [ALCRuntime aClassProtocols:[NSString class]];
-    XCTAssertEqual(4u, [protocols count]);
+    XCTAssertEqual(3u, [protocols count]);
     XCTAssertTrue([protocols containsObject:@protocol(NSCopying)]);
     XCTAssertTrue([protocols containsObject:@protocol(NSMutableCopying)]);
     XCTAssertTrue([protocols containsObject:@protocol(NSSecureCoding)]);
-    XCTAssertTrue([protocols containsObject:@protocol(NSObject)]);
+    // Not applying the NSObject protocol as every object would have it.
+    //XCTAssertTrue([protocols containsObject:@protocol(NSObject)]);
 }
 
 -(void) testIVarClassNSString {

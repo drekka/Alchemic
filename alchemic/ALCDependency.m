@@ -37,6 +37,7 @@
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> __nonnull *) postProcessors {
 
     STLog(_valueClass, @"Resolving %@", self);
+    STStartScope(self->_valueClass);
     ALCContext *strongContext = _context;
     [strongContext executeOnBuildersWithQualifiers:_qualifiers
                            processingBuildersBlock:^(NSSet<id<ALCBuilder>> * __nonnull builders) {

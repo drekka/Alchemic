@@ -181,31 +181,24 @@
     if (selector != NULL) {
         // Dealing with a factory method registration so create a new entry in the model for the method.
         [ALCRuntime aClass:classBuilder.valueClass validateSelector:selector];
-        NSString *finalName = name == nil ? [NSString stringWithFormat:@"%@::%@", NSStringFromClass(returnType), NSStringFromSelector(selector)]: name;
         finalBuilder = [[ALCMethodBuilder alloc] initWithContext:self
                                                       valueClass:returnType
-                                                            name:finalName
+                                                            name:[NSString stringWithFormat:@"%@::%@", NSStringFromClass(returnType), NSStringFromSelector(selector)]
                                               parentClassBuilder:classBuilder
                                                         selector:selector
                                                       qualifiers:qualifiers];
         [self addBuilderToModel:finalBuilder];
     }
 
+    if (name != nil) {
+        classBuilder.name = name;
+    }
     finalBuilder.factory = isFactory;
     finalBuilder.primary = isPrimary;
     finalBuilder.createOnStartup = !isFactory;
 
     STLog(finalBuilder, @"Setting up: %@, Primary: %@, Factory: %@, Factory Selector: %s, Return type: %s, Name: %@", finalBuilder, isPrimary ? @"YES": @"NO", isFactory ? @"YES": @"NO",sel_getName(selector) , class_getName(returnType), name);
 
-}
-
--(void) registerObject:(id) object withName:(NSString *) name {
-    ALCClassBuilder *instance = [[ALCClassBuilder alloc] initWithContext:self
-                                                              valueClass:[object class]
-                                                                    name:name];
-    STLog(instance, @"Adding object %@", object);
-    instance.value = object;
-    [self addBuilderToModel:instance];
 }
 
 -(void) addBuilderToModel:(id<ALCBuilder> __nonnull) builder {

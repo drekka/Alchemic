@@ -9,7 +9,9 @@
 #import <OCMock/OCMock.h>
 #import <StoryTeller/StoryTeller.h>
 #import "ALCTestCase.h"
-#import "ALCModelClassProcessor.h"
+#import "ALCPrimaryObjectDependencyPostProcessor.h"
+#import "ALCRuntime.h"
+#import "ALCRuntimeScanner.h"
 
 @implementation ALCTestCase {
     id _mockAlchemic;
@@ -33,7 +35,19 @@
 }
 
 -(void) setUpALCContext {
+
+    // Set context up with minimal objects from runtime.
     _context = [[ALCContext alloc] init];
+    NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
+                                                                 //[ALCRuntimeScanner modelScanner],
+                                                                 [ALCRuntimeScanner dependencyPostProcessorScanner],
+                                                                 [ALCRuntimeScanner objectFactoryScanner],
+                                                                 //[ALCRuntimeScanner initStrategyScanner],
+                                                                 [ALCRuntimeScanner resourceLocatorScanner]
+                                                                 ]];
+    [ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
+    [_context start];
+
     _mockAlchemic = OCMClassMock([ALCAlchemic class]);
     OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
 }
@@ -41,8 +55,8 @@
 -(void) scanClassIntoContext:(Class __nonnull) aClass {
     NSAssert(self.context != nil, @"Context must be setup first");
     STStartScope(aClass);
-    ALCModelClassProcessor *classProcessor = [[ALCModelClassProcessor alloc] init];
-    [classProcessor processClass:aClass withContext:self.context];
+    ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
+    modelScanner.processor(self.context, aClass);
 }
 
 @end

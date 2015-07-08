@@ -13,9 +13,7 @@
 #import <Alchemic/ALCContext.h>
 #import "ALCClassBuilder.h"
 #import <StoryTeller/StoryTeller.h>
-#import "ALCModelClassProcessor.h"
-#import "ALCClassWithProtocolClassProcessor.h"
-#import "ALCResourceLocator.h"
+#import "ALCRuntimeScanner.h"
 
 @implementation ALCRuntime
 
@@ -98,49 +96,25 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return sel_registerName(newSelectorName);
 }
 
++(void) scanRuntimeWithContext:(ALCContext __nonnull *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> __nonnull *) runtimeScanners {
 
-+(void) scanRuntimeWithContext:(ALCContext __nonnull *) context {
+    // Use the app bundles and Alchemic framework for searching for runtime components.
+    NSArray<NSBundle *> *appBundles = [NSBundle allBundles];
+    appBundles = [appBundles arrayByAddingObject:[NSBundle bundleForClass:[ALCContext class]]];
 
-    ClassMatchesBlock initStrategiesBlock = ^(classMatchesBlockArgs){
-        [context addInitStrategy:class];
-    };
-
-    ClassMatchesBlock resolverPostProcessorBlock = ^(classMatchesBlockArgs){
-        [context addDependencyPostProcessor:[[class alloc] init]];
-    };
-
-    /*
-     ClassMatchesBlock resourceLocatorBlock = ^(classMatchesBlockArgs){
-     ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
-     classBuilder.value = [[class alloc] init];
-     };
-     */
-
-    ClassMatchesBlock objectFactoryBlock = ^(classMatchesBlockArgs){
-        [context addObjectFactory:[[class alloc] init]];
-    };
-
-    NSSet *processors = [NSSet setWithArray:@[
-                                              [[ALCModelClassProcessor alloc] init],
-                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCInitStrategy)
-                                                                                               whenMatches:initStrategiesBlock],
-                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCDependencyPostProcessor)
-                                                                                               whenMatches:resolverPostProcessorBlock],
-                                              // [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCResourceLocator)
-                                              //                                                 whenMatches:resourceLocatorBlock],
-                                              [[ALCClassWithProtocolClassProcessor alloc] initWithProtocol:@protocol(ALCObjectFactory)
-                                                                                               whenMatches:objectFactoryBlock]
-                                              ]];
-
-    for (NSBundle *bundle in [NSBundle allBundles]) {
+    for (NSBundle *bundle in appBundles) {
 
         STLog(ALCHEMIC_LOG, @"Scanning bundle %@", bundle);
         unsigned int count = 0;
         const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
 
         for(unsigned int i = 0;i < count;i++){
-            for (id<ALCClassProcessor> processor in processors) {
-                [processor processClass:objc_getClass(classes[i]) withContext:context];
+            Class nextClass = objc_getClass(classes[i]);
+            STLog(ALCHEMIC_LOG, @"Checking class %@", NSStringFromClass(nextClass));
+            for (ALCRuntimeScanner *scanner in runtimeScanners) {
+                if (scanner.selector(nextClass)) {
+                    scanner.processor(context, nextClass);
+                }
             }
         }
     }

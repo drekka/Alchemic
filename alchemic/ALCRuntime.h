@@ -9,8 +9,9 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCQualifier.h>
-#import <Alchemic/ALCContext.h>
+@class ALCRuntimeScanner;
+@class ALCContext;
+@class ALCQualifier;
 
 @interface ALCRuntime : NSObject
 
@@ -57,6 +58,6 @@
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
  @discussion Once found, the block is called to finish the registration of the class.
  */
-+(void) scanRuntimeWithContext:(ALCContext __nonnull *) context;
++(void) scanRuntimeWithContext:(ALCContext __nonnull *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> __nonnull *) runtimeScanners;
 
 @end

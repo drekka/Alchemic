@@ -12,6 +12,7 @@
 
 #import "ALCAbstractClass.h"
 #import "ALCRuntime.h"
+#import "ALCInitStrategy.h"
 #import <Alchemic/ALCAlchemic.h>
 
 // Use this macro with the initLogic macro to safely wrap up the args. This allows us to passed multiple

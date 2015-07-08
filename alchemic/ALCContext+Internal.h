@@ -37,6 +37,4 @@ typedef void (^ProcessBuilderBlock)(NSSet<id<ALCBuilder>> __nonnull *);
 
 -(void) registerClassBuilder:(ALCClassBuilder __nonnull *) classBuilder, ...;
 
--(void) registerObject:(id __nonnull) object withName:(NSString __nonnull *) name;
-
 @end
