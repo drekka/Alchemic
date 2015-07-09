@@ -9,98 +9,108 @@
 #import "ALCMethodBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
-#import "ALCType.h"
 #import <Alchemic/ALCContext.h>
 
 @implementation ALCMethodBuilder {
-    ALCClassBuilder *_factoryClassBuilder;
-    SEL _factorySelector;
-    NSInvocation *_factoryInvocation;
+    ALCClassBuilder *_parentClassBuilder;
+    SEL _selector;
+    NSInvocation *_inv;
+    NSMutableArray<ALCDependency *> *_invArgumentDependencies;
+    BOOL _useClassMethod;
+
 }
 
--(instancetype) initWithContext:(__weak ALCContext *) context
-                      valueType:(ALCType *) valueType
-            factoryClassBuilder:(ALCClassBuilder *) factoryClassBuilder
-                factorySelector:(SEL) factorySelector
-               argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers {
-    
-    self = [super initWithContext:context valueType:valueType];
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                             valueClass:(Class __nonnull) valueClass
+                                   name:(NSString __nonnull *)name
+                     parentClassBuilder:(ALCClassBuilder __nonnull *) parentClassBuilder
+                               selector:(SEL __nonnull) selector
+                             qualifiers:(NSArray __nonnull *) qualifiers {
+
+    self = [super initWithContext:context valueClass:valueClass name:name];
     if (self) {
-        
-        Class factoryClass = factoryClassBuilder.valueType.typeClass;
-        [ALCRuntime validateSelector:factorySelector withClass:factoryClass];
-        
+
+        Class parentClass = parentClassBuilder.valueClass;
+        [ALCRuntime aClass:parentClass validateSelector:selector];
+
         // Locate the method.
-        Method method = class_getInstanceMethod(factoryClass, factorySelector);
+        Method method = class_getInstanceMethod(parentClass, selector);
         if (method == NULL) {
-            method = class_getClassMethod(factoryClass, factorySelector);
+            _useClassMethod = YES;
+            method = class_getClassMethod(parentClass, selector);
         }
-        
+
         // Validate the number of arguments.
         unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
-        if (nbrArgs != [argumentMatchers count]) {
+        if (nbrArgs != [qualifiers count]) {
             @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
-                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu", class_getName(factoryClassBuilder.valueType.typeClass), sel_getName(factorySelector), nbrArgs, (unsigned long)[argumentMatchers count]]
+                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu",
+                                                   class_getName(parentClass),
+                                                   sel_getName(selector),
+                                                   nbrArgs,
+                                                   (unsigned long)[qualifiers count]]
                                          userInfo:nil];
         }
-        
-        _factoryClassBuilder = factoryClassBuilder;
-        _factorySelector = factorySelector;
-        
+
+        _parentClassBuilder = parentClassBuilder;
+        _selector = selector;
+        _invArgumentDependencies = [[NSMutableArray alloc] init];
+
         // Setup the dependencies for each argument.
         Class arrayClass = [NSArray class];
-        [argumentMatchers enumerateObjectsUsingBlock:^(id matchers, NSUInteger idx, BOOL *stop) {
-            NSSet<id<ALCMatcher>> *matcherSet = [matchers isKindOfClass:arrayClass] ? [NSSet setWithArray:matchers] : [NSSet setWithObject:matchers];
-            [self addDependency:[[ALCDependency alloc] initWithContext:context
-                                                             valueType:nil
-                                                              matchers:matcherSet]];
+        [qualifiers enumerateObjectsUsingBlock:^(id qualifier, NSUInteger idx, BOOL *stop) {
+            NSSet<ALCQualifier *> *qualifierSet = [qualifier isKindOfClass:arrayClass] ? [NSSet setWithArray:qualifier] : [NSSet setWithObject:qualifier];
+            [self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithContext:context
+                                                                                  valueClass:[NSObject class]
+                                                                                  qualifiers:qualifierSet]];
         }];
-        
+
     }
     return self;
 }
 
--(id) value {
-    id returnValue = super.value;
-    if (returnValue == nil) {
-        returnValue = [self instantiate];
-        ALCContext *strongContext = self.context;
-        [strongContext injectDependencies:returnValue];
-    }
-    return returnValue;
-}
+-(nonnull id) instantiateObject {
 
--(id) resolveValue {
-    
     STLog([self description], @"Creating object with %@", [self description]);
-    
-    id factoryObject = _factoryClassBuilder.value;
-    
+
+    id factoryObject = _parentClassBuilder.value;
+
     // Get an invocation ready.
-    if (_factoryInvocation == nil) {
-        NSMethodSignature *sig = [factoryObject methodSignatureForSelector:_factorySelector];
-        _factoryInvocation = [NSInvocation invocationWithMethodSignature:sig];
-        _factoryInvocation.selector = _factorySelector;
-        [_factoryInvocation retainArguments];
+    if (_inv == nil) {
+        NSMethodSignature *sig = [factoryObject methodSignatureForSelector:_selector];
+        _inv = [NSInvocation invocationWithMethodSignature:sig];
+        _inv.selector = _selector;
+        [_inv retainArguments];
     }
-    
+
     // Load the arguments.
-    [self.dependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
-        id argument = dependency.value;
-        [self->_factoryInvocation setArgument:&argument atIndex:(NSInteger)idx];
+    [_invArgumentDependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
+        id argumentValue = dependency.value;
+        [self->_inv setArgument:&argumentValue atIndex:(NSInteger)idx];
     }];
-    
-    [_factoryInvocation invokeWithTarget:factoryObject];
-    
+
+    [_inv invokeWithTarget:factoryObject];
+
     id returnObj;
-    [_factoryInvocation getReturnValue:&returnObj];
+    [_inv getReturnValue:&returnObj];
     STLog([self description], @"   Method created a %s", class_getName([returnObj class]));
     return returnObj;
-    
 }
 
--(NSString *) description {
-    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_factoryClassBuilder.valueType.typeClass), sel_getName(_factorySelector)];
+-(void) resolveDependencies {
+    ALCContext *strongContext = self.context;
+    [_invArgumentDependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
+        [strongContext resolveDependency:dependency];
+    }];
+}
+
+-(void) injectObjectDependencies:(id __nonnull) object {
+    STLog([object class], @"Injecting dependencies into a %s", object_getClassName(object));
+    [self.context injectDependencies:object];
+}
+
+-(nonnull NSString *) description {
+    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_parentClassBuilder.valueClass), sel_getName(_selector)];
 }
 
 @end

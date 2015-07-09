@@ -11,14 +11,13 @@
 @import UIKit;
 @import ObjectiveC;
 
-#import "ALCType.h"
 #import "ALCClassBuilder.h"
 #import <Alchemic/ALCContext.h>
 
 @implementation ALCNSObjectInitStrategy
 
 +(BOOL) canWrapInit:(ALCClassBuilder *) classBuilder {
-    return ! [classBuilder.valueType.typeClass isSubclassOfClass:[UIViewController class]];
+    return ! [classBuilder.valueClass isSubclassOfClass:[UIViewController class]];
 }
 
 -(SEL) initSelector {

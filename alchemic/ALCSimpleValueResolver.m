@@ -12,7 +12,6 @@
 
 #import <Alchemic/ALCDependency.h>
 #import <StoryTeller/StoryTeller.h>
-#import "ALCType.h"
 
 @implementation ALCSimpleValueResolver
 

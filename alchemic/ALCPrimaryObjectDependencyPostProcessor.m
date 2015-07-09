@@ -8,10 +8,12 @@
 
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
 #import <Alchemic/ALCBuilder.h>
+#import <Alchemic/ALCInternal.h>
+#import <StoryTeller/StoryTeller.h>
 
 @implementation ALCPrimaryObjectDependencyPostProcessor
 
--(NSSet *) process:(NSSet *) dependencies {
+-(nonnull NSSet<id<ALCBuilder>> *) process:(NSSet<id<ALCBuilder>> __nonnull *) dependencies {
 
     // Build a list of primary objects.
     NSMutableSet<id<ALCBuilder>> *primaries = [[NSMutableSet alloc] init];
@@ -22,6 +24,7 @@
     }
     
     // Replace the list if primaries are present.
+    STLog(ALCHEMIC_LOG, @"Primary objects %@", [primaries count] > 0 ? @"detected": @"not found");
     return [primaries count] > 0 ? primaries : dependencies;
 }
 

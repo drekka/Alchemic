@@ -10,15 +10,14 @@
 #import <StoryTeller/StoryTeller.h>
 #import "ALCRuntime.h"
 #import <Alchemic/ALCDependency.h>
-#import "ALCType.h"
 
 @implementation ALCArrayValueResolver
 
 -(BOOL) canResolveValueForDependency:(ALCDependency *)dependency
                           candidates:(NSSet<id<ALCBuilder>> *)candidates {
-    Class typeClass = dependency.valueType.typeClass;
+    Class typeClass = dependency.valueClass;
     return (typeClass == NULL && [candidates count] > 1)
-    || [ALCRuntime class:typeClass isKindOfClass:[NSArray class]];
+    || [typeClass isKindOfClass:[NSArray class]];
 }
 
 -(id) resolveCandidateValues:(NSSet<id<ALCBuilder>> *) candidates {

@@ -7,7 +7,7 @@
 //
 
 #import "SingletonObject.h"
-#import <Alchemic/Alchemic.h>
+#import <Alchemic/ALCContext+Internal.h>
 
 @implementation SingletonObject
 

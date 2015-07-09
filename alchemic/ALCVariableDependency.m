@@ -12,14 +12,14 @@
 
 @implementation ALCVariableDependency
 
--(instancetype) initWithContext:(__weak ALCContext *) context
-                       variable:(Ivar) variable
-                      valueType:(ALCType *) valueType
-                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers {
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                               variable:(Ivar __nonnull) variable
+                             qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
     self = [super initWithContext:context
-                        valueType:valueType
-                         matchers:dependencyMatchers];
+                       valueClass:[ALCRuntime iVarClass:variable]
+                       qualifiers:qualifiers];
     if (self) {
+        STLog(self.valueClass, @"Registering variable dependency: %s with qualifiers: %@", ivar_getName(variable), qualifiers);
         _variable = variable;
     }
     return self;
@@ -27,8 +27,8 @@
 
 -(void) injectInto:(id) object {
     id value = self.value;
-    STLog([object class], @"   Injecting %s::%s <- %s",object_getClassName(object) , ivar_getName(self.variable), object_getClassName(value));
-    [ALCRuntime injectObject:object variable:self.variable withValue:value];
+    STLog([object class], @"Injecting %s::%s <- %s",object_getClassName(object), ivar_getName(self.variable), object_getClassName(value));
+    [ALCRuntime object:object injectVariable:self.variable withValue:value];
 }
 
 -(NSString *) description {

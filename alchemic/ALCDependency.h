@@ -10,20 +10,21 @@
 
 @class ALCContext;
 
-#import <Alchemic/ALCMatcher.h>
+#import <Alchemic/ALCQualifier.h>
+#import <Alchemic/ALCDependencyPostProcessor.h>
 
 @interface ALCDependency : NSObject
 
-@property (nonatomic, strong, readonly) id value;
+@property (nonatomic, strong, readonly, nonnull) id value;
 
-@property (nonatomic, strong, readonly) ALCType *valueType;
+@property (nonatomic, strong, readonly, nonnull) Class valueClass;
 
 #pragma mark - Resolving
 
--(void) resolve;
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> __nonnull *) postProcessors;
 
--(instancetype) initWithContext:(__weak ALCContext *) context
-                      valueType:(ALCType *) valueType
-                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers;
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                             valueClass:(Class __nonnull) valueClass
+                             qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers;
 
 @end

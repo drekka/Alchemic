@@ -10,12 +10,11 @@
 
 @interface ALCMethodBuilder : ALCAbstractBuilder
 
-@property (nonatomic, strong, readonly) NSArray *argumentMatchers;
-
--(instancetype) initWithContext:(__weak ALCContext *) context
-                      valueType:(ALCType *) valyeType
-            factoryClassBuilder:(ALCClassBuilder *) factoryClassBuilder
-                factorySelector:(SEL) factorySelector
-               argumentMatchers:(NSArray<id<ALCMatcher>> *) argumentMatchers NS_DESIGNATED_INITIALIZER;
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                             valueClass:(Class __nonnull) valueClass
+                                   name:(NSString __nonnull *)name
+                     parentClassBuilder:(ALCClassBuilder __nonnull *) parentClassBuilder
+                               selector:(SEL __nonnull) selector
+                             qualifiers:(NSArray __nonnull *) qualifiers NS_DESIGNATED_INITIALIZER;
 
 @end

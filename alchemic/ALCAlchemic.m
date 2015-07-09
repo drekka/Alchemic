@@ -11,6 +11,7 @@
 #import <Alchemic/ALCInternal.h>
 
 #import "ALCRuntime.h"
+#import "ALCRuntimeScanner.h"
 
 #import <StoryTeller/StoryTeller.h>
 
@@ -36,7 +37,14 @@ static __strong ALCContext *__mainContext;
 +(void) start {
     STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
     __mainContext = [[ALCContext alloc] init];
-    [ALCRuntime scanRuntimeWithContext:__mainContext];
+    NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
+                                                                 [ALCRuntimeScanner modelScanner],
+                                                                 [ALCRuntimeScanner dependencyPostProcessorScanner],
+                                                                 [ALCRuntimeScanner objectFactoryScanner],
+                                                                 [ALCRuntimeScanner initStrategyScanner],
+                                                                 [ALCRuntimeScanner resourceLocatorScanner]
+                                                                 ]];
+    [ALCRuntime scanRuntimeWithContext:__mainContext runtimeScanners:scanners];
     [__mainContext start];
 }
 

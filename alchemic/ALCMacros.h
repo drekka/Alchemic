@@ -6,6 +6,10 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
+#import <Alchemic/ALCInternal.h>
+#import <Alchemic/ALCContext.h>
+#import "ALCContext+Internal.h"
+
 #pragma mark - Defining objects
 
 #define ACAsName(_objectName) [ALCAsName asNameWithName:_objectName]
@@ -16,11 +20,11 @@
 
 #pragma mark - Dependency matching
 
-#define ACWithClass(_className) [ALCClassMatcher matcherWithClass:[_className class]]
+#define ACWithClass(_className) [ALCQualifier qualifierWithValue:[_className class]]
 
-#define ACWithProtocol(_protocolName) [ALCProtocolMatcher matcherWithProtocol:@protocol(_protocolName)]
+#define ACWithProtocol(_protocolName) [ALCQualifier qualifierWithValue:@protocol(_protocolName)]
 
-#define ACWithName(_objectName) [ALCNameMatcher matcherWithName:_objectName]
+#define ACWithName(_objectName) [ALCQualifier qualifierWithValue:_objectName]
 
 #define ACReturnType(_returnType) [ALCReturnType returnTypeWithClass:[_returnType class]]
 

@@ -15,51 +15,64 @@
 @implementation ALCAbstractBuilder
 
 // Properties from protocol
-@synthesize valueType = _valueType;
+@synthesize valueClass = _valueClass;
 @synthesize primary = _primary;
 @synthesize factory = _factory;
 @synthesize createOnStartup = _createOnStartup;
 @synthesize value = _value;
+@synthesize name = _name;
 
 #pragma mark - Lifecycle
 
--(instancetype) initWithContext:(__weak ALCContext *) context valueType:(ALCType *) valueType {
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                             valueClass:(Class __nonnull) valueClass
+                                   name:(NSString __nonnull *) name {
     self = [super init];
     if (self) {
+        _name = name == nil ? NSStringFromClass(valueClass) : name;
         _context = context;
-        _valueType = valueType;
-        _dependencies = [[NSMutableArray alloc] init];
+        _valueClass = valueClass;
     }
     return self;
 }
 
--(void) addDependency:(ALCDependency *) dependency {
-    [(NSMutableArray *) self.dependencies addObject:dependency];
+-(BOOL) createOnStartup {
+    return _createOnStartup && _value == nil;
 }
 
--(void) resolve {
-    for (ALCDependency *dependency in self.dependencies) {
-        [dependency resolve];
+-(id) value {
+    // Value will be populated if this is not a factory.
+    if (_value == nil) {
+        id newValue = [self instantiate];
+        [self injectObjectDependencies:newValue];
+        return newValue;
+    } else {
+        return _value;
     }
+
 }
 
--(id) instantiate {
-    
-    // Get the value and store it if we are not a factory.
-    id newValue = [self resolveValue];
+
+-(nonnull id) instantiate {
+    id newValue = [self instantiateObject];
     if (!_factory) {
+        // Only store the value if this is not a factory.
         _value = newValue;
     }
     return newValue;
 }
 
--(BOOL) shouldCreateOnStartup {
-    return _createOnStartup && _value == nil;
+-(void) resolveDependencies {
+    [self doesNotRecognizeSelector:_cmd];
 }
 
--(id) resolveValue {
+-(nonnull id) instantiateObject {
     [self doesNotRecognizeSelector:_cmd];
     return nil;
+}
+
+-(void) injectObjectDependencies:(id) object {
+    [self doesNotRecognizeSelector:_cmd];
 }
 
 @end

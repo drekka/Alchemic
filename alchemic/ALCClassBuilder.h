@@ -15,10 +15,8 @@
 
 #pragma mark - Setting up
 
--(void) addInjectionPoint:(NSString *) inj withMatchers:(NSSet *) matchers;
+-(void) addInjectionPoint:(NSString __nonnull *) inj withQualifiers:(NSSet __nonnull *) qualifiers;
 
--(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
-
--(void) injectDependenciesInto:(id) object;
+-(void) addInitStrategy:(id<ALCInitStrategy> __nonnull) initialisationStrategy;
 
 @end

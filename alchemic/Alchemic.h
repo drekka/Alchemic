@@ -17,7 +17,7 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 #import <Alchemic/ALCAlchemic.h>
 #import <Alchemic/ALCAsName.h>
 #import <Alchemic/ALCBuilder.h>
-#import <Alchemic/ALCClassMatcher.h>
+#import <Alchemic/ALCConfig.h>
 #import <Alchemic/ALCContext.h>
 #import <Alchemic/ALCDependency.h>
 #import <Alchemic/ALCDependencyPostProcessor.h>
@@ -28,10 +28,9 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 #import <Alchemic/ALCIsFactory.h>
 #import <Alchemic/ALCIsPrimary.h>
 #import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCMatcher.h>
 #import <Alchemic/ALCMethodSelector.h>
-#import <Alchemic/ALCNameMatcher.h>
 #import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCProtocolMatcher.h>
+#import <Alchemic/ALCQualifier.h>
 #import <Alchemic/ALCReturnType.h>
 #import <Alchemic/ALCValueResolverManager.h>
+#import <Alchemic/ALCContext+Internal.h>

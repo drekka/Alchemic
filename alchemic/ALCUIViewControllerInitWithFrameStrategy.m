@@ -11,13 +11,13 @@
 #import "ALCUIViewControllerInitWithFrameStrategy.h"
 
 #import "ALCClassBuilder.h"
-#import "ALCType.h"
 #import <Alchemic/ALCContext.h>
+#import "ALCRuntime.h"
 
 @implementation ALCUIViewControllerInitWithFrameStrategy
 
 +(BOOL) canWrapInit:(ALCClassBuilder *) classBuilder {
-    return [classBuilder.valueType.typeClass isSubclassOfClass:[UIViewController class]];
+    return [classBuilder.valueClass isKindOfClass:[UIViewController class]];
 }
 
 -(SEL) replacementInitSelector {

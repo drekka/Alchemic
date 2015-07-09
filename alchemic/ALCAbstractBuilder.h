@@ -18,10 +18,18 @@
 
 @property (nonatomic, weak, readonly) ALCContext *context;
 
-@property(nonatomic, strong, readonly) NSArray<ALCDependency *> *dependencies;
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                             valueClass:(Class __nonnull) valueClass
+                                   name:(NSString __nonnull *) name;
 
--(instancetype) initWithContext:(__weak ALCContext *) context valueType:(ALCType *) valueType;
+/**
+ Called to create the object.
+ */
+-(nonnull id) instantiateObject;
 
--(id) resolveValue;
+/**
+ Called to resolve dependencies after the value has been created.
+ */
+-(void) injectObjectDependencies:(id __nonnull) object;
 
 @end

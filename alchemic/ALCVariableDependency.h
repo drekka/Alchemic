@@ -11,13 +11,12 @@
 
 @interface ALCVariableDependency : ALCDependency
 
-@property (nonatomic, assign, readonly) Ivar variable;
+@property (nonatomic, assign, readonly, nonnull) Ivar variable;
 
--(instancetype) initWithContext:(__weak ALCContext *) context
-                       variable:(Ivar) variable
-                      valueType:(ALCType *) valueType
-                       matchers:(NSSet<id<ALCMatcher>> *) dependencyMatchers NS_DESIGNATED_INITIALIZER;
+-(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
+                               variable:(Ivar __nonnull) variable
+                               qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers NS_DESIGNATED_INITIALIZER;
 
--(void) injectInto:(id) object;
+-(void) injectInto:(id __nonnull) object;
 
 @end

@@ -9,48 +9,55 @@
 @import Foundation;
 @import ObjectiveC;
 
-@class ALCClassBuilder;
+@class ALCRuntimeScanner;
 @class ALCContext;
+@class ALCQualifier;
 
 @interface ALCRuntime : NSObject
 
-#pragma mark - General
+#pragma mark - Checking and Querying
 
-+(const char *) concat:(const char *) left to:(const char *) right;
++(BOOL) objectIsAClass:(id __nonnull) possibleClass;
 
-+(SEL) alchemicSelectorForSelector:(SEL) selector;
++(BOOL) objectIsAProtocol:(id __nonnull) possiblePrototocol;
 
-+(Ivar) class:(Class) class withName:(NSString *) name;
++(void) aClass:(Class __nonnull) aClass validateSelector:(SEL __nonnull) selector;
 
-+(BOOL) classIsProtocol:(Class) possiblePrototocol;
++(nonnull NSSet<Protocol *> *) aClassProtocols:(Class __nonnull) aClass;
 
-+(void) validateMatcher:(id) object;
-
-+(void) validateSelector:(SEL) selector withClass:(Class) class;
-
-+(void) injectObject:(id) object variable:(Ivar) variable withValue:(id) value;
-
-+(BOOL) class:(Class) class isKindOfClass:(Class) otherClass;
-
-#pragma mark - Alchemic
-
-/**
- Scans the classes in the runtime, looking for Alchemic signatures and declarations.
- @discussion Once found, the block is called to finish the registration of the class.
- */
-+(void) scanRuntimeWithContext:(ALCContext *) context;
++(nullable Class) iVarClass:(Ivar __nonnull) ivar;
 
 /**
  Scans a class to find the actual variable used.
  @discussion The passed injection point is used to locate one of three possibilities.
  Either a matching instance variable with the same name, a class variable of the same name or a property whose variable uses the name. When looking for the variable behind a property, a '_' is prefixed.
- 
+
  @param class the class to look at.
  @param inj   The name of the variable.
- 
+
  @return the Ivar for the variable.
  @throw an exception if no matching variable is found.
  */
-+(Ivar) class:(Class) class variableForInjectionPoint:(NSString *) inj;
++(nullable Ivar) aClass:(Class __nonnull) aClass variableForInjectionPoint:(NSString __nonnull *) inj;
+
+#pragma mark - General
+
++(nonnull SEL) alchemicSelectorForSelector:(SEL __nonnull) selector;
+
++(void) object:(id __nonnull) object injectVariable:(Ivar __nonnull) variable withValue:(id __nullable) value;
+
+#pragma mark - Getting qualifiers
+
++(nonnull NSSet<ALCQualifier *> *) qualifiersForClass:(Class __nonnull) class;
+
++(nonnull NSSet<ALCQualifier *> *) qualifiersForVariable:(Ivar __nonnull) variable;
+
+#pragma mark - Runtime scanning
+
+/**
+ Scans the classes in the runtime, looking for Alchemic signatures and declarations.
+ @discussion Once found, the block is called to finish the registration of the class.
+ */
++(void) scanRuntimeWithContext:(ALCContext __nonnull *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> __nonnull *) runtimeScanners;
 
 @end
