@@ -19,7 +19,7 @@
                        valueClass:[ALCRuntime iVarClass:variable]
                        qualifiers:qualifiers];
     if (self) {
-        STLog(self.valueClass, @"Adding dependency for variable: %s with qualifiers: %@", ivar_getName(variable), qualifiers);
+        STLog(self.valueClass, @"Registering variable dependency: %s with qualifiers: %@", ivar_getName(variable), qualifiers);
         _variable = variable;
     }
     return self;
@@ -27,7 +27,7 @@
 
 -(void) injectInto:(id) object {
     id value = self.value;
-    STLog([object class], @"Injecting %s::%s <- %s",object_getClassName(object) , ivar_getName(self.variable), object_getClassName(value));
+    STLog([object class], @"Injecting %s::%s <- %s",object_getClassName(object), ivar_getName(self.variable), object_getClassName(value));
     [ALCRuntime object:object injectVariable:self.variable withValue:value];
 }
 

@@ -9,7 +9,7 @@
 #import "FactoryObject.h"
 #import "ALCTestCase.h"
 #import <Alchemic/Alchemic.h>
-
+#import <StoryTeller/StoryTeller.h>
 
 @interface FactoryObjectTests : ALCTestCase
 @end
@@ -22,10 +22,17 @@
 ACInject(ACIntoVariable(_of1))
 ACInject(ACIntoVariable(_of2), ACWithClass(FactoryObject))
 
+-(void) setUp {
+    STStartLogging(@"is [FactoryObject]");
+    STStartScope([FactoryObject class]);
+    [self setUpALCContextWithClasses:@[[self class],[FactoryObject class]]];
+    ACInjectDependencies(self);
+}
+
 -(void) testFactory {
     XCTAssertNotNil(_of1);
     XCTAssertNotNil(_of2);
-    XCTAssertEqual(_of1, _of2);
+    XCTAssertNotEqual(_of1, _of2);
 }
 
 @end

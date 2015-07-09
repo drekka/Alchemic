@@ -75,7 +75,7 @@
 }
 
 -(nonnull NSString *) description {
-    return [NSString stringWithFormat:@"Class builder for %s%@", class_getName(self.valueClass), self.factory ? @" (factory)" : @""];
+    return [NSString stringWithFormat:@"Class %@ for type %s", self.factory ? @"factory" : @"builder", class_getName(self.valueClass)];
 }
 
 @end

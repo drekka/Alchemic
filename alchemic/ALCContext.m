@@ -106,6 +106,7 @@
 
 -(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder, ... {
 
+    STLog(classBuilder.valueClass, @"Registering a dependency ...");
     NSMutableSet<ALCQualifier *> *qualifiers = [[NSMutableSet alloc] init];
     NSString *intoVariable = nil;
 
@@ -118,6 +119,7 @@
             intoVariable = ((ALCIntoVariable *) arg).variableName;
 
         } else if ([arg isKindOfClass:[ALCQualifier class]]) {
+            STLog(classBuilder.valueClass, @"Adding a explicit %@", arg);
             [qualifiers addObject:arg];
 
         } else {
@@ -197,7 +199,13 @@
     finalBuilder.primary = isPrimary;
     finalBuilder.createOnStartup = !isFactory;
 
-    STLog(finalBuilder, @"Setting up: %@, Primary: %@, Factory: %@, Factory Selector: %s, Return type: %s, Name: %@", finalBuilder, isPrimary ? @"YES": @"NO", isFactory ? @"YES": @"NO",sel_getName(selector) , class_getName(returnType), name);
+    STLog(finalBuilder, @"Setting up: %@, Primary: %@, Factory: %@, Factory Selector: %s returns a %s, Name: %@",
+          finalBuilder,
+          isPrimary ? @"YES": @"NO",
+          isFactory ? @"YES": @"NO",
+          sel_getName(selector),
+          class_getName(returnType),
+          classBuilder.name);
 
 }
 
