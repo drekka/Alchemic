@@ -18,13 +18,19 @@
 }
 
 +(void)load {
-    [STStoryTeller storyTeller].logger.showMethodDetails = YES;
-    [STStoryTeller storyTeller].logger.showTime = NO;
-    [STStoryTeller storyTeller].logger.showThreadId = NO;
-    [STStoryTeller storyTeller].logger.showKey = NO;
+
+    NSProcessInfo *info = [NSProcessInfo processInfo];
+    [info.environment enumerateKeysAndObjectsUsingBlock:^(NSString * __nonnull key, NSString * __nonnull obj, BOOL * __nonnull stop) {
+        NSLog(@"E: %@ = %@", key, obj);
+    }];
+    [info.arguments enumerateObjectsUsingBlock:^(NSString * __nonnull obj, NSUInteger idx, BOOL * __nonnull stop) {
+        NSLog(@"A: %@", obj);
+    }];
+
+    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%1$@\n   %2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine];
     ((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
-    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor redColor];
-    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).lineDetailsColour = [UIColor colorWithRed:0.3 green:0.8 blue:0.8 alpha:1.0];
+    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor blackColor];
+    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor lightGrayColor];
 }
 
 -(void) tearDown {
