@@ -19,14 +19,6 @@
 
 +(void)load {
 
-    NSProcessInfo *info = [NSProcessInfo processInfo];
-    [info.environment enumerateKeysAndObjectsUsingBlock:^(NSString * __nonnull key, NSString * __nonnull obj, BOOL * __nonnull stop) {
-        NSLog(@"E: %@ = %@", key, obj);
-    }];
-    [info.arguments enumerateObjectsUsingBlock:^(NSString * __nonnull obj, NSUInteger idx, BOOL * __nonnull stop) {
-        NSLog(@"A: %@", obj);
-    }];
-
     [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%1$@\n   %2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine];
     ((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
     ((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor blackColor];
