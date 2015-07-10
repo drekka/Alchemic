@@ -43,10 +43,12 @@
 -(id) value {
     // Value will be populated if this is not a factory.
     if (_value == nil) {
+        STLog(_valueClass, @"Value is nil, instantiating a %@ ...", NSStringFromClass(_valueClass));
         id newValue = [self instantiate];
         [self injectObjectDependencies:newValue];
         return newValue;
     } else {
+        STLog(_valueClass, @"Value present, returning a %@", NSStringFromClass([_value class]));
         return _value;
     }
 
@@ -57,6 +59,7 @@
     id newValue = [self instantiateObject];
     if (!_factory) {
         // Only store the value if this is not a factory.
+        STLog(_valueClass, @"%s is not a factory - storing new instance.", class_getName([newValue class]));
         _value = newValue;
     }
     return newValue;

@@ -23,13 +23,13 @@ ACInject(ACIntoVariable(_of1))
 ACInject(ACIntoVariable(_of2), ACWithClass(FactoryObject))
 
 -(void) setUp {
+    [super setUp];
     STStartLogging(@"is [FactoryObject]");
-    STStartScope([FactoryObject class]);
     [self setUpALCContextWithClasses:@[[self class],[FactoryObject class]]];
     ACInjectDependencies(self);
 }
 
--(void) testFactory {
+-(void) testFactoryClass {
     XCTAssertNotNil(_of1);
     XCTAssertNotNil(_of2);
     XCTAssertNotEqual(_of1, _of2);

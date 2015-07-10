@@ -17,17 +17,18 @@
     id _mockAlchemic;
 }
 
-+(void)load {
-
-    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%1$@\t\t\t%2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine];
+-(void) setUp {
+    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"{{time}} {{threadName}} %1$@\t\t\t%2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine];
     ((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
     ((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor colorWithRed:0.1 green:0.1 blue:0.5 alpha:1.0];
-    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor colorWithRed:0.7 green:0.9 blue:0.7 alpha:1.0];
+    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor colorWithRed:0.6 green:0.8 blue:0.6 alpha:1.0];
+
 }
 
 -(void) tearDown {
     // Stop the mocking.
     _mockAlchemic = nil;
+    // Reset logging.
     [[STStoryTeller storyTeller] reset];
 }
 

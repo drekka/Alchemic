@@ -24,14 +24,11 @@
     // Because any known class will have an overridden init which does DI for when an object is created outside of Alchemic, we need to call the original code or super init.
     SEL originalInit = [ALCRuntime alchemicSelectorForSelector:@selector(init)];
     if (class_respondsToSelector(objClass, originalInit)) {
-    
-        STLog(objClass, @"   using original %s::%s", class_getName(objClass), sel_getName(originalInit));
+        STLog(objClass, @"Instantiating an object using original %s::%s", class_getName(objClass), sel_getName(originalInit));
         return ((id (*)(id, SEL))objc_msgSend)(obj, originalInit);
-
     } else {
-        
         struct objc_super superData = {obj, class_getSuperclass(objClass)};
-        STLog(objClass, @"   using super %s::%s", class_getName(superData.super_class), sel_getName(initSel));
+        STLog(objClass, @"Instantiating an object using super %s::%s", class_getName(superData.super_class), sel_getName(initSel));
         return ((id (*)(struct objc_super *, SEL))objc_msgSendSuper)(&superData, initSel);
     }
 }

@@ -77,7 +77,7 @@
     [_qualifiers enumerateObjectsUsingBlock:^(ALCQualifier *qualifier, BOOL *stop) {
         [qualifierDescs addObject:[qualifier description]];
     }];
-    return [NSString stringWithFormat:@"%s using %@", class_getName(_valueClass), [qualifierDescs componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"%s using: %@", class_getName(_valueClass), [qualifierDescs componentsJoinedByString:@", "]];
 }
 
 @end

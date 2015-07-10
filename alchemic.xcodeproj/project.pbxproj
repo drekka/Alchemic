@@ -37,7 +37,6 @@
 		6C36D7871B38531E0073C4FB /* ALCRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C66DC4A1A8B85E1009F9D94 /* ALCRuntime.m */; };
 		6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6F01A9B339500ACD0F8 /* ALCTestCase.m */; };
 		6C36D78E1B38533C0073C4FB /* FactoryMethodsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7827041B039512009EAE27 /* FactoryMethodsTests.m */; };
-		6C36D78F1B38533C0073C4FB /* FactoryObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C214F031B319D1F00C1D33D /* FactoryObjectTests.m */; };
 		6C36D7901B38533C0073C4FB /* InjectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C45ADC91AC97A4800D9BF7C /* InjectionTests.m */; };
 		6C36D7911B38533C0073C4FB /* FactoryMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BFFDD1AC2E7AB00456536 /* FactoryMethods.m */; };
 		6C36D7921B38533C0073C4FB /* SingletonObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C66DC581A8CBF8A009F9D94 /* SingletonObject.m */; };
@@ -84,6 +83,7 @@
 		6C36D7C01B3853F20073C4FB /* ALCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C66DC491A8B85E1009F9D94 /* ALCRuntime.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7C41B3853F20073C4FB /* ALCAbstractClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC54B6B1AF50DE500D5D634 /* ALCAbstractClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C4F34F11B4AB8CF005E19A0 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
+		6C5C3A4C1B4F4ED400D1AD1A /* FactoryObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C214F031B319D1F00C1D33D /* FactoryObjectTests.m */; };
 		6C7F24EA1B4B564B007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
 		6C7F24EB1B4B565E007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
 		6C7F24ED1B4B5A9F007A44C8 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -690,12 +690,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C36D7921B38533C0073C4FB /* SingletonObject.m in Sources */,
+				6C5C3A4C1B4F4ED400D1AD1A /* FactoryObjectTests.m in Sources */,
 				6C36D7941B38533C0073C4FB /* FactoryObject.m in Sources */,
 				6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */,
 				6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */,
 				6CAC88771B4A11B200AFB8E4 /* ALCQualifierTests.m in Sources */,
 				6C36D7901B38533C0073C4FB /* InjectionTests.m in Sources */,
-				6C36D78F1B38533C0073C4FB /* FactoryObjectTests.m in Sources */,
 				6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */,
 				6C36D7951B38533C0073C4FB /* ValueTests.m in Sources */,
 				6C36D7931B38533C0073C4FB /* Component.m in Sources */,

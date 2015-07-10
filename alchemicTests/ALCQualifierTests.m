@@ -11,12 +11,13 @@
 #import <OCMock/OCMock.h>
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
+#import "ALCTestCase.h"
 
 #import "ALCQualifier.h"
 #import "ALCClassBuilder.h"
 
 
-@interface ALCQualifierTests : XCTestCase
+@interface ALCQualifierTests : ALCTestCase
 @end
 
 @implementation ALCQualifierTests {
@@ -25,6 +26,7 @@
 }
 
 -(void) setUp {
+    [super setUp];
     _mockContext = OCMClassMock([ALCContext class]);
     _builder = [[ALCClassBuilder alloc] initWithContext:_mockContext
                                                            valueClass:[NSString class]

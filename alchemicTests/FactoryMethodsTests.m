@@ -10,6 +10,9 @@
 
 #import "Component.h"
 #import "ALCTestCase.h"
+#import "FactoryMethods.h"
+#import "Component.h"
+#import <StoryTeller/StoryTeller.h>
 
 @interface FactoryMethodsTests : ALCTestCase
 @end
@@ -23,10 +26,17 @@
 
 ACInject(ACIntoVariable(string1), ACWithName(@"buildAString"))
 ACInject(ACIntoVariable(string2), ACWithName(@"buildAString"))
-ACInject(ACIntoVariable(string3), ACWithName(@"buildAComponentString"))
-ACInject(ACIntoVariable(string4), ACWithName(@"buildAComponentString"))
+//ACInject(ACIntoVariable(string3), ACWithName(@"buildAComponentString"))
+//ACInject(ACIntoVariable(string4), ACWithName(@"buildAComponentString"))
 
-- (void)testSimpleFactoryMethod {
+-(void) setUp {
+    [super setUp];
+    STStartLogging(@"is [FactoryMethodsTests]");
+    [self setUpALCContextWithClasses:@[[self class], [FactoryMethods class], [Component class]]];
+    ACInjectDependencies(self);
+}
+
+- (void) testSimpleFactoryMethod {
     XCTAssertTrue([string1 hasPrefix:@"Factory string"]);
     XCTAssertTrue([string2 hasPrefix:@"Factory string"]);
     XCTAssertNotEqualObjects(string1, string2);

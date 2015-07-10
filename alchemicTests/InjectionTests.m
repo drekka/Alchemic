@@ -30,6 +30,7 @@ ACInject(ACIntoVariable(_singletonObjectByClass), ACWithClass(SingletonObject))
 ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectableProtocol))
 
 -(void) setUp {
+    [super setUp];
     STStartLogging(@"is [InjectionTests]");
     STStartScope([self class]);
     [self setUpALCContextWithClasses:@[[self class],[SingletonObject class]]];

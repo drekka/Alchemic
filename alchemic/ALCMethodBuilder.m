@@ -93,7 +93,7 @@
 
     id returnObj;
     [_inv getReturnValue:&returnObj];
-    STLog([self description], @"   Method created a %s", class_getName([returnObj class]));
+    STLog([self description], @"Created a %s", class_getName([returnObj class]));
     return returnObj;
 }
 
@@ -105,12 +105,12 @@
 }
 
 -(void) injectObjectDependencies:(id __nonnull) object {
-    STLog([object class], @"Injecting dependencies into a %s", object_getClassName(object));
+    STLog([object class], @">>> Injecting dependencies into a %s", object_getClassName(object));
     [self.context injectDependencies:object];
 }
 
 -(nonnull NSString *) description {
-    return [NSString stringWithFormat:@"Method builder -(%1$s) %1$s::%2$s", class_getName(_parentClassBuilder.valueClass), sel_getName(_selector)];
+    return [NSString stringWithFormat:@"Method builder %s::%s for type %s", class_getName(_parentClassBuilder.valueClass), sel_getName(_selector), class_getName(self.valueClass)];
 }
 
 @end

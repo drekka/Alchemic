@@ -52,7 +52,7 @@
 
                     // If we are here then we have an alchemic method to process, so create a class builder for for the class.
                     if (currentClassBuilder == nil) {
-                        STLog(ALCHEMIC_LOG, @"Loading class %@ into model ...", NSStringFromClass(aClass));
+                        STLog(aClass, @"Creating a class builder for a %@ ...", NSStringFromClass(aClass));
                         currentClassBuilder = [[ALCClassBuilder alloc] initWithContext:context
                                                                             valueClass:aClass
                                                                                   name:NSStringFromClass(aClass)];

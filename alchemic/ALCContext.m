@@ -80,7 +80,8 @@
 -(void) resolveBuilderDependencies {
     STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
     [[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop){
-        STLog(builder.valueClass, @"Resolving '%@' (%s)", builder.name, class_getName(builder.valueClass));
+        STLog(builder.valueClass, @"Resolving dependencies for builder %1$@", builder.name);
+        STStartScope(builder.valueClass);
         [builder resolveDependencies];
     }];
 }
@@ -137,6 +138,7 @@
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
 
+    STLog(classBuilder.valueClass, @"Registering a builder ...");
     Class returnType = NULL;
     BOOL isFactory = NO;
     BOOL isPrimary = NO;
@@ -183,9 +185,11 @@
     if (selector != NULL) {
         // Dealing with a factory method registration so create a new entry in the model for the method.
         [ALCRuntime aClass:classBuilder.valueClass validateSelector:selector];
+        NSString *builderName = [NSString stringWithFormat:@"%@::%@", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(selector)];
+        STLog(classBuilder.valueClass, @"Creating a factory builder for selector %@", builderName);
         finalBuilder = [[ALCMethodBuilder alloc] initWithContext:self
                                                       valueClass:returnType
-                                                            name:[NSString stringWithFormat:@"%@::%@", NSStringFromClass(returnType), NSStringFromSelector(selector)]
+                                                            name:builderName
                                               parentClassBuilder:classBuilder
                                                         selector:selector
                                                       qualifiers:qualifiers];
@@ -193,19 +197,19 @@
     }
 
     if (name != nil) {
-        classBuilder.name = name;
+        finalBuilder.name = name;
     }
     finalBuilder.factory = isFactory;
     finalBuilder.primary = isPrimary;
     finalBuilder.createOnStartup = !isFactory;
 
-    STLog(finalBuilder, @"Setting up: %@, Primary: %@, Factory: %@, Factory Selector: %s returns a %s, Name: %@",
+    STLog(classBuilder.valueClass, @"Created: %@, Name: %@, Primary: %@, Factory: %@, Factory Selector: %s returns a %s",
           finalBuilder,
+          finalBuilder.name,
           isPrimary ? @"YES": @"NO",
           isFactory ? @"YES": @"NO",
           sel_getName(selector),
-          class_getName(returnType),
-          classBuilder.name);
+          class_getName(returnType));
 
 }
 
@@ -225,7 +229,6 @@
 
 -(nonnull id) instantiateObjectFromBuilder:(id<ALCBuilder> __nonnull) builder {
 
-    STLog(builder.valueClass, @"Instantiating value");
     for (id<ALCObjectFactory> objectFactory in _objectFactories) {
         id newValue = [objectFactory createObjectFromBuilder:builder];
         if (newValue != nil) {
