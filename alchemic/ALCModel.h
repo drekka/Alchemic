@@ -36,7 +36,7 @@
  
  @return a NSSet of builders that return objects of the class.
  */
--(nonnull NSSet<id<ALCBuilder>> *) buildersMatchingQualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers;
+-(nonnull NSSet<id<ALCBuilder>> *) buildersForQualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers;
 
 -(nonnull NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> __nonnull *) builders;
 

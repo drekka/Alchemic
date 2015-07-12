@@ -12,6 +12,8 @@
 #import "ALCClassBuilder.h"
 #import "ALCInternal.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation ALCModel {
     NSMutableSet<id<ALCBuilder>> *_model;
     NSCache *_queryCache;
@@ -35,7 +37,7 @@
 
 #pragma mark - Updating
 
--(void) addBuilder:(id<ALCBuilder> __nonnull) builder {
+-(void) addBuilder:(id<ALCBuilder>) builder {
     STLog(builder.valueClass, @"Storing builder for a %@", NSStringFromClass(builder.valueClass));
     [_model addObject:builder];
     [_queryCache removeAllObjects];
@@ -43,87 +45,120 @@
 
 #pragma mark - Querying
 
--(nonnull NSSet<id<ALCBuilder>> *) allBuilders {
+-(NSSet<id<ALCBuilder>> *) allBuilders {
     return _model;
 }
 
--(nonnull NSSet<ALCClassBuilder *> *) allClassBuilders {
-    return [self buildersWithCacheId:[ALCClassBuilder class]
-                         searchBlock:^BOOL(id<ALCBuilder> builder) {
-                             return [builder isKindOfClass:[ALCClassBuilder class]];
-                         }];
+-(NSSet<ALCClassBuilder *> *) allClassBuilders {
+    return [self buildersForQualifier:[ALCQualifier qualifierWithValue:@"AllClassBuilders"]
+                          searchBlock:^BOOL(id<ALCBuilder> builder) {
+                              return [builder isKindOfClass:[ALCClassBuilder class]];
+                          }];
 }
 
--(nonnull NSSet<id<ALCBuilder>> *) buildersMatchingQualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
+-(NSSet<id<ALCBuilder>> *) buildersForQualifiers:(NSSet<ALCQualifier *> *) qualifiers {
 
     // Quick short cut for single qualifier queries. Saves building a new set.
     if ([qualifiers count] == 1) {
         ALCQualifier *qualifier = [qualifiers anyObject];
-        return [self buildersWithCacheId:qualifier.value
-                            searchBlock:^BOOL(id<ALCBuilder> builder) {
-                                return [qualifier matchesBuilder:builder];
-                            }];
+        return [self buildersForQualifier:qualifier
+                              searchBlock:^BOOL(id<ALCBuilder> builder) {
+                                  return [qualifier matchesBuilder:builder];
+                              }];
     }
 
+    NSArray<ALCQualifier *> *sortedQualifiers = [self prioritizeQualifiersInSet:qualifiers];
+
+
     NSMutableSet<id<ALCBuilder>> *results;
-    for (ALCQualifier *qualifier in qualifiers) {
-        NSSet<id<ALCBuilder>> *builders = [self buildersWithCacheId:qualifier.value
-                      searchBlock:^BOOL(id<ALCBuilder> builder) {
-                          return [qualifier matchesBuilder:builder];
-                      }];
+    for (ALCQualifier *qualifier in sortedQualifiers) {
+        NSSet<id<ALCBuilder>> *builders = [self buildersForQualifier:qualifier
+                                                         searchBlock:^BOOL(id<ALCBuilder> builder) {
+                                                             return [qualifier matchesBuilder:builder];
+                                                         }];
+        STLog(ALCHEMIC_LOG, @"Found %lu builders for qualifier %@", [builders count], qualifier);
         if (results == nil) {
             // No results yet to go with the set as a base set.
-            STLog(ALCHEMIC_LOG, @"Found %lu initial builders for qualifier %@", [builders count], qualifier);
             results = [NSMutableSet setWithSet:builders];
         } else {
             // Remove any members which are not in the next qualifiers set.
-            STLog(ALCHEMIC_LOG, @"Filtering with %lu builders for qualifier %@", [builders count], qualifier);
+            STLog(ALCHEMIC_LOG, @"Filtering builders with qualifier %@", [builders count], qualifier);
             [results intersectSet:builders];
         }
 
         // Opps, run out of builders.
         if ([results count] == 0) {
+            STLog(ALCHEMIC_LOG, @"No builders left.");
             break;
         }
     }
     return results;
 }
 
--(nonnull NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> __nonnull *) builders {
+-(NSArray *) prioritizeQualifiersInSet:(NSSet<ALCQualifier *> *) qualifiers {
+    NSArray *results = [qualifiers.allObjects sortedArrayUsingComparator:^NSComparisonResult(ALCQualifier __nonnull *qualifier1, ALCQualifier __nonnull *qualifier2) {
+        int v1Weight = [self qualifierSortingWeight:qualifier1];
+        int v2Weight = [self qualifierSortingWeight:qualifier2];
+        if (v1Weight < v2Weight) {
+            return NSOrderedAscending;
+        }
+        if (v1Weight > v2Weight) {
+            return NSOrderedDescending;
+        }
+        return NSOrderedSame;
+    }];
+    return results;
+}
+
+-(int) qualifierSortingWeight:(ALCQualifier *) qualifier {
+    id value = qualifier.value;
+    if ([ALCRuntime objectIsAClass:value]) {
+        return 0;
+    }
+    if ([ALCRuntime objectIsAProtocol:value]) {
+        return 1;
+    }
+    return -1;
+}
+
+-(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders {
     STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
-    NSSet<ALCClassBuilder *> *newBuilders = (NSSet<ALCClassBuilder *> *)[builders objectsPassingTest:^BOOL(id<ALCBuilder>  __nonnull builder, BOOL * __nonnull stop) {
+    NSSet<ALCClassBuilder *> *newBuilders = (NSSet<ALCClassBuilder *> *)[builders objectsPassingTest:^BOOL(id<ALCBuilder>  builder, BOOL * stop) {
         return [builder isKindOfClass:[ALCClassBuilder class]];
     }];
-    STLog(ALCHEMIC_LOG, @"Returning %lu builders", [newBuilders count]);
+    STLog(ALCHEMIC_LOG, @"Returning %lu class builders", [newBuilders count]);
     return newBuilders;
 }
 
 #pragma mark - Internal
 
--(nonnull NSSet<id<ALCBuilder>> *) buildersWithCacheId:(id __nonnull) cacheId searchBlock:(BOOL (^ __nonnull)(id<ALCBuilder> builder)) searchBlock {
+-(NSSet<id<ALCBuilder>> *) buildersForQualifier:(ALCQualifier *) qualifier searchBlock:(BOOL (^)(id<ALCBuilder> builder)) searchBlock {
 
-    STLog(ALCHEMIC_LOG, @"Searching for builders using cache Id: %@", cacheId);
+    STLog(ALCHEMIC_LOG, @"Searching for builders with: %@", qualifier);
 
     // Check the cache
-    NSSet<id<ALCBuilder>> *cachedBuilders = [_queryCache objectForKey:cacheId];
+    NSSet<id<ALCBuilder>> *cachedBuilders = [_queryCache objectForKey:qualifier.value];
     if (cachedBuilders) {
-        STLog(ALCHEMIC_LOG, @"Cached list of builders being returned.");
+        STLog(ALCHEMIC_LOG, @"Returning cached list of %lu builders", [cachedBuilders count]);
         return cachedBuilders;
     }
 
     // Find the builders that match the qualifier.
-    NSSet<id<ALCBuilder>> *builders = [_model objectsPassingTest:^BOOL(id<ALCBuilder>  __nonnull builder, BOOL * __nonnull stop) {
+    STLog(ALCHEMIC_LOG, @"Searching for builders for %@", qualifier);
+    NSSet<id<ALCBuilder>> *builders = [_model objectsPassingTest:^BOOL(id<ALCBuilder>  builder, BOOL * stop) {
         if (searchBlock(builder)) {
-            STLog(ALCHEMIC_LOG, @"Adding builder for a %@", NSStringFromClass(builder.valueClass));
+            STLog(ALCHEMIC_LOG, @"Adding builder '%@' '%@", builder.name, NSStringFromClass(builder.valueClass));
             return YES;
         }
         return NO;
     }];
 
     // Store and return.
-    [_queryCache setObject:builders forKey:cacheId];
-    STLog(ALCHEMIC_LOG, @"Returning %li builders.", [builders count]);
+    [_queryCache setObject:builders forKey:qualifier.value];
+    STLog(ALCHEMIC_LOG, @"Returning %li builders", [builders count]);
     return builders;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

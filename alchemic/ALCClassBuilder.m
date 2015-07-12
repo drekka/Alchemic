@@ -62,7 +62,7 @@
 }
 
 -(void) injectObjectDependencies:(id __nonnull) object {
-    STLog([object class], @">>> Injecting dependencies into a %s", object_getClassName(object));
+    STLog([object class], @">>> Injecting %lu dependencies into a %s instance", [_dependencies count], object_getClassName(object));
     for (ALCVariableDependency *dependency in _dependencies) {
         [dependency injectInto:object];
     }

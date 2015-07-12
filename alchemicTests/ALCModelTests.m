@@ -46,7 +46,7 @@
 
 -(void) testSimpleQuery {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"abc"];
-    NSSet<id<ALCBuilder>> *results = [_model buildersMatchingQualifiers:[NSSet setWithObject:qualifier]];
+    NSSet<id<ALCBuilder>> *results = [_model buildersForQualifiers:[NSSet setWithObject:qualifier]];
     XCTAssertEqual(1u, [results count]);
     XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
     XCTAssertEqual(@"abc", [results anyObject].name);
@@ -55,7 +55,7 @@
 -(void) testComplexQuery {
     ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:@"abc"];
     ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:[ALCModelTests class]];
-    NSSet<id<ALCBuilder>> *results = [_model buildersMatchingQualifiers:[NSSet setWithObjects:qualifier1, qualifier2, nil]];
+    NSSet<id<ALCBuilder>> *results = [_model buildersForQualifiers:[NSSet setWithObjects:qualifier1, qualifier2, nil]];
     XCTAssertEqual(1u, [results count]);
     XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
     XCTAssertEqual(@"abc", [results anyObject].name);
@@ -63,8 +63,8 @@
 
 -(void) testSecondQueryReturnsCachedResults {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"abc"];
-    NSSet<id<ALCBuilder>> *result1 = [_model buildersMatchingQualifiers:[NSSet setWithObject:qualifier]];
-    NSSet<id<ALCBuilder>> *result2 = [_model buildersMatchingQualifiers:[NSSet setWithObject:qualifier]];
+    NSSet<id<ALCBuilder>> *result1 = [_model buildersForQualifiers:[NSSet setWithObject:qualifier]];
+    NSSet<id<ALCBuilder>> *result2 = [_model buildersForQualifiers:[NSSet setWithObject:qualifier]];
     XCTAssertEqual(result1, result2);
 }
 

@@ -71,7 +71,7 @@
 
 -(nonnull id) instantiateObject {
 
-    STLog([self description], @"Creating object with %@", [self description]);
+    STLog(self.valueClass, @"Getting %s object", class_getName(_parentClassBuilder.valueClass));
 
     id factoryObject = _parentClassBuilder.value;
 
@@ -89,6 +89,7 @@
         [self->_inv setArgument:&argumentValue atIndex:(NSInteger)idx];
     }];
 
+    STLog(self.valueClass, @">>> Creating object with %@", [self description]);
     [_inv invokeWithTarget:factoryObject];
 
     id returnObj;
@@ -105,7 +106,7 @@
 }
 
 -(void) injectObjectDependencies:(id __nonnull) object {
-    STLog([object class], @">>> Injecting dependencies into a %s", object_getClassName(object));
+    STLog([object class], @">>> Checking whether a %s instance has dependencies", object_getClassName(object));
     [self.context injectDependencies:object];
 }
 

@@ -26,9 +26,8 @@
 }
 
 -(void) injectInto:(id) object {
-    id value = self.value;
-    STLog([object class], @"Injecting %s::%s <- %s",object_getClassName(object), ivar_getName(self.variable), object_getClassName(value));
-    [ALCRuntime object:object injectVariable:self.variable withValue:value];
+    STLog([object class], @"Injecting %s::%s with a %s",object_getClassName(object), ivar_getName(self.variable), object_getClassName(self.valueClass));
+    [ALCRuntime object:object injectVariable:self.variable withValue:self.value];
 }
 
 -(NSString *) description {

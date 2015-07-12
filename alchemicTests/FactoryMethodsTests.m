@@ -26,8 +26,8 @@
 
 ACInject(ACIntoVariable(string1), ACWithName(@"buildAString"))
 ACInject(ACIntoVariable(string2), ACWithName(@"buildAString"))
-//ACInject(ACIntoVariable(string3), ACWithName(@"buildAComponentString"))
-//ACInject(ACIntoVariable(string4), ACWithName(@"buildAComponentString"))
+ACInject(ACIntoVariable(string3), ACWithName(@"buildAComponentString"))
+ACInject(ACIntoVariable(string4), ACWithName(@"buildAComponentString"))
 
 -(void) setUp {
     [super setUp];

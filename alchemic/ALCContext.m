@@ -66,9 +66,9 @@
 
 -(void) injectDependencies:(id) object {
     STStartScope([object class]);
-    STLog([object class], @"Locating class builder for a %@", NSStringFromClass([object class]));
+    STLog([object class], @"Injecting dependencies into a %@", NSStringFromClass([object class]));
     NSSet<ALCQualifier *> *qualifiers = [ALCRuntime qualifiersForClass:[object class]];
-    NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersMatchingQualifiers:qualifiers]];
+    NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForQualifiers:qualifiers]];
     ALCClassBuilder *classBuilder = [builders anyObject];
     [classBuilder injectObjectDependencies:object];
 }
@@ -219,7 +219,7 @@
 
 -(void) executeOnBuildersWithQualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers
                 processingBuildersBlock:(ProcessBuilderBlock __nonnull) processBuildersBlock {
-    NSSet<id<ALCBuilder>> *builders = [_model buildersMatchingQualifiers:qualifiers];
+    NSSet<id<ALCBuilder>> *builders = [_model buildersForQualifiers:qualifiers];
     if ([builders count] > 0) {
         processBuildersBlock(builders);
     }

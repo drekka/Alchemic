@@ -54,12 +54,11 @@
 
 }
 
-
 -(nonnull id) instantiate {
     id newValue = [self instantiateObject];
     if (!_factory) {
         // Only store the value if this is not a factory.
-        STLog(_valueClass, @"%s is not a factory - storing new instance.", class_getName([newValue class]));
+        STLog(_valueClass, @"Created object is a %s singleton, storing reference", class_getName([newValue class]));
         _value = newValue;
     }
     return newValue;
