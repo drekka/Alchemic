@@ -10,7 +10,7 @@
 #import "ALCModel.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
-#import "ALCInternal.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

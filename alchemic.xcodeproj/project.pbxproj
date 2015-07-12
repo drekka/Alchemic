@@ -45,7 +45,7 @@
 		6C36D7951B38533C0073C4FB /* ValueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF341B31ADD5A9100A9B76B /* ValueTests.m */; };
 		6C36D7961B3853F10073C4FB /* ALCContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C66DC5D1A903204009F9D94 /* ALCContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C36D7971B3853F10073C4FB /* ALCAlchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C66DC311A8B82C3009F9D94 /* ALCAlchemic.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6C36D7981B3853F10073C4FB /* ALCInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C66DC5A1A8F662E009F9D94 /* ALCInternal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C36D7981B3853F10073C4FB /* ALCInternalMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C66DC5A1A8F662E009F9D94 /* ALCInternalMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C36D7991B3853F10073C4FB /* ALCAbstractInitStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9473061AE7D7CB008EB2E5 /* ALCAbstractInitStrategy.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D79A1B3853F10073C4FB /* ALCInitStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C94730B1AE7D7CB008EB2E5 /* ALCInitStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C36D79B1B3853F10073C4FB /* ALCNSObjectInitStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C94730F1AE7D7CB008EB2E5 /* ALCNSObjectInitStrategy.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -151,7 +151,7 @@
 		6C66DC4A1A8B85E1009F9D94 /* ALCRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCRuntime.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C66DC571A8CBF8A009F9D94 /* SingletonObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonObject.h; sourceTree = "<group>"; };
 		6C66DC581A8CBF8A009F9D94 /* SingletonObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonObject.m; sourceTree = "<group>"; };
-		6C66DC5A1A8F662E009F9D94 /* ALCInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ALCInternal.h; sourceTree = "<group>"; };
+		6C66DC5A1A8F662E009F9D94 /* ALCInternalMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ALCInternalMacros.h; sourceTree = "<group>"; };
 		6C66DC5D1A903204009F9D94 /* ALCContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCContext.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C66DC5E1A903204009F9D94 /* ALCContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCContext.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C6D00A81AB70BB500984CF7 /* AlchemicAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlchemicAware.h; sourceTree = "<group>"; };
@@ -429,7 +429,7 @@
 			isa = PBXGroup;
 			children = (
 				6CAC88781B4A2E9900AFB8E4 /* ALCContext+Internal.h */,
-				6C66DC5A1A8F662E009F9D94 /* ALCInternal.h */,
+				6C66DC5A1A8F662E009F9D94 /* ALCInternalMacros.h */,
 			);
 			name = Internal;
 			sourceTree = "<group>";
@@ -513,7 +513,7 @@
 				6C36D7961B3853F10073C4FB /* ALCContext.h in Headers */,
 				6CAC887E1B4A60BE00AFB8E4 /* ALCContext+Internal.h in Headers */,
 				6C36D7971B3853F10073C4FB /* ALCAlchemic.h in Headers */,
-				6C36D7981B3853F10073C4FB /* ALCInternal.h in Headers */,
+				6C36D7981B3853F10073C4FB /* ALCInternalMacros.h in Headers */,
 				6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */,
 				6C36D7991B3853F10073C4FB /* ALCAbstractInitStrategy.h in Headers */,
 				6C36D79A1B3853F10073C4FB /* ALCInitStrategy.h in Headers */,

@@ -8,7 +8,7 @@
 
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
 #import <Alchemic/ALCBuilder.h>
-#import <Alchemic/ALCInternal.h>
+#import <Alchemic/ALCInternalMacros.h>
 #import <StoryTeller/StoryTeller.h>
 
 @implementation ALCPrimaryObjectDependencyPostProcessor

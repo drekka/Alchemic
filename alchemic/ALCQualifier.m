@@ -7,7 +7,7 @@
 //
 
 #import <Alchemic/ALCQualifier.h>
-#import <Alchemic/ALCInternal.h>
+#import <Alchemic/ALCInternalMacros.h>
 #import "ALCRuntime.h"
 #import <StoryTeller/StoryTeller.h>
 

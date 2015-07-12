@@ -6,7 +6,7 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCInternal.h>
+#import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCContext.h>
 #import "ALCContext+Internal.h"
 

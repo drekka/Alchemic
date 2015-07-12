@@ -11,7 +11,7 @@
 
 #import "ALCAbstractInitStrategy.h"
 #import "ALCClassBuilder.h"
-#import <Alchemic/ALCInternal.h>
+#import <Alchemic/ALCInternalMacros.h>
 
 @implementation ALCAbstractInitStrategy {
     Class _forClass;

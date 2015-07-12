@@ -8,7 +8,7 @@
 
 #import <Alchemic/ALCAlchemic.h>
 #import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCInternal.h>
+#import <Alchemic/ALCInternalMacros.h>
 
 #import "ALCRuntime.h"
 #import "ALCRuntimeScanner.h"

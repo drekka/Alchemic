@@ -18,7 +18,7 @@
 #import "ALCIsFactory.h"
 #import "ALCModel.h"
 #import "ALCContext+Internal.h"
-#import "ALCinternal.h"
+#import "ALCInternalMacros.h"
 
 @implementation ALCContext {
     ALCModel *_model;

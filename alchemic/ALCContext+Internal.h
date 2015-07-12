@@ -27,7 +27,8 @@ typedef void (^ProcessBuilderBlock)(NSSet<id<ALCBuilder>> __nonnull *);
 
 #pragma mark - Resolving
 
--(nonnull id) resolveValueForDependency:(ALCDependency __nonnull *) dependency candidates:(NSSet<id<ALCBuilder>> __nonnull *)candidates;
+-(nonnull id) resolveValueForDependency:(ALCDependency __nonnull *) dependency
+                             candidates:(NSSet<id<ALCBuilder>> __nonnull *)candidates;
 
 -(void) resolveBuilderDependencies;
 
