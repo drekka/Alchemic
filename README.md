@@ -80,11 +80,13 @@ Alchemic has a central *'Context'* which manages all of the objects and classes 
 
 # Declaring objects
 
+Before we look at resolving dependencies and injecting values, we first need to look at declaring classes so that Alchemic knows about them.
+
 ## Singletons 
 
-No matter what you are writing, you will need objects which are instantiated at the beginning of your app, are used by a variety of other objects, and only have a single instance. These are ususlly referred to as [Singletons](https://en.wikipedia.org/wiki/Singleton_pattern). There are a number of opinions amongst developers about singletons and how they should be declared and used in code. Alchemic's approach is to keep an instance of a singleton class in it's context and inject it where ever requested. It doesn't do anything to stop you creating other instances of that class outside of it's context. However any request for an instance of a class that Alchemic views as a singleton will always return the same instance.
+No matter what you are writing, you will need objects which are instantiated at the beginning of your app, are used by a variety of other objects, and only have a single instance. These are ususlly referred to as [Singletons](https://en.wikipedia.org/wiki/Singleton_pattern). There are a number of opinions amongst developers about singletons and how they should be declared and used in code. Alchemic's approach is to keep an instance of a singleton class in it's context and inject it where ever requested. It doesn't do anything to stop you creating other instances of that class outside of the context. However any request to Alchemic for an instance of a class that it views as a singleton will always return the same instance.
 
-To declare a class as a singleton, use this macro in the classes implementation:
+To declare a class as a singleton, use this macro in the class's implementation:
 
 ```objectivec
 @implementation MyClass
@@ -92,16 +94,13 @@ ACRegister()
 @end
 ```
 
-The `ACRegister(...)` macro is how Alchemic recognises classes it will be managing, and it will auto-instantiate the singleton object on startup. This is the simplest form of registering a class with Alchemic.
+The `ACRegister(...)` macro is how Alchemic recognises classes it will be managing, and it will auto-instantiate any registered classes as singletons on startup. This is the simplest form of registering a class with Alchemic.
 
 *Note: Mostly there should only be one `ACRegister(...)` for a class. If you add another, a second instance of the class will then be registered. This can be useful in some situations, but generally it's not something that is common.*
 
-*Note: `ACRegister(...)` has the ability to take a number of arguments. Only arguments for selectors must occur in specific order. Other arguments can occur in any order, before or after selector arguments.*
-
-
 ## ![Underconstruction](./images/alchemic-underconstruction.png) Constructors
 
-By default, Alchemic will use the standard `init` method when constructing an instance of a class. However this is not always the best option, so a method is needed which allows us to specify a different initializer and also to pass arguments to it. Here's an example:
+By default, Alchemic will use the standard `init` method when constructing an instance of a class. However this is not always the best option, so Alchemic provides a method for specifing a different initializer and how to locate any arguments it needs. Here's an example:
 
 ```objectivec
 @implementation MyClass
@@ -114,34 +113,13 @@ ACRegister(ACInitializer(ACSelector(initWithFrame:), ACWithClass(MyOtherClass))
 
 There are two parts to this registration. The first is the `ACSelector(...)` argument. This defines the selector of the intializer that will be called. 
 
-The second part is the `ACWithClass(...)`. This defines a search criteria that will be used to locate the argument value for the initializer. If the initializer does not need any arguments then this is not needed. If there are multiple arguments then you need to supply a search criteria for each.
-
-### Search criteria
-
-Search criteria for registrations follows some simple rules. Each selector argument that needs to be satified must be matched by either a single `ACWith...` search criteria, or an Objective-C array of search criteria. The order of the arguments in the selector must match the order of the search criteria.
-
-Search critieria can be any combination of the following:
-
-Macro | Description
---- | ---
-`ACWithName(...)` | Search for registered objects based on their name.
-`ACWithClass(...)` | Search for registered objects based on their class or if they are derived from the class.
-`ACWithProtocol(...)` | Search for registered objects based on if they implement the passed protocol name.
-
-So give a selector `initWithMyObj:withView:`, all of these are valid:
-
-```objectivec
-ACRegister(ACSelector(initWithMyObj:withView:), ACWithName(@"MyObj"), ACWithClass(MyView))
-ACRegister(ACSelector(initWithMyObj:withView:), (@[ACWithClass(@"MyAbstractObj"), ACWithProtocol(MyBanking)]), ACWithProtocol(MyManagedView))
-```
-
-*Note: the extra '(...)' around the Objective-C array. This is required because macros do not understand Objective-C and will mistake the commas in the array for macro argument delimiters.*
+The second part is the argument resolvers used to locate values for the selector. See [Resolving argument values](#resolving-argument-value) for details on setting these.
 
 ## Factories
 
-Sometimes you want to declare a class to Alchemic, but have Alchemic create a new instance everytime you request it. This is what Alchemic regards as a ***Factory***. Factories are not as common as singletons in the DI world, but they can be useful. 
+Sometimes you want to declare a class to Alchemic, but have Alchemic create a new instance everytime you request it. This is what Alchemic regards as a ***Factory***. Factories are not as common as singletons in the DI world, but they can be useful in a variety of situations. 
 
-To define a class as a factory, add the `ACIsFactory` macro to the `ACRegister(...)` macro like this:
+To tell Alchemic to treat a class registration as a factory, add the `ACIsFactory` macro to the `ACRegister(...)` macro like this:
 
 ```objectivec
 ACRegister(ACIsFactory)
@@ -151,7 +129,7 @@ Now every time yor code requests an instance of the class, a new one will be cre
 
 ## Object names
 
-Objects automatically have a matching name generated when they are registered. By using the `ACWithName(...)` macro, this name can be used later to locate them. By default, the name is the name of the class. But sometimes it's handy to provide your own name.  
+Objects automatically have a matching name generated when they are registered. By adding the `ACWithName(...)` macro, this name can be used later to locate them. By default, the name is the name of the class. But sometimes it's handy to provide your own name.  
 
 Using a custom name, we can specify the exact one we want when dealing with multiple registrations. For example, we might register several `NSDateFormatter` objects with Alchemic and give them names like *'JSON date formatter'*, *'DB date formatter'*, etc. Then later, when we need a `NSDateFormatter`, we can inject the correct one by using `ACWithName(...) ` as part of the injection.
 
@@ -215,6 +193,32 @@ ACInject(ACIntoVariable(_yetAnotherClass))
 // Rest of class ...
 @end
 ```
+
+### Resolving argument values 
+
+There are a number of ways to locate values for arguments to constructors and dependencies alike. 
+
+#### Looking up values
+
+Each selector argument that needs to be satified must be matched by either a single `ACWith...` search criteria, or an Objective-C array of search criteria. The order of the arguments in the selector must match the order of the search criteria.
+
+Search critieria can be any combination of the following:
+
+Macro | Description
+--- | ---
+`ACWithName(...)` | Search for registered objects based on their name.
+`ACWithClass(...)` | Search for registered objects based on their class or if they are derived from the class.
+`ACWithProtocol(...)` | Search for registered objects based on if they implement the passed protocol name.
+![Underconstruction](./images/alchemic-underconstruction.png) `ACWithValue(...)` | Qualifier which can accept any type of value.
+
+So give a selector `initWithMyObj:withView:`, all of these are valid:
+
+```objectivec
+ACRegister(ACSelector(initWithMyObj:withView:), ACWithName(@"MyObj"), ACWithClass(MyView))
+ACRegister(ACSelector(initWithMyObj:withView:), (@[ACWithClass(@"MyAbstractObj"), ACWithProtocol(MyBanking)]), ACWithProtocol(MyManagedView))
+```
+
+*Note: the extra '(...)' around the Objective-C array. This is required because macros do not understand Objective-C and will mistake the commas in the array for macro argument delimiters.*
 
 ## Refining injections
 
