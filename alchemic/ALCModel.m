@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
             results = [NSMutableSet setWithSet:builders];
         } else {
             // Remove any members which are not in the next qualifiers set.
-            STLog(ALCHEMIC_LOG, @"Filtering builders with qualifier %@", [builders count], qualifier);
+            STLog(ALCHEMIC_LOG, @"Filtering %lu builders with qualifier %@", [builders count], qualifier);
             [results intersectSet:builders];
         }
 
