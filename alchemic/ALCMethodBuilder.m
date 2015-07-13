@@ -44,7 +44,7 @@
         unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
         if (nbrArgs != [qualifiers count]) {
             @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
-                                           reason:[NSString stringWithFormat:@"%s::%s - Expecting %lu argument matchers, got %lu",
+                                           reason:[NSString stringWithFormat:@"-[%s %s] - Expecting %lu argument matchers, got %lu",
                                                    class_getName(parentClass),
                                                    sel_getName(selector),
                                                    nbrArgs,
@@ -111,7 +111,7 @@
 }
 
 -(nonnull NSString *) description {
-    return [NSString stringWithFormat:@"Method builder %s::%s for type %s", class_getName(_parentClassBuilder.valueClass), sel_getName(_selector), class_getName(self.valueClass)];
+    return [NSString stringWithFormat:@"Method builder -[%s %s] for type %s", class_getName(_parentClassBuilder.valueClass), sel_getName(_selector), class_getName(self.valueClass)];
 }
 
 @end

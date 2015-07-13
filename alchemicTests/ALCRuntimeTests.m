@@ -10,6 +10,7 @@
 @import ObjectiveC;
 
 #import <Alchemic/Alchemic.h>
+#import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntime.h"
 
@@ -189,6 +190,10 @@
     XCTAssertNil(iVarClass);
 }
 
+-(void) testIVarNotFoundException {
+    XCTAssertThrowsSpecificNamed([ALCRuntime aClass:[self class] variableForInjectionPoint:@"xxxx"], NSException, @"AlchemicInjectionNotFound");
+}
+
 #pragma mark - General
 
 -(void) testAlchemicSelector {
@@ -200,6 +205,16 @@
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringProperty"];
     [ALCRuntime object:self injectVariable:var withValue:@"abc"];
     XCTAssertEqualObjects(@"abc", self.aStringProperty);
+}
+
+#pragma mark - Qualifiers
+
+-(void) testQualifiersForVariable {
+    STStartLogging(ALCHEMIC_LOG);
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringProperty"];
+    NSSet<ALCQualifier *> *qualifiers = [ALCRuntime qualifiersForVariable:var];
+    XCTAssertEqual(1u, [qualifiers count]);
+    XCTAssertTrue([qualifiers containsObject:[ALCQualifier qualifierWithValue:[NSString class]]]);
 }
 
 @end

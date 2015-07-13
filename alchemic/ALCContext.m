@@ -185,7 +185,7 @@
     if (selector != NULL) {
         // Dealing with a factory method registration so create a new entry in the model for the method.
         [ALCRuntime aClass:classBuilder.valueClass validateSelector:selector];
-        NSString *builderName = [NSString stringWithFormat:@"%@::%@", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(selector)];
+        NSString *builderName = [NSString stringWithFormat:@"-[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(selector)];
         STLog(classBuilder.valueClass, @"Creating a factory builder for selector %@", builderName);
         finalBuilder = [[ALCMethodBuilder alloc] initWithContext:self
                                                       valueClass:returnType

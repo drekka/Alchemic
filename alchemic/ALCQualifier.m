@@ -42,6 +42,7 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 
         // sort of the check block.
         if ([ALCRuntime objectIsAClass:value]) {
+            _type = QualifierTypeClass;
             _descTemplate = [NSString stringWithFormat:@"Qualifier [%s]", class_getName(value)];
             STLog(value, _descTemplate);
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
@@ -49,6 +50,7 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
             };
 
         } else if ([ALCRuntime objectIsAProtocol:value]) {
+            _type = QualifierTypeProtocol;
             _descTemplate = [NSString stringWithFormat:@"Qualifier <%s>", protocol_getName(value)];
             STLog(value, _descTemplate);
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
@@ -56,6 +58,7 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
             };
 
         } else {
+            _type = QualifierTypeString;
             _descTemplate = [NSString stringWithFormat:@"Qualifier '%@'", value];
             STLog(value, _descTemplate);
             _checkBlock = ^BOOL(id<ALCBuilder> builder) {
@@ -72,6 +75,23 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 
 -(NSString *) description {
     return [NSString stringWithFormat:_descTemplate, [_value description]];
+}
+
+#pragma mark - Equality
+
+-(NSUInteger)hash {
+    return [_value hash];
+}
+
+-(BOOL) isEqual:(id)object {
+ return self == object
+    || ([object isKindOfClass:[ALCQualifier class]] && [self isEqualToQualifier:object]);
+}
+
+-(BOOL) isEqualToQualifier:(ALCQualifier *) qualifier {
+    return qualifier != nil
+    && qualifier.type == _type
+    && _type == QualifierTypeString ? [(NSString *)_value isEqualToString:qualifier.value]: qualifier.value == _value;
 }
 
 @end

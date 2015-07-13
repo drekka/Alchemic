@@ -18,10 +18,10 @@
 }
 
 -(void) setUp {
-    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"{{time}} {{threadName}} %1$@\t\t\t%2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine];
-    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
-    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor colorWithRed:0.1 green:0.1 blue:0.5 alpha:1.0];
-    ((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor colorWithRed:0.6 green:0.8 blue:0.6 alpha:1.0];
+    //[STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"{{time}} {{threadName}} %1$@\t\t\t%2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine];
+    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
+    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor colorWithRed:0.1 green:0.1 blue:0.5 alpha:1.0];
+    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor colorWithRed:0.6 green:0.8 blue:0.6 alpha:1.0];
 
 }
 

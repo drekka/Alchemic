@@ -64,4 +64,48 @@
     XCTAssertFalse([qualifier matchesBuilder:_builder]);
 }
 
+#pragma mark - Equality & hash
+
+-(void) testIsEqualToQualifierWhenSameInstance {
+    ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:[NSString class]];
+    XCTAssertTrue([qualifier1 isEqualToQualifier:qualifier1]);
+    XCTAssertEqual([qualifier1 hash], [qualifier1 hash]);
+}
+
+-(void) testIsEqualToQualifierWhenSameClass {
+    ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:[NSString class]];
+    ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:[NSString class]];
+    XCTAssertTrue([qualifier1 isEqualToQualifier:qualifier2]);
+    XCTAssertEqual([qualifier1 hash], [qualifier2 hash]);
+}
+
+-(void) testIsEqualToQualifierWhenSameProtocol {
+    ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:@protocol(NSCopying)];
+    ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:@protocol(NSCopying)];
+    XCTAssertTrue([qualifier1 isEqualToQualifier:qualifier2]);
+    XCTAssertEqual([qualifier1 hash], [qualifier2 hash]);
+}
+
+-(void) testIsEqualToQualifierWhenSameString {
+    ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:@"abc"];
+    ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:@"abc"];
+    XCTAssertTrue([qualifier1 isEqualToQualifier:qualifier2]);
+    XCTAssertEqual([qualifier1 hash], [qualifier2 hash]);
+}
+
+-(void) testIsEqualToQualifierWhenDifferentClasses {
+    ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:[NSString class]];
+    ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:[NSMutableString class]];
+    XCTAssertFalse([qualifier1 isEqualToQualifier:qualifier2]);
+    XCTAssertNotEqual([qualifier1 hash], [qualifier2 hash]);
+}
+
+-(void) testIsEqualToQualifierWhenDifferentTypes {
+    ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:[NSString class]];
+    ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:@protocol(NSCopying)];
+    XCTAssertFalse([qualifier1 isEqualToQualifier:qualifier2]);
+    XCTAssertNotEqual([qualifier1 hash], [qualifier2 hash]);
+}
+
+
 @end

@@ -60,7 +60,6 @@
                     }
 
                     // Call the method, passing it the current class builder.
-                    //STLog(aClass, @"Executing %s::%s ...", class_getName(aClass), sel_getName(sel));
                     ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(aClass, sel, currentClassBuilder);
 
                 }

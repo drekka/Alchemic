@@ -33,7 +33,7 @@
  */
 #define ACIsPrimary [[ALCIsPrimary alloc] init]
 
-#pragma mark - Dependency matching
+#pragma mark - Dependencies
 
 /**
  Used when we want to locate dependencies based on a class.
@@ -72,7 +72,7 @@
 
  @param _methodSelector the selector to call when a value is needed.
  */
-#define ACFactorySelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
+#define ACSelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
 
 /**
  When declaring a dependency in a class, this defines the name of the variable that the value will be injected into.

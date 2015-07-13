@@ -26,7 +26,7 @@
 }
 
 -(void) injectInto:(id) object {
-    STLog([object class], @"Injecting %s::%s with a %s",object_getClassName(object), ivar_getName(self.variable), object_getClassName(self.valueClass));
+    STLog([object class], @"Injecting -[%s %s] with a %s",object_getClassName(object), ivar_getName(self.variable), object_getClassName(self.valueClass));
     [ALCRuntime object:object injectVariable:self.variable withValue:self.value];
 }
 

@@ -57,9 +57,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
-            BuildableName = "Alchemic.framework"
-            BlueprintName = "Alchemic"
+            BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
+            BuildableName = "Alchemic tests.xctest"
+            BlueprintName = "Alchemic tests"
             ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -69,6 +69,13 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "XcodeColors"
+            value = "YES"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

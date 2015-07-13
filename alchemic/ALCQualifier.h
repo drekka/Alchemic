@@ -6,6 +6,18 @@
 @import Foundation;
 #import <Alchemic/ALCBuilder.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+/**
+ Indicates what type of qualifier this is.
+ */
+typedef NS_ENUM(NSUInteger, QualifierType) {
+    QualifierTypeString,
+    QualifierTypeClass,
+    QualifierTypeProtocol
+};
+
+
 /**
  Wraps an argument so that it can be conveniantly passed around. 
  
@@ -13,10 +25,15 @@
  */
 @interface ALCQualifier : NSObject
 
-@property (nonatomic, strong, readonly, nonnull) id value;
+@property (nonatomic, assign, readonly) QualifierType type;
+@property (nonatomic, strong, readonly) id value;
 
-+(nonnull instancetype) qualifierWithValue:(id __nonnull) value;
++(instancetype) qualifierWithValue:(id) value;
 
--(BOOL) matchesBuilder:(id<ALCBuilder> __nonnull) builder;
+-(BOOL) matchesBuilder:(id<ALCBuilder>) builder;
+
+-(BOOL) isEqualToQualifier:(ALCQualifier *) qualifier;
 
 @end
+
+NS_ASSUME_NONNULL_END
