@@ -1,15 +1,31 @@
 # Alchemic
 By Derek Clarkson
 
+![Underconstruction](./images/alchemic-underconstruction.png) ***Currently Alchemic is in development.*** Wherever you see this logo, it means that this section of Alchemic is still being worked on. 
+
  * [Installation](#installation)
  * [Alchemic](#alchemic)
-  * [Using Alchemic](#using-alchemic)
- * [Installation](#installation)
- * [Installation](#installation)
- * [Installation](#installation)
- * [Installation](#installation)
+     * [Starting](#starting)
+     * [Stopping](#stopping)
+     * [Adding to your code](#adding-to-your-code)
+     * [The context](#the-context)
+ * [Declaring objects](#declaring-objects)
+      * [Singletons](#singletons)
+      * [Constructors](#-constructors)
+      * [Factories](#factories)
+      * [Object names](#object-names)
+      * [Primary objects](#primary-objects)
+          * [Primary objects and testing](#primary-objects-and-testing)
+ * [Injecting dependencies](#injecting-dependencies)
+ * [Resolving argument values](#resolving-argument-values)
+     * [Classes and protocols](#classes-and-protocols)
+     * [Names](#names)
+     * [Constant values](#-constant-values)
+     * [Property values](#-property-values)
+ * [Factory methods](#factory-methods)
+ * [Macro reference](./macros.md)
 
-![Underconstruction](./images/alchemic-underconstruction.png) ***Currently Alchemic is in development.*** Wherever you see this logo, it means that this section of Alchemic is still being worked on. 
+#Intro
 
 Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS.  It's based loosely on ideas from the [Spring](http://projects.spring.io/spring-framework/) Java framework as well as several iOS frameworks. 
 
@@ -328,9 +344,8 @@ In addition to the `ACSelector(...)` and `ACReturnType(...)` macros, we must spe
 
 Unlike variable dependencies, the macros that define the selector arguments **must appear in the same order** as the selector arguments. Once Alchemic has resolved values, it will use the argument indexes to set earch argument in turn.
 
-If you want to use more than one qualifier *(as per the second argument above)* you need to wrap them in `(@[...])`. This defines an Objective-C array of arguments to be used. 
+*Note: If you want to use more than one qualifier *(as per the second argument above)* you need to wrap them in `(@[...])`. This defines an Objective-C array of arguments to be used. This is required because macros do not understand Objective-C and will mistake the commas in the array for macro argument delimiters.*
 
-*Note: the extra '(...)' brackets around the Objective-C array. This is required because macros do not understand Objective-C and will mistake the commas in the array for macro argument delimiters.*
 
  
 
