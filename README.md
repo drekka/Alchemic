@@ -80,7 +80,7 @@ Alchemic has a central *'Context'* which manages all of the objects and classes 
 
 # Declaring objects
 
-Before we look at resolving dependencies and injecting values, we first need to look at declaring classes so that Alchemic knows about them.
+Before we look at resolving dependencies and injecting values, we first need to look at declaring classes so that Alchemic can find them.
 
 ## Singletons 
 
@@ -111,13 +111,13 @@ ACRegister(ACInitializer(ACSelector(initWithFrame:), ACWithClass(MyOtherClass))
 @end
 ```
 
-There are two parts to this registration. The first is the `ACSelector(...)` argument. This defines the selector of the intializer that will be called. 
+The `ACSelector(...)` argument defines the selector of the intializer that will be called. 
 
-The second part is the argument resolvers used to locate values for the selector. See [Resolving argument values](#resolving-argument-value) for details on setting these.
+The `ACWithClass(...)` is an argument resolver used to locate the object to be passed to the initializer. See [Resolving argument values](#resolving-argument-value) for details on argument resolving.
 
 ## Factories
 
-Sometimes you want to declare a class to Alchemic, but have Alchemic create a new instance everytime you request it. This is what Alchemic regards as a ***Factory***. Factories are not as common as singletons in the DI world, but they can be useful in a variety of situations. 
+Sometimes you want to declare a class to Alchemic, but have Alchemic create a new instance every time you need the object. This is what Alchemic regards as a ***Factory***. Factories are not as common as singletons in the DI world, but they can be useful in a variety of situations. For example, you could declare a SMS message class as a factory. Then every time you need one, Alchemic will create a new SMS message object and give it to you with all it's dependencies injected.
 
 To tell Alchemic to treat a class registration as a factory, add the `ACIsFactory` macro to the `ACRegister(...)` macro like this:
 
@@ -129,9 +129,7 @@ Now every time yor code requests an instance of the class, a new one will be cre
 
 ## Object names
 
-Objects automatically have a matching name generated when they are registered. By adding the `ACWithName(...)` macro, this name can be used later to locate them. By default, the name is the name of the class. But sometimes it's handy to provide your own name.  
-
-Using a custom name, we can specify the exact one we want when dealing with multiple registrations. For example, we might register several `NSDateFormatter` objects with Alchemic and give them names like *'JSON date formatter'*, *'DB date formatter'*, etc. Then later, when we need a `NSDateFormatter`, we can inject the correct one by using `ACWithName(...) ` as part of the injection.
+Objects are automatically given a name when they are registered. By default, it's the class name. If you  add the `ACWithName(...)` macro you can specify a custom name to use instead. This can be extremely useful when dealing with multiple similar registrations. For example, we might register several `NSDateFormatter` objects with Alchemic and give them names like *'JSON date formatter'*, *'DB date formatter'*, etc. Then when we need a `NSDateFormatter`, we can inject the relevant one by using `ACWithName(...) ` argument resolver as part of the injection.
 
 Here's how we assign a custom name during registration:
 
@@ -143,25 +141,25 @@ ACRegister(ACAsName(@"JSON date formatter"))
 
 When we have several possible candidate objects for a dependency, we might not want to use custom names to get the exact one we want, but we still need to be able to select just one. Alchemic can define one object as the default object for these situations. It has the concept of ***Primary*** objects which it borrowed from the *Spring framework*. 
 
-The basic idea is that when registering multiple objects which can satisfy a dependency, you can flag one of them as the *'Primary'* object. Later when injecting, Alchemic will use this object as the final selection, regardless of how many other candidates are available. Here's how to declare a Primary:
+The basic idea is that when registering multiple objects which can satisfy a dependency, you can flag one of them as the *'Primary'* object. Later when injecting, Alchemic will use this object in preference to the others. Here's how to declare a Primary:
 
 ```objectivec
 ACRegister(ACIsPrimary)
 ```
 
-Primary objects are only checked after all search criteria specified with `ACWith...` criteria has been executed. This ensures that they only matter when the search criteria are not enough. 
+Primary objects are only checked once a list of candidate objects has been located. This ensures that dependencies where specifically named objects are used are still given priority.
 
-*Note that whilst this can solve situations where multiple candidates for a dependency are presents, if it finds Multiple Primary objects for a dependency it will still raise an error.*
+*Note that whilst this can solve situations where multiple candidates for a dependency are presents, if it finds Multiple Primary objects for a dependency, Alchemic will still raise an error.*
 
 ### Primary objects and testing
 
-Primary objects are most useful in testing. You can create classes in your test suites and register them as Primary. When Alchemic loads, these test objects will then become the defaults to be injected instead of the production objects, all without having to change a single line of code.
+Primary objects are most useful in testing. You can register mock or dummy objects from your test suites and set them as Primaries. When Alchemic loads, these test objects will then become the defaults to be injected instead of the production objects, all without having to change a single line of code.
 
 # Injecting dependencies
 
-The main point of a DI framework is to locate an objects dependencies and inject them without the developer having to pass them around, or write code to locate them in other ways. In other words, to save the developer from having to write a lot of [boiler plate](https://en.wikipedia.org/wiki/Boilerplate_code) code and manage the objects themselves. 
+The main point of a DI framework is to locate an objects dependencies and inject them without the developer having to write code to manage the objects. In other words, to save the developer from having to write a lot of [boiler plate](https://en.wikipedia.org/wiki/Boilerplate_code) code. 
 
-Alchemic specifies dependencies in a class in a very similar fashion to how it defines a class to be created. Here's a basic registration:
+Alchemic specifies dependencies in a very similar fashion to how it registers classes. Here's a basic dependency registration:
 
 ```objectivec
 @interface MyClass
@@ -174,9 +172,9 @@ ACInject(ACIntoVariable(otherClass))
 @end
 ```
 
-The `ACinject(...)` macro does all the work of telling Alchemic that there is a dependency that needs to be injected into instances of the class. And what is to be injected. The `ACIntoVariable(...)` argument is required as it makes no sense to do an injection without knowing what to inject into. If there are no other qualifiers on the injection, then Alchemic will lookup the variable, work out what class and protocols it implements, and use that information to locates potential candidates within the context.
+The `ACinject(...)` macro does all the work of telling Alchemic that there is a dependency that needs to be injected into instances of the class. The `ACIntoVariable(...)` argument gives the variable to be injected. It's required as Alchemic cannot do an injection without knowing what to inject into. 
 
-Alchemic is also quite smart in what you can inject. It can inject public properties like the above example, but also private properties and variables. You can also use the internal name of properties if you want. So all of the following will work as well:
+If there are no other arguments on the injection, then Alchemic will lookup the variable, work out what class and protocols it implements, and use that information to locates potential candidates within the context. Alchemic can inject public properties like the above example, but also private properties and variables. You can also use the internal name of properties if you want. So all of the following will work:
 
 ```objectivec
 @interface MyClass
@@ -194,51 +192,35 @@ ACInject(ACIntoVariable(_yetAnotherClass))
 @end
 ```
 
-### Resolving argument values 
+# Resolving argument values 
 
-There are a number of ways to locate values for arguments to constructors and dependencies alike. 
+In order to process an injection, Alchemic needs a way to locate potential objects. When handling a dependency injection, it can generally examine the variable and work out for itself what to inject. But often you might want to provide your own criteria for what gets injected. Plus there are other situations where Objective-C cannot provide Alchemic with the information it needs to locate the objects. 
 
-#### Looking up values
+This is where you need to provide more information so that Alchemic can locate the objects it needs for the dependency.
 
-Each selector argument that needs to be satified must be matched by either a single `ACWith...` search criteria, or an Objective-C array of search criteria. The order of the arguments in the selector must match the order of the search criteria.
+## Classes and Protocols
 
-Search critieria can be any combination of the following:
-
-Macro | Description
---- | ---
-`ACWithName(...)` | Search for registered objects based on their name.
-`ACWithClass(...)` | Search for registered objects based on their class or if they are derived from the class.
-`ACWithProtocol(...)` | Search for registered objects based on if they implement the passed protocol name.
-![Underconstruction](./images/alchemic-underconstruction.png) `ACWithValue(...)` | Qualifier which can accept any type of value.
-
-So give a selector `initWithMyObj:withView:`, all of these are valid:
-
-```objectivec
-ACRegister(ACSelector(initWithMyObj:withView:), ACWithName(@"MyObj"), ACWithClass(MyView))
-ACRegister(ACSelector(initWithMyObj:withView:), (@[ACWithClass(@"MyAbstractObj"), ACWithProtocol(MyBanking)]), ACWithProtocol(MyManagedView))
-```
-
-*Note: the extra '(...)' around the Objective-C array. This is required because macros do not understand Objective-C and will mistake the commas in the array for macro argument delimiters.*
-
-## Refining injections
-
-As with registrations, there are a variety of other qaulifiers that you can add to an injection to define how Alchemic looks for candidates.
-
-### Classes and Protocols
-
-You can tell Alchemic to ignore the type information of the variable you are injecting and define your own class and/or protocols to use for selecting candidates. Here's an example:
+You can tell Alchemic to ignore the type information of the dependency you are injecting and define your own class and/or protocols to use for selecting candidate objects. Here's an example:
 
 ```objectivec
 ACInject(ACIntoVariable(otherClass), ACWithClass(MySpecialClass), ACWithProtocol(NSCopying), ACWithProtocol(MyOwnProtocol))
 ``` 
 
-You can only specify one class, but as many protocols as you want. All are optional.
+You can only specify one `ACWithClass(...)`, but as many `ACWithProtocol(...)` macros as you want. The main purposes of this is to allow you to control what is injected. It's quite useful when your variables are quite general and you want to inject more specific types. For example:
 
-The main purposes of this is to allow you to control what is injected and mostly its used to declare generalised variables using types such as `UIViewController`, but inject them with more specific types.
+```objectivec
+@implementation {
+    id<Account> *_account;
+}
 
-### Using names
+ACInject(ACIntoVariable(_account), ACWithClass(AmexAccount))
+// Rest of class ...
+@end
+```
 
-Earlier on we discussed storing objects under custom names in the context so they can be found later. Here's an example of how we use a custom name to locate a specific instance of an obejct:
+## Names
+
+Earlier on we discussed storing objects under custom names in the context so they can be found later. Here's an example of how we use a custom name to locate a specific instance of an object:
 
 ```objectivec
 @implementation {
@@ -250,10 +232,45 @@ ACInject(ACIntoVariable(otherClass), ACWithName(@"JSON date formatter"))
 @end
 ```
 
-# Factory methods
-This is a seperate subject because it's slightly more complex to setup than class based objects and factories. It's an unfortunate thing, but the Objective-C runtime does not track any information about the argument and return types of methods. This goes to the way that the runtime see's methods and sends messages to objects. The runtime can tell us how many arguments there are and whether they are primitive types, structs or objects, but thats pretty much it.
 
-The up shot is that there is no way automatically discover information about a method at runtime beyond the basic type and arguments it uses. So to use factory methods we have to define more information about them so that Alchemic can match them against dependencies and decide whether to call them to create objects for injection. 
+## ![Underconstruction](./images/alchemic-underconstruction.png) Constant values
+
+Some times you might want to specify a constant value for a dependency. In this case we can use the 
+`ACWithValue(...)` macro like this:
+
+```objectivec
+@implementation {
+    NSString *_message;
+}
+
+ACInject(ACIntoVariable(_message), ACWithValue(@"hello world"))
+// Rest of class ...
+@end
+```
+
+`ACWithValue(...)` cannot be used with any of the macros that perform searches for objects and must occur by itself. 
+
+## ![Underconstruction](./images/alchemic-underconstruction.png) Property values
+
+Property values are sourced from data sources such as Plist files or localization files. To access them you need to have the ***key*** of the value you need to obtain and use the `ACWithProperty(...)` macro like this:
+
+```objectivec
+@implementation {
+    NSString *_message;
+}
+
+ACInject(ACIntoVariable(_message), ACWithProperty(@"my.app.hello.message"))
+// Rest of class ...
+@end
+```
+
+`ACWithProperty(...)` cannot be used with any of the macros that perform searches for objects and must occur by itself. 
+
+# Factory methods
+
+This is a seperate subject because it's slightly more complex to setup than classes and dependencies. Sometimes it's useful to use methods to create the objects we want to provide for injecting into dependencies. For example, we might want to hae a method that generates a `NSDateFormatter` object based on some passed arguments and we want to use it to define several date formatters which can be injected.
+
+We know the method we need to use, but unfortunately the Objective-C runtime does not track any information about the argument and return types of methods. This goes to the way that the runtime see's methods and sends messages to objects. The runtime can tell us how many arguments there are and whether they are primitive types, structs or objects, but thats pretty much it. The up shot is that there is no way automatically discover information about a method at runtime beyond the basic type and arguments it uses. So to use a method to generate objects we have to define more information about it so that Alchemic knows what it produces as well as what arguments it needs.
 
 Lets take a look at a simple example:
 
@@ -262,7 +279,7 @@ Lets take a look at a simple example:
     int x;
 }
 
-ACRegister(ACReturnType(NSString), ACFactorySelector(makeAString));
+ACRegister(ACReturnType(NSString), ACSelector(makeAString));
 -(NSString *) makeAString {
     x++;
     return [NSString stringWithFormat:@"Factory string %i", x];
@@ -270,15 +287,15 @@ ACRegister(ACReturnType(NSString), ACFactorySelector(makeAString));
 @end
 ```
 
-Firstly note that factory methods ***do not*** have to be declared on the header if only used by Alchemic. Alchemic deals purely with the implementation code.
+We use the same `ACRegister(...)` macro that we use to declare classes, but this time we add macros that define this registration as being for a method instead. 
 
-Next note that we are using the same `ACRegister(...)` macro, but this time we are registering a method as a factory rather than a class. You will also see that we actually don't register the class at all. Alchemic is smart enough to register the class and create it as necessary to access it's factory methods.
+*Note: You will also see that we actually don't register the class at all. Alchemic is smart enough to register the class automatically and create it as necessary to access it's factory methods.*
 
-To tell Alchemic that we are declaring a factory method, we add the `ACFactorySelector(...)`. On seeing this Alchemic now knows to call this method to create the object when it needs one.
+To tell Alchemic that we are declaring a factory method, we add the `ACSelector(...)`. On seeing this Alchemic now knows to call the method specified by the selector to create the object when it needs one.
 
-Like classes factory methods references are stored in the context. This time under a combined name of the class and method selector. Like class registrations, you can make use of the `ACAsName(...)` macro to give a factory method a more meaningful and useful name for selecting it as a candidate for dependency injection.
+Factory method registrations are stored in the Alchemic context along side the classes. For their names, it uses a combination of the class and method selector. Like class registrations, you can make use of the `ACAsName(...)` macro to give a factory method a more meaningful and useful name. 
 
-Essentially with a factory method there are two required arguments to the `ACRegister(...)` macro. The `ACFActorySelector(...)` argument which defines the selector to be called, and the `ACReturnType(...)` argument which defines the class of the object that will be returned. Both are required, but can appear in any order.
+Essentially there are two required arguments to the `ACRegister(...)` macro when declaring factory methods. The `ACFActorySelector(...)` argument which defines the selector to be called, and the `ACReturnType(...)` argument which defines the class of the object that will be returned. Both are required, and can appear in any order.
 
 Now lets take a look at a factory method that takes arguments:
 
@@ -286,7 +303,7 @@ Now lets take a look at a factory method that takes arguments:
 ACRegister(
 	ACAsName(@"buildAComponentString"), 
 	ACReturnType(NSString), 
-	ACFactorySelector(makeAStringWithComponent:), 
+	ACSelector(makeAStringWithComponent:), 
 	ACWithClass(Component),
 	(@[ACWithProtocol(MyProtocol), ACWithProtocol(NSCopying)])
 	)
@@ -296,13 +313,13 @@ ACRegister(
 }
 ```
 
-The difference here is that we must specify the qualifiers that will allow Alchemic to treat the arguments as dependencies to be injected. Alchemic uses this information to look up the context for candidates, select those that are appropriate and pass them as method arguments to the factory method.
+In addition to the `ACSelector(...)` and `ACReturnType(...)` macros, we must specify argument macros that will allow Alchemic to values to be passed to the method's arguments. Alchemic uses these to select appropriate values and pass them as method arguments to the factory method.
 
-The only rule here is that the qualifiers must appear in the same order as the arguments in the selector. Alchemic will match based on index so the first qualifier will be used to locate the first argument and so on.
+Unlike variable dependencies, the macros that define the selector arguments **must appear in the same order** as the selector arguments. Once Alchemic has resolved values, it will use the argument indexes to set earch argument in turn.
 
-If you want to use more than one qualifier as per the second argument above, you need to wrap them in `(@[...])`. This defines an array of qualifiers to be used. The extra brackets are so that the macro doesn't miss-interperate the embedded comma.
+If you want to use more than one qualifier *(as per the second argument above)* you need to wrap them in `(@[...])`. This defines an Objective-C array of arguments to be used. 
 
-
+*Note: the extra '(...)' brackets around the Objective-C array. This is required because macros do not understand Objective-C and will mistake the commas in the array for macro argument delimiters.*
 
  
 
