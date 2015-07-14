@@ -57,6 +57,13 @@
 #define ACWithName(_objectName) [ALCQualifier qualifierWithValue:_objectName]
 
 /**
+ Used to search for builders based on the names given to them.
+
+ @param _objectName The name to search on.
+ */
+#define ACWithValue(_value) [ALCConstantValue constantValueWithValue:_value]
+
+/**
  When defining a method which builds an object, this tells the builder what class is expected to be returned from the method.
  
  @discussion The class declared by this macro is used for searching when resolving dependencies.

@@ -108,6 +108,7 @@
 
     STLog(classBuilder.valueClass, @"Registering a dependency ...");
     NSMutableSet<ALCQualifier *> *qualifiers = [[NSMutableSet alloc] init];
+    id constant;
     NSString *intoVariable = nil;
 
     va_list args;
@@ -118,17 +119,29 @@
         if ([arg isKindOfClass:[ALCIntoVariable class]]) {
             intoVariable = ((ALCIntoVariable *) arg).variableName;
 
+        } else if ([arg isKindOfClass:[ALCConstantValue class]]) {
+            STLog(classBuilder.valueClass, @"Adding a constant value %@", arg);
+            constant = arg;
+
         } else if ([arg isKindOfClass:[ALCQualifier class]]) {
             STLog(classBuilder.valueClass, @"Adding a explicit %@", arg);
             [qualifiers addObject:arg];
 
         } else {
+            va_end(args);
             @throw [NSException exceptionWithName:@"AlchemicUnexpectedQualifier"
                                            reason:[NSString stringWithFormat:@"Unexpected qualifier %@ for a variable declaration.", arg]
                                          userInfo:nil];
         }
     }
     va_end(args);
+
+    // Validate
+    if (constant != nil && [qualifiers count] > 0) {
+        @throw [NSException exceptionWithName:@"AlchemicInvalidDependencyRegistration"
+                                       reason:[NSString stringWithFormat:@"Cannot declare both qualifiers and constant values for a dependency declaration."]
+                                     userInfo:nil];
+    }
 
     // Add the registration.
     [classBuilder addInjectionPoint:intoVariable withQualifiers:qualifiers];
@@ -154,11 +167,6 @@
         if ([arg isKindOfClass:[ALCReturnType class]]) {
             returnType = ((ALCReturnType *)arg).returnType;
 
-        } else if ([arg isKindOfClass:[ALCIntoVariable class]]) {
-            @throw [NSException exceptionWithName:@"AlchemicCannotUseIntoVariableHere"
-                                           reason:[NSString stringWithFormat:@"Cannot use %@ in a class declaration", arg]
-                                         userInfo:nil];
-
         } else if ([arg isKindOfClass:[ALCIsFactory class]]) {
             isFactory = YES;
 
@@ -172,12 +180,32 @@
             selector = ((ALCMethodSelector *) arg).factorySelector;
 
         } else if ([arg isKindOfClass:[ALCQualifier class]]
+                   || [arg isKindOfClass:[ALCConstantValue class]]
                    || [arg isKindOfClass:[NSArray class]]) {
             [qualifiers addObject:arg];
+        } else {
+            va_end(args);
+            @throw [NSException exceptionWithName:@"AlchemicUnexpectedQualifier"
+                                           reason:[NSString stringWithFormat:@"Unexpected qualifier %@ for a class or method declaration.", arg]
+                                         userInfo:nil];
         }
 
     }
     va_end(args);
+
+    // Validate qualifiers. We only need to check embedded arrays do not contain any constants.
+    [qualifiers enumerateObjectsUsingBlock:^(id  __nonnull obj, NSUInteger idx, BOOL * __nonnull stop) {
+        if ([obj isKindOfClass:[NSArray class]]) {
+            [(NSArray *)obj enumerateObjectsUsingBlock:^(id  __nonnull qualifier, NSUInteger qIdx, BOOL * __nonnull qStop) {
+                if ([qualifier isKindOfClass:[ALCConstantValue class]]) {
+                    @throw [NSException exceptionWithName:@"AlchemicInvalidDependencyRegistration"
+                                                   reason:[NSString stringWithFormat:@"Cannot declare both qualifiers and constant values for a method argument dependency declaration."]
+                                                 userInfo:nil];
+                }
+            }];
+        }
+    }];
+
 
     // Add the registration.
     id<ALCBuilder> finalBuilder = classBuilder;
