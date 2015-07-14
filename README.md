@@ -1,6 +1,14 @@
 # Alchemic
 By Derek Clarkson
 
+ * [Installation](#installation)
+ * [Alchemic](#alchemic)
+  * [Using Alchemic](#using-alchemic)
+ * [Installation](#installation)
+ * [Installation](#installation)
+ * [Installation](#installation)
+ * [Installation](#installation)
+
 ![Underconstruction](./images/alchemic-underconstruction.png) ***Currently Alchemic is in development.*** Wherever you see this logo, it means that this section of Alchemic is still being worked on. 
 
 Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS.  It's based loosely on ideas from the [Spring](http://projects.spring.io/spring-framework/) Java framework as well as several iOS frameworks. 
@@ -39,7 +47,9 @@ Alchemic.framework | This software.
 Storyteller.framework | [Story Teller](https://github.com/drekka/StoryTeller) is a alternative logging framework. Add to your project along with Alchemic. 
 PEGKit.framework | Used by StoryTeller and already included inside it. *You do not need to add this to your project.*
 
-# Starting Alchemic
+# Alchemic
+
+## Starting
 
 Alchemic will automatically start itself when the app loads. During this process it will following this sequence of events:
 
@@ -47,7 +57,8 @@ Alchemic will automatically start itself when the app loads. During this process
 2. Scan all classes in your app for dependency injection commands. 
 3. Instantiate any classes it recognises as Singletons and wire up their dependencies.
 
-#### Stopping achemic from loading
+## Stopping
+
 If for some reason you do not want Alchemic to auto-start (unit testing perhaps), then you can do this by modifying XCode's scheme for the launch like this:
 
 ![Stop Alchemic from loading](./images/screen-shot-stop-alchemic.png)
@@ -62,7 +73,7 @@ Alchemic can then be programmatically started using:
 
 But generally speaking, just letting Alchemic autostart is the best way.
 
-# Using Alchemic
+## Adding to your code
 
 To use Alchemic you will need to do an import at the top of any source code where you will be adding Alchemic statements. Mostly, this will be in ***\*.m*** files as Alchemic works with the runtime and ignores header files.
 
@@ -104,7 +115,7 @@ By default, Alchemic will use the standard `init` method when constructing an in
 
 ```objectivec
 @implementation MyClass
-ACRegister(ACInitializer(ACSelector(initWithFrame:), ACWithClass(MyOtherClass))
+ACRegister(ACInitializer(ACSelector(initWithOtherObject:), ACWithClass(MyOtherClass))
 -(instancetype) initWithOtherObject:(id) obj {
     // ...
 }
