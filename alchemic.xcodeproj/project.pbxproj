@@ -300,14 +300,22 @@
 			name = Declarations;
 			sourceTree = "<group>";
 		};
-		6C4655F21B54D58500FD1D28 /* Value sources */ = {
+		6C4655F21B54D58500FD1D28 /* Values */ = {
 			isa = PBXGroup;
 			children = (
 				6C4655F31B54D59F00FD1D28 /* ALCValueSource.h */,
 				6C4655F51B54D62400FD1D28 /* ALCModelValueSource.h */,
 				6C4655F61B54D62400FD1D28 /* ALCModelValueSource.m */,
+				6C7BFFD91AC2D9A500456536 /* ALCSimpleValueStrategy.h */,
+				6C7BFFDA1AC2D9A500456536 /* ALCSimpleValueStrategy.m */,
+				6C65A64E1ACD93A3006ADC1F /* ALCArrayValueStrategy.h */,
+				6C65A64F1ACD93A3006ADC1F /* ALCArrayValueStrategy.m */,
+				6CC54B721AFCEFDA00D5D634 /* ALCValueResolverStrategy.h */,
+				6CB309DF1B08BC29003C1DE6 /* ALCValueResolver.h */,
+				6CB309E01B08BD4F003C1DE6 /* ALCDefaultValueResolver.h */,
+				6CB309E11B08BD4F003C1DE6 /* ALCDefaultValueResolver.m */,
 			);
-			name = "Value sources";
+			name = Values;
 			sourceTree = "<group>";
 		};
 		6C66DC251A8B82C3009F9D94 = {
@@ -376,21 +384,6 @@
 			children = (
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		6C7BFFD71AC2D10500456536 /* Values */ = {
-			isa = PBXGroup;
-			children = (
-				6C7BFFD91AC2D9A500456536 /* ALCSimpleValueStrategy.h */,
-				6C7BFFDA1AC2D9A500456536 /* ALCSimpleValueStrategy.m */,
-				6C65A64E1ACD93A3006ADC1F /* ALCArrayValueStrategy.h */,
-				6C65A64F1ACD93A3006ADC1F /* ALCArrayValueStrategy.m */,
-				6CC54B721AFCEFDA00D5D634 /* ALCValueResolverStrategy.h */,
-				6CB309DF1B08BC29003C1DE6 /* ALCValueResolver.h */,
-				6CB309E01B08BD4F003C1DE6 /* ALCDefaultValueResolver.h */,
-				6CB309E11B08BD4F003C1DE6 /* ALCDefaultValueResolver.m */,
-			);
-			name = Values;
 			sourceTree = "<group>";
 		};
 		6C9473051AE7D797008EB2E5 /* Initialisation */ = {
@@ -469,13 +462,12 @@
 		6CB309EA1B10C4CC003C1DE6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				6C4655F21B54D58500FD1D28 /* Value sources */,
+				6C4655F21B54D58500FD1D28 /* Values */,
 				6CF46EC81B4610EE0009007A /* ALCModel.h */,
 				6CF46EC91B4610EE0009007A /* ALCModel.m */,
 				6CC54B6C1AFA513000D5D634 /* Builders */,
 				6CDF44921B00E2F20066D18B /* Declarations */,
 				6C978BF01AA879AE00C2D48D /* Dependencies */,
-				6C7BFFD71AC2D10500456536 /* Values */,
 			);
 			name = Model;
 			sourceTree = "<group>";
