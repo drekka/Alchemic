@@ -14,18 +14,21 @@
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
-#import "ALCDefaultValueResolverManager.h"
+#import "ALCDefaultValueResolver.h"
 #import "ALCIsFactory.h"
 #import "ALCModel.h"
 #import "ALCContext+Internal.h"
 #import "ALCInternalMacros.h"
+
+@interface ALCContext ()
+@property (nonatomic, strong) id<ALCValueResolver> valueResolver;
+@end
 
 @implementation ALCContext {
     ALCModel *_model;
     NSMutableSet<Class> *_initialisationStrategyClasses;
     NSSet<id<ALCDependencyPostProcessor>> *_dependencyPostProcessors;
     NSSet<id<ALCObjectFactory>> *_objectFactories;
-    id<ALCValueResolverManager> _valueResolverManager;
 }
 
 #pragma mark - Lifecycle
@@ -37,7 +40,7 @@
         _initialisationStrategyClasses = [[NSMutableSet alloc] init];
         _dependencyPostProcessors = [[NSMutableSet alloc] init];
         _objectFactories = [[NSMutableSet alloc] init];
-        _valueResolverManager = [[ALCDefaultValueResolverManager alloc] init];
+        _valueResolver = [[ALCDefaultValueResolver alloc] init];
     }
     return self;
 }
@@ -73,16 +76,12 @@
     [classBuilder injectObjectDependencies:object];
 }
 
--(void) resolveDependency:(ALCDependency __nonnull *) dependency {
-    [dependency resolveWithPostProcessors:_dependencyPostProcessors];
-}
-
 -(void) resolveBuilderDependencies {
     STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
     [[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop){
         STLog(builder.valueClass, @"Resolving dependencies for builder %1$@", builder.name);
         STStartScope(builder.valueClass);
-        [builder resolveDependencies];
+        [builder resolveDependenciesWithPostProcessors:self->_dependencyPostProcessors];
     }];
 }
 
@@ -242,11 +241,6 @@
                                  userInfo:nil];
 
 }
-
--(nonnull id) resolveValueForDependency:(ALCDependency __nonnull *) dependency candidates:(NSSet<id<ALCBuilder>> __nonnull *)candidates {
-    return [_valueResolverManager resolveValueForDependency:dependency candidates:candidates];
-}
-
 
 #pragma mark - Internal
 

@@ -48,10 +48,9 @@
 
 #pragma mark - Instantiating
 
--(void) resolveDependencies {
-    ALCContext *strongContext = self.context;
+-(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
     [_dependencies enumerateObjectsUsingBlock:^(ALCVariableDependency * __nonnull dependency, BOOL * __nonnull stop) {
-        [strongContext resolveDependency:dependency];
+        [dependency resolveWithPostProcessors:postProcessors];
     }];
 }
 

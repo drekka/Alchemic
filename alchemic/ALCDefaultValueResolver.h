@@ -7,8 +7,8 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCValueResolverManager.h>
+#import <Alchemic/ALCValueResolver.h>
 
-@interface ALCDefaultValueResolverManager : NSObject<ALCValueResolverManager>
+@interface ALCDefaultValueResolver : NSObject<ALCValueResolver>
 
 @end

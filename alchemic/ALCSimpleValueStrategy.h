@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCValueResolver.h"
+#import "ALCValueResolverStrategy.h"
 
-@interface ALCSimpleValueResolver : NSObject<ALCValueResolver>
+@interface ALCSimpleValueStrategy : NSObject<ALCValueResolverStrategy>
 
 @end

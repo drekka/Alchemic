@@ -7,7 +7,9 @@
 //
 
 @class ALCDependency;
-@class ALCType;
+@protocol ALCDependencyPostProcessor;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCBuilder <NSObject>
 
@@ -29,8 +31,10 @@
 
 /**
  Called during model setup to resolve dependencies into a list of candidate objects.
+ 
+ @param postProcessors a set of post processors which can be used to resolve results further if needed.
  */
--(void) resolveDependencies;
+-(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 
 /**
  Used during the instantiation of singletons on startup. Otherwise never used.
@@ -42,3 +46,5 @@
 -(id) instantiate;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -64,7 +64,7 @@
     return newValue;
 }
 
--(void) resolveDependencies {
+-(void) resolveDependenciesWithPostProcessors:(nonnull NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
     [self doesNotRecognizeSelector:_cmd];
 }
 

@@ -10,11 +10,15 @@
 #import <StoryTeller/StoryTeller.h>
 #import "ALCRuntime.h"
 #import "ALCContext+Internal.h"
+#import "ALCValueSource.h"
+#import "ALCModelValueSource.h"
 
 @implementation ALCDependency {
     __weak ALCContext __nonnull *_context;
     NSSet<ALCQualifier *> __nonnull *_qualifiers;
     NSSet<id<ALCBuilder>> __nonnull *_candidateBuilders;
+    id<ALCValueSource> _valueSource;
+
 }
 
 -(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
@@ -22,54 +26,22 @@
                              qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
     self = [super init];
     if (self) {
-        _context = context;
+        ALCContext *strongContext = context;
+        _context = strongContext;
         _valueClass = valueClass;
         _qualifiers = qualifiers;
-        if ([_qualifiers count] == 0) {
-            @throw [NSException exceptionWithName:@"AlchemicMissingQualifiers"
-                                           reason:[NSString stringWithFormat:@"No qualifiers passed"]
-                                         userInfo:nil];
-        }
+        _valueSource = [[ALCModelValueSource alloc] initWithContext:strongContext
+                                                         qualifiers:qualifiers];
     }
     return self;
 }
 
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> __nonnull *) postProcessors {
-
-    STLog(_valueClass, @"Resolving %@", self);
-    STStartScope(self->_valueClass);
-    ALCContext *strongContext = _context;
-    [strongContext executeOnBuildersWithQualifiers:_qualifiers
-                           processingBuildersBlock:^(NSSet<id<ALCBuilder>> * __nonnull builders) {
-
-                               NSSet<id<ALCBuilder>> *finalBuilders = builders;
-                               for (id<ALCDependencyPostProcessor> postProcessor in postProcessors) {
-                                   finalBuilders = [postProcessor process:finalBuilders];
-                                   if ([finalBuilders count] == 0) {
-                                       break;
-                                   }
-                               }
-
-                               STLog(ALCHEMIC_LOG, @"Found %lu candidates", [finalBuilders count]);
-                               self->_candidateBuilders = finalBuilders;
-                           }];
-
-    // If there are no candidates left then error.
-    if ([_candidateBuilders count] == 0) {
-
-        NSMutableArray<NSString *> *qualifierDescs = [[NSMutableArray alloc] initWithCapacity:[_qualifiers count]];
-        [_qualifiers enumerateObjectsUsingBlock:^(ALCQualifier * __nonnull qualifier, BOOL * __nonnull stop) {
-            [qualifierDescs addObject:[qualifier description]];
-        }];
-
-        @throw [NSException exceptionWithName:@"AlchemicNoCandidateBuildersFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve dependency %@ using %@ - no builders found.", NSStringFromClass(_valueClass), [qualifierDescs componentsJoinedByString:@", "]]
-                                     userInfo:nil];
-    }
+    [_valueSource resolveWithPostProcessors:postProcessors];
 }
 
 -(id) value {
-    return [_context resolveValueForDependency:self candidates:_candidateBuilders];
+    return [_context.valueResolver resolveValueForDependency:self fromValues:_valueSource.values];
 }
 
 -(NSString *) description {

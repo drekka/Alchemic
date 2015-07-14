@@ -60,13 +60,6 @@
 #pragma mark - Dependencies
 
 /**
- Called by builders when resolving their dependencies.
- 
- @param dependency the dependency to be resolved.
- */
--(void) resolveDependency:(ALCDependency __nonnull *) dependency;
-
-/**
  Access point for objects which need to have dependencies injected. 
  
  @discussion This checks the model against the model. If a class builder is found which matches the class and protocols of the passed object, it is used to inject any listed dependencies into the object.

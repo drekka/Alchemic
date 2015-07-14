@@ -7,8 +7,7 @@
 //
 
 @import Foundation;
-
-#import <Alchemic/ALCBuilder.h>
+@protocol ALCBuilder;
 
 @protocol ALCDependencyPostProcessor <NSObject>
 

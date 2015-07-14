@@ -98,10 +98,9 @@
     return returnObj;
 }
 
--(void) resolveDependencies {
-    ALCContext *strongContext = self.context;
+-(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
     [_invArgumentDependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
-        [strongContext resolveDependency:dependency];
+        [dependency resolveWithPostProcessors:postProcessors];
     }];
 }
 
