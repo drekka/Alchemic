@@ -8,9 +8,9 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCInitInjector.h>
-#import <Alchemic/ALCDependencyPostProcessor.h>
-#import <Alchemic/ALCObjectFactory.h>
+@protocol ALCInitInjector;
+@protocol ALCDependencyPostProcessor;
+@protocol ALCObjectFactory;
 
 @class ALCClassBuilder;
 

@@ -7,7 +7,8 @@
 //
 
 @import Foundation;
-#import "ALCDependencyPostProcessor.h"
+
+@protocol ALCDependencyPostProcessor;
 
 /**
  Objects that can produce values for dependencies.

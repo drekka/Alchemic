@@ -18,9 +18,9 @@ By Derek Clarkson
           * [Primary objects and testing](#primary-objects-and-testing)
  * [Injecting dependencies](#injecting-dependencies)
  * [Resolving argument values](#resolving-argument-values)
-     * [Classes and protocols](#classes-and-protocols)
-     * [Names](#names)
-     * [Constant values](#-constant-values)
+     * [Searching by class and protocols](#searching-by-class-and-protocols)
+     * [Searching by Name](#searching-by-name)
+     * [Constant values](#constant-values)
      * [Property values](#-property-values)
  * [Factory methods](#factory-methods)
  * [Macro reference](./macros.md)
@@ -225,7 +225,7 @@ In order to process an injection, Alchemic needs a way to locate potential objec
 
 This is where you need to provide more information so that Alchemic can locate the objects it needs for the dependency.
 
-## Classes and Protocols
+## Searching by Class and Protocols
 
 You can tell Alchemic to ignore the type information of the dependency you are injecting and define your own class and/or protocols to use for selecting candidate objects. Here's an example:
 
@@ -245,7 +245,7 @@ ACInject(ACIntoVariable(_account), ACWithClass(AmexAccount))
 @end
 ```
 
-## Names
+## Searching by Name
 
 Earlier on we discussed storing objects under custom names in the context so they can be found later. Here's an example of how we use a custom name to locate a specific instance of an object:
 
@@ -260,10 +260,9 @@ ACInject(ACIntoVariable(otherClass), ACWithName(@"JSON date formatter"))
 ```
 
 
-## ![Underconstruction](./images/alchemic-underconstruction.png) Constant values
+## Constant values
 
-Some times you might want to specify a constant value for a dependency. In this case we can use the 
-`ACWithValue(...)` macro like this:
+Some times you might want to specify a constant value for a dependency. In this case we can use the `ACWithValue(...)` macro like this:
 
 ```objectivec
 @implementation {
@@ -275,7 +274,7 @@ ACInject(ACIntoVariable(_message), ACWithValue(@"hello world"))
 @end
 ```
 
-`ACWithValue(...)` cannot be used with any of the macros that perform searches for objects and must occur by itself. 
+`ACWithValue(...)` cannot be used with any of the macros that perform searches for objects and must occur by itself. If defining arguments for a [factory method](#factory-method), `ACWithValue(...)` can be used for individual arguments. 
 
 ## ![Underconstruction](./images/alchemic-underconstruction.png) Property values
 
@@ -316,13 +315,13 @@ ACRegister(ACReturnType(NSString), ACSelector(makeAString));
 
 We use the same `ACRegister(...)` macro that we use to declare classes, but this time we add macros that define this registration as being for a method instead. 
 
-*Note: You will also see that we actually don't register the class at all. Alchemic is smart enough to register the class automatically and create it as necessary to access it's factory methods.*
+*Note: You will also notice that we don't need to register the class separately. Alchemic is smart enough to register the class automatically and create it as necessary to access it's factory methods.*
 
-To tell Alchemic that we are declaring a factory method, we add the `ACSelector(...)`. On seeing this Alchemic now knows to call the method specified by the selector to create the object when it needs one.
+To tell Alchemic that we are declaring a factory method, we add the `ACSelector(...)`. On seeing this macro, Alchemic now knows to call the method specified by the selector when it needs an instance.
 
 Factory method registrations are stored in the Alchemic context along side the classes. For their names, it uses a combination of the class and method selector. Like class registrations, you can make use of the `ACAsName(...)` macro to give a factory method a more meaningful and useful name. 
 
-Essentially there are two required arguments to the `ACRegister(...)` macro when declaring factory methods. The `ACFActorySelector(...)` argument which defines the selector to be called, and the `ACReturnType(...)` argument which defines the class of the object that will be returned. Both are required, and can appear in any order.
+There are two required arguments to the `ACRegister(...)` macro when declaring factory methods. The `ACFActorySelector(...)` argument which defines the selector to be called, and the `ACReturnType(...)` argument which defines the class of the object that will be returned. Both are required, and can appear in any order.
 
 Now lets take a look at a factory method that takes arguments:
 
@@ -332,21 +331,28 @@ ACRegister(
 	ACReturnType(NSString), 
 	ACSelector(makeAStringWithComponent:), 
 	ACWithClass(Component),
-	(@[ACWithProtocol(MyProtocol), ACWithProtocol(NSCopying)])
+	(@[ACWithProtocol(MyProtocol), ACWithProtocol(NSCopying)]),
+	ACWithValue(@5)
 	)
--(NSString *) makeAStringWithComponent:(Component *) component myOtherObject:(id) otherObj {
+-(NSString *) makeAStringWithComponent:(Component *) component myOtherObject:(id) otherObj aNumber:(NSNumber *) aNumber {
     x++;
     return [NSString stringWithFormat:@"Component Factory string %i", x];
 }
 ```
 
-In addition to the `ACSelector(...)` and `ACReturnType(...)` macros, we must specify argument macros that will allow Alchemic to values to be passed to the method's arguments. Alchemic uses these to select appropriate values and pass them as method arguments to the factory method.
+In addition to the `ACSelector(...)` and `ACReturnType(...)` macros, we must specify argument macros that will allow Alchemic to values to be passed to the method's arguments. Alchemic uses these to select appropriate values and pass them as method arguments to the factory method. 
 
-Unlike variable dependencies, the macros that define the selector arguments **must appear in the same order** as the selector arguments. Once Alchemic has resolved values, it will use the argument indexes to set earch argument in turn.
+Unlike variable dependencies, the macros that define the selector arguments **must appear in the same order** as the selector arguments. Once Alchemic has resolved values, it will use the argument indexes match the selector arguments.
 
-*Note: If you want to use more than one qualifier *(as per the second argument above)* you need to wrap them in `(@[...])`. This defines an Objective-C array of arguments to be used. This is required because macros do not understand Objective-C and will mistake the commas in the array for macro argument delimiters.*
+*Note: If you want to use more than one qualifier (as per the second argument above) you need to wrap them in* ***`(@[...])`*** *brackets. This defines an Objective-C array of arguments to be used. Macros do not understand Objective-C arrays and will mistake the commas in the array for macro argument delimiters. Hence the need for extra brackets.*
 
+# Credits
 
+ * Big Thanks to the guys behind Carthage for writing a dependency tool that actual works well with XCode and Git.
+ * Thanks to the guys behind the Spring Framework. The work you have done has made my life so much easier on so many Java projects.
+ * Thanks to Mulle Cybernetik for OCMock. An outstanding mocking framework for Objective-C that has enabled me to test the un-testable many times.
+ * Thanks to ... for PEGKit. I've learned a lot from working with it on Story Teller.
+ * 
  
 
 

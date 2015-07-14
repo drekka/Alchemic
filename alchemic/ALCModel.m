@@ -11,6 +11,7 @@
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCInternalMacros.h"
+#import <Alchemic/Alchemic.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

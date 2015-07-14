@@ -9,9 +9,8 @@
 @import Foundation;
 
 @class ALCContext;
-
-#import <Alchemic/ALCQualifier.h>
-#import <Alchemic/ALCDependencyPostProcessor.h>
+@class ALCQualifier;
+@protocol ALCDependencyPostProcessor;
 
 @interface ALCDependency : NSObject
 

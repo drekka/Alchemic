@@ -10,6 +10,7 @@
 
 #import <StoryTeller/StoryTeller.h>
 
+#import <Alchemic/Alchemic.h>
 #import "ALCInitStrategyInjector.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
@@ -19,6 +20,7 @@
 #import "ALCModel.h"
 #import "ALCContext+Internal.h"
 #import "ALCInternalMacros.h"
+
 
 @interface ALCContext ()
 @property (nonatomic, strong) id<ALCValueResolver> valueResolver;

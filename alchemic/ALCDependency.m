@@ -12,6 +12,8 @@
 #import "ALCContext+Internal.h"
 #import "ALCValueSource.h"
 #import "ALCModelValueSource.h"
+#import <Alchemic/Alchemic.h>
+#import "ALCValueResolver.h"
 
 @implementation ALCDependency {
     __weak ALCContext __nonnull *_context;

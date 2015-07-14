@@ -10,11 +10,10 @@
 
 #import "ALCRuntime.h"
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCContext.h>
+#import <Alchemic/Alchemic.h>
 #import "ALCClassBuilder.h"
 #import <StoryTeller/StoryTeller.h>
 #import "ALCRuntimeScanner.h"
-#import "ALCConfig.h"
 
 @implementation ALCRuntime
 

@@ -8,8 +8,9 @@
 
 @import Foundation;
 
-#import "ALCBuilder.h"
-#import "ALCClassBuilder.h"
+@protocol ALCBuilder;
+@class ALCClassBuilder;
+@class ALCQualifier;
 
 /**
  Core object management.

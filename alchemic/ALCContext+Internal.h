@@ -7,7 +7,7 @@
 //
 
 #import <Alchemic/Alchemic.h>
-#import "ALCValueResolver.h"
+@protocol ALCValueResolver;
 
 typedef void (^ProcessBuilderBlock)(NSSet<id<ALCBuilder>> __nonnull *);
 

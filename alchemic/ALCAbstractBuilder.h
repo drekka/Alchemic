@@ -10,9 +10,9 @@
 
 @class ALCType;
 @class ALCContext;
+@class ALCDependency;
 
 #import <Alchemic/ALCBuilder.h>
-#import <Alchemic/ALCDependency.h>
 
 @interface ALCAbstractBuilder : NSObject<ALCBuilder>
 

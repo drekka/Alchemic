@@ -9,7 +9,8 @@
 @import Foundation;
 
 #import "ALCAbstractBuilder.h"
-#import <Alchemic/ALCInitStrategy.h>
+
+@protocol ALCInitStrategy;
 
 @interface ALCClassBuilder : ALCAbstractBuilder
 

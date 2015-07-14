@@ -9,7 +9,7 @@
 #import "ALCMethodBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
-#import <Alchemic/ALCContext.h>
+#import <Alchemic/Alchemic.h>
 
 @implementation ALCMethodBuilder {
     ALCClassBuilder *_parentClassBuilder;

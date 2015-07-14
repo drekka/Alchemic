@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCQualifier.h>
+#import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import "ALCRuntime.h"
 #import <StoryTeller/StoryTeller.h>

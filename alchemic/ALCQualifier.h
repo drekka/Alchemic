@@ -4,7 +4,7 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCBuilder.h>
+@protocol ALCBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
