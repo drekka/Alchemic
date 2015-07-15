@@ -13,6 +13,8 @@
 #import <Alchemic/ALCQualifier.h>
 #import "ALCDependencyPostProcessor.h"
 #import "ALCContext+Internal.h"
+#import "ALCInternalMacros.h"
+#import <StoryTeller/StoryTeller.h>
 
 @interface ALCModelValueSourceTests : XCTestCase
 
@@ -21,7 +23,7 @@
 @implementation ALCModelValueSourceTests
 
 -(void) testResolveWithPostProcessors {
-
+    STStartLogging(ALCHEMIC_LOG);
     id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
     NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
 
@@ -33,10 +35,12 @@
     NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet setWithObject:mockPostProcessor];
 
     OCMExpect([mockContext executeOnBuildersWithQualifiers:qualifiers
-                                   processingBuildersBlock:[OCMArg checkWithBlock:^BOOL(ProcessBuilderBlock processBuilderBlock) {
-        processBuilderBlock();
-        return YES;
-    }]]);
+                                   processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
+        __unsafe_unretained ProcessBuilderBlock block = NULL;
+        [inv getArgument:&block atIndex:3];
+        block(builders);
+    });
+    OCMExpect([mockPostProcessor process:builders]).andReturn(builders);
 
     ALCModelValueSource *source = [[ALCModelValueSource alloc] initWithContext:mockContext qualifiers:qualifiers];
     [source resolveWithPostProcessors:postProcessors];

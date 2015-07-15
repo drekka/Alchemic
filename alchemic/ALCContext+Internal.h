@@ -9,7 +9,8 @@
 #import <Alchemic/Alchemic.h>
 @protocol ALCValueResolver;
 
-typedef void (^ProcessBuilderBlock)(NSSet<id<ALCBuilder>> __nonnull *);
+#define ProcessBuiderBlockArgs NSSet<id<ALCBuilder>> __nonnull *builders
+typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 /**
  Category which gives access to methods reserved for internal Alchemic processing.

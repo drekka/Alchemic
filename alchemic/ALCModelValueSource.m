@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
     STStartScope(self);
     ALCContext *strongContext = _context;
     [strongContext executeOnBuildersWithQualifiers:_qualifiers
-                           processingBuildersBlock:^(NSSet<id<ALCBuilder>> * builders) {
+                           processingBuildersBlock:^(ProcessBuiderBlockArgs) {
 
                                NSSet<id<ALCBuilder>> *finalBuilders = builders;
                                for (id<ALCDependencyPostProcessor> postProcessor in postProcessors) {
