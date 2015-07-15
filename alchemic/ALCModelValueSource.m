@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @implementation ALCModelValueSource {
     __weak ALCContext *_context;
-    NSSet<id<ALCModelSearchExpression>> *_searchExpressions;
     NSSet<id<ALCBuilder>> *_candidateBuilders;
 }
 

@@ -7,11 +7,12 @@
 //
 
 @import Foundation;
-#import "ALCModelSearchExpression.h"
+@protocol ALCValueSource;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCMacroArgumentProcessor : NSObject
+
 @property (nonatomic, assign, readonly) Class returnType;
 @property (nonatomic, assign, readonly) BOOL isClassSelector;
 @property (nonatomic, assign, readonly) SEL selector;
@@ -19,17 +20,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *asName;
 @property (nonatomic, assign, readonly) BOOL isFactory;
 @property (nonatomic, assign, readonly) BOOL isPrimary;
-@property (nonatomic, strong, readonly) id constantValue;
-@property (nonatomic, strong, readonly) NSSet<id<ALCModelSearchExpression>> *searchExpressions;
 
 -(void) processArgument:(id) argument;
+
+-(id<ALCValueSource>) dependencyValueSource;
 
 /**
  When dealing with method arguments, returns the relevant sarch expressions for the argument at the index.
  
  @param index the index of the method argument. Remember this is 2 based because indexes 0 and 1 are the object and selectors of the method.
  */
--(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsAtIndex:(NSUInteger) index;
+-(id<ALCValueSource>) valueSourceAtIndex:(NSUInteger) index;
 
 /**
  Call after sending all arguments to validate the content sent.

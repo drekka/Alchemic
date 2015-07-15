@@ -40,35 +40,58 @@ NS_ASSUME_NONNULL_BEGIN
         _selector = ((ALCMethodSelector *)argument).methodSelector;
     } else if ([argument isKindOfClass:[ALCReturnType class]]) {
         _returnType = ((ALCReturnType *)argument).returnType;
-    } else if ([argument isKindOfClass:[ALCConstantValue class]]) {
-        _constantValue = ((ALCConstantValue *)argument).value;
     } else if ([argument isKindOfClass:[ALCIsPrimary class]]) {
         _isPrimary = YES;
     } else if ([argument isKindOfClass:[ALCQualifier class]]
-               || [argument isKindOfClass:[NSArray class]]) {
+               || [argument isKindOfClass:[NSArray class]]
+               || [argument isKindOfClass:[ALCConstantValue class]]) {
         [_searchArguments addObject:(id<ALCModelSearchExpression>)argument];
     }
 }
 
--(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
-    return [NSSet setWithArray:_searchArguments];
+-(id<ALCValueSource>)dependencyValueSource {
+    NSAssert(_variableName != nil, @"Variable name must be present");
+    return nil;//[NSSet setWithArray:_searchArguments];
 }
 
--(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsAtIndex:(NSUInteger) index {
-    return _searchArguments[index];
+-(id<ALCValueSource>) valueSourceAtIndex:(NSUInteger) index {
+    NSAssert(_selector != nil, @"Selector must be present");
+    return nil;// _searchArguments[index];
 }
 
 -(void) validateWithClass:(Class) parentClass {
-    if (_selector == nil) {
-        [self validateDependencyInfo];
+
+    if (_variableName == nil && _selector == NULL) {
+
+        // It's a class registration.
+        if ([_searchArguments count] > 0) {
+            @throw [NSException exceptionWithName:@"AlchemicInvalidRegistration"
+                                           reason:[NSString stringWithFormat:@"Cannot specify search arguments with a class registration for %@", NSStringFromClass(parentClass)]
+                                         userInfo:nil];
+        }
+
     } else {
-        [self validateMethodInfoForClass:parentClass];
+        if (_selector == nil) {
+            [self validateDependencyInfo];
+        } else {
+            [self validateMethodInfoForClass:parentClass];
+        }
     }
+
 }
 
 -(void) validateDependencyInfo {
+
     // all arguments must be expressions.
     [_searchArguments enumerateObjectsUsingBlock:^(id  __nonnull searchArgument, NSUInteger idx, BOOL * __nonnull stop) {
+
+        // If any argument is a constant then it must be the only one.
+        if ([searchArgument isKindOfClass:[ALCConstantValue class]] && [self->_searchArguments count] > 1) {
+            @throw [NSException exceptionWithName:@"AlchemicInvalidArguments"
+                                           reason:[NSString stringWithFormat:@"ACWithValue(...) must be the only data source macro for %@", self->_variableName]
+                                         userInfo:nil];
+        }
+
         if (![searchArgument conformsToProtocol:@protocol(ALCModelSearchExpression)]) {
             @throw [NSException exceptionWithName:@"AlchemicUnexpectedArray"
                                            reason:[NSString stringWithFormat:@"Arrays of qualifiers not allowed for dependencies. Check the definition of %@", self->_variableName]

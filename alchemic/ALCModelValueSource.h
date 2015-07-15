@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCModelValueSource : NSObject<ALCValueSource>
 
+@property (nonatomic, strong, readonly) NSSet<id<ALCModelSearchExpression>> *searchExpressions;
+
 -(instancetype) initWithContext:(ALCContext __weak *) context
               searchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions;
 
