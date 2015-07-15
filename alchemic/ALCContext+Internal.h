@@ -8,6 +8,7 @@
 
 #import <Alchemic/Alchemic.h>
 @protocol ALCValueResolver;
+@protocol ALCModelSearchExpression;
 
 #define ProcessBuiderBlockArgs NSSet<id<ALCBuilder>> __nonnull *builders
 typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
@@ -26,8 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) addBuilderToModel:(id<ALCBuilder>) builder;
 
--(void) executeOnBuildersWithQualifiers:(NSSet<ALCQualifier *> *) qualifiers
-                processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
+-(void) executeOnBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
+                       processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
 
 -(id) instantiateObjectFromBuilder:(id<ALCBuilder>) builder;
 

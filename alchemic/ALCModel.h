@@ -9,8 +9,8 @@
 @import Foundation;
 
 @protocol ALCBuilder;
+@protocol ALCModelSearchExpression;
 @class ALCClassBuilder;
-@class ALCQualifier;
 
 /**
  Core object management.
@@ -37,7 +37,7 @@
  
  @return a NSSet of builders that return objects of the class.
  */
--(nonnull NSSet<id<ALCBuilder>> *) buildersForQualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers;
+-(nonnull NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> __nonnull *) searchExpressions;
 
 -(nonnull NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> __nonnull *) builders;
 

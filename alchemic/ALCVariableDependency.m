@@ -12,14 +12,14 @@
 
 @implementation ALCVariableDependency
 
--(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
-                               variable:(Ivar __nonnull) variable
-                             qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
+-(nonnull instancetype) initWithContext:(ALCContext * __nonnull __weak)context
+                               variable:(nonnull Ivar)variable
+                            valueSource:(nonnull id<ALCValueSource>)valueSource {
     self = [super initWithContext:context
                        valueClass:[ALCRuntime iVarClass:variable]
-                       qualifiers:qualifiers];
+                      valueSource:valueSource];
     if (self) {
-        STLog(self.valueClass, @"Registering variable dependency: %s with qualifiers: %@", ivar_getName(variable), qualifiers);
+        STLog(self.valueClass, @"Registering variable dependency: %s from source: %@", ivar_getName(variable), valueSource);
         _variable = variable;
     }
     return self;

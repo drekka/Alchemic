@@ -15,6 +15,7 @@
 #import "ALCContext+Internal.h"
 #import "ALCInternalMacros.h"
 #import <StoryTeller/StoryTeller.h>
+#import "ALCQualifier+Internal.h"
 
 @interface ALCModelValueSourceTests : XCTestCase
 
@@ -28,13 +29,13 @@
     NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
 
     id mockContext = OCMClassMock([ALCContext class]);
-    ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"abc"];
-    NSSet<ALCQualifier *> *qualifiers = [NSSet setWithObject:qualifier];
+    id<ALCModelSearchExpression> searchExpression = [ALCQualifier qualifierWithValue:@"abc"];
+    NSSet<id<ALCModelSearchExpression>> *searchExpressions = [NSSet setWithObject:searchExpression];
 
     id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));
     NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet setWithObject:mockPostProcessor];
 
-    OCMExpect([mockContext executeOnBuildersWithQualifiers:qualifiers
+    OCMExpect([mockContext executeOnBuildersWithSearchExpressions:searchExpressions
                                    processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
         __unsafe_unretained ProcessBuilderBlock block = NULL;
         [inv getArgument:&block atIndex:3];
@@ -42,7 +43,7 @@
     });
     OCMExpect([mockPostProcessor process:builders]).andReturn(builders);
 
-    ALCModelValueSource *source = [[ALCModelValueSource alloc] initWithContext:mockContext qualifiers:qualifiers];
+    ALCModelValueSource *source = [[ALCModelValueSource alloc] initWithContext:mockContext searchExpressions:searchExpressions];
     [source resolveWithPostProcessors:postProcessors];
 
 }

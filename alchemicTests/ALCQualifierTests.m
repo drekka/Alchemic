@@ -15,6 +15,7 @@
 
 #import "ALCQualifier.h"
 #import "ALCClassBuilder.h"
+#import "ALCQualifier+Internal.h"
 
 
 @interface ALCQualifierTests : ALCTestCase
@@ -35,33 +36,33 @@
 
 -(void) testStringQualifierMatches {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"abc"];
-    XCTAssertTrue([qualifier matchesBuilder:_builder]);
+    XCTAssertTrue(qualifier.matchBlock(_builder));
 }
 
 -(void) testStringQualifierFailsMatch {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"def"];
-    XCTAssertFalse([qualifier matchesBuilder:_builder]);
+    XCTAssertTrue(qualifier.matchBlock(_builder));
 }
 
 -(void) testClassQualifierMatches {
     STStartLogging(@"is [NSString]");
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:[NSString class]];
-    XCTAssertTrue([qualifier matchesBuilder:_builder]);
+    XCTAssertTrue(qualifier.matchBlock(_builder));
 }
 
 -(void) testClassQualifierFailsMatch {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:[NSArray class]];
-    XCTAssertFalse([qualifier matchesBuilder:_builder]);
+    XCTAssertTrue(qualifier.matchBlock(_builder));
 }
 
 -(void) testProtocolQualifierMatches {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@protocol(NSCopying)];
-    XCTAssertTrue([qualifier matchesBuilder:_builder]);
+    XCTAssertTrue(qualifier.matchBlock(_builder));
 }
 
 -(void) testProtocolQualifierFailsMatch {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@protocol(NSFastEnumeration)];
-    XCTAssertFalse([qualifier matchesBuilder:_builder]);
+    XCTAssertTrue(qualifier.matchBlock(_builder));
 }
 
 #pragma mark - Equality & hash

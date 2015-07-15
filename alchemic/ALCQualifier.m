@@ -10,24 +10,19 @@
 #import <Alchemic/ALCInternalMacros.h>
 #import "ALCRuntime.h"
 #import <StoryTeller/StoryTeller.h>
+#import "ALCQualifier+Internal.h"
 
-/**
- Block type for checking this qualifier against a builder to see if it applies.
-
- @param builder	the builder to be checked.
-
- @return YES if the builder can be matched by the qualifier.
- */
-typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
-
-@interface ALCQualifier ()
--(nonnull instancetype) initWithValue:(id __nonnull) value;
+// We need to re-apply the protocol here, otherwise Objective-C does not see it. I think it's because
+// It's applied on a category and Objective-C regards the protocol methods as being part of the category.
+@interface ALCQualifier()<ALCModelSearchExpression>
 @end
 
 @implementation ALCQualifier {
-    QualifierCheck __nonnull _checkBlock;
     NSString *_descTemplate;
 }
+
+@synthesize type = _type;
+@synthesize matchBlock = _matchBlock;
 
 +(nonnull instancetype) qualifierWithValue:(id __nonnull) value {
     return [[ALCQualifier alloc] initWithValue:value];
@@ -42,26 +37,26 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 
         // sort of the check block.
         if ([ALCRuntime objectIsAClass:value]) {
-            _type = QualifierTypeClass;
+            _type = ALCModelSearchExpressionTypeClass;
             _descTemplate = [NSString stringWithFormat:@"Qualifier [%s]", class_getName(value)];
             STLog(value, _descTemplate);
-            _checkBlock = ^BOOL(id<ALCBuilder> builder) {
+            _matchBlock = ^BOOL(ALCMatchBuilderBlockArgs) {
                 return [builder.valueClass isSubclassOfClass:value];
             };
 
         } else if ([ALCRuntime objectIsAProtocol:value]) {
-            _type = QualifierTypeProtocol;
+            _type = ALCModelSearchExpressionTypeProtocol;
             _descTemplate = [NSString stringWithFormat:@"Qualifier <%s>", protocol_getName(value)];
             STLog(value, _descTemplate);
-            _checkBlock = ^BOOL(id<ALCBuilder> builder) {
+            _matchBlock = ^BOOL(ALCMatchBuilderBlockArgs) {
                 return [builder.valueClass conformsToProtocol:value];
             };
 
         } else {
-            _type = QualifierTypeString;
+            _type = ALCModelSearchExpressionTypeString;
             _descTemplate = [NSString stringWithFormat:@"Qualifier '%@'", value];
             STLog(value, _descTemplate);
-            _checkBlock = ^BOOL(id<ALCBuilder> builder) {
+            _matchBlock = ^BOOL(ALCMatchBuilderBlockArgs) {
                 return [builder.name isEqualToString:value];
             };
         }
@@ -69,8 +64,8 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
     return self;
 }
 
--(BOOL) matchesBuilder:(id<ALCBuilder> __nonnull) builder {
-    return _checkBlock(builder);
+-(id) cacheId {
+    return _value;
 }
 
 -(NSString *) description {
@@ -91,7 +86,7 @@ typedef BOOL(^QualifierCheck)(id<ALCBuilder> __nonnull builder);
 -(BOOL) isEqualToQualifier:(ALCQualifier *) qualifier {
     return qualifier != nil
     && qualifier.type == _type
-    && _type == QualifierTypeString ? [(NSString *)_value isEqualToString:qualifier.value]: qualifier.value == _value;
+    && _type == ALCModelSearchExpressionTypeString ? [(NSString *)_value isEqualToString:qualifier.value]: qualifier.value == _value;
 }
 
 @end

@@ -21,8 +21,6 @@
 
 +(BOOL) objectIsAProtocol:(id __nonnull) possiblePrototocol;
 
-+(void) aClass:(Class __nonnull) aClass validateSelector:(SEL __nonnull) selector;
-
 +(nonnull NSSet<Protocol *> *) aClassProtocols:(Class __nonnull) aClass;
 
 +(nullable Class) iVarClass:(Ivar __nonnull) ivar;

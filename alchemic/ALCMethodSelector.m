@@ -9,9 +9,9 @@
 @implementation ALCMethodSelector
 
 +(instancetype) methodSelector:(SEL) methodSelector {
-    ALCMethodSelector *factorySelectorQualifier = [[ALCMethodSelector alloc] init];
-    factorySelectorQualifier->_factorySelector = methodSelector;
-    return factorySelectorQualifier;
+    ALCMethodSelector *methodSelectorArgument = [[ALCMethodSelector alloc] init];
+    methodSelectorArgument->_methodSelector = methodSelector;
+    return methodSelectorArgument;
 }
 
 @end

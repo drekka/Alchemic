@@ -36,14 +36,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return __protocolClass == [possiblePrototocol class];
 }
 
-+(void) aClass:(Class __nonnull) class validateSelector:(SEL __nonnull) selector {
-    if (! class_respondsToSelector(class, selector)) {
-        @throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"
-                                       reason:[NSString stringWithFormat:@"Faciled to find selector -[%s %s]", class_getName(class), sel_getName(selector)]
-                                     userInfo:nil];
-    }
-}
-
 +(nullable Class) iVarClass:(Ivar __nonnull) ivar {
 
     // Get the type.

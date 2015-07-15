@@ -7,8 +7,9 @@
 //
 
 @import Foundation;
+#import <Alchemic/ALCMacroArgument.h>
 
-@interface ALCIntoVariable : NSObject
+@interface ALCIntoVariable : NSObject<ALCMacroArgument>
 
 @property (nonatomic, strong, readonly) NSString *variableName;
 

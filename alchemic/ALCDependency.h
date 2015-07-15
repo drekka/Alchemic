@@ -9,21 +9,28 @@
 @import Foundation;
 
 @class ALCContext;
-@class ALCQualifier;
 @protocol ALCDependencyPostProcessor;
+@protocol ALCValueSource;
 
+NS_ASSUME_NONNULL_BEGIN
+
+/**
+ Main class for managing dependencies.
+ */
 @interface ALCDependency : NSObject
 
-@property (nonatomic, strong, readonly, nonnull) id value;
+@property (nonatomic, strong, readonly) id value;
 
-@property (nonatomic, strong, readonly, nonnull) Class valueClass;
+@property (nonatomic, strong, readonly) Class valueClass;
 
 #pragma mark - Resolving
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> __nonnull *) postProcessors;
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 
--(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
-                             valueClass:(Class __nonnull) valueClass
-                             qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers;
+-(instancetype) initWithContext:(__weak ALCContext *) context
+                             valueClass:(Class) valueClass
+                            valueSource:(id<ALCValueSource>) valueSource;
 
 @end
+
+NS_ASSUME_NONNULL_END

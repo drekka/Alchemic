@@ -9,15 +9,19 @@
 @import Foundation;
 
 #import "ALCAbstractBuilder.h"
-
+@class ALCMacroArgumentProcessor;
 @protocol ALCInitStrategy;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCClassBuilder : ALCAbstractBuilder
 
 #pragma mark - Setting up
 
--(void) addInjectionPoint:(NSString __nonnull *) inj withQualifiers:(NSSet __nonnull *) qualifiers;
+-(void) addInjectionPointForArguments:(ALCMacroArgumentProcessor *) arguments;
 
--(void) addInitStrategy:(id<ALCInitStrategy> __nonnull) initialisationStrategy;
+-(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -9,14 +9,21 @@
 #import <Alchemic/ALCDependency.h>
 @import ObjectiveC;
 
+NS_ASSUME_NONNULL_BEGIN
+
+/**
+ Class for dependencies which are variables in classes.
+ */
 @interface ALCVariableDependency : ALCDependency
 
-@property (nonatomic, assign, readonly, nonnull) Ivar variable;
+@property (nonatomic, assign, readonly) Ivar variable;
 
--(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
-                               variable:(Ivar __nonnull) variable
-                               qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithContext:(__weak ALCContext *) context
+                               variable:(Ivar) variable
+                            valueSource:(id<ALCValueSource>) valueSource;
 
--(void) injectInto:(id __nonnull) object;
+-(void) injectInto:(id) object;
 
 @end
+
+NS_ASSUME_NONNULL_END

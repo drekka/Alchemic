@@ -6,31 +6,20 @@
 @import Foundation;
 @protocol ALCBuilder;
 
+#import <Alchemic/ALCMacroArgument.h>
+
 NS_ASSUME_NONNULL_BEGIN
-
-/**
- Indicates what type of qualifier this is.
- */
-typedef NS_ENUM(NSUInteger, QualifierType) {
-    QualifierTypeString,
-    QualifierTypeClass,
-    QualifierTypeProtocol
-};
-
 
 /**
  Wraps an argument so that it can be conveniantly passed around. 
  
  Usually arguments are classes, protocols or names.
  */
-@interface ALCQualifier : NSObject
+@interface ALCQualifier : NSObject <ALCMacroArgument>
 
-@property (nonatomic, assign, readonly) QualifierType type;
 @property (nonatomic, strong, readonly) id value;
 
 +(instancetype) qualifierWithValue:(id) value;
-
--(BOOL) matchesBuilder:(id<ALCBuilder>) builder;
 
 -(BOOL) isEqualToQualifier:(ALCQualifier *) qualifier;
 

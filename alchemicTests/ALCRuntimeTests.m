@@ -107,19 +107,6 @@
     XCTAssertFalse([ALCRuntime objectIsAProtocol:@12]);
 }
 
--(void) testValidateSelectorValid {
-    [ALCRuntime aClass:[self class] validateSelector:@selector(testValidateSelectorValid)];
-}
-
--(void) testValidateSelectorInValid {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    XCTAssertThrowsSpecificNamed([ALCRuntime  aClass:[self class] validateSelector:@selector(abc)],
-                                 NSException,
-                                 @"AlchemicSelectorNotFound");
-#pragma clang diagnostic pop
-}
-
 -(void) testClassVariableForInjectionPointExactMatch {
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringVariable"];
     Ivar expected = class_getInstanceVariable([self class], "_aStringVariable");

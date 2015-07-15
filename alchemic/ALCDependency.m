@@ -15,9 +15,10 @@
 #import <Alchemic/Alchemic.h>
 #import "ALCValueResolver.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation ALCDependency {
     __weak ALCContext __nonnull *_context;
-    NSSet<ALCQualifier *> __nonnull *_qualifiers;
     NSSet<id<ALCBuilder>> __nonnull *_candidateBuilders;
     id<ALCValueSource> _valueSource;
 
@@ -25,15 +26,13 @@
 
 -(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
                              valueClass:(Class __nonnull) valueClass
-                             qualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers {
+                             valueSource:(nonnull id<ALCValueSource>)valueSource {
     self = [super init];
     if (self) {
         ALCContext *strongContext = context;
         _context = strongContext;
         _valueClass = valueClass;
-        _qualifiers = qualifiers;
-        _valueSource = [[ALCModelValueSource alloc] initWithContext:strongContext
-                                                         qualifiers:qualifiers];
+        _valueSource = valueSource;
     }
     return self;
 }
@@ -47,11 +46,9 @@
 }
 
 -(NSString *) description {
-    NSMutableArray<NSString *> *qualifierDescs = [[NSMutableArray alloc] init];
-    [_qualifiers enumerateObjectsUsingBlock:^(ALCQualifier *qualifier, BOOL *stop) {
-        [qualifierDescs addObject:[qualifier description]];
-    }];
-    return [NSString stringWithFormat:@"%s using: %@", class_getName(_valueClass), [qualifierDescs componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"%s using: %@", class_getName(_valueClass), _valueSource];
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

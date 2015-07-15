@@ -31,7 +31,6 @@
     if (self) {
 
         Class parentClass = parentClassBuilder.valueClass;
-        [ALCRuntime aClass:parentClass validateSelector:selector];
 
         // Locate the method.
         Method method = class_getInstanceMethod(parentClass, selector);
@@ -57,12 +56,13 @@
         _invArgumentDependencies = [[NSMutableArray alloc] init];
 
         // Setup the dependencies for each argument.
-        Class arrayClass = [NSArray class];
+        //Class arrayClass = [NSArray class];
         [qualifiers enumerateObjectsUsingBlock:^(id qualifier, NSUInteger idx, BOOL *stop) {
-            NSSet<ALCQualifier *> *qualifierSet = [qualifier isKindOfClass:arrayClass] ? [NSSet setWithArray:qualifier] : [NSSet setWithObject:qualifier];
-            [self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithContext:context
-                                                                                  valueClass:[NSObject class]
-                                                                                  qualifiers:qualifierSet]];
+            //NSSet<ALCQualifier *> *qualifierSet = [qualifier isKindOfClass:arrayClass] ? [NSSet setWithArray:qualifier] : [NSSet setWithObject:qualifier];
+            // TODO
+            //[self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithContext:context
+            //                                                                      valueClass:[NSObject class]
+            //                                                                      qualifiers:qualifierSet]];
         }];
 
     }

@@ -17,6 +17,8 @@
 #import <Alchemic/ALCObjectFactory.h>
 #import <Alchemic/ALCContext.h>
 #import "ALCContext+Internal.h"
+#import "ALCMacroArgumentProcessor.h"
+#import "ALCModelValueSource.h"
 
 @implementation ALCClassBuilder {
     NSArray<id<ALCInitStrategy>> *_initialisationStrategies;
@@ -36,13 +38,14 @@
 
 #pragma mark - Adding dependencies
 
--(void) addInjectionPoint:(NSString __nonnull *) inj withQualifiers:(NSSet __nonnull *) qualifiers {
+-(void) addInjectionPointForArguments:(ALCMacroArgumentProcessor *) arguments {
 
-    Ivar variable = [ALCRuntime aClass:self.valueClass variableForInjectionPoint:inj];
-    NSSet<ALCQualifier *>* finalQualifiers = qualifiers == nil || [qualifiers count] == 0 ? [ALCRuntime qualifiersForVariable:variable] : qualifiers;
+    Ivar variable = [ALCRuntime aClass:self.valueClass variableForInjectionPoint:arguments.variableName];
+    //NSSet<ALCQualifier *>* finalQualifiers = qualifiers == nil || [qualifiers count] == 0 ? [ALCRuntime qualifiersForVariable:variable] : qualifiers;
+    ALCModelValueSource *valueSource = nil;
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithContext:self.context
                                                                               variable:variable
-                                                                            qualifiers:finalQualifiers];
+                                                                           valueSource:valueSource];
     [_dependencies addObject:dependency];
 }
 

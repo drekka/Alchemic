@@ -8,7 +8,7 @@
 
 @import Foundation;
 @class ALCContext;
-@class ALCQualifier;
+@protocol ALCModelSearchExpression;
 
 #import "ALCValueSource.h"
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCModelValueSource : NSObject<ALCValueSource>
 
 -(instancetype) initWithContext:(ALCContext __weak *) context
-                     qualifiers:(NSSet<ALCQualifier *> *) qualifiers;
+              searchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions;
 
 @end
 

@@ -20,7 +20,7 @@
 #import "ALCModel.h"
 #import "ALCContext+Internal.h"
 #import "ALCInternalMacros.h"
-
+#import "ALCQualifier+Internal.h"
 
 @interface ALCContext ()
 @property (nonatomic, strong) id<ALCValueResolver> valueResolver;
@@ -73,7 +73,7 @@
     STStartScope([object class]);
     STLog([object class], @"Injecting dependencies into a %@", NSStringFromClass([object class]));
     NSSet<ALCQualifier *> *qualifiers = [ALCRuntime qualifiersForClass:[object class]];
-    NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForQualifiers:qualifiers]];
+    NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:qualifiers]];
     ALCClassBuilder *classBuilder = [builders anyObject];
     [classBuilder injectObjectDependencies:object];
 }
@@ -146,7 +146,7 @@
     }
 
     // Add the registration.
-    [classBuilder addInjectionPoint:intoVariable withQualifiers:qualifiers];
+    //[classBuilder addInjectionPoint:intoVariable withQualifiers:qualifiers];
 
 }
 
@@ -179,7 +179,7 @@
             name = ((ALCAsName *) arg).asName;
 
         } else if ([arg isKindOfClass:[ALCMethodSelector class]]) {
-            selector = ((ALCMethodSelector *) arg).factorySelector;
+            selector = ((ALCMethodSelector *) arg).methodSelector;
 
         } else if ([arg isKindOfClass:[ALCQualifier class]]
                    || [arg isKindOfClass:[ALCConstantValue class]]
@@ -213,7 +213,6 @@
     id<ALCBuilder> finalBuilder = classBuilder;
     if (selector != NULL) {
         // Dealing with a factory method registration so create a new entry in the model for the method.
-        [ALCRuntime aClass:classBuilder.valueClass validateSelector:selector];
         NSString *builderName = [NSString stringWithFormat:@"-[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(selector)];
         STLog(classBuilder.valueClass, @"Creating a factory builder for selector %@", builderName);
         finalBuilder = [[ALCMethodBuilder alloc] initWithContext:self
@@ -246,9 +245,9 @@
     [_model addBuilder:builder];
 }
 
--(void) executeOnBuildersWithQualifiers:(NSSet<ALCQualifier *> __nonnull *) qualifiers
-                processingBuildersBlock:(ProcessBuilderBlock __nonnull) processBuildersBlock {
-    NSSet<id<ALCBuilder>> *builders = [_model buildersForQualifiers:qualifiers];
+-(void) executeOnBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
+                       processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock {
+    NSSet<id<ALCBuilder>> *builders = [_model buildersForSearchExpressions:searchExpressions];
     if ([builders count] > 0) {
         processBuildersBlock(builders);
     }

@@ -5,10 +5,11 @@
 //
 
 @import Foundation;
+#import <Alchemic/ALCMacroArgument.h>
 
-@interface ALCMethodSelector : NSObject
+@interface ALCMethodSelector : NSObject<ALCMacroArgument>
 
-@property(nonatomic, assign, readonly) SEL factorySelector;
+@property(nonatomic, assign, readonly) SEL methodSelector;
 
 +(instancetype) methodSelector:(SEL) methodSelector;
 
