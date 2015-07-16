@@ -25,9 +25,9 @@
     id _singletonObjectByProtocol;
 }
 
-ACInject(ACIntoVariable(_singletonObjectByName), ACWithName(@"Test Singleton"))
-ACInject(ACIntoVariable(_singletonObjectByClass), ACWithClass(SingletonObject))
-ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectableProtocol))
+ACInject(_singletonObjectByName, ACWithName(@"Test Singleton"))
+ACInject(_singletonObjectByClass, ACWithClass(SingletonObject))
+ACInject(_singletonObjectByProtocol, ACWithProtocol(InjectableProtocol))
 
 -(void) setUp {
     [super setUp];

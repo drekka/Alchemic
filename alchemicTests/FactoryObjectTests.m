@@ -19,8 +19,8 @@
     FactoryObject *_of2;
 }
 
-ACInject(ACIntoVariable(_of1))
-ACInject(ACIntoVariable(_of2), ACWithClass(FactoryObject))
+ACInject(_of1)
+ACInject(_of2, ACWithClass(FactoryObject))
 
 -(void) setUp {
     [super setUp];

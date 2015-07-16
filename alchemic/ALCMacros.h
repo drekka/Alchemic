@@ -100,7 +100,7 @@
 #pragma mark - Registering
 
 /**
- Register a class or method as a source of objects.
+ Register a class as a source of objects.
  
  @discussion This is the main macro for setting up objects within Alchemic. It take a number of other macros as 
  */
@@ -109,8 +109,13 @@
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
+#define ACMethod(returnType, selector, ...) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
+[[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ACReturnType(returnType), ACSelector(selector), ## __VA_ARGS__, nil]; \
+}
+
 // Registers an injection point in the current class.
-#define ACInject(...) \
+#define ACInject(variableName, ...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerDependencyInClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerDependencyInClassBuilder:classBuilder, ACIntoVariable(variableName), ## __VA_ARGS__, nil]; \
 }

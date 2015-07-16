@@ -14,13 +14,13 @@
     int x;
 }
 
-ACRegister(ACIsFactory, ACAsName(@"buildAString"), ACReturnType(NSString), ACSelector(makeAString));
+ACMethod(NSString, makeAString, ACIsFactory, ACAsName(@"buildAString"));
 -(NSString *) makeAString {
     x++;
     return [NSString stringWithFormat:@"Factory string %i", x];
 }
 
-ACRegister(ACIsFactory, ACAsName(@"buildAComponentString"), ACReturnType(NSString), ACSelector(makeAStringWithComponent:), ACWithClass(Component))
+ACMethod(NSString, makeAStringWithComponent:, ACIsFactory, ACAsName(@"buildAComponentString"), ACWithClass(Component))
 -(NSString *) makeAStringWithComponent:(Component *) component {
     x++;
     return [NSString stringWithFormat:@"Component Factory string %i", x];
