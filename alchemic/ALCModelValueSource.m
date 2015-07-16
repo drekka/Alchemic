@@ -17,18 +17,15 @@ NS_ASSUME_NONNULL_BEGIN
  Sources values from the model.
  */
 @implementation ALCModelValueSource {
-    __weak ALCContext *_context;
     NSSet<id<ALCBuilder>> *_candidateBuilders;
 }
 
 @synthesize values = _values;
 
--(instancetype) initWithContext:(ALCContext __weak *) context
-              searchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
+-(instancetype) initWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
     self = [super init];
     if (self) {
         _searchExpressions = searchExpressions;
-        _context = context;
         if ([searchExpressions count] == 0) {
             @throw [NSException exceptionWithName:@"AlchemicMissingSearchExpressions"
                                            reason:[NSString stringWithFormat:@"No search expressions passed"]
@@ -50,21 +47,20 @@ NS_ASSUME_NONNULL_BEGIN
 
     STLog(self, @"Resolving %@", self);
     STStartScope(self);
-    ALCContext *strongContext = _context;
-    [strongContext executeOnBuildersWithSearchExpressions:_searchExpressions
-                                  processingBuildersBlock:^(ProcessBuiderBlockArgs) {
+    [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
+                                              processingBuildersBlock:^(ProcessBuiderBlockArgs) {
 
-                                      NSSet<id<ALCBuilder>> *finalBuilders = builders;
-                                      for (id<ALCDependencyPostProcessor> postProcessor in postProcessors) {
-                                          finalBuilders = [postProcessor process:finalBuilders];
-                                          if ([finalBuilders count] == 0) {
-                                              break;
-                                          }
-                                      }
+                                                  NSSet<id<ALCBuilder>> *finalBuilders = builders;
+                                                  for (id<ALCDependencyPostProcessor> postProcessor in postProcessors) {
+                                                      finalBuilders = [postProcessor process:finalBuilders];
+                                                      if ([finalBuilders count] == 0) {
+                                                          break;
+                                                      }
+                                                  }
 
-                                      STLog(ALCHEMIC_LOG, @"Found %lu candidates", [finalBuilders count]);
-                                      self->_candidateBuilders = finalBuilders;
-                                  }];
+                                                  STLog(ALCHEMIC_LOG, @"Found %lu candidates", [finalBuilders count]);
+                                                  self->_candidateBuilders = finalBuilders;
+                                              }];
 
     // If there are no candidates left then error.
     if ([_candidateBuilders count] == 0) {

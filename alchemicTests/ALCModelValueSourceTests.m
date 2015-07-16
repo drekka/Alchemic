@@ -24,11 +24,15 @@
 @implementation ALCModelValueSourceTests
 
 -(void) testResolveWithPostProcessors {
+    
     STStartLogging(ALCHEMIC_LOG);
     id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
     NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
 
     id mockContext = OCMClassMock([ALCContext class]);
+    id mockAlchemic = OCMClassMock([ALCAlchemic class]);
+    OCMStub(ClassMethod([mockAlchemic mainContext])).andReturn(mockContext);
+
     id<ALCModelSearchExpression> searchExpression = [ALCQualifier qualifierWithValue:@"abc"];
     NSSet<id<ALCModelSearchExpression>> *searchExpressions = [NSSet setWithObject:searchExpression];
 
@@ -43,7 +47,7 @@
     });
     OCMExpect([mockPostProcessor process:builders]).andReturn(builders);
 
-    ALCModelValueSource *source = [[ALCModelValueSource alloc] initWithContext:mockContext searchExpressions:searchExpressions];
+    ALCModelValueSource *source = [[ALCModelValueSource alloc] initWithSearchExpressions:searchExpressions];
     [source resolveWithPostProcessors:postProcessors];
 
 }

@@ -12,23 +12,27 @@
 #import <Alchemic/Alchemic.h>
 #import "ALCQualifier+Internal.h"
 #import "ALCModelSearchExpression.h"
+#import "ALCModelValueSource.h"
+#import "ALCConstantValueSource.h"
+#import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMacroArgumentProcessor {
-    NSMutableArray *_searchArguments;
+    NSMutableArray *_valueSourceMacros;
 }
 
--(instancetype) init {
+-(instancetype) initWithParentClass:(Class) parentClass {
     self = [super init];
     if (self) {
+        _parentClass = parentClass;
         _selector = NULL;
-        _searchArguments = [[NSMutableArray alloc] init];
+        _valueSourceMacros = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
--(void) processArgument:(id) argument {
+-(void) addArgument:(id) argument {
 
     if ([argument isKindOfClass:[ALCIsFactory class]]) {
         _isFactory = YES;
@@ -45,95 +49,119 @@ NS_ASSUME_NONNULL_BEGIN
     } else if ([argument isKindOfClass:[ALCQualifier class]]
                || [argument isKindOfClass:[NSArray class]]
                || [argument isKindOfClass:[ALCConstantValue class]]) {
-        [_searchArguments addObject:(id<ALCModelSearchExpression>)argument];
+        [_valueSourceMacros addObject:(id<ALCModelSearchExpression>)argument];
     }
 }
 
 -(id<ALCValueSource>)dependencyValueSource {
-    NSAssert(_variableName != nil, @"Variable name must be present");
-    return nil;//[NSSet setWithArray:_searchArguments];
+    return [_valueSourceMacros count] == 0 ? nil : [self valueSourceForMacros:_valueSourceMacros];
 }
 
--(id<ALCValueSource>) valueSourceAtIndex:(NSUInteger) index {
-    NSAssert(_selector != nil, @"Selector must be present");
-    return nil;// _searchArguments[index];
+-(NSArray<id<ALCValueSource>> *) methodValueSources {
+    NSMutableArray *valueSources = [[NSMutableArray alloc] initWithCapacity:[_valueSourceMacros count]];
+    [_valueSourceMacros enumerateObjectsUsingBlock:^(id  __nonnull macros, NSUInteger idx, BOOL * __nonnull stop) {
+        [valueSources addObject:[self valueSourceForMacros:[macros isKindOfClass:[NSArray class]] ? macros : @[macros]]];
+    }];
+    return valueSources;
 }
 
--(void) validateWithClass:(Class) parentClass {
-
+-(void) validate {
     if (_variableName == nil && _selector == NULL) {
-
-        // It's a class registration.
-        if ([_searchArguments count] > 0) {
-            @throw [NSException exceptionWithName:@"AlchemicInvalidRegistration"
-                                           reason:[NSString stringWithFormat:@"Cannot specify search arguments with a class registration for %@", NSStringFromClass(parentClass)]
-                                         userInfo:nil];
-        }
-
+        [self validateClassRegistrationInfo];
     } else {
         if (_selector == nil) {
             [self validateDependencyInfo];
         } else {
-            [self validateMethodInfoForClass:parentClass];
+            [self validateMethodInfo];
         }
     }
+}
 
+#pragma mark - Internal
+
+-(void) validateClassRegistrationInfo {
+
+    // Setup the name.
+    if (_asName == nil) {
+        _asName = NSStringFromClass(_parentClass);
+    }
+
+    if ([_valueSourceMacros count] > 0) {
+        @throw [NSException exceptionWithName:@"AlchemicInvalidRegistration"
+                                       reason:[NSString stringWithFormat:@"Cannot specify search arguments with a class registration for %@", NSStringFromClass(_parentClass)]
+                                     userInfo:nil];
+    }
 }
 
 -(void) validateDependencyInfo {
 
-    // all arguments must be expressions.
-    [_searchArguments enumerateObjectsUsingBlock:^(id  __nonnull searchArgument, NSUInteger idx, BOOL * __nonnull stop) {
+    // Set the ivar.
+    _variable = [ALCRuntime aClass:_parentClass variableForInjectionPoint:_variableName];
+
+    // Check macros
+    if ([_valueSourceMacros count] == 0) {
+        _valueSourceMacros = [NSMutableArray arrayWithArray:[ALCRuntime qualifiersForVariable:_variable].allObjects];
+    }
+
+    // Validate arguments.
+    for (id macro in _valueSourceMacros) {
 
         // If any argument is a constant then it must be the only one.
-        if ([searchArgument isKindOfClass:[ALCConstantValue class]] && [self->_searchArguments count] > 1) {
+        if ([macro isKindOfClass:[ALCConstantValue class]] && [self->_valueSourceMacros count] > 1) {
             @throw [NSException exceptionWithName:@"AlchemicInvalidArguments"
                                            reason:[NSString stringWithFormat:@"ACWithValue(...) must be the only data source macro for %@", self->_variableName]
                                          userInfo:nil];
         }
 
-        if (![searchArgument conformsToProtocol:@protocol(ALCModelSearchExpression)]) {
+        if ([macro isKindOfClass:[NSArray class]]) {
             @throw [NSException exceptionWithName:@"AlchemicUnexpectedArray"
                                            reason:[NSString stringWithFormat:@"Arrays of qualifiers not allowed for dependencies. Check the definition of %@", self->_variableName]
                                          userInfo:nil];
         }
-    }];
+    };
 }
 
--(void) validateMethodInfoForClass:(Class) parentClass {
+-(void) validateMethodInfo {
 
-    // Wrap all arguments in NSSets.
-    [_searchArguments enumerateObjectsUsingBlock:^(id  __nonnull searchArgument, NSUInteger idx, BOOL * __nonnull stop) {
-        self->_searchArguments[idx] = [searchArgument conformsToProtocol:@protocol(ALCModelSearchExpression)] ? [NSSet setWithObject:searchArgument] : [NSSet setWithArray:searchArgument];
-    }];
+    // Setup the name.
+    if (_asName == nil) {
+        _asName = [NSString stringWithFormat:@"%@::%@", NSStringFromClass(_parentClass), NSStringFromSelector(_selector)];
+    }
 
     // Validate the selector and number of arguments.
-    if (! class_respondsToSelector(parentClass, _selector)) {
+    if (! class_respondsToSelector(_parentClass, _selector)) {
         @throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"
-                                       reason:[NSString stringWithFormat:@"Faciled to find selector -[%s %s]", class_getName(parentClass), sel_getName(_selector)]
+                                       reason:[NSString stringWithFormat:@"Failed to find selector -[%s %s]", class_getName(_parentClass), sel_getName(_selector)]
                                      userInfo:nil];
     }
 
 
     // Locate the method.
-    Method method = class_getInstanceMethod(parentClass, _selector);
+    Method method = class_getInstanceMethod(_parentClass, _selector);
     if (method == NULL) {
         _isClassSelector = YES;
-        method = class_getClassMethod(parentClass, _selector);
+        method = class_getClassMethod(_parentClass, _selector);
     }
 
     // Validate the number of arguments.
     unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
-    if (nbrArgs != [_searchArguments count]) {
+    if (nbrArgs != [_valueSourceMacros count]) {
         @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
                                        reason:[NSString stringWithFormat:@"-[%s %s] - Expecting %lu argument matchers, got %lu",
-                                               class_getName(parentClass),
+                                               class_getName(_parentClass),
                                                sel_getName(_selector),
                                                nbrArgs,
-                                               (unsigned long)[_searchArguments count]]
+                                               (unsigned long)[_valueSourceMacros count]]
                                      userInfo:nil];
     }
 
+}
+
+-(id<ALCValueSource>) valueSourceForMacros:(NSArray *) macros {
+    if ([macros[0] isKindOfClass:[ALCConstantValue class]]) {
+        return [[ALCConstantValueSource alloc] initWithValue:((ALCConstantValue *)macros[0]).value];
+    }
+    return [[ALCModelValueSource alloc] initWithSearchExpressions:[NSSet setWithArray:macros]];
 }
 
 @end

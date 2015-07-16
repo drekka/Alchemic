@@ -29,9 +29,8 @@
 -(void) setUp {
     [super setUp];
     _mockContext = OCMClassMock([ALCContext class]);
-    _builder = [[ALCClassBuilder alloc] initWithContext:_mockContext
-                                                           valueClass:[NSString class]
-                                                                 name:@"abc"];
+    _builder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]
+                                                      name:@"abc"];
 }
 
 -(void) testStringQualifierMatches {
@@ -41,7 +40,7 @@
 
 -(void) testStringQualifierFailsMatch {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"def"];
-    XCTAssertTrue(qualifier.matchBlock(_builder));
+    XCTAssertFalse(qualifier.matchBlock(_builder));
 }
 
 -(void) testClassQualifierMatches {
@@ -52,7 +51,7 @@
 
 -(void) testClassQualifierFailsMatch {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:[NSArray class]];
-    XCTAssertTrue(qualifier.matchBlock(_builder));
+    XCTAssertFalse(qualifier.matchBlock(_builder));
 }
 
 -(void) testProtocolQualifierMatches {
@@ -62,7 +61,7 @@
 
 -(void) testProtocolQualifierFailsMatch {
     ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@protocol(NSFastEnumeration)];
-    XCTAssertTrue(qualifier.matchBlock(_builder));
+    XCTAssertFalse(qualifier.matchBlock(_builder));
 }
 
 #pragma mark - Equality & hash

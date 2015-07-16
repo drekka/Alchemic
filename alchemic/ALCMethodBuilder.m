@@ -5,11 +5,14 @@
 //
 
 #import <StoryTeller/StoryTeller.h>
+#import <Alchemic/Alchemic.h>
 
 #import "ALCMethodBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
-#import <Alchemic/Alchemic.h>
+#import "ALCMacroArgumentProcessor.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodBuilder {
     ALCClassBuilder *_parentClassBuilder;
@@ -20,51 +23,20 @@
 
 }
 
--(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
-                             valueClass:(Class __nonnull) valueClass
-                                   name:(NSString __nonnull *)name
-                     parentClassBuilder:(ALCClassBuilder __nonnull *) parentClassBuilder
-                               selector:(SEL __nonnull) selector
-                             qualifiers:(NSArray __nonnull *) qualifiers {
+-(nonnull instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
+                                         arguments:(ALCMacroArgumentProcessor *) arguments {
 
-    self = [super initWithContext:context valueClass:valueClass name:name];
+    self = [super initWithValueClass:arguments.returnType name:arguments.asName];
     if (self) {
-
-        Class parentClass = parentClassBuilder.valueClass;
-
-        // Locate the method.
-        Method method = class_getInstanceMethod(parentClass, selector);
-        if (method == NULL) {
-            _useClassMethod = YES;
-            method = class_getClassMethod(parentClass, selector);
-        }
-
-        // Validate the number of arguments.
-        unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
-        if (nbrArgs != [qualifiers count]) {
-            @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
-                                           reason:[NSString stringWithFormat:@"-[%s %s] - Expecting %lu argument matchers, got %lu",
-                                                   class_getName(parentClass),
-                                                   sel_getName(selector),
-                                                   nbrArgs,
-                                                   (unsigned long)[qualifiers count]]
-                                         userInfo:nil];
-        }
-
         _parentClassBuilder = parentClassBuilder;
-        _selector = selector;
+        _selector = arguments.selector;
         _invArgumentDependencies = [[NSMutableArray alloc] init];
 
         // Setup the dependencies for each argument.
-        //Class arrayClass = [NSArray class];
-        [qualifiers enumerateObjectsUsingBlock:^(id qualifier, NSUInteger idx, BOOL *stop) {
-            //NSSet<ALCQualifier *> *qualifierSet = [qualifier isKindOfClass:arrayClass] ? [NSSet setWithArray:qualifier] : [NSSet setWithObject:qualifier];
-            // TODO
-            //[self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithContext:context
-            //                                                                      valueClass:[NSObject class]
-            //                                                                      qualifiers:qualifierSet]];
+        [arguments.methodValueSources enumerateObjectsUsingBlock:^(id<ALCValueSource> valueSource, NSUInteger idx, BOOL * stop) {
+            [self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:[NSObject class]
+                                                                                    valueSource:valueSource]];
         }];
-
     }
     return self;
 }
@@ -106,7 +78,7 @@
 
 -(void) injectObjectDependencies:(id __nonnull) object {
     STLog([object class], @">>> Checking whether a %s instance has dependencies", object_getClassName(object));
-    [self.context injectDependencies:object];
+    [[ALCAlchemic mainContext] injectDependencies:object];
 }
 
 -(nonnull NSString *) description {
@@ -114,3 +86,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,7 +8,6 @@
 
 @import Foundation;
 
-@class ALCContext;
 @protocol ALCDependencyPostProcessor;
 @protocol ALCValueSource;
 
@@ -27,9 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 
--(instancetype) initWithContext:(__weak ALCContext *) context
-                             valueClass:(Class) valueClass
-                            valueSource:(id<ALCValueSource>) valueSource;
+-(instancetype) initWithValueClass:(Class) valueClass
+                       valueSource:(id<ALCValueSource>) valueSource;
 
 @end
 

@@ -10,13 +10,14 @@
 
 #import <OCMock/OCMock.h>
 #import <StoryTeller/StoryTeller.h>
+#import <Alchemic/Alchemic.h>
 
 #import "ALCModel.h"
 #import "ALCBuilder.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
-#import <Alchemic/Alchemic.h>
 #import "ALCQualifier+Internal.h"
+#import "ALCMacroArgumentProcessor.h"
 
 @interface ALCModelTests : XCTestCase
 
@@ -32,15 +33,12 @@
 -(void) setUp {
     _model = [[ALCModel alloc] init];
     _mockContext = OCMClassMock([ALCContext class]);
-    _builder1 = [[ALCClassBuilder alloc] initWithContext:_mockContext
-                                              valueClass:[ALCModelTests class]
-                                                    name:@"abc"];
-    _builder2 = [[ALCMethodBuilder alloc] initWithContext:_mockContext
-                                               valueClass:[NSString class]
-                                                     name:@"def"
-                                       parentClassBuilder:_builder1
-                                                 selector:@selector(someMethod)
-                                               qualifiers:@[]];
+    _builder1 = [[ALCClassBuilder alloc] initWithValueClass:[ALCModelTests class]
+                                                       name:@"abc"];
+    ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:_builder1.valueClass];
+    [macroProcessor addArgument:ACSelector(someMethod)];
+    [macroProcessor addArgument:ACReturnType(NSString)];
+    _builder2 = [[ALCMethodBuilder alloc] initWithParentClassBuilder:_builder1 arguments:macroProcessor];
     [_model addBuilder:_builder1];
     [_model addBuilder:_builder2];
 }

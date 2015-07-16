@@ -17,14 +17,6 @@
     id _mockAlchemic;
 }
 
--(void) setUp {
-    //[STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"{{time}} {{threadName}} %1$@\t\t\t%2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine];
-    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
-    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor colorWithRed:0.1 green:0.1 blue:0.5 alpha:1.0];
-    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor colorWithRed:0.6 green:0.8 blue:0.6 alpha:1.0];
-
-}
-
 -(void) tearDown {
     // Stop the mocking.
     _mockAlchemic = nil;
@@ -32,13 +24,13 @@
     [[STStoryTeller storyTeller] reset];
 }
 
--(void) setUpALCContextWithClasses:(NSArray<Class> __nonnull *) classes {
-
-    // Set context up with minimal objects from runtime.
+-(void) mockAlchemicContext {
     _context = [[ALCContext alloc] init];
     _mockAlchemic = OCMClassMock([ALCAlchemic class]);
     OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
+}
 
+-(void) setUpALCContextWithClasses:(NSArray<Class> __nonnull *) classes {
     NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
                                                                  //[ALCRuntimeScanner modelScanner],
                                                                  [ALCRuntimeScanner dependencyPostProcessorScanner],

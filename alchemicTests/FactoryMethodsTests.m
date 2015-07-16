@@ -32,6 +32,7 @@ ACInject(ACIntoVariable(string4), ACWithName(@"buildAComponentString"))
 -(void) setUp {
     [super setUp];
     STStartLogging(@"is [FactoryMethodsTests]");
+    [self mockAlchemicContext];
     [self setUpALCContextWithClasses:@[[self class], [FactoryMethods class], [Component class]]];
     ACInjectDependencies(self);
 }

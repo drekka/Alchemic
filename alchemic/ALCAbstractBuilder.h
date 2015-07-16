@@ -16,11 +16,8 @@
 
 @interface ALCAbstractBuilder : NSObject<ALCBuilder>
 
-@property (nonatomic, weak, readonly) ALCContext *context;
-
--(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
-                             valueClass:(Class __nonnull) valueClass
-                                   name:(NSString __nonnull *) name;
+-(nonnull instancetype) initWithValueClass:(Class __nonnull) valueClass
+                                      name:(NSString __nonnull *) name;
 
 /**
  Called to create the object.

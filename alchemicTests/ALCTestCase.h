@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong, readonly, nullable) ALCContext *context;
 
+-(void) mockAlchemicContext;
 -(void) setUpALCContextWithClasses:(NSArray<Class> __nonnull *) classes;
 
 @end

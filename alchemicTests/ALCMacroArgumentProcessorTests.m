@@ -18,62 +18,82 @@
 
 @end
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+
 @implementation ALCMacroArgumentProcessorTests {
     ALCMacroArgumentProcessor *_processor;
     ALCQualifier *_stringQ;
     ALCQualifier *_classQ;
     ALCQualifier *_protocolQ;
+
+    NSString *_stringVar;
+    NSNumber *_numberVar;
 }
 
 -(void) setUp {
     _stringQ = [ALCQualifier qualifierWithValue:@"abc"];
     _classQ = [ALCQualifier qualifierWithValue:[self class]];
     _protocolQ = [ALCQualifier qualifierWithValue:@protocol(NSCopying)];
-    _processor = [[ALCMacroArgumentProcessor alloc] init];
+    _processor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:[self class]];
 }
 
 -(void) testSetsIsFactoryFlag {
-    [_processor processArgument:[[ALCIsFactory alloc] init]];
+    [self processArguments:ACIsFactory, nil];
     XCTAssertTrue(_processor.isFactory);
 }
 
 -(void) testSetsIsPrimaryFlag {
-    [_processor processArgument:[[ALCIsPrimary alloc] init]];
+    [self processArguments:ACIsPrimary, nil];
     XCTAssertTrue(_processor.isPrimary);
 }
 
 -(void) testSetsName {
-    [_processor processArgument:[ALCAsName asNameWithName:@"abc"]];
+    [self processArguments:ACAsName(@"abc"), nil];
     XCTAssertEqualObjects(@"abc", _processor.asName);
 }
 
 -(void) testSetsVariableName {
-    [_processor processArgument:[ALCIntoVariable intoVariableWithName:@"abc"]];
+    [self processArguments:ACIntoVariable(abc), nil];
     XCTAssertEqualObjects(@"abc", _processor.variableName);
 }
 
 -(void) testSetsSelector {
-    [_processor processArgument:[ALCMethodSelector methodSelector:@selector(testSetsSelector)]];
+    [self processArguments:ACSelector(testSetsSelector), nil];
     XCTAssertEqual(@selector(testSetsSelector), _processor.selector);
 }
 
 -(void) testSetsReturnType {
-    [_processor processArgument:[ALCReturnType returnTypeWithClass:[self class]]];
+    [self processArguments:ACReturnType(self), nil];
     XCTAssertEqual([self class], _processor.returnType);
 }
 
--(void) testSetsConstantValue {
-    [_processor processArgument:[ALCConstantValue constantValueWithValue:@12]];
-    [_processor validateWithClass:[self class]];
+-(void) testClassRegistrationSetsDefaultName {
+    [self processArguments:nil];
+    [_processor validate];
+    XCTAssertEqualObjects(NSStringFromClass([self class]), _processor.asName);
+}
+
+-(void) testClassRegistrationWithValuesThrows {
+    [self processArguments:ACWithValue(@12), nil];
+    XCTAssertThrowsSpecificNamed([_processor validate], NSException, @"AlchemicInvalidRegistration");
+}
+
+-(void) testDependencyWithConstantValue {
+    [self processArguments:ACIntoVariable(_numberVar), ACWithValue(@12), nil];
+    [_processor validate];
     id<ALCValueSource> valueSource = [_processor dependencyValueSource];
     XCTAssertEqualObjects(@12, valueSource.values.anyObject);
 }
 
--(void) testCreatesDependencyValueSource {
-    [_processor processArgument:_stringQ];
-    [_processor processArgument:_classQ];
-    [_processor processArgument:_protocolQ];
-    [_processor validateWithClass:[self class]];
+-(void) testDependencyWithConstantAndOtherMacrosThrows {
+    [self processArguments:ACIntoVariable(_numberVar), ACWithValue(@12), ACWithClass([self class]), nil];
+    XCTAssertThrowsSpecificNamed([_processor validate], NSException, @"AlchemicInvalidArguments");
+}
+
+-(void) testDependencyWithModelValueSource {
+    [self processArguments:ACIntoVariable(_stringVar), _stringQ, _classQ, _protocolQ, nil];
+    [_processor validate];
     ALCModelValueSource *valueSource = [_processor dependencyValueSource];
     NSSet<id<ALCModelSearchExpression>> *searchExpressions = valueSource.searchExpressions;
     XCTAssertTrue([searchExpressions containsObject:_stringQ]);
@@ -81,79 +101,115 @@
     XCTAssertTrue([searchExpressions containsObject:_protocolQ]);
 }
 
--(void) testCreatesMethodArgumentValueSources {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    [_processor processArgument:[ALCMethodSelector methodSelector:@selector(methodWithString:class:protocol:)]];
-    [_processor processArgument:_stringQ];
-    [_processor processArgument:_classQ];
-    [_processor processArgument:_protocolQ];
-    [_processor validateWithClass:[self class]];
-    NSSet<id<ALCModelSearchExpression>> *searchExpressions;
-    searchExpressions = ((ALCModelValueSource *)[_processor valueSourceAtIndex:0]).searchExpressions;
-    XCTAssertTrue([searchExpressions containsObject:_stringQ]);
-    searchExpressions = ((ALCModelValueSource *)[_processor valueSourceAtIndex:1]).searchExpressions;
-    XCTAssertTrue([searchExpressions containsObject:_classQ]);
-    searchExpressions = ((ALCModelValueSource *)[_processor valueSourceAtIndex:2]).searchExpressions;
-    XCTAssertTrue([searchExpressions containsObject:_protocolQ]);
-#pragma clang diagnostic pop
+-(void) testDependencyWithArrayArgumentThrows {
+    [self processArguments:ACIntoVariable(_stringVar), _stringQ, @[_classQ, _protocolQ], nil];
+    XCTAssertThrowsSpecificNamed([_processor validate], NSException, @"AlchemicUnexpectedArray");
 }
 
--(void) testCreatesMethodArgumentValueSourcesWhenSelectorLast {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    [_processor processArgument:_stringQ];
-    [_processor processArgument:_classQ];
-    [_processor processArgument:_protocolQ];
-    [_processor processArgument:[ALCMethodSelector methodSelector:@selector(methodWithString:class:protocol:)]];
-    [_processor validateWithClass:[self class]];
-    NSSet<id<ALCModelSearchExpression>> *searchExpressions;
-    searchExpressions = ((ALCModelValueSource *)[_processor valueSourceAtIndex:0]).searchExpressions;
-    XCTAssertTrue([searchExpressions containsObject:_stringQ]);
-    searchExpressions = ((ALCModelValueSource *)[_processor valueSourceAtIndex:1]).searchExpressions;
-    XCTAssertTrue([searchExpressions containsObject:_classQ]);
-    searchExpressions = ((ALCModelValueSource *)[_processor valueSourceAtIndex:2]).searchExpressions;
-    XCTAssertTrue([searchExpressions containsObject:_protocolQ]);
-#pragma clang diagnostic pop
+-(void) testMethodWithModelSourceValueSources {
+    [self processArguments:ACSelector(methodWithString:class:protocol:), _stringQ, _classQ, _protocolQ, nil];
+    [_processor validate];
+    NSArray<id<ALCValueSource>> *valueSources = [_processor methodValueSources];
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[0]).searchExpressions containsObject:_stringQ]);
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[1]).searchExpressions containsObject:_classQ]);
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[2]).searchExpressions containsObject:_protocolQ]);
 }
 
--(void) testStoresMethodSearchExpressionsHandlesArraysOfQualifiers {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    [_processor processArgument:_stringQ];
-    [_processor processArgument:@[_classQ, _protocolQ]];
-    [_processor processArgument:[ALCMethodSelector methodSelector:@selector(methodWithString:runtime:)]];
-    [_processor validateWithClass:[self class]];
-    XCTAssertEqualObjects(_stringQ, [_processor searchExpressionsAtIndex:0].anyObject);
-    NSSet<id<ALCModelSearchExpression>> *quals = [_processor searchExpressionsAtIndex:1];
-    XCTAssertTrue([quals containsObject:_classQ]);
-    XCTAssertTrue([quals containsObject:_protocolQ]);
-#pragma clang diagnostic pop
+-(void) testMethodWithTooFewArgumentsThrows {
+    [self processArguments:ACSelector(methodWithString:class:protocol:), _stringQ, _classQ, nil];
+    XCTAssertThrowsSpecificNamed([_processor validate], NSException, @"AlchemicIncorrectNumberArguments");
 }
 
--(void) testStoresSearchExpressionsThrowsWhenArrayPresent {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    [_processor processArgument:_stringQ];
-    [_processor processArgument:@[_classQ, _protocolQ]];
-    XCTAssertThrowsSpecificNamed([_processor validateWithClass:[self class]], NSException, @"AlchemicUnexpectedArray");
-#pragma clang diagnostic pop
+-(void) testMethodWithTooManyArgumentsThrows {
+    [self processArguments:ACSelector(methodWithString:class:protocol:), _stringQ, _classQ, _protocolQ, ACWithValue(@"abc"), nil];
+    XCTAssertThrowsSpecificNamed([_processor validate], NSException, @"AlchemicIncorrectNumberArguments");
 }
+
+-(void) testMethodWhenSelectorLast {
+    [self processArguments:_stringQ, _classQ, _protocolQ, ACSelector(methodWithString:class:protocol:), nil];
+    [_processor validate];
+    NSArray<id<ALCValueSource>> *valueSources = [_processor methodValueSources];
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[0]).searchExpressions containsObject:_stringQ]);
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[1]).searchExpressions containsObject:_classQ]);
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[2]).searchExpressions containsObject:_protocolQ]);
+}
+
+-(void) testMethodWithArraysOfQualifiers {
+    [self processArguments:ACSelector(methodWithString:runtime:), _stringQ, @[_classQ, _protocolQ], nil];
+    [_processor validate];
+    NSArray<id<ALCValueSource>> *valueSources = [_processor methodValueSources];
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[0]).searchExpressions containsObject:_stringQ]);
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[1]).searchExpressions containsObject:_classQ]);
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[1]).searchExpressions containsObject:_protocolQ]);
+}
+
+-(void) testMethodWithArraysOfQualifiersAndConstants {
+    [self processArguments:ACSelector(methodWithString:runtime:), ACWithValue(@"abc"), @[_classQ, _protocolQ], nil];
+    [_processor validate];
+
+    NSArray<id<ALCValueSource>> *valueSources = [_processor methodValueSources];
+    XCTAssertEqualObjects(@"abc", valueSources[0].values.anyObject);
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[1]).searchExpressions containsObject:_classQ]);
+    XCTAssertTrue([((ALCModelValueSource *)valueSources[1]).searchExpressions containsObject:_protocolQ]);
+}
+
+-(void) testMethodSetsDefaultName {
+    [self processArguments:ACSelector(testMethodSetsDefaultName), nil];
+    [_processor validate];
+    XCTAssertEqualObjects(@"ALCMacroArgumentProcessorTests::testMethodSetsDefaultName", _processor.asName);
+}
+
 
 -(void) testValidateSelectorValid {
-    [_processor processArgument:[ALCMethodSelector methodSelector:@selector(testValidateSelectorValid)]];
-    [_processor validateWithClass:[self class]];
+    [_processor addArgument:ACSelector(testValidateSelectorValid)];
+    [_processor validate];
 }
 
 -(void) testValidateSelectorInValid {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    [_processor processArgument:[ALCMethodSelector methodSelector:@selector(xxxx)]];
-    XCTAssertThrowsSpecificNamed([_processor validateWithClass:[self class]],
+    [_processor addArgument:ACSelector(xxxx)];
+    XCTAssertThrowsSpecificNamed([_processor validate],
                                  NSException,
                                  @"AlchemicSelectorNotFound");
-#pragma clang diagnostic pop
 }
 
+-(void) testFullMethodRegistration {
+    [self processArguments:ACIsFactory, ACIsPrimary, ACAsName(@"abc"), ACReturnType(NSObject), ACSelector(methodWithObject:), ACWithClass(self), nil];
+    XCTAssertTrue(_processor.isFactory);
+    XCTAssertTrue(_processor.isPrimary);
+    XCTAssertEqualObjects(@"abc", _processor.asName);
+    XCTAssertEqual([NSObject class], _processor.returnType);
+    XCTAssertEqual(@selector(methodWithObject:), _processor.selector);
+    NSArray<id<ALCValueSource>> *valueSources = [_processor methodValueSources];
+    XCTAssertTrue([valueSources[0] isKindOfClass:[ALCModelValueSource class]]);
+}
+
+#pragma mark - Internal
+
+-(void) processArguments:(id) firstArgument, ... {
+
+    [_processor addArgument:firstArgument];
+
+    va_list args;
+    va_start(args, firstArgument);
+    id arg;
+    while ((arg = va_arg(args, id)) != nil) {
+        [_processor addArgument:arg];
+    }
+    va_end(args);
+}
+
+-(id) methodWithObject:(id) object {
+    return nil;
+}
+
+-(id) methodWithString:(NSString *) aString class:(Class) aClass protocol:(Protocol *) aProtocol {
+    return nil;
+}
+
+-(id) methodWithString:(NSString *) aString runtime:(id) runtime {
+    return nil;
+}
 
 @end
+
+#pragma clang diagnostic pop

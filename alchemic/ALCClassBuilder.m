@@ -10,12 +10,11 @@
 
 @import ObjectiveC;
 #import <StoryTeller/StoryTeller.h>
+#import <Alchemic/Alchemic.h>
 
 #import "ALCRuntime.h"
 #import "ALCVariableDependency.h"
 #import "ALCClassBuilder.h"
-#import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCContext.h>
 #import "ALCContext+Internal.h"
 #import "ALCMacroArgumentProcessor.h"
 #import "ALCModelValueSource.h"
@@ -25,10 +24,9 @@
     NSMutableSet<ALCVariableDependency*> *_dependencies;
 }
 
--(instancetype) initWithContext:(ALCContext *__weak __nonnull)context
-                     valueClass:(__unsafe_unretained __nonnull Class) valueClass
-                           name:(NSString * __nonnull)name {
-    self = [super initWithContext:context valueClass:valueClass name:name];
+-(instancetype) initWithValueClass:(__unsafe_unretained __nonnull Class) valueClass
+                              name:(NSString * __nonnull)name {
+    self = [super initWithValueClass:valueClass name:name];
     if (self) {
         _initialisationStrategies = @[];
         _dependencies = [[NSMutableSet alloc] init];
@@ -39,14 +37,8 @@
 #pragma mark - Adding dependencies
 
 -(void) addInjectionPointForArguments:(ALCMacroArgumentProcessor *) arguments {
-
-    Ivar variable = [ALCRuntime aClass:self.valueClass variableForInjectionPoint:arguments.variableName];
-    //NSSet<ALCQualifier *>* finalQualifiers = qualifiers == nil || [qualifiers count] == 0 ? [ALCRuntime qualifiersForVariable:variable] : qualifiers;
-    ALCModelValueSource *valueSource = nil;
-    ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithContext:self.context
-                                                                              variable:variable
-                                                                           valueSource:valueSource];
-    [_dependencies addObject:dependency];
+    [_dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:arguments.variable
+                                                                 valueSource:[arguments dependencyValueSource]]];
 }
 
 #pragma mark - Instantiating
@@ -59,8 +51,7 @@
 
 -(nonnull id) instantiateObject {
     STLog(self.valueClass, @"Creating a %@", NSStringFromClass(self.valueClass));
-    ALCContext *strongContext = self.context;
-    return [strongContext instantiateObjectFromBuilder:self];
+    return [[ALCAlchemic mainContext] instantiateObjectFromBuilder:self];
 }
 
 -(void) injectObjectDependencies:(id __nonnull) object {

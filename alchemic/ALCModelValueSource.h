@@ -18,8 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) NSSet<id<ALCModelSearchExpression>> *searchExpressions;
 
--(instancetype) initWithContext:(ALCContext __weak *) context
-              searchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions;
+-(instancetype) initWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions;
 
 @end
 

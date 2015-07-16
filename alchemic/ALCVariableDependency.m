@@ -12,12 +12,10 @@
 
 @implementation ALCVariableDependency
 
--(nonnull instancetype) initWithContext:(ALCContext * __nonnull __weak)context
-                               variable:(nonnull Ivar)variable
-                            valueSource:(nonnull id<ALCValueSource>)valueSource {
-    self = [super initWithContext:context
-                       valueClass:[ALCRuntime iVarClass:variable]
-                      valueSource:valueSource];
+-(nonnull instancetype) initWithVariable:(nonnull Ivar)variable
+                             valueSource:(nonnull id<ALCValueSource>)valueSource {
+    self = [super initWithValueClass:[ALCRuntime iVarClass:variable]
+                         valueSource:valueSource];
     if (self) {
         STLog(self.valueClass, @"Registering variable dependency: %s from source: %@", ivar_getName(variable), valueSource);
         _variable = variable;

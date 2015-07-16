@@ -110,15 +110,17 @@
 -(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder, ... {
 
     STLog(classBuilder.valueClass, @"Registering a dependency ...");
-    ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] init];
+    ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:classBuilder.valueClass];
 
     va_list args;
     va_start(args, classBuilder);
     id arg;
     while ((arg = va_arg(args, id)) != nil) {
-        [macroProcessor processArgument:arg];
+        [macroProcessor addArgument:arg];
     }
     va_end(args);
+
+    [macroProcessor validate];
 
     // Add the registration.
     [classBuilder addInjectionPointForArguments:macroProcessor];
@@ -128,15 +130,17 @@
 
     STLog(classBuilder.valueClass, @"Registering a builder ...");
 
-    ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] init];
+    ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:classBuilder.valueClass];
 
     va_list args;
     va_start(args, classBuilder);
     id arg;
     while ((arg = va_arg(args, id)) != nil) {
-        [macroProcessor processArgument:arg];
+        [macroProcessor addArgument:arg];
     }
     va_end(args);
+
+    [macroProcessor validate];
 
     // Add the registration.
     id<ALCBuilder> finalBuilder = classBuilder;
@@ -144,12 +148,8 @@
         // Dealing with a factory method registration so create a new entry in the model for the method.
         NSString *builderName = [NSString stringWithFormat:@"-[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(macroProcessor.selector)];
         STLog(classBuilder.valueClass, @"Creating a factory builder for selector %@", builderName);
-        finalBuilder = [[ALCMethodBuilder alloc] initWithContext:self
-                                                      valueClass:macroProcessor.returnType
-                                                            name:builderName
-                                              parentClassBuilder:classBuilder
-                                                        selector:macroProcessor.selector
-                                                      qualifiers:@[]];
+        finalBuilder = [[ALCMethodBuilder alloc] initWithParentClassBuilder:classBuilder
+                                                                  arguments:macroProcessor];
         [self addBuilderToModel:finalBuilder];
     }
 

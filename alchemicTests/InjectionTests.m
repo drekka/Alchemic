@@ -33,6 +33,7 @@ ACInject(ACIntoVariable(_singletonObjectByProtocol), ACWithProtocol(InjectablePr
     [super setUp];
     STStartLogging(@"is [InjectionTests]");
     STStartScope([self class]);
+    [self mockAlchemicContext];
     [self setUpALCContextWithClasses:@[[self class],[SingletonObject class]]];
     ACInjectDependencies(self);
 }

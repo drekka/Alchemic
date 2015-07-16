@@ -18,9 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) Ivar variable;
 
--(instancetype) initWithContext:(__weak ALCContext *) context
-                               variable:(Ivar) variable
-                            valueSource:(id<ALCValueSource>) valueSource;
+-(instancetype) initWithVariable:(Ivar) variable
+                     valueSource:(id<ALCValueSource>) valueSource;
 
 -(void) injectInto:(id) object;
 

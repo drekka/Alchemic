@@ -7,37 +7,38 @@
 //
 
 @import Foundation;
+@import ObjectiveC;
 @protocol ALCValueSource;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCMacroArgumentProcessor : NSObject
 
+@property (nonatomic, assign) Class parentClass;
+
 @property (nonatomic, assign, readonly) Class returnType;
 @property (nonatomic, assign, readonly) BOOL isClassSelector;
 @property (nonatomic, assign, readonly) SEL selector;
 @property (nonatomic, strong, readonly) NSString *variableName;
+@property (nonatomic, assign, readonly) Ivar variable;
 @property (nonatomic, strong, readonly) NSString *asName;
 @property (nonatomic, assign, readonly) BOOL isFactory;
 @property (nonatomic, assign, readonly) BOOL isPrimary;
 
--(void) processArgument:(id) argument;
+-(instancetype) initWithParentClass:(Class) parentClass;
+
+-(void) addArgument:(id) argument;
 
 -(id<ALCValueSource>) dependencyValueSource;
 
-/**
- When dealing with method arguments, returns the relevant sarch expressions for the argument at the index.
- 
- @param index the index of the method argument. Remember this is 2 based because indexes 0 and 1 are the object and selectors of the method.
- */
--(id<ALCValueSource>) valueSourceAtIndex:(NSUInteger) index;
+-(NSArray<id<ALCValueSource>> *) methodValueSources;
 
 /**
  Call after sending all arguments to validate the content sent.
  
  @param parentClass the class that the data is about.
  */
--(void) validateWithClass:(Class) parentClass;
+-(void) validate;
 
 @end
 

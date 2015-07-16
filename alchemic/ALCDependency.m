@@ -6,31 +6,27 @@
 //
 
 @import ObjectiveC;
-
+#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
+
 #import "ALCRuntime.h"
 #import "ALCContext+Internal.h"
 #import "ALCValueSource.h"
 #import "ALCModelValueSource.h"
-#import <Alchemic/Alchemic.h>
 #import "ALCValueResolver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCDependency {
-    __weak ALCContext __nonnull *_context;
     NSSet<id<ALCBuilder>> __nonnull *_candidateBuilders;
     id<ALCValueSource> _valueSource;
 
 }
 
--(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
-                             valueClass:(Class __nonnull) valueClass
-                             valueSource:(nonnull id<ALCValueSource>)valueSource {
+-(nonnull instancetype) initWithValueClass:(Class __nonnull) valueClass
+                               valueSource:(nonnull id<ALCValueSource>)valueSource {
     self = [super init];
     if (self) {
-        ALCContext *strongContext = context;
-        _context = strongContext;
         _valueClass = valueClass;
         _valueSource = valueSource;
     }
@@ -42,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) value {
-    return [_context.valueResolver resolveValueForDependency:self fromValues:_valueSource.values];
+    return [[ALCAlchemic mainContext].valueResolver resolveValueForDependency:self fromValues:_valueSource.values];
 }
 
 -(NSString *) description {

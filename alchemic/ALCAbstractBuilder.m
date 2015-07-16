@@ -24,13 +24,11 @@
 
 #pragma mark - Lifecycle
 
--(nonnull instancetype) initWithContext:(__weak ALCContext __nonnull *) context
-                             valueClass:(Class __nonnull) valueClass
-                                   name:(NSString __nonnull *) name {
+-(nonnull instancetype) initWithValueClass:(Class __nonnull) valueClass
+                                      name:(NSString __nonnull *) name {
     self = [super init];
     if (self) {
         _name = name == nil ? NSStringFromClass(valueClass) : name;
-        _context = context;
         _valueClass = valueClass;
     }
     return self;
