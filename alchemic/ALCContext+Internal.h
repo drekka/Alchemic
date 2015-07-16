@@ -42,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ...;
 
+-(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder, ...;
+
 @end
 
 NS_ASSUME_NONNULL_END

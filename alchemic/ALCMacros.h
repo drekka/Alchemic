@@ -111,7 +111,7 @@
 
 #define ACMethod(returnType, selector, ...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ACReturnType(returnType), ACSelector(selector), ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerMethodBuilder:classBuilder, ACReturnType(returnType), ACSelector(selector), ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.

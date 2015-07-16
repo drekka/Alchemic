@@ -112,13 +112,9 @@
     STLog(classBuilder.valueClass, @"Registering a dependency ...");
     ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:classBuilder.valueClass];
 
-    va_list args;
-    va_start(args, classBuilder);
-    id arg;
-    while ((arg = va_arg(args, id)) != nil) {
-        [macroProcessor addArgument:arg];
-    }
-    va_end(args);
+    vaArgs(classBuilder,
+           [macroProcessor addArgument:arg];
+           );
 
     [macroProcessor validate];
 
@@ -132,35 +128,48 @@
 
     ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:classBuilder.valueClass];
 
-    va_list args;
-    va_start(args, classBuilder);
-    id arg;
-    while ((arg = va_arg(args, id)) != nil) {
-        [macroProcessor addArgument:arg];
+    vaArgs(classBuilder,
+           [macroProcessor addArgument:arg];
+           );
+
+    [macroProcessor validate];
+    if (macroProcessor.asName != nil) {
+        classBuilder.name = macroProcessor.asName;
     }
-    va_end(args);
+    classBuilder.factory = macroProcessor.isFactory;
+    classBuilder.primary = macroProcessor.isPrimary;
+    classBuilder.createOnStartup = !macroProcessor.isFactory;
+
+    STLog(classBuilder.valueClass, @"Created: %@, %@", classBuilder, macroProcessor);
+
+}
+
+-(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder, ... {
+
+    STLog(classBuilder.valueClass, @"Registering a builder ...");
+
+    ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:classBuilder.valueClass];
+
+    vaArgs(classBuilder,
+           [macroProcessor addArgument:arg];
+           );
 
     [macroProcessor validate];
 
     // Add the registration.
-    id<ALCBuilder> finalBuilder = classBuilder;
-    if (macroProcessor.selector != NULL) {
-        // Dealing with a factory method registration so create a new entry in the model for the method.
-        NSString *builderName = [NSString stringWithFormat:@"-[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(macroProcessor.selector)];
-        STLog(classBuilder.valueClass, @"Creating a factory builder for selector %@", builderName);
-        finalBuilder = [[ALCMethodBuilder alloc] initWithParentClassBuilder:classBuilder
-                                                                  arguments:macroProcessor];
-        [self addBuilderToModel:finalBuilder];
-    }
-
+    // Dealing with a factory method registration so create a new entry in the model for the method.
+    NSString *builderName = [NSString stringWithFormat:@"-[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(macroProcessor.selector)];
+    STLog(classBuilder.valueClass, @"Creating a factory builder for selector %@", builderName);
+    id<ALCBuilder> methodBuilder = [[ALCMethodBuilder alloc] initWithParentClassBuilder:classBuilder arguments:macroProcessor];
+    [self addBuilderToModel:methodBuilder];
     if (macroProcessor.asName != nil) {
-        finalBuilder.name = macroProcessor.asName;
+        methodBuilder.name = macroProcessor.asName;
     }
-    finalBuilder.factory = macroProcessor.isFactory;
-    finalBuilder.primary = macroProcessor.isPrimary;
-    finalBuilder.createOnStartup = !macroProcessor.isFactory;
+    methodBuilder.factory = macroProcessor.isFactory;
+    methodBuilder.primary = macroProcessor.isPrimary;
+    methodBuilder.createOnStartup = !macroProcessor.isFactory;
 
-    STLog(classBuilder.valueClass, @"Created: %@, %@", finalBuilder, macroProcessor);
+    STLog(classBuilder.valueClass, @"Created: %@, %@", methodBuilder, macroProcessor);
 
 }
 
