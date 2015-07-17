@@ -29,4 +29,6 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 #import <Alchemic/ALCIsPrimary.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCQualifier.h>
+#import <Alchemic/ALCWithClass.h>
+#import <Alchemic/ALCWithName.h>
+#import <Alchemic/ALCWithProtocol.h>
