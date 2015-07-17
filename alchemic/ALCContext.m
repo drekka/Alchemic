@@ -16,11 +16,7 @@
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
 #import "ALCDefaultValueResolver.h"
-#import "ALCIsFactory.h"
 #import "ALCModel.h"
-#import "ALCContext+Internal.h"
-#import "ALCInternalMacros.h"
-#import "ALCQualifier+Internal.h"
 #import "ALCClassRegistrationMacroProcessor.h"
 #import "ALCMethodRegistrationMacroProcessor.h"
 #import "ALCVariableDependencyMacroProcessor.h"
@@ -85,7 +81,7 @@ va_end(args); \
 -(void) injectDependencies:(id) object {
     STStartScope([object class]);
     STLog([object class], @"Injecting dependencies into a %@", NSStringFromClass([object class]));
-    NSSet<ALCQualifier *> *qualifiers = [ALCRuntime qualifiersForClass:[object class]];
+    NSSet<id<ALCModelSearchExpression>> *qualifiers = [ALCRuntime searchExpressionsForClass:[object class]];
     NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:qualifiers]];
     ALCClassBuilder *classBuilder = [builders anyObject];
     [classBuilder injectObjectDependencies:object];

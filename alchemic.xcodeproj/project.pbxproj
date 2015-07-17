@@ -89,7 +89,7 @@
 		6C7F24EA1B4B564B007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
 		6C7F24EB1B4B565E007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
 		6C7F24ED1B4B5A9F007A44C8 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6C8CD9651B55FC9100C1BC7F /* ALCModelSearchExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C8CD9641B55FC9100C1BC7F /* ALCModelSearchExpression.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6C8CD9651B55FC9100C1BC7F /* ALCModelSearchExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C8CD9641B55FC9100C1BC7F /* ALCModelSearchExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C8CD96C1B561E2B00C1BC7F /* ALCClassRegistrationMacroProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8CD96B1B561E2B00C1BC7F /* ALCClassRegistrationMacroProcessorTests.m */; };
 		6C901DED1B58D81B0046CF9E /* ALCWithClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C901DEB1B58D81B0046CF9E /* ALCWithClass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C901DEE1B58D81B0046CF9E /* ALCWithClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C901DEC1B58D81B0046CF9E /* ALCWithClass.m */; };
@@ -107,7 +107,6 @@
 		6CA4DFA01B58930E0059F0DF /* ALCClassRegistrationMacroProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA4DF9E1B58930E0059F0DF /* ALCClassRegistrationMacroProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CA4DFA11B58930E0059F0DF /* ALCClassRegistrationMacroProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA4DF9F1B58930E0059F0DF /* ALCClassRegistrationMacroProcessor.m */; };
 		6CA4DFA21B5893370059F0DF /* ALCMethodRegistrationMacroProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA4DF9C1B5892D00059F0DF /* ALCMethodRegistrationMacroProcessor.m */; };
-		6CAC88771B4A11B200AFB8E4 /* ALCQualifierTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAC88761B4A11B200AFB8E4 /* ALCQualifierTests.m */; };
 		6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CF46EC81B4610EE0009007A /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CAC887C1B4A5AA000AFB8E4 /* ALCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46EC91B4610EE0009007A /* ALCModel.m */; };
 		6CAC887E1B4A60BE00AFB8E4 /* ALCContext+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CAC88781B4A2E9900AFB8E4 /* ALCContext+Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -237,7 +236,6 @@
 		6CA4DF9C1B5892D00059F0DF /* ALCMethodRegistrationMacroProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMethodRegistrationMacroProcessor.m; sourceTree = "<group>"; };
 		6CA4DF9E1B58930E0059F0DF /* ALCClassRegistrationMacroProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassRegistrationMacroProcessor.h; sourceTree = "<group>"; };
 		6CA4DF9F1B58930E0059F0DF /* ALCClassRegistrationMacroProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCClassRegistrationMacroProcessor.m; sourceTree = "<group>"; };
-		6CAC88761B4A11B200AFB8E4 /* ALCQualifierTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCQualifierTests.m; sourceTree = "<group>"; };
 		6CAC88781B4A2E9900AFB8E4 /* ALCContext+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALCContext+Internal.h"; sourceTree = "<group>"; };
 		6CAC88801B4A6C6000AFB8E4 /* ALCRuntimeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCRuntimeTests.m; sourceTree = "<group>"; };
 		6CAE806D1B424F8A00217F9D /* Alchemic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alchemic.h; sourceTree = "<group>"; };
@@ -327,7 +325,6 @@
 		6C4655F11B54CCA100FD1D28 /* Declarations */ = {
 			isa = PBXGroup;
 			children = (
-				6CAC88761B4A11B200AFB8E4 /* ALCQualifierTests.m */,
 			);
 			name = Declarations;
 			sourceTree = "<group>";
@@ -790,7 +787,6 @@
 				6C36D7941B38533C0073C4FB /* FactoryObject.m in Sources */,
 				6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */,
 				6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */,
-				6CAC88771B4A11B200AFB8E4 /* ALCQualifierTests.m in Sources */,
 				6C92C6B01B58BC3100EE49D1 /* ALCMethodRegistrationMacroProcessorTests.m in Sources */,
 				6C36D7901B38533C0073C4FB /* InjectionTests.m in Sources */,
 				6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */,

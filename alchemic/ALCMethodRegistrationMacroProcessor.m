@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
         _asName = ((ALCAsName *)argument).asName;
     } else if ([argument isKindOfClass:[ALCIsPrimary class]]) {
         _isPrimary = YES;
-    } else if ([argument isKindOfClass:[ALCQualifier class]]
+    } else if ([argument conformsToProtocol:@protocol(ALCModelSearchExpression)]
                || [argument isKindOfClass:[NSArray class]]
                || [argument isKindOfClass:[ALCConstantValue class]]) {
         [_valueSourceMacros addObject:(id<ALCModelSearchExpression>)argument];

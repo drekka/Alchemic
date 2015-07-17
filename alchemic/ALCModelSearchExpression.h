@@ -14,6 +14,7 @@
  */
 @protocol ALCModelSearchExpression <NSObject>
 
+@property (nonatomic, assign, readonly) int priority;
 @property (nonatomic, strong, readonly) id cacheId;
 
 -(BOOL) matches:(id<ALCBuilder>) builder;

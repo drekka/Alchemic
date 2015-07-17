@@ -11,19 +11,21 @@
 
 @class ALCRuntimeScanner;
 @class ALCContext;
-@class ALCQualifier;
+@protocol ALCModelSearchExpression;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCRuntime : NSObject
 
 #pragma mark - Checking and Querying
 
-+(BOOL) objectIsAClass:(id __nonnull) possibleClass;
++(BOOL) objectIsAClass:(id) possibleClass;
 
-+(BOOL) objectIsAProtocol:(id __nonnull) possiblePrototocol;
++(BOOL) objectIsAProtocol:(id) possiblePrototocol;
 
-+(nonnull NSSet<Protocol *> *) aClassProtocols:(Class __nonnull) aClass;
++(NSSet<Protocol *> *) aClassProtocols:(Class) aClass;
 
-+(nullable Class) iVarClass:(Ivar __nonnull) ivar;
++(nullable Class) iVarClass:(Ivar) ivar;
 
 /**
  Scans a class to find the actual variable used.
@@ -36,19 +38,19 @@
  @return the Ivar for the variable.
  @throw an exception if no matching variable is found.
  */
-+(nullable Ivar) aClass:(Class __nonnull) aClass variableForInjectionPoint:(NSString __nonnull *) inj;
++(nullable Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
 #pragma mark - General
 
-+(nonnull SEL) alchemicSelectorForSelector:(SEL __nonnull) selector;
++(SEL) alchemicSelectorForSelector:(SEL) selector;
 
-+(void) object:(id __nonnull) object injectVariable:(Ivar __nonnull) variable withValue:(id __nullable) value;
++(void) object:(id) object injectVariable:(Ivar) variable withValue:(id) value;
 
 #pragma mark - Getting qualifiers
 
-+(nonnull NSSet<ALCQualifier *> *) qualifiersForClass:(Class __nonnull) class;
++(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForClass:(Class) class;
 
-+(nonnull NSSet<ALCQualifier *> *) qualifiersForVariable:(Ivar __nonnull) variable;
++(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForVariable:(Ivar) variable;
 
 #pragma mark - Runtime scanning
 
@@ -56,6 +58,8 @@
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
  @discussion Once found, the block is called to finish the registration of the class.
  */
-+(void) scanRuntimeWithContext:(ALCContext __nonnull *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> __nonnull *) runtimeScanners;
++(void) scanRuntimeWithContext:(ALCContext *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> *) runtimeScanners;
 
 @end
+
+NS_ASSUME_NONNULL_END

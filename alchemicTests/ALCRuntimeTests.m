@@ -199,9 +199,9 @@
 -(void) testQualifiersForVariable {
     STStartLogging(ALCHEMIC_LOG);
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringProperty"];
-    NSSet<ALCQualifier *> *qualifiers = [ALCRuntime qualifiersForVariable:var];
-    XCTAssertEqual(1u, [qualifiers count]);
-    XCTAssertTrue([qualifiers containsObject:[ALCQualifier qualifierWithValue:[NSString class]]]);
+    NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForVariable:var];
+    XCTAssertEqual(1u, [expressions count]);
+    XCTAssertTrue([expressions containsObject:[ALCWithClass withClass:[NSString class]]]);
 }
 
 @end

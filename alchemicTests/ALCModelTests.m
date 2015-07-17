@@ -16,7 +16,6 @@
 #import "ALCBuilder.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
-#import "ALCQualifier+Internal.h"
 #import "ALCMethodRegistrationMacroProcessor.h"
 
 @interface ALCModelTests : XCTestCase
@@ -44,26 +43,26 @@
 }
 
 -(void) testSimpleQuery {
-    ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"abc"];
-    NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObject:qualifier]];
+    id<ALCModelSearchExpression> expression = [ALCWithName withName:@"abc"];
+    NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObject:expression]];
     XCTAssertEqual(1u, [results count]);
     XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
     XCTAssertEqual(@"abc", [results anyObject].name);
 }
 
 -(void) testComplexQuery {
-    ALCQualifier *qualifier1 = [ALCQualifier qualifierWithValue:@"abc"];
-    ALCQualifier *qualifier2 = [ALCQualifier qualifierWithValue:[ALCModelTests class]];
-    NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:qualifier1, qualifier2, nil]];
+    id<ALCModelSearchExpression> expression1 = [ALCWithName withName:@"abc"];
+    id<ALCModelSearchExpression> expression2 = [ALCWithClass withClass:[ALCModelTests class]];
+    NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:expression1, expression2, nil]];
     XCTAssertEqual(1u, [results count]);
     XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
     XCTAssertEqual(@"abc", [results anyObject].name);
 }
 
 -(void) testSecondQueryReturnsCachedResults {
-    ALCQualifier *qualifier = [ALCQualifier qualifierWithValue:@"abc"];
-    NSSet<id<ALCBuilder>> *result1 = [_model buildersForSearchExpressions:[NSSet setWithObject:qualifier]];
-    NSSet<id<ALCBuilder>> *result2 = [_model buildersForSearchExpressions:[NSSet setWithObject:qualifier]];
+    id<ALCModelSearchExpression> expression1 = [ALCWithName withName:@"abc"];
+    NSSet<id<ALCBuilder>> *result1 = [_model buildersForSearchExpressions:[NSSet setWithObject:expression1]];
+    NSSet<id<ALCBuilder>> *result2 = [_model buildersForSearchExpressions:[NSSet setWithObject:expression1]];
     XCTAssertEqual(result1, result2);
 }
 

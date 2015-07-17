@@ -10,7 +10,6 @@
 
 #import "ALCVariableDependencyMacroProcessor.h"
 #import <Alchemic/Alchemic.h>
-#import "ALCQualifier+Internal.h"
 #import "ALCModelValueSource.h"
 
 @interface ALCVariableDependencyMacroProcessorTests : ALCTestCase
@@ -21,17 +20,17 @@
 
 @implementation ALCVariableDependencyMacroProcessorTests {
     ALCVariableDependencyMacroProcessor *_processor;
-    ALCQualifier *_stringQ;
-    ALCQualifier *_classQ;
-    ALCQualifier *_protocolQ;
+    ALCWithName *_stringQ;
+    ALCWithClass *_classQ;
+    ALCWithProtocol *_protocolQ;
 
     NSString *_stringVar;
 }
 
 -(void) setUp {
-    _stringQ = [ALCQualifier qualifierWithValue:@"abc"];
-    _classQ = [ALCQualifier qualifierWithValue:[self class]];
-    _protocolQ = [ALCQualifier qualifierWithValue:@protocol(NSCopying)];
+    _stringQ = [ALCWithName withName:@"abc"];
+    _classQ = [ALCWithClass withClass:[self class]];
+    _protocolQ = [ALCWithProtocol withProtocol:@protocol(NSCopying)];
     _processor = [[ALCVariableDependencyMacroProcessor alloc] initWithParentClass:[self class] variable:@"_stringVar"];
 }
 

@@ -7,15 +7,14 @@
 //
 
 @import XCTest;
-#import "ALCModelValueSource.h"
+#import <StoryTeller/StoryTeller.h>
 #import <OCMock/OCMock.h>
 #import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCQualifier.h>
+
+#import "ALCModelValueSource.h"
 #import "ALCDependencyPostProcessor.h"
 #import "ALCContext+Internal.h"
 #import "ALCInternalMacros.h"
-#import <StoryTeller/StoryTeller.h>
-#import "ALCQualifier+Internal.h"
 
 @interface ALCModelValueSourceTests : XCTestCase
 
@@ -33,7 +32,7 @@
     id mockAlchemic = OCMClassMock([ALCAlchemic class]);
     OCMStub(ClassMethod([mockAlchemic mainContext])).andReturn(mockContext);
 
-    id<ALCModelSearchExpression> searchExpression = [ALCQualifier qualifierWithValue:@"abc"];
+    id<ALCModelSearchExpression> searchExpression = [ALCWithName withName:@"abc"];
     NSSet<id<ALCModelSearchExpression>> *searchExpressions = [NSSet setWithObject:searchExpression];
 
     id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));

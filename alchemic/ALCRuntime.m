@@ -7,13 +7,14 @@
 //
 
 @import ObjectiveC;
+#import <StoryTeller/StoryTeller.h>
+#import <Alchemic/Alchemic.h>
 
 #import "ALCRuntime.h"
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/Alchemic.h>
 #import "ALCClassBuilder.h"
-#import <StoryTeller/StoryTeller.h>
 #import "ALCRuntimeScanner.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCRuntime
 
@@ -27,16 +28,16 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - Checking and querying
 
-+(BOOL) objectIsAClass:(id __nonnull) possibleClass {
++(BOOL) objectIsAClass:(id) possibleClass {
     // Must use getClass here to access the meta class which is how we detect class objects.
     return class_isMetaClass(object_getClass(possibleClass));
 }
 
-+(BOOL) objectIsAProtocol:(id __nonnull) possiblePrototocol {
++(BOOL) objectIsAProtocol:(id) possiblePrototocol {
     return __protocolClass == [possiblePrototocol class];
 }
 
-+(nullable Class) iVarClass:(Ivar __nonnull) ivar {
++(nullable Class) iVarClass:(Ivar) ivar {
 
     // Get the type.
     NSArray *iVarTypes = [self typesForIVar:ivar];
@@ -48,7 +49,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return iVarTypes[0];
 }
 
-+(nonnull NSSet<Protocol *> *) aClassProtocols:(Class __nonnull) aClass {
++(NSSet<Protocol *> *) aClassProtocols:(Class) aClass {
 
     NSMutableSet<Protocol *> *protocols = [[NSMutableSet<Protocol *> alloc] init];
 
@@ -77,7 +78,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - General
 
-+(void) object:(id __nonnull) object injectVariable:(Ivar __nonnull) variable withValue:(id __nullable) value {
++(void) object:(id) object injectVariable:(Ivar) variable withValue:(id) value {
     object_setIvar(object, variable, value);
 }
 
@@ -88,7 +89,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return sel_registerName(newSelectorName);
 }
 
-+(void) scanRuntimeWithContext:(ALCContext __nonnull *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> __nonnull *) runtimeScanners {
++(void) scanRuntimeWithContext:(ALCContext *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> *) runtimeScanners {
 
     // Use the app bundles and Alchemic framework for searching for runtime components.
     NSArray<NSBundle *> *appBundles = [NSBundle allBundles];
@@ -99,7 +100,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     Protocol *configProtocol = @protocol(ALCConfig);
 
     // Define a block for processing a class.
-    void (^classScanners)(ALCContext __nonnull *, Class __nonnull) = ^(ALCContext __nonnull *scanContext, Class __nonnull scanClass) {
+    void (^classScanners)(ALCContext *, Class) = ^(ALCContext *scanContext, Class scanClass) {
         for (ALCRuntimeScanner *scanner in runtimeScanners) {
             if (scanner.selector(scanClass)) {
                 scanner.processor(scanContext, scanClass);
@@ -107,7 +108,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
         }
     };
 
-    [self scanBundles:appBundles withClassBlock:^(Class  __nonnull __unsafe_unretained aClass) {
+    [self scanBundles:appBundles withClassBlock:^(Class  __unsafe_unretained aClass) {
 
         // Process each class.
         classScanners(context, aClass);
@@ -118,7 +119,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
             // Found a config so get the classes that define additional bundles and load them up.
             NSArray<Class> *configClasses = [((id<ALCConfig>)aClass) scanBundlesWithClasses];
 
-            [configClasses enumerateObjectsUsingBlock:^(Class  __nonnull configClass, NSUInteger idx, BOOL * __nonnull stop) {
+            [configClasses enumerateObjectsUsingBlock:^(Class  configClass, NSUInteger idx, BOOL * stop) {
 
                 // If the config bundle is not already scanned then do so.
                 NSBundle *additionalBundle = [NSBundle bundleForClass:configClass];
@@ -127,7 +128,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
                     [scannedBundles addObject:additionalBundle];
 
                     [self scanBundles:@[additionalBundle]
-                       withClassBlock:^(Class  __nonnull __unsafe_unretained additionalClass) {
+                       withClassBlock:^(Class  __unsafe_unretained additionalClass) {
                            classScanners(context, additionalClass);
                        }];
                 }
@@ -138,7 +139,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 }
 
-+(void) scanBundles:(NSArray<NSBundle *> __nonnull *) bundles withClassBlock:(void(^)(Class __nonnull aClass)) classBlock {
++(void) scanBundles:(NSArray<NSBundle *> *) bundles withClassBlock:(void(^)(Class aClass)) classBlock {
     for (NSBundle *bundle in bundles) {
         STLog(ALCHEMIC_LOG, @"Scanning bundle %@", bundle.bundlePath.lastPathComponent);
         unsigned int count = 0;
@@ -149,7 +150,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 }
 
-+(nullable Ivar) aClass:(Class __nonnull) aClass variableForInjectionPoint:(NSString __nonnull *) inj {
++(nullable Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
 
     const char * charName = [inj UTF8String];
     Ivar var = class_getInstanceVariable(aClass, charName);
@@ -185,36 +186,36 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - Qualifiers
 
-+(nonnull NSSet<ALCQualifier *> *) qualifiersForClass:(Class __nonnull) class {
-    STLog(class, @"Generating search qualifiers for class: %@", NSStringFromClass(class));
-    NSMutableSet<ALCQualifier *> * qualifiers = [[NSMutableSet<ALCQualifier *> alloc] init];
-    [qualifiers addObject:[ALCQualifier qualifierWithValue:class]];
++(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForClass:(Class) class {
+    STLog(class, @"Generating search expressions for class: %@", NSStringFromClass(class));
+    NSMutableSet<id<ALCModelSearchExpression>> * expressions = [[NSMutableSet alloc] init];
+    [expressions addObject:[ALCWithClass withClass:class]];
     for (Protocol *protocol in [self aClassProtocols:class]) {
-        [qualifiers addObject:[ALCQualifier qualifierWithValue:protocol]];
+        [expressions addObject:[ALCWithProtocol withProtocol:protocol]];
     }
-    return qualifiers;
+    return expressions;
 }
 
-+(nonnull NSSet<ALCQualifier *> *) qualifiersForVariable:(Ivar __nonnull)variable {
++(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForVariable:(Ivar)variable {
 
-    STLog(ALCHEMIC_LOG, @"Generating qualifiers for class: %s", ivar_getName(variable));
-    NSMutableSet<ALCQualifier *> * qualifiers = [[NSMutableSet<ALCQualifier *> alloc] init];
+    STLog(ALCHEMIC_LOG, @"Generating search expressions for variable: %s", ivar_getName(variable));
+    NSMutableSet<id<ALCModelSearchExpression>> *expressions = [[NSMutableSet alloc] init];
 
     // Get the type.
     NSArray *iVarTypes = [self typesForIVar:variable];
     if (iVarTypes == nil) {
-        return qualifiers;
+        return expressions;
     }
 
     // Must have some type information returned.
-    [qualifiers addObject:[ALCQualifier qualifierWithValue:iVarTypes[0]]];
+    [expressions addObject:[ALCWithClass withClass:iVarTypes[0]]];
     for (unsigned long i = 1; i < [iVarTypes count];i++) {
-        [qualifiers addObject:[ALCQualifier qualifierWithValue:iVarTypes[i]]];
+        [expressions addObject:[ALCWithProtocol withProtocol:iVarTypes[i]]];
     }
-    return qualifiers;
+    return expressions;
 }
 
-+(nullable NSArray *) typesForIVar:(Ivar __nonnull) iVar {
++(nullable NSArray *) typesForIVar:(Ivar) iVar {
 
     // Get the type.
     NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(iVar)];
@@ -251,7 +252,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
  @param aClass				the class to start with.
  @param executeBlock	the block to execute. Return a YES from this block to stop processing.
  */
-+(void) aClass:(Class __nonnull) aClass executeOnHierarchy:(BOOL (^ __nonnull)(Class nextClass)) executeBlock {
++(void) aClass:(Class) aClass executeOnHierarchy:(BOOL (^)(Class nextClass)) executeBlock {
     Class nextClass = aClass;
     while (nextClass != nil && ! executeBlock(nextClass)) {
         nextClass = class_getSuperclass(nextClass);
@@ -259,3 +260,5 @@ static NSCharacterSet *__typeEncodingDelimiters;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -27,8 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) addArgument:(id) argument {
-    if ([argument isKindOfClass:[ALCQualifier class]]
-               || [argument isKindOfClass:[ALCConstantValue class]]) {
+    if ([argument conformsToProtocol:@protocol(ALCModelSearchExpression)]
+        || [argument isKindOfClass:[ALCConstantValue class]]) {
         [_valueSourceMacros addObject:(id<ALCModelSearchExpression>)argument];
     } else {
         [super addArgument:argument];
@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Check macros
     if ([_valueSourceMacros count] == 0) {
-        _valueSourceMacros = [NSMutableArray arrayWithArray:[ALCRuntime qualifiersForVariable:_variable].allObjects];
+        _valueSourceMacros = [NSMutableArray arrayWithArray:[ALCRuntime searchExpressionsForVariable:_variable].allObjects];
     }
 
     // Validate arguments.

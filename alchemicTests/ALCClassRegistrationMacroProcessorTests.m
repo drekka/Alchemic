@@ -11,7 +11,6 @@
 #import <Alchemic/Alchemic.h>
 #import "ALCModelValueSource.h"
 #import "ALCModelSearchExpression.h"
-#import "ALCQualifier+Internal.h"
 #import "ALCValueSource.h"
 
 @interface ALCClassRegistrationMacroProcessorTests : ALCTestCase

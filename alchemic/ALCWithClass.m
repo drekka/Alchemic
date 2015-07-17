@@ -23,6 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
     return withClass;
 }
 
+-(int) priority {
+    return 0;
+}
+
 -(id) cacheId {
     return _aClass;
 }

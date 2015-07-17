@@ -20,16 +20,19 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @implementation AllClassesExpression
-@synthesize type = _type;
+
+-(int) priority {
+    return 0;
+}
 
 -(id) cacheId {
     return @"AllClassBuilders";
 }
--(ALCMatchBuilderBlock) matchBlock {
-    return ^BOOL(ALCMatchBuilderBlockArgs) {
-        return [builder isKindOfClass:[ALCClassBuilder class]];
-     };
+
+-(BOOL) matches:(id<ALCBuilder>)builder {
+    return [builder isKindOfClass:[ALCClassBuilder class]];
 }
+
 @end
 
 
@@ -105,11 +108,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSArray *) sortedSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
-    NSArray *results = [searchExpressions.allObjects sortedArrayUsingComparator:^NSComparisonResult(id<ALCModelSearchExpression> __nonnull exp1, id<ALCModelSearchExpression> __nonnull exp2) {
-        if (exp1.type < exp2.type) {
+    NSArray *results = [searchExpressions.allObjects sortedArrayUsingComparator:^NSComparisonResult(id<ALCModelSearchExpression> exp1, id<ALCModelSearchExpression> exp2) {
+        if (exp1.priority > exp2.priority) {
             return NSOrderedAscending;
         }
-        if (exp1.type > exp2.type) {
+        if (exp1.priority < exp2.priority) {
             return NSOrderedDescending;
         }
         return NSOrderedSame;
@@ -142,7 +145,7 @@ NS_ASSUME_NONNULL_BEGIN
     // Find the builders that match the expression.
     STLog(ALCHEMIC_LOG, @"Searching for builders for %@", searchExpression);
     NSSet<id<ALCBuilder>> *builders = [_model objectsPassingTest:^BOOL(id<ALCBuilder>  builder, BOOL * stop) {
-        if (searchExpression.matchBlock(builder)) {
+        if ([searchExpression matches:builder]) {
             STLog(ALCHEMIC_LOG, @"Adding builder '%@' '%@", builder.name, NSStringFromClass(builder.valueClass));
             return YES;
         }
