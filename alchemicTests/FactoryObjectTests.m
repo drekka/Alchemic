@@ -20,7 +20,7 @@
 }
 
 ACInject(_of1)
-ACInject(_of2, ACWithClass(FactoryObject))
+ACInject(_of2, ACClass(FactoryObject))
 
 -(void) setUp {
     [super setUp];

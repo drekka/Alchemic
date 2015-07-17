@@ -39,7 +39,7 @@
 }
 
 -(void) testSetsName {
-    [self loadMacroProcessor:_processor withArguments:ACAsName(@"abc"), nil];
+    [self loadMacroProcessor:_processor withArguments:ACWithName(@"abc"), nil];
     XCTAssertEqualObjects(@"abc", _processor.asName);
 }
 
@@ -49,7 +49,7 @@
 }
 
 -(void) testClassRegistrationUnknownMacro {
-    XCTAssertThrowsSpecificNamed(([self loadMacroProcessor:_processor withArguments:ACWithValue(@12), nil]), NSException, @"AlchemicUnexpectedMacro");
+    XCTAssertThrowsSpecificNamed(([self loadMacroProcessor:_processor withArguments:ACValue(@12), nil]), NSException, @"AlchemicUnexpectedMacro");
 }
 
 @end

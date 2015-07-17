@@ -27,18 +27,18 @@ returnType:[NSObject class]]
 
 @implementation ALCMethodRegistrationMacroProcessorTests {
     ALCMethodRegistrationMacroProcessor *_processor;
-    ALCWithName *_stringQ;
-    ALCWithClass *_classQ;
-    ALCWithProtocol *_protocolQ;
+    ALCName *_stringQ;
+    ALCClass *_classQ;
+    ALCProtocol *_protocolQ;
 
     NSString *_stringVar;
     NSNumber *_numberVar;
 }
 
 -(void) setUp {
-    _stringQ = [ALCWithName withName:@"abc"];
-    _classQ = [ALCWithClass withClass:[self class]];
-    _protocolQ = [ALCWithProtocol withProtocol:@protocol(NSCopying)];
+    _stringQ = [ALCName withName:@"abc"];
+    _classQ = [ALCClass withClass:[self class]];
+    _protocolQ = [ALCProtocol withProtocol:@protocol(NSCopying)];
 }
 
 
@@ -56,7 +56,7 @@ returnType:[NSObject class]]
 
 -(void) testSetsName {
     setupProcessorForSelector(method);
-    [self loadMacroProcessor:_processor withArguments:ACAsName(@"abc"), nil];
+    [self loadMacroProcessor:_processor withArguments:ACWithName(@"abc"), nil];
     XCTAssertEqualObjects(@"abc", _processor.asName);
 }
 
@@ -86,7 +86,7 @@ returnType:[NSObject class]]
 
 -(void) testMethodWithTooManyArgumentsThrows {
     setupProcessorForSelector(methodWithString:class:protocol:);
-    XCTAssertThrowsSpecificNamed(([self loadMacroProcessor:_processor withArguments:_stringQ, _classQ, _protocolQ, ACWithValue(@"abc"), nil]), NSException, @"AlchemicIncorrectNumberArguments");
+    XCTAssertThrowsSpecificNamed(([self loadMacroProcessor:_processor withArguments:_stringQ, _classQ, _protocolQ, ACValue(@"abc"), nil]), NSException, @"AlchemicIncorrectNumberArguments");
 }
 
 -(void) testMethodWithArraysOfQualifiers {
@@ -100,7 +100,7 @@ returnType:[NSObject class]]
 
 -(void) testMethodWithArraysOfQualifiersAndConstants {
     setupProcessorForSelector(methodWithString:runtime:);
-    [self loadMacroProcessor:_processor withArguments:ACWithValue(@"abc"), @[_classQ, _protocolQ], nil];
+    [self loadMacroProcessor:_processor withArguments:ACValue(@"abc"), @[_classQ, _protocolQ], nil];
 
     NSArray<id<ALCValueSource>> *valueSources = [_processor methodValueSources];
     XCTAssertEqualObjects(@"abc", valueSources[0].values.anyObject);
@@ -122,7 +122,7 @@ returnType:[NSObject class]]
 
 -(void) testFullMethodRegistration {
     setupProcessorForSelector(methodWithObject:);
-    [self loadMacroProcessor:_processor withArguments:ACIsFactory, ACIsPrimary, ACAsName(@"abc"), ACWithClass(self), nil];
+    [self loadMacroProcessor:_processor withArguments:ACIsFactory, ACIsPrimary, ACWithName(@"abc"), ACClass(self), nil];
     XCTAssertTrue(_processor.isFactory);
     XCTAssertTrue(_processor.isPrimary);
     XCTAssertEqualObjects(@"abc", _processor.asName);

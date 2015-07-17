@@ -1,27 +1,17 @@
 //
-//  ALCWithName.h
-//  Alchemic
+//  ALCAsName.h
+//  alchemic
 //
-//  Created by Derek Clarkson on 17/07/2015.
-//  Copyright © 2015 Derek Clarkson. All rights reserved.
+//  Created by Derek Clarkson on 8/06/2015.
+//  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
 @import Foundation;
-#import "ALCModelSearchExpression.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@interface ALCWithName : NSObject
 
-/**
- Wraps an argument so that it can be conveniantly passed around.
- */
-@interface ALCWithName : NSObject<ALCModelSearchExpression>
+@property (nonatomic, strong, readonly) NSString *asName;
 
-@property (nonatomic, strong, readonly) NSString *aName;
-
-+(instancetype) withName:(NSString *) aName;
-
--(BOOL) isEqualToWithName:(ALCWithName *) withName;
++(instancetype) withName:(NSString *) name;
 
 @end
-
-NS_ASSUME_NONNULL_END

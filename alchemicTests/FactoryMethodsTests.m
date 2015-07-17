@@ -24,10 +24,10 @@
     NSString *string4;
 }
 
-ACInject(string1, ACWithName(@"buildAString"))
-ACInject(string2, ACWithName(@"buildAString"))
-ACInject(string3, ACWithName(@"buildAComponentString"))
-ACInject(string4, ACWithName(@"buildAComponentString"))
+ACInject(string1, ACName(@"buildAString"))
+ACInject(string2, ACName(@"buildAString"))
+ACInject(string3, ACName(@"buildAComponentString"))
+ACInject(string4, ACName(@"buildAComponentString"))
 
 -(void) setUp {
     [super setUp];

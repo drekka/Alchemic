@@ -1,5 +1,5 @@
 //
-//  ALCWithClass.h
+//  ALCWithProtocol.h
 //  Alchemic
 //
 //  Created by Derek Clarkson on 17/07/2015.
@@ -14,13 +14,13 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Wraps an argument so that it can be conveniantly passed around.
  */
-@interface ALCWithClass : NSObject<ALCModelSearchExpression>
+@interface ALCProtocol : NSObject<ALCModelSearchExpression>
 
-@property (nonatomic, assign, readonly) Class aClass;
+@property (nonatomic, strong, readonly) Protocol *aProtocol;
 
-+(instancetype) withClass:(Class) aClass;
++(instancetype) withProtocol:(Protocol *) aProtocol;
 
--(BOOL) isEqualToWithClass:(ALCWithClass *) withClass;
+-(BOOL) isEqualToWithProtocol:(ALCProtocol *) withProtocol;
 
 @end
 

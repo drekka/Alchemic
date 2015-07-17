@@ -201,7 +201,7 @@
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringProperty"];
     NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForVariable:var];
     XCTAssertEqual(1u, [expressions count]);
-    XCTAssertTrue([expressions containsObject:[ALCWithClass withClass:[NSString class]]]);
+    XCTAssertTrue([expressions containsObject:[ALCClass withClass:[NSString class]]]);
 }
 
 @end

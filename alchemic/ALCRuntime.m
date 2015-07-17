@@ -189,9 +189,9 @@ static NSCharacterSet *__typeEncodingDelimiters;
 +(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForClass:(Class) class {
     STLog(class, @"Generating search expressions for class: %@", NSStringFromClass(class));
     NSMutableSet<id<ALCModelSearchExpression>> * expressions = [[NSMutableSet alloc] init];
-    [expressions addObject:[ALCWithClass withClass:class]];
+    [expressions addObject:[ALCClass withClass:class]];
     for (Protocol *protocol in [self aClassProtocols:class]) {
-        [expressions addObject:[ALCWithProtocol withProtocol:protocol]];
+        [expressions addObject:[ALCProtocol withProtocol:protocol]];
     }
     return expressions;
 }
@@ -208,9 +208,9 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 
     // Must have some type information returned.
-    [expressions addObject:[ALCWithClass withClass:iVarTypes[0]]];
+    [expressions addObject:[ALCClass withClass:iVarTypes[0]]];
     for (unsigned long i = 1; i < [iVarTypes count];i++) {
-        [expressions addObject:[ALCWithProtocol withProtocol:iVarTypes[i]]];
+        [expressions addObject:[ALCProtocol withProtocol:iVarTypes[i]]];
     }
     return expressions;
 }

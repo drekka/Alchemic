@@ -43,7 +43,7 @@
 }
 
 -(void) testSimpleQuery {
-    id<ALCModelSearchExpression> expression = [ALCWithName withName:@"abc"];
+    id<ALCModelSearchExpression> expression = [ALCName withName:@"abc"];
     NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObject:expression]];
     XCTAssertEqual(1u, [results count]);
     XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
@@ -51,8 +51,8 @@
 }
 
 -(void) testComplexQuery {
-    id<ALCModelSearchExpression> expression1 = [ALCWithName withName:@"abc"];
-    id<ALCModelSearchExpression> expression2 = [ALCWithClass withClass:[ALCModelTests class]];
+    id<ALCModelSearchExpression> expression1 = [ALCName withName:@"abc"];
+    id<ALCModelSearchExpression> expression2 = [ALCClass withClass:[ALCModelTests class]];
     NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:expression1, expression2, nil]];
     XCTAssertEqual(1u, [results count]);
     XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
@@ -60,7 +60,7 @@
 }
 
 -(void) testSecondQueryReturnsCachedResults {
-    id<ALCModelSearchExpression> expression1 = [ALCWithName withName:@"abc"];
+    id<ALCModelSearchExpression> expression1 = [ALCName withName:@"abc"];
     NSSet<id<ALCBuilder>> *result1 = [_model buildersForSearchExpressions:[NSSet setWithObject:expression1]];
     NSSet<id<ALCBuilder>> *result2 = [_model buildersForSearchExpressions:[NSSet setWithObject:expression1]];
     XCTAssertEqual(result1, result2);

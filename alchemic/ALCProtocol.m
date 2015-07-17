@@ -6,7 +6,7 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCWithProtocol.h"
+#import "ALCProtocol.h"
 
 #import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCInternalMacros.h>
@@ -15,10 +15,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCWithProtocol
+@implementation ALCProtocol
 
 +(instancetype) withProtocol:(Protocol *) aProtocol {
-    ALCWithProtocol *withProtocol = [[ALCWithProtocol alloc] init];
+    ALCProtocol *withProtocol = [[ALCProtocol alloc] init];
     withProtocol->_aProtocol = aProtocol;
     return withProtocol;
 }
@@ -47,10 +47,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL) isEqual:(id)object {
     return self == object
-    || ([object isKindOfClass:[ALCWithProtocol class]] && [self isEqualToWithProtocol:object]);
+    || ([object isKindOfClass:[ALCProtocol class]] && [self isEqualToWithProtocol:object]);
 }
 
--(BOOL) isEqualToWithProtocol:(nonnull ALCWithProtocol *)withProtocol {
+-(BOOL) isEqualToWithProtocol:(nonnull ALCProtocol *)withProtocol {
     return withProtocol != nil && withProtocol.aProtocol == _aProtocol;
 }
 

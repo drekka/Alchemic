@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
         // If any argument is a constant then it must be the only one.
         if ([macro isKindOfClass:[ALCConstantValue class]] && [self->_valueSourceMacros count] > 1) {
             @throw [NSException exceptionWithName:@"AlchemicInvalidArguments"
-                                           reason:[NSString stringWithFormat:@"ACWithValue(...) must be the only data source macro for %@", self->_variableName]
+                                           reason:[NSString stringWithFormat:@"ACValue(...) must be the only data source macro for %@", self->_variableName]
                                          userInfo:nil];
         }
 

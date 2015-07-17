@@ -1,59 +1,19 @@
 //
-//  ALCWithName.m
-//  Alchemic
+//  ALCAsName.m
+//  alchemic
 //
-//  Created by Derek Clarkson on 17/07/2015.
-//  Copyright © 2015 Derek Clarkson. All rights reserved.
+//  Created by Derek Clarkson on 8/06/2015.
+//  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCWithName.h"
-
-#import <Alchemic/Alchemic.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import "ALCRuntime.h"
-#import <StoryTeller/StoryTeller.h>
-
-NS_ASSUME_NONNULL_BEGIN
+#import <Alchemic/ALCWithName.h>
 
 @implementation ALCWithName
 
-+(instancetype) withName:(NSString *) aName {
-    ALCWithName *withName = [[ALCWithName alloc] init];
-    withName->_aName = aName;
-    return withName;
-}
-
--(int) priority {
-    return 1;
-}
-
--(id) cacheId {
-    return _aName;
-}
-
--(BOOL) matches:(id<ALCBuilder>) builder {
-    return [builder.name isEqualToString:_aName];
-}
-
--(NSString *)description {
-    return [NSString stringWithFormat:@"With '%@'", _aName];
-}
-
-#pragma mark - Equality
-
--(NSUInteger)hash {
-    return [_aName hash];
-}
-
--(BOOL) isEqual:(id)object {
-    return self == object
-    || ([object isKindOfClass:[ALCWithName class]] && [self isEqualToWithName:object]);
-}
-
--(BOOL) isEqualToWithName:(nonnull ALCWithName *)withName {
-    return withName != nil && withName.aName == _aName;
++(instancetype) withName:(NSString *) name {
+    ALCWithName *asNameQualifier = [[ALCWithName alloc] init];
+    asNameQualifier->_asName = name;
+    return asNameQualifier;
 }
 
 @end
-
-NS_ASSUME_NONNULL_END

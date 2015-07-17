@@ -11,6 +11,6 @@
 
 @implementation SingletonObject
 
-ACRegister(ACAsName(@"Test Singleton"))
+ACRegister(ACWithName(@"Test Singleton"))
 
 @end

@@ -32,7 +32,7 @@
     id mockAlchemic = OCMClassMock([ALCAlchemic class]);
     OCMStub(ClassMethod([mockAlchemic mainContext])).andReturn(mockContext);
 
-    id<ALCModelSearchExpression> searchExpression = [ALCWithName withName:@"abc"];
+    id<ALCModelSearchExpression> searchExpression = [ALCName withName:@"abc"];
     NSSet<id<ALCModelSearchExpression>> *searchExpressions = [NSSet setWithObject:searchExpression];
 
     id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));

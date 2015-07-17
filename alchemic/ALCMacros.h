@@ -15,7 +15,7 @@
 /**
  Tells Alchemic to set a custom name on a registration.
  */
-#define ACAsName(_objectName) [ALCAsName asNameWithName:_objectName]
+#define ACWithName(_objectName) [ALCWithName withName:_objectName]
 
 /**
  Defines the class or factory method as a factory.
@@ -40,28 +40,28 @@
  
  @param _className the name of the class to search for.
  */
-#define ACWithClass(_className) [ALCWithClass withClass:[_className class]]
+#define ACClass(_className) [ALCClass withClass:[_className class]]
 
 /**
  Used to search for dependencies based on a protocol that a class implements.
  
  @param _ProtocolName the name of the protocol.
  */
-#define ACWithProtocol(_protocolName) [ALCWithProtocol withProtocol:@protocol(_protocolName)]
+#define ACProtocol(_protocolName) [ALCProtocol withProtocol:@protocol(_protocolName)]
 
 /**
  Used to search for builders based on the names given to them.
  
  @param _objectName The name to search on.
  */
-#define ACWithName(_objectName) [ALCWithName withName:_objectName]
+#define ACName(_objectName) [ALCName withName:_objectName]
 
 /**
  Used to search for builders based on the names given to them.
 
  @param _objectName The name to search on.
  */
-#define ACWithValue(_value) [ALCConstantValue constantValueWithValue:_value]
+#define ACValue(_value) [ALCConstantValue constantValueWithValue:_value]
 
 #pragma mark - Injection
 

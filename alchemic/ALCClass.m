@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCWithClass.h"
+#import "ALCClass.h"
 
 #import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCInternalMacros.h>
@@ -15,10 +15,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCWithClass
+@implementation ALCClass
 
 +(instancetype) withClass:(Class) aClass {
-    ALCWithClass *withClass = [[ALCWithClass alloc] init];
+    ALCClass *withClass = [[ALCClass alloc] init];
     withClass->_aClass = aClass;
     return withClass;
 }
@@ -47,10 +47,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL) isEqual:(id)object {
     return self == object
-    || ([object isKindOfClass:[ALCWithClass class]] && [self isEqualToWithClass:object]);
+    || ([object isKindOfClass:[ALCClass class]] && [self isEqualToWithClass:object]);
 }
 
--(BOOL) isEqualToWithClass:(nonnull ALCWithClass *)withClass {
+-(BOOL) isEqualToWithClass:(nonnull ALCClass *)withClass {
     return withClass != nil && withClass.aClass == _aClass;
 }
 

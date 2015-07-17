@@ -20,28 +20,28 @@
 
 @implementation ALCVariableDependencyMacroProcessorTests {
     ALCVariableDependencyMacroProcessor *_processor;
-    ALCWithName *_stringQ;
-    ALCWithClass *_classQ;
-    ALCWithProtocol *_protocolQ;
+    ALCName *_stringQ;
+    ALCClass *_classQ;
+    ALCProtocol *_protocolQ;
 
     NSString *_stringVar;
 }
 
 -(void) setUp {
-    _stringQ = [ALCWithName withName:@"abc"];
-    _classQ = [ALCWithClass withClass:[self class]];
-    _protocolQ = [ALCWithProtocol withProtocol:@protocol(NSCopying)];
+    _stringQ = [ALCName withName:@"abc"];
+    _classQ = [ALCClass withClass:[self class]];
+    _protocolQ = [ALCProtocol withProtocol:@protocol(NSCopying)];
     _processor = [[ALCVariableDependencyMacroProcessor alloc] initWithParentClass:[self class] variable:@"_stringVar"];
 }
 
 -(void) testDependencyWithConstantValue {
-    [self loadMacroProcessor:_processor withArguments:ACWithValue(@12), nil];
+    [self loadMacroProcessor:_processor withArguments:ACValue(@12), nil];
     id<ALCValueSource> valueSource = [_processor valueSource];
     XCTAssertEqualObjects(@12, valueSource.values.anyObject);
 }
 
 -(void) testDependencyWithConstantAndOtherMacrosThrows {
-    XCTAssertThrowsSpecificNamed(([self loadMacroProcessor:_processor withArguments:ACWithValue(@12), ACWithClass([self class]), nil]), NSException, @"AlchemicInvalidArguments");
+    XCTAssertThrowsSpecificNamed(([self loadMacroProcessor:_processor withArguments:ACValue(@12), ACClass([self class]), nil]), NSException, @"AlchemicInvalidArguments");
 }
 
 -(void) testDependencyWithModelValueSource {

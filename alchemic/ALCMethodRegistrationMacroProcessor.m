@@ -31,8 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 
     if ([argument isKindOfClass:[ALCIsFactory class]]) {
         _isFactory = YES;
-    } else if ([argument isKindOfClass:[ALCAsName class]]) {
-        _asName = ((ALCAsName *)argument).asName;
+    } else if ([argument isKindOfClass:[ALCWithName class]]) {
+        _asName = ((ALCWithName *)argument).asName;
     } else if ([argument isKindOfClass:[ALCIsPrimary class]]) {
         _isPrimary = YES;
     } else if ([argument conformsToProtocol:@protocol(ALCModelSearchExpression)]
