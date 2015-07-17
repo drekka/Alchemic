@@ -63,24 +63,6 @@
  */
 #define ACWithValue(_value) [ALCConstantValue constantValueWithValue:_value]
 
-/**
- When defining a method which builds an object, this tells the builder what class is expected to be returned from the method.
- 
- @discussion The class declared by this macro is used for searching when resolving dependencies.
- 
- _returnType The class that is to be returned.
- */
-#define ACReturnType(_returnType) [ALCReturnType returnTypeWithClass:[_returnType class]]
-
-/**
- The selector of a method in the classes that will be used to build objects.
-
- @discussion In the ACRegister(...) macro, the rest of the ACWith... arguments must match the arguments to this selector, in order. This allows Alchemic to then locate the dependencies for those arguments. If an argument needs more than one ACWith... to locate the dependency, they should be wrapped in an Objective-C array.
-
- @param _methodSelector the selector to call when a value is needed.
- */
-#define ACSelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
-
 #pragma mark - Injection
 
 /**
