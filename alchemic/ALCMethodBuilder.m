@@ -10,7 +10,7 @@
 #import "ALCMethodBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
-#import "ALCMacroArgumentProcessor.h"
+#import "ALCMethodRegistrationMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(nonnull instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
-                                         arguments:(ALCMacroArgumentProcessor *) arguments {
+                                         arguments:(ALCMethodRegistrationMacroProcessor *) arguments {
 
     self = [super initWithValueClass:arguments.returnType name:arguments.asName];
     if (self) {

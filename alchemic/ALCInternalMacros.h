@@ -25,13 +25,5 @@
 #define _alchemic_toNSString(chars) __alchemic_toNSString(chars)
 #define __alchemic_toNSString(chars) @#chars
 
-#define vaArgs(lastVar, stuffToDo) \
-va_list args; \
-va_start(args, lastVar); \
-id arg; \
-while ((arg = va_arg(args, id)) != nil) { \
-stuffToDo \
-} \
-va_end(args)
 
 

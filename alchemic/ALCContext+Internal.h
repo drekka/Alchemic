@@ -38,11 +38,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Registration call backs
 
--(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder, ...;
+-(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder variable:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ...;
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder, ...;
+-(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end
 

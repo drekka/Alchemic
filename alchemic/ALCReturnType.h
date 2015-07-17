@@ -7,9 +7,8 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCMacroArgument.h>
 
-@interface ALCReturnType : NSObject<ALCMacroArgument>
+@interface ALCReturnType : NSObject
 
 @property(nonatomic, assign, readonly) Class returnType;
 

@@ -6,8 +6,6 @@
 @import Foundation;
 @protocol ALCBuilder;
 
-#import <Alchemic/ALCMacroArgument.h>
-
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -15,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  Usually arguments are classes, protocols or names.
  */
-@interface ALCQualifier : NSObject <ALCMacroArgument>
+@interface ALCQualifier : NSObject
 
 @property (nonatomic, strong, readonly) id value;
 

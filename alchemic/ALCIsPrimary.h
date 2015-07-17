@@ -7,8 +7,7 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCMacroArgument.h>
 
-@interface ALCIsPrimary : NSObject<ALCMacroArgument>
+@interface ALCIsPrimary : NSObject
 
 @end

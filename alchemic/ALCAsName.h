@@ -7,9 +7,8 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCMacroArgument.h>
 
-@interface ALCAsName : NSObject<ALCMacroArgument>
+@interface ALCAsName : NSObject
 
 @property (nonatomic, strong, readonly) NSString *asName;
 

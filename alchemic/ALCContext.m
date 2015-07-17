@@ -21,7 +21,19 @@
 #import "ALCContext+Internal.h"
 #import "ALCInternalMacros.h"
 #import "ALCQualifier+Internal.h"
-#import "ALCMacroArgumentProcessor.h"
+#import "ALCClassRegistrationMacroProcessor.h"
+#import "ALCMethodRegistrationMacroProcessor.h"
+#import "ALCVariableDependencyMacroProcessor.h"
+
+#define loadMacroProcessor(processorVar, lastArg) \
+va_list args; \
+va_start(args, lastArg); \
+id arg; \
+while ((arg = va_arg(args, id)) != nil) { \
+[processorVar addArgument:arg]; \
+} \
+va_end(args); \
+[processorVar validate]
 
 @interface ALCContext ()
 @property (nonatomic, strong) id<ALCValueResolver> valueResolver;
@@ -107,16 +119,12 @@
 
 #pragma mark - Registration call backs
 
--(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder, ... {
+-(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder variable:(NSString *) variable, ... {
 
     STLog(classBuilder.valueClass, @"Registering a dependency ...");
-    ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:classBuilder.valueClass];
+    ALCVariableDependencyMacroProcessor *macroProcessor = [[ALCVariableDependencyMacroProcessor alloc] initWithParentClass:classBuilder.valueClass variable:variable];
 
-    vaArgs(classBuilder,
-           [macroProcessor addArgument:arg];
-           );
-
-    [macroProcessor validate];
+    loadMacroProcessor(macroProcessor, variable);
 
     // Add the registration.
     [classBuilder addInjectionPointForArguments:macroProcessor];
@@ -126,13 +134,10 @@
 
     STLog(classBuilder.valueClass, @"Registering a builder ...");
 
-    ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:classBuilder.valueClass];
+    ALCClassRegistrationMacroProcessor *macroProcessor = [[ALCClassRegistrationMacroProcessor alloc] initWithParentClass:classBuilder.valueClass];
 
-    vaArgs(classBuilder,
-           [macroProcessor addArgument:arg];
-           );
+    loadMacroProcessor(macroProcessor, classBuilder);
 
-    [macroProcessor validate];
     if (macroProcessor.asName != nil) {
         classBuilder.name = macroProcessor.asName;
     }
@@ -144,17 +149,15 @@
 
 }
 
--(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder, ... {
+-(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
 
     STLog(classBuilder.valueClass, @"Registering a builder ...");
 
-    ALCMacroArgumentProcessor *macroProcessor = [[ALCMacroArgumentProcessor alloc] initWithParentClass:classBuilder.valueClass];
+    ALCMethodRegistrationMacroProcessor *macroProcessor = [[ALCMethodRegistrationMacroProcessor alloc] initWithParentClass:classBuilder.valueClass
+                                                                                                                  selector:selector
+                                                                                                                returnType:returnType];
 
-    vaArgs(classBuilder,
-           [macroProcessor addArgument:arg];
-           );
-
-    [macroProcessor validate];
+    loadMacroProcessor(macroProcessor, returnType);
 
     // Add the registration.
     // Dealing with a factory method registration so create a new entry in the model for the method.

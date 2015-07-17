@@ -81,13 +81,6 @@
  */
 #define ACSelector(_methodSelector) [ALCMethodSelector methodSelector:@selector(_methodSelector)]
 
-/**
- When declaring a dependency in a class, this defines the name of the variable that the value will be injected into.
- 
- @param _variableName the name of the variable. If a property is the target, this can either be the name of the property or the variable behind the property.
- */
-#define ACIntoVariable(_variableName) [ALCIntoVariable intoVariableWithName:_alchemic_toNSString(_variableName)]
-
 #pragma mark - Injection
 
 /**
@@ -109,13 +102,13 @@
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
-#define ACMethod(returnType, selector, ...) \
+#define ACMethod(returnTypeClass, selectorSig, ...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerMethodBuilder:classBuilder, ACReturnType(returnType), ACSelector(selector), ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerMethodBuilder:classBuilder selector:@selector(selectorSig) returnType:[returnTypeClass class], ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
 #define ACInject(variableName, ...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerDependencyInClassBuilder:classBuilder, ACIntoVariable(variableName), ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerDependencyInClassBuilder:classBuilder variable:_alchemic_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }

@@ -5,9 +5,8 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCMacroArgument.h>
 
-@interface ALCMethodSelector : NSObject<ALCMacroArgument>
+@interface ALCMethodSelector : NSObject
 
 @property(nonatomic, assign, readonly) SEL methodSelector;
 

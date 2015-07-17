@@ -7,14 +7,14 @@
 #import "ALCAbstractBuilder.h"
 
 @class ALCClassBuilder;
-@class ALCMacroArgumentProcessor;
+@class ALCMethodRegistrationMacroProcessor;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCMethodBuilder : ALCAbstractBuilder
 
 -(nonnull instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
-                               arguments:(ALCMacroArgumentProcessor *) arguments NS_DESIGNATED_INITIALIZER;
+                               arguments:(ALCMethodRegistrationMacroProcessor *) arguments NS_DESIGNATED_INITIALIZER;
 
 @end
 

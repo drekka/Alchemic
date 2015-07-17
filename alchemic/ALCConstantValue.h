@@ -7,11 +7,10 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCMacroArgument.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCConstantValue : NSObject<ALCMacroArgument>
+@interface ALCConstantValue : NSObject
 
 @property(nonatomic, strong, readonly) id value;
 

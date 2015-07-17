@@ -16,7 +16,7 @@
 #import "ALCVariableDependency.h"
 #import "ALCClassBuilder.h"
 #import "ALCContext+Internal.h"
-#import "ALCMacroArgumentProcessor.h"
+#import "ALCVariableDependencyMacroProcessor.h"
 #import "ALCModelValueSource.h"
 
 @implementation ALCClassBuilder {
@@ -36,9 +36,9 @@
 
 #pragma mark - Adding dependencies
 
--(void) addInjectionPointForArguments:(ALCMacroArgumentProcessor *) arguments {
+-(void) addInjectionPointForArguments:(ALCVariableDependencyMacroProcessor *) arguments {
     [_dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:arguments.variable
-                                                                 valueSource:[arguments dependencyValueSource]]];
+                                                                 valueSource:[arguments valueSource]]];
 }
 
 #pragma mark - Instantiating

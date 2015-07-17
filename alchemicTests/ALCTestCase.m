@@ -12,6 +12,9 @@
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
 #import "ALCRuntime.h"
 #import "ALCRuntimeScanner.h"
+#import "ALCMacroProcessor.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCTestCase {
     id _mockAlchemic;
@@ -30,7 +33,7 @@
     OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
 }
 
--(void) setUpALCContextWithClasses:(NSArray<Class> __nonnull *) classes {
+-(void) setUpALCContextWithClasses:(NSArray<Class> *) classes {
     NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
                                                                  //[ALCRuntimeScanner modelScanner],
                                                                  [ALCRuntimeScanner dependencyPostProcessorScanner],
@@ -49,4 +52,16 @@
 
 }
 
+-(void) loadMacroProcessor:(id<ALCMacroProcessor>) macroProcessor withArguments:(id __nullable) firstArgument, ... {
+    va_list args;
+    va_start(args, firstArgument);
+    for (id arg = firstArgument; arg != nil; arg = va_arg(args, id)) {
+        [macroProcessor addArgument:arg];
+    }
+    va_end(args);
+    [macroProcessor validate];
+}
+
 @end
+
+NS_ASSUME_NONNULL_END

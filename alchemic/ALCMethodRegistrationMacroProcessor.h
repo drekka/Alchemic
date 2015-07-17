@@ -10,35 +10,22 @@
 @import ObjectiveC;
 @protocol ALCValueSource;
 
+#import "ALCAbstractMacroProcessor.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCMacroArgumentProcessor : NSObject
-
-@property (nonatomic, assign) Class parentClass;
+@interface ALCMethodRegistrationMacroProcessor : ALCAbstractMacroProcessor
 
 @property (nonatomic, assign, readonly) Class returnType;
 @property (nonatomic, assign, readonly) BOOL isClassSelector;
 @property (nonatomic, assign, readonly) SEL selector;
-@property (nonatomic, strong, readonly) NSString *variableName;
-@property (nonatomic, assign, readonly) Ivar variable;
 @property (nonatomic, strong, readonly) NSString *asName;
 @property (nonatomic, assign, readonly) BOOL isFactory;
 @property (nonatomic, assign, readonly) BOOL isPrimary;
 
--(instancetype) initWithParentClass:(Class) parentClass;
-
--(void) addArgument:(id) argument;
-
--(id<ALCValueSource>) dependencyValueSource;
+-(instancetype) initWithParentClass:(Class) parentClass selector:(SEL) selector returnType:(Class) returnType NS_DESIGNATED_INITIALIZER;
 
 -(NSArray<id<ALCValueSource>> *) methodValueSources;
-
-/**
- Call after sending all arguments to validate the content sent.
- 
- @param parentClass the class that the data is about.
- */
--(void) validate;
 
 @end
 
