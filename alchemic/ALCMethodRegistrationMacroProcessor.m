@@ -14,7 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodRegistrationMacroProcessor {
-    NSMutableArray *_valueSourceMacros;
+    NSMutableArray<ALCArg *> *_args;
 }
 
 -(instancetype) initWithParentClass:(Class) parentClass selector:(SEL) selector returnType:(Class) returnType {
@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (self) {
         _selector = selector;
         _returnType = returnType;
-        _valueSourceMacros = [[NSMutableArray alloc] init];
+        _args = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -35,21 +35,15 @@ NS_ASSUME_NONNULL_BEGIN
         _asName = ((ALCWithName *)argument).asName;
     } else if ([argument isKindOfClass:[ALCIsPrimary class]]) {
         _isPrimary = YES;
-    } else if ([argument conformsToProtocol:@protocol(ALCModelSearchExpression)]
-               || [argument isKindOfClass:[NSArray class]]
-               || [argument isKindOfClass:[ALCConstantValue class]]) {
-        [_valueSourceMacros addObject:(id<ALCModelSearchExpression>)argument];
+    } else if ([argument isKindOfClass:[ALCArg class]]) {
+        [_args addObject:argument];
     } else {
-        [super addArgument:argument];
+        [super addArgument:nil];
     }
 }
 
--(NSArray<id<ALCValueSource>> *) methodValueSources {
-    NSMutableArray *valueSources = [[NSMutableArray alloc] initWithCapacity:[_valueSourceMacros count]];
-    [_valueSourceMacros enumerateObjectsUsingBlock:^(id  __nonnull macros, NSUInteger idx, BOOL * __nonnull stop) {
-        [valueSources addObject:[self valueSourceForMacros:[macros isKindOfClass:[NSArray class]] ? macros : @[macros]]];
-    }];
-    return valueSources;
+-(NSArray<ALCArg *> *) methodValueSources {
+    return _args;
 }
 
 -(void) validate {
@@ -75,15 +69,17 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Validate the number of arguments.
     unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
-    if (nbrArgs != [_valueSourceMacros count]) {
+    if (nbrArgs != [_args count]) {
         @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
                                        reason:[NSString stringWithFormat:@"-[%s %s] - Expecting %lu argument matchers, got %lu",
                                                class_getName(self.parentClass),
                                                sel_getName(_selector),
                                                nbrArgs,
-                                               (unsigned long)[_valueSourceMacros count]]
+                                               (unsigned long)[_args count]]
                                      userInfo:nil];
     }
+
+    [super validate];
 }
 
 @end

@@ -33,10 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
         _invArgumentDependencies = [[NSMutableArray alloc] init];
 
         // Setup the dependencies for each argument.
-        [arguments.methodValueSources enumerateObjectsUsingBlock:^(id<ALCValueSource> valueSource, NSUInteger idx, BOOL * stop) {
-            [self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:[NSObject class]
-                                                                                    valueSource:valueSource]];
-        }];
+        for (ALCArg *arg in arguments.methodValueSources) {
+            [self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType valueSource:arg.valueSource]];
+        };
     }
     return self;
 }
@@ -49,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Get an invocation ready.
     if (_inv == nil) {
+        STLog(self.valueClass, @"Creating an invocation for %@", NSStringFromSelector(_selector));
         NSMethodSignature *sig = [factoryObject methodSignatureForSelector:_selector];
         _inv = [NSInvocation invocationWithMethodSignature:sig];
         _inv.selector = _selector;
@@ -66,14 +66,14 @@ NS_ASSUME_NONNULL_BEGIN
 
     id returnObj;
     [_inv getReturnValue:&returnObj];
-    STLog([self description], @"Created a %s", class_getName([returnObj class]));
+    STLog(self.valueClass, @"Created a %s", class_getName([returnObj class]));
     return returnObj;
 }
 
 -(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
-    [_invArgumentDependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
+    for(ALCDependency *dependency in _invArgumentDependencies) {
         [dependency resolveWithPostProcessors:postProcessors];
-    }];
+    };
 }
 
 -(void) injectObjectDependencies:(id __nonnull) object {

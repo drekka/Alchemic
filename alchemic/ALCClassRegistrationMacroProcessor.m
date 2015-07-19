@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
     } else if ([argument isKindOfClass:[ALCIsPrimary class]]) {
         _isPrimary = YES;
     } else {
-        [super addArgument:argument];
+        [super addArgument:nil];
     }
 }
 
@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (_asName == nil) {
         _asName = NSStringFromClass(self.parentClass);
     }
+    [super validate];
 }
 
 @end

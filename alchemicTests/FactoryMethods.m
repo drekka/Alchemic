@@ -20,7 +20,7 @@ ACMethod(NSString, makeAString, ACIsFactory, ACWithName(@"buildAString"));
     return [NSString stringWithFormat:@"Factory string %i", x];
 }
 
-ACMethod(NSString, makeAStringWithComponent:, ACIsFactory, ACWithName(@"buildAComponentString"), ACClass(Component))
+ACMethod(NSString, makeAStringWithComponent:, ACIsFactory, ACWithName(@"buildAComponentString"), ACArg(NSString, ACClass(Component)))
 -(NSString *) makeAStringWithComponent:(Component *) component {
     x++;
     return [NSString stringWithFormat:@"Component Factory string %i", x];

@@ -14,24 +14,20 @@
 #import "Component.h"
 #import <StoryTeller/StoryTeller.h>
 
-@interface FactoryMethodsTests : ALCTestCase
+@interface FactoryMethodTests : ALCTestCase
 @end
 
-@implementation FactoryMethodsTests {
+@implementation FactoryMethodTests {
     NSString *string1;
     NSString *string2;
-    NSString *string3;
-    NSString *string4;
 }
 
 ACInject(string1, ACName(@"buildAString"))
 ACInject(string2, ACName(@"buildAString"))
-ACInject(string3, ACName(@"buildAComponentString"))
-ACInject(string4, ACName(@"buildAComponentString"))
 
 -(void) setUp {
     [super setUp];
-    STStartLogging(@"is [FactoryMethodsTests]");
+    STStartLogging(@"is [FactoryMethods]");
     [self mockAlchemicContext];
     [self setUpALCContextWithClasses:@[[self class], [FactoryMethods class], [Component class]]];
     ACInjectDependencies(self);
@@ -41,12 +37,6 @@ ACInject(string4, ACName(@"buildAComponentString"))
     XCTAssertTrue([string1 hasPrefix:@"Factory string"]);
     XCTAssertTrue([string2 hasPrefix:@"Factory string"]);
     XCTAssertNotEqualObjects(string1, string2);
-}
-
--(void) testFactoryMethodWithComponentArgument {
-    XCTAssertTrue([string3 hasPrefix:@"Component Factory string"]);
-    XCTAssertTrue([string4 hasPrefix:@"Component Factory string"]);
-    XCTAssertNotEqualObjects(string3, string4);
 }
 
 @end

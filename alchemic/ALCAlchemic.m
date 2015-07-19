@@ -20,7 +20,12 @@
 static __strong ALCContext *__mainContext;
 
 +(ALCContext *) mainContext {
+    STLog(ALCHEMIC_LOG, @"Unloading Alchemic");
     return __mainContext;
+}
+
++(void) unload {
+    __mainContext = nil;
 }
 
 +(void) load {

@@ -1,22 +1,26 @@
 //
-//  ALCMacroProcessor.h
+//  ALCMethodArgMacroProcessor.h
 //  Alchemic
 //
-//  Created by Derek Clarkson on 17/07/2015.
+//  Created by Derek Clarkson on 18/07/2015.
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
 @import Foundation;
+@protocol ALCValueSource;
 
-@protocol ALCMacroProcessor <NSObject>
+@interface ALCMacroProcessor : NSObject
+
+@property (nonatomic, strong, readonly) NSMutableArray *valueSourceMacros;
+
+@property (nonatomic, assign, readonly) Class parentClass;
+
+-(instancetype) initWithParentClass:(Class) parentClass;
 
 -(void) addArgument:(id) argument;
 
-/**
- Call after sending all arguments to validate the content sent.
+-(id<ALCValueSource>) valueSource;
 
- @param parentClass the class that the data is about.
- */
 -(void) validate;
 
 @end

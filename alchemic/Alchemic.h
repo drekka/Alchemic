@@ -14,6 +14,7 @@ FOUNDATION_EXPORT double alchemicVersionNumber;
 //! Project version string for alchemic.
 FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 
+#import <Alchemic/ALCArg.h>
 #import <Alchemic/ALCAlchemic.h>
 #import <Alchemic/ALCWithName.h>
 #import <Alchemic/ALCBuilder.h>

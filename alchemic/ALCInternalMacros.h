@@ -25,5 +25,16 @@
 #define _alchemic_toNSString(chars) __alchemic_toNSString(chars)
 #define __alchemic_toNSString(chars) @#chars
 
+#define loadMacroProcessor(processorVar, afterArg) \
+{ \
+va_list args; \
+va_start(args, afterArg); \
+id arg; \
+while ((arg = va_arg(args, id)) != nil) { \
+[processorVar addArgument:arg]; \
+} \
+va_end(args); \
+[processorVar validate]; \
+}
 
 

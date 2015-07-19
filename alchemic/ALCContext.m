@@ -21,16 +21,6 @@
 #import "ALCMethodRegistrationMacroProcessor.h"
 #import "ALCVariableDependencyMacroProcessor.h"
 
-#define loadMacroProcessor(processorVar, lastArg) \
-va_list args; \
-va_start(args, lastArg); \
-id arg; \
-while ((arg = va_arg(args, id)) != nil) { \
-[processorVar addArgument:arg]; \
-} \
-va_end(args); \
-[processorVar validate]
-
 @interface ALCContext ()
 @property (nonatomic, strong) id<ALCValueResolver> valueResolver;
 @end
@@ -80,20 +70,19 @@ va_end(args); \
 
 -(void) injectDependencies:(id) object {
     STStartScope([object class]);
-    STLog([object class], @"Injecting dependencies into a %@", NSStringFromClass([object class]));
-    NSSet<id<ALCModelSearchExpression>> *qualifiers = [ALCRuntime searchExpressionsForClass:[object class]];
-    NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:qualifiers]];
-    ALCClassBuilder *classBuilder = [builders anyObject];
-    [classBuilder injectObjectDependencies:object];
+    STLog([object class], @">>> Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
+    NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForClass:[object class]];
+    NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:expressions]];
+    [[builders anyObject] injectObjectDependencies:object];
 }
 
 -(void) resolveBuilderDependencies {
     STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
-    [[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop){
-        STLog(builder.valueClass, @"Resolving dependencies for builder %1$@", builder.name);
+    for (id<ALCBuilder> builder in [_model allBuilders]) {
+        STLog(builder.valueClass, @"Resolving dependencies for builder %@", builder.name);
         STStartScope(builder.valueClass);
         [builder resolveDependenciesWithPostProcessors:self->_dependencyPostProcessors];
-    }];
+    }
 }
 
 #pragma mark - Configuration
@@ -116,13 +105,9 @@ va_end(args); \
 #pragma mark - Registration call backs
 
 -(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder variable:(NSString *) variable, ... {
-
     STLog(classBuilder.valueClass, @"Registering a dependency ...");
     ALCVariableDependencyMacroProcessor *macroProcessor = [[ALCVariableDependencyMacroProcessor alloc] initWithParentClass:classBuilder.valueClass variable:variable];
-
     loadMacroProcessor(macroProcessor, variable);
-
-    // Add the registration.
     [classBuilder addInjectionPointForArguments:macroProcessor];
 }
 

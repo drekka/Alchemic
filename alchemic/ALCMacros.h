@@ -33,35 +33,17 @@
  */
 #define ACIsPrimary [[ALCIsPrimary alloc] init]
 
-#pragma mark - Dependencies
+#pragma mark - Dependency expressions
 
-/**
- Used when we want to locate dependencies based on a class.
- 
- @param _className the name of the class to search for.
- */
-#define ACClass(_className) [ALCClass withClass:[_className class]]
+#define ACClass(className) [ALCClass withClass:[className class]]
 
-/**
- Used to search for dependencies based on a protocol that a class implements.
- 
- @param _ProtocolName the name of the protocol.
- */
-#define ACProtocol(_protocolName) [ALCProtocol withProtocol:@protocol(_protocolName)]
+#define ACProtocol(protocolName) [ALCProtocol withProtocol:@protocol(protocolName)]
 
-/**
- Used to search for builders based on the names given to them.
- 
- @param _objectName The name to search on.
- */
-#define ACName(_objectName) [ALCName withName:_objectName]
+#define ACName(objectName) [ALCName withName:objectName]
 
-/**
- Used to search for builders based on the names given to them.
-
- @param _objectName The name to search on.
- */
 #define ACValue(_value) [ALCConstantValue constantValueWithValue:_value]
+
+#define ACArg(argType, expression, ...) [ALCArg argWithType:[argType class], ## __VA_ARGS__, nil]
 
 #pragma mark - Injection
 
@@ -84,9 +66,9 @@
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
-#define ACMethod(returnTypeClass, selectorSig, ...) \
+#define ACMethod(methodType, sel, ...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerMethodBuilder:classBuilder selector:@selector(selectorSig) returnType:[returnTypeClass class], ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerMethodBuilder:classBuilder selector:@selector(sel) returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.

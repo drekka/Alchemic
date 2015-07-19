@@ -8,6 +8,8 @@
 
 #import <OCMock/OCMock.h>
 #import <StoryTeller/StoryTeller.h>
+@import ObjectiveC;
+
 #import "ALCTestCase.h"
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
 #import "ALCRuntime.h"
@@ -16,6 +18,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface ALCAlchemic (hack)
++(void) unload;
+@end
+
 @implementation ALCTestCase {
     id _mockAlchemic;
 }
@@ -23,6 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) tearDown {
     // Stop the mocking.
     _mockAlchemic = nil;
+
+    // Clear Alchemic.
+    [ALCAlchemic unload];
+
     // Reset logging.
     [[STStoryTeller storyTeller] reset];
 }
@@ -52,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 }
 
--(void) loadMacroProcessor:(id<ALCMacroProcessor>) macroProcessor withArguments:(id __nullable) firstArgument, ... {
+-(void) loadMacroProcessor:(ALCMacroProcessor *) macroProcessor withArguments:(id __nullable) firstArgument, ... {
     va_list args;
     va_start(args, firstArgument);
     for (id arg = firstArgument; arg != nil; arg = va_arg(args, id)) {

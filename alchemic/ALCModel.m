@@ -121,6 +121,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders {
+
+    if ([builders count] == 0) {
+        return builders;
+    }
+
     STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
     NSSet<ALCClassBuilder *> *newBuilders = (NSSet<ALCClassBuilder *> *)[builders objectsPassingTest:^BOOL(id<ALCBuilder>  builder, BOOL * stop) {
         return [builder isKindOfClass:[ALCClassBuilder class]];
@@ -133,17 +138,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSSet<id<ALCBuilder>> *) buildersForSearchExpression:(id<ALCModelSearchExpression>) searchExpression {
 
-    STLog(ALCHEMIC_LOG, @"Searching for builders with: %@", searchExpression);
-
     // Check the cache
     NSSet<id<ALCBuilder>> *cachedBuilders = [_queryCache objectForKey:searchExpression.cacheId];
     if (cachedBuilders) {
-        STLog(ALCHEMIC_LOG, @"Returning cached list of %lu builders", [cachedBuilders count]);
+        STLog(ALCHEMIC_LOG, @"Returning cached list of %lu builders for expressions %@", [cachedBuilders count], searchExpression);
         return cachedBuilders;
     }
 
     // Find the builders that match the expression.
-    STLog(ALCHEMIC_LOG, @"Searching for builders for %@", searchExpression);
+    STLog(ALCHEMIC_LOG, @"Searching for builders based on expressions %@", searchExpression);
     NSSet<id<ALCBuilder>> *builders = [_model objectsPassingTest:^BOOL(id<ALCBuilder>  builder, BOOL * stop) {
         if ([searchExpression matches:builder]) {
             STLog(ALCHEMIC_LOG, @"Adding builder '%@' '%@", builder.name, NSStringFromClass(builder.valueClass));

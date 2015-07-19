@@ -8,19 +8,16 @@
 
 @import Foundation;
 @import ObjectiveC;
-@protocol ALCValueSource;
 
-#import "ALCAbstractMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCVariableDependencyMacroProcessor : ALCAbstractMacroProcessor
+@interface ALCVariableDependencyMacroProcessor : ALCMacroProcessor
 
 @property (nonatomic, assign, readonly) Ivar variable;
 
 -(instancetype) initWithParentClass:(Class) parentClass variable:(NSString *) variable NS_DESIGNATED_INITIALIZER;
-
--(id<ALCValueSource>) valueSource;
 
 @end
 

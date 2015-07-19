@@ -9,12 +9,12 @@
 @import Foundation;
 @import ObjectiveC;
 @protocol ALCValueSource;
-
-#import "ALCAbstractMacroProcessor.h"
+@class ALCArg;
+#import "ALCMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCMethodRegistrationMacroProcessor : ALCAbstractMacroProcessor
+@interface ALCMethodRegistrationMacroProcessor : ALCMacroProcessor
 
 @property (nonatomic, assign, readonly) Class returnType;
 @property (nonatomic, assign, readonly) BOOL isClassSelector;
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(instancetype) initWithParentClass:(Class) parentClass selector:(SEL) selector returnType:(Class) returnType NS_DESIGNATED_INITIALIZER;
 
--(NSArray<id<ALCValueSource>> *) methodValueSources;
+-(NSArray<ALCArg *> *) methodValueSources;
 
 @end
 
