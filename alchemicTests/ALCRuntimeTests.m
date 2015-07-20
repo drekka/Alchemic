@@ -25,8 +25,17 @@
 
 @implementation ALCRuntimeTests {
     NSString *_aStringVariable;
+    int _primitiveInt;
 }
 @synthesize aFunnyStringProperty = __myFunnyImplVariableName;
+
+#pragma mark - Primitives
+
+-(void) testPrimitiveIntType {
+    Ivar intVar = class_getInstanceVariable([self class], "_primitiveInt");
+    const char *encoding = ivar_getTypeEncoding(intVar);
+    NSLog(@"Encoding: %s", encoding);
+}
 
 #pragma mark - Runtime exploration tests
 

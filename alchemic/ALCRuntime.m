@@ -89,67 +89,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return sel_registerName(newSelectorName);
 }
 
-+(void) scanRuntimeWithContext:(ALCContext *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> *) runtimeScanners {
-
-    // Use the app bundles and Alchemic framework for searching for runtime components.
-    NSArray<NSBundle *> *appBundles = [NSBundle allBundles];
-    appBundles = [appBundles arrayByAddingObject:[NSBundle bundleForClass:[ALCContext class]]];
-
-    // Now do a secondary scan of the bundles included any additional bundles with configs.
-    NSMutableSet<NSBundle *> *scannedBundles = [NSMutableSet setWithArray:appBundles];
-    Protocol *configProtocol = @protocol(ALCConfig);
-
-    // Define a block for processing a class.
-    void (^classScanners)(ALCContext *, Class) = ^(ALCContext *scanContext, Class scanClass) {
-        for (ALCRuntimeScanner *scanner in runtimeScanners) {
-            if (scanner.selector(scanClass)) {
-                scanner.processor(scanContext, scanClass);
-            }
-        }
-    };
-
-    [self scanBundles:appBundles withClassBlock:^(Class  __unsafe_unretained aClass) {
-
-        // Process each class.
-        classScanners(context, aClass);
-
-        // Now check for config classes which define additional bundles.
-        if ([aClass conformsToProtocol:configProtocol]) {
-
-            // Found a config so get the classes that define additional bundles and load them up.
-            NSArray<Class> *configClasses = [((id<ALCConfig>)aClass) scanBundlesWithClasses];
-
-            [configClasses enumerateObjectsUsingBlock:^(Class  configClass, NSUInteger idx, BOOL * stop) {
-
-                // If the config bundle is not already scanned then do so.
-                NSBundle *additionalBundle = [NSBundle bundleForClass:configClass];
-                if (![scannedBundles containsObject:additionalBundle]) {
-
-                    [scannedBundles addObject:additionalBundle];
-
-                    [self scanBundles:@[additionalBundle]
-                       withClassBlock:^(Class  __unsafe_unretained additionalClass) {
-                           classScanners(context, additionalClass);
-                       }];
-                }
-            }];
-        }
-
-    }];
-
-}
-
-+(void) scanBundles:(NSArray<NSBundle *> *) bundles withClassBlock:(void(^)(Class aClass)) classBlock {
-    for (NSBundle *bundle in bundles) {
-        STLog(ALCHEMIC_LOG, @"Scanning bundle %@", bundle.bundlePath.lastPathComponent);
-        unsigned int count = 0;
-        const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
-        for(unsigned int i = 0;i < count;i++){
-            classBlock(objc_getClass(classes[i]));
-        }
-    }
-}
-
 +(nullable Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
 
     const char * charName = [inj UTF8String];
@@ -182,6 +121,101 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
     STLog(aClass, @"Mapping name %@ -> variable: %s", inj, ivar_getName(var));
     return var;
+}
+
+#pragma mark - Scanning
+
++(void) scanRuntimeWithContext:(ALCContext *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> *) runtimeScanners {
+
+    // Define a block for processing a class.
+    void (^classScanners)(ALCContext *, Class) = ^(ALCContext *scanContext, Class scanClass) {
+        for (ALCRuntimeScanner *scanner in runtimeScanners) {
+            if (scanner.selector(scanClass)) {
+                scanner.processor(scanContext, scanClass);
+            }
+        }
+    };
+
+    // Use the app bundles and Alchemic framework as the base bundles to search configs classes.
+    NSArray<NSBundle *> *appBundles = [NSBundle allBundles];
+    appBundles = [appBundles arrayByAddingObject:[NSBundle bundleForClass:[ALCContext class]]];
+
+    // Scan each bundle, checking each class in the bundle.
+    NSMutableSet<NSBundle *> *scannedBundles = [NSMutableSet setWithArray:appBundles];
+    Protocol *configProtocol = @protocol(ALCConfig);
+    [self scanBundles:appBundles withClassBlock:^(Class  __unsafe_unretained aClass) {
+
+        // Check the class for Alchemic methods.
+        classScanners(context, aClass);
+
+        // Now check to see if it's an Alchemic config class.
+        if ([aClass conformsToProtocol:configProtocol]) {
+
+            // Found a config, get a list of classes from the config that define additional bundles to scan.
+            NSArray<Class> *configClasses = [((id<ALCConfig>)aClass) scanBundlesWithClasses];
+            [configClasses enumerateObjectsUsingBlock:^(Class  configClass, NSUInteger idx, BOOL * stop) {
+
+                // If the config bundle is not already scanned then scan it.
+                NSBundle *additionalBundle = [NSBundle bundleForClass:configClass];
+                if (![scannedBundles containsObject:additionalBundle]) {
+                    [scannedBundles addObject:additionalBundle];
+                    [self scanBundles:@[additionalBundle] withClassBlock:^(Class  __unsafe_unretained additionalClass) {
+                        classScanners(context, additionalClass);
+                    }];
+                }
+            }];
+        }
+    }];
+
+}
+
++(void) scanBundles:(NSArray<NSBundle *> *) bundles withClassBlock:(void(^)(Class aClass)) classBlock {
+    for (NSBundle *bundle in bundles) {
+        STLog(ALCHEMIC_LOG, @"Scanning bundle %@", bundle.bundlePath.lastPathComponent);
+        unsigned int count = 0;
+        const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
+        for(unsigned int i = 0;i < count;i++){
+            classBlock(objc_getClass(classes[i]));
+        }
+    }
+}
+
+-(void) wrapUnManagedClass:(Class) aClass initializer:(SEL) initializer {
+
+    // Check to see if the class has already been modified for this init.
+    const char *initPropertyName = [NSString stringWithFormat:@"%s%s", _alchemic_toCharPointer(ALCHEMIC_PREFIX), sel_getName(initializer)].UTF8String;
+
+    STLog(aClass, @"Replacing -[%s %s] with wrapper %2$s", class_getName(aClass), sel_getName(initializer));
+    NSNumber *initAdded = objc_getAssociatedObject(aClass, initPropertyName);
+    if ([initAdded boolValue]) {
+        STLog(aClass, @"Init method already replaced.");
+        return;
+    }
+
+    // Get original method details
+    Method init = class_getInstanceMethod(aClass, initializer);
+    IMP initIMP = method_getImplementation(init);
+    objc_msgSend()
+    Class selfClass = [self class];
+    SEL replacementInitSel = self.replacementInitSelector;
+
+    // Get the new methods details.
+    Method replacementMethod = class_getInstanceMethod(selfClass, replacementInitSel);
+    const char * initTypeEncoding = method_getTypeEncoding(replacementMethod);
+    IMP wrapperIMP = class_getMethodImplementation(selfClass, replacementInitSel);
+
+    // Add or replace any existing IMP with a wrapper IMP.
+    IMP originalInitIMP = class_replaceMethod(_forClass, initSel, wrapperIMP, initTypeEncoding);
+    if (originalInitIMP != NULL) {
+        // There was an original init method so save it so it can be found.
+        SEL alchemicInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
+        STLog(_forClass, @"Storing original init as -[%s %s]", class_getName(selfClass), sel_getName(alchemicInitSel));
+        class_addMethod(_forClass, alchemicInitSel, originalInitIMP, initTypeEncoding);
+    }
+
+    // Tag the class so we know it's been modified.
+    objc_setAssociatedObject(aClass, initPropertyName, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
 }
 
 #pragma mark - Qualifiers

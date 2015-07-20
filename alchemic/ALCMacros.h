@@ -57,6 +57,14 @@
 #pragma mark - Registering
 
 /**
+ Injects code into a class so that it self injects when the class is instantiated by external code. For example, UIViewControllers in story boards.
+ 
+ @discussion Alchemic will wrap the passed initializer selector so that when it is called, Alchemic is called afterwards to trigger any required dependency inejctions. 
+
+ */
+#define ACWrapUnManagedClass(aClass, initSelector) [[ALCAlchemic mainContext] wrapUnManagedClass:aClass initializer:initSelector]
+
+/**
  Register a class as a source of objects.
  
  @discussion This is the main macro for setting up objects within Alchemic. It take a number of other macros as 

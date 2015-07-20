@@ -169,6 +169,10 @@
     }
 }
 
+-(void) wrapUnManagedClass:(Class) aClass initializer:(SEL) initializer {
+    
+}
+
 #pragma mark - Objects
 
 -(nonnull id) instantiateObjectFromBuilder:(id<ALCBuilder> __nonnull) builder {
