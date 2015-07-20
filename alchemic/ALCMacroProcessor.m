@@ -39,8 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
         || [argument isKindOfClass:[ALCConstantValue class]]) {
         [_valueSourceMacros addObject:(id<ALCModelSearchExpression>)argument];
     } else {
+        NSString *source = self.parentClass == nil ? @"": [NSString stringWithFormat:@" %@ class registration", NSStringFromClass(self.parentClass)];
         @throw [NSException exceptionWithName:@"AlchemicUnexpectedMacro"
-                                       reason:[NSString stringWithFormat:@"Unexpected macro %@ for %@ class registration", argument, NSStringFromClass(self.parentClass)]
+                                       reason:[NSString stringWithFormat:@"Unexpected macro %@%@", argument, source]
                                      userInfo:nil];
     }
 }

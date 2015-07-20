@@ -107,7 +107,7 @@
 -(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder variable:(NSString *) variable, ... {
     STLog(classBuilder.valueClass, @"Registering a dependency ...");
     ALCVariableDependencyMacroProcessor *macroProcessor = [[ALCVariableDependencyMacroProcessor alloc] initWithParentClass:classBuilder.valueClass variable:variable];
-    loadMacroProcessor(macroProcessor, variable);
+    loadMacrosAfter(macroProcessor, variable);
     [classBuilder addInjectionPointForArguments:macroProcessor];
 }
 
@@ -117,7 +117,7 @@
 
     ALCClassRegistrationMacroProcessor *macroProcessor = [[ALCClassRegistrationMacroProcessor alloc] initWithParentClass:classBuilder.valueClass];
 
-    loadMacroProcessor(macroProcessor, classBuilder);
+    loadMacrosAfter(macroProcessor, classBuilder);
 
     if (macroProcessor.asName != nil) {
         classBuilder.name = macroProcessor.asName;
@@ -138,7 +138,7 @@
                                                                                                                   selector:selector
                                                                                                                 returnType:returnType];
 
-    loadMacroProcessor(macroProcessor, returnType);
+    loadMacrosAfter(macroProcessor, returnType);
 
     // Add the registration.
     // Dealing with a factory method registration so create a new entry in the model for the method.

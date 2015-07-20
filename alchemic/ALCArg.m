@@ -12,18 +12,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCArg
+@implementation ALCArg {
+    ALCMacroProcessor *_macroProcessor;
+}
 
-+(instancetype) argWithType:(Class) argType, ... {
++(instancetype) argWithType:(Class) argType expressions:(id) firstExpression, ... {
 
     ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
-    loadMacroProcessor(macroProcessor, argType);
+    loadMacrosIncluding(macroProcessor, firstExpression);
 
     ALCArg *arg = [[ALCArg alloc] init];
     arg->_argType = argType;
-    arg->_valueSource = [macroProcessor valueSource];
+    arg->_macroProcessor = macroProcessor;
 
     return arg;
+}
+
+-(nonnull id<ALCValueSource>)valueSource {
+    return [_macroProcessor valueSource];
 }
 
 @end

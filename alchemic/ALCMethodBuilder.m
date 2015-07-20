@@ -34,7 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 
         // Setup the dependencies for each argument.
         for (ALCArg *arg in arguments.methodValueSources) {
-            [self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType valueSource:arg.valueSource]];
+            [self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType
+                                                                                    valueSource:[arg valueSource]]];
         };
     }
     return self;

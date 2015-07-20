@@ -43,7 +43,7 @@
 
 #define ACValue(_value) [ALCConstantValue constantValueWithValue:_value]
 
-#define ACArg(argType, expression, ...) [ALCArg argWithType:[argType class], ## __VA_ARGS__, nil]
+#define ACArg(argType, expression, ...) [ALCArg argWithType:[argType class] expressions:expression, ## __VA_ARGS__, nil]
 
 #pragma mark - Injection
 

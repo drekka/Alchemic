@@ -15,9 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCArg : NSObject
 
 @property (nonatomic, assign, readonly) Class argType;
-@property (nonatomic, strong, readonly) id<ALCValueSource> valueSource;
 
-+(instancetype) argWithType:(Class) argType, ... NS_REQUIRES_NIL_TERMINATION;
++(instancetype) argWithType:(Class) argType expressions:(id) firstExpression, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(id<ALCValueSource>) valueSource;
 
 @end
 

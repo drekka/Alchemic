@@ -62,14 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 }
 
--(void) loadMacroProcessor:(ALCMacroProcessor *) macroProcessor withArguments:(id __nullable) firstArgument, ... {
-    va_list args;
-    va_start(args, firstArgument);
-    for (id arg = firstArgument; arg != nil; arg = va_arg(args, id)) {
-        [macroProcessor addArgument:arg];
-    }
-    va_end(args);
-    [macroProcessor validate];
+-(void) loadMacroProcessor:(ALCMacroProcessor *) macroProcessor withArguments:(id __nullable) firstArgument, ... NS_REQUIRES_NIL_TERMINATION {
+    loadMacrosIncluding(macroProcessor, firstArgument);
 }
 
 @end

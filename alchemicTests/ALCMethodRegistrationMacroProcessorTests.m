@@ -40,9 +40,9 @@ returnType:[NSObject class]]
 -(void) setUp {
     _protocolClass = NSClassFromString(@"Protocol");
     _metaClass = object_getClass([NSString class]);
-    _stringArg = [ALCArg argWithType:[NSString class], [ALCName withName:@"abc"], nil];
-    _classArg = [ALCArg argWithType:_metaClass, [ALCClass withClass:[self class]], nil];
-    _protocolArg = [ALCArg argWithType:_protocolClass, [ALCProtocol withProtocol:@protocol(NSCopying)], nil];
+    _stringArg = [ALCArg argWithType:[NSString class] expressions:[ALCName withName:@"abc"], nil];
+    _classArg = [ALCArg argWithType:_metaClass expressions:[ALCClass withClass:[self class]], nil];
+    _protocolArg = [ALCArg argWithType:_protocolClass expressions:[ALCProtocol withProtocol:@protocol(NSCopying)], nil];
 }
 
 
