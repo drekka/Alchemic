@@ -182,39 +182,60 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 -(void) wrapUnManagedClass:(Class) aClass initializer:(SEL) initializer {
 
-    // Check to see if the class has already been modified for this init.
-    const char *initPropertyName = [NSString stringWithFormat:@"%s%s", _alchemic_toCharPointer(ALCHEMIC_PREFIX), sel_getName(initializer)].UTF8String;
+    // Get an alchmeic prefixed selector for the initializer.
+    SEL alchemicSel = [ALCRuntime alchemicSelectorForSelector:initializer];
 
-    STLog(aClass, @"Replacing -[%s %s] with wrapper %2$s", class_getName(aClass), sel_getName(initializer));
-    NSNumber *initAdded = objc_getAssociatedObject(aClass, initPropertyName);
-    if ([initAdded boolValue]) {
-        STLog(aClass, @"Init method already replaced.");
+    // Test if the class has ready had it replaced.
+    if (objc_getAssociatedObject(aClass, sel_getName(alchemicSel)) != nil) {
         return;
     }
 
-    // Get original method details
-    Method init = class_getInstanceMethod(aClass, initializer);
-    IMP initIMP = method_getImplementation(init);
-    objc_msgSend()
-    Class selfClass = [self class];
-    SEL replacementInitSel = self.replacementInitSelector;
+    // Now get the methods and IMPs we need to do the replacement.
+    Method originalMethod = class_getInstanceMethod(aClass, initializer);
+    Method wrapperMethod = class_getInstanceMethod([self class], @selector(initializerWrapper:));
+    IMP wrapperImp = method_getImplementation(wrapperMethod);
 
-    // Get the new methods details.
-    Method replacementMethod = class_getInstanceMethod(selfClass, replacementInitSel);
-    const char * initTypeEncoding = method_getTypeEncoding(replacementMethod);
-    IMP wrapperIMP = class_getMethodImplementation(selfClass, replacementInitSel);
+    // Perform the replacement.
+    IMP originalIMP = method_setImplementation(originalMethod, wrapperImp);
+    if (originalIMP != NULL) {
+        // Add the original method to the class under a name we can find so we can call it from the wrapper.
+        class_addMethod([self class], alchemicSel, originalIMP, method_getTypeEncoding(originalMethod));
+    }
+}
 
-    // Add or replace any existing IMP with a wrapper IMP.
-    IMP originalInitIMP = class_replaceMethod(_forClass, initSel, wrapperIMP, initTypeEncoding);
-    if (originalInitIMP != NULL) {
-        // There was an original init method so save it so it can be found.
-        SEL alchemicInitSel = [ALCRuntime alchemicSelectorForSelector:initSel];
-        STLog(_forClass, @"Storing original init as -[%s %s]", class_getName(selfClass), sel_getName(alchemicInitSel));
-        class_addMethod(_forClass, alchemicInitSel, originalInitIMP, initTypeEncoding);
+-(id) initializerWrapper:(void *) firstArg, ... {
+
+    // Locate the orginal initializer we have stored and setup a NSInvocation to call it.
+    SEL alchemicSel = [ALCRuntime alchemicSelectorForSelector:_cmd];
+    if ([self respondsToSelector:alchemicSel]) {
+        // We have a stored initializer.
+    } else {
+        // No stored initializer so we have to call a super implementation of the current selector.
     }
 
-    // Tag the class so we know it's been modified.
-    objc_setAssociatedObject(aClass, initPropertyName, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    NSMethodSignature *sig = [self methodSignatureForSelector:alchemicSel];
+    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+    inv.selector = alchemicSel;
+
+    // Loop through the arguments for the original initializer which will come in via the passed va_list.
+    va_list args;
+    va_start(args, firstArg);
+    for(long i = 2; i < (long)[sig numberOfArguments]; i++) {
+        if (i == 2) {
+            [inv setArgument:&firstArg atIndex:2];
+        } else {
+            void *arg = va_arg(args, void *);
+            [inv setArgument:&arg atIndex:i];
+        }
+    }
+    va_end(args);
+    [inv invokeWithTarget:self];
+    NSLog(@"Target invoked");
+
+    // Initializers always return the instance.
+    id returnValue;
+    [inv getReturnValue:&returnValue];
+    return returnValue;
 
 }
 

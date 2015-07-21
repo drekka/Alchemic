@@ -37,6 +37,89 @@
     NSLog(@"Encoding: %s", encoding);
 }
 
+#pragma mark - Runtime
+
+-(void) testRuntimeInitSwizzling {
+    [self patch:@selector(originalMethod)];
+    [self originalMethod];
+}
+
+-(void) testRuntimeInitSwizzlingWithArgs {
+    [self patch:@selector(originalMethodWithString:andInt:)];
+    [self originalMethodWithString:@"abc" andInt:5];
+}
+
+-(void) patch:(SEL) selector {
+
+    SEL alchemicSel = [ALCRuntime alchemicSelectorForSelector:selector];
+    NSString *currentAlchemicSelector = objc_getAssociatedObject([self class], sel_getName(alchemicSel));
+    if (currentAlchemicSelector != nil) {
+        // Already replaced.
+        return;
+    }
+
+    //
+    Method originalMethod = class_getInstanceMethod([self class], selector);
+    Method hackMethod = class_getInstanceMethod([self class], @selector(injectedMethod:));
+    IMP hackImp = method_getImplementation(hackMethod);
+    IMP originalIMP = method_setImplementation(originalMethod, hackImp);
+    class_addMethod([self class], alchemicSel, originalIMP, method_getTypeEncoding(originalMethod));
+}
+
+-(void) originalMethod {
+    NSLog(@"Hello from original method");
+}
+
+-(void) originalMethodWithString:(NSString *) string andInt:(int) anInt {
+    NSLog(@"Hello from original method %@, %i", string, anInt);
+}
+
+-(instancetype) fakeInit:(void *) firstArg, ... {
+    return nil;
+}
+
+-(void) injectedMethod:(void *) firstArg, ... {
+
+    NSLog(@"Current selector: %@", NSStringFromSelector(_cmd));
+    SEL alchemicSel = [ALCRuntime alchemicSelectorForSelector:_cmd];
+
+    va_list args;
+    va_start(args, firstArg);
+
+    NSMethodSignature *sig = [self methodSignatureForSelector:alchemicSel];
+    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+    inv.selector = alchemicSel;
+
+    for(long i = 2; i < (long)[sig numberOfArguments]; i++) {
+        if (i == 2) {
+            [inv setArgument:&firstArg atIndex:2];
+        } else {
+            void *arg = va_arg(args, void *);
+            [inv setArgument:&arg atIndex:i];
+        }
+    }
+    va_end(args);
+    [inv invokeWithTarget:self];
+    NSLog(@"Target invoked");
+ }
+
+-(void) testVaArgInt {
+    ((void (*)(id, SEL, NSString *, int, NSString *))objc_msgSend)(self, @selector(withString:int:anotherString:), @"abc", 5, @"def");
+    [self withArgs:@"abc", 5, @"def"];
+}
+
+-(void) withArgs:(void *) firstArg, ... {
+    va_list args;
+    va_start(args, firstArg);
+    // This actually doesn't work !!!! It'll pass the memory address of the va_list to the int arg.
+    ((void (*)(id, SEL, void *, ...))objc_msgSend)(self, @selector(withString:int:anotherString:), firstArg, args);
+    va_end(args);
+}
+
+-(void) withString:(NSString *) aString int:(int) aInt anotherString:(NSString *) string2 {
+    NSLog(@"A string: %@, an int: %i, string 2: %@", aString, aInt, string2);
+}
+
 #pragma mark - Runtime exploration tests
 
 -(void) testNSObjectProtocolImplements {
