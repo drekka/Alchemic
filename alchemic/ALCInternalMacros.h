@@ -65,7 +65,7 @@ initWrapper(initSig, wrapperArgTypes(initArgTypes), (initArgNames)) \
       self = ((id (*)(id, SEL initArgTypes)) objc_msgSend)(self, relocatedInitSel initArgNames); \
 	} else { \
       struct objc_super superData = {self, class_getSuperclass([self class])}; \
-      self = ((id (*)(struct objc_super *, SEL initArgTypes))objc_msgSendSuper)(&superData, initSel initArgNames); \
+      self = ((id (*)(struct objc_super *, SEL initArgTypes))objc_msgSendSuper)(&superData, _cmd initArgNames); \
    } \
    STLog([self class], @"Triggering dependency injection from -[%s %s]", class_getName([self class]), sel_getName(initSel)); \
    [[ALCAlchemic mainContext] injectDependencies:self]; \
