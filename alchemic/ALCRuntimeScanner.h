@@ -23,7 +23,6 @@ typedef void(^ClassProcessor)(ALCContext __nonnull *context, Class __nonnull aCl
 +(nonnull instancetype) modelScanner;
 +(nonnull instancetype) dependencyPostProcessorScanner;
 +(nonnull instancetype) objectFactoryScanner;
-+(nonnull instancetype) initStrategyScanner;
 +(nonnull instancetype) resourceLocatorScanner;
 
 @end

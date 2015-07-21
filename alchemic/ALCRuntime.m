@@ -180,63 +180,28 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 }
 
--(void) wrapUnManagedClass:(Class) aClass initializer:(SEL) initializer {
++(void) wrapClass:(Class) destClass initializer:(SEL) initializer
+		  withClass:(Class) wrapperClass wrapper:(SEL) wrapperSel {
 
     // Get an alchmeic prefixed selector for the initializer.
     SEL alchemicSel = [ALCRuntime alchemicSelectorForSelector:initializer];
 
     // Test if the class has ready had it replaced.
-    if (objc_getAssociatedObject(aClass, sel_getName(alchemicSel)) != nil) {
+    if (objc_getAssociatedObject(destClass, sel_getName(alchemicSel)) != nil) {
         return;
     }
 
     // Now get the methods and IMPs we need to do the replacement.
-    Method originalMethod = class_getInstanceMethod(aClass, initializer);
-    Method wrapperMethod = class_getInstanceMethod([self class], @selector(initializerWrapper:));
+    Method originalMethod = class_getInstanceMethod(destClass, initializer);
+    Method wrapperMethod = class_getInstanceMethod(wrapperClass, wrapperSel);
     IMP wrapperImp = method_getImplementation(wrapperMethod);
 
     // Perform the replacement.
     IMP originalIMP = method_setImplementation(originalMethod, wrapperImp);
     if (originalIMP != NULL) {
         // Add the original method to the class under a name we can find so we can call it from the wrapper.
-        class_addMethod([self class], alchemicSel, originalIMP, method_getTypeEncoding(originalMethod));
+        class_addMethod(destClass, alchemicSel, originalIMP, method_getTypeEncoding(originalMethod));
     }
-}
-
--(id) initializerWrapper:(void *) firstArg, ... {
-
-    // Locate the orginal initializer we have stored and setup a NSInvocation to call it.
-    SEL alchemicSel = [ALCRuntime alchemicSelectorForSelector:_cmd];
-    if ([self respondsToSelector:alchemicSel]) {
-        // We have a stored initializer.
-    } else {
-        // No stored initializer so we have to call a super implementation of the current selector.
-    }
-
-    NSMethodSignature *sig = [self methodSignatureForSelector:alchemicSel];
-    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
-    inv.selector = alchemicSel;
-
-    // Loop through the arguments for the original initializer which will come in via the passed va_list.
-    va_list args;
-    va_start(args, firstArg);
-    for(long i = 2; i < (long)[sig numberOfArguments]; i++) {
-        if (i == 2) {
-            [inv setArgument:&firstArg atIndex:2];
-        } else {
-            void *arg = va_arg(args, void *);
-            [inv setArgument:&arg atIndex:i];
-        }
-    }
-    va_end(args);
-    [inv invokeWithTarget:self];
-    NSLog(@"Target invoked");
-
-    // Initializers always return the instance.
-    id returnValue;
-    [inv getReturnValue:&returnValue];
-    return returnValue;
-
 }
 
 #pragma mark - Qualifiers

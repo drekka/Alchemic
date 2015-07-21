@@ -11,7 +11,6 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import <Alchemic/Alchemic.h>
-#import "ALCInitStrategyInjector.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
@@ -27,7 +26,6 @@
 
 @implementation ALCContext {
     ALCModel *_model;
-    NSMutableSet<Class> *_initialisationStrategyClasses;
     NSSet<id<ALCDependencyPostProcessor>> *_dependencyPostProcessors;
     NSSet<id<ALCObjectFactory>> *_objectFactories;
 }
@@ -38,7 +36,6 @@
     self = [super init];
     if (self) {
         _model = [[ALCModel alloc] init];
-        _initialisationStrategyClasses = [[NSMutableSet alloc] init];
         _dependencyPostProcessors = [[NSMutableSet alloc] init];
         _objectFactories = [[NSMutableSet alloc] init];
         _valueResolver = [[ALCDefaultValueResolver alloc] init];
@@ -51,15 +48,6 @@
 -(void) start {
 
     STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
-
-    // Set defaults.
-    if (self.runtimeInitInjector == nil) {
-        self.runtimeInitInjector = [[ALCInitStrategyInjector alloc] initWithStrategyClasses:_initialisationStrategyClasses];
-    }
-
-    // Inject init wrappers into classes that have registered for dependency injection.
-    //[_runtimeInitInjector replaceInitsInModelClasses:_model];
-
     [self resolveBuilderDependencies];
 
     STLog(ALCHEMIC_LOG, @"Creating singletons ...");
@@ -95,11 +83,6 @@
 -(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor {
     STLog(ALCHEMIC_LOG, @"Adding dependency post processor: %s", object_getClassName(postProcessor));
     [(NSMutableSet *)_dependencyPostProcessors addObject:postProcessor];
-}
-
--(void) addInitStrategy:(Class) initialisationStrategyClass {
-    STLog(ALCHEMIC_LOG, @"Adding init strategy: %s", object_getClassName(initialisationStrategyClass));
-    [_initialisationStrategyClasses addObject:initialisationStrategyClass];
 }
 
 #pragma mark - Registration call backs
@@ -167,10 +150,6 @@
     if ([builders count] > 0) {
         processBuildersBlock(builders);
     }
-}
-
--(void) wrapUnManagedClass:(Class) aClass initializer:(SEL) initializer {
-    
 }
 
 #pragma mark - Objects

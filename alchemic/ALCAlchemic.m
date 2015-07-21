@@ -17,6 +17,13 @@
 
 @implementation ALCAlchemic
 
+insertInitWrapper(ALCRuntime, initWithString:integer:, initWithString:(NSString *) aString integer:(int) aInt, wrapperArgTypes(NSString *, int), wrapperArgNames(aString, aInt))
+
+-(instancetype) initWithString:(NSString *) aString integer:(int) aInt {
+	return nil;
+}
+
+
 static __strong ALCContext *__mainContext;
 
 +(ALCContext *) mainContext {
@@ -46,7 +53,6 @@ static __strong ALCContext *__mainContext;
                                                                  [ALCRuntimeScanner modelScanner],
                                                                  [ALCRuntimeScanner dependencyPostProcessorScanner],
                                                                  [ALCRuntimeScanner objectFactoryScanner],
-                                                                 [ALCRuntimeScanner initStrategyScanner],
                                                                  [ALCRuntimeScanner resourceLocatorScanner]
                                                                  ]];
     [ALCRuntime scanRuntimeWithContext:__mainContext runtimeScanners:scanners];

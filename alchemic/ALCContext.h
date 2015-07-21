@@ -9,7 +9,6 @@
 @import Foundation;
 @import ObjectiveC;
 
-@protocol ALCInitInjector;
 @protocol ALCDependencyPostProcessor;
 @protocol ALCObjectFactory;
 
@@ -20,20 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCContext : NSObject
 
 #pragma mark - Configuration
-
-/**
- Specifies the class used to inject init method wrappers into the runtime. Normally this doesn't been to be changed from the default.
- @discussion By default this is AlchemicRuntimeInjector.
- */
-@property (nonatomic, strong) id<ALCInitInjector> runtimeInitInjector;
-
-/**
- Adds an additional initialisation strategy to the built in ones.
- Strategies are run in reverse order from last registered through to the builtin ones when attempting to instantiate an object.
- 
- @param initialisationStrategyClass the class to be added.
- */
--(void) addInitStrategy:(Class) initialisationStrategyClass;
 
 /**
  Adds an dependency post processor.
@@ -50,13 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
  @param objectFactory the factory to add.
  */
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory;
-
-/**
- Wraps initializers in unmanaged classes. 
- 
- @discussion The passed class will have already been registered by the runtime scanners. So all we have to do is inject some code into the class to callback to the context to do the injections after it's instantiated.
- */
--(void) wrapUnManagedClass:(Class) aClass initializer:(SEL) initializer;
 
 #pragma mark - Lifecycle
 

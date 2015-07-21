@@ -60,7 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 +(void) scanRuntimeWithContext:(ALCContext *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> *) runtimeScanners;
 
--(void) wrapUnManagedClass:(Class) aClass initializer:(SEL) initializer;
++(void) wrapClass:(Class) destClass initializer:(SEL) initializer
+		  withClass:(Class) wrapperClass wrapper:(SEL) wrapperSel;
 
 @end
 

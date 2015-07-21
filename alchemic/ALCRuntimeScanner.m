@@ -90,17 +90,6 @@
             }];
 }
 
-+(nonnull instancetype) initStrategyScanner {
-    return [[ALCRuntimeScanner alloc]
-            initWithSelector:^BOOL(Class  __nonnull __unsafe_unretained aClass) {
-                return [aClass conformsToProtocol:@protocol(ALCInitStrategy)];
-            }
-            processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
-                STLog(ALCHEMIC_LOG, @"Adding init strategy %@", NSStringFromClass(aClass));
-                [context addInitStrategy:aClass];
-            }];
-}
-
 +(nonnull instancetype) resourceLocatorScanner {
     return [[ALCRuntimeScanner alloc]
             initWithSelector:^BOOL(Class  __nonnull __unsafe_unretained aClass) {

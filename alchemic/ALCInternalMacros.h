@@ -48,4 +48,29 @@ va_end(args); \
 [processorVar validate]; \
 }
 
+#define wrapperArgTypes(...) , ## __VA_ARGS__
+#define wrapperArgNames(...) , ## __VA_ARGS__
+
+#define insertInitWrapper(destClass, initializerSel, initSig, initArgTypes, initArgNames) \
+initWrapper(initSig, wrapperArgTypes(initArgTypes), (initArgNames)) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _injectInitWrapper) { \
+   [ALCRuntime wrapClass:[destClass class] initializer:@selector(initializerSel) \
+	withClass:[self class] wrapper:@selector(initWrapper ## initializerSel)]; \
+} \
+
+#define initWrapper(initSig, initArgTypes, initArgNames) \
+-(id) initWrapper ## initSig { \
+   SEL relocatedInitSel = [ALCRuntime alchemicSelectorForSelector:_cmd]; \
+   if ([self respondsToSelector:relocatedInitSel]) { \
+      self = ((id (*)(id, SEL initArgTypes)) objc_msgSend)(self, relocatedInitSel initArgNames); \
+	} else { \
+      struct objc_super superData = {self, class_getSuperclass([self class])}; \
+      self = ((id (*)(struct objc_super *, SEL initArgTypes))objc_msgSendSuper)(&superData, initSel initArgNames); \
+   } \
+   STLog([self class], @"Triggering dependency injection from -[%s %s]", class_getName([self class]), sel_getName(initSel)); \
+   [[ALCAlchemic mainContext] injectDependencies:self]; \
+   return self; \
+}
+
+
 
