@@ -4,17 +4,11 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractBuilder.h"
-
-@class ALCClassBuilder;
-@class ALCMethodRegistrationMacroProcessor;
+#import "ALCAbstractMethodBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCMethodBuilder : ALCAbstractBuilder
-
--(nonnull instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
-                               arguments:(ALCMethodRegistrationMacroProcessor *) arguments NS_DESIGNATED_INITIALIZER;
+@interface ALCMethodBuilder : ALCAbstractMethodBuilder
 
 @end
 

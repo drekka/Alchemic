@@ -14,6 +14,7 @@
 @protocol ALCValueResolver;
 @protocol ALCModelSearchExpression;
 @class ALCClassBuilder;
+@protocol ALCBuilder;
 
 #define ProcessBuiderBlockArgs NSSet<id<ALCBuilder>> __nonnull *builders
 typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
@@ -48,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
 
-//-(void) registerClassInitializer:(ALCClassBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassInitializer:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
 -(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
@@ -80,8 +81,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) executeOnBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
 							  processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
-
--(id) instantiateObjectFromBuilder:(id<ALCBuilder>) builder;
 
 @end
 

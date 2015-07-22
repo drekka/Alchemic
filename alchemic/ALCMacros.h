@@ -66,7 +66,7 @@
 }
 
 #define ACMethod(methodType, methodSel, ...) \
-+(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodInClassBuilder):(ALCClassBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerMethodBuilder:classBuilder selector:@selector(methodSel) returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 
@@ -76,4 +76,10 @@
 [[ALCAlchemic mainContext] registerDependencyInClassBuilder:classBuilder variable:_alchemic_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
-#define ACInitializer(initializer, ...)
+// Registers an initializer for a class.
+#define ACInitializer(initializer, initializerSel, ...) \
++(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerInitializerForClassBuilder):(ALCClassBuilder *) classBuilder { \
+	[[ALCAlchemic mainContext] registerClassInitializer:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
+}
+
+

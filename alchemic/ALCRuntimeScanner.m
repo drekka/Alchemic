@@ -7,12 +7,12 @@
 //
 
 @import ObjectiveC;
+#import <Alchemic/Alchemic.h>
+#import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntimeScanner.h"
 #import "ALCClassBuilder.h"
 #import "ALCInternalMacros.h"
-#import <Alchemic/ALCContext.h>
-#import <StoryTeller/StoryTeller.h>
 #import "ALCResourceLocator.h"
 
 @implementation ALCRuntimeScanner
@@ -75,17 +75,6 @@
             processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
                 STLog(ALCHEMIC_LOG, @"Adding dependency post processor %@", NSStringFromClass(aClass));
                 [context addDependencyPostProcessor:[[aClass alloc] init]];
-            }];
-}
-
-+(nonnull instancetype) objectFactoryScanner {
-    return [[ALCRuntimeScanner alloc]
-            initWithSelector:^BOOL(Class  __nonnull __unsafe_unretained aClass) {
-                return [aClass conformsToProtocol:@protocol(ALCObjectFactory)];
-            }
-            processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
-                STLog(ALCHEMIC_LOG, @"Adding object factory %@", NSStringFromClass(aClass));
-                [context addObjectFactory:[[aClass alloc] init]];
             }];
 }
 

@@ -14,19 +14,23 @@
 
 #import <Alchemic/ALCBuilder.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ALCAbstractBuilder : NSObject<ALCBuilder>
 
--(nonnull instancetype) initWithValueClass:(Class __nonnull) valueClass
-                                      name:(NSString __nonnull *) name;
+-(instancetype) initWithValueClass:(Class) valueClass
+										name:(NSString *) name;
 
 /**
  Called to create the object.
  */
--(nonnull id) instantiateObject;
+-(id) instantiateObject;
 
 /**
  Called to resolve dependencies after the value has been created.
  */
--(void) injectObjectDependencies:(id __nonnull) object;
+-(void) injectObjectDependencies:(id) object;
 
 @end
+
+NS_ASSUME_NONNULL_END

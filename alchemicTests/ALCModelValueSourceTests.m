@@ -9,7 +9,7 @@
 @import XCTest;
 #import <StoryTeller/StoryTeller.h>
 #import <OCMock/OCMock.h>
-#import <Alchemic/ALCContext.h>
+#import <Alchemic/Alchemic.h>
 
 #import "ALCModelValueSource.h"
 #import "ALCDependencyPostProcessor.h"

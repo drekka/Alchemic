@@ -10,7 +10,7 @@
 
 #import "ALCAbstractBuilder.h"
 @class ALCVariableDependencyMacroProcessor;
-@protocol ALCInitStrategy;
+@class ALCClassInitializerBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,9 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Setting up
 
--(void) addInjectionPointForArguments:(ALCVariableDependencyMacroProcessor *) arguments;
+@property(nonatomic, strong) ALCClassInitializerBuilder *initializerBuilder;
 
--(void) addInitStrategy:(id<ALCInitStrategy>) initialisationStrategy;
+-(void) addInjectionPointForArguments:(ALCVariableDependencyMacroProcessor *) arguments;
 
 @end
 

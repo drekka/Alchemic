@@ -6,9 +6,10 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCModelValueSource.h"
+#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
-#import <Alchemic/ALCBuilder.h>
+
+#import "ALCModelValueSource.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

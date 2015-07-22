@@ -45,10 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setUpALCContextWithClasses:(NSArray<Class> *) classes {
     NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
-                                                                 //[ALCRuntimeScanner modelScanner],
                                                                  [ALCRuntimeScanner dependencyPostProcessorScanner],
-                                                                 [ALCRuntimeScanner objectFactoryScanner],
-                                                                 //[ALCRuntimeScanner initStrategyScanner],
                                                                  [ALCRuntimeScanner resourceLocatorScanner]
                                                                  ]];
     [ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
