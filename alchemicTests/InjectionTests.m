@@ -12,7 +12,6 @@
 #import <OCMock/OCMock.h>
 #import "SingletonObject.h"
 #import "InjectableProtocol.h"
-#import "ALCContext+Internal.h"
 
 @import XCTest;
 

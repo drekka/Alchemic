@@ -15,7 +15,6 @@
 #import "ALCRuntime.h"
 #import "ALCVariableDependency.h"
 #import "ALCClassBuilder.h"
-#import "ALCContext+Internal.h"
 #import "ALCVariableDependencyMacroProcessor.h"
 #import "ALCModelValueSource.h"
 

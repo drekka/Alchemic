@@ -96,7 +96,6 @@
 		6CA4DFA21B5893370059F0DF /* ALCMethodRegistrationMacroProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA4DF9C1B5892D00059F0DF /* ALCMethodRegistrationMacroProcessor.m */; };
 		6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CF46EC81B4610EE0009007A /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CAC887C1B4A5AA000AFB8E4 /* ALCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46EC91B4610EE0009007A /* ALCModel.m */; };
-		6CAC887E1B4A60BE00AFB8E4 /* ALCContext+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CAC88781B4A2E9900AFB8E4 /* ALCContext+Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAC88801B4A6C6000AFB8E4 /* ALCRuntimeTests.m */; };
 		6CAE80701B42535A00217F9D /* Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CAE806D1B424F8A00217F9D /* Alchemic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB074091B4D000A00CA9002 /* ALCRuntimeScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB074071B4CF49D00CA9002 /* ALCRuntimeScanner.m */; };
@@ -213,7 +212,6 @@
 		6CA4DF9C1B5892D00059F0DF /* ALCMethodRegistrationMacroProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMethodRegistrationMacroProcessor.m; sourceTree = "<group>"; };
 		6CA4DF9E1B58930E0059F0DF /* ALCClassRegistrationMacroProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassRegistrationMacroProcessor.h; sourceTree = "<group>"; };
 		6CA4DF9F1B58930E0059F0DF /* ALCClassRegistrationMacroProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCClassRegistrationMacroProcessor.m; sourceTree = "<group>"; };
-		6CAC88781B4A2E9900AFB8E4 /* ALCContext+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALCContext+Internal.h"; sourceTree = "<group>"; };
 		6CAC88801B4A6C6000AFB8E4 /* ALCRuntimeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCRuntimeTests.m; sourceTree = "<group>"; };
 		6CAE806D1B424F8A00217F9D /* Alchemic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alchemic.h; sourceTree = "<group>"; };
 		6CB074061B4CF49D00CA9002 /* ALCRuntimeScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCRuntimeScanner.h; sourceTree = "<group>"; };
@@ -449,7 +447,6 @@
 		6CAC887D1B4A5B1800AFB8E4 /* Internal */ = {
 			isa = PBXGroup;
 			children = (
-				6CAC88781B4A2E9900AFB8E4 /* ALCContext+Internal.h */,
 				6C66DC5A1A8F662E009F9D94 /* ALCInternalMacros.h */,
 			);
 			name = Internal;
@@ -551,7 +548,6 @@
 				6CB0740F1B4D078C00CA9002 /* ALCConfig.h in Headers */,
 				6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */,
 				6C36D7961B3853F10073C4FB /* ALCContext.h in Headers */,
-				6CAC887E1B4A60BE00AFB8E4 /* ALCContext+Internal.h in Headers */,
 				6C36D7971B3853F10073C4FB /* ALCAlchemic.h in Headers */,
 				6C36D7981B3853F10073C4FB /* ALCInternalMacros.h in Headers */,
 				6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */,

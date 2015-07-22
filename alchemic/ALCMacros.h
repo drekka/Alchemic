@@ -8,7 +8,6 @@
 
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCContext.h>
-#import "ALCContext+Internal.h"
 
 #pragma mark - Defining objects
 
@@ -57,14 +56,6 @@
 #pragma mark - Registering
 
 /**
- Injects code into a class so that it self injects when the class is instantiated by external code. For example, UIViewControllers in story boards.
- 
- @discussion Alchemic will wrap the passed initializer selector so that when it is called, Alchemic is called afterwards to trigger any required dependency inejctions. 
-
- */
-#define ACWrapUnManagedClass(aClass, initSelector) [[ALCAlchemic mainContext] wrapUnManagedClass:aClass initializer:initSelector]
-
-/**
  Register a class as a source of objects.
  
  @discussion This is the main macro for setting up objects within Alchemic. It take a number of other macros as 
@@ -74,9 +65,9 @@
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
-#define ACMethod(methodType, sel, ...) \
+#define ACMethod(methodType, methodSel, ...) \
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerMethodBuilder:classBuilder selector:@selector(sel) returnType:[methodType class], ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerMethodBuilder:classBuilder selector:@selector(methodSel) returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
@@ -84,3 +75,5 @@
 +(void) _alchemic_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerDependencyInClassBuilder:classBuilder variable:_alchemic_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
+
+#define ACInitializer(initializer, ...)

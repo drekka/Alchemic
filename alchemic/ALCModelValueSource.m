@@ -8,7 +8,6 @@
 
 #import "ALCModelValueSource.h"
 #import <StoryTeller/StoryTeller.h>
-#import "ALCContext+Internal.h"
 #import <Alchemic/ALCBuilder.h>
 
 NS_ASSUME_NONNULL_BEGIN

@@ -10,7 +10,6 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntime.h"
-#import "ALCContext+Internal.h"
 #import "ALCValueSource.h"
 #import "ALCModelValueSource.h"
 #import "ALCValueResolver.h"

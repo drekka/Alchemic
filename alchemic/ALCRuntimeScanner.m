@@ -12,7 +12,6 @@
 #import "ALCClassBuilder.h"
 #import "ALCInternalMacros.h"
 #import <Alchemic/ALCContext.h>
-#import "ALCContext+Internal.h"
 #import <StoryTeller/StoryTeller.h>
 #import "ALCResourceLocator.h"
 

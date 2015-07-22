@@ -13,7 +13,6 @@
 
 #import "ALCModelValueSource.h"
 #import "ALCDependencyPostProcessor.h"
-#import "ALCContext+Internal.h"
 #import "ALCInternalMacros.h"
 
 @interface ALCModelValueSourceTests : XCTestCase
