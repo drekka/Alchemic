@@ -14,7 +14,7 @@
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
 #import "ALCRuntime.h"
 #import "ALCRuntimeScanner.h"
-#import "ALCMacroProcessor.h"
+#import "ALCAbstractMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 }
 
--(void) loadMacroProcessor:(ALCMacroProcessor *) macroProcessor withArguments:(id __nullable) firstArgument, ... NS_REQUIRES_NIL_TERMINATION {
+-(void) loadMacroProcessor:(ALCAbstractMacroProcessor *) macroProcessor withArguments:(id __nullable) firstArgument, ... NS_REQUIRES_NIL_TERMINATION {
     loadMacrosIncluding(macroProcessor, firstArgument);
 }
 

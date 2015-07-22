@@ -15,15 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *name;
 
-@property (nonatomic, assign) BOOL createOnStartup;
+@property (nonatomic, assign) BOOL createOnBoot;
 
+// If the builder is to be regarded as a primary builder.
 @property (nonatomic, assign) BOOL primary;
 
+// If the builder is a factory.
 @property (nonatomic, assign) BOOL factory;
 
-@property (nonatomic, strong) id value;
-
-#pragma mark - Querying the builder
 
 @property (nonatomic, strong, readonly) Class valueClass;
 
@@ -31,19 +30,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Called during model setup to resolve dependencies into a list of candidate objects.
- 
+
  @param postProcessors a set of post processors which can be used to resolve results further if needed.
  */
 -(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 
 /**
- Used during the instantiation of singletons on startup. Otherwise never used.
- Different to accessing the value in that it does not trigger dependency injection.
- 
- Use the value property to obtain objects normally.
+ Creates the object and puts it into the value if this is not a factory.
+
+ @discussion This does not trigger dependency injection. Use the value property to obtain objects and get them injected.
  @see value
  */
 -(id) instantiate;
+
+@property (nonatomic, strong) id value;
 
 @end
 

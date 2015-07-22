@@ -10,11 +10,11 @@
 @import ObjectiveC;
 @protocol ALCValueSource;
 @class ALCArg;
-#import "ALCMacroProcessor.h"
+#import "ALCAbstractMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCInitializerRegistrationMacroProcessor : ALCMacroProcessor
+@interface ALCInitializerRegistrationMacroProcessor : ALCAbstractMacroProcessor
 
 @property (nonatomic, assign, readonly) SEL initializer;
 

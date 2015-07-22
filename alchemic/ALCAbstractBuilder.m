@@ -12,30 +12,27 @@
 #import <Alchemic/ALCDependency.h>
 #import "ALCVariableDependency.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation ALCAbstractBuilder
 
 // Properties from protocol
 @synthesize valueClass = _valueClass;
 @synthesize primary = _primary;
 @synthesize factory = _factory;
-@synthesize createOnStartup = _createOnStartup;
+@synthesize createOnBoot = _createOnBoot;
 @synthesize value = _value;
 @synthesize name = _name;
 
 #pragma mark - Lifecycle
 
--(nonnull instancetype) initWithValueClass:(Class __nonnull) valueClass
-                                      name:(NSString __nonnull *) name {
+-(nonnull instancetype) initWithValueClass:(Class __nonnull) valueClass {
     self = [super init];
     if (self) {
-        _name = name == nil ? NSStringFromClass(valueClass) : name;
+        _name = NSStringFromClass(valueClass);
         _valueClass = valueClass;
     }
     return self;
-}
-
--(BOOL) createOnStartup {
-    return _createOnStartup && _value == nil;
 }
 
 -(id) value {
@@ -49,7 +46,6 @@
         STLog(_valueClass, @"Value present, returning a %@", NSStringFromClass([_value class]));
         return _value;
     }
-
 }
 
 -(nonnull id) instantiate {
@@ -76,3 +72,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

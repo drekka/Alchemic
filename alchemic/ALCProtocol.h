@@ -8,13 +8,14 @@
 
 @import Foundation;
 #import "ALCModelSearchExpression.h"
+#import "ALCValueDefMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Wraps an argument so that it can be conveniantly passed around.
  */
-@interface ALCProtocol : NSObject<ALCModelSearchExpression>
+@interface ALCProtocol : NSObject<ALCModelSearchExpression, ALCValueDefMacro>
 
 @property (nonatomic, strong, readonly) Protocol *aProtocol;
 

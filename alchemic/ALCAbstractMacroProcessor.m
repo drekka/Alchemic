@@ -6,7 +6,7 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCMacroProcessor.h"
+#import "ALCAbstractMacroProcessor.h"
 
 #import "ALCValueSource.h"
 #import "ALCModelSearchExpression.h"
@@ -16,25 +16,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCMacroProcessor
+@implementation ALCAbstractMacroProcessor
 
--(instancetype) init {
+@synthesize parentClass = _parentClass;
+
+-(instancetype) initWithParentClass:(nonnull Class)parentClass {
     self = [super init];
     if (self) {
         _valueSourceMacros = [[NSMutableArray alloc] init];
-    }
-    return self;
-}
-
--(instancetype)initWithParentClass:(Class)parentClass {
-    self = [self init];
-    if (self) {
-        _parentClass = parentClass;
+		 _parentClass = parentClass;
     }
     return self;
 }
 
 -(void) addArgument:(id) argument {
+
+	// If a non-arg is passed then add it to the first arg.
     if ([argument conformsToProtocol:@protocol(ALCModelSearchExpression)]
         || [argument isKindOfClass:[ALCConstantValue class]]) {
         [_valueSourceMacros addObject:(id<ALCModelSearchExpression>)argument];

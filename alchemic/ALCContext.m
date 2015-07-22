@@ -178,7 +178,7 @@
 	// This is a two stage process so that all objects are created before dependencies are injected.
 	STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
 	NSMutableSet *singletons = [[NSMutableSet alloc] init];
-	[[_model allClassBuilders] enumerateObjectsUsingBlock:^(ALCClassBuilder *classBuilder, BOOL *stop) {
+	[[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop) {
 		if (classBuilder.createOnStartup) {
 			STLog(classBuilder, @"Creating singleton %@ -> %@", classBuilder.name, classBuilder);
 			[singletons addObject:classBuilder];

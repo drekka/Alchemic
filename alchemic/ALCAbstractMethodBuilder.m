@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(nonnull instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
 													  arguments:(ALCMethodRegistrationMacroProcessor *) arguments {
 
-	self = [super initWithValueClass:arguments.returnType name:arguments.asName];
+	self = [super initWithValueClass:arguments.returnType];
 	if (self) {
 		_parentClassBuilder = parentClassBuilder;
 		_selector = arguments.selector;

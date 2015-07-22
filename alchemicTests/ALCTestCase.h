@@ -9,7 +9,7 @@
 @import XCTest;
 
 #import <Alchemic/Alchemic.h>
-#import "ALCMacroProcessor.h"
+#import "ALCAbstractMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setUpALCContextWithClasses:(NSArray<Class> *) classes;
 
--(void) loadMacroProcessor:(ALCMacroProcessor *) macroProcessor withArguments:(id __nullable) firstArgument, ...;
+-(void) loadMacroProcessor:(ALCAbstractMacroProcessor *) macroProcessor withArguments:(id __nullable) firstArgument, ...;
 
 @end
 

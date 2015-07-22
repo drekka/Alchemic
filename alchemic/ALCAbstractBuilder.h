@@ -18,11 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractBuilder : NSObject<ALCBuilder>
 
--(instancetype) initWithValueClass:(Class) valueClass
-										name:(NSString *) name;
+-(instancetype) initWithValueClass:(Class) valueClass;
 
 /**
- Called to create the object.
+ Called to create the object by the instantiate method. This is overridden to create the objects. Instantiate manages it and general should not be overridden.
  */
 -(id) instantiateObject;
 

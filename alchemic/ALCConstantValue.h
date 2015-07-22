@@ -7,10 +7,11 @@
 //
 
 @import Foundation;
+#import "ALCValueDefMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCConstantValue : NSObject
+@interface ALCConstantValue : NSObject<ALCValueDefMacro>
 
 @property(nonatomic, strong, readonly) id value;
 

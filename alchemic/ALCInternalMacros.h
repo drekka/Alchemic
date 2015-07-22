@@ -25,6 +25,18 @@
 #define _alchemic_toNSString(chars) __alchemic_toNSString(chars)
 #define __alchemic_toNSString(chars) @#chars
 
+// Processes varadic args
+#define processVarArgsIncluding(argType, firstArg, codeBlock) \
+{ \
+va_list args; \
+va_start(args, firstArg); \
+for (argType arg = firstArg; arg != nil; arg = va_arg(args, argType)) { \
+codeBlock; \
+} \
+va_end(args); \
+}
+
+
 // Processes varadic args into a macro processor, excluding the arg that is used to guard them.
 #define loadMacrosAfter(processorVar, afterArg) \
 { \
@@ -39,14 +51,7 @@ va_end(args); \
 }
 
 // Processes varadic args into a macro processor, including the arg that is used to guard them.
-#define loadMacrosIncluding(processorVar, firstArg) \
-{ \
-va_list args; \
-va_start(args, firstArg); \
-for (id arg = firstArg; arg != nil; arg = va_arg(args, id)) { \
-[processorVar addArgument:arg]; \
-} \
-va_end(args); \
+#define loadMacrosIncluding(id, processorVar, firstArg) \
+processVarArgsIncluding(firstArg, [processorVar addArgument:arg]); \
 [processorVar validate]; \
-}
 

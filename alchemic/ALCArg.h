@@ -9,6 +9,7 @@
 @import Foundation;
 
 @protocol ALCValueSource;
+#import "ALCValueDefMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,9 +17,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) Class argType;
 
-+(instancetype) argWithType:(Class) argType expressions:(id) firstExpression, ... NS_REQUIRES_NIL_TERMINATION;
+-(instancetype) initWithArgType:(Class) argType NS_DESIGNATED_INITIALIZER;
+
++(instancetype) argWithType:(Class) argType macros:(id<ALCValueDefMacro>) firstMacro, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) addMacro:(id<ALCValueDefMacro>) macro;
 
 -(id<ALCValueSource>) valueSource;
+
+-(void) validate;
 
 @end
 

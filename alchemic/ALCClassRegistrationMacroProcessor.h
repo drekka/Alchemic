@@ -10,12 +10,12 @@
 @import ObjectiveC;
 @protocol ALCValueSource;
 
-#import "ALCMacroProcessor.h"
+#import "ALCAbstractMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface ALCClassRegistrationMacroProcessor : ALCMacroProcessor
+@interface ALCClassRegistrationMacroProcessor : ALCAbstractMacroProcessor
 
 @property (nonatomic, strong, readonly) NSString *asName;
 @property (nonatomic, assign, readonly) BOOL isFactory;
