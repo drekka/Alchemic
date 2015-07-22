@@ -16,6 +16,6 @@
 /**
  Called after all dependencies have been resolved.
  */
--(void) didResolveDependencies;
+-(void) didInjectDependencies;
 
 @end

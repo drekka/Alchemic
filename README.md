@@ -17,12 +17,15 @@ By Derek Clarkson
       * [Primary objects](#primary-objects)
           * [Primary objects and testing](#primary-objects-and-testing)
  * [Injecting dependencies](#injecting-dependencies)
- * [Providing object search criteria](#providing-object-search-criteria)
+ * [Object search criteria](#object-search-criteria)
      * [Searching by class and protocols](#searching-by-class-and-protocols)
      * [Searching by Name](#searching-by-name)
      * [Constant values](#constant-values)
      * [Property values](#-property-values)
  * [Factory methods](#factory-methods)
+ * [Unmanaged instances](#unmanaged-instances)
+ * [Callbacks](#callbacks)
+ * [Configuration](#configuration)
  * [Macro reference](./macros.md)
 
 #Intro
@@ -219,7 +222,7 @@ ACInject(_yetAnotherClass)
 @end
 ```
 
-# Providing object search criteria 
+# Object search criteria 
 
 In order to inject a variable, Alchemic needs a way to locate potential values. Generally it can examine the variable and work out for itself what to inject. But often you might want to provide your own criteria for what gets injected. Plus there are some situations where Objective-C cannot provide Alchemic with the information it needs to work out what to inject. 
 
@@ -230,7 +233,11 @@ Lets look at how to take control of what is injected.
 You can tell Alchemic to ignore the type information of the dependency you are injecting and define your own class and/or protocols to use for selecting candidate objects. Here's an example:
 
 ```objectivec
-ACInject(otherClass, ACClass(MySpecialClass), ACProtocol(NSCopying), ACProtocol(MyOwnProtocol))
+ACInject(otherClass, 
+    ACClass(MySpecialClass), 
+    ACProtocol(NSCopying), 
+    ACProtocol(MyOwnProtocol)
+    )
 ``` 
 
 You can only specify one `ACClass(...)`, but as many `ACProtocol(...)` macros as you want. It's quite useful when your variables are quite general and you want to inject more specific types. For example, assuming that `AmexAccount` implements the `Account` protocol, we can write this:
@@ -277,7 +284,9 @@ ACInject(_message, ACValue(@"hello world"))
 @end
 ```
 
-`ACValue(...)` cannot be used with any of the macros that perform searches for objects and must occur by itself. If defining arguments for a [factory method](#factory-method), `ACWithValue(...)` can be used for individual arguments and mixed up with arguments that search the model for objects. 
+`ACValue(...)` cannot be used with any of the macros that perform searches for objects and must occur by itself. In other words, it makes no sense to define a search criteria that looks for objects and a constant value. It's either one or the other.
+
+*Note: If defining arguments for a [factory method](#factory-method), `ACWithValue(...)` can be used for individual arguments along side other arguments that search the model for objects. See [Factory methods](#factory-methods) for more details.*
 
 ## ![Underconstruction](./images/alchemic-underconstruction.png) Property values
 
@@ -293,36 +302,42 @@ ACInject(_message, ACProperty(@"my.app.hello.message"))
 @end
 ```
 
-`ACProperty(...)` cannot be used with any of the macros that perform searches for objects and must occur by itself. 
+`ACProperty(...)` is like `ACValue(...)` in that it provides a specific value and cannot be used with any of the macros that perform searches for objects.
 
 # Factory methods
 
 *Note: This is a seperate subject because it's slightly more complex to setup than classes and dependencies.* 
 
-Sometimes it's useful to use methods to create the objects we want to provide for injecting into dependencies. For example, we might want to have a method that generates a `Transaction` object based on some passed arguments and we want a new transaction each time we inject one into a class.
+Sometimes we want to use methods to create objects for injecting into dependencies. For example, we might want to have a method that generates a `Transaction` object based on some passed arguments and we want a new transaction each time we inject one into a class.
 
-We know the method we need to use, but unfortunately the Objective-C runtime does not track any information about the argument and return types of methods. This goes to the way that the runtime see's methods and sends messages to objects. The runtime can tell us how many arguments there are and whether they are primitive types, structs or objects, but thats pretty much it. The up shot is that there is no way automatically discover information about a method at runtime beyond the basic type and arguments it uses. So to use a method to generate objects we have to define more information about it so that Alchemic knows what it produces as well as what arguments it needs.
+Unfortunately the Objective-C runtime does not track any information about the argument and return types of methods. Only for variables. It can tell us how many arguments there are and whether they are primitive types, structs or objects, but thats pretty much it. The up shot is that there is no way for Alchemic to automatically discover information about a method at runtime beyond this basic information. So when using methods we have to define more information so that Alchemic knows how to use it.
 
-Lets take a look at generating a transaction:
+Lets take a look at two sample methods:
 
 ```objectivec
 @implementation Factory {
     int x;
 }
 
-ACMethod(NSString, makeATransaction, ACIsFactory));
+ACMethod(Database, generateDatabaseConnection)
+-(id<DBConnection>) generateDatabaseConnection {
+    // Complexe connection setup code.
+    return dbConn;
+}
+
+ACMethod(NSString, makeATransaction, ACIsFactory))
 -(NSString *) makeATransaction {
-    x++;
-    return [[Transaction alloc] initWithName:[NSString stringWithFormat:@"Transaction %i", x]];
+    return [[Transaction alloc] 
+        initWithName:[NSString stringWithFormat:@"Transaction %i", ++x]];
 }
 @end
 ```
 
-We use the `ACMethod(...)` macro to define ay method that creates objects. Because this method has no arguments and we want to generate transactions every time, we only need to supply the return type of the method, it's selector and the `ACIsFactory` flag.
+We use the `ACMethod(...)` macro to define ay method that can create objects. This macro is similar to `ACRegister(...)` in that it registers a source of objects which can be injected into other things. 
 
-If we left off the `ACIsFactory` flag then Alchemic would generate a transaction the first time an object was required from the method, but then cache it thereafter. This means that objects can be created from `ACMethod(...)` macros as well as `ACRegister(...)`. A very useful function for customising how objects are created.
+The first example creates a singleton instance. Alchemic will only call the method once and reuse the returned object every time it needs it. This allows you to utilise more complex code to setup singletons when you need it. The second example which generates transactions needs to generate a new one each time it is needed. So this one has the `ACIsFactory` flag. 
 
-*Note: You will also notice that we don't need to register the class separately. Alchemic is smart enough to register the class automatically and create it as necessary to access it's factory methods. If you want to tweak the class you can still use a `ACRegister(...) macro. Otherwise there is no need for one.*
+*Note: You will also notice that we don't need to register the class separately. Alchemic is smart enough to register the class automatically and create it hen necessary to access it's factory methods. If you want to tweak the class you can still use a `ACRegister(...) macro. Otherwise it's not needed.*
 
 Factory method registrations are stored in the Alchemic context along side the classes. For their names, Alchemic uses a combination of the class and method selector. Like class registrations, you can make use of the `ACWithName(...)` macro to give a factory method a more meaningful and useful associated name. 
 
@@ -334,23 +349,88 @@ ACMethod(NSURLConnection, serverConnectionWithURL:retries:,
 	ACArg(NSURL, ACName(@"db-server-url")),
 	ACArg(NSNumber, ACValue(@5))
 	)
--(NSURLConnection *) serverConnectionWithURL:(NSURL *) url retries:(NSNumber *) retries {
+-(NSURLConnection *) serverConnectionWithURL:(NSURL *) url 
+                                     retries:(NSNumber *) retries {
     // lots of complex setup code here that creates newConnection.
     return newConnection;
 }
 ```
 
-Now we are adding argument macros that will allow Alchemic to locate values to be passed to the method's arguments. Alchemic uses this information to select appropriate values and pass them as method arguments to the factory method when it's creating an instance with it.
+Here we need to use `ACArg(...)` macros that will allow Alchemic to locate values to be passed to the method's arguments. Alchemic uses this information to select appropriate values and pass them as method arguments to the factory method when it's creating an instance with it. It needs both the type of the argument and how to locate the value.
 
 Unlike variable dependencies, which can appear in any order, `ACArg(...)` arguments **must appear in the same order as the selector arguments**. Alchemic will use the argument order to match the selector arguments.
 
+# Unmanaged instances
+
+Not all objects are managed by Alchemic. For example, UIViewControllers in storyboards are created by the storyboard. Whilst I looked at several options for automatically injecting these instances, I did not find any that worked reliably and didn't require a lot of effort to code. So for the moment Alchemic does not manage them automatically.
+
+If you use a class that had Alchemic dependencies in a story board or in some other situation where instances are created, you need a way to inject those dependencies. The easiest way is to add a call to Alchemic into it's initializer like this:
+
+```objectivec
+-(instancetype) initWithFrame:(CGRect) aFrame {
+    self = [super initWithFrame:aFrame];
+    if (self) {
+        ACInjectDependencies(self);
+    }
+    return self;
+}
+```
+
+Alchemic will then inject any known dependencies.
+
+## ![Underconstruction](./images/alchemic-underconstruction.png) Callbacks
+
+Sometimes it's useful to know when Alchemic has finished injecting values into an object. To facilitate this, a callback method can be added to your class like this:
+
+```objectivec
+@implementation {
+    YetAnotherClass *_yetAnotherClass;
+}
+
+ACInject(_yetAnotherClass)
+
+-(void) didInjectDependencies {
+    // Do stuff
+}
+
+@end
+```
+
+This method will automatically be called after all dependencies have been injected.
+
+# Configuration
+
+Alchemic needs no configuration out of the box. However sometimes there are things you might want to change before it starts. To do this, you need to create one or more classes and implement the `ALCConfig` protocol on them. Alchemic will automatically locate these classes during startup and read them for additional configuration settings. 
+
+## Additional bundles
+
+By default, Alchemic scans your apps main bundles for classes. This is sourced from `[NSBundle allBundles]`. Alchemic also scans the Alchemic framework itself for internal classes. However you may have code residing in other bundles or frameworks that require injections as well. For example you might have setup a common framework for business logic. 
+
+To let Alchemic know that there are further sources of classes that need injections, you need to implement the `scanBundlesWithClasses` method like this:
+
+```objectivec
+#import <Alchemic/Alchemic.>
+@interface MyAppConfig : NSObject<ALCConfig>
+@end
+
+@implementation MyAppConfig
+
+-(NSArray<Class> scanBundlesWithClasses {
+    return @[[MyAppBusinessLogic class]];
+}
+
+@end
+```
+
+During scanning, Alchemic will read the list of classes. For each one, it will locate the bundle or framework that it came from and scan all classes within it. So you only need to refer to a single class to get all classes scanned.
+
 # Credits
 
- * Big Thanks to the guys behind Carthage for writing a dependency tool that actual works well with XCode and Git.
- * Thanks to the guys behind the Spring Framework. The work you have done has made my life so much easier on so many Java projects.
- * Thanks to Mulle Cybernetik for OCMock. An outstanding mocking framework for Objective-C that has enabled me to test the un-testable many times.
- * Thanks to ... for PEGKit. I've learned a lot from working with it on Story Teller.
- * 
+ * Big Thanks to the guys behind [Carthage](https://github.com/Carthage/Carthage) for writing a dependency tool that actual works well with XCode and Git.
+ * Thanks to the guys behind the [Spring Framework](https://spring.io). The work you have done has made my life so much easier on so many Java projects.
+ * Thanks to Mulle Cybernetik for [OCMock](ocmock.org). An outstanding mocking framework for Objective-C that has enabled me to test the un-testable many times.
+ * Thanks to Todd Ditchendorf for [PEGKit](https://github.com/itod/pegkit). I've learned a lot from working with it on [Story Teller](https://github.com/drekka/StoryTeller).
+ 
  
 
 
