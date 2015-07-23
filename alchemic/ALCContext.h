@@ -16,10 +16,11 @@
 @class ALCClassBuilder;
 @protocol ALCBuilder;
 
-#define ProcessBuiderBlockArgs NSSet<id<ALCBuilder>> __nonnull *builders
+NS_ASSUME_NONNULL_BEGIN
+
+#define ProcessBuiderBlockArgs NSSet<id<ALCBuilder>> *builders
 typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
-NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCContext : NSObject
 

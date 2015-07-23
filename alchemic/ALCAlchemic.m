@@ -6,10 +6,9 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCAlchemic.h>
-#import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCInternalMacros.h>
-
+#import "ALCAlchemic.h"
+#import "ALCContext.h"
+#import "ALCInternalMacros.h"
 #import "ALCRuntime.h"
 #import "ALCRuntimeScanner.h"
 

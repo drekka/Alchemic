@@ -17,6 +17,6 @@
 
 @property (nonatomic, strong, nonnull) NSSet<id> *values;
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> __nonnull *) postProcessors;
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull) postProcessors;
 
 @end

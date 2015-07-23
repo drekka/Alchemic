@@ -11,16 +11,17 @@
 #import "ALCAbstractBuilder.h"
 @class ALCVariableDependencyMacroProcessor;
 @class ALCClassInitializerBuilder;
+@class ALCMethodBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCClassBuilder : ALCAbstractBuilder
 
-#pragma mark - Setting up
-
 @property(nonatomic, strong) ALCClassInitializerBuilder *initializerBuilder;
 
--(void) addInjectionPointForArguments:(ALCVariableDependencyMacroProcessor *) arguments;
+-(void) addVariableInjection:(ALCVariableDependencyMacroProcessor *) variableMacroProcessor;
+
+-(void) addMethodBuilder:(ALCMethodBuilder *) methodBuilder;
 
 @end
 

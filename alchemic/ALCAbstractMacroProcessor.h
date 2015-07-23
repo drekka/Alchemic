@@ -7,18 +7,15 @@
 //
 
 @import Foundation;
-@class ALCArg;
-@protocol ALCValueSourceMacro;
 
 #include "ALCMacroProcessor.h"
+@protocol ALCMacro;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractMacroProcessor : NSObject<ALCMacroProcessor>
 
-@property (nonatomic, strong, readonly) NSMutableArray<id<ALCValueSourceMacro>> *valueSourceMacros;
-
--(instancetype) initWithParentClass:(Class) parentClass NS_DESIGNATED_INITIALIZER;
+-(void) raiseUnexpectedMacroError:(id<ALCMacro>) macro;
 
 @end
 

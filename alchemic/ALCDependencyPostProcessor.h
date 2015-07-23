@@ -14,6 +14,6 @@
 /**
  @return a new list of candidates objects or nil if the list is not changed.
  */
--(nonnull NSSet<id<ALCBuilder>> *) process:(NSSet<id<ALCBuilder>> __nonnull *) dependencies;
+-(nonnull NSSet<id<ALCBuilder>> *) process:(NSSet<id<ALCBuilder>> * _Nonnull) dependencies;
 
 @end

@@ -9,13 +9,14 @@
 @import Foundation;
 #import "ALCModelSearchExpression.h"
 #import "ALCValueDefMacro.h"
+#import "ALCMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Wraps an argument so that it can be conveniantly passed around.
  */
-@interface ALCName : NSObject<ALCModelSearchExpression, ALCValueDefMacro>
+@interface ALCName : NSObject<ALCModelSearchExpression, ALCValueDefMacro, ALCMacro>
 
 @property (nonatomic, strong, readonly) NSString *aName;
 

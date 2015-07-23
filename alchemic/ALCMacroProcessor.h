@@ -7,17 +7,18 @@
 //
 
 @import Foundation;
-@protocol ALCValueSource;
+@protocol ALCMacro;
+@class ALCValueSourceFactory;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCMacroProcessor <NSObject>
 
-@property (nonatomic, assign, readonly) Class parentClass;
+-(void) addMacro:(id<ALCMacro>) macro;
 
--(void) addArgument:(id) argument;
+-(ALCValueSourceFactory *) valueSourceFactoryForIndex:(NSUInteger) index;
 
--(id<ALCValueSource>) valueSourceAtIndex:(int) index;
+-(NSUInteger) valueSourceCount;
 
 -(void) validate;
 

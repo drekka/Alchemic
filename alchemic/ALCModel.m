@@ -7,11 +7,11 @@
 //
 
 #import <StoryTeller/StoryTeller.h>
+
 #import "ALCModel.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCInternalMacros.h"
-#import <Alchemic/Alchemic.h>
 #import "ALCModelSearchExpression.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -75,7 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [self buildersForSearchExpression:[[AllClassesExpression alloc] init]];
 }
 
--(nonnull NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> __nonnull *) searchExpressions {
+-(NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
 
     // Quick short cut for single expression queries. Saves building a new set.
     if ([searchExpressions count] == 1) {

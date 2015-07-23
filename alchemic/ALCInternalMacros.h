@@ -42,16 +42,16 @@ va_end(args); \
 { \
 va_list args; \
 va_start(args, afterArg); \
-id arg; \
-while ((arg = va_arg(args, id)) != nil) { \
-[processorVar addArgument:arg]; \
+id macro; \
+while ((macro = va_arg(args, id)) != nil) { \
+[processorVar addMacro:macro]; \
 } \
 va_end(args); \
 [processorVar validate]; \
 }
 
 // Processes varadic args into a macro processor, including the arg that is used to guard them.
-#define loadMacrosIncluding(id, processorVar, firstArg) \
-processVarArgsIncluding(firstArg, [processorVar addArgument:arg]); \
-[processorVar validate]; \
+#define loadMacrosIncluding(processorVar, firstArg) \
+processVarArgsIncluding(id<ALCMacro>, firstArg, [processorVar addMacro:arg]); \
+[processorVar validate];
 

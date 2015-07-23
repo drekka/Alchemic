@@ -10,39 +10,62 @@
 
 @import ObjectiveC;
 #import <StoryTeller/StoryTeller.h>
-#import <Alchemic/Alchemic.h>
 
 #import "ALCRuntime.h"
 #import "ALCVariableDependency.h"
 #import "ALCClassBuilder.h"
 #import "ALCVariableDependencyMacroProcessor.h"
+#import "ALCClassRegistrationMacroProcessor.h"
 #import "ALCModelValueSource.h"
 #import "ALCClassInitializerBuilder.h"
+#import "ALCMethodBuilder.h"
+#import "ALCValueSourceFactory.h"
 
 @implementation ALCClassBuilder {
 	NSMutableSet<ALCVariableDependency*> *_dependencies;
+	NSMutableSet<ALCMethodBuilder *> *_methodBuilders;
 }
 
--(instancetype) initWithValueClass:(__unsafe_unretained __nonnull Class) valueClass
-										name:(NSString * __nonnull)name {
-	self = [super initWithValueClass:valueClass name:name];
+-(instancetype) initWithValueClass:(__unsafe_unretained _Nonnull Class) valueClass {
+	self = [super initWithValueClass:valueClass];
 	if (self) {
 		_dependencies = [[NSMutableSet alloc] init];
+		_methodBuilders = [[NSMutableSet alloc] init];
 	}
 	return self;
 }
 
+-(void) configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
+	[super configureWithMacroProcessor:macroProcessor];
+	ALCClassRegistrationMacroProcessor *processor = macroProcessor;
+	self.factory = processor.isFactory;
+	self.primary = processor.isPrimary;
+	NSString *name = processor.asName;
+	self.name = name == nil ? NSStringFromClass(self.valueClass) : name;
+	self.createOnBoot = !self.factory;
+}
+
 #pragma mark - Adding dependencies
 
--(void) addInjectionPointForArguments:(ALCVariableDependencyMacroProcessor *) arguments {
-	[_dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:arguments.variable
-																					 valueSource:[arguments valueSource]]];
+-(void) addVariableInjection:(nonnull ALCVariableDependencyMacroProcessor *)variableMacroProcessor {
+	[_dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:variableMacroProcessor.variable
+																					 valueSource:[[variableMacroProcessor valueSourceFactoryForIndex:0] valueSource]]];
+}
+
+-(void) setInitializerBuilder:(ALCClassInitializerBuilder * _Nonnull)initializerBuilder {
+	_initializerBuilder = initializerBuilder;
+	initializerBuilder.parentClassBuilder = self;
+}
+
+-(void) addMethodBuilder:(nonnull ALCMethodBuilder *)methodBuilder {
+	[_methodBuilders addObject:methodBuilder];
+	methodBuilder.parentClassBuilder = self;
 }
 
 #pragma mark - Instantiating
 
 -(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
-	[_dependencies enumerateObjectsUsingBlock:^(ALCVariableDependency * __nonnull dependency, BOOL * __nonnull stop) {
+	[_dependencies enumerateObjectsUsingBlock:^(ALCVariableDependency * _Nonnull dependency, BOOL * _Nonnull stop) {
 		[dependency resolveWithPostProcessors:postProcessors];
 	}];
 }
@@ -57,7 +80,7 @@
 	return [[self.valueClass alloc] init];
 }
 
--(void) injectObjectDependencies:(id __nonnull) object {
+-(void) injectObjectDependencies:(id _Nonnull) object {
 	STLog([object class], @">>> Injecting %lu dependencies into a %s instance", [_dependencies count], object_getClassName(object));
 	for (ALCVariableDependency *dependency in _dependencies) {
 		[dependency injectInto:object];

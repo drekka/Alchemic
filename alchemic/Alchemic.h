@@ -14,20 +14,27 @@ FOUNDATION_EXPORT double alchemicVersionNumber;
 //! Project version string for alchemic.
 FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 
-#import <Alchemic/ALCArg.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCAlchemic.h>
-#import <Alchemic/ALCWithName.h>
-#import <Alchemic/ALCBuilder.h>
-#import <Alchemic/ALCConfig.h>
-#import <Alchemic/ALCConstantValue.h>
 #import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCDependency.h>
-#import <Alchemic/ALCDependencyPostProcessor.h>
-#import <Alchemic/ALCInternalMacros.h>
+
+// Macros
+#import <Alchemic/ALCArg.h>
+#import <Alchemic/ALCWithName.h>
 #import <Alchemic/ALCIsFactory.h>
 #import <Alchemic/ALCIsPrimary.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCModelSearchExpression.h>
 #import <Alchemic/ALCClass.h>
-#import <Alchemic/ALCName.h>
 #import <Alchemic/ALCProtocol.h>
+#import <Alchemic/ALCName.h>
+#import <Alchemic/ALCConstantValue.h>
+
+// Config
+#import <Alchemic/ALCConfig.h>
+
+// #Internal
+#import <Alchemic/ALCValueDefMacro.h>
+#import <Alchemic/ALCMacro.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCValueSourceFactory.h>
+#import <Alchemic/ALCModelSearchExpression.h>
+

@@ -10,16 +10,17 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import <Alchemic/Alchemic.h>
+#import "ALCContext.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCClassInitializerBuilder.h"
+#import "ALCInternalMacros.h"
 #import "ALCMethodBuilder.h"
 #import "ALCDefaultValueResolver.h"
 #import "ALCModel.h"
 #import "ALCClassRegistrationMacroProcessor.h"
-#import "ALCInitializerRegistrationMacroProcessor.h"
-#import "ALCMethodRegistrationMacroProcessor.h"
+#import "ALCInitializerMacroProcessor.h"
+#import "ALCMethodMacroProcessor.h"
 #import "ALCVariableDependencyMacroProcessor.h"
 
 @interface ALCContext ()
@@ -91,75 +92,40 @@
 
 -(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder variable:(NSString *) variable, ... {
 	STLog(classBuilder.valueClass, @"Registering a dependency ...");
-	ALCVariableDependencyMacroProcessor *macroProcessor = [[ALCVariableDependencyMacroProcessor alloc] initWithParentClass:classBuilder.valueClass variable:variable];
+	Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
+	id<ALCMacroProcessor> macroProcessor = [[ALCVariableDependencyMacroProcessor alloc] initWithVariable:var];
 	loadMacrosAfter(macroProcessor, variable);
-	[classBuilder addInjectionPointForArguments:macroProcessor];
+	[classBuilder addVariableInjection:macroProcessor];
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
-
 	STLog(classBuilder.valueClass, @"Registering a builder ...");
-
-	ALCClassRegistrationMacroProcessor *macroProcessor = [[ALCClassRegistrationMacroProcessor alloc] initWithParentClass:classBuilder.valueClass];
-
+	id<ALCMacroProcessor> macroProcessor = [[ALCClassRegistrationMacroProcessor alloc] init];
 	loadMacrosAfter(macroProcessor, classBuilder);
-
-	if (macroProcessor.asName != nil) {
-		classBuilder.name = macroProcessor.asName;
-	}
-	classBuilder.factory = macroProcessor.isFactory;
-	classBuilder.primary = macroProcessor.isPrimary;
-	classBuilder.createOnStartup = !macroProcessor.isFactory;
-
+	[classBuilder configureWithMacroProcessor:macroProcessor];
 	STLog(classBuilder.valueClass, @"Created: %@, %@", classBuilder, macroProcessor);
-
 }
 
 -(void) registerClassInitializer:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... {
-
-	STLog(classBuilder.valueClass, @"Registering a class initializer ...");
-	ALCInitializerRegistrationMacroProcessor *macroProcessor = [[ALCInitializerRegistrationMacroProcessor alloc] initWithParentClass:classBuilder.valueClass
-																																					  initializer:initializer];
-
+	STLog(classBuilder.valueClass, @"Registering a class initializer for a %@", NSStringFromClass(classBuilder.valueClass));
+	id<ALCMacroProcessor> macroProcessor = [[ALCInitializerMacroProcessor alloc] init];
 	loadMacrosAfter(macroProcessor, initializer);
-
-	// Dealing with an initializer registration so use a method builder.
-	NSString *builderName = [NSString stringWithFormat:@"-[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(macroProcessor.initializer)];
-	STLog(classBuilder.valueClass, @"Creating an initializer builder %@", builderName);
-	id<ALCBuilder> initializerBuilder = [[ALCClassInitializerBuilder alloc] initWithParentClassBuilder:classBuilder arguments:macroProcessor];
+	ALCClassInitializerBuilder *initializerBuilder = [[ALCClassInitializerBuilder alloc] initWithValueClass:classBuilder.valueClass];
+	initializerBuilder.selector = initializer;
 	classBuilder.initializerBuilder = initializerBuilder;
-	STLog(classBuilder.valueClass, @"Created: %@, %@", initializerBuilder, macroProcessor);
-
 }
 
 -(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
-
-	STLog(classBuilder.valueClass, @"Registering a builder ...");
-
-	ALCMethodRegistrationMacroProcessor *macroProcessor = [[ALCMethodRegistrationMacroProcessor alloc] initWithParentClass:classBuilder.valueClass
-																																					  selector:selector
-																																					returnType:returnType];
-
+	STLog(classBuilder.valueClass, @"Registering a method builder for %@", NSStringFromSelector(selector));
+	id<ALCMacroProcessor> macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	loadMacrosAfter(macroProcessor, returnType);
-
-	// Add the registration.
-	// Dealing with a factory method registration so create a new entry in the model for the method.
-	NSString *builderName = [NSString stringWithFormat:@"-[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(macroProcessor.selector)];
-	STLog(classBuilder.valueClass, @"Creating a factory builder for selector %@", builderName);
-	id<ALCBuilder> methodBuilder = [[ALCMethodBuilder alloc] initWithParentClassBuilder:classBuilder arguments:macroProcessor];
+	id<ALCBuilder> methodBuilder = [[ALCMethodBuilder alloc] initWithValueClass:returnType];
 	[self addBuilderToModel:methodBuilder];
-	if (macroProcessor.asName != nil) {
-		methodBuilder.name = macroProcessor.asName;
-	}
-	methodBuilder.factory = macroProcessor.isFactory;
-	methodBuilder.primary = macroProcessor.isPrimary;
-	methodBuilder.createOnStartup = !macroProcessor.isFactory;
-
+	[classBuilder addMethodBuilder:methodBuilder];
 	STLog(classBuilder.valueClass, @"Created: %@, %@", methodBuilder, macroProcessor);
-
 }
 
--(void) addBuilderToModel:(id<ALCBuilder> __nonnull) builder {
+-(void) addBuilderToModel:(id<ALCBuilder> _Nonnull) builder {
 	[_model addBuilder:builder];
 }
 
@@ -179,10 +145,10 @@
 	STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
 	NSMutableSet *singletons = [[NSMutableSet alloc] init];
 	[[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop) {
-		if (classBuilder.createOnStartup) {
-			STLog(classBuilder, @"Creating singleton %@ -> %@", classBuilder.name, classBuilder);
-			[singletons addObject:classBuilder];
-			[classBuilder instantiate];
+		if (builder.createOnBoot) {
+			STLog(builder, @"Creating singleton %@ -> %@", builder.name, builder);
+			[singletons addObject:builder];
+			[builder instantiate];
 		}
 	}];
 

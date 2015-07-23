@@ -8,6 +8,7 @@
 
 @class ALCDependency;
 @protocol ALCDependencyPostProcessor;
+@protocol ALCMacroProcessor;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -7,8 +7,8 @@
 //
 
 #import "FactoryMethods.h"
-#import "Component.h"
 #import <Alchemic/Alchemic.h>
+#import "Component.h"
 
 @implementation FactoryMethods {
     int x;

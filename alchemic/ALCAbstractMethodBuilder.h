@@ -15,11 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractMethodBuilder : ALCAbstractBuilder
 
-@property (nonatomic, strong, readonly) id<ALCBuilder> parentClassBuilder;
-@property (nonatomic, assign, readonly) SEL selector;
-
--(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
-											arguments:(ALCMethodRegistrationMacroProcessor *) arguments NS_DESIGNATED_INITIALIZER;
+@property (nonatomic, weak) id<ALCBuilder> parentClassBuilder;
+@property (nonatomic, assign) SEL selector;
 
 -(id) invokeMethodOn:(id) target;
 

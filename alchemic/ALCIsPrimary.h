@@ -7,7 +7,8 @@
 //
 
 @import Foundation;
+#import "ALCMacro.h"
 
-@interface ALCIsPrimary : NSObject
+@interface ALCIsPrimary : NSObject<ALCMacro>
 
 @end

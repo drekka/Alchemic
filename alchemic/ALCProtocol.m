@@ -6,12 +6,11 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
+#import <StoryTeller/StoryTeller.h>
 #import "ALCProtocol.h"
 
-#import <Alchemic/Alchemic.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import "ALCRuntime.h"
-#import <StoryTeller/StoryTeller.h>
+#import "ALCBuilder.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"With <%s>", protocol_getName(_aProtocol)];
+    return [NSString stringWithFormat:@"With <%@>", NSStringFromProtocol(_aProtocol)];
 }
 
 #pragma mark - Equality

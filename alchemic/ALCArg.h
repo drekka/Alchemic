@@ -8,24 +8,23 @@
 
 @import Foundation;
 
+#import "ALCValueSourceFactory.h"
+#import "ALCMacro.h"
+
 @protocol ALCValueSource;
-#import "ALCValueDefMacro.h"
+@protocol ALCValueDefMacro;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCArg : NSObject
+@interface ALCArg : ALCValueSourceFactory<ALCMacro>
 
 @property (nonatomic, assign, readonly) Class argType;
+
+-(instancetype) init NS_UNAVAILABLE;
 
 -(instancetype) initWithArgType:(Class) argType NS_DESIGNATED_INITIALIZER;
 
 +(instancetype) argWithType:(Class) argType macros:(id<ALCValueDefMacro>) firstMacro, ... NS_REQUIRES_NIL_TERMINATION;
-
--(void) addMacro:(id<ALCValueDefMacro>) macro;
-
--(id<ALCValueSource>) valueSource;
-
--(void) validate;
 
 @end
 

@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * __nonnull)postProcessors{}
+-(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors{}
 
 @end
 

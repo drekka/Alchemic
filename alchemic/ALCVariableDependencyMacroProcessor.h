@@ -17,7 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) Ivar variable;
 
--(instancetype) initWithParentClass:(Class) parentClass variable:(NSString *) variable NS_DESIGNATED_INITIALIZER;
+-(instancetype) init NS_UNAVAILABLE;
+
+-(instancetype) initWithVariable:(Ivar) variable NS_DESIGNATED_INITIALIZER;
 
 @end
 

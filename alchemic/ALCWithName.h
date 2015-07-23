@@ -7,8 +7,9 @@
 //
 
 @import Foundation;
+#import "ALCMacro.h"
 
-@interface ALCWithName : NSObject
+@interface ALCWithName : NSObject<ALCMacro>
 
 @property (nonatomic, strong, readonly) NSString *asName;
 

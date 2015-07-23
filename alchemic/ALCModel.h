@@ -12,6 +12,8 @@
 @protocol ALCModelSearchExpression;
 @class ALCClassBuilder;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Core object management.
  */
@@ -24,21 +26,23 @@
 
  @param builder	the builder to be added.
  */
--(void) addBuilder:(id<ALCBuilder> __nonnull) builder;
+-(void) addBuilder:(id<ALCBuilder>) builder;
 
 #pragma mark - Querying
 
--(nonnull NSSet<id<ALCBuilder>> *) allBuilders;
+-(NSSet<id<ALCBuilder>> *) allBuilders;
 
--(nonnull NSSet<ALCClassBuilder *> *) allClassBuilders;
+-(NSSet<ALCClassBuilder *> *) allClassBuilders;
 
 /**
  Finds all builder which are matched by the passed list of qualifiers.
  
  @return a NSSet of builders that return objects of the class.
  */
--(nonnull NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> __nonnull *) searchExpressions;
+-(NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions;
 
--(nonnull NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> __nonnull *) builders;
+-(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders;
 
 @end
+
+NS_ASSUME_NONNULL_END

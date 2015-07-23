@@ -14,6 +14,7 @@
 #import "ALCModelValueSource.h"
 #import "ALCDependencyPostProcessor.h"
 #import "ALCInternalMacros.h"
+#import "ALCBuilder.h"
 
 @interface ALCModelValueSourceTests : XCTestCase
 

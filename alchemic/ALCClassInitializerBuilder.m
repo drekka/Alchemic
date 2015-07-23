@@ -6,16 +6,17 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
+#import "ALCInitializerMacroProcessor.h"
 #import "ALCClassInitializerBuilder.h"
 
 @implementation ALCClassInitializerBuilder
 
 -(nonnull id) instantiateObject {
-	STLog(self.valueClass, @"Instantiating a %s using %s", class_getName(self.parentClassBuilder.valueClass), sel_getName(self.selector));
-	id unInittedObj = [self.parentClassBuilder.valueClass alloc];
+	id<ALCBuilder> parent = self.parentClassBuilder;
+	STLog(self.valueClass, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), NSStringFromSelector(self.selector));
+	id unInittedObj = [parent.valueClass alloc];
 	return [self invokeMethodOn:unInittedObj];
 }
 

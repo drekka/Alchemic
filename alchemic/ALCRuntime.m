@@ -8,11 +8,15 @@
 
 @import ObjectiveC;
 #import <StoryTeller/StoryTeller.h>
-#import <Alchemic/Alchemic.h>
 
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
 #import "ALCRuntimeScanner.h"
+#import "ALCInternalMacros.h"
+#import "ALCContext.h"
+#import "ALCProtocol.h"
+#import "ALCConfig.h"
+#import "ALCClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

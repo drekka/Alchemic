@@ -8,7 +8,7 @@
 #import "ALCTestCase.h"
 #import <Alchemic/Alchemic.h>
 
-#import "ALCMethodRegistrationMacroProcessor.h"
+#import "ALCMethodMacroProcessor.h"
 #import "ALCModelValueSource.h"
 #import "ALCModelSearchExpression.h"
 #import "ALCValueSource.h"
@@ -20,13 +20,8 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 
-#define setupProcessorForSelector(selectorSig) \
-_processor = [[ALCMethodRegistrationMacroProcessor alloc] initWithParentClass:[self class] \
-selector:@selector(selectorSig) \
-returnType:[NSObject class]]
-
 @implementation ALCMethodRegistrationMacroProcessorTests {
-    ALCMethodRegistrationMacroProcessor *_processor;
+    ALCMethodMacroProcessor *_processor;
     ALCArg *_stringArg;
     ALCArg *_classArg;
     ALCArg *_protocolArg;
@@ -40,37 +35,37 @@ returnType:[NSObject class]]
 -(void) setUp {
     _protocolClass = NSClassFromString(@"Protocol");
     _metaClass = object_getClass([NSString class]);
-    _stringArg = [ALCArg argWithType:[NSString class] expressions:[ALCName withName:@"abc"], nil];
-    _classArg = [ALCArg argWithType:_metaClass expressions:[ALCClass withClass:[self class]], nil];
-    _protocolArg = [ALCArg argWithType:_protocolClass expressions:[ALCProtocol withProtocol:@protocol(NSCopying)], nil];
+    _stringArg = [ALCArg argWithType:[NSString class] macros:[ALCName withName:@"abc"], nil];
+    _classArg = [ALCArg argWithType:_metaClass macros:[ALCClass withClass:[self class]], nil];
+    _protocolArg = [ALCArg argWithType:_protocolClass macros:[ALCProtocol withProtocol:@protocol(NSCopying)], nil];
 }
 
 
 -(void) testSetsIsFactoryFlag {
-    setupProcessorForSelector(method);
+    _processor = [[ALCMethodMacroProcessor alloc] init];
     [self loadMacroProcessor:_processor withArguments:ACIsFactory, nil];
     XCTAssertTrue(_processor.isFactory);
 }
 
 -(void) testSetsIsPrimaryFlag {
-    setupProcessorForSelector(method);
+    _processor = [[ALCMethodMacroProcessor alloc] init];
     [self loadMacroProcessor:_processor withArguments:ACIsPrimary, nil];
     XCTAssertTrue(_processor.isPrimary);
 }
 
 -(void) testSetsName {
-    setupProcessorForSelector(method);
+    _processor = [[ALCMethodMacroProcessor alloc] init];
     [self loadMacroProcessor:_processor withArguments:ACWithName(@"abc"), nil];
     XCTAssertEqualObjects(@"abc", _processor.asName);
 }
 
 -(void) testSetsSelector {
-    setupProcessorForSelector(method);
+    _processor = [[ALCMethodMacroProcessor alloc] init];
     XCTAssertEqual(@selector(method), _processor.selector);
 }
 
 -(void) testSetsReturnType {
-    setupProcessorForSelector(method);
+    _processor = [[ALCMethodMacroProcessor alloc] init];
     XCTAssertEqual([NSObject class], _processor.returnType);
 }
 

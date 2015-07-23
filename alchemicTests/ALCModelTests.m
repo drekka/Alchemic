@@ -16,7 +16,7 @@
 #import "ALCBuilder.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
-#import "ALCMethodRegistrationMacroProcessor.h"
+#import "ALCMethodMacroProcessor.h"
 
 @interface ALCModelTests : XCTestCase
 
@@ -32,12 +32,9 @@
 -(void) setUp {
     _model = [[ALCModel alloc] init];
     _mockContext = OCMClassMock([ALCContext class]);
-    _builder1 = [[ALCClassBuilder alloc] initWithValueClass:[ALCModelTests class]
-                                                       name:@"abc"];
-    ALCMethodRegistrationMacroProcessor *macroProcessor = [[ALCMethodRegistrationMacroProcessor alloc] initWithParentClass:_builder1.valueClass
-                                                                                                                  selector:@selector(someMethod)
-                                                                                                                returnType:[NSString class]];
-    _builder2 = [[ALCMethodBuilder alloc] initWithParentClassBuilder:_builder1 arguments:macroProcessor];
+    _builder1 = [[ALCClassBuilder alloc] initWithValueClass:[ALCModelTests class]];
+    _builder2 = [[ALCMethodBuilder alloc] initWithValueClass:[NSString class]];
+	[(ALCClassBuilder *)_builder1 addMethodBuilder:_builder2];
     [_model addBuilder:_builder1];
     [_model addBuilder:_builder2];
 }

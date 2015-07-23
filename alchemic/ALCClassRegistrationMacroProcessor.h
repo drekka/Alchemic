@@ -1,26 +1,13 @@
 //
-//  ALCClassMacroProcessor.h
+//  ALCClassRegistrationMacroProcessor.h
 //  Alchemic
 //
-//  Created by Derek Clarkson on 17/07/2015.
+//  Created by Derek Clarkson on 23/07/2015.
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-@import Foundation;
-@import ObjectiveC;
-@protocol ALCValueSource;
+#import "ALCObjectFactoryMacroProcessor.h"
 
-#import "ALCAbstractMacroProcessor.h"
-
-NS_ASSUME_NONNULL_BEGIN
-
-
-@interface ALCClassRegistrationMacroProcessor : ALCAbstractMacroProcessor
-
-@property (nonatomic, strong, readonly) NSString *asName;
-@property (nonatomic, assign, readonly) BOOL isFactory;
-@property (nonatomic, assign, readonly) BOOL isPrimary;
+@interface ALCClassRegistrationMacroProcessor : ALCObjectFactoryMacroProcessor
 
 @end
-
-NS_ASSUME_NONNULL_END

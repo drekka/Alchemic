@@ -6,72 +6,60 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
+@import ObjectiveC;
+
 #import "ALCAbstractMacroProcessor.h"
 
-#import "ALCValueSource.h"
+#import "ALCValueSourceFactory.h"
 #import "ALCModelSearchExpression.h"
-#import "ALCConstantValue.h"
-#import "ALCConstantValueSource.h"
-#import "ALCModelValueSource.h"
+#import "ALCValueDefMacro.h"
+#import "ALCMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCAbstractMacroProcessor
-
-@synthesize parentClass = _parentClass;
-
--(instancetype) initWithParentClass:(nonnull Class)parentClass {
-    self = [super init];
-    if (self) {
-        _valueSourceMacros = [[NSMutableArray alloc] init];
-		 _parentClass = parentClass;
-    }
-    return self;
+@implementation ALCAbstractMacroProcessor {
+	NSMutableArray<ALCValueSourceFactory *> *_valueSourceFactories;
 }
 
--(void) addArgument:(id) argument {
-
-	// If a non-arg is passed then add it to the first arg.
-    if ([argument conformsToProtocol:@protocol(ALCModelSearchExpression)]
-        || [argument isKindOfClass:[ALCConstantValue class]]) {
-        [_valueSourceMacros addObject:(id<ALCModelSearchExpression>)argument];
-    } else {
-        NSString *source = self.parentClass == nil ? @"": [NSString stringWithFormat:@" %@ class registration", NSStringFromClass(self.parentClass)];
-        @throw [NSException exceptionWithName:@"AlchemicUnexpectedMacro"
-                                       reason:[NSString stringWithFormat:@"Unexpected macro %@%@", argument, source]
-                                     userInfo:nil];
-    }
+-(instancetype) init {
+	self = [super init];
+	if (self) {
+		_valueSourceFactories = [[NSMutableArray alloc] init];
+	}
+	return self;
 }
 
--(id<ALCValueSource>) valueSource {
-    return [_valueSourceMacros count] == 0 ? nil : [self valueSourceForMacros:_valueSourceMacros];
+-(void) addMacro:(id<ALCMacro>) macro {
+	if ([macro isKindOfClass:[ALCValueSourceFactory class]]) {
+		[_valueSourceFactories addObject:(ALCValueSourceFactory *)macro];
+	} else if ([macro conformsToProtocol:@protocol(ALCValueDefMacro)]) {
+		if ([_valueSourceFactories count] == 0) {
+			[_valueSourceFactories addObject:[[ALCValueSourceFactory alloc] init]];
+		}
+		[_valueSourceFactories[0] addMacro:(id<ALCValueDefMacro>)macro];
+	} else {
+		[self raiseUnexpectedMacroError:macro];
+	}
 }
 
--(id<ALCValueSource>) valueSourceForMacros:(NSArray *) macros {
-    if ([macros[0] isKindOfClass:[ALCConstantValue class]]) {
-        return [[ALCConstantValueSource alloc] initWithValue:((ALCConstantValue *)macros[0]).value];
-    }
-    return [[ALCModelValueSource alloc] initWithSearchExpressions:[NSSet setWithArray:macros]];
+-(void) raiseUnexpectedMacroError:(id<ALCMacro>) macro {
+	@throw [NSException exceptionWithName:@"AlchemicUnexpectedMacro"
+											 reason:[NSString stringWithFormat:@"Unexpected macro %@", macro]
+										  userInfo:nil];
+}
+
+-(ALCValueSourceFactory *) valueSourceFactoryForIndex:(NSUInteger) index {
+	return _valueSourceFactories[index];
+}
+
+-(NSUInteger) valueSourceCount {
+	return [_valueSourceFactories count];
 }
 
 -(void) validate {
-
-    // Validate arguments.
-    for (id macro in _valueSourceMacros) {
-
-        // If any argument is a constant then it must be the only one.
-        if ([macro isKindOfClass:[ALCConstantValue class]] && [self->_valueSourceMacros count] > 1) {
-            @throw [NSException exceptionWithName:@"AlchemicInvalidArguments"
-                                           reason:[NSString stringWithFormat:@"ACValue(...) must be the only data source macro"]
-                                         userInfo:nil];
-        }
-
-        if ([macro isKindOfClass:[NSArray class]]) {
-            @throw [NSException exceptionWithName:@"AlchemicUnexpectedArray"
-                                           reason:[NSString stringWithFormat:@"Arrays of qualifiers not allowed for dependencies. Check the definition."]
-                                         userInfo:nil];
-        }
-    };
+	for (ALCValueSourceFactory *valueSourceFactory in _valueSourceFactories) {
+		[valueSourceFactory validate];
+	}
 }
 
 @end

@@ -6,8 +6,8 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCContext.h>
+#import "ALCContext.h"
+#import "ALCInternalMacros.h"
 
 #pragma mark - Defining objects
 
@@ -42,7 +42,7 @@
 
 #define ACValue(_value) [ALCConstantValue constantValueWithValue:_value]
 
-#define ACArg(argType, expression, ...) [ALCArg argWithType:[argType class] expressions:expression, ## __VA_ARGS__, nil]
+#define ACArg(argType, valueMacros, ...) [ALCArg argWithType:[argType class] macros:valueMacros, ## __VA_ARGS__, nil]
 
 #pragma mark - Injection
 

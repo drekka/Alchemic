@@ -7,18 +7,19 @@
 //
 
 @import ObjectiveC;
-#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntimeScanner.h"
 #import "ALCClassBuilder.h"
 #import "ALCInternalMacros.h"
+#import "ALCDependencyPostProcessor.h"
 #import "ALCResourceLocator.h"
+#import "ALCContext.h"
 
 @implementation ALCRuntimeScanner
 
--(nonnull instancetype) initWithSelector:(ClassSelector __nonnull) selector
-                               processor:(ClassProcessor __nonnull) processor {
+-(nonnull instancetype) initWithSelector:(ClassSelector _Nonnull) selector
+                               processor:(ClassProcessor _Nonnull) processor {
     self = [super init];
     if (self) {
         _selector = selector;
@@ -29,10 +30,10 @@
 
 +(nonnull instancetype) modelScanner {
     return [[ALCRuntimeScanner alloc]
-            initWithSelector:^BOOL(Class  __nonnull __unsafe_unretained aClass) {
+            initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
                 return YES;
             }
-            processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
+            processor:^(ALCContext * _Nonnull context, Class  _Nonnull __unsafe_unretained aClass) {
 
                 // Get the class methods. We need to get the class of the class for them.
                 unsigned int methodCount;
@@ -68,10 +69,10 @@
 
 +(nonnull instancetype) dependencyPostProcessorScanner {
     return [[ALCRuntimeScanner alloc]
-            initWithSelector:^BOOL(Class  __nonnull __unsafe_unretained aClass) {
+            initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
                 return [aClass conformsToProtocol:@protocol(ALCDependencyPostProcessor)];
             }
-            processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
+            processor:^(ALCContext * _Nonnull context, Class  _Nonnull __unsafe_unretained aClass) {
                 STLog(ALCHEMIC_LOG, @"Adding dependency post processor %@", NSStringFromClass(aClass));
                 [context addDependencyPostProcessor:[[aClass alloc] init]];
             }];
@@ -79,10 +80,10 @@
 
 +(nonnull instancetype) resourceLocatorScanner {
     return [[ALCRuntimeScanner alloc]
-            initWithSelector:^BOOL(Class  __nonnull __unsafe_unretained aClass) {
+            initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
                 return [aClass conformsToProtocol:@protocol(ALCResourceLocator)];
             }
-            processor:^(ALCContext * __nonnull context, Class  __nonnull __unsafe_unretained aClass) {
+            processor:^(ALCContext * _Nonnull context, Class  _Nonnull __unsafe_unretained aClass) {
                 STLog(ALCHEMIC_LOG, @"Adding resource locator %@", NSStringFromClass(aClass));
                 //ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
                 //classBuilder.value = [[aClass alloc] init];

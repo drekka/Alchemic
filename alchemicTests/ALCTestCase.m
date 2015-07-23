@@ -15,6 +15,7 @@
 #import "ALCRuntime.h"
 #import "ALCRuntimeScanner.h"
 #import "ALCAbstractMacroProcessor.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
     [ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
 
     ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
-    [classes enumerateObjectsUsingBlock:^(Class  __nonnull aClass, NSUInteger idx, BOOL * __nonnull stop) {
+    [classes enumerateObjectsUsingBlock:^(Class  _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
         modelScanner.processor(self.context, aClass);
     }];
     
@@ -59,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 }
 
--(void) loadMacroProcessor:(ALCAbstractMacroProcessor *) macroProcessor withArguments:(id __nullable) firstArgument, ... NS_REQUIRES_NIL_TERMINATION {
+-(void) loadMacroProcessor:(ALCAbstractMacroProcessor *) macroProcessor withArguments:(id _Nullable) firstArgument, ... NS_REQUIRES_NIL_TERMINATION {
     loadMacrosIncluding(macroProcessor, firstArgument);
 }
 

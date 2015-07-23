@@ -7,30 +7,45 @@
 //
 
 #import "ALCVariableDependencyMacroProcessor.h"
-#import <Alchemic/Alchemic.h>
+#import "ALCValueSourceFactory.h"
 #import "ALCRuntime.h"
+#import "ALCMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCVariableDependencyMacroProcessor {
-    NSString *_variableName;
+    Ivar _variable;
 }
 
--(instancetype) initWithParentClass:(Class) parentClass variable:(NSString *) variable {
-    self = [super initWithParentClass:parentClass];
+-(nonnull instancetype)init {
+	return nil;
+}
+
+-(instancetype) initWithVariable:(nonnull Ivar) variable {
+    self = [super init];
     if (self) {
-        _variableName = variable;
+		 _variable = variable;
     }
     return self;
 }
 
--(void) validate {
-    // Set the ivar.
-    _variable = [ALCRuntime aClass:self.parentClass variableForInjectionPoint:_variableName];
+-(void)addMacro:(nonnull id<ALCMacro>)macro {
+	// Error if we get arg macros.
+	if ([macro isKindOfClass:[ALCValueSourceFactory class]]) {
+		[self raiseUnexpectedMacroError:macro];
+	} else {
+		[super addMacro:macro];
+	}
+}
 
-    // Check macros
-    if ([self.valueSourceMacros count] == 0) {
-        [self.valueSourceMacros addObjectsFromArray:[ALCRuntime searchExpressionsForVariable:_variable].allObjects];
+-(void) validate {
+
+    // Check macros and create if necessary.
+    if ([self valueSourceCount] == 0) {
+		 NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForVariable:_variable];
+		 for (id<ALCModelSearchExpression> macro in macros) {
+			 [self addMacro: (id<ALCMacro>)macro];
+		 }
     }
 
     [super validate];

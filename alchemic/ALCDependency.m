@@ -6,23 +6,29 @@
 //
 
 @import ObjectiveC;
-#import <Alchemic/Alchemic.h>
+
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntime.h"
 #import "ALCValueSource.h"
 #import "ALCModelValueSource.h"
 #import "ALCValueResolver.h"
+#import "ALCDependency.h"
+#import "ALCBuilder.h"
+#import "ALCAlchemic.h"
+#import "ALCDependencyPostProcessor.h"
+#import "ALCValueResolver.h"
+#import "ALCContext.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCDependency {
-    NSSet<id<ALCBuilder>> __nonnull *_candidateBuilders;
+    NSSet<id<ALCBuilder>> *_candidateBuilders;
     id<ALCValueSource> _valueSource;
 
 }
 
--(nonnull instancetype) initWithValueClass:(Class __nonnull) valueClass
+-(nonnull instancetype) initWithValueClass:(Class _Nonnull) valueClass
                                valueSource:(nonnull id<ALCValueSource>)valueSource {
     self = [super init];
     if (self) {
@@ -32,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> __nonnull *) postProcessors {
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
     [_valueSource resolveWithPostProcessors:postProcessors];
 }
 

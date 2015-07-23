@@ -8,10 +8,8 @@
 
 @import Foundation;
 
-@protocol ALCValueSource;
-
 /**
- Tags classes which represent macros.
+ Tags macros which can generate ALCValueSource objects.
  */
 @protocol ALCValueDefMacro <NSObject>
 

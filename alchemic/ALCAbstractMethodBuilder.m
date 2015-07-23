@@ -5,12 +5,15 @@
 //
 
 #import <StoryTeller/StoryTeller.h>
-#import <Alchemic/Alchemic.h>
 
 #import "ALCAbstractMethodBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCClassBuilder.h"
-#import "ALCMethodRegistrationMacroProcessor.h"
+#import "ALCMacroProcessor.h"
+#import "ALCDependency.h"
+#import "ALCArg.h"
+#import "ALCAlchemic.h"
+#import "ALCContext.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,22 +23,23 @@ NS_ASSUME_NONNULL_BEGIN
 	BOOL _useClassMethod;
 }
 
--(nonnull instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
-													  arguments:(ALCMethodRegistrationMacroProcessor *) arguments {
-
-	self = [super initWithValueClass:arguments.returnType];
+-(instancetype) initWithValueClass:(__unsafe_unretained _Nonnull Class) valueClass {
+	self = [super initWithValueClass:valueClass];
 	if (self) {
-		_parentClassBuilder = parentClassBuilder;
-		_selector = arguments.selector;
 		_invArgumentDependencies = [[NSMutableArray alloc] init];
-
-		// Setup the dependencies for each argument.
-		for (ALCArg *arg in arguments.methodValueSources) {
-			[self->_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType
-																											valueSource:[arg valueSource]]];
-		};
 	}
 	return self;
+}
+
+-(void)configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>) macroProcessor {
+	[super configureWithMacroProcessor:macroProcessor];
+	for (NSUInteger i = 0; i < [macroProcessor valueSourceCount]; i++) {
+		ALCArg *arg = (ALCArg *)[macroProcessor valueSourceFactoryForIndex:i];
+		[_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType
+																								valueSource:[arg valueSource]]];
+	}
+	[self validateSelector:self.selector];
+	[self validateArgumentsForSelector:self.selector macroProcessor:macroProcessor];
 }
 
 -(id) instantiateObject {
@@ -74,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
 	};
 }
 
--(void) injectObjectDependencies:(id __nonnull) object {
+-(void) injectObjectDependencies:(id _Nonnull) object {
 	STLog([object class], @">>> Checking whether a %s instance has dependencies", object_getClassName(object));
 	[[ALCAlchemic mainContext] injectDependencies:object];
 }

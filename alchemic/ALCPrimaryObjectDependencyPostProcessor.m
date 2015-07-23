@@ -11,9 +11,11 @@
 #import <Alchemic/ALCInternalMacros.h>
 #import <StoryTeller/StoryTeller.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation ALCPrimaryObjectDependencyPostProcessor
 
--(nonnull NSSet<id<ALCBuilder>> *) process:(NSSet<id<ALCBuilder>> __nonnull *) dependencies {
+-(NSSet<id<ALCBuilder>> *) process:(NSSet<id<ALCBuilder>> *) dependencies {
 
     // Build a list of primary objects.
     NSMutableSet<id<ALCBuilder>> *primaries = [[NSMutableSet alloc] init];
@@ -29,3 +31,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

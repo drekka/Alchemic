@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setUpALCContextWithClasses:(NSArray<Class> *) classes;
 
--(void) loadMacroProcessor:(ALCAbstractMacroProcessor *) macroProcessor withArguments:(id __nullable) firstArgument, ...;
+-(void) loadMacroProcessor:(ALCAbstractMacroProcessor *) macroProcessor withArguments:(id _Nullable) firstArgument, ...;
 
 @end
 
