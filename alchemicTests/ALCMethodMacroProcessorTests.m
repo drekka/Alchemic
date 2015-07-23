@@ -13,14 +13,14 @@
 #import "ALCModelSearchExpression.h"
 #import "ALCValueSource.h"
 
-@interface ALCMethodRegistrationMacroProcessorTests : ALCTestCase
+@interface ALCMethodMacroProcessorTests : ALCTestCase
 
 @end
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 
-@implementation ALCMethodRegistrationMacroProcessorTests {
+@implementation ALCMethodMacroProcessorTests {
     ALCMethodMacroProcessor *_processor;
     ALCArg *_stringArg;
     ALCArg *_classArg;
@@ -57,44 +57,6 @@
     _processor = [[ALCMethodMacroProcessor alloc] init];
     [self loadMacroProcessor:_processor withArguments:ACWithName(@"abc"), nil];
     XCTAssertEqualObjects(@"abc", _processor.asName);
-}
-
--(void) testSetsSelector {
-    _processor = [[ALCMethodMacroProcessor alloc] init];
-    XCTAssertEqual(@selector(method), _processor.selector);
-}
-
--(void) testSetsReturnType {
-    _processor = [[ALCMethodMacroProcessor alloc] init];
-    XCTAssertEqual([NSObject class], _processor.returnType);
-}
-
--(void) testMethodWithModelSourceValueSources {
-    setupProcessorForSelector(methodWithString:class:protocol:);
-    [self loadMacroProcessor:_processor withArguments:_stringArg, _classArg, _protocolArg, nil];
-    NSArray<ALCArg *> *args = [_processor methodValueSources];
-    XCTAssertEqualObjects(_stringArg, args[0]);
-}
-
--(void) testMethodWithTooFewArgumentsThrows {
-    setupProcessorForSelector(methodWithString:class:protocol:);
-    XCTAssertThrowsSpecificNamed(([self loadMacroProcessor:_processor withArguments:_stringArg, _classArg, nil]), NSException, @"AlchemicIncorrectNumberArguments");
-}
-
--(void) testMethodWithTooManyArgumentsThrows {
-    setupProcessorForSelector(methodWithString:class:protocol:);
-    XCTAssertThrowsSpecificNamed(([self loadMacroProcessor:_processor withArguments:_stringArg, _classArg, _protocolArg, _stringArg, nil]), NSException, @"AlchemicIncorrectNumberArguments");
-}
-
--(void) testMethodSetsDefaultName {
-    setupProcessorForSelector(method);
-    [_processor validate];
-    XCTAssertEqualObjects(@"ALCMethodRegistrationMacroProcessorTests::method", _processor.asName);
-}
-
--(void) testValidateSelectorInValid {
-    setupProcessorForSelector(xxxx);
-    XCTAssertThrowsSpecificNamed([_processor validate], NSException, @"AlchemicSelectorNotFound");
 }
 
 #pragma mark - Internal

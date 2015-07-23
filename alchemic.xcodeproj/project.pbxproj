@@ -88,7 +88,7 @@
 		6C901DF61B58DCB40046CF9E /* ALCName.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C901DF41B58DCB40046CF9E /* ALCName.m */; };
 		6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C91F9EE1B399009002DF241 /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C92C6AF1B58BC2A00EE49D1 /* ALCVariableDependencyMacroProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C92C6A81B589CDA00EE49D1 /* ALCVariableDependencyMacroProcessorTests.m */; };
-		6C92C6B01B58BC3100EE49D1 /* ALCMethodRegistrationMacroProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C92C6A71B589CDA00EE49D1 /* ALCMethodRegistrationMacroProcessorTests.m */; };
+		6C92C6B01B58BC3100EE49D1 /* ALCMethodMacroProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C92C6A71B589CDA00EE49D1 /* ALCMethodMacroProcessorTests.m */; };
 		6C92C6B11B58CFCD00EE49D1 /* ALCMethodMacroProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C92C6A41B5893C200EE49D1 /* ALCMethodMacroProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CA4DFA01B58930E0059F0DF /* ALCObjectFactoryMacroProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA4DF9E1B58930E0059F0DF /* ALCObjectFactoryMacroProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CA4DFA11B58930E0059F0DF /* ALCObjectFactoryMacroProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA4DF9F1B58930E0059F0DF /* ALCObjectFactoryMacroProcessor.m */; };
@@ -206,7 +206,7 @@
 		6C901DF41B58DCB40046CF9E /* ALCName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCName.m; sourceTree = "<group>"; };
 		6C91F9EE1B399009002DF241 /* ALCMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMacros.h; sourceTree = "<group>"; };
 		6C92C6A41B5893C200EE49D1 /* ALCMethodMacroProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMethodMacroProcessor.h; sourceTree = "<group>"; };
-		6C92C6A71B589CDA00EE49D1 /* ALCMethodRegistrationMacroProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMethodRegistrationMacroProcessorTests.m; sourceTree = "<group>"; };
+		6C92C6A71B589CDA00EE49D1 /* ALCMethodMacroProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMethodMacroProcessorTests.m; sourceTree = "<group>"; };
 		6C92C6A81B589CDA00EE49D1 /* ALCVariableDependencyMacroProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCVariableDependencyMacroProcessorTests.m; sourceTree = "<group>"; };
 		6C978BF41AAC08C200C2D48D /* InjectableProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InjectableProtocol.h; sourceTree = "<group>"; };
 		6C9ADAB61ADFEB1500A240F2 /* ALCResourceLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALCResourceLocator.h; path = alchemic/ALCResourceLocator.h; sourceTree = "<group>"; };
@@ -411,7 +411,7 @@
 		6C8CD96A1B561E0500C1BC7F /* Macro arguments */ = {
 			isa = PBXGroup;
 			children = (
-				6C92C6A71B589CDA00EE49D1 /* ALCMethodRegistrationMacroProcessorTests.m */,
+				6C92C6A71B589CDA00EE49D1 /* ALCMethodMacroProcessorTests.m */,
 				6C92C6A81B589CDA00EE49D1 /* ALCVariableDependencyMacroProcessorTests.m */,
 				6C8CD96B1B561E2B00C1BC7F /* ALCClassRegistrationMacroProcessorTests.m */,
 			);
@@ -772,7 +772,7 @@
 				6C36D7941B38533C0073C4FB /* FactoryObject.m in Sources */,
 				6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */,
 				6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */,
-				6C92C6B01B58BC3100EE49D1 /* ALCMethodRegistrationMacroProcessorTests.m in Sources */,
+				6C92C6B01B58BC3100EE49D1 /* ALCMethodMacroProcessorTests.m in Sources */,
 				6C36D7901B38533C0073C4FB /* InjectionTests.m in Sources */,
 				6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */,
 				6CC9D76E1B5B7D5200EFD517 /* FactoryMethodWithArgTests.m in Sources */,
@@ -975,6 +975,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
 					"$(inherited)",
+					/PrivateHeaders,
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -994,6 +995,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
 					"$(inherited)",
+					/PrivateHeaders,
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

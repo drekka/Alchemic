@@ -25,7 +25,7 @@
 }
 
 -(void) setUp {
-    _processor = [[ALCClassRegistrationMacroProcessor alloc] initWithParentClass:[self class]];
+    _processor = [[ALCClassRegistrationMacroProcessor alloc] init];
 }
 
 -(void) testSetsIsFactoryFlag {
