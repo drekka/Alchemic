@@ -277,7 +277,7 @@
 
 -(void) testAlchemicSelector {
     SEL alcSel = [ALCRuntime alchemicSelectorForSelector:@selector(testAlchemicSelector)];
-    XCTAssertEqualObjects(@"_alchemic_testAlchemicSelector", NSStringFromSelector(alcSel));
+    XCTAssertEqualObjects(@"_alc_testAlchemicSelector", NSStringFromSelector(alcSel));
 }
 
 -(void) testInjectVariableValue {

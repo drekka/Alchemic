@@ -8,50 +8,49 @@
 
 #define ALCHEMIC_LOG @"Alchemic"
 
-#define ALCHEMIC_PREFIX _alchemic_
+#define ALCHEMIC_PREFIX _alc_
 
 // Used to assemble two strings. We use double macros to ensure any
 // embedded macros are resolved.
-#define _alchemic_concat(prefix, suffix) _alchemic_concat_strings(prefix, suffix)
-#define _alchemic_concat_strings(prefix, suffix) prefix ## suffix
+#define alc_concat(prefix, suffix) _alc_concat(prefix, suffix)
+#define _alc_concat(prefix, suffix) prefix ## suffix
 
-#define ALCHEMIC_METHOD_PREFIX _alchemic_concat(ALCHEMIC_PREFIX, __LINE__)
+#define ALCHEMIC_METHOD_PREFIX alc_concat(ALCHEMIC_PREFIX, __LINE__)
 
 // Convert raw macro text to a char *
-#define _alchemic_toCharPointer(text) __alchemic_toCharPointer(text)
-#define __alchemic_toCharPointer(text) #text
+#define alc_toCharPointer(text) _alc_toCharPointer(text)
+#define _alc_toCharPointer(text) #text
 
 // Convert raw macro text to a NSString *
-#define _alchemic_toNSString(chars) __alchemic_toNSString(chars)
-#define __alchemic_toNSString(chars) @#chars
+#define alc_toNSString(chars) _alc_toNSString(chars)
+#define _alc_toNSString(chars) @#chars
 
 // Processes varadic args
-#define processVarArgsIncluding(argType, firstArg, codeBlock) \
+#define alc_processVarArgsIncluding(argType, firstArg, codeBlock) \
 { \
-va_list args; \
-va_start(args, firstArg); \
-for (argType arg = firstArg; arg != nil; arg = va_arg(args, argType)) { \
-codeBlock; \
+va_list argList; \
+va_start(argList, firstArg); \
+for (argType nextArg = firstArg; nextArg != nil; nextArg = va_arg(argList, argType)) { \
+codeBlock(nextArg); \
 } \
-va_end(args); \
+va_end(argList); \
 }
 
-
 // Processes varadic args into a macro processor, excluding the arg that is used to guard them.
-#define loadMacrosAfter(processorVar, afterArg) \
+#define alc_loadMacrosAfter(processorVar, afterArg) \
 { \
-va_list args; \
-va_start(args, afterArg); \
+va_list macroList; \
+va_start(macroList, afterArg); \
 id macro; \
-while ((macro = va_arg(args, id)) != nil) { \
+while ((macro = va_arg(macroList, id)) != nil) { \
 [processorVar addMacro:macro]; \
 } \
-va_end(args); \
+va_end(macroList); \
 [processorVar validate]; \
 }
 
 // Processes varadic args into a macro processor, including the arg that is used to guard them.
-#define loadMacrosIncluding(processorVar, firstArg) \
-processVarArgsIncluding(id<ALCMacro>, firstArg, [processorVar addMacro:arg]); \
+#define alc_loadMacrosIncluding(processorVar, firstArg) \
+alc_processVarArgsIncluding(id<ALCMacro>, firstArg, ^(id<ALCMacro> macro){[processorVar addMacro:macro];}); \
 [processorVar validate];
 

@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) withName:(NSString *) aName;
 
--(BOOL) isEqualToWithName:(ALCName *) withName;
+-(BOOL) isEqualToName:(ALCName *) withName;
 
 @end
 

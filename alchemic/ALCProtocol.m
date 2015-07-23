@@ -46,10 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL) isEqual:(id)object {
     return self == object
-    || ([object isKindOfClass:[ALCProtocol class]] && [self isEqualToWithProtocol:object]);
+    || ([object isKindOfClass:[ALCProtocol class]] && [self isEqualToProtocol:object]);
 }
 
--(BOOL) isEqualToWithProtocol:(nonnull ALCProtocol *)withProtocol {
+-(BOOL) isEqualToProtocol:(nonnull ALCProtocol *)withProtocol {
     return withProtocol != nil && withProtocol.aProtocol == _aProtocol;
 }
 

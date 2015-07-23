@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) withClass:(Class) aClass;
 
--(BOOL) isEqualToWithClass:(ALCClass *) withClass;
+-(BOOL) isEqualToClass:(ALCClass *) withClass;
 
 @end
 

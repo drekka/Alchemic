@@ -60,8 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 }
 
--(void) loadMacroProcessor:(ALCAbstractMacroProcessor *) macroProcessor withArguments:(id _Nullable) firstArgument, ... NS_REQUIRES_NIL_TERMINATION {
-    loadMacrosIncluding(macroProcessor, firstArgument);
+-(void) loadMacroProcessor:(ALCAbstractMacroProcessor *) macroProcessor withArguments:(nullable id) firstArgument, ... NS_REQUIRES_NIL_TERMINATION {
+    alc_loadMacrosIncluding(macroProcessor, firstArgument);
 }
 
 @end

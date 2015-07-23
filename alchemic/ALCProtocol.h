@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) withProtocol:(Protocol *) aProtocol;
 
--(BOOL) isEqualToWithProtocol:(ALCProtocol *) withProtocol;
+-(BOOL) isEqualToProtocol:(ALCProtocol *) withProtocol;
 
 @end
 

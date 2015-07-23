@@ -87,7 +87,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 }
 
 +(SEL) alchemicSelectorForSelector:(SEL) selector {
-    const char * prefix = _alchemic_toCharPointer(ALCHEMIC_PREFIX);
+    const char * prefix = alc_toCharPointer(ALCHEMIC_PREFIX);
     const char * selName = sel_getName(selector);
     const char * newSelectorName = [NSString stringWithFormat:@"%s%s", prefix, selName].UTF8String;
     return sel_registerName(newSelectorName);

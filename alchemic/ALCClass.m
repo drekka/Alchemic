@@ -46,10 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL) isEqual:(id)object {
     return self == object
-    || ([object isKindOfClass:[ALCClass class]] && [self isEqualToWithClass:object]);
+    || ([object isKindOfClass:[ALCClass class]] && [self isEqualToClass:object]);
 }
 
--(BOOL) isEqualToWithClass:(nonnull ALCClass *)withClass {
+-(BOOL) isEqualToClass:(nonnull ALCClass *)withClass {
     return withClass != nil && withClass.aClass == _aClass;
 }
 

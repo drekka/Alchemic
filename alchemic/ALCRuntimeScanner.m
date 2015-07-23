@@ -41,7 +41,7 @@
 
                 // Search the methods for registration methods.
                 ALCClassBuilder *currentClassBuilder = nil;
-                NSString *alchemicMethodPrefix = _alchemic_toNSString(ALCHEMIC_PREFIX);
+                NSString *alchemicMethodPrefix = alc_toNSString(ALCHEMIC_PREFIX);
                 for (size_t idx = 0; idx < methodCount; ++idx) {
 
                     // If the method is not an alchemic one, then ignore it.

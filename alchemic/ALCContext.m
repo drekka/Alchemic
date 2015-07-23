@@ -94,14 +94,14 @@
 	STLog(classBuilder.valueClass, @"Registering a dependency ...");
 	Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
 	id<ALCMacroProcessor> macroProcessor = [[ALCVariableDependencyMacroProcessor alloc] initWithVariable:var];
-	loadMacrosAfter(macroProcessor, variable);
+	alc_loadMacrosAfter(macroProcessor, variable);
 	[classBuilder addVariableInjection:macroProcessor];
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
 	STLog(classBuilder.valueClass, @"Registering a builder ...");
 	id<ALCMacroProcessor> macroProcessor = [[ALCClassRegistrationMacroProcessor alloc] init];
-	loadMacrosAfter(macroProcessor, classBuilder);
+	alc_loadMacrosAfter(macroProcessor, classBuilder);
 	[classBuilder configureWithMacroProcessor:macroProcessor];
 	STLog(classBuilder.valueClass, @"Created: %@, %@", classBuilder, macroProcessor);
 }
@@ -109,7 +109,7 @@
 -(void) registerClassInitializer:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... {
 	STLog(classBuilder.valueClass, @"Registering a class initializer for a %@", NSStringFromClass(classBuilder.valueClass));
 	id<ALCMacroProcessor> macroProcessor = [[ALCInitializerMacroProcessor alloc] init];
-	loadMacrosAfter(macroProcessor, initializer);
+	alc_loadMacrosAfter(macroProcessor, initializer);
 	ALCClassInitializerBuilder *initializerBuilder = [[ALCClassInitializerBuilder alloc] initWithValueClass:classBuilder.valueClass];
 	initializerBuilder.selector = initializer;
 	classBuilder.initializerBuilder = initializerBuilder;
@@ -118,7 +118,7 @@
 -(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
 	STLog(classBuilder.valueClass, @"Registering a method builder for %@", NSStringFromSelector(selector));
 	id<ALCMacroProcessor> macroProcessor = [[ALCMethodMacroProcessor alloc] init];
-	loadMacrosAfter(macroProcessor, returnType);
+	alc_loadMacrosAfter(macroProcessor, returnType);
 	id<ALCBuilder> methodBuilder = [[ALCMethodBuilder alloc] initWithValueClass:returnType];
 	[self addBuilderToModel:methodBuilder];
 	[classBuilder addMethodBuilder:methodBuilder];

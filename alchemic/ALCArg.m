@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) argWithType:(Class) argType macros:(id<ALCValueDefMacro>) firstMacro, ... {
 	ALCArg *newArg = [[ALCArg alloc] initWithArgType:argType];
-	processVarArgsIncluding(id<ALCValueDefMacro>, firstMacro, [newArg addMacro:arg]);
+	alc_processVarArgsIncluding(id<ALCValueDefMacro>, firstMacro, ^(id<ALCValueDefMacro> arg){[newArg addMacro:arg];});
 	return newArg;
 }
 

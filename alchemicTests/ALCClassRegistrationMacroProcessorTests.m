@@ -7,11 +7,13 @@
 //
 #import "ALCTestCase.h"
 
-#import "ALCClassRegistrationMacroProcessor.h"
 #import <Alchemic/Alchemic.h>
+
+#import "ALCClassRegistrationMacroProcessor.h"
 #import "ALCModelValueSource.h"
 #import "ALCModelSearchExpression.h"
 #import "ALCValueSource.h"
+#import "ALCInternalMacros.h"
 
 @interface ALCClassRegistrationMacroProcessorTests : ALCTestCase
 
@@ -44,7 +46,7 @@
 }
 
 -(void) testClassRegistrationSetsDefaultName {
-    [self loadMacroProcessor:_processor withArguments:nil];
+    [self loadMacroProcessor:_processor withArguments:ACIsPrimary, nil];
     XCTAssertEqualObjects(NSStringFromClass([self class]), _processor.asName);
 }
 
