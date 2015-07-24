@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCValueSourceFactory : NSObject
 
+@property(nonatomic, strong, readonly) NSSet<id<ALCValueDefMacro>> *macros;
+
 -(void) addMacro:(id<ALCValueDefMacro>) macro;
 
 -(id<ALCValueSource>) valueSource;

@@ -40,7 +40,7 @@
 
 #define ACName(objectName) [ALCName withName:objectName]
 
-#define ACValue(_value) [ALCConstantValue constantValueWithValue:_value]
+#define ACValue(_value) [ALCConstantValue constantValue:_value]
 
 #define ACArg(argType, valueMacros, ...) [ALCArg argWithType:[argType class] macros:valueMacros, ## __VA_ARGS__, nil]
 

@@ -10,7 +10,7 @@
 
 @implementation ALCConstantValue
 
-+(instancetype) constantValueWithValue:(id) value {
++(instancetype) constantValue:(id) value {
     ALCConstantValue *constantValue = [[ALCConstantValue alloc] init];
     constantValue->_value = value;
     return constantValue;

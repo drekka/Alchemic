@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, strong, readonly) id value;
 
-+(instancetype) constantValueWithValue:(id) value;
++(instancetype) constantValue:(id) value;
 
 @end
 

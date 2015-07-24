@@ -14,9 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCValueSourceFactory {
-	NSMutableSet<id<ALCValueDefMacro>> *_macros;
-}
+@implementation ALCValueSourceFactory
 
 -(instancetype) init {
 	self = [super init];
@@ -35,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) addMacro:(id) macro {
-	[_macros addObject:macro];
+	[(NSMutableSet *)_macros addObject:macro];
 }
 
 -(void) validate {

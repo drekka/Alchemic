@@ -15,7 +15,7 @@
  */
 @protocol ALCValueSource <NSObject>
 
-@property (nonatomic, strong, nonnull) NSSet<id> *values;
+@property (nonatomic, strong, readonly, nonnull) NSSet<id> *values;
 
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull) postProcessors;
 

@@ -24,7 +24,7 @@
 }
 
 -(void) testArgWithTypeMacros {
-	ALCArg *arg = [ALCArg argWithType:[NSString class] macros:[ALCConstantValue constantValueWithValue:@5], nil];
+	ALCArg *arg = [ALCArg argWithType:[NSString class] macros:[ALCConstantValue constantValue:@5], nil];
 	XCTAssertEqual([NSString class], arg.argType);
 	ALCConstantValueSource *valueSource = [arg valueSource];
 	XCTAssertEqualObjects(@5, [valueSource.values anyObject]);

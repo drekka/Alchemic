@@ -24,8 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
     NSSet<id<ALCBuilder>> *_candidateBuilders;
 }
 
-@synthesize values = _values;
-
 -(instancetype) initWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
     self = [super init];
     if (self) {

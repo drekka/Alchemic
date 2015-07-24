@@ -5,78 +5,45 @@
 //  Created by Derek Clarkson on 15/07/2015.
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
-#import "ALCTestCase.h"
+
+@import XCTest;
+
 #import <Alchemic/Alchemic.h>
 
 #import "ALCMethodMacroProcessor.h"
-#import "ALCModelValueSource.h"
-#import "ALCModelSearchExpression.h"
 #import "ALCValueSource.h"
 
-@interface ALCMethodMacroProcessorTests : ALCTestCase
+@interface ALCMethodMacroProcessorTests : XCTestCase
 
 @end
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
 
 @implementation ALCMethodMacroProcessorTests {
     ALCMethodMacroProcessor *_processor;
-    ALCArg *_stringArg;
-    ALCArg *_classArg;
-    ALCArg *_protocolArg;
-    Class _metaClass;
-    Class _protocolClass;
-
-    NSString *_stringVar;
-    NSNumber *_numberVar;
 }
 
 -(void) setUp {
-    _protocolClass = NSClassFromString(@"Protocol");
-    _metaClass = object_getClass([NSString class]);
-    _stringArg = [ALCArg argWithType:[NSString class] macros:[ALCName withName:@"abc"], nil];
-    _classArg = [ALCArg argWithType:_metaClass macros:[ALCClass withClass:[self class]], nil];
-    _protocolArg = [ALCArg argWithType:_protocolClass macros:[ALCProtocol withProtocol:@protocol(NSCopying)], nil];
+	_processor = [[ALCMethodMacroProcessor alloc] init];
 }
 
-
--(void) testSetsIsFactoryFlag {
-    _processor = [[ALCMethodMacroProcessor alloc] init];
-    [self loadMacroProcessor:_processor withArguments:ACIsFactory, nil];
-    XCTAssertTrue(_processor.isFactory);
+-(void) testAddMacroAcceptsALCArgMacros {
+	[_processor addMacro:ACArg(NSString, ACValue(@5))];
+	[_processor validate];
+	XCTAssertEqualObjects(@5,[[[_processor valueSourceFactoryForIndex:0] valueSource].values anyObject]);
 }
 
--(void) testSetsIsPrimaryFlag {
-    _processor = [[ALCMethodMacroProcessor alloc] init];
-    [self loadMacroProcessor:_processor withArguments:ACIsPrimary, nil];
-    XCTAssertTrue(_processor.isPrimary);
+-(void) testAddMacroAcceptsObjectMacros {
+	[_processor addMacro:ACIsFactory];
+	[_processor addMacro:ACIsPrimary];
+	[_processor addMacro:ACWithName(@"abc")];
+	[_processor validate];
+	XCTAssertTrue(_processor.isFactory);
+	XCTAssertTrue(_processor.isPrimary);
+	XCTAssertEqualObjects(@"abc", _processor.asName);
 }
 
--(void) testSetsName {
-    _processor = [[ALCMethodMacroProcessor alloc] init];
-    [self loadMacroProcessor:_processor withArguments:ACWithName(@"abc"), nil];
-    XCTAssertEqualObjects(@"abc", _processor.asName);
+-(void) testAddMacroRejectsDefMacros {
+	XCTAssertThrowsSpecificNamed([_processor addMacro:ACName(@"abc")], NSException, @"AlchemicUnexpectedMacro");
 }
 
-#pragma mark - Internal
-
--(id) method {
-    return nil;
-}
-
--(id) methodWithObject:(id) object {
-    return nil;
-}
-
--(id) methodWithString:(NSString *) stringByName class:(NSNumber *) numberByClass protocol:(Protocol *) aProtocol {
-    return nil;
-}
-
--(id) methodWithString:(NSString *) aString runtime:(id) runtime {
-    return nil;
-}
 
 @end
-
-#pragma clang diagnostic pop
