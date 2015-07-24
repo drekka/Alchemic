@@ -28,7 +28,7 @@
 	[_factory validate];
 	id<ALCValueSource> valueSource = [_factory valueSource];
 	XCTAssertTrue([valueSource isKindOfClass:[ALCConstantValueSource class]]);
-	XCTAssertEqualObjects(@5, [valueSource.values anyObject]);
+	XCTAssertEqualObjects(@5, [valueSource valueForType:[NSNumber class]]);
 }
 
 -(void) testValueSourceForModel {

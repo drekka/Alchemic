@@ -61,7 +61,7 @@
 	[_processor validate];
 
 	ALCValueSourceFactory *factory = [_processor valueSourceFactoryForIndex:0];
-	XCTAssertEqualObjects(@5, [[factory valueSource].values anyObject]);
+	XCTAssertEqualObjects(@5, [[factory valueSource] valueForType:[NSNumber class]]);
 
 }
 

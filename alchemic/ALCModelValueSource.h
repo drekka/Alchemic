@@ -9,12 +9,11 @@
 @import Foundation;
 @class ALCContext;
 @protocol ALCModelSearchExpression;
-
-#import "ALCValueSource.h"
+#import "ALCAbstractValueSource.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCModelValueSource : NSObject<ALCValueSource>
+@interface ALCModelValueSource : ALCAbstractValueSource
 
 @property (nonatomic, strong, readonly) NSSet<id<ALCModelSearchExpression>> *searchExpressions;
 

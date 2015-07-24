@@ -27,7 +27,7 @@
 -(void) testAddMacroAcceptsALCArg {
 	[_processor addMacro:ACArg(NSString, ACValue(@5))];
 	[_processor validate];
-	XCTAssertEqualObjects(@5,[[[_processor valueSourceFactoryForIndex:0] valueSource].values anyObject]);
+	XCTAssertEqualObjects(@5,[[[_processor valueSourceFactoryForIndex:0] valueSource] valueForType:[NSNumber class]]);
 }
 
 -(void) testAddMacroRejectsNonALCArgMacros {

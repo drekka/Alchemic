@@ -11,9 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCConstantValueSource {
+	id _value;
 }
-
-@synthesize values = _values;
 
 -(instancetype) init {
 	return nil;
@@ -22,9 +21,13 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) initWithValue:(id) value {
     self = [super init];
     if (self) {
-        _values = [NSSet setWithObject:value];
+		 _value = value;
     }
     return self;
+}
+
+-(NSSet<id> *) values {
+	return [NSSet setWithObject:_value];
 }
 
 -(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors{}

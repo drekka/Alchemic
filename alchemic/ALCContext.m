@@ -16,7 +16,6 @@
 #import "ALCClassInitializerBuilder.h"
 #import "ALCInternalMacros.h"
 #import "ALCMethodBuilder.h"
-#import "ALCDefaultValueResolver.h"
 #import "ALCModel.h"
 #import "ALCClassRegistrationMacroProcessor.h"
 #import "ALCInitializerMacroProcessor.h"
@@ -41,7 +40,6 @@
 		_model = [[ALCModel alloc] init];
 		_dependencyPostProcessors = [[NSMutableSet alloc] init];
 		_objectFactories = [[NSMutableSet alloc] init];
-		_valueResolver = [[ALCDefaultValueResolver alloc] init];
 	}
 	return self;
 }

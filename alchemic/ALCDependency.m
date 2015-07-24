@@ -12,12 +12,10 @@
 #import "ALCRuntime.h"
 #import "ALCValueSource.h"
 #import "ALCModelValueSource.h"
-#import "ALCValueResolver.h"
 #import "ALCDependency.h"
 #import "ALCBuilder.h"
 #import "ALCAlchemic.h"
 #import "ALCDependencyPostProcessor.h"
-#import "ALCValueResolver.h"
 #import "ALCContext.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -43,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) value {
-    return [[ALCAlchemic mainContext].valueResolver resolveValueForDependency:self fromValues:_valueSource.values];
+    return [_valueSource valueForType:self.valueClass];
 }
 
 -(NSString *) description {

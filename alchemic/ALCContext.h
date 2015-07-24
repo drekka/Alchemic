@@ -26,8 +26,6 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 #pragma mark - Configuration
 
-@property (nonatomic, strong, readonly) id<ALCValueResolver> valueResolver;
-
 /**
  Adds an dependency post processor.
 

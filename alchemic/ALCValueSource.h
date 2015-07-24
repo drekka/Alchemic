@@ -18,9 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol ALCValueSource <NSObject>
 
-@property (nonatomic, strong, readonly) NSSet<id> *values;
-
--(NSSet<id> *) valuesForType:(Class) finalType;
+-(id) valueForType:(Class) finalType;
 
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 

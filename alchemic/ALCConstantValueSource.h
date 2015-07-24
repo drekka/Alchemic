@@ -8,10 +8,11 @@
 
 @import Foundation;
 #import "ALCValueSource.h"
+#import "ALCAbstractValueSource.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCConstantValueSource : NSObject<ALCValueSource>
+@interface ALCConstantValueSource : ALCAbstractValueSource
 
 -(instancetype) init NS_UNAVAILABLE;
 
