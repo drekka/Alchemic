@@ -9,6 +9,7 @@
 #import "ALCTestCase.h"
 #import "ALCModelValueSource.h"
 #import "ALCClassBuilder.h"
+#import "ALCDependencyPostProcessor.h"
 
 @interface ALCModelValueSourceTests : ALCTestCase
 
@@ -42,11 +43,44 @@
 	XCTAssertEqualObjects(@"def", [results anyObject]);
 }
 
+-(void) testResolversCalled {
+
+	id<ALCBuilder> builder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
+	builder.value = @"def";
+	NSSet<id<ALCBuilder>> *builders =[NSSet setWithObject:builder];
+	[self stubExecuteOnBuilders:builders];
+
+	id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));
+	OCMExpect([mockPostProcessor process:builders]).andReturn(builders);
+
+	[_source resolveWithPostProcessors:[NSSet setWithObject:mockPostProcessor]];
+
+	NSSet<id> *results = _source.values;
+	XCTAssertEqual(1u, [results count]);
+	XCTAssertEqualObjects(@"def", [results anyObject]);
+	OCMVerifyAll(mockPostProcessor);
+}
+
 -(void) testBasicResolvingFailsToFindCandidates {
 	[self stubExecuteOnBuilders:[NSSet set]];
 	XCTAssertThrowsSpecificNamed([_source resolveWithPostProcessors:[NSSet set]], NSException, @"AlchemicNoCandidateBuildersFound");
 
 }
+
+-(void) testResolversReturnEmptySet {
+
+	id<ALCBuilder> builder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
+	builder.value = @"def";
+	NSSet<id<ALCBuilder>> *builders =[NSSet setWithObject:builder];
+	[self stubExecuteOnBuilders:builders];
+
+	id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));
+	OCMExpect([mockPostProcessor process:builders]).andReturn([NSSet set]);
+
+	XCTAssertThrowsSpecificNamed([_source resolveWithPostProcessors:[NSSet setWithObject:mockPostProcessor]], NSException, @"AlchemicNoCandidateBuildersFound");
+	OCMVerifyAll(mockPostProcessor);
+}
+
 
 #pragma mark - Internal
 

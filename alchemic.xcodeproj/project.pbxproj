@@ -333,6 +333,13 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		6C2421061B6224A000884A93 /* Resolving */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resolving;
+			sourceTree = "<group>";
+		};
 		6C4655F21B54D58500FD1D28 /* Value */ = {
 			isa = PBXGroup;
 			children = (
@@ -351,6 +358,7 @@
 		6C5EDC991B55464000EE88EF /* Value */ = {
 			isa = PBXGroup;
 			children = (
+				6C2421061B6224A000884A93 /* Resolving */,
 				6C2421001B61FB5E00884A93 /* ALCValueSourceFactoryTests.m */,
 				6C2421021B62006000884A93 /* ALCConstantValueSourceTests.m */,
 				6C2421041B6200B900884A93 /* ALCModelValueSourceTests.m */,
