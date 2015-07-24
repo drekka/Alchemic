@@ -16,10 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCTestCase : XCTestCase
 
 @property (nonatomic, strong, readonly, nullable) ALCContext *context;
+@property (nonatomic, strong, readonly, nullable) id mockContext;
 
--(void) mockAlchemicContext;
+-(void) setupMockContext;
+-(void) setupRealContext;
 
--(void) setUpALCContextWithClasses:(NSArray<Class> *) classes;
+-(void) addClassesToContext:(NSArray<Class> *) classes;
 
 @end
 

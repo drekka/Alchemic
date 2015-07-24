@@ -24,39 +24,49 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @implementation ALCTestCase {
-    id _mockAlchemic;
+	id _mockAlchemic;
 }
 
 -(void) tearDown {
-    // Stop the mocking.
-    _mockAlchemic = nil;
+	// Stop the mocking.
+	_mockAlchemic = nil;
+	_mockContext = nil;
 
-    // Clear Alchemic.
-    [ALCAlchemic unload];
+	// Clear Alchemic's singleton reference.
+	[ALCAlchemic unload];
 
-    // Reset logging.
-    [[STStoryTeller storyTeller] reset];
+	// Reset logging.
+	[[STStoryTeller storyTeller] reset];
 }
 
--(void) mockAlchemicContext {
-    _context = [[ALCContext alloc] init];
-    _mockAlchemic = OCMClassMock([ALCAlchemic class]);
-    OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
+-(void)setupMockContext {
+	NSAssert(_context == nil, @"Cannot setup both a real and mock context");
+	_mockContext = OCMClassMock([ALCContext class]);
+	_mockAlchemic = OCMClassMock([ALCAlchemic class]);
+	OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_mockContext);
 }
 
--(void) setUpALCContextWithClasses:(NSArray<Class> *) classes {
-    NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
-                                                                 [ALCRuntimeScanner dependencyPostProcessorScanner],
-                                                                 [ALCRuntimeScanner resourceLocatorScanner]
-                                                                 ]];
-    [ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
+-(void)setupRealContext {
+	NSAssert(_mockContext == nil, @"Cannot setup both a real and mock context");
+	_context = [[ALCContext alloc] init];
+	_mockAlchemic = OCMClassMock([ALCAlchemic class]);
+	OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
+}
 
-    ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
-    [classes enumerateObjectsUsingBlock:^(Class  _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
-        modelScanner.processor(self.context, aClass);
-    }];
-    
-    [_context start];
+-(void) addClassesToContext:(NSArray<Class> *) classes {
+	NSAssert(_context != nil, @"[ALCTestCase setupRealContext must be called first.");
+	NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
+																					 [ALCRuntimeScanner dependencyPostProcessorScanner],
+																					 [ALCRuntimeScanner resourceLocatorScanner]
+																					 ]];
+	[ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
+
+	ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
+	[classes enumerateObjectsUsingBlock:^(Class  _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
+		modelScanner.processor(self.context, aClass);
+	}];
+
+	[_context start];
 
 }
 

@@ -28,8 +28,8 @@ ACInject(string2, ACName(@"buildAString"))
 -(void) setUp {
     [super setUp];
     STStartLogging(@"is [FactoryMethods]");
-    [self mockAlchemicContext];
-    [self setUpALCContextWithClasses:@[[self class], [FactoryMethods class], [Component class]]];
+    [self setupRealContext];
+    [self addClassesToContext:@[[self class], [FactoryMethods class], [Component class]]];
     ACInjectDependencies(self);
 }
 

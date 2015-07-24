@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize values = _values;
 
+-(instancetype) init {
+	return nil;
+}
+
 -(instancetype) initWithValue:(id) value {
     self = [super init];
     if (self) {

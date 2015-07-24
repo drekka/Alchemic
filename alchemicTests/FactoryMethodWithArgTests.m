@@ -29,8 +29,8 @@ ACInject(string4, ACName(@"buildAComponentString"))
     [super setUp];
     STStartLogging(@"is [FactoryMethodWithArgTests]");
     STStartLogging(ALCHEMIC_LOG);
-    [self mockAlchemicContext];
-    [self setUpALCContextWithClasses:@[[self class], [FactoryMethods class], [Component class]]];
+    [self setupRealContext];
+    [self addClassesToContext:@[[self class], [FactoryMethods class], [Component class]]];
     ACInjectDependencies(self);
 }
 

@@ -25,8 +25,8 @@ ACInject(_of2, ACClass(FactoryObject))
 -(void) setUp {
     [super setUp];
     STStartLogging(@"is [FactoryObject]");
-    [self mockAlchemicContext];
-    [self setUpALCContextWithClasses:@[[self class],[FactoryObject class]]];
+    [self setupRealContext];
+    [self addClassesToContext:@[[self class],[FactoryObject class]]];
     ACInjectDependencies(self);
 }
 

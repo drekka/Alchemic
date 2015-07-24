@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 	return [[ALCModelValueSource alloc] initWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *)_macros];
 }
 
--(void) addMacro:(id) macro {
+-(void) addMacro:(id<ALCValueDefMacro>) macro {
 	[(NSMutableSet *)_macros addObject:macro];
 }
 

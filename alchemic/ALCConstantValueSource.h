@@ -13,7 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCConstantValueSource : NSObject<ALCValueSource>
 
--(instancetype) initWithValue:(id) value;
+-(instancetype) init NS_UNAVAILABLE;
+
+-(instancetype) initWithValue:(id) value NS_DESIGNATED_INITIALIZER;
 
 @end
 

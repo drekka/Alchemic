@@ -2,53 +2,60 @@
 //  ALCModelValueSourceTests.m
 //  Alchemic
 //
-//  Created by Derek Clarkson on 14/07/2015.
+//  Created by Derek Clarkson on 24/07/2015.
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
-
-@import XCTest;
-#import <StoryTeller/StoryTeller.h>
 #import <OCMock/OCMock.h>
-#import <Alchemic/Alchemic.h>
-
+#import "ALCTestCase.h"
 #import "ALCModelValueSource.h"
-#import "ALCDependencyPostProcessor.h"
-#import "ALCInternalMacros.h"
-#import "ALCBuilder.h"
+#import "ALCClassBuilder.h"
 
-@interface ALCModelValueSourceTests : XCTestCase
+@interface ALCModelValueSourceTests : ALCTestCase
 
 @end
 
-@implementation ALCModelValueSourceTests
+@implementation ALCModelValueSourceTests {
+	ALCModelValueSource *_source;
+	NSSet<id<ALCModelSearchExpression>> * _searchExpressions;
+}
 
--(void) testResolveWithPostProcessors {
-    
-    STStartLogging(ALCHEMIC_LOG);
-    id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
-    NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
+-(void) setUp {
 
-    id mockContext = OCMClassMock([ALCContext class]);
-    id mockAlchemic = OCMClassMock([ALCAlchemic class]);
-    OCMStub(ClassMethod([mockAlchemic mainContext])).andReturn(mockContext);
+	[super setUp];
+	[self setupMockContext];
 
-    id<ALCModelSearchExpression> searchExpression = [ALCName withName:@"abc"];
-    NSSet<id<ALCModelSearchExpression>> *searchExpressions = [NSSet setWithObject:searchExpression];
+	_searchExpressions = [NSSet setWithObject:ACName(@"abc")];
+	_source = [[ALCModelValueSource alloc] initWithSearchExpressions:_searchExpressions];
+}
 
-    id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));
-    NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet setWithObject:mockPostProcessor];
+-(void) testBasicResolving {
 
-    OCMExpect([mockContext executeOnBuildersWithSearchExpressions:searchExpressions
-                                   processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
-        __unsafe_unretained ProcessBuilderBlock block = NULL;
-        [inv getArgument:&block atIndex:3];
-        block(builders);
-    });
-    OCMExpect([mockPostProcessor process:builders]).andReturn(builders);
+	id<ALCBuilder> builder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
+	builder.value = @"def";
+	NSSet<id<ALCBuilder>> *builders =[NSSet setWithObject:builder];
+	[self stubExecuteOnBuilders:builders];
 
-    ALCModelValueSource *source = [[ALCModelValueSource alloc] initWithSearchExpressions:searchExpressions];
-    [source resolveWithPostProcessors:postProcessors];
+	[_source resolveWithPostProcessors:[NSSet set]];
 
+	NSSet<id> *results = _source.values;
+	XCTAssertEqual(1u, [results count]);
+	XCTAssertEqualObjects(@"def", [results anyObject]);
+}
+
+-(void) testBasicResolvingFailsToFindCandidates {
+	[self stubExecuteOnBuilders:[NSSet set]];
+	XCTAssertThrowsSpecificNamed([_source resolveWithPostProcessors:[NSSet set]], NSException, @"AlchemicNoCandidateBuildersFound");
+
+}
+
+#pragma mark - Internal
+
+-(void) stubExecuteOnBuilders:(NSSet<id<ALCBuilder>> *) builders {
+	OCMStub([self.mockContext executeOnBuildersWithSearchExpressions:_searchExpressions processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
+		__unsafe_unretained ProcessBuilderBlock processBuilderBlock;
+		[inv getArgument:&processBuilderBlock atIndex:3];
+		processBuilderBlock(builders);
+	});
 }
 
 
