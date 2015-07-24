@@ -7,6 +7,9 @@
 //
 
 @import Foundation;
+@import ObjectiveC;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCDependencyPostProcessor;
 
@@ -15,8 +18,12 @@
  */
 @protocol ALCValueSource <NSObject>
 
-@property (nonatomic, strong, readonly, nonnull) NSSet<id> *values;
+@property (nonatomic, strong, readonly) NSSet<id> *values;
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull) postProcessors;
+-(NSSet<id> *) valuesForType:(Class) finalType;
+
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 
 @end
+
+NS_ASSUME_NONNULL_END
