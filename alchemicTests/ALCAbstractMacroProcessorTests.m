@@ -31,7 +31,7 @@
 
 -(void) testAddMacroArg {
 
-	ALCArg *arg = ACArg(NSString, ACName(@"abc"));
+	ALCArg *arg = AcArg(NSString, AcName(@"abc"));
 
 	[_processor addMacro:arg];
 	[_processor validate];
@@ -41,8 +41,8 @@
 
 -(void) testAddMacroArgs {
 
-	ALCArg *arg1 = ACArg(NSString, ACName(@"abc"));
-	ALCArg *arg2 = ACArg(NSString, ACName(@"abc"));
+	ALCArg *arg1 = AcArg(NSString, AcName(@"abc"));
+	ALCArg *arg2 = AcArg(NSString, AcName(@"abc"));
 
 	[_processor addMacro:arg1];
 	[_processor addMacro:arg2];
@@ -55,7 +55,7 @@
 
 -(void) testAddMacroFirstExpression {
 
-	ALCConstantValue *value = ACValue(@5);
+	ALCConstantValue *value = AcValue(@5);
 
 	[_processor addMacro:value];
 	[_processor validate];
@@ -67,8 +67,8 @@
 
 -(void) testAddMacroCombinesExpressions {
 
-	ALCName *name1 = ACName(@"abc");
-	ALCName *name2 = ACName(@"def");
+	ALCName *name1 = AcName(@"abc");
+	ALCName *name2 = AcName(@"def");
 
 	[_processor addMacro:name1];
 	[_processor addMacro:name2];
@@ -81,8 +81,8 @@
 
 -(void) testAddMacroWithInvalidCombinationOfMacros {
 
-	id<ALCMacro, ALCValueDefMacro> name1 = ACName(@"abc");
-	id<ALCMacro, ALCValueDefMacro> name2 = ACValue(@5);
+	id<ALCMacro, ALCValueDefMacro> name1 = AcName(@"abc");
+	id<ALCMacro, ALCValueDefMacro> name2 = AcValue(@5);
 
 	[_processor addMacro:name1];
 	[_processor addMacro:name2];

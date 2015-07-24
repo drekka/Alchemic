@@ -22,15 +22,15 @@
     NSString *string2;
 }
 
-ACInject(string1, ACName(@"buildAString"))
-ACInject(string2, ACName(@"buildAString"))
+AcInject(string1, AcName(@"buildAString"))
+AcInject(string2, AcName(@"buildAString"))
 
 -(void) setUp {
     [super setUp];
     STStartLogging(@"is [FactoryMethods]");
     [self setupRealContext];
     [self addClassesToContext:@[[self class], [FactoryMethods class], [Component class]]];
-    ACInjectDependencies(self);
+    AcInjectDependencies(self);
 }
 
 - (void) testSimpleFactoryMethod {

@@ -6,8 +6,7 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-@import XCTest;
-
+#import "ALCTestCase.h"
 #import <OCMock/OCMock.h>
 #import <StoryTeller/StoryTeller.h>
 #import <Alchemic/Alchemic.h>
@@ -18,30 +17,29 @@
 #import "ALCMethodBuilder.h"
 #import "ALCMethodMacroProcessor.h"
 
-@interface ALCModelTests : XCTestCase
+@interface ALCModelTests : ALCTestCase
 
 @end
 
 @implementation ALCModelTests {
     ALCModel *_model;
-    id _mockContext;
-    id<ALCBuilder> _builder1;
-    id<ALCBuilder> _builder2;
+    id<ALCBuilder> _classBuilder;
+    id<ALCBuilder> _methodBuilder;
 }
 
 -(void) setUp {
+	[super setUp];
+	[self setupMockContext];
     _model = [[ALCModel alloc] init];
-    _mockContext = OCMClassMock([ALCContext class]);
-    _builder1 = [[ALCClassBuilder alloc] initWithValueClass:[ALCModelTests class]];
-    _builder2 = [[ALCMethodBuilder alloc] initWithValueClass:[NSString class]];
-	[(ALCClassBuilder *)_builder1 addMethodBuilder:_builder2];
-    [_model addBuilder:_builder1];
-    [_model addBuilder:_builder2];
+    _classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[ALCModelTests class]];
+    _methodBuilder = [[ALCMethodBuilder alloc] initWithValueClass:[NSString class]];
+	[(ALCClassBuilder *)_classBuilder addMethodBuilder:_methodBuilder];
+    [_model addBuilder:_classBuilder];
+    [_model addBuilder:_methodBuilder];
 }
 
 -(void) testSimpleQuery {
-    id<ALCModelSearchExpression> expression = [ALCName withName:@"abc"];
-    NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObject:expression]];
+	NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObject:AcName(@"abc")]];
     XCTAssertEqual(1u, [results count]);
     XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
     XCTAssertEqual(@"abc", [results anyObject].name);
@@ -66,14 +64,14 @@
 -(void) testAllBuilders {
     NSSet<id<ALCBuilder>> *results = [_model allBuilders];
     XCTAssertEqual(2u, [results count]);
-    XCTAssertTrue([results containsObject:_builder1]);
-    XCTAssertTrue([results containsObject:_builder2]);
+    XCTAssertTrue([results containsObject:_classBuilder]);
+    XCTAssertTrue([results containsObject:_methodBuilder]);
 }
 
 -(void) testClassBuildersFromBuilders {
     NSSet<id<ALCBuilder>> *results = [_model classBuildersFromBuilders:[_model allBuilders]];
     XCTAssertEqual(1u, [results count]);
-    XCTAssertTrue([results containsObject:_builder1]);
+    XCTAssertTrue([results containsObject:_classBuilder]);
 }
 
 #pragma mark - Internal

@@ -17,15 +17,18 @@ By Derek Clarkson
       * [Primary objects](#primary-objects)
           * [Primary objects and testing](#primary-objects-and-testing)
  * [Injecting dependencies](#injecting-dependencies)
- * [Object search criteria](#object-search-criteria)
-     * [Searching by class and protocols](#searching-by-class-and-protocols)
-     * [Searching by Name](#searching-by-name)
-     * [Constant values](#constant-values)
-     * [Property values](#-property-values)
+     * [Object search criteria](#object-search-criteria)
+         * [Searching by class and protocols](#searching-by-class-and-protocols)
+         * [Searching by Name](#searching-by-name)
+         * [Constant values](#constant-values)
+         * [Property values](#-property-values)
+     * [Arrays](#arrays)
  * [Factory methods](#factory-methods)
  * [Unmanaged instances](#unmanaged-instances)
  * [Callbacks](#callbacks)
  * [Configuration](#configuration)
+ * [Credits](#credits)
+
  * [Macro reference](./macros.md)
 
 #Intro
@@ -222,13 +225,13 @@ ACInject(_yetAnotherClass)
 @end
 ```
 
-# Object search criteria 
+## Object search criteria 
 
 In order to inject a variable, Alchemic needs a way to locate potential values. Generally it can examine the variable and work out for itself what to inject. But often you might want to provide your own criteria for what gets injected. Plus there are some situations where Objective-C cannot provide Alchemic with the information it needs to work out what to inject. 
 
 Lets look at how to take control of what is injected.
 
-## Searching by Class and Protocols
+### Searching by Class and Protocols
 
 You can tell Alchemic to ignore the type information of the dependency you are injecting and define your own class and/or protocols to use for selecting candidate objects. Here's an example:
 
@@ -254,7 +257,7 @@ ACInject(_account, ACClass(AmexAccount))
 
 As programming to protocols is considered a good practice, this sort of injection allows you classes to be quite general in how they refer to other classes, yet you can still locate specific objects to inject.
 
-## Searching by Name
+### Searching by Name
 
 Earlier on we discussed storing objects under custom names in the context so they can be found later. Here's an example of how we use a custom name to locate a specific instance of an object:
 
@@ -270,7 +273,7 @@ ACInject(otherClass, ACName(@"JSON date formatter"))
 
 Again we are making a general reference to a `NSDateFormatter`, but using the name assigned by Alchemic to locate the specific one needed for the injection.
 
-## Constant values
+### Constant values
 
 Some times you might want to specify a constant value for a dependency. In this case we can use the `ACValue(...)` macro like this:
 
@@ -303,6 +306,24 @@ ACInject(_message, ACProperty(@"my.app.hello.message"))
 ```
 
 `ACProperty(...)` is like `ACValue(...)` in that it provides a specific value and cannot be used with any of the macros that perform searches for objects.
+
+## Arrays
+
+Alchemic has another trick up it's sleeve borrwed from the [*Spring framework*](http://spring.io). If you want to get an array of all the objects that match a [search criteria](#object-search-criteria), you can just specify to inject an array variable, and Alchemic will automatically inject a list of all objects that match the criteria. 
+
+For example, if we want a list of all NSDateFormatters objects that Alchemic knows about:
+
+```objectivec
+@implementation {
+    NSArray<NSDateFormatter *> *_dateFormatters;
+}
+
+ACInject(_dateFormatters, ACClass(NSdateFormatter))
+
+@end
+```
+
+When processing the available objects to inject, Alchemic will automatically check for the target type being an array and adjust it's injection accordingly, wrapping objects in NSArrays as required.
 
 # Factory methods
 

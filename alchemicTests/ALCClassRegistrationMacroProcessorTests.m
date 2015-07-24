@@ -23,11 +23,11 @@
 }
 
 -(void) testRejectsACArgMacro {
-XCTAssertThrowsSpecificNamed(([_processor addMacro:ACArg(NSString, ACName(@"abc"))]), NSException, @"AlchemicUnexpectedMacro");
+XCTAssertThrowsSpecificNamed(([_processor addMacro:AcArg(NSString, AcName(@"abc"))]), NSException, @"AlchemicUnexpectedMacro");
 }
 
 -(void) testRejectsOtherDefMacro {
-	XCTAssertThrowsSpecificNamed(([_processor addMacro:ACName(@"abc")]), NSException, @"AlchemicUnexpectedMacro");
+	XCTAssertThrowsSpecificNamed(([_processor addMacro:AcName(@"abc")]), NSException, @"AlchemicUnexpectedMacro");
 }
 
 -(void) testAcceptsNonDefMacro {

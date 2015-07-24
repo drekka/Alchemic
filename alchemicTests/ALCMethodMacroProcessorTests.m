@@ -26,7 +26,7 @@
 }
 
 -(void) testAddMacroAcceptsALCArgMacros {
-	[_processor addMacro:ACArg(NSString, ACValue(@5))];
+	[_processor addMacro:AcArg(NSString, AcValue(@5))];
 	[_processor validate];
 	XCTAssertEqualObjects(@5,[[[_processor valueSourceFactoryForIndex:0] valueSource] valueForType:[NSNumber class]]);
 }
@@ -34,7 +34,7 @@
 -(void) testAddMacroAcceptsObjectMacros {
 	[_processor addMacro:ACIsFactory];
 	[_processor addMacro:ACIsPrimary];
-	[_processor addMacro:ACWithName(@"abc")];
+	[_processor addMacro:AcWithName(@"abc")];
 	[_processor validate];
 	XCTAssertTrue(_processor.isFactory);
 	XCTAssertTrue(_processor.isPrimary);
@@ -42,7 +42,7 @@
 }
 
 -(void) testAddMacroRejectsDefMacros {
-	XCTAssertThrowsSpecificNamed([_processor addMacro:ACName(@"abc")], NSException, @"AlchemicUnexpectedMacro");
+	XCTAssertThrowsSpecificNamed([_processor addMacro:AcName(@"abc")], NSException, @"AlchemicUnexpectedMacro");
 }
 
 

@@ -24,7 +24,7 @@
 }
 
 -(void) testValueSourceForConstant {
-	[_factory addMacro:ACValue(@5)];
+	[_factory addMacro:AcValue(@5)];
 	[_factory validate];
 	id<ALCValueSource> valueSource = [_factory valueSource];
 	XCTAssertTrue([valueSource isKindOfClass:[ALCConstantValueSource class]]);
@@ -32,17 +32,17 @@
 }
 
 -(void) testValueSourceForModel {
-	[_factory addMacro:ACName(@"abc")];
+	[_factory addMacro:AcName(@"abc")];
 	[_factory validate];
 	id<ALCValueSource> valueSource = [_factory valueSource];
 	XCTAssertTrue([valueSource isKindOfClass:[ALCModelValueSource class]]);
 	NSSet<id<ALCModelSearchExpression>> *searchExpressions = ((ALCModelValueSource *)valueSource).searchExpressions;
-	XCTAssertTrue([searchExpressions containsObject:ACName(@"abc")]);
+	XCTAssertTrue([searchExpressions containsObject:AcName(@"abc")]);
 }
 
 -(void) testValidateFailsWhenConstantAndSearchExpression {
-	[_factory addMacro:ACValue(@5)];
-	[_factory addMacro:ACName(@"abc")];
+	[_factory addMacro:AcValue(@5)];
+	[_factory addMacro:AcName(@"abc")];
 	XCTAssertThrowsSpecificNamed([_factory validate], NSException, @"AlchemicInvalidArguments");
 }
 

@@ -24,9 +24,9 @@
     id _singletonObjectByProtocol;
 }
 
-ACInject(_singletonObjectByName, ACName(@"Test Singleton"))
-ACInject(_singletonObjectByClass, ACClass(SingletonObject))
-ACInject(_singletonObjectByProtocol, ACProtocol(InjectableProtocol))
+AcInject(_singletonObjectByName, AcName(@"Test Singleton"))
+AcInject(_singletonObjectByClass, AcClass(SingletonObject))
+AcInject(_singletonObjectByProtocol, AcProtocol(InjectableProtocol))
 
 -(void) setUp {
     [super setUp];
@@ -34,7 +34,7 @@ ACInject(_singletonObjectByProtocol, ACProtocol(InjectableProtocol))
     STStartScope([self class]);
     [self setupRealContext];
     [self addClassesToContext:@[[self class],[SingletonObject class]]];
-    ACInjectDependencies(self);
+    AcInjectDependencies(self);
 }
 
 -(void) testInjectByName {

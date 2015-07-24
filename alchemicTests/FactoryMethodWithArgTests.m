@@ -22,8 +22,8 @@
     NSString *string4;
 }
 
-ACInject(string3, ACName(@"buildAComponentString"))
-ACInject(string4, ACName(@"buildAComponentString"))
+AcInject(string3, AcName(@"buildAComponentString"))
+AcInject(string4, AcName(@"buildAComponentString"))
 
 -(void) setUp {
     [super setUp];
@@ -31,7 +31,7 @@ ACInject(string4, ACName(@"buildAComponentString"))
     STStartLogging(ALCHEMIC_LOG);
     [self setupRealContext];
     [self addClassesToContext:@[[self class], [FactoryMethods class], [Component class]]];
-    ACInjectDependencies(self);
+    AcInjectDependencies(self);
 }
 
 -(void) testFactoryMethodWithComponentArgument {

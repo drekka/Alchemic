@@ -41,12 +41,12 @@
 }
 
 -(void) testSetsName {
-	[_processor addMacro:ACWithName(@"abc")];
+	[_processor addMacro:AcWithName(@"abc")];
     XCTAssertEqualObjects(@"abc", _processor.asName);
 }
 
 -(void) testPassesMacroToParent {
-	ALCArg *arg = ACArg(NSString, ACName(@"abc"));
+	ALCArg *arg = AcArg(NSString, AcName(@"abc"));
 
 	[_processor addMacro:arg];
 	[_processor validate];

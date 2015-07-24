@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 	for (id<ALCValueDefMacro> macro in _macros) {
 		if ([macro isKindOfClass:[ALCConstantValue class]] && [_macros count] > 1) {
 			@throw [NSException exceptionWithName:@"AlchemicInvalidArguments"
-													 reason:[NSString stringWithFormat:@"ACValue(...) must be the only macro"]
+													 reason:[NSString stringWithFormat:@"AcValue(...) must be the only macro"]
 												  userInfo:nil];
 		}
 	}

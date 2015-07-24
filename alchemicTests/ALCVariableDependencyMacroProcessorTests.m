@@ -31,11 +31,11 @@
 }
 
 -(void) testAddMacroRejectsValueSourceMacros {
-	XCTAssertThrowsSpecificNamed(([_processor addMacro:ACArg(NSString, ACValue(@5))]), NSException, @"AlchemicUnexpectedMacro");
+	XCTAssertThrowsSpecificNamed(([_processor addMacro:AcArg(NSString, AcValue(@5))]), NSException, @"AlchemicUnexpectedMacro");
 }
 
 -(void) testAddMacroAcceptsExpressions {
-	[_processor addMacro:ACName(@"abc")];
+	[_processor addMacro:AcName(@"abc")];
 	[_processor validate];
 	XCTAssertEqual(1u, [_processor valueSourceCount]);
 }
@@ -43,7 +43,7 @@
 -(void) testValidateCreatesIfNoMacrosPassed {
 	[_processor validate];
 	ALCValueSourceFactory *factory = [_processor valueSourceFactoryForIndex:0];
-	XCTAssertTrue([factory.macros containsObject:ACClass(NSString)]);
+	XCTAssertTrue([factory.macros containsObject:AcClass(NSString)]);
 }
 
 @end

@@ -19,15 +19,15 @@
     FactoryObject *_of2;
 }
 
-ACInject(_of1)
-ACInject(_of2, ACClass(FactoryObject))
+AcInject(_of1)
+AcInject(_of2, AcClass(FactoryObject))
 
 -(void) setUp {
     [super setUp];
     STStartLogging(@"is [FactoryObject]");
     [self setupRealContext];
     [self addClassesToContext:@[[self class],[FactoryObject class]]];
-    ACInjectDependencies(self);
+    AcInjectDependencies(self);
 }
 
 -(void) testFactoryClass {

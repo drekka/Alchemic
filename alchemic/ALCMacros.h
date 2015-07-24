@@ -14,7 +14,7 @@
 /**
  Tells Alchemic to set a custom name on a registration.
  */
-#define ACWithName(_objectName) [ALCWithName withName:_objectName]
+#define AcWithName(_objectName) [ALCWithName withName:_objectName]
 
 /**
  Defines the class or factory method as a factory.
@@ -34,15 +34,15 @@
 
 #pragma mark - Dependency expressions
 
-#define ACClass(className) [ALCClass withClass:[className class]]
+#define AcClass(className) [ALCClass withClass:[className class]]
 
-#define ACProtocol(protocolName) [ALCProtocol withProtocol:@protocol(protocolName)]
+#define AcProtocol(protocolName) [ALCProtocol withProtocol:@protocol(protocolName)]
 
-#define ACName(objectName) [ALCName withName:objectName]
+#define AcName(objectName) [ALCName withName:objectName]
 
-#define ACValue(_value) [ALCConstantValue constantValue:_value]
+#define AcValue(_value) [ALCConstantValue constantValue:_value]
 
-#define ACArg(argType, valueMacros, ...) [ALCArg argWithType:[argType class] macros:valueMacros, ## __VA_ARGS__, nil]
+#define AcArg(argType, valueMacros, ...) [ALCArg argWithType:[argType class] macros:valueMacros, ## __VA_ARGS__, nil]
 
 #pragma mark - Injection
 
@@ -51,7 +51,7 @@
  
  @param object the object whose dependencies need to be resolved and injected.
  */
-#define ACInjectDependencies(object) [[ALCAlchemic mainContext] injectDependencies:object]
+#define AcInjectDependencies(object) [[ALCAlchemic mainContext] injectDependencies:object]
 
 #pragma mark - Registering
 
@@ -60,24 +60,24 @@
  
  @discussion This is the main macro for setting up objects within Alchemic. It take a number of other macros as 
  */
-#define ACRegister(...) \
+#define AcRegister(...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
-#define ACMethod(methodType, methodSel, ...) \
+#define AcMethod(methodType, methodSel, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodInClassBuilder):(ALCClassBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerMethodBuilder:classBuilder selector:@selector(methodSel) returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
-#define ACInject(variableName, ...) \
+#define AcInject(variableName, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerDependencyInClassBuilder:classBuilder variable:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
 // Registers an initializer for a class.
-#define ACInitializer(initializer, initializerSel, ...) \
+#define AcInitializer(initializer, initializerSel, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerInitializerForClassBuilder):(ALCClassBuilder *) classBuilder { \
 	[[ALCAlchemic mainContext] registerClassInitializer:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
 }
