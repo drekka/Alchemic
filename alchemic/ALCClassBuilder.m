@@ -22,7 +22,7 @@
 #import "ALCValueSourceFactory.h"
 
 @implementation ALCClassBuilder {
-	NSMutableSet<ALCVariableDependency*> *_dependencies;
+	NSMutableSet<ALCVariableDependency *> *_dependencies;
 	NSMutableSet<ALCMethodBuilder *> *_methodBuilders;
 }
 
@@ -65,7 +65,7 @@
 #pragma mark - Instantiating
 
 -(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
-	[_dependencies enumerateObjectsUsingBlock:^(ALCVariableDependency * _Nonnull dependency, BOOL * _Nonnull stop) {
+	[_dependencies enumerateObjectsUsingBlock:^(ALCVariableDependency *dependency, BOOL *stop) {
 		[dependency resolveWithPostProcessors:postProcessors];
 	}];
 }
