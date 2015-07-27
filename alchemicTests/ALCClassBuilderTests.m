@@ -79,14 +79,16 @@
 }
 
 -(void) testSetInitializerBuilder {
-	ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] init];
+	ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] initWithSelector:@selector(init)];
 	_builder.initializerBuilder = initBuilder;
 	id<ALCBuilder> parentBuilder = initBuilder.parentClassBuilder;
 	XCTAssertEqual(_builder, parentBuilder);
 }
 
 -(void) testAddMethodBuilder {
-	ALCMethodBuilder *methodBuilder = [[ALCMethodBuilder alloc] initWithValueClass:[NSString class]];
+	ignoreSelectorWarnings(
+								  ALCMethodBuilder *methodBuilder = [[ALCMethodBuilder alloc] initWithSelector:@selector(stringFactoryMethod) valueClass:[NSString class]];
+	)
 	[_builder addMethodBuilder:methodBuilder];
 	id<ALCBuilder> parentBuilder = methodBuilder.parentClassBuilder;
 	XCTAssertEqual(_builder, parentBuilder);

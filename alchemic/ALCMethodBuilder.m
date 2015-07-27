@@ -15,12 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize valueClass = _valueClass;
 
--(instancetype) init {
+-(instancetype) initWithSelector:(nonnull SEL)selector {
 	return nil;
 }
 
--(instancetype) initWithValueClass:(Class)valueClass {
-	self = [super init];
+-(instancetype) initWithSelector:(nonnull SEL)selector valueClass:(nonnull Class)valueClass {
+	self = [super initWithSelector:selector];
 	if (self) {
 		_valueClass = valueClass;
 	}

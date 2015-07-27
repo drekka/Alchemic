@@ -25,8 +25,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(instancetype) init {
+	return nil;
+}
+
+-(nonnull instancetype)initWithSelector:(nonnull SEL)selector {
 	self = [super init];
 	if (self) {
+		_selector = selector;
 		_invArgumentDependencies = [[NSMutableArray alloc] init];
 	}
 	return self;

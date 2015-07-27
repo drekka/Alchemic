@@ -22,23 +22,26 @@
 @end
 
 @implementation ALCModelTests {
-    ALCModel *_model;
-    id<ALCSearchableBuilder> _classBuilder;
-    id<ALCSearchableBuilder> _methodBuilder;
+	ALCModel *_model;
+	id<ALCSearchableBuilder> _classBuilder;
+	id<ALCSearchableBuilder> _methodBuilder;
 }
 
 -(void) setUp {
+
 	[super setUp];
 	[self setupMockContext];
-    _model = [[ALCModel alloc] init];
-    _classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[ALCModelTests class]];
+
+	_model = [[ALCModel alloc] init];
+	_classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[ALCModelTests class]];
 	((ALCClassBuilder *)_classBuilder).name = @"abc";
-    _methodBuilder = [[ALCMethodBuilder alloc] initWithValueClass:[NSString class]];
+
+	_methodBuilder = [[ALCMethodBuilder alloc] initWithSelector:@selector(someMethod) valueClass:[NSString class]];
 	[(ALCClassBuilder *)_classBuilder addMethodBuilder:_methodBuilder];
 	((ALCClassBuilder *)_methodBuilder).name = @"def";
 
-    [_model addBuilder:_classBuilder];
-    [_model addBuilder:_methodBuilder];
+	[_model addBuilder:_classBuilder];
+	[_model addBuilder:_methodBuilder];
 }
 
 -(void) testNumberBuilders {
@@ -55,18 +58,18 @@
 -(void) testBuildersForSearchExpressionSimpleQuery {
 	STStartLogging(ALCHEMIC_LOG);
 	NSSet<id<ALCSearchableBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObject:AcName(@"abc")]];
-    XCTAssertEqual(1u, [results count]);
-    XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
-    XCTAssertEqual(@"abc", [results anyObject].name);
+	XCTAssertEqual(1u, [results count]);
+	XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
+	XCTAssertEqual(@"abc", [results anyObject].name);
 }
 
 -(void) testBuildersForSearchExpressionComplexQuery {
-    id<ALCModelSearchExpression> expression1 = AcName(@"abc");
-    id<ALCModelSearchExpression> expression2 = AcClass(ALCModelTests);
-    NSSet<id<ALCSearchableBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:expression1, expression2, nil]];
-    XCTAssertEqual(1u, [results count]);
-    XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
-    XCTAssertEqual(@"abc", [results anyObject].name);
+	id<ALCModelSearchExpression> expression1 = AcName(@"abc");
+	id<ALCModelSearchExpression> expression2 = AcClass(ALCModelTests);
+	NSSet<id<ALCSearchableBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:expression1, expression2, nil]];
+	XCTAssertEqual(1u, [results count]);
+	XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
+	XCTAssertEqual(@"abc", [results anyObject].name);
 }
 
 -(void) testBuildersForSearchExpressionComplexWideRangeQuery {
@@ -79,19 +82,19 @@
 }
 
 -(void) testBuildersForSearchExpressionSecondQueryReturnsCachedResults {
-    id<ALCModelSearchExpression> expression1 = AcName(@"abc");
-    NSSet<id<ALCBuilder>> *result1 = [_model buildersForSearchExpressions:[NSSet setWithObject:expression1]];
-    NSSet<id<ALCBuilder>> *result2 = [_model buildersForSearchExpressions:[NSSet setWithObject:expression1]];
-    XCTAssertEqual(result1, result2);
+	id<ALCModelSearchExpression> expression1 = AcName(@"abc");
+	NSSet<id<ALCBuilder>> *result1 = [_model buildersForSearchExpressions:[NSSet setWithObject:expression1]];
+	NSSet<id<ALCBuilder>> *result2 = [_model buildersForSearchExpressions:[NSSet setWithObject:expression1]];
+	XCTAssertEqual(result1, result2);
 }
 
 #pragma mark - Accessing builders
 
 -(void) testAllBuilders {
-    NSSet<id<ALCBuilder>> *results = [_model allBuilders];
-    XCTAssertEqual(2u, [results count]);
-    XCTAssertTrue([results containsObject:_classBuilder]);
-    XCTAssertTrue([results containsObject:_methodBuilder]);
+	NSSet<id<ALCBuilder>> *results = [_model allBuilders];
+	XCTAssertEqual(2u, [results count]);
+	XCTAssertTrue([results containsObject:_classBuilder]);
+	XCTAssertTrue([results containsObject:_methodBuilder]);
 }
 
 -(void) testAllClassBuilders {
@@ -101,15 +104,15 @@
 }
 
 -(void) testClassBuildersFromBuilders {
-    NSSet<id<ALCBuilder>> *results = [_model classBuildersFromBuilders:[_model allBuilders]];
-    XCTAssertEqual(1u, [results count]);
-    XCTAssertTrue([results containsObject:_classBuilder]);
+	NSSet<id<ALCBuilder>> *results = [_model classBuildersFromBuilders:[_model allBuilders]];
+	XCTAssertEqual(1u, [results count]);
+	XCTAssertTrue([results containsObject:_classBuilder]);
 }
 
 #pragma mark - Internal
 
 -(NSString *) someMethod {
-    return @"xyc";
+	return @"xyc";
 }
 
 @end
