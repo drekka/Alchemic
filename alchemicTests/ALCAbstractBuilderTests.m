@@ -78,39 +78,36 @@
 
 #pragma mark - Validations
 
--(void) testValidateSelector {
-	[_builder validateSelector:@selector(description)];
-}
-
--(void) testValidateSelectorThrowsWhenNotFound {
-	ignoreSelectorWarnings(
-								  XCTAssertThrowsSpecificNamed([_builder validateSelector:@selector(xxxx)], NSException, @"AlchemicSelectorNotFound");
-								  )
-}
-
--(void) testValidateArgumentsForSelectorWhenNoArgs {
+-(void) testValidateClassSelectorWhenNoArgs {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
-	[_builder validateArgumentsForSelector:@selector(description) macroProcessor:macroProcessor];
+	[_builder validateClass:[SimpleObject class] selector:@selector(description) macroProcessor:macroProcessor];
+}
+
+-(void) testValidateClassSelectorWhenUnknownSelector {
+	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
+	ignoreSelectorWarnings(
+								  XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(xxxx) macroProcessor:macroProcessor], NSException, @"AlchemicSelectorNotFound");
+								  )
 }
 
 -(void) testValidateArgumentsForSelector {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
 	ignoreSelectorWarnings(
-								  [_builder validateArgumentsForSelector:@selector(aMethodWithAString:) macroProcessor:macroProcessor];
+								  [_builder validateClass:[SimpleObject class] selector:@selector(aMethodWithAString:) macroProcessor:macroProcessor];
 								  )
 }
 
 -(void) testValidateArgumentsForSelectorWithToFewNumberArguments {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
-	XCTAssertThrowsSpecificNamed([_builder validateArgumentsForSelector:@selector(aMethodWithAString:) macroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
+	XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(aMethodWithAString:) macroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
 }
 
 -(void) testValidateArgumentsForSelectorWithToManyNumberArguments {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"def"))];
-	XCTAssertThrowsSpecificNamed([_builder validateArgumentsForSelector:@selector(aMethodWithAString:) macroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
+	XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(aMethodWithAString:) macroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
 }
 
 @end

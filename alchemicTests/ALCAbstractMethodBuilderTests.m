@@ -11,6 +11,7 @@
 #import "ALCAbstractMethodBuilder.h"
 #import "SimpleObject.h"
 #import "ALCMethodMacroProcessor.h"
+#import "ALCClassBuilder.h"
 #import <Alchemic/Alchemic.h>
 #import "ALCDependency.h"
 
@@ -19,52 +20,54 @@
 @end
 
 @implementation ALCAbstractMethodBuilderTests {
-	ALCAbstractMethodBuilder *_builder;
+	ALCClassBuilder *_parentBuilder;
+	ALCAbstractMethodBuilder *_methodBuilder;
 }
 
 -(void) setUp {
-	_builder = [[ALCAbstractMethodBuilder alloc] init];
+	_parentBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
+	_methodBuilder = [[ALCAbstractMethodBuilder alloc] init];
+	_methodBuilder.parentClassBuilder = _parentBuilder;
 }
 
 -(void) testConfigureWithMacroProcessor {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
 	ignoreSelectorWarnings(
-								  _builder.selector = @selector(stringFactoryMethodUsingAString:);
+								  _methodBuilder.selector = @selector(stringFactoryMethodUsingAString:);
 								  )
-	[_builder configureWithMacroProcessor:macroProcessor];
+	[_methodBuilder configureWithMacroProcessor:macroProcessor];
 
 	Ivar dependenciesVar = class_getInstanceVariable([ALCAbstractMethodBuilder class], "_invArgumentDependencies");
-	NSMutableArray<ALCDependency *> *invArgumentDependencies = object_getIvar(_builder, dependenciesVar);
+	NSMutableArray<ALCDependency *> *invArgumentDependencies = object_getIvar(_methodBuilder, dependenciesVar);
 	XCTAssertNotNil(invArgumentDependencies);
 	ALCDependency *dependency = invArgumentDependencies[0];
 	XCTAssertEqualObjects(@"abc", dependency.value);
-
 }
 
 -(void) testConfigureWithMacroProcessorWithInvalidSelector {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	ignoreSelectorWarnings(
-								  _builder.selector = @selector(xxxx);
+								  _methodBuilder.selector = @selector(xxxx);
 								  )
-	XCTAssertThrowsSpecificNamed([_builder configureWithMacroProcessor:macroProcessor], NSException, @"AlchemicSelectorNotFound");
+	XCTAssertThrowsSpecificNamed([_methodBuilder configureWithMacroProcessor:macroProcessor], NSException, @"AlchemicSelectorNotFound");
 
 }
 
 -(void) testConfigureWithMacroProcessorIncorrectNumberArguments {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
-	_builder.selector = @selector(stringFactoryMethodUsingAString:);
-	XCTAssertThrowsSpecificNamed([_builder configureWithMacroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
+	_methodBuilder.selector = @selector(stringFactoryMethodUsingAString:);
+	XCTAssertThrowsSpecificNamed([_methodBuilder configureWithMacroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
 }
 
 #pragma mark - Invoking
 
 -(void) testInvokeMethodOn {
 	ignoreSelectorWarnings(
-								  _builder.selector = @selector(stringFactoryMethod);
+								  _methodBuilder.selector = @selector(stringFactoryMethod);
 								  )
 	SimpleObject *object = [[SimpleObject alloc] init];
-	NSString *result = [_builder invokeMethodOn:object];
+	NSString *result = [_methodBuilder invokeMethodOn:object];
 	XCTAssertEqualObjects(@"abc", result);
 }
 

@@ -8,8 +8,6 @@
 
 #import "ALCAbstractBuilder.h"
 
-@class ALCClassBuilder;
-@class ALCMethodRegistrationMacroProcessor;
 @protocol ALCSearchableBuilder;
 
 NS_ASSUME_NONNULL_BEGIN

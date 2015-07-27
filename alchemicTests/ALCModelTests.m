@@ -12,7 +12,7 @@
 #import <Alchemic/Alchemic.h>
 
 #import "ALCModel.h"
-#import "ALCBuilder.h"
+#import "ALCSearchableBuilder.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
 #import "ALCMethodMacroProcessor.h"
@@ -23,8 +23,8 @@
 
 @implementation ALCModelTests {
     ALCModel *_model;
-    id<ALCBuilder> _classBuilder;
-    id<ALCBuilder> _methodBuilder;
+    id<ALCSearchableBuilder> _classBuilder;
+    id<ALCSearchableBuilder> _methodBuilder;
 }
 
 -(void) setUp {
@@ -54,7 +54,7 @@
 
 -(void) testBuildersForSearchExpressionSimpleQuery {
 	STStartLogging(ALCHEMIC_LOG);
-	NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObject:AcName(@"abc")]];
+	NSSet<id<ALCSearchableBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObject:AcName(@"abc")]];
     XCTAssertEqual(1u, [results count]);
     XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
     XCTAssertEqual(@"abc", [results anyObject].name);
@@ -63,7 +63,7 @@
 -(void) testBuildersForSearchExpressionComplexQuery {
     id<ALCModelSearchExpression> expression1 = AcName(@"abc");
     id<ALCModelSearchExpression> expression2 = AcClass(ALCModelTests);
-    NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:expression1, expression2, nil]];
+    NSSet<id<ALCSearchableBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:expression1, expression2, nil]];
     XCTAssertEqual(1u, [results count]);
     XCTAssertEqual([ALCModelTests class], [results anyObject].valueClass);
     XCTAssertEqual(@"abc", [results anyObject].name);
@@ -72,7 +72,7 @@
 -(void) testBuildersForSearchExpressionComplexWideRangeQuery {
 	id<ALCModelSearchExpression> expression1 = AcClass(NSObject);
 	id<ALCModelSearchExpression> expression2 = AcProtocol(NSCopying);
-	NSSet<id<ALCBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:expression2, expression1, nil]];
+	NSSet<id<ALCSearchableBuilder>> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:expression2, expression1, nil]];
 	XCTAssertEqual(1u, [results count]);
 	XCTAssertEqual([NSString class], [results anyObject].valueClass);
 	XCTAssertEqual(@"def", [results anyObject].name);

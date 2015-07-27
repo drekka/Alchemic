@@ -24,6 +24,14 @@ NS_ASSUME_NONNULL_BEGIN
 	BOOL _useClassMethod;
 }
 
+-(instancetype) init {
+	self = [super init];
+	if (self) {
+		_invArgumentDependencies = [[NSMutableArray alloc] init];
+	}
+	return self;
+}
+
 -(void)configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>) macroProcessor {
 	[super configureWithMacroProcessor:macroProcessor];
 	for (NSUInteger i = 0; i < [macroProcessor valueSourceCount]; i++) {
@@ -31,6 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
 		[_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType
 																								valueSource:[arg valueSource]]];
 	}
+	[self validateClass:self.parentClassBuilder.valueClass
+				  selector:self.selector
+		  macroProcessor:macroProcessor];
 }
 
 -(id) instantiateObject {
