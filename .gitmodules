@@ -1,0 +1,6 @@
+[submodule "Carthage/Checkouts/pegkit"]
+	path = Carthage/Checkouts/pegkit
+	url = ssh://git@github.com/drekka/pegkit.git
+[submodule "Carthage/Checkouts/StoryTeller"]
+	path = Carthage/Checkouts/StoryTeller
+	url = ssh://git@github.com/drekka/StoryTeller.git
