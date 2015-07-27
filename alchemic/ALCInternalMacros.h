@@ -54,3 +54,11 @@ va_end(macroList); \
 alc_processVarArgsIncluding(id<ALCMacro>, firstArg, ^(id<ALCMacro> macro){[processorVar addMacro:macro];}); \
 [processorVar validate];
 
+#define ignoreSelectorWarnings(code) \
+_Pragma ("clang diagnostic push") \
+_Pragma ("clang diagnostic ignored \"-Wselector\"") \
+_Pragma ("clang diagnostic ignored \"-Wundeclared-selector\"") \
+code \
+_Pragma ("clang diagnostic pop")
+
+

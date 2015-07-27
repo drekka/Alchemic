@@ -18,4 +18,9 @@
 	return @"abc";
 }
 
+-(NSString *) stringFactoryMethodUsingAString:(NSString *) aString {
+	self.stringFactoryWithAStringCalled = YES;
+	return @"abc";
+}
+
 @end

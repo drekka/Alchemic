@@ -10,12 +10,13 @@
 
 @class ALCClassBuilder;
 @class ALCMethodRegistrationMacroProcessor;
+@protocol ALCSearchableBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractMethodBuilder : ALCAbstractBuilder
 
-@property (nonatomic, weak) id<ALCBuilder> parentClassBuilder;
+@property (nonatomic, weak) id<ALCSearchableBuilder> parentClassBuilder;
 @property (nonatomic, assign) SEL selector;
 
 -(id) invokeMethodOn:(id) target;

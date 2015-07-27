@@ -8,6 +8,7 @@
 
 @import Foundation;
 @protocol ALCBuilder;
+@protocol ALCSearchableBuilder;
 
 /**
  Classes which can be used to search the model.
@@ -17,6 +18,6 @@
 @property (nonatomic, assign, readonly) int priority;
 @property (nonatomic, strong, readonly) id cacheId;
 
--(BOOL) matches:(id<ALCBuilder>) builder;
+-(BOOL) matches:(id<ALCSearchableBuilder>) builder;
 
 @end

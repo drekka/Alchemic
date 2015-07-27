@@ -19,9 +19,6 @@
 
 @end
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-
 @implementation ALCObjectFactoryMacroProcessorTests {
     ALCObjectFactoryMacroProcessor *_processor;
 }
@@ -56,4 +53,3 @@
 
 @end
 
-#pragma clang diagnostic pop

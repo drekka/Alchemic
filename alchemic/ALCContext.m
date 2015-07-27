@@ -21,6 +21,7 @@
 #import "ALCInitializerMacroProcessor.h"
 #import "ALCMethodMacroProcessor.h"
 #import "ALCVariableDependencyMacroProcessor.h"
+#import "ALCSearchableBuilder.h"
 
 @interface ALCContext ()
 @property (nonatomic, strong) id<ALCValueResolver> valueResolver;
@@ -67,7 +68,7 @@
 
 -(void) resolveBuilderDependencies {
 	STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
-	for (id<ALCBuilder> builder in [_model allBuilders]) {
+	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
 		STLog(builder.valueClass, @"Resolving dependencies for builder %@", builder.name);
 		STStartScope(builder.valueClass);
 		[builder resolveDependenciesWithPostProcessors:self->_dependencyPostProcessors];
@@ -108,7 +109,7 @@
 	STLog(classBuilder.valueClass, @"Registering a class initializer for a %@", NSStringFromClass(classBuilder.valueClass));
 	id<ALCMacroProcessor> macroProcessor = [[ALCInitializerMacroProcessor alloc] init];
 	alc_loadMacrosAfter(macroProcessor, initializer);
-	ALCClassInitializerBuilder *initializerBuilder = [[ALCClassInitializerBuilder alloc] initWithValueClass:classBuilder.valueClass];
+	ALCClassInitializerBuilder *initializerBuilder = [[ALCClassInitializerBuilder alloc] init];
 	initializerBuilder.selector = initializer;
 	classBuilder.initializerBuilder = initializerBuilder;
 }
@@ -117,7 +118,7 @@
 	STLog(classBuilder.valueClass, @"Registering a method builder for %@", NSStringFromSelector(selector));
 	id<ALCMacroProcessor> macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	alc_loadMacrosAfter(macroProcessor, returnType);
-	id<ALCBuilder> methodBuilder = [[ALCMethodBuilder alloc] initWithValueClass:returnType];
+	ALCMethodBuilder *methodBuilder = [[ALCMethodBuilder alloc] initWithValueClass:returnType];
 	[self addBuilderToModel:methodBuilder];
 	[classBuilder addMethodBuilder:methodBuilder];
 	STLog(classBuilder.valueClass, @"Created: %@, %@", methodBuilder, macroProcessor);
@@ -142,7 +143,7 @@
 	// This is a two stage process so that all objects are created before dependencies are injected.
 	STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
 	NSMutableSet *singletons = [[NSMutableSet alloc] init];
-	[[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop) {
+	[[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCSearchableBuilder> builder, BOOL *stop) {
 		if (builder.createOnBoot) {
 			STLog(builder, @"Creating singleton %@ -> %@", builder.name, builder);
 			[singletons addObject:builder];

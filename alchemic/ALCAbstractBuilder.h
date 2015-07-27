@@ -16,10 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractBuilder : NSObject<ALCBuilder>
 
--(instancetype) init NS_UNAVAILABLE;
-
--(instancetype) initWithValueClass:(Class) valueClass NS_DESIGNATED_INITIALIZER;
-
 -(void) configureWithMacroProcessor:(id<ALCMacroProcessor>) macroProcessor;
 
 /**
@@ -32,9 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) injectObjectDependencies:(id) object;
 
--(void) validateSelector:(SEL) selector;
-
--(void) validateArgumentsForSelector:(nonnull SEL)selector macroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor;
+-(void) validateClass:(Class) aClass selector:(nonnull SEL)selector macroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor;
 
 @end
 

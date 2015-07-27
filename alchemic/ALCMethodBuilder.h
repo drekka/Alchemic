@@ -5,10 +5,15 @@
 //
 
 #import "ALCAbstractMethodBuilder.h"
+#import "ALCSearchableBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCMethodBuilder : ALCAbstractMethodBuilder
+@interface ALCMethodBuilder : ALCAbstractMethodBuilder<ALCSearchableBuilder>
+
+-(instancetype) init NS_UNAVAILABLE;
+
+-(instancetype) initWithValueClass:(Class) valueClass NS_DESIGNATED_INITIALIZER;
 
 @end
 

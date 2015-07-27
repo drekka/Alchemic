@@ -24,9 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 // If the builder is a factory.
 @property (nonatomic, assign) BOOL factory;
 
-
-@property (nonatomic, strong, readonly) Class valueClass;
-
 #pragma mark - Resolving
 
 /**

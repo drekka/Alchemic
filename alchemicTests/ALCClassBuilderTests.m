@@ -79,7 +79,7 @@
 }
 
 -(void) testSetInitializerBuilder {
-	ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] initWithValueClass:_builder.valueClass];
+	ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] init];
 	_builder.initializerBuilder = initBuilder;
 	id<ALCBuilder> parentBuilder = initBuilder.parentClassBuilder;
 	XCTAssertEqual(_builder, parentBuilder);

@@ -44,14 +44,10 @@
 @implementation ALCAbstractBuilderTests
 
 -(void) setUp {
-	_builder = [[FakeBuilder alloc] initWithValueClass:[SimpleObject class]];
+	_builder = [[FakeBuilder alloc] init];
 }
 
 #pragma mark - Creating objects
-
--(void) testInitWithValueClass {
-	XCTAssertEqual([SimpleObject class], _builder.valueClass);
-}
 
 -(void) testValueBuildsAndInjects {
 	id value = _builder.value;
@@ -86,26 +82,24 @@
 	[_builder validateSelector:@selector(description)];
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
 -(void) testValidateSelectorThrowsWhenNotFound {
-	XCTAssertThrowsSpecificNamed([_builder validateSelector:@selector(xxxx)], NSException, @"AlchemicSelectorNotFound");
+	ignoreSelectorWarnings(
+								  XCTAssertThrowsSpecificNamed([_builder validateSelector:@selector(xxxx)], NSException, @"AlchemicSelectorNotFound");
+								  )
 }
-#pragma clang diagnostic pop
 
 -(void) testValidateArgumentsForSelectorWhenNoArgs {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	[_builder validateArgumentsForSelector:@selector(description) macroProcessor:macroProcessor];
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wselector"
 -(void) testValidateArgumentsForSelector {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
-	[_builder validateArgumentsForSelector:@selector(aMethodWithAString:) macroProcessor:macroProcessor];
+	ignoreSelectorWarnings(
+								  [_builder validateArgumentsForSelector:@selector(aMethodWithAString:) macroProcessor:macroProcessor];
+								  )
 }
-#pragma clang diagnostic pop
 
 -(void) testValidateArgumentsForSelectorWithToFewNumberArguments {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];

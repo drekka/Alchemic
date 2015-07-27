@@ -9,7 +9,7 @@
 #import <StoryTeller/StoryTeller.h>
 #import "ALCProtocol.h"
 
-#import "ALCBuilder.h"
+#import "ALCSearchableBuilder.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
     return _aProtocol;
 }
 
--(BOOL) matches:(id<ALCBuilder>) builder {
+-(BOOL) matches:(id<ALCSearchableBuilder>) builder {
     return [builder.valueClass conformsToProtocol:_aProtocol];
 }
 

@@ -13,6 +13,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodBuilder
 
+@synthesize valueClass = _valueClass;
+
+-(instancetype) init {
+	return nil;
+}
+
+-(instancetype) initWithValueClass:(Class)valueClass {
+	self = [super init];
+	if (self) {
+		_valueClass = valueClass;
+	}
+	return self;
+}
+
 -(void)configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
 	[super configureWithMacroProcessor:macroProcessor];
 	ALCMethodMacroProcessor *processor = macroProcessor;
@@ -26,9 +40,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nonnull id) instantiateObject {
 	id<ALCBuilder> parent = self.parentClassBuilder;
-	STLog(self.valueClass, @"Getting a %s parent object for method", class_getName(parent.valueClass));
 	id factoryObject = parent.value;
 	return [self invokeMethodOn:factoryObject];
+}
+
+-(nonnull NSString *) description {
+	return [NSString stringWithFormat:@"Method builder [%s -(%@ *) %s]", class_getName(self.parentClassBuilder.valueClass), NSStringFromClass(self.valueClass), sel_getName(self.selector)];
 }
 
 @end

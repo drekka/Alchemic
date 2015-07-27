@@ -10,14 +10,20 @@
 
 #import "ALCInitializerMacroProcessor.h"
 #import "ALCClassInitializerBuilder.h"
+#import "ALCSearchableBuilder.h"
 
 @implementation ALCClassInitializerBuilder
 
 -(nonnull id) instantiateObject {
-	id<ALCBuilder> parent = self.parentClassBuilder;
-	STLog(self.valueClass, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), NSStringFromSelector(self.selector));
+	id<ALCSearchableBuilder> parent = self.parentClassBuilder;
 	id unInittedObj = [parent.valueClass alloc];
-	return [self invokeMethodOn:unInittedObj];
+	id newObj = [self invokeMethodOn:unInittedObj];
+	STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), NSStringFromSelector(self.selector));
+	return newObj;
+}
+
+-(nonnull NSString *) description {
+	return [NSString stringWithFormat:@"Initializer -[%@ %@]", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(self.selector)];
 }
 
 @end

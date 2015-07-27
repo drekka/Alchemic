@@ -14,6 +14,7 @@
 #import "ALCArg.h"
 #import "ALCAlchemic.h"
 #import "ALCContext.h"
+#import "ALCSearchableBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,14 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 	BOOL _useClassMethod;
 }
 
--(instancetype) initWithValueClass:(__unsafe_unretained _Nonnull Class) valueClass {
-	self = [super initWithValueClass:valueClass];
-	if (self) {
-		_invArgumentDependencies = [[NSMutableArray alloc] init];
-	}
-	return self;
-}
-
 -(void)configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>) macroProcessor {
 	[super configureWithMacroProcessor:macroProcessor];
 	for (NSUInteger i = 0; i < [macroProcessor valueSourceCount]; i++) {
@@ -38,8 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 		[_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType
 																								valueSource:[arg valueSource]]];
 	}
-	[self validateSelector:self.selector];
-	[self validateArgumentsForSelector:self.selector macroProcessor:macroProcessor];
 }
 
 -(id) instantiateObject {
@@ -50,8 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(id) invokeMethodOn:(id) target {
 	// Get an invocation ready.
 	if (_inv == nil) {
-		STLog(self.valueClass, @"Creating an invocation for %@", NSStringFromSelector(_selector));
-		NSMethodSignature *sig = [_parentClassBuilder.valueClass instanceMethodSignatureForSelector:_selector];
+		STLog(self, @"Creating an invocation for %@", NSStringFromSelector(_selector));
+		NSMethodSignature *sig = [[target class]instanceMethodSignatureForSelector:_selector];
 		_inv = [NSInvocation invocationWithMethodSignature:sig];
 		_inv.selector = _selector;
 		[_inv retainArguments];
@@ -63,12 +54,12 @@ NS_ASSUME_NONNULL_BEGIN
 		[self->_inv setArgument:&argumentValue atIndex:(NSInteger)idx];
 	}];
 
-	STLog(self.valueClass, @">>> Creating object with %@", [self description]);
+	STLog(self, @">>> Creating object with %@", [self description]);
 	[_inv invokeWithTarget:target];
 
 	id returnObj;
 	[_inv getReturnValue:&returnObj];
-	STLog(self.valueClass, @"Created a %s", class_getName([returnObj class]));
+	STLog(self, @"Created a %s", class_getName([returnObj class]));
 	return returnObj;
 }
 
@@ -81,10 +72,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) injectObjectDependencies:(id _Nonnull) object {
 	STLog([object class], @">>> Checking whether a %s instance has dependencies", object_getClassName(object));
 	[[ALCAlchemic mainContext] injectDependencies:object];
-}
-
--(nonnull NSString *) description {
-	return [NSString stringWithFormat:@"Method builder -[%s %s] for type %s", class_getName(_parentClassBuilder.valueClass), sel_getName(_selector), class_getName(self.valueClass)];
 }
 
 @end

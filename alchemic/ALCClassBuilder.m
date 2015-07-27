@@ -26,9 +26,16 @@
 	NSMutableSet<ALCMethodBuilder *> *_methodBuilders;
 }
 
+@synthesize valueClass = _valueClass;
+
+-(instancetype) init {
+	return nil;
+}
+
 -(instancetype) initWithValueClass:(__unsafe_unretained _Nonnull Class) valueClass {
-	self = [super initWithValueClass:valueClass];
+	self = [super init];
 	if (self) {
+		_valueClass = valueClass;
 		_dependencies = [[NSMutableSet alloc] init];
 		_methodBuilders = [[NSMutableSet alloc] init];
 	}
