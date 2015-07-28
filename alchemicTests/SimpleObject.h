@@ -12,6 +12,8 @@
 @property (nonatomic, strong) NSString *aStringProperty;
 @property (nonatomic, assign) BOOL aMethodWithAStringCalled;
 @property (nonatomic, assign) BOOL stringFactoryWithAStringCalled;
+-(instancetype) initAlternative;
+-(instancetype) initWithString:(NSString *) aString;
 -(void) aMethodWithAString:(NSString *) aString;
 -(NSString *) stringFactoryMethod;
 -(NSString *) stringFactoryMethodUsingAString:(NSString *) aString;

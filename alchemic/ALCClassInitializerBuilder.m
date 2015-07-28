@@ -11,14 +11,15 @@
 #import "ALCInitializerMacroProcessor.h"
 #import "ALCClassInitializerBuilder.h"
 #import "ALCSearchableBuilder.h"
+@import ObjectiveC;
 
 @implementation ALCClassInitializerBuilder
 
--(nonnull id) instantiateObject {
+-(nonnull __autoreleasing id) instantiate {
 	id<ALCSearchableBuilder> parent = self.parentClassBuilder;
-	id unInittedObj = [parent.valueClass alloc];
-	id newObj = [self invokeMethodOn:unInittedObj];
+	id newObj = [self invokeMethodOn:[parent.valueClass alloc]];
 	STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), NSStringFromSelector(self.selector));
+	CFBridgingRetain(newObj);
 	return newObj;
 }
 

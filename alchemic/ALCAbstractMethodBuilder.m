@@ -19,7 +19,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractMethodBuilder {
-	NSInvocation *_inv;
 	BOOL _useClassMethod;
 }
 
@@ -56,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 	// Get an invocation ready.
 	if (_inv == nil) {
 		STLog(self, @"Creating an invocation for %@", NSStringFromSelector(_selector));
-		NSMethodSignature *sig = [[target class]instanceMethodSignatureForSelector:_selector];
+		NSMethodSignature *sig = [[target class] instanceMethodSignatureForSelector:_selector];
 		_inv = [NSInvocation invocationWithMethodSignature:sig];
 		_inv.selector = _selector;
 		[_inv retainArguments];

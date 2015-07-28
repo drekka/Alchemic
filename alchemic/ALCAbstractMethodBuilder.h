@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractMethodBuilder : ALCAbstractBuilder
 
+@property (nonatomic, strong, readonly) NSInvocation *inv;
+
 -(instancetype) init NS_UNAVAILABLE;
 
 -(instancetype) initWithSelector:(SEL) selector NS_DESIGNATED_INITIALIZER;

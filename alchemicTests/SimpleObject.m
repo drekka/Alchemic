@@ -10,6 +10,22 @@
 
 @implementation SimpleObject
 
+-(instancetype) initAlternative {
+	self = [super init];
+	if (self) {
+		self.aStringProperty = @"xyz";
+	}
+	return self;
+}
+
+-(instancetype) initWithString:(NSString *) aString {
+	self = [super init];
+	if (self) {
+		self.aStringProperty = aString;
+	}
+	return self;
+}
+
 -(void) aMethodWithAString:(NSString *) aString{
 	_aMethodWithAStringCalled = YES;
 }
