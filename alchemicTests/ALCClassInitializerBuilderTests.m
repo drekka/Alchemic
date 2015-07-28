@@ -21,33 +21,35 @@
 @implementation ALCClassInitializerBuilderTests
 
 -(void) testInstantiateObject {
-	ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
+	ALCInitializerMacroProcessor *initMacroProcessor = [[ALCInitializerMacroProcessor alloc] init];
 	ignoreSelectorWarnings(
-								  ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] initWithSelector:@selector(initAlternative)];
-	)
-	classBuilder.initializerBuilder = initBuilder;
-
-	SimpleObject *object = classBuilder.value;
-	XCTAssertNotNil(object);
+								  SimpleObject *object = [self runTestWithMacroProcessor:initMacroProcessor
+																							initializer:@selector(initAlternative)];
+								  )
 	XCTAssertEqualObjects(@"xyz", object.aStringProperty);
 }
 
 -(void) testInstantiateObjectWithArgument {
-	ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
-
 	ALCInitializerMacroProcessor *initMacroProcessor = [[ALCInitializerMacroProcessor alloc] init];
 	[initMacroProcessor addMacro:AcArg(NSString, AcValue(@"hello"))];
+	SimpleObject *object = [self runTestWithMacroProcessor:initMacroProcessor
+															 initializer:@selector(initWithString:)];
+	XCTAssertEqualObjects(@"hello", object.aStringProperty);
+}
+
+-(SimpleObject *) runTestWithMacroProcessor:(ALCInitializerMacroProcessor *) initMacroProcessor
+										  initializer:(SEL) initializer {
+
+	ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
 	[initMacroProcessor validate];
 
-	ignoreSelectorWarnings(
-								  ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] initWithSelector:@selector(initWithString:)];
-								  )
+	ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] initWithSelector:initializer];
 	classBuilder.initializerBuilder = initBuilder;
 	[initBuilder configureWithMacroProcessor:initMacroProcessor];
 
 	SimpleObject *object = classBuilder.value;
 	XCTAssertNotNil(object);
-	XCTAssertEqualObjects(@"hello", object.aStringProperty);
+	return object;
 }
 
 @end
