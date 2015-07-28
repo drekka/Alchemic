@@ -15,11 +15,10 @@
 
 @implementation ALCClassInitializerBuilder
 
--(nonnull __autoreleasing id) instantiate {
+-(nonnull id) instantiate {
 	id<ALCSearchableBuilder> parent = self.parentClassBuilder;
 	id newObj = [self invokeMethodOn:[parent.valueClass alloc]];
 	STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), NSStringFromSelector(self.selector));
-	CFBridgingRetain(newObj);
 	return newObj;
 }
 

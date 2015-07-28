@@ -64,13 +64,13 @@ NS_ASSUME_NONNULL_BEGIN
 	// Load the arguments.
 	[self.dependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
 		id argumentValue = dependency.value;
-		[self->_inv setArgument:&argumentValue atIndex:(NSInteger)idx];
+		[self->_inv setArgument:&argumentValue atIndex:(NSInteger)idx + 2];
 	}];
 
 	STLog(self, @">>> Creating object with %@", [self description]);
 	[_inv invokeWithTarget:target];
 
-	id returnObj;
+	id __unsafe_unretained returnObj;
 	[_inv getReturnValue:&returnObj];
 	STLog(self, @"Created a %s", class_getName([returnObj class]));
 	return returnObj;

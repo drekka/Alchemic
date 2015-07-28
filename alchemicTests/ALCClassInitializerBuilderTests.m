@@ -11,7 +11,8 @@
 #import "ALCClassInitializerBuilder.h"
 #import "SimpleObject.h"
 #import "ALCInternalMacros.h"
-
+#import "ALCInitializerMacroProcessor.h"
+#import <Alchemic/Alchemic.h>
 
 @interface ALCClassInitializerBuilderTests : XCTestCase
 
@@ -31,5 +32,22 @@
 	XCTAssertEqualObjects(@"xyz", object.aStringProperty);
 }
 
+-(void) testInstantiateObjectWithArgument {
+	ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
+
+	ALCInitializerMacroProcessor *initMacroProcessor = [[ALCInitializerMacroProcessor alloc] init];
+	[initMacroProcessor addMacro:AcArg(NSString, AcValue(@"hello"))];
+	[initMacroProcessor validate];
+
+	ignoreSelectorWarnings(
+								  ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] initWithSelector:@selector(initWithString:)];
+								  )
+	classBuilder.initializerBuilder = initBuilder;
+	[initBuilder configureWithMacroProcessor:initMacroProcessor];
+
+	SimpleObject *object = classBuilder.value;
+	XCTAssertNotNil(object);
+	XCTAssertEqualObjects(@"hello", object.aStringProperty);
+}
 
 @end

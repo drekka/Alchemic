@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion This does not trigger dependency injection. Use the value property to obtain objects and get them injected.
  @see value
  */
--(id __autoreleasing) instantiate;
+-(id) instantiate;
 
 @property (nonatomic, strong) id value;
 
