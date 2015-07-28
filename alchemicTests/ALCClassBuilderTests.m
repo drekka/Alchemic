@@ -125,21 +125,4 @@
 	OCMVerifyAll(mockInitializerBuilder);
 }
 
-#pragma mark - Injecting
-
--(void) testInjectObjectDependencies {
-
-	id mockDependency = OCMClassMock([ALCVariableDependency class]);
-	Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
-	object_setIvar(_builder, dependenciesVar, [NSMutableSet setWithObject:mockDependency]);
-
-	SimpleObject *object = [[SimpleObject alloc] init];
-	OCMExpect([mockDependency injectInto:object]);
-
-	[_builder injectValueDependencies:object];
-
-	OCMVerifyAll(mockDependency);
-
-}
-
 @end

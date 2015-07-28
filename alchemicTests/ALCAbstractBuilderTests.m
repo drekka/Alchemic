@@ -12,10 +12,11 @@
 #import "SimpleObject.h"
 #import "ALCAbstractBuilder.h"
 #import "ALCMethodMacroProcessor.h"
+#import <OCMock/OCMock.h>
+#import "ALCVariableDependency.h"
 
 @interface FakeBuilder : ALCAbstractBuilder
 @property(nonatomic, assign) BOOL resolveDependenciesCalled;
-@property(nonatomic, assign) BOOL injectValueCalled;
 @end
 
 @implementation FakeBuilder
@@ -26,10 +27,6 @@
 
 -(nonnull id) instantiateObject {
 	return [[SimpleObject alloc] init];
-}
-
--(void) injectValueDependencies:(id) value {
-	self.injectValueCalled = YES;
 }
 
 @end
@@ -51,10 +48,17 @@
 #pragma mark - Creating objects
 
 -(void) testValueBuildsAndInjects {
+
+	id mockDependency = OCMStrictClassMock([ALCVariableDependency class]);
+	OCMExpect([mockDependency injectInto:[OCMArg isKindOfClass:[SimpleObject class]]]);
+	[_builder.dependencies addObject:mockDependency];
+
 	id value = _builder.value;
+
 	XCTAssertNotNil(value);
 	XCTAssertEqual([SimpleObject class], [value class]);
-	XCTAssertTrue(_builder.injectValueCalled);
+
+	OCMVerifyAll(mockDependency);
 }
 
 -(void) testValueCachesWhenNotAFactory {
@@ -71,10 +75,15 @@
 }
 
 -(void) testInstantiateCreatesObjectButDoesNotWireIt {
+	id mockDependency = OCMStrictClassMock([ALCVariableDependency class]);
+	[_builder.dependencies addObject:mockDependency];
+
 	id value = [_builder instantiate];
+
 	XCTAssertNotNil(value);
 	XCTAssertEqual([SimpleObject class], [value class]);
-	XCTAssertFalse(_builder.injectValueCalled);
+
+	OCMVerifyAll(mockDependency);
 }
 
 #pragma mark - Validations
@@ -110,5 +119,21 @@
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"def"))];
 	XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(aMethodWithAString:) macroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
 }
+#pragma mark - Injecting
+
+-(void) testInjectObjectDependencies {
+
+	id mockDependency = OCMClassMock([ALCVariableDependency class]);
+	[_builder.dependencies addObject:mockDependency];
+
+	SimpleObject *object = [[SimpleObject alloc] init];
+	OCMExpect([mockDependency injectInto:object]);
+
+	[_builder injectValueDependencies:object];
+
+	OCMVerifyAll(mockDependency);
+	
+}
+
 
 @end
