@@ -7,14 +7,15 @@
 //
 
 @import XCTest;
+#import <Alchemic/Alchemic.h>
+
+#import "SimpleObject.h"
 #import "ALCAbstractBuilder.h"
 #import "ALCMethodMacroProcessor.h"
-#import <Alchemic/Alchemic.h>
-#import "SimpleObject.h"
 
 @interface FakeBuilder : ALCAbstractBuilder
 @property(nonatomic, assign) BOOL resolveDependenciesCalled;
-@property(nonatomic, assign) BOOL injectObjectCalled;
+@property(nonatomic, assign) BOOL injectValueCalled;
 @end
 
 @implementation FakeBuilder
@@ -27,8 +28,8 @@
 	return [[SimpleObject alloc] init];
 }
 
--(void) injectObjectDependencies:(id) object {
-	self.injectObjectCalled = YES;
+-(void) injectValueDependencies:(id) value {
+	self.injectValueCalled = YES;
 }
 
 @end
@@ -53,7 +54,7 @@
 	id value = _builder.value;
 	XCTAssertNotNil(value);
 	XCTAssertEqual([SimpleObject class], [value class]);
-	XCTAssertTrue(_builder.injectObjectCalled);
+	XCTAssertTrue(_builder.injectValueCalled);
 }
 
 -(void) testValueCachesWhenNotAFactory {
@@ -73,7 +74,7 @@
 	id value = [_builder instantiate];
 	XCTAssertNotNil(value);
 	XCTAssertEqual([SimpleObject class], [value class]);
-	XCTAssertFalse(_builder.injectObjectCalled);
+	XCTAssertFalse(_builder.injectValueCalled);
 }
 
 #pragma mark - Validations

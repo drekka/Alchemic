@@ -22,7 +22,6 @@
 #import "ALCValueSourceFactory.h"
 
 @implementation ALCClassBuilder {
-	NSMutableSet<ALCVariableDependency *> *_dependencies;
 	NSMutableSet<ALCMethodBuilder *> *_methodBuilders;
 }
 
@@ -36,7 +35,6 @@
 	self = [super init];
 	if (self) {
 		_valueClass = valueClass;
-		_dependencies = [[NSMutableSet alloc] init];
 		_methodBuilders = [[NSMutableSet alloc] init];
 	}
 	return self;
@@ -55,7 +53,7 @@
 #pragma mark - Adding dependencies
 
 -(void) addVariableInjection:(nonnull ALCVariableDependencyMacroProcessor *)variableMacroProcessor {
-	[_dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:variableMacroProcessor.variable
+	[self.dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:variableMacroProcessor.variable
 																					 valueSource:[[variableMacroProcessor valueSourceFactoryForIndex:0] valueSource]]];
 }
 
@@ -71,12 +69,6 @@
 
 #pragma mark - Instantiating
 
--(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
-	[_dependencies enumerateObjectsUsingBlock:^(ALCVariableDependency *dependency, BOOL *stop) {
-		[dependency resolveWithPostProcessors:postProcessors];
-	}];
-}
-
 -(nonnull id) instantiateObject {
 	
 	if (self.initializerBuilder != nil) {
@@ -85,13 +77,6 @@
 
 	STLog(self.valueClass, @"Creating a %@", NSStringFromClass(self.valueClass));
 	return [[self.valueClass alloc] init];
-}
-
--(void) injectObjectDependencies:(id _Nonnull) object {
-	STLog([object class], @">>> Injecting %lu dependencies into a %s instance", [_dependencies count], object_getClassName(object));
-	for (ALCVariableDependency *dependency in _dependencies) {
-		[dependency injectInto:object];
-	}
 }
 
 -(nonnull NSString *) description {

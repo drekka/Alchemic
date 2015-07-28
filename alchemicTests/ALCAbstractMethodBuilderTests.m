@@ -36,10 +36,7 @@
 	methodBuilder.parentClassBuilder = _parentBuilder;
 	[methodBuilder configureWithMacroProcessor:macroProcessor];
 
-	Ivar dependenciesVar = class_getInstanceVariable([ALCAbstractMethodBuilder class], "_invArgumentDependencies");
-	NSMutableArray<ALCDependency *> *invArgumentDependencies = object_getIvar(methodBuilder, dependenciesVar);
-	XCTAssertNotNil(invArgumentDependencies);
-	ALCDependency *dependency = invArgumentDependencies[0];
+	ALCDependency *dependency = methodBuilder.dependencies[0];
 	XCTAssertEqualObjects(@"abc", dependency.value);
 }
 
@@ -69,6 +66,21 @@
 								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithSelector:@selector(stringFactoryMethod)];
 								  )
 	methodBuilder.parentClassBuilder = _parentBuilder;
+	SimpleObject *object = [[SimpleObject alloc] init];
+	NSString *result = [methodBuilder invokeMethodOn:object];
+	XCTAssertEqualObjects(@"abc", result);
+}
+
+-(void) testInvokeMethodOnWithArgs {
+	ignoreSelectorWarnings(
+								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithSelector:@selector(stringFactoryMethodUsingAString:)];
+								  )
+	methodBuilder.parentClassBuilder = _parentBuilder;
+
+	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
+	[macroProcessor addMacro:AcArg(NSString, AcValue(@"def"))];
+	[methodBuilder configureWithMacroProcessor:macroProcessor];
+
 	SimpleObject *object = [[SimpleObject alloc] init];
 	NSString *result = [methodBuilder invokeMethodOn:object];
 	XCTAssertEqualObjects(@"abc", result);

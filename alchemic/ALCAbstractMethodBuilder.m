@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractMethodBuilder {
 	NSInvocation *_inv;
-	NSMutableArray<ALCDependency *> *_invArgumentDependencies;
 	BOOL _useClassMethod;
 }
 
@@ -32,7 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 	self = [super init];
 	if (self) {
 		_selector = selector;
-		_invArgumentDependencies = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
@@ -41,8 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 	[super configureWithMacroProcessor:macroProcessor];
 	for (NSUInteger i = 0; i < [macroProcessor valueSourceCount]; i++) {
 		ALCArg *arg = (ALCArg *)[macroProcessor valueSourceFactoryForIndex:i];
-		[_invArgumentDependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType
-																								valueSource:[arg valueSource]]];
+		[self.dependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType
+																					  valueSource:[arg valueSource]]];
 	}
 	[self validateClass:self.parentClassBuilder.valueClass
 				  selector:self.selector
@@ -65,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 
 	// Load the arguments.
-	[_invArgumentDependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
+	[self.dependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
 		id argumentValue = dependency.value;
 		[self->_inv setArgument:&argumentValue atIndex:(NSInteger)idx];
 	}];
@@ -77,17 +75,6 @@ NS_ASSUME_NONNULL_BEGIN
 	[_inv getReturnValue:&returnObj];
 	STLog(self, @"Created a %s", class_getName([returnObj class]));
 	return returnObj;
-}
-
--(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
-	for(ALCDependency *dependency in _invArgumentDependencies) {
-		[dependency resolveWithPostProcessors:postProcessors];
-	};
-}
-
--(void) injectObjectDependencies:(id _Nonnull) object {
-	STLog([object class], @">>> Checking whether a %s instance has dependencies", object_getClassName(object));
-	[[ALCAlchemic mainContext] injectDependencies:object];
 }
 
 @end

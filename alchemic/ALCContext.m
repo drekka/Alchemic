@@ -63,7 +63,7 @@
 	STLog([object class], @">>> Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
 	NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForClass:[object class]];
 	NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:expressions]];
-	[[builders anyObject] injectObjectDependencies:object];
+	[[builders anyObject] injectValueDependencies:object];
 }
 
 -(void) resolveBuilderDependencies {
@@ -152,7 +152,7 @@
 
 	STLog(ALCHEMIC_LOG, @"Injecting dependencies into %lu singletons ...", [singletons count]);
 	[singletons enumerateObjectsUsingBlock:^(ALCClassBuilder *singleton, BOOL *stop) {
-		[singleton injectObjectDependencies:singleton.value];
+		[singleton injectValueDependencies:singleton.value];
 	}];
 
 }

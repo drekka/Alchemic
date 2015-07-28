@@ -11,6 +11,7 @@
 
 #import "ALCAbstractBuilder.h"
 #import "ALCMacroProcessor.h"
+#import "ALCVariableDependency.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,12 +26,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Lifecycle
 
+-(instancetype) init {
+	self = [super init];
+	if (self) {
+		_dependencies = [[NSMutableArray alloc] init];
+	}
+	return self;
+}
+
 -(id) value {
 	// Value will be populated if this is not a factory.
 	if (_value == nil) {
 		STLog(self, @"Value is nil, creating a new value ...");
 		id newValue = [self instantiate];
-		[self injectObjectDependencies:newValue];
+		[self injectValueDependencies:newValue];
 		return newValue;
 	} else {
 		STLog(self, @"Value present, returning a %@", NSStringFromClass([_value class]));
@@ -72,17 +81,22 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 }
 
+-(void) injectValueDependencies:(id _Nonnull) value {
+	STLog([value class], @">>> Injecting %lu dependencies into a %s instance", [_dependencies count], object_getClassName(value));
+	for (ALCVariableDependency *dependency in _dependencies) {
+		[dependency injectInto:value];
+	}
+}
+
 -(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
-	[self doesNotRecognizeSelector:_cmd];
+	for(ALCDependency *dependency in _dependencies) {
+		[dependency resolveWithPostProcessors:postProcessors];
+	};
 }
 
 -(nonnull id) instantiateObject {
 	[self doesNotRecognizeSelector:_cmd];
 	return nil;
-}
-
--(void) injectObjectDependencies:(id) object {
-	[self doesNotRecognizeSelector:_cmd];
 }
 
 @end

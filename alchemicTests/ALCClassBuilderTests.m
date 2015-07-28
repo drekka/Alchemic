@@ -70,11 +70,7 @@
 
 	[_builder addVariableInjection:dependencyMacroProcessor];
 
-	Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
-	NSSet<ALCVariableDependency *> *dependencies = object_getIvar(_builder, dependenciesVar);
-
-	XCTAssertEqual(1u,[dependencies count]);
-	ALCVariableDependency *dependency = [dependencies anyObject];
+	ALCVariableDependency *dependency = (ALCVariableDependency *)_builder.dependencies[0];
 	XCTAssertEqual(stringVar, dependency.variable);
 }
 
@@ -140,7 +136,7 @@
 	SimpleObject *object = [[SimpleObject alloc] init];
 	OCMExpect([mockDependency injectInto:object]);
 
-	[_builder injectObjectDependencies:object];
+	[_builder injectValueDependencies:object];
 
 	OCMVerifyAll(mockDependency);
 

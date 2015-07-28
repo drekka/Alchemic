@@ -9,12 +9,15 @@
 @import Foundation;
 
 @protocol ALCMacroProcessor;
+@class ALCDependency;
 
 #import <Alchemic/ALCBuilder.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractBuilder : NSObject<ALCBuilder>
+
+@property (nonatomic, strong, readonly) NSMutableArray<ALCDependency *> *dependencies;
 
 -(void) configureWithMacroProcessor:(id<ALCMacroProcessor>) macroProcessor;
 
@@ -24,9 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(id) instantiateObject;
 
 /**
- Called to resolve dependencies after the value has been created.
+ Called to inject dependencies after the value has been created.
  */
--(void) injectObjectDependencies:(id) object;
+-(void) injectValueDependencies:(id) value;
 
 -(void) validateClass:(Class) aClass selector:(nonnull SEL)selector macroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor;
 
