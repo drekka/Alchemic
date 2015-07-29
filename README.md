@@ -9,9 +9,10 @@ By Derek Clarkson
      * [Stopping](#stopping)
      * [Adding to your code](#adding-to-your-code)
      * [The context](#the-context)
+ * [Macros](#macros)
  * [Declaring objects](#declaring-objects)
       * [Singletons](#singletons)
-      * [Constructors](#-constructors)
+      * [Constructors](#constructors)
       * [Factories](#factories)
       * [Object names](#object-names)
       * [Primary objects](#primary-objects)
@@ -111,6 +112,18 @@ Alchemic has a central *'Context'* which manages all of the objects and classes 
 [Alchemic mainContext] ...;
 ```
 
+# Macros
+
+Alchemic is designed to be as unobtrusive as possible. But it still needs to know a fair amount of information about your classes and methods. To achieve this it uses a sort of meta-data defined using a number of pre-processor macros. These macros are generally pretty simple and easy to remember and it's likely that within a short time you will being using them without much thought. 
+
+Most of these macros take one or more arguments. For example the `AcArg(...)` macro takes at least two arguments and possibly more. To help keep the macros susinct and avoid you having to type needless boiler plate, there are some common conventions used:
+
+ * When  macro needs a type, you only need to specify the relevant class or protocol. For example `AcProtocol(NSCopying)` is the macro form of `[ALCProtocol withProtocol:@protocol(NSCopying)]`.
+ * Selectors are also shortened by macros where needed. For example `AcInitializer(myInitMethod)` is the macro form of 
+ `[[ALCAlchemic mainContext] registerClassInitializer:classBuilder initializer:@selector(initializerSel), ... , nil];`
+ * Property names are also shortened. So that code completion can assist, they are **not** expressioned as strings. For example `AcInject(myVar)` 
+ * Many macros make use of varadic lists so you can add as many criteria as you like in a single line.
+
 # Declaring objects
 
 Before we look at resolving dependencies and injecting values, we first need to look at declaring classes so that Alchemic can find them.
@@ -131,24 +144,24 @@ The `AcRegister(...)` macro is how Alchemic recognises classes it will be managi
 
 *Note: Mostly there should only be one `AcRegister(...)` for a class. If you add another, a second instance of the class will then be registered. This can be useful in some situations, but generally it's not something that is commonly done.*
 
-## ![Underconstruction](./images/alchemic-underconstruction.png) Constructors
+## Constructors
 
 By default, Alchemic will use the standard `init` method when constructing an instance of a class. However this is not always the best option, so Alchemic provides a method for specifing a different initializer and how to locate any arguments it needs. Here's an example:
 
 ```objectivec
 @implementation MyClass
-AcRegister(AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
+AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
 -(instancetype) initWithOtherObject:(id) obj {
     // ...
 }
 @end
 ```
 
-`AcSelector(...)` argument defines the selector of the intializer that will be called. 
+The `AcInitiailizer(...)` macro tells Alchemic that when it needs to create an instance of MyClass, it should use the `initWithOtherObject:` initializer. The first argument to this macro is required and specifies the initializer selector. After that is a series of `AcArg(...)` macros which define where to get the value for each argument that the selector has. 
 
-`AcArg(...)` defines how an argument's value is located.
+### AcArg(type, search-criteria, ...)
 
-`AcClass(...)` is an argument resolver used to locate the object to be passed to the initializer. See [Resolving argument values](#resolving-argument-value) for details on argument resolving.
+`AcArg(...)` is a macro that helps both `AcInitializer(...)` and `AcMethod(...)` locate argument values to be passed to the methods they are going to be calling. The first argument to `AcArg(...)` is the type of the argument. After that is a list of one or more [Object search criteria](#object-search-criteria) which tell Alchemic where and how to obtain the value for that argument. 
 
 ## Factories
 
