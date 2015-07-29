@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#include "ALCMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 @protocol ALCMacro;
 
 NS_ASSUME_NONNULL_BEGIN

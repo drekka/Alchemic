@@ -9,18 +9,17 @@
 @import Foundation;
 @protocol ALCMacro;
 @class ALCValueSourceFactory;
+#import "ALCValidatable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ALCMacroProcessor <NSObject>
+@protocol ALCMacroProcessor <NSObject, ALCValidatable>
 
 -(void) addMacro:(id<ALCMacro>) macro;
 
 -(ALCValueSourceFactory *) valueSourceFactoryForIndex:(NSUInteger) index;
 
 -(NSUInteger) valueSourceCount;
-
--(void) validate;
 
 @end
 

@@ -9,10 +9,10 @@
 @class ALCDependency;
 @protocol ALCDependencyPostProcessor;
 @protocol ALCMacroProcessor;
-
+#import "ALCValidatable.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ALCBuilder <NSObject>
+@protocol ALCBuilder <NSObject, ALCValidatable>
 
 @property (nonatomic, strong) NSString *name;
 

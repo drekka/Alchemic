@@ -57,10 +57,6 @@ NS_ASSUME_NONNULL_BEGIN
 	return newValue;
 }
 
--(void) configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
-	[macroProcessor validate];
-}
-
 -(void) validateClass:(Class) aClass selector:(nonnull SEL)selector macroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
 
 	if (! [aClass instancesRespondToSelector:selector]) {
@@ -95,9 +91,19 @@ NS_ASSUME_NONNULL_BEGIN
 	};
 }
 
--(nonnull id) instantiateObject {
+#pragma mark - Overridable points
+
+-(void) configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
+	[self doesNotRecognizeSelector:_cmd];
+}
+
+-(id) instantiateObject {
 	[self doesNotRecognizeSelector:_cmd];
 	return nil;
+}
+
+-(void) validate {
+	[self doesNotRecognizeSelector:_cmd];
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 @import ObjectiveC;
+#import <StoryTeller/StoryTeller.h>
 
 #import "ALCAbstractMacroProcessor.h"
 

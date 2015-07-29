@@ -50,6 +50,11 @@
 -(void) start {
 
 	STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
+	for (id<ALCValidatable> validatable in [_model allBuilders]) {
+		[validatable validate];
+	}
+
+	STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
 	[self resolveBuilderDependencies];
 
 	STLog(ALCHEMIC_LOG, @"Creating singletons ...");
