@@ -31,9 +31,9 @@
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
 	ignoreSelectorWarnings(
-								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithSelector:@selector(stringFactoryMethodUsingAString:)];
+								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
+																																								selector:@selector(stringFactoryMethodUsingAString:)];
 								  )
-	methodBuilder.parentClassBuilder = _parentBuilder;
 	[methodBuilder configureWithMacroProcessor:macroProcessor];
 
 	ALCDependency *dependency = methodBuilder.dependencies[0];
@@ -43,9 +43,9 @@
 -(void) testConfigureWithMacroProcessorWithInvalidSelector {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	ignoreSelectorWarnings(
-								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithSelector:@selector(xxxx)];
+								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
+																																								selector:@selector(xxxx)];
 								  )
-	methodBuilder.parentClassBuilder = _parentBuilder;
 	XCTAssertThrowsSpecificNamed([methodBuilder configureWithMacroProcessor:macroProcessor], NSException, @"AlchemicSelectorNotFound");
 
 }
@@ -53,9 +53,9 @@
 -(void) testConfigureWithMacroProcessorIncorrectNumberArguments {
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	ignoreSelectorWarnings(
-								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithSelector:@selector(stringFactoryMethodUsingAString:)];
+								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
+																																								selector:@selector(stringFactoryMethodUsingAString:)];
 								  )
-	methodBuilder.parentClassBuilder = _parentBuilder;
 	XCTAssertThrowsSpecificNamed([methodBuilder configureWithMacroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
 }
 
@@ -63,9 +63,9 @@
 
 -(void) testInvokeMethodOn {
 	ignoreSelectorWarnings(
-								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithSelector:@selector(stringFactoryMethod)];
+								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
+																																								selector:@selector(stringFactoryMethod)];
 								  )
-	methodBuilder.parentClassBuilder = _parentBuilder;
 	SimpleObject *object = [[SimpleObject alloc] init];
 	NSString *result = [methodBuilder invokeMethodOn:object];
 	XCTAssertEqualObjects(@"abc", result);
@@ -73,9 +73,9 @@
 
 -(void) testInvokeMethodOnWithArgs {
 	ignoreSelectorWarnings(
-								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithSelector:@selector(stringFactoryMethodUsingAString:)];
+								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
+																																								selector:@selector(stringFactoryMethodUsingAString:)];
 								  )
-	methodBuilder.parentClassBuilder = _parentBuilder;
 
 	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"def"))];

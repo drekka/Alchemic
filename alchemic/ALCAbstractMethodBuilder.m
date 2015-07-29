@@ -26,9 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 	return nil;
 }
 
--(nonnull instancetype)initWithSelector:(nonnull SEL)selector {
+-(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
+											 selector:(SEL) selector {
 	self = [super init];
 	if (self) {
+		_parentClassBuilder = parentClassBuilder;
 		_selector = selector;
 	}
 	return self;

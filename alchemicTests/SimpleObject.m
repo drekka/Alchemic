@@ -26,10 +26,6 @@
 	return self;
 }
 
--(void) aMethodWithAString:(NSString *) aString{
-	_aMethodWithAStringCalled = YES;
-}
-
 -(NSString *) stringFactoryMethod {
 	return @"abc";
 }

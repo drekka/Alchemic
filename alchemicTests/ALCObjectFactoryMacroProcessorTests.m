@@ -28,12 +28,12 @@
 }
 
 -(void) testSetsIsFactoryFlag {
-	[_processor addMacro:ACIsFactory];
+	[_processor addMacro:AcIsFactory];
     XCTAssertTrue(_processor.isFactory);
 }
 
 -(void) testSetsIsPrimaryFlag {
-	[_processor addMacro:ACIsPrimary];
+	[_processor addMacro:AcIsPrimary];
     XCTAssertTrue(_processor.isPrimary);
 }
 

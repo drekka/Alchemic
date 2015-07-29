@@ -12,6 +12,6 @@
 
 @implementation FactoryObject
 
-AcRegister(ACIsFactory)
+AcRegister(AcIsFactory)
 
 @end

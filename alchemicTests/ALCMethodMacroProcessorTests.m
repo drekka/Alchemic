@@ -32,8 +32,8 @@
 }
 
 -(void) testAddMacroAcceptsObjectMacros {
-	[_processor addMacro:ACIsFactory];
-	[_processor addMacro:ACIsPrimary];
+	[_processor addMacro:AcIsFactory];
+	[_processor addMacro:AcIsPrimary];
 	[_processor addMacro:AcWithName(@"abc")];
 	[_processor validate];
 	XCTAssertTrue(_processor.isFactory);

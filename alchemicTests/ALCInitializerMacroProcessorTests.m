@@ -31,7 +31,7 @@
 }
 
 -(void) testAddMacroRejectsNonALCArgMacros {
-	XCTAssertThrowsSpecificNamed([_processor addMacro:ACIsFactory], NSException, @"AlchemicUnexpectedMacro");
+	XCTAssertThrowsSpecificNamed([_processor addMacro:AcIsFactory], NSException, @"AlchemicUnexpectedMacro");
 	XCTAssertThrowsSpecificNamed([_processor addMacro:AcName(@"abc")], NSException, @"AlchemicUnexpectedMacro");
 }
 

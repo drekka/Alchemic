@@ -36,14 +36,14 @@
 #pragma mark - Configuration
 
 -(void) testConfigureWithmacroProcessorSetsFactory {
-	[_macroProcessor addMacro:ACIsFactory];
+	[_macroProcessor addMacro:AcIsFactory];
 	[_builder configureWithMacroProcessor:_macroProcessor];
 	XCTAssertTrue(_builder.factory);
 	XCTAssertFalse(_builder.createOnBoot);
 }
 
 -(void) testConfigureWithmacroProcessorSetsPrimary {
-	[_macroProcessor addMacro:ACIsPrimary];
+	[_macroProcessor addMacro:AcIsPrimary];
 	[_builder configureWithMacroProcessor:_macroProcessor];
 	XCTAssertTrue(_builder.primary);
 	XCTAssertTrue(_builder.createOnBoot);
@@ -74,18 +74,18 @@
 	XCTAssertEqual(stringVar, dependency.variable);
 }
 
--(void) testSetInitializerBuilder {
-	ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] initWithSelector:@selector(init)];
-	_builder.initializerBuilder = initBuilder;
+-(void) testCreatesInitializerBuilder {
+	ALCClassInitializerBuilder *initBuilder = [_builder createInitializerBuilderForSelector:@selector(init)];
+	XCTAssertNotNil(initBuilder);
 	id<ALCBuilder> parentBuilder = initBuilder.parentClassBuilder;
 	XCTAssertEqual(_builder, parentBuilder);
 }
 
 -(void) testAddMethodBuilder {
 	ignoreSelectorWarnings(
-								  ALCMethodBuilder *methodBuilder = [[ALCMethodBuilder alloc] initWithSelector:@selector(stringFactoryMethod) valueClass:[NSString class]];
-	)
-	[_builder addMethodBuilder:methodBuilder];
+								  ALCMethodBuilder *methodBuilder = [_builder createMethodBuilderForSelector:@selector(stringFactoryMethod)
+																														valueClass:[NSString class]];
+								  )
 	id<ALCBuilder> parentBuilder = methodBuilder.parentClassBuilder;
 	XCTAssertEqual(_builder, parentBuilder);
 }
@@ -113,16 +113,9 @@
 }
 
 -(void) testInstantiateObjectUsingInitializer {
-
-	id mockInitializerBuilder = OCMClassMock([ALCClassInitializerBuilder class]);
-	_builder.initializerBuilder = mockInitializerBuilder;
-	SimpleObject *object = [[SimpleObject alloc] init];
-	OCMExpect([mockInitializerBuilder instantiate]).andReturn(object);
-
+	[_builder createInitializerBuilderForSelector:@selector(init)];
 	id resultObject = [_builder instantiateObject];
-	XCTAssertEqual(object, resultObject);
-
-	OCMVerifyAll(mockInitializerBuilder);
+	XCTAssertTrue([resultObject isKindOfClass:[SimpleObject class]]);
 }
 
 @end

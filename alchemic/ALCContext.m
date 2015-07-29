@@ -109,17 +109,17 @@
 	STLog(classBuilder.valueClass, @"Registering a class initializer for a %@", NSStringFromClass(classBuilder.valueClass));
 	id<ALCMacroProcessor> macroProcessor = [[ALCInitializerMacroProcessor alloc] init];
 	alc_loadMacrosAfter(macroProcessor, initializer);
-	ALCClassInitializerBuilder *initializerBuilder = [[ALCClassInitializerBuilder alloc] initWithSelector:initializer];
-	classBuilder.initializerBuilder = initializerBuilder;
+	ALCClassInitializerBuilder *initializerBuilder = [classBuilder createInitializerBuilderForSelector:initializer];
+	[initializerBuilder configureWithMacroProcessor:macroProcessor];
 }
 
 -(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
 	STLog(classBuilder.valueClass, @"Registering a method builder for %@", NSStringFromSelector(selector));
 	id<ALCMacroProcessor> macroProcessor = [[ALCMethodMacroProcessor alloc] init];
 	alc_loadMacrosAfter(macroProcessor, returnType);
-	ALCMethodBuilder *methodBuilder = [[ALCMethodBuilder alloc] initWithSelector:selector valueClass:returnType];
+	ALCMethodBuilder *methodBuilder = [classBuilder createMethodBuilderForSelector:selector valueClass:returnType];
+	[methodBuilder configureWithMacroProcessor:macroProcessor];
 	[self addBuilderToModel:methodBuilder];
-	[classBuilder addMethodBuilder:methodBuilder];
 	STLog(classBuilder.valueClass, @"Created: %@, %@", methodBuilder, macroProcessor);
 }
 

@@ -36,8 +36,7 @@
 	_classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[ALCModelTests class]];
 	((ALCClassBuilder *)_classBuilder).name = @"abc";
 
-	_methodBuilder = [[ALCMethodBuilder alloc] initWithSelector:@selector(someMethod) valueClass:[NSString class]];
-	[(ALCClassBuilder *)_classBuilder addMethodBuilder:_methodBuilder];
+	_methodBuilder = [(ALCClassBuilder *)_classBuilder createMethodBuilderForSelector:@selector(someMethod) valueClass:[NSString class]];
 	((ALCClassBuilder *)_methodBuilder).name = @"def";
 
 	[_model addBuilder:_classBuilder];

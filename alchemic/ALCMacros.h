@@ -23,14 +23,14 @@
  
  @param _objectName the name to set on the registration.
  */
-#define ACIsFactory [[ALCIsFactory alloc] init]
+#define AcIsFactory [[ALCIsFactory alloc] init]
 
 /**
  When there is more than one candidate object for a dependency, Primary objects are used first. 
  
  @discussion This is mainly used for a couple of situations. Firstly where there are a number of candiates and you don't want to use names to define a default. Secondly during unit testing, this can be used to set registrations in unit test code as overrides to the app's instances.
  */
-#define ACIsPrimary [[ALCIsPrimary alloc] init]
+#define AcIsPrimary [[ALCIsPrimary alloc] init]
 
 #pragma mark - Dependency expressions
 

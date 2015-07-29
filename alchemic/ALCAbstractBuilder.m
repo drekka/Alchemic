@@ -58,6 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
+	[macroProcessor validate];
 }
 
 -(void) validateClass:(Class) aClass selector:(nonnull SEL)selector macroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {

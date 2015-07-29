@@ -23,6 +23,8 @@
 
 @implementation ALCClassBuilder {
 	NSMutableSet<ALCMethodBuilder *> *_methodBuilders;
+	ALCClassInitializerBuilder *_initializerBuilder;
+
 }
 
 @synthesize valueClass = _valueClass;
@@ -54,25 +56,30 @@
 
 -(void) addVariableInjection:(nonnull ALCVariableDependencyMacroProcessor *)variableMacroProcessor {
 	[self.dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:variableMacroProcessor.variable
-																					 valueSource:[[variableMacroProcessor valueSourceFactoryForIndex:0] valueSource]]];
+																						  valueSource:[[variableMacroProcessor valueSourceFactoryForIndex:0] valueSource]]];
 }
 
--(void) setInitializerBuilder:(ALCClassInitializerBuilder * _Nonnull)initializerBuilder {
-	_initializerBuilder = initializerBuilder;
-	initializerBuilder.parentClassBuilder = self;
+-(ALCClassInitializerBuilder *) createInitializerBuilderForSelector:(SEL) initializer {
+	ALCClassInitializerBuilder *builder = [[ALCClassInitializerBuilder alloc] initWithParentClassBuilder:self
+																															  selector:initializer];
+	_initializerBuilder = builder;
+	return builder;
 }
 
--(void) addMethodBuilder:(nonnull ALCMethodBuilder *)methodBuilder {
-	[_methodBuilders addObject:methodBuilder];
-	methodBuilder.parentClassBuilder = self;
+-(ALCMethodBuilder *) createMethodBuilderForSelector:(SEL)selector valueClass:(Class) valueClass {
+	ALCMethodBuilder *builder = [[ALCMethodBuilder alloc] initWithParentBuilder:self
+																							 selector:selector
+																						  valueClass:valueClass];
+	[_methodBuilders addObject:builder];
+	return builder;
 }
 
 #pragma mark - Instantiating
 
 -(nonnull id) instantiateObject {
-	
-	if (self.initializerBuilder != nil) {
-		return [self.initializerBuilder instantiate];
+
+	if (_initializerBuilder != nil) {
+		return [_initializerBuilder instantiate];
 	}
 
 	STLog(self.valueClass, @"Creating a %@", NSStringFromClass(self.valueClass));

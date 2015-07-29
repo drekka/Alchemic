@@ -15,12 +15,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize valueClass = _valueClass;
 
--(instancetype) initWithSelector:(nonnull SEL)selector {
+-(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
+											 selector:(SEL) selector {
 	return nil;
 }
 
--(instancetype) initWithSelector:(nonnull SEL)selector valueClass:(nonnull Class)valueClass {
-	self = [super initWithSelector:selector];
+-(instancetype) initWithParentBuilder:(ALCClassBuilder *) parentClassBuilder
+									  selector:(nonnull SEL)selector
+									valueClass:(Class) valueClass {
+	self = [super initWithParentClassBuilder:parentClassBuilder
+											  selector:selector];
 	if (self) {
 		_valueClass = valueClass;
 	}
@@ -33,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 	self.factory = processor.isFactory;
 	self.primary = processor.isPrimary;
 	NSString *name = processor.asName;
-	self.name = name == nil ? [NSString stringWithFormat:@"%@::%@", NSStringFromClass(self.valueClass), NSStringFromSelector(self.selector)] : name;
+	self.name = name == nil ? [NSString stringWithFormat:@"%@::%@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(self.selector)] : name;
 
 	self.createOnBoot = !self.factory;
 }

@@ -31,7 +31,7 @@ XCTAssertThrowsSpecificNamed(([_processor addMacro:AcArg(NSString, AcName(@"abc"
 }
 
 -(void) testAcceptsNonDefMacro {
-	[_processor addMacro:ACIsFactory];
+	[_processor addMacro:AcIsFactory];
 	XCTAssertTrue(_processor.isFactory);
 }
 

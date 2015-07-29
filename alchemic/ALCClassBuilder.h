@@ -22,11 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(instancetype) initWithValueClass:(Class) valueClass NS_DESIGNATED_INITIALIZER;
 
-@property(nonatomic, strong) ALCClassInitializerBuilder *initializerBuilder;
-
 -(void) addVariableInjection:(ALCVariableDependencyMacroProcessor *) variableMacroProcessor;
 
--(void) addMethodBuilder:(ALCMethodBuilder *) methodBuilder;
+-(ALCClassInitializerBuilder *) createInitializerBuilderForSelector:(SEL) initializer;
+
+-(ALCMethodBuilder *) createMethodBuilderForSelector:(SEL)selector valueClass:(Class) valueClass;
 
 @end
 

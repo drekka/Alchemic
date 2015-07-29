@@ -41,10 +41,8 @@
 										  initializer:(SEL) initializer {
 
 	ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
-	[initMacroProcessor validate];
 
-	ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] initWithSelector:initializer];
-	classBuilder.initializerBuilder = initBuilder;
+	ALCClassInitializerBuilder *initBuilder = [classBuilder createInitializerBuilderForSelector:initializer];
 	[initBuilder configureWithMacroProcessor:initMacroProcessor];
 
 	SimpleObject *object = classBuilder.value;
