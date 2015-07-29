@@ -10,10 +10,17 @@
 #import "ALCRuntime.h"
 #import <StoryTeller/StoryTeller.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation ALCVariableDependency
 
--(nonnull instancetype) initWithVariable:(nonnull Ivar)variable
-                             valueSource:(nonnull id<ALCValueSource>)valueSource {
+-(instancetype) initWithValueClass:(Class) valueClass
+							  valueSource:(id<ALCValueSource>) valueSource {
+	return nil;
+}
+
+-(instancetype) initWithVariable:(Ivar)variable
+                             valueSource:(id<ALCValueSource>)valueSource {
     self = [super initWithValueClass:[ALCRuntime iVarClass:variable]
                          valueSource:valueSource];
     if (self) {
@@ -34,3 +41,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

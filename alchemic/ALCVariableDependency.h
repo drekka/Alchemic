@@ -18,8 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) Ivar variable;
 
+-(instancetype) initWithValueClass:(Class) valueClass
+							  valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
+
 -(instancetype) initWithVariable:(Ivar) variable
-                     valueSource:(id<ALCValueSource>) valueSource;
+                     valueSource:(id<ALCValueSource>) valueSource NS_DESIGNATED_INITIALIZER;
 
 -(void) injectInto:(id) object;
 
