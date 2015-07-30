@@ -14,7 +14,7 @@
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
 #import "ALCRuntime.h"
 #import "ALCRuntimeScanner.h"
-#import "ALCAbstractMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 #import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN

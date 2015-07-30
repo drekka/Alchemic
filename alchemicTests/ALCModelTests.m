@@ -15,7 +15,6 @@
 #import "ALCSearchableBuilder.h"
 #import "ALCClassBuilder.h"
 #import "ALCMethodBuilder.h"
-#import "ALCMethodMacroProcessor.h"
 
 @interface ALCModelTests : ALCTestCase
 

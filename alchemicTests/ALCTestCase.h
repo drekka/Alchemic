@@ -9,7 +9,7 @@
 @import XCTest;
 
 #import <Alchemic/Alchemic.h>
-#import "ALCAbstractMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

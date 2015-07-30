@@ -11,7 +11,7 @@
 
 #import "SimpleObject.h"
 #import "ALCAbstractBuilder.h"
-#import "ALCMethodMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 #import <OCMock/OCMock.h>
 #import "ALCVariableDependency.h"
 
@@ -89,19 +89,19 @@
 #pragma mark - Validations
 
 -(void) testValidateClassSelectorWhenNoArgs {
-	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
+	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
 	[_builder validateClass:[SimpleObject class] selector:@selector(description) macroProcessor:macroProcessor];
 }
 
 -(void) testValidateClassSelectorWhenUnknownSelector {
-	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
+	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
 	ignoreSelectorWarnings(
 								  XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(xxxx) macroProcessor:macroProcessor], NSException, @"AlchemicSelectorNotFound");
 								  )
 }
 
 -(void) testValidateArgumentsForSelector {
-	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
+	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
 	ignoreSelectorWarnings(
 								  [_builder validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor];
@@ -109,12 +109,12 @@
 }
 
 -(void) testValidateArgumentsForSelectorWithToFewNumberArguments {
-	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
+	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
 	XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
 }
 
 -(void) testValidateArgumentsForSelectorWithToManyNumberArguments {
-	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
+	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"def"))];
 	XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");

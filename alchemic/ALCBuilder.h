@@ -8,21 +8,28 @@
 
 @class ALCDependency;
 @protocol ALCDependencyPostProcessor;
-@protocol ALCMacroProcessor;
-#import "ALCValidatable.h"
+@class ALCMacroProcessor;
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ALCBuilder <NSObject, ALCValidatable>
+@protocol ALCBuilder <NSObject>
+
+#pragma mark - Settings
 
 @property (nonatomic, strong) NSString *name;
 
-@property (nonatomic, assign) BOOL createOnBoot;
+@property (nonatomic, assign, readonly) BOOL createOnBoot;
 
 // If the builder is to be regarded as a primary builder.
-@property (nonatomic, assign) BOOL primary;
+@property (nonatomic, assign, readonly) BOOL primary;
 
 // If the builder is a factory.
-@property (nonatomic, assign) BOOL factory;
+@property (nonatomic, assign, readonly) BOOL factory;
+
+#pragma mark - Configuring
+
+@property (nonatomic, strong, readonly) ALCMacroProcessor *macroProcessor;
+
+-(void) configure;
 
 #pragma mark - Resolving
 

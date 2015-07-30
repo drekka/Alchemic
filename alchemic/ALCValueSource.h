@@ -8,7 +8,6 @@
 
 @import Foundation;
 @import ObjectiveC;
-#import "ALCValidatable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Objects that can produce values for dependencies.
  */
-@protocol ALCValueSource <NSObject, ALCValidatable>
+@protocol ALCValueSource <NSObject>
 
 -(id) valueForType:(Class) finalType;
 

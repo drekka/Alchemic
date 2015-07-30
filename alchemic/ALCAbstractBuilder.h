@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@protocol ALCMacroProcessor;
+@class ALCMacroProcessor;
 @class ALCDependency;
 
 #import <Alchemic/ALCBuilder.h>
@@ -17,9 +17,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractBuilder : NSObject<ALCBuilder>
 
-@property (nonatomic, strong, readonly) NSMutableArray<ALCDependency *> *dependencies;
+@property (nonatomic, strong) NSString *name;
 
--(void) configureWithMacroProcessor:(id<ALCMacroProcessor>) macroProcessor;
+@property (nonatomic, assign) BOOL createOnBoot;
+
+// If the builder is to be regarded as a primary builder.
+@property (nonatomic, assign) BOOL primary;
+
+// If the builder is a factory.
+@property (nonatomic, assign) BOOL factory;
+
+@property (nonatomic, strong) ALCMacroProcessor *macroProcessor;
+
+@property (nonatomic, strong, readonly) NSMutableArray<ALCDependency *> *dependencies;
 
 /**
  Called to create the object by the instantiate method. This is overridden to create the objects. Instantiate manages it and general should not be overridden.
@@ -31,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) injectValueDependencies:(id) value;
 
--(void) validateClass:(Class) aClass selector:(nonnull SEL)selector macroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor;
+-(void) validateClass:(Class) aClass selector:(SEL)selector macroProcessor:(ALCMacroProcessor *) macroProcessor;
 
 @end
 

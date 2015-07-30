@@ -17,10 +17,7 @@
 #import "ALCInternalMacros.h"
 #import "ALCMethodBuilder.h"
 #import "ALCModel.h"
-#import "ALCClassRegistrationMacroProcessor.h"
-#import "ALCInitializerMacroProcessor.h"
-#import "ALCMethodMacroProcessor.h"
-#import "ALCVariableDependencyMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 #import "ALCSearchableBuilder.h"
 
 @interface ALCContext ()
@@ -50,10 +47,6 @@
 -(void) start {
 
 	STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
-	for (id<ALCValidatable> validatable in [_model allBuilders]) {
-		[validatable validate];
-	}
-
 	STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
 	[self resolveBuilderDependencies];
 
@@ -95,37 +88,45 @@
 #pragma mark - Registration call backs
 
 -(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder variable:(NSString *) variable, ... {
+
 	STLog(classBuilder.valueClass, @"Registering a dependency ...");
+
 	Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
-	id<ALCMacroProcessor> macroProcessor = [[ALCVariableDependencyMacroProcessor alloc] initWithVariable:var];
+	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValueDef];
 	alc_loadMacrosAfter(macroProcessor, variable);
-	[classBuilder addVariableInjection:macroProcessor];
+
+	// Add a default value source for the ivar if no macros where loaded to define it.
+	if ([macroProcessor valueSourceCount] == 0) {
+		NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForVariable:var];
+		for (id<ALCModelSearchExpression> macro in macros) {
+			[macroProcessor addMacro:(id<ALCMacro>)macro];
+		}
+	}
+
+	[classBuilder addVariableInjection:var macroProcessor:macroProcessor];
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
 	STLog(classBuilder.valueClass, @"Registering a builder ...");
-	id<ALCMacroProcessor> macroProcessor = [[ALCClassRegistrationMacroProcessor alloc] init];
-	alc_loadMacrosAfter(macroProcessor, classBuilder);
-	[classBuilder configureWithMacroProcessor:macroProcessor];
-	STLog(classBuilder.valueClass, @"Created: %@, %@", classBuilder, macroProcessor);
+	alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
+	[classBuilder configure];
+	STLog(classBuilder.valueClass, @"Created: %@, %@", classBuilder, classBuilder.macroProcessor);
 }
 
 -(void) registerClassInitializer:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... {
 	STLog(classBuilder.valueClass, @"Registering a class initializer for a %@", NSStringFromClass(classBuilder.valueClass));
-	id<ALCMacroProcessor> macroProcessor = [[ALCInitializerMacroProcessor alloc] init];
-	alc_loadMacrosAfter(macroProcessor, initializer);
 	ALCClassInitializerBuilder *initializerBuilder = [classBuilder createInitializerBuilderForSelector:initializer];
-	[initializerBuilder configureWithMacroProcessor:macroProcessor];
+	alc_loadMacrosAfter(initializerBuilder.macroProcessor, initializer);
+	[initializerBuilder configure];
 }
 
 -(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
 	STLog(classBuilder.valueClass, @"Registering a method builder for %@", NSStringFromSelector(selector));
-	id<ALCMacroProcessor> macroProcessor = [[ALCMethodMacroProcessor alloc] init];
-	alc_loadMacrosAfter(macroProcessor, returnType);
 	ALCMethodBuilder *methodBuilder = [classBuilder createMethodBuilderForSelector:selector valueClass:returnType];
-	[methodBuilder configureWithMacroProcessor:macroProcessor];
+	alc_loadMacrosAfter(methodBuilder.macroProcessor, returnType);
+	[methodBuilder configure];
 	[self addBuilderToModel:methodBuilder];
-	STLog(classBuilder.valueClass, @"Created: %@, %@", methodBuilder, macroProcessor);
+	STLog(classBuilder.valueClass, @"Created: %@, %@", methodBuilder, methodBuilder.macroProcessor);
 }
 
 -(void) addBuilderToModel:(id<ALCBuilder> _Nonnull) builder {

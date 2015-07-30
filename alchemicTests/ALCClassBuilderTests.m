@@ -11,10 +11,9 @@
 #import <OCMock/OCMock.h>
 
 #import "ALCClassBuilder.h"
-#import "ALCClassRegistrationMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 #import "ALCClassInitializerBuilder.h"
 #import "ALCMethodBuilder.h"
-#import "ALCVariableDependencyMacroProcessor.h"
 #import "SimpleObject.h"
 #import "ALCVariableDependency.h"
 
@@ -25,38 +24,36 @@
 
 @implementation ALCClassBuilderTests {
 	ALCClassBuilder *_builder;
-	ALCClassRegistrationMacroProcessor *_macroProcessor;
 }
 
 -(void) setUp {
-	_macroProcessor = [[ALCClassRegistrationMacroProcessor alloc] init];
 	_builder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
 }
 
 #pragma mark - Configuration
 
--(void) testConfigureWithmacroProcessorSetsFactory {
-	[_macroProcessor addMacro:AcIsFactory];
-	[_builder configureWithMacroProcessor:_macroProcessor];
+-(void) testConfigureSetsFactory {
+	[_builder.macroProcessor addMacro:AcIsFactory];
+	[_builder configure];
 	XCTAssertTrue(_builder.factory);
 	XCTAssertFalse(_builder.createOnBoot);
 }
 
--(void) testConfigureWithmacroProcessorSetsPrimary {
-	[_macroProcessor addMacro:AcIsPrimary];
-	[_builder configureWithMacroProcessor:_macroProcessor];
+-(void) testConfigureSetsPrimary {
+	[_builder.macroProcessor addMacro:AcIsPrimary];
+	[_builder configure];
 	XCTAssertTrue(_builder.primary);
 	XCTAssertTrue(_builder.createOnBoot);
 }
 
--(void) testConfigureWithmacroProcessorSetsName {
-	[_builder configureWithMacroProcessor:_macroProcessor];
+-(void) testConfigureSetsName {
+	[_builder configure];
 	XCTAssertEqualObjects(@"SimpleObject", _builder.name);
 }
 
--(void) testConfigureWithmacroProcessorSetsCustomName {
-	[_macroProcessor addMacro:AcWithName(@"abc")];
-	[_builder configureWithMacroProcessor:_macroProcessor];
+-(void) testConfigureSetsCustomName {
+	[_builder.macroProcessor addMacro:AcWithName(@"abc")];
+	[_builder configure];
 	XCTAssertEqualObjects(@"abc", _builder.name);
 }
 
@@ -65,10 +62,11 @@
 -(void) testAddVariableInjection {
 
 	Ivar stringVar = class_getInstanceVariable([SimpleObject class], "_aStringProperty");
-	ALCVariableDependencyMacroProcessor *dependencyMacroProcessor = [[ALCVariableDependencyMacroProcessor alloc] initWithVariable:stringVar];
+
+	ALCMacroProcessor *dependencyMacroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValueDef];
 	[dependencyMacroProcessor addMacro:AcValue(@"abc")];
 
-	[_builder addVariableInjection:dependencyMacroProcessor];
+	[_builder addVariableInjection:stringVar macroProcessor:dependencyMacroProcessor];
 
 	ALCVariableDependency *dependency = (ALCVariableDependency *)_builder.dependencies[0];
 	XCTAssertEqual(stringVar, dependency.variable);

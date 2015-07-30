@@ -10,7 +10,7 @@
 #import <Alchemic/Alchemic.h>
 
 #import "ALCMethodBuilder.h"
-#import "ALCMethodMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 #import "ALCClassBuilder.h"
 #import "SimpleObject.h"
 #import "ALCInternalMacros.h"
@@ -78,12 +78,12 @@
 								  ALCMethodBuilder *methodBuilder = [_parentBuilder createMethodBuilderForSelector:selector
 																																valueClass:[NSString class]];
 								  )
-	ALCMethodMacroProcessor *macroProcessor = [[ALCMethodMacroProcessor alloc] init];
+	ALCMacroProcessor *macroProcessor = methodBuilder.macroProcessor;
 	for (id<ALCMacro> macro in macros) {
 		[macroProcessor addMacro:macro];
 	}
 
-	[methodBuilder configureWithMacroProcessor:macroProcessor];
+	[methodBuilder configure];
 	return methodBuilder;
 }
 

@@ -5,8 +5,8 @@
 //
 
 #import <StoryTeller/StoryTeller.h>
-
-#import "ALCMethodMacroProcessor.h"
+@import ObjectiveC;
+#import "ALCMacroProcessor.h"
 #import "ALCMethodBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -27,19 +27,15 @@ NS_ASSUME_NONNULL_BEGIN
 											  selector:selector];
 	if (self) {
 		_valueClass = valueClass;
+		self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg + ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary];
 	}
 	return self;
 }
 
--(void)configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
-	[super configureWithMacroProcessor:macroProcessor];
-	ALCMethodMacroProcessor *processor = macroProcessor;
-	self.factory = processor.isFactory;
-	self.primary = processor.isPrimary;
-	NSString *name = processor.asName;
+-(void)configure {
+	[super configure];
+	NSString *name = self.macroProcessor.asName;
 	self.name = name == nil ? [NSString stringWithFormat:@"%@::%@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(self.selector)] : name;
-
-	self.createOnBoot = !self.factory;
 }
 
 -(nonnull id) instantiateObject {

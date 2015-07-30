@@ -14,8 +14,7 @@
 #import "ALCRuntime.h"
 #import "ALCVariableDependency.h"
 #import "ALCClassBuilder.h"
-#import "ALCVariableDependencyMacroProcessor.h"
-#import "ALCClassRegistrationMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 #import "ALCModelValueSource.h"
 #import "ALCClassInitializerBuilder.h"
 #import "ALCMethodBuilder.h"
@@ -33,30 +32,29 @@
 	return nil;
 }
 
--(instancetype) initWithValueClass:(__unsafe_unretained _Nonnull Class) valueClass {
+-(instancetype) initWithValueClass:(__unsafe_unretained Class) valueClass {
 	self = [super init];
 	if (self) {
 		_valueClass = valueClass;
 		_methodBuilders = [[NSMutableSet alloc] init];
+		self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary];
 	}
 	return self;
 }
 
--(void) configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
-	[super configureWithMacroProcessor:macroProcessor];
-	ALCClassRegistrationMacroProcessor *processor = macroProcessor;
-	self.factory = processor.isFactory;
-	self.primary = processor.isPrimary;
-	NSString *name = processor.asName;
+#pragma mark - Configuring
+
+-(void) configure {
+	[super configure];
+	NSString *name = self.macroProcessor.asName;
 	self.name = name == nil ? NSStringFromClass(self.valueClass) : name;
-	self.createOnBoot = !self.factory;
 }
 
 #pragma mark - Adding dependencies
 
--(void) addVariableInjection:(nonnull ALCVariableDependencyMacroProcessor *)variableMacroProcessor {
-	[self.dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:variableMacroProcessor.variable
-																						  valueSource:[[variableMacroProcessor valueSourceFactoryForIndex:0] valueSource]]];
+-(void) addVariableInjection:(Ivar) variable macroProcessor:(ALCMacroProcessor *) macroProcessor {
+	[self.dependencies addObject:[[ALCVariableDependency alloc] initWithVariable:variable
+																						  valueSource:[[macroProcessor valueSourceFactoryAtIndex:0] valueSource]]];
 }
 
 -(ALCClassInitializerBuilder *) createInitializerBuilderForSelector:(SEL) initializer {

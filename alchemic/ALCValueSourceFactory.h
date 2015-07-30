@@ -21,8 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id<ALCValueSource>) valueSource;
 
--(void) validate;
-
 @end
 
 NS_ASSUME_NONNULL_END

@@ -8,12 +8,21 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCInitializerMacroProcessor.h"
 #import "ALCClassInitializerBuilder.h"
 #import "ALCSearchableBuilder.h"
+#import "ALCMacroProcessor.h"
 @import ObjectiveC;
 
 @implementation ALCClassInitializerBuilder
+
+-(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
+											 selector:(SEL) selector {
+	self = [super initWithParentClassBuilder:parentClassBuilder selector:selector];
+	if (self) {
+		self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
+	}
+	return self;
+}
 
 -(nonnull id) instantiate {
 	id<ALCSearchableBuilder> parent = self.parentClassBuilder;

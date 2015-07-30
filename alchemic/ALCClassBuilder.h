@@ -7,9 +7,10 @@
 //
 
 @import Foundation;
+@import ObjectiveC;
 
 #import "ALCAbstractBuilder.h"
-@class ALCVariableDependencyMacroProcessor;
+@class ALCMacroProcessor;
 @class ALCClassInitializerBuilder;
 @class ALCMethodBuilder;
 #import "ALCSearchableBuilder.h"
@@ -22,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(instancetype) initWithValueClass:(Class) valueClass NS_DESIGNATED_INITIALIZER;
 
--(void) addVariableInjection:(ALCVariableDependencyMacroProcessor *) variableMacroProcessor;
+-(void) addVariableInjection:(Ivar) variable macroProcessor:(ALCMacroProcessor *) macroProcessor;
 
 -(ALCClassInitializerBuilder *) createInitializerBuilderForSelector:(SEL) initializer;
 

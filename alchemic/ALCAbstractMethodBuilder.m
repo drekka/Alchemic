@@ -15,6 +15,7 @@
 #import "ALCAlchemic.h"
 #import "ALCContext.h"
 #import "ALCSearchableBuilder.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,16 +37,16 @@ NS_ASSUME_NONNULL_BEGIN
 	return self;
 }
 
--(void)configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>) macroProcessor {
-	[super configureWithMacroProcessor:macroProcessor];
-	for (NSUInteger i = 0; i < [macroProcessor valueSourceCount]; i++) {
-		ALCArg *arg = (ALCArg *)[macroProcessor valueSourceFactoryForIndex:i];
+-(void)configure {
+	[super configure];
+	for (NSUInteger i = 0; i < [self.macroProcessor valueSourceCount]; i++) {
+		ALCArg *arg = (ALCArg *)[self.macroProcessor valueSourceFactoryAtIndex:i];
 		[self.dependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType
 																					  valueSource:[arg valueSource]]];
 	}
 	[self validateClass:self.parentClassBuilder.valueClass
 				  selector:self.selector
-		  macroProcessor:macroProcessor];
+		  macroProcessor:self.macroProcessor];
 }
 
 -(id) instantiateObject {
@@ -56,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(id) invokeMethodOn:(id) target {
 	// Get an invocation ready.
 	if (_inv == nil) {
-		STLog(self, @"Creating an invocation for %@", NSStringFromSelector(_selector));
+		STLog(ALCHEMIC_LOG, @"Creating an invocation for %@", NSStringFromSelector(_selector));
 		NSMethodSignature *sig = [[target class] instanceMethodSignatureForSelector:_selector];
 		_inv = [NSInvocation invocationWithMethodSignature:sig];
 		_inv.selector = _selector;
@@ -66,15 +67,15 @@ NS_ASSUME_NONNULL_BEGIN
 	// Load the arguments.
 	[self.dependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
 		id argumentValue = dependency.value;
-		[self->_inv setArgument:&argumentValue atIndex:(NSInteger)idx + 2];
+		[self->_inv setArgument:&argumentValue atIndex:(NSInteger) idx + 2];
 	}];
 
-	STLog(self, @">>> Creating object with %@", [self description]);
+	STLog(ALCHEMIC_LOG, @"Creating object with %@", [self description]);
 	[_inv invokeWithTarget:target];
 
 	id __unsafe_unretained returnObj;
 	[_inv getReturnValue:&returnObj];
-	STLog(self, @"Created a %s", class_getName([returnObj class]));
+	STLog(ALCHEMIC_LOG, @"Created a %s", class_getName([returnObj class]));
 	return returnObj;
 }
 

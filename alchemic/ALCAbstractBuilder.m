@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize createOnBoot = _createOnBoot;
 @synthesize value = _value;
 @synthesize name = _name;
+@synthesize macroProcessor = _macroProcessor;
 
 #pragma mark - Lifecycle
 
@@ -57,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 	return newValue;
 }
 
--(void) validateClass:(Class) aClass selector:(nonnull SEL)selector macroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
+-(void) validateClass:(Class) aClass selector:(SEL)selector macroProcessor:(ALCMacroProcessor *) macroProcessor {
 
 	if (! [aClass instancesRespondToSelector:selector]) {
 		@throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"
@@ -93,17 +94,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Overridable points
 
--(void) configureWithMacroProcessor:(nonnull id<ALCMacroProcessor>)macroProcessor {
-	[self doesNotRecognizeSelector:_cmd];
+-(void) configure {
+	self.factory = self.macroProcessor.isFactory;
+	self.primary = self.macroProcessor.isPrimary;
+	self.createOnBoot = !self.factory;
 }
 
 -(id) instantiateObject {
 	[self doesNotRecognizeSelector:_cmd];
 	return nil;
-}
-
--(void) validate {
-	[self doesNotRecognizeSelector:_cmd];
 }
 
 @end

@@ -46,13 +46,11 @@ while ((macro = va_arg(macroList, id)) != nil) { \
 [processorVar addMacro:macro]; \
 } \
 va_end(macroList); \
-[processorVar validate]; \
 }
 
 // Processes varadic args into a macro processor, including the arg that is used to guard them.
 #define alc_loadMacrosIncluding(processorVar, firstArg) \
-alc_processVarArgsIncluding(id<ALCMacro>, firstArg, ^(id<ALCMacro> macro){[processorVar addMacro:macro];}); \
-[processorVar validate];
+alc_processVarArgsIncluding(id<ALCMacro>, firstArg, ^(id<ALCMacro> macro){[processorVar addMacro:macro];});
 
 #define ignoreSelectorWarnings(code) \
 _Pragma ("clang diagnostic push") \

@@ -44,7 +44,7 @@
 }
 
 -(void) test_alc_loadMacrosAfter {
-	id mockMacroProcessor = OCMProtocolMock(@protocol(ALCMacroProcessor));
+	id mockMacroProcessor = OCMClassMock([ALCMacroProcessor class]);
 	OCMExpect([mockMacroProcessor addMacro:[OCMArg checkWithBlock:^BOOL(id value){
 		return [value isKindOfClass:[ALCName class]]
 		&& [((ALCName *) value).aName isEqualToString:@"def"];
@@ -53,7 +53,7 @@
 }
 
 -(void) test_alc_loadMacrosIncluding {
-	id mockMacroProcessor = OCMProtocolMock(@protocol(ALCMacroProcessor));
+	id mockMacroProcessor = OCMClassMock([ALCMacroProcessor class]);
 	OCMExpect([mockMacroProcessor addMacro:[OCMArg checkWithBlock:^BOOL(id value){
 		return [value isKindOfClass:[ALCName class]]
 		&& [((ALCName *) value).aName isEqualToString:@"abc"];
@@ -73,11 +73,11 @@
 	return result;
 }
 
--(void) macroProcessorWithVarArgsAfter:(id<ALCMacroProcessor>) macroProcessor macros:(id) firstArg, ... NS_REQUIRES_NIL_TERMINATION {
+-(void) macroProcessorWithVarArgsAfter:(ALCMacroProcessor *) macroProcessor macros:(id) firstArg, ... NS_REQUIRES_NIL_TERMINATION {
 	alc_loadMacrosAfter(macroProcessor, firstArg);
 }
 
--(void) macroProcessorWithVarArgsIncluding:(id<ALCMacroProcessor>) macroProcessor macros:(id) firstArg, ... NS_REQUIRES_NIL_TERMINATION {
+-(void) macroProcessorWithVarArgsIncluding:(ALCMacroProcessor *) macroProcessor macros:(id) firstArg, ... NS_REQUIRES_NIL_TERMINATION {
 	alc_loadMacrosAfter(macroProcessor, firstArg);
 }
 

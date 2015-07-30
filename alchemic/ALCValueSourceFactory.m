@@ -25,6 +25,16 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(nonnull id<ALCValueSource>) valueSource {
+
+	// If any argument is a constant then it must be the only one.
+	for (id<ALCValueDefMacro> macro in _macros) {
+		if ([macro isKindOfClass:[ALCConstantValue class]] && [_macros count] > 1) {
+			@throw [NSException exceptionWithName:@"AlchemicInvalidArguments"
+													 reason:[NSString stringWithFormat:@"AcValue(...) must be the only macro"]
+												  userInfo:nil];
+		}
+	}
+
 	id macro =_macros.anyObject;
 	if ([macro isKindOfClass:[ALCConstantValue class]]) {
 		return [[ALCConstantValueSource alloc] initWithValue:((ALCConstantValue *)macro).value];
@@ -34,17 +44,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) addMacro:(id<ALCValueDefMacro>) macro {
 	[(NSMutableSet *)_macros addObject:macro];
-}
-
--(void) validate {
-	// If any argument is a constant then it must be the only one.
-	for (id<ALCValueDefMacro> macro in _macros) {
-		if ([macro isKindOfClass:[ALCConstantValue class]] && [_macros count] > 1) {
-			@throw [NSException exceptionWithName:@"AlchemicInvalidArguments"
-													 reason:[NSString stringWithFormat:@"AcValue(...) must be the only macro"]
-												  userInfo:nil];
-		}
-	}
 }
 
 @end

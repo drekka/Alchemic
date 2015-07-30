@@ -9,7 +9,7 @@
 @import XCTest;
 
 #import "ALCMacros.h"
-#import "ALCAbstractMacroProcessor.h"
+#import "ALCMacroProcessor.h"
 #import "ALCValueSourceFactory.h"
 #import "ALCArg.h"
 #import "ALCName.h"
@@ -17,16 +17,16 @@
 #import "ALCValueSource.h"
 #import "ALCIsFactory.h"
 
-@interface ALCAbstractMacroProcessorTests : XCTestCase
+@interface ALCMacroProcessorTests : XCTestCase
 
 @end
 
-@implementation ALCAbstractMacroProcessorTests {
-	ALCAbstractMacroProcessor *_processor;
+@implementation ALCMacroProcessorTests {
+	ALCMacroProcessor *_processor;
 }
 
 -(void) setUp {
-	_processor = [[ALCAbstractMacroProcessor alloc] init];
+	_processor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg + ALCAllowedMacrosValueDef];
 }
 
 -(void) testAddMacroArg {
@@ -34,9 +34,8 @@
 	ALCArg *arg = AcArg(NSString, AcName(@"abc"));
 
 	[_processor addMacro:arg];
-	[_processor validate];
 
-	XCTAssertEqual(arg, [_processor valueSourceFactoryForIndex:0]);
+	XCTAssertEqual(arg, [_processor valueSourceFactoryAtIndex:0]);
 }
 
 -(void) testAddMacroArgs {
@@ -46,10 +45,9 @@
 
 	[_processor addMacro:arg1];
 	[_processor addMacro:arg2];
-	[_processor validate];
 
-	XCTAssertEqual(arg1, [_processor valueSourceFactoryForIndex:0]);
-	XCTAssertEqual(arg2, [_processor valueSourceFactoryForIndex:1]);
+	XCTAssertEqual(arg1, [_processor valueSourceFactoryAtIndex:0]);
+	XCTAssertEqual(arg2, [_processor valueSourceFactoryAtIndex:1]);
 	XCTAssertEqual(2u, [_processor valueSourceCount]);
 }
 
@@ -58,9 +56,8 @@
 	ALCConstantValue *value = AcValue(@5);
 
 	[_processor addMacro:value];
-	[_processor validate];
 
-	ALCValueSourceFactory *factory = [_processor valueSourceFactoryForIndex:0];
+	ALCValueSourceFactory *factory = [_processor valueSourceFactoryAtIndex:0];
 	XCTAssertEqualObjects(@5, [[factory valueSource] valueForType:[NSNumber class]]);
 
 }
@@ -72,22 +69,10 @@
 
 	[_processor addMacro:name1];
 	[_processor addMacro:name2];
-	[_processor validate];
 
-	ALCValueSourceFactory *factory = [_processor valueSourceFactoryForIndex:0];
+	ALCValueSourceFactory *factory = [_processor valueSourceFactoryAtIndex:0];
 	XCTAssertTrue([factory.macros containsObject:name1]);
 	XCTAssertTrue([factory.macros containsObject:name2]);
-}
-
--(void) testAddMacroWithInvalidCombinationOfMacros {
-
-	id<ALCMacro, ALCValueDefMacro> name1 = AcName(@"abc");
-	id<ALCMacro, ALCValueDefMacro> name2 = AcValue(@5);
-
-	[_processor addMacro:name1];
-	[_processor addMacro:name2];
-	XCTAssertThrowsSpecificNamed([_processor validate], NSException, @"AlchemicInvalidArguments");
-
 }
 
 -(void) testAddMacroInvalidMacro {
