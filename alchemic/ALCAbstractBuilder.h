@@ -36,11 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(id) instantiateObject;
 
-/**
- Called to inject dependencies after the value has been created.
- */
--(void) injectValueDependencies:(id) value;
-
 -(void) validateClass:(Class) aClass selector:(SEL)selector macroProcessor:(ALCMacroProcessor *) macroProcessor;
 
 @end

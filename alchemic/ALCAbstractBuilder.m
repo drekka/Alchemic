@@ -79,14 +79,20 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 }
 
--(void) injectValueDependencies:(id _Nonnull) value {
-	STLog([value class], @">>> Injecting %lu dependencies into a %s instance", [_dependencies count], object_getClassName(value));
+-(void) injectValueDependencies:(id) value {
+	STLog([value class], @"Injecting %lu dependencies into a %s instance", [_dependencies count], object_getClassName(value));
 	for (ALCVariableDependency *dependency in _dependencies) {
 		[dependency injectInto:value];
 	}
 }
 
 -(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
+
+	if ([_dependencies count] == 0) {
+		STLog(self, @"No dependencies found.");
+		return;
+	}
+
 	for(ALCDependency *dependency in _dependencies) {
 		[dependency resolveWithPostProcessors:postProcessors];
 	};

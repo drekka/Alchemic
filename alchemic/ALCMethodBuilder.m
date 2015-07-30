@@ -8,6 +8,8 @@
 @import ObjectiveC;
 #import "ALCMacroProcessor.h"
 #import "ALCMethodBuilder.h"
+#import "ALCAlchemic.h"
+#import "ALCContext.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 	if (self) {
 		_valueClass = valueClass;
 		self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg + ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary];
+		self.name = [NSString stringWithFormat:@"%@::%@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(self.selector)];
 	}
 	return self;
 }
@@ -35,7 +38,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)configure {
 	[super configure];
 	NSString *name = self.macroProcessor.asName;
-	self.name = name == nil ? [NSString stringWithFormat:@"%@::%@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(self.selector)] : name;
+	if (name != nil) {
+		self.name = name;
+	}
 }
 
 -(nonnull id) instantiateObject {
@@ -47,6 +52,12 @@ NS_ASSUME_NONNULL_BEGIN
 -(nonnull NSString *) description {
 	return [NSString stringWithFormat:@"Method builder [%s -(%@ *) %s]", class_getName(self.parentClassBuilder.valueClass), NSStringFromClass(self.valueClass), sel_getName(self.selector)];
 }
+
+-(void) injectValueDependencies:(id) value {
+	STLog([value class], @"Handing a %s instance to the context for dependency injection", object_getClassName(value));
+	[[ALCAlchemic mainContext] injectDependencies:value];
+}
+
 
 @end
 

@@ -45,20 +45,18 @@
 #pragma mark - Initialisation
 
 -(void) start {
-
+	STStartScope(ALCHEMIC_LOG);
 	STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
-	STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
 	[self resolveBuilderDependencies];
-
-	STLog(ALCHEMIC_LOG, @"Creating singletons ...");
 	[self instantiateSingletons];
+	STLog(ALCHEMIC_LOG, @"Alchemic started.");
 }
 
 #pragma mark - Dependencies
 
 -(void) injectDependencies:(id) object {
 	STStartScope([object class]);
-	STLog([object class], @">>> Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
+	STLog([object class], @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
 	NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForClass:[object class]];
 	NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:expressions]];
 	[[builders anyObject] injectValueDependencies:object];
@@ -146,20 +144,24 @@
 -(void) instantiateSingletons {
 
 	// This is a two stage process so that all objects are created before dependencies are injected.
+	
 	STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
-	NSMutableSet *singletons = [[NSMutableSet alloc] init];
-	[[_model allBuilders] enumerateObjectsUsingBlock:^(id<ALCSearchableBuilder> builder, BOOL *stop) {
+
+	// Use a map table so we can store keys without copying them.
+	NSMapTable<id, id<ALCSearchableBuilder>> *singletons = [NSMapTable strongToStrongObjectsMapTable];
+	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
 		if (builder.createOnBoot) {
-			STLog(builder, @"Creating singleton %@ -> %@", builder.name, builder);
-			[singletons addObject:builder];
-			[builder instantiate];
+			STLog(builder, @"Creating singleton %@ using %@", builder.name, builder);
+			id obj = [builder instantiate];
+			[singletons setObject:builder forKey:obj];
 		}
-	}];
+	};
 
 	STLog(ALCHEMIC_LOG, @"Injecting dependencies into %lu singletons ...", [singletons count]);
-	[singletons enumerateObjectsUsingBlock:^(ALCClassBuilder *singleton, BOOL *stop) {
-		[singleton injectValueDependencies:singleton.value];
-	}];
+	for (id obj in [singletons keyEnumerator]) {
+		id<ALCBuilder> builder = [singletons objectForKey:obj];
+		[builder injectValueDependencies:obj];
+	}
 
 }
 

@@ -38,6 +38,7 @@
 		_valueClass = valueClass;
 		_methodBuilders = [[NSMutableSet alloc] init];
 		self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary];
+		self.name = NSStringFromClass(valueClass);
 	}
 	return self;
 }
@@ -47,7 +48,9 @@
 -(void) configure {
 	[super configure];
 	NSString *name = self.macroProcessor.asName;
-	self.name = name == nil ? NSStringFromClass(self.valueClass) : name;
+	if (name != nil) {
+		self.name = name;
+	}
 }
 
 #pragma mark - Adding dependencies

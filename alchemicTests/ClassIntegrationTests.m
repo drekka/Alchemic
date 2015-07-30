@@ -25,12 +25,10 @@ AcRegister()
 
 AcInject(simpleObject)
 
--(void) setUp {
-	[self setupRealContext];
-	STStartLogging(ALCHEMIC_LOG);
-}
-
 -(void) testCreatingASingleton {
+	[self setupRealContext];
+	//STStartLogging(ALCHEMIC_LOG);
+	STStartLogging(@"[ClassIntegrationTests]");
 	[self addClassesToContext:@[[CISimpleObject class], [ClassIntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertNotNil(self.simpleObject);

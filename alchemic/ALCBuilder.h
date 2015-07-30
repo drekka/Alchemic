@@ -48,6 +48,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(id) instantiate;
 
+/**
+ Used to inject dependencies after the value has been created.
+ */
+-(void) injectValueDependencies:(id) value;
+
 @property (nonatomic, strong) id value;
 
 @end
