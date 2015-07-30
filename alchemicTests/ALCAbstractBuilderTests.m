@@ -43,6 +43,21 @@
 
 -(void) setUp {
 	_builder = [[FakeBuilder alloc] init];
+	_builder.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosFactory + ALCAllowedMacrosPrimary + ALCAllowedMacrosName];
+}
+
+-(void) testConfigureFactory {
+	[_builder.macroProcessor addMacro:AcIsFactory];
+	[_builder configure];
+	XCTAssertTrue(_builder.factory);
+	XCTAssertFalse(_builder.createOnBoot);
+}
+
+-(void) testConfigurePrimary {
+	[_builder.macroProcessor addMacro:AcIsPrimary];
+	[_builder configure];
+	XCTAssertTrue(_builder.primary);
+	XCTAssertTrue(_builder.createOnBoot);
 }
 
 #pragma mark - Creating objects

@@ -8,6 +8,9 @@
 
 #import "ALCContext.h"
 #import "ALCInternalMacros.h"
+#import "ALCIsPrimary.h"
+#import "ALCIsFactory.h"
+#import "ALCWithName.h"
 
 #pragma mark - Defining objects
 

@@ -6,13 +6,13 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 #import <StoryTeller/StoryTeller.h>
+#import <Alchemic/Alchemic.h>
 @import XCTest;
+
 #import "ALCClassBuilder.h"
 #import "ALCClassInitializerBuilder.h"
 #import "SimpleObject.h"
-#import "ALCInternalMacros.h"
 #import "ALCMacroProcessor.h"
-#import <Alchemic/Alchemic.h>
 
 @interface ALCClassInitializerBuilderTests : XCTestCase
 
@@ -32,6 +32,8 @@
 	SimpleObject *object = [self runTestWithInitializer:@selector(initWithString:) macros:@[AcArg(NSString, AcValue(@"hello"))]];
 	XCTAssertEqualObjects(@"hello", object.aStringProperty);
 }
+
+#pragma mark - Internal
 
 -(SimpleObject *) runTestWithInitializer:(SEL) initializer macros:(NSArray<id<ALCMacro>> *) macros {
 

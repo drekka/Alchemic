@@ -26,15 +26,32 @@
 }
 
 -(void) setUp {
-	_processor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg + ALCAllowedMacrosValueDef];
+	_processor = [[ALCMacroProcessor alloc] initWithAllowedMacros:
+					  ALCAllowedMacrosArg
+					  + ALCAllowedMacrosValueDef
+					  + ALCAllowedMacrosFactory
+					  + ALCAllowedMacrosName
+					  + ALCAllowedMacrosPrimary];
+}
+
+-(void) testAddMacroFactory {
+	[_processor addMacro:AcIsFactory];
+	XCTAssertTrue(_processor.isFactory);
+}
+
+-(void) testAddMacroPrimary {
+	[_processor addMacro:AcIsPrimary];
+	XCTAssertTrue(_processor.isPrimary);
+}
+
+-(void) testAddMacroName {
+	[_processor addMacro:AcWithName(@"abc")];
+	XCTAssertEqualObjects(@"abc", _processor.asName);
 }
 
 -(void) testAddMacroArg {
-
 	ALCArg *arg = AcArg(NSString, AcName(@"abc"));
-
 	[_processor addMacro:arg];
-
 	XCTAssertEqual(arg, [_processor valueSourceFactoryAtIndex:0]);
 }
 
@@ -76,7 +93,8 @@
 }
 
 -(void) testAddMacroInvalidMacro {
-	XCTAssertThrowsSpecificNamed([_processor addMacro:[[ALCIsFactory alloc] init]], NSException, @"AlchemicUnexpectedMacro");
+	ALCMacroProcessor *processor = [[ALCMacroProcessor alloc] initWithAllowedMacros:0];
+	XCTAssertThrowsSpecificNamed([processor addMacro:[[ALCIsFactory alloc] init]], NSException, @"AlchemicUnexpectedMacro");
 }
 
 
