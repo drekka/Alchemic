@@ -10,12 +10,7 @@
 
 @implementation ALCAbstractValueSource
 
--(NSSet<id> * _Nonnull)values {
-	[self doesNotRecognizeSelector:_cmd];
-	return nil;
-}
-
--(id) valueForType:(Class) finalType {
+-(id) valueForType:(nullable Class) finalType {
 
 	NSSet<id> *values = [self values];
 
@@ -57,6 +52,11 @@
 
 -(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors{
 	[self doesNotRecognizeSelector:_cmd];
+}
+
+-(NSSet<id> * _Nonnull)values {
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
 }
 
 @end

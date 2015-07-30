@@ -28,6 +28,21 @@
 	_source = [[DummyValueSource alloc] init];
 }
 
+-(void) testValueForTypeNullWhenSingleValue {
+	_source.values = [NSSet setWithObject:@"abc"];
+	id result = [_source valueForType:NULL];
+	XCTAssertTrue([result isKindOfClass:[NSString class]]);
+	XCTAssertEqualObjects(@"abc", result);
+}
+
+-(void) testValueForTypeNullWhenMultipleValue {
+	_source.values = [NSSet setWithObjects:@"abc", @"def", nil];
+	id result = [_source valueForType:NULL];
+	XCTAssertTrue([result isKindOfClass:[NSArray class]]);
+	XCTAssertTrue([result containsObject:@"abc"]);
+	XCTAssertTrue([result containsObject:@"def"]);
+}
+
 -(void) testValueForTypeObjectWhenSingleValue {
 	_source.values = [NSSet setWithObject:@"abc"];
 	id result = [_source valueForType:[NSString class]];
@@ -75,6 +90,17 @@
 	XCTAssertTrue([result isKindOfClass:[NSArray class]]);
 	XCTAssertEqual(1u, [result count]);
 	XCTAssertEqualObjects(@"abc", result[0]);
+}
+
+#pragma mark - Overrides
+
+-(void) testResolveWithPostProcessors {
+	XCTAssertThrowsSpecificNamed([_source resolveWithPostProcessors:[NSSet set]], NSException, @"NSInvalidArgumentException");
+}
+
+-(void) testValues {
+	ALCAbstractValueSource *abstractSource = [[ALCAbstractValueSource alloc] init];
+	XCTAssertThrowsSpecificNamed([abstractSource values], NSException, @"NSInvalidArgumentException");
 }
 
 @end

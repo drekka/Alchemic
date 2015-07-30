@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol ALCValueSource <NSObject>
 
--(id) valueForType:(Class) finalType;
+-(id) valueForType:(nullable Class) finalType;
 
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 
