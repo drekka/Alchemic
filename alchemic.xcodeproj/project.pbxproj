@@ -107,6 +107,7 @@
 		6CDEBF9C1B5FCC32009E3BEF /* ALCValueSourceFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CDEBF9D1B5FCC32009E3BEF /* ALCValueSourceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */; };
 		6CDEBFA01B606EA0009E3BEF /* ALCMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDEBF9F1B606EA0009E3BEF /* ALCMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6CF28C641B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF28C631B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m */; };
 		6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46ECB1B4618630009007A /* ALCModelTests.m */; };
 		6CFD6E981B456D27008B6695 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
 		6CFE92051B69FD6200BEAC0B /* FactoryIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFE92031B69FCDD00BEAC0B /* FactoryIntegrationTests.m */; };
@@ -238,6 +239,7 @@
 		6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCValueSourceFactory.h; sourceTree = "<group>"; };
 		6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCValueSourceFactory.m; sourceTree = "<group>"; };
 		6CDEBF9F1B606EA0009E3BEF /* ALCMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMacro.h; sourceTree = "<group>"; };
+		6CF28C631B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodSingletonsIntegrationTests.m; sourceTree = "<group>"; };
 		6CF46EC81B4610EE0009007A /* ALCModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCModel.h; sourceTree = "<group>"; };
 		6CF46EC91B4610EE0009007A /* ALCModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModel.m; sourceTree = "<group>"; };
 		6CF46ECB1B4618630009007A /* ALCModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelTests.m; sourceTree = "<group>"; };
@@ -404,6 +406,7 @@
 				6C8FF8A11B68EB8400B2B90A /* ClassIntegrationTests.m */,
 				6CFE92031B69FCDD00BEAC0B /* FactoryIntegrationTests.m */,
 				6CFE92061B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m */,
+				6CF28C631B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m */,
 			);
 			name = "Unit tests";
 			path = alchemicTests;
@@ -737,6 +740,7 @@
 				6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */,
 				6C95EDEC1B68A5D3004D8F74 /* ALCDependencyTests.m in Sources */,
 				6C24210D1B67181F00884A93 /* ALCClassInitializerBuilderTests.m in Sources */,
+				6CF28C641B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m in Sources */,
 				6C5F17101B61282100F60B1B /* ALCArgTests.m in Sources */,
 				6C5F17161B6130F400F60B1B /* ALCProtocolTests.m in Sources */,
 				6C2420F71B61BFFB00884A93 /* ALCConstantValueTests.m in Sources */,

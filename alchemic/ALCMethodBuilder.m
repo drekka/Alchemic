@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nonnull id) instantiateObject {
 	id<ALCBuilder> parent = self.parentClassBuilder;
+	STLog(self.valueClass, @"Retrieving method's parent object instance ...");
 	id factoryObject = parent.value;
 	return [self invokeMethodOn:factoryObject];
 }

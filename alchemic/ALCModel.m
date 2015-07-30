@@ -149,7 +149,7 @@ NS_ASSUME_NONNULL_BEGIN
     STLog(ALCHEMIC_LOG, @"Searching for builders based on expressions %@", searchExpression);
     NSSet<id<ALCSearchableBuilder>> *builders = [_model objectsPassingTest:^BOOL(id<ALCSearchableBuilder>  builder, BOOL * stop) {
         if ([searchExpression matches:builder]) {
-            STLog(ALCHEMIC_LOG, @"Adding builder '%@' '%@", builder.name, NSStringFromClass(builder.valueClass));
+            STLog(ALCHEMIC_LOG, @"Adding builder '%@' %@", builder.name, builder);
             return YES;
         }
         return NO;
