@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"With <%@>", NSStringFromProtocol(_aProtocol)];
+    return [NSString stringWithFormat:@"<%@>", NSStringFromProtocol(_aProtocol)];
 }
 
 #pragma mark - Equality

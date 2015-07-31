@@ -104,6 +104,8 @@ To use Alchemic you will need to do an import at the top of any source code wher
 #import <Alchemic/Alchemic.h>
 ```
 
+*Because Alchemic works with the runtime, it accesses the classes rather than the headers. This means it can access methods and initializers that are not declared in headers or visible to other classes.  The advantage of this s that it gives you the ability to create initializers and methods which only Alchemic can see. This can make the interfaces declared in your headers much simpler.*
+
 ## The context
 
 Alchemic has a central *'Context'* which manages all of the objects and classes that Alchemic needs. You generally don't need to do anything directly with the context as Alchemic provides a range of *macros* which will take care of the dirty work for you. However should you need to access it directly, it can be accessed like this:

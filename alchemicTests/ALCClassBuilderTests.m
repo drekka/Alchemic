@@ -103,6 +103,28 @@
 
 }
 
+-(void) testResolveDependenciesCascadesToInitializer {
+
+	id mockDependency = OCMClassMock([ALCVariableDependency class]);
+	Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
+	object_setIvar(_builder, dependenciesVar, [NSMutableSet setWithObject:mockDependency]);
+
+	id mockInitializer = OCMClassMock([ALCClassInitializerBuilder class]);
+	Ivar initializerVar = class_getInstanceVariable([ALCClassBuilder class], "_initializerBuilder");
+	object_setIvar(_builder, initializerVar, mockInitializer);
+
+	NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet set];
+	OCMExpect([mockDependency resolveWithPostProcessors:postProcessors]);
+	OCMExpect([mockInitializer resolveDependenciesWithPostProcessors:postProcessors]);
+
+	[_builder resolveDependenciesWithPostProcessors:postProcessors];
+
+	OCMVerifyAll(mockDependency);
+	OCMVerifyAll(mockInitializer);
+
+}
+
+
 #pragma mark - Instantiating
 
 -(void) testInstantiateObjectViaInit {

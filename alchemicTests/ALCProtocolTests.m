@@ -60,7 +60,7 @@
 
 -(void) testDescription {
 	ALCProtocol *alcProtocol = [ALCProtocol withProtocol:@protocol(NSCopying)];
-	XCTAssertEqualObjects(@"With <NSCopying>", [alcProtocol description]);
+	XCTAssertEqualObjects(@"<NSCopying>", [alcProtocol description]);
 }
 
 @end

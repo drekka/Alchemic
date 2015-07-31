@@ -82,6 +82,10 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+-(NSString *) description {
+	return [NSString stringWithFormat:@"model value source: %@", [_searchExpressions.allObjects componentsJoinedByString:@", "]];
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

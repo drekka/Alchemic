@@ -75,6 +75,13 @@
 	return builder;
 }
 
+#pragma mark - resolving
+
+-(void)resolveDependenciesWithPostProcessors:(nonnull NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
+	[super resolveDependenciesWithPostProcessors:postProcessors];
+	[_initializerBuilder resolveDependenciesWithPostProcessors:postProcessors];
+}
+
 #pragma mark - Instantiating
 
 -(nonnull id) instantiateObject {

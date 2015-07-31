@@ -49,7 +49,12 @@
 	STStartScope(ALCHEMIC_LOG);
 	STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
 
-	[self resolveBuilderDependencies];
+	STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
+	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
+		STLog(builder.valueClass, @"Resolving dependencies for builder %@", builder.name);
+		STStartScope(builder.valueClass);
+		[builder resolveDependenciesWithPostProcessors:self->_dependencyPostProcessors];
+	}
 
 	STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
 	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
@@ -70,15 +75,6 @@
 	NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForClass:[object class]];
 	NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:expressions]];
 	[[builders anyObject] injectValueDependencies:object];
-}
-
--(void) resolveBuilderDependencies {
-	STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
-	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
-		STLog(builder.valueClass, @"Resolving dependencies for builder %@", builder.name);
-		STStartScope(builder.valueClass);
-		[builder resolveDependenciesWithPostProcessors:self->_dependencyPostProcessors];
-	}
 }
 
 #pragma mark - Configuration

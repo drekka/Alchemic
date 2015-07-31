@@ -62,7 +62,7 @@
 
 -(void) testDescription {
 	ALCName *alcName = [ALCName withName:@"abc"];
-	XCTAssertEqualObjects(@"With 'abc'", [alcName description]);
+	XCTAssertEqualObjects(@"'abc'", [alcName description]);
 }
 
 @end

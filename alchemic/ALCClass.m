@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"With [%s]", class_getName(_aClass)];
+    return [NSString stringWithFormat:@"[%s]", class_getName(_aClass)];
 }
 
 #pragma mark - Equality

@@ -80,7 +80,7 @@
 }
 
 // Registers an initializer for a class.
-#define AcInitializer(initializer, initializerSel, ...) \
+#define AcInitializer(initializerSel, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerInitializerForClassBuilder):(ALCClassBuilder *) classBuilder { \
 	[[ALCAlchemic mainContext] registerClassInitializer:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
 }

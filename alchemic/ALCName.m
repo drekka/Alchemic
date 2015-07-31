@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"With '%@'", _aName];
+    return [NSString stringWithFormat:@"'%@'", _aName];
 }
 
 #pragma mark - Equality

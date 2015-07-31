@@ -61,8 +61,6 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) start;
 
--(void) resolveBuilderDependencies;
-
 #pragma mark - Dependencies
 
 /**

@@ -60,7 +60,7 @@
 
 -(void) testDescription {
 	ALCClass *alcClass = [ALCClass withClass:[NSString class]];
-	XCTAssertEqualObjects(@"With [NSString]", [alcClass description]);
+	XCTAssertEqualObjects(@"[NSString]", [alcClass description]);
 }
 
 @end
