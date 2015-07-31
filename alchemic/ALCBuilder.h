@@ -41,7 +41,15 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 
 /**
- Used to inject dependencies on an abitary object.
+ Creates the object and puts it into the value if this is not a factory.
+
+ @discussion This does not trigger dependency injection. Use the value property to obtain objects and get them injected.
+ @see value
+ */
+-(id) instantiate;
+
+/**
+ Used to inject dependencies after the value has been created.
  */
 -(void) injectValueDependencies:(id) value;
 

@@ -89,6 +89,18 @@
 	XCTAssertNotEqual(value1, value2);
 }
 
+-(void) testInstantiateCreatesObjectButDoesNotWireIt {
+	id mockDependency = OCMStrictClassMock([ALCVariableDependency class]);
+	[_builder.dependencies addObject:mockDependency];
+
+	id value = [_builder instantiate];
+
+	XCTAssertNotNil(value);
+	XCTAssertEqual([SimpleObject class], [value class]);
+
+	OCMVerifyAll(mockDependency);
+}
+
 #pragma mark - Validations
 
 -(void) testValidateClassSelectorWhenNoArgs {

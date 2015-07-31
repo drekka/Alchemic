@@ -65,7 +65,7 @@
 								  ALCMethodBuilder *methodBuilder = [self createBuilderWithSelector:@selector(stringFactoryMethod)
 																												 macros:@[]];
 								  )
-	id value = [methodBuilder instantiateObject];
+	id value = [methodBuilder instantiate];
 	XCTAssertNotNil(value);
 	XCTAssertEqualObjects(@"abc", value);
 }
