@@ -120,9 +120,12 @@ Alchemic is designed to be as unobtrusive as possible. But it still needs to kno
 
 Most of these macros take one or more arguments. For example the `AcArg(...)` macro takes at least two arguments and possibly more. To help keep the macros susinct and avoid you having to type needless boiler plate, there are some common conventions used:
 
- * When  macro needs a type, you only need to specify the relevant class or protocol. For example `AcProtocol(NSCopying)` is the macro form of `[ALCProtocol withProtocol:@protocol(NSCopying)]`.
- * Selectors are also shortened by macros where needed. For example `AcInitializer(myInitMethod)` is the macro form of 
- `[[ALCAlchemic mainContext] registerClassInitializer:classBuilder initializer:@selector(initializerSel), ... , nil];`
+ * When  macro needs a type, you only need to specify the relevant class or protocol. For example  
+`AcProtocol(NSCopying)` is the macro form of  
+ `[ALCProtocol withProtocol:@protocol(NSCopying)]`.
+ * Selectors are also shortened by macros where needed. For example  
+ `AcInitializer(myInitMethod)` is the macro form of  
+ `[[ALCAlchemic mainContext] registerClassInitializer:classBuilder initializer:@selector(initializerSel), nil];`
  * Property names are also shortened. So that code completion can assist, they are **not** expressioned as strings. For example `AcInject(myVar)` 
  * Many macros make use of varadic lists so you can add as many criteria as you like in a single line.
 
