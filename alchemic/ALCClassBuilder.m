@@ -80,7 +80,7 @@
 -(nonnull id) instantiateObject {
 
 	if (_initializerBuilder != nil) {
-		return [_initializerBuilder instantiate];
+		return [_initializerBuilder instantiateObject];
 	}
 
 	STLog(self.valueClass, @"Creating a %@", NSStringFromClass(self.valueClass));

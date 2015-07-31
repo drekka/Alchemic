@@ -45,10 +45,20 @@
 #pragma mark - Initialisation
 
 -(void) start {
+
 	STStartScope(ALCHEMIC_LOG);
 	STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
+
 	[self resolveBuilderDependencies];
-	[self instantiateSingletons];
+
+	STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
+	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
+		if (builder.createOnBoot) {
+			STLog(builder, @"Creating singleton %@ using %@", builder.name, builder);
+			[builder value];
+		}
+	};
+
 	STLog(ALCHEMIC_LOG, @"Alchemic started.");
 }
 
@@ -137,41 +147,6 @@
 	if ([builders count] > 0) {
 		processBuildersBlock(builders);
 	}
-}
-
-#pragma mark - Internal
-
--(void) instantiateSingletons {
-
-	// This is a two stage process so that all objects are created before dependencies are injected.
-	
-	STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
-	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
-		if (builder.createOnBoot) {
-			STLog(builder, @"Creating singleton %@ using %@", builder.name, builder);
-			[builder value];
-		}
-	};
-
-	if (/* DISABLES CODE */ (YES)) return;
-
-
-	// Use a map table so we can store keys without copying them.
-	NSMapTable<id, id<ALCSearchableBuilder>> *singletons = [NSMapTable strongToStrongObjectsMapTable];
-	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
-		if (builder.createOnBoot) {
-			STLog(builder, @"Creating singleton %@ using %@", builder.name, builder);
-			id obj = [builder instantiate];
-			[singletons setObject:builder forKey:obj];
-		}
-	};
-
-	STLog(ALCHEMIC_LOG, @"Injecting dependencies into %lu singletons ...", [singletons count]);
-	for (id obj in [singletons keyEnumerator]) {
-		id<ALCBuilder> builder = [singletons objectForKey:obj];
-		[builder injectValueDependencies:obj];
-	}
-
 }
 
 @end

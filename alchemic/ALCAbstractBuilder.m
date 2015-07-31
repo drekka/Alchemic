@@ -37,24 +37,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id) value {
 	// Value will be populated if this is not a factory.
-	if (_value == nil) {
-		STLog(self, @"Value is nil, creating a new value ...");
-		id newValue = [self instantiate];
-		[self injectValueDependencies:newValue];
-		return newValue;
-	} else {
+	if (_value != nil) {
 		STLog(self, @"Value present, returning a %@", NSStringFromClass([_value class]));
 		return _value;
 	}
-}
 
--(id) instantiate {
+	STLog(self, @"Value is nil, creating a new value ...");
 	id newValue = [self instantiateObject];
+	[self injectValueDependencies:newValue];
+
 	if (!_factory) {
 		// Only store the value if this is not a factory.
 		STLog(self, @"Created object is a %@ singleton, storing reference", NSStringFromClass([newValue class]));
 		_value = newValue;
 	}
+
 	return newValue;
 }
 

@@ -24,7 +24,7 @@
 	return self;
 }
 
--(nonnull id) instantiate {
+-(nonnull id) instantiateObject {
 	id<ALCSearchableBuilder> parent = self.parentClassBuilder;
 	id newObj = [self invokeMethodOn:[parent.valueClass alloc]];
 	STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), NSStringFromSelector(self.selector));
