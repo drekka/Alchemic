@@ -146,6 +146,15 @@
 	// This is a two stage process so that all objects are created before dependencies are injected.
 	
 	STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
+	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
+		if (builder.createOnBoot) {
+			STLog(builder, @"Creating singleton %@ using %@", builder.name, builder);
+			[builder value];
+		}
+	};
+
+	if (/* DISABLES CODE */ (YES)) return;
+
 
 	// Use a map table so we can store keys without copying them.
 	NSMapTable<id, id<ALCSearchableBuilder>> *singletons = [NSMapTable strongToStrongObjectsMapTable];
