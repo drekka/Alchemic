@@ -9,40 +9,48 @@
 #import "ALCTestCase.h"
 #import <StoryTeller/StoryTeller.h>
 
+@interface ASObject : NSObject
+
+@end
+
+@implementation ASObject
+
+@end
+
 @interface ArraysIntegrationTests : ALCTestCase
 
 @end
 
 @implementation ArraysIntegrationTests {
-	NSArray *_dateFormatters;
-	NSDateFormatter *_df1;
-	NSDateFormatter *_df2;
+	NSArray *_asObjects;
+	ASObject *_obj1;
+	ASObject *_obj2;
 }
 
-AcInject(_dateFormatters, AcClass(NSDateFormatter))
-AcInject(_df1, AcName(@"df1"))
-AcInject(_df2, AcName(@"df2"))
+AcInject(_asObjects, AcClass(ASObject))
+AcInject(_obj1, AcName(@"o1"))
+AcInject(_obj2, AcName(@"o2"))
 
 -(void) testNoArgInit {
 	STStartLogging(ALCHEMIC_LOG);
 	[self setupRealContext];
 	[self addClassesToContext:@[[ArraysIntegrationTests class]]];
 	AcInjectDependencies(self);
-	XCTAssertNotNil(_dateFormatters);
-	XCTAssertNotNil(_df1);
-	XCTAssertNotNil(_df2);
-	XCTAssertNotEqual(_df1, _df2);
-	XCTAssertTrue([_dateFormatters containsObject:_df1]);
-	XCTAssertTrue([_dateFormatters containsObject:_df2]);
+	XCTAssertNotNil(_asObjects);
+	XCTAssertNotNil(_obj1);
+	XCTAssertNotNil(_obj2);
+	XCTAssertNotEqual(_obj1, _obj2);
+	XCTAssertTrue([_asObjects containsObject:_obj1]);
+	XCTAssertTrue([_asObjects containsObject:_obj2]);
 }
 
 
 #pragma mark - Factories
 
-AcMethod(NSDateFormatter, dateFormatter, AcWithName(@"df1"))
-AcMethod(NSDateFormatter, dateFormatter, AcWithName(@"df2"))
--(NSDateFormatter *) dateFormatter {
-	return [[NSDateFormatter alloc] init];
+AcMethod(ASObject, newAsObject, AcWithName(@"o1"))
+AcMethod(ASObject, newAsObject, AcWithName(@"o2"))
+-(ASObject *) newAsObject {
+	return [[ASObject alloc] init];
 }
 
 

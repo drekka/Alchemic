@@ -48,7 +48,9 @@
 
 	STStartScope(ALCHEMIC_LOG);
 	STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
+	STLog(ALCHEMIC_LOG, @"Resolving dependencies ...");
 	[self resolveBuilderDependencies];
+	STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
 	[self instantiateSingletons];
 	STLog(ALCHEMIC_LOG, @"Alchemic started.");
 }
@@ -88,7 +90,7 @@
 
 -(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder variable:(NSString *) variable, ... {
 
-	STLog(classBuilder.valueClass, @"Registering a dependency ...");
+	STLog(classBuilder.valueClass, @"Registering variable dependency %@ ...", variable);
 
 	Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
 	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValueDef];
@@ -150,7 +152,7 @@
 	NSMapTable<id, id<ALCSearchableBuilder>> *singletons = [NSMapTable strongToStrongObjectsMapTable];
 	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
 		if (builder.createOnBoot) {
-			STLog(builder, @"Creating singleton %@ using %@", builder.name, builder);
+			STLog(builder, @"Creating singleton '%@' using %@", builder.name, builder);
 			id obj = [builder instantiate];
 			[singletons setObject:builder forKey:obj];
 		}

@@ -60,7 +60,6 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Updating
 
 -(void) addBuilder:(id<ALCSearchableBuilder>) builder {
-    STLog(builder.valueClass, @"Storing builder for a %@", NSStringFromClass(builder.valueClass));
     [_model addObject:builder];
     [_queryCache removeAllObjects];
 }

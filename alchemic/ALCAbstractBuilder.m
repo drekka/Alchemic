@@ -38,21 +38,28 @@ NS_ASSUME_NONNULL_BEGIN
 -(id) value {
 	// Value will be populated if this is not a factory.
 	if (_value == nil) {
-		STLog(self, @"Value is nil, creating a new value ...");
+		STLog(self, @"'%@' is nil, instanting ...", self.name);
 		id newValue = [self instantiate];
 		[self injectValueDependencies:newValue];
 		return newValue;
 	} else {
-		STLog(self, @"Value present, returning a %@", NSStringFromClass([_value class]));
+		STLog(self, @"Returning a %@", NSStringFromClass([_value class]));
 		return _value;
 	}
+}
+
+#pragma mark - Start up
+
+-(BOOL)createOnBoot {
+	// This allows for when a dependency as caused a object to be created during the singleton startup process.
+	return _createOnBoot && _value != nil;
 }
 
 -(id) instantiate {
 	id newValue = [self instantiateObject];
 	if (!_factory) {
 		// Only store the value if this is not a factory.
-		STLog(self, @"Created object is a %@ singleton, storing reference", NSStringFromClass([newValue class]));
+		STLog(self, @"Caching a %@", NSStringFromClass([newValue class]));
 		_value = newValue;
 	}
 	return newValue;
@@ -80,6 +87,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) injectValueDependencies:(id) value {
+
+	if ([_dependencies count] == 0u) {
+		return;
+	}
+
 	STLog([value class], @"Injecting %lu dependencies into a %s instance", [_dependencies count], object_getClassName(value));
 	for (ALCVariableDependency *dependency in _dependencies) {
 		[dependency injectInto:value];

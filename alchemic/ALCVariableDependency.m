@@ -24,14 +24,14 @@ NS_ASSUME_NONNULL_BEGIN
     self = [super initWithValueClass:[ALCRuntime iVarClass:variable]
                          valueSource:valueSource];
     if (self) {
-        STLog(self.valueClass, @"Registering variable dependency: %s from source: %@", ivar_getName(variable), valueSource);
+        STLog(self.valueClass, @"Creating variable injection: %s from source: %@", ivar_getName(variable), valueSource);
         _variable = variable;
     }
     return self;
 }
 
 -(void) injectInto:(id) object {
-    STLog([object class], @"Injecting -[%s %s] with a %s",object_getClassName(object), ivar_getName(self.variable), object_getClassName(self.valueClass));
+    STLog([object class], @"Injecting %@.%s with a %@", NSStringFromClass([object class]), ivar_getName(self.variable), NSStringFromClass(self.valueClass));
     [ALCRuntime object:object injectVariable:self.variable withValue:self.value];
 }
 

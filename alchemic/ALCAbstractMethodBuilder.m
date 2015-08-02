@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(id) invokeMethodOn:(id) target {
 	// Get an invocation ready.
 	if (_inv == nil) {
-		STLog(ALCHEMIC_LOG, @"Creating an invocation for %@", NSStringFromSelector(_selector));
+		STLog(ALCHEMIC_LOG, @"Creating an invocation for '%@' using selector %@", self.name, NSStringFromSelector(_selector));
 		NSMethodSignature *sig = [[target class] instanceMethodSignatureForSelector:_selector];
 		_inv = [NSInvocation invocationWithMethodSignature:sig];
 		_inv.selector = _selector;
@@ -75,7 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 	id __unsafe_unretained returnObj;
 	[_inv getReturnValue:&returnObj];
-	STLog(ALCHEMIC_LOG, @"Created a %s", class_getName([returnObj class]));
+	STLog(ALCHEMIC_LOG, @"Returning a %s", class_getName([returnObj class]));
 	return returnObj;
 }
 

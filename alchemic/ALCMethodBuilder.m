@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(instancetype) initWithParentBuilder:(ALCClassBuilder *) parentClassBuilder
-									  selector:(nonnull SEL)selector
+									  selector:(SEL)selector
 									valueClass:(Class) valueClass {
 	self = [super initWithParentClassBuilder:parentClassBuilder
 											  selector:selector];
@@ -43,15 +43,15 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 }
 
--(nonnull id) instantiateObject {
+-(id) instantiateObject {
 	id<ALCBuilder> parent = self.parentClassBuilder;
-	STLog(self.valueClass, @"Retrieving method's parent object instance ...");
+	STLog(self.valueClass, @"Retrieving method's parent object ...");
 	id factoryObject = parent.value;
 	return [self invokeMethodOn:factoryObject];
 }
 
--(nonnull NSString *) description {
-	return [NSString stringWithFormat:@"Method builder [%s -(%@ *) %s]", class_getName(self.parentClassBuilder.valueClass), NSStringFromClass(self.valueClass), sel_getName(self.selector)];
+-(NSString *) description {
+	return [NSString stringWithFormat:@"Method builder -(%2$@ *) [%1$s %3$s]", class_getName(self.parentClassBuilder.valueClass), NSStringFromClass(self.valueClass), sel_getName(self.selector)];
 }
 
 -(void) injectValueDependencies:(id) value {
