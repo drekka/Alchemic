@@ -36,14 +36,12 @@
 	[_builder.macroProcessor addMacro:AcIsFactory];
 	[_builder configure];
 	XCTAssertTrue(_builder.factory);
-	XCTAssertFalse(_builder.createOnBoot);
 }
 
 -(void) testConfigureSetsPrimary {
 	[_builder.macroProcessor addMacro:AcIsPrimary];
 	[_builder configure];
 	XCTAssertTrue(_builder.primary);
-	XCTAssertTrue(_builder.createOnBoot);
 }
 
 -(void) testConfigureSetsName {

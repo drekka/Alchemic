@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL)createOnBoot {
 	// This allows for when a dependency as caused a object to be created during the singleton startup process.
-	return _createOnBoot && _value != nil;
+	return _createOnBoot && _value == nil;
 }
 
 -(id) instantiate {

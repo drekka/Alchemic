@@ -50,14 +50,38 @@
 	[_builder.macroProcessor addMacro:AcIsFactory];
 	[_builder configure];
 	XCTAssertTrue(_builder.factory);
-	XCTAssertFalse(_builder.createOnBoot);
 }
 
 -(void) testConfigurePrimary {
 	[_builder.macroProcessor addMacro:AcIsPrimary];
 	[_builder configure];
 	XCTAssertTrue(_builder.primary);
+}
+
+#pragma mark - Create on boot
+
+-(void) testCreateOnBootWhenNotAFactoryAndNoValue {
+	[_builder configure];
 	XCTAssertTrue(_builder.createOnBoot);
+}
+
+-(void) testCreateOnBootWhenAFactoryAndNoValue {
+	[_builder.macroProcessor addMacro:AcIsFactory];
+	[_builder configure];
+	XCTAssertFalse(_builder.createOnBoot);
+}
+
+-(void) testCreateOnBootWhenNotAFactoryAndValueSet {
+	[_builder configure];
+	_builder.value = @"abc";
+	XCTAssertFalse(_builder.createOnBoot);
+}
+
+-(void) testCreateOnBootWhenAFactoryAndValueSet {
+	[_builder.macroProcessor addMacro:AcIsFactory];
+	[_builder configure];
+	_builder.value = @"abc";
+	XCTAssertFalse(_builder.createOnBoot);
 }
 
 #pragma mark - Creating objects
