@@ -108,10 +108,10 @@
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
-	STLog(classBuilder.valueClass, @"Registering a builder ...");
+	STLog(classBuilder.valueClass, @"Updating the current class builder ...");
 	alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
 	[classBuilder configure];
-	STLog(classBuilder.valueClass, @"Created: %@, %@", classBuilder, classBuilder.macroProcessor);
+	STLog(classBuilder.valueClass, @"Modified builder: %@, %@", classBuilder, classBuilder.macroProcessor);
 }
 
 -(void) registerClassInitializer:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... {

@@ -70,6 +70,23 @@ NS_ASSUME_NONNULL_BEGIN
 	return [_valueSourceFactories count];
 }
 
+-(NSString *)description {
+	NSMutableArray *flags = [[NSMutableArray alloc] init];
+	if (self.isFactory) {
+		[flags addObject:@"factory"];
+	}
+	if (self.isPrimary) {
+		[flags addObject:@"primary"];
+	}
+	if (self.asName != nil) {
+		[flags addObject:[NSString stringWithFormat:@"name: '%@'", self.asName]];
+	}
+	if ([self valueSourceCount] > 0u) {
+		[flags addObject:[_valueSourceFactories componentsJoinedByString:@", "]];
+	}
+	return [NSString stringWithFormat:@"Macro processor: %@", [flags componentsJoinedByString:@", "]];
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -27,6 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 	id _mockAlchemic;
 }
 
++(void)initialize {
+	[STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%4$@ %1$@ %2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine, STLoggerTemplateKeyKey];
+}
+
 -(void) tearDown {
 	// Stop the mocking.
 	_mockAlchemic = nil;

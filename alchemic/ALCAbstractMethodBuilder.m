@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 	if (self) {
 		_parentClassBuilder = parentClassBuilder;
 		_selector = selector;
+		self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg + ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary];
+		self.name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(self.selector)];
 	}
 	return self;
 }
