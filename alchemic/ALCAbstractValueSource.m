@@ -54,6 +54,10 @@
 	[self doesNotRecognizeSelector:_cmd];
 }
 
+-(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
+	[self doesNotRecognizeSelector:_cmd];
+}
+
 -(NSSet<id> * _Nonnull)values {
 	[self doesNotRecognizeSelector:_cmd];
 	return nil;

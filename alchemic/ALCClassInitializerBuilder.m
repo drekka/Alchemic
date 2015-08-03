@@ -15,13 +15,8 @@
 
 @implementation ALCClassInitializerBuilder
 
--(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
-											 selector:(SEL) selector {
-	self = [super initWithParentClassBuilder:parentClassBuilder selector:selector];
-	if (self) {
-		self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
-	}
-	return self;
+-(Class) valueClass {
+	return self.parentClassBuilder.valueClass;
 }
 
 -(nonnull id) instantiateObject {

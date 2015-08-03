@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) addBuilder:(id<ALCBuilder>) builder;
 
+-(void) removeBuilder:(id<ALCBuilder>) builder;
+
 #pragma mark - Querying
 
 -(NSSet<id<ALCSearchableBuilder>> *) allBuilders;

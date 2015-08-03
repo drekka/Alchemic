@@ -77,10 +77,22 @@
 
 #pragma mark - resolving
 
--(void)resolveDependenciesWithPostProcessors:(nonnull NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
-	[super resolveDependenciesWithPostProcessors:postProcessors];
-	[_initializerBuilder resolveDependenciesWithPostProcessors:postProcessors];
+-(void)resolveWithPostProcessors:(nonnull NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
+	[super resolveWithPostProcessors:postProcessors];
+	[_initializerBuilder resolveWithPostProcessors:postProcessors];
 }
+
+-(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
+
+	[super validateWithDependencyStack:dependencyStack];
+
+	if (_initializerBuilder != nil) {
+		[dependencyStack addObject:self];
+		[_initializerBuilder validateWithDependencyStack:dependencyStack];
+		[dependencyStack removeObject:self];
+	}
+}
+
 
 #pragma mark - Instantiating
 

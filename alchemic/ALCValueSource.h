@@ -8,6 +8,7 @@
 
 @import Foundation;
 @import ObjectiveC;
+#import "ALCResolvable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Objects that can produce values for dependencies.
  */
-@protocol ALCValueSource <NSObject>
+@protocol ALCValueSource <NSObject, ALCResolvable>
 
 -(id) valueForType:(nullable Class) finalType;
 

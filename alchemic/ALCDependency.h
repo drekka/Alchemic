@@ -10,13 +10,14 @@
 
 @protocol ALCDependencyPostProcessor;
 @protocol ALCValueSource;
+#import "ALCResolvable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Main class for managing dependencies.
  */
-@interface ALCDependency : NSObject
+@interface ALCDependency : NSObject<ALCResolvable>
 
 @property (nonatomic, strong, readonly) id value;
 

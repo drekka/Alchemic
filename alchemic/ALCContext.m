@@ -66,12 +66,20 @@
 }
 
 -(void) resolveBuilderDependencies {
+
 	STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
 	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
 		STLog(builder.valueClass, @"Resolving dependencies for builder %@", builder.name);
 		STStartScope(builder.valueClass);
-		[builder resolveDependenciesWithPostProcessors:self->_dependencyPostProcessors];
+		[builder resolveWithPostProcessors:self->_dependencyPostProcessors];
 	}
+
+	STLog(ALCHEMIC_LOG, @"Validating dependencies into %lu singletons ...", _model.numberBuilders);
+	for (id<ALCSearchableBuilder> builder in [_model allBuilders]) {
+		NSMutableArray<id<ALCResolvable>> *stack = [[NSMutableArray alloc] init];
+		[builder validateWithDependencyStack:stack];
+	}
+
 }
 
 #pragma mark - Configuration
@@ -119,6 +127,11 @@
 	ALCClassInitializerBuilder *initializerBuilder = [classBuilder createInitializerBuilderForSelector:initializer];
 	alc_loadMacrosAfter(initializerBuilder.macroProcessor, initializer);
 	[initializerBuilder configure];
+
+	// replace the class builder in the model with the initializer builder.
+	[_model addBuilder:initializerBuilder];
+	[_model removeBuilder:classBuilder];
+
 }
 
 -(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
@@ -126,7 +139,7 @@
 	ALCMethodBuilder *methodBuilder = [classBuilder createMethodBuilderForSelector:selector valueClass:returnType];
 	alc_loadMacrosAfter(methodBuilder.macroProcessor, returnType);
 	[methodBuilder configure];
-	[self addBuilderToModel:methodBuilder];
+	[_model addBuilder:methodBuilder];
 	STLog(classBuilder.valueClass, @"Created: %@, %@", methodBuilder, methodBuilder.macroProcessor);
 }
 

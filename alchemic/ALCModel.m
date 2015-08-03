@@ -64,6 +64,11 @@ NS_ASSUME_NONNULL_BEGIN
     [_queryCache removeAllObjects];
 }
 
+-(void) removeBuilder:(id<ALCSearchableBuilder>) builder {
+	[_model removeObject:builder];
+	[_queryCache removeAllObjects];
+}
+
 #pragma mark - Querying
 
 -(NSSet<id<ALCBuilder>> *) allBuilders {

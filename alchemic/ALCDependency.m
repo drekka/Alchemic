@@ -33,6 +33,10 @@ NS_ASSUME_NONNULL_BEGIN
     [_valueSource resolveWithPostProcessors:postProcessors];
 }
 
+-(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
+	[_valueSource validateWithDependencyStack:dependencyStack];
+}
+
 -(id) value {
     return [_valueSource valueForType:self.valueClass];
 }

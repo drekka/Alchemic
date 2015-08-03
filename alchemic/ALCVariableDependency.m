@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
+-(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {}
+
 -(void) injectInto:(id) object {
     STLog([object class], @"Injecting %@.%s with a %@", NSStringFromClass([object class]), ivar_getName(self.variable), NSStringFromClass(self.valueClass));
     [ALCRuntime object:object injectVariable:self.variable withValue:self.value];

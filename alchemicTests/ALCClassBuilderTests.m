@@ -95,7 +95,7 @@
 	NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet set];
 	OCMExpect([mockDependency resolveWithPostProcessors:postProcessors]);
 
-	[_builder resolveDependenciesWithPostProcessors:postProcessors];
+	[_builder resolveWithPostProcessors:postProcessors];
 
 	OCMVerifyAll(mockDependency);
 
@@ -113,9 +113,9 @@
 
 	NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet set];
 	OCMExpect([mockDependency resolveWithPostProcessors:postProcessors]);
-	OCMExpect([mockInitializer resolveDependenciesWithPostProcessors:postProcessors]);
+	OCMExpect([mockInitializer resolveWithPostProcessors:postProcessors]);
 
-	[_builder resolveDependenciesWithPostProcessors:postProcessors];
+	[_builder resolveWithPostProcessors:postProcessors];
 
 	OCMVerifyAll(mockDependency);
 	OCMVerifyAll(mockInitializer);

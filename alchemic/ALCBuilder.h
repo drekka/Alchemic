@@ -9,9 +9,11 @@
 @class ALCDependency;
 @protocol ALCDependencyPostProcessor;
 @class ALCMacroProcessor;
+#import "ALCResolvable.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ALCBuilder <NSObject>
+@protocol ALCBuilder <NSObject, ALCResolvable>
 
 #pragma mark - Settings
 
@@ -30,15 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) ALCMacroProcessor *macroProcessor;
 
 -(void) configure;
-
-#pragma mark - Resolving
-
-/**
- Called during model setup to resolve dependencies into a list of candidate objects.
-
- @param postProcessors a set of post processors which can be used to resolve results further if needed.
- */
--(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 
 /**
  Creates the object and puts it into the value if this is not a factory.

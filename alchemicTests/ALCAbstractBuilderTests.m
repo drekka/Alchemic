@@ -21,7 +21,7 @@
 
 @implementation FakeBuilder
 
--(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
 	self.resolveDependenciesCalled = YES;
 }
 

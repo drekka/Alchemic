@@ -17,8 +17,7 @@
 @end
 
 @implementation Chicken
-AcRegister(AcWithName(@"A chicken"))
-AcInitializer(initWithEgg:, AcArg(Egg, AcClass(Egg)))
+AcInitializer(initWithEgg:, AcWithName(@"A chicken"), AcArg(Egg, AcClass(Egg)))
 -(instancetype) initWithEgg:(Egg *) egg {
 	return [[Chicken alloc] init];
 }
@@ -46,7 +45,7 @@ AcInject(_chicken, AcName(@"A chicken"))
 	STStartLogging(@"is [Chicken]");
 	STStartLogging(@"is [Egg]");
 	STStartLogging(@"is [CircularDependency4IntegrationTests]");
-	[self addClassesToContext:@[[Chicken class], [Egg class], [CircularDependency4IntegrationTests class]]];
+	XCTAssertThrowsSpecificNamed(([self addClassesToContext:@[[Chicken class], [Egg class], [CircularDependency4IntegrationTests class]]]), NSException, @"AlchemicCircularDependency");
 	AcInjectDependencies(self);
 	XCTAssertNotNil(_chicken);
 }

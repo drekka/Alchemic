@@ -12,6 +12,7 @@
 #import "ALCAbstractBuilder.h"
 #import "ALCMacroProcessor.h"
 #import "ALCVariableDependency.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -98,7 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 }
 
--(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
 
 	if ([_dependencies count] == 0) {
 		STLog(self, @"No dependencies found.");
@@ -110,12 +111,37 @@ NS_ASSUME_NONNULL_BEGIN
 	};
 }
 
+-(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
+
+	STLog(ALCHEMIC_LOG, @"Validating %@", self);
+	if ([dependencyStack containsObject:self]) {
+		[dependencyStack addObject:self];
+		@throw [NSException exceptionWithName:@"AlchemicCircularDependency"
+												 reason:[NSString stringWithFormat:@"Circular dependency detected: %@",
+															[dependencyStack componentsJoinedByString:@" -> "]]
+											  userInfo:nil];
+	}
+
+	[dependencyStack addObject:self];
+	for (ALCDependency *dependency in _dependencies) {
+		[dependency validateWithDependencyStack:dependencyStack];
+	}
+
+	// remove ourselves before we fall back.
+	[dependencyStack removeObject:self];
+
+}
+
 #pragma mark - Overridable points
 
 -(void) configure {
 	self.factory = self.macroProcessor.isFactory;
 	self.primary = self.macroProcessor.isPrimary;
 	self.createOnBoot = !self.factory;
+	NSString *name = self.macroProcessor.asName;
+	if (name != nil) {
+		self.name = name;
+	}
 }
 
 -(id) instantiateObject {

@@ -82,6 +82,12 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+-(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
+	for (id<ALCBuilder> candidate in _candidateBuilders) {
+		[candidate validateWithDependencyStack:dependencyStack];
+	}
+}
+
 -(NSString *) description {
 	return [NSString stringWithFormat:@"model value source: %@", [_searchExpressions.allObjects componentsJoinedByString:@", "]];
 }

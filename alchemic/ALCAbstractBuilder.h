@@ -11,7 +11,7 @@
 @class ALCMacroProcessor;
 @class ALCDependency;
 
-#import <Alchemic/ALCBuilder.h>
+#import "ALCBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -33,14 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 	return self;
 }
 
--(void)configure {
-	[super configure];
-	NSString *name = self.macroProcessor.asName;
-	if (name != nil) {
-		self.name = name;
-	}
-}
-
 -(id) instantiateObject {
 	id<ALCBuilder> parent = self.parentClassBuilder;
 	STLog(self.valueClass, @"Retrieving method's parent object ...");
