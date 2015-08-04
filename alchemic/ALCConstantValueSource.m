@@ -36,6 +36,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {}
 
+-(NSString *)description {
+	return [NSString stringWithFormat:@"Constant: %@", [_value description]];
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

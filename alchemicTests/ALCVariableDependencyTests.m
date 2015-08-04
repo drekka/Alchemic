@@ -17,21 +17,31 @@
 
 @end
 
-@implementation ALCVariableDependencyTests
+@implementation ALCVariableDependencyTests {
+	ALCVariableDependency *_dependency;
+}
 
--(void) testInjectsVariable {
+-(void) setUp {
 	id mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
 	OCMStub([mockValueSource valueForType:[NSString class]]).andReturn(@"abc");
 
 	Ivar var = class_getInstanceVariable([SimpleObject class], "_aStringProperty");
-	ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithVariable:var
-																									valueSource:mockValueSource];
+	_dependency = [[ALCVariableDependency alloc] initWithVariable:var
+																	  valueSource:mockValueSource];
+}
+
+-(void) testInjectsVariable {
 	SimpleObject *object = [[SimpleObject alloc] init];
-
-	[dependency injectInto:object];
-
+	[_dependency injectInto:object];
 	XCTAssertEqualObjects(@"abc", object.aStringProperty);
 }
 
+-(void) testValidateWithDependencyStackDoesNothing {
+	[_dependency validateWithDependencyStack:[@[] mutableCopy]];
+}
+
+-(void) testDescription {
+	XCTAssertEqualObjects(@"_aStringProperty = NSString using: OCMockObject(ALCValueSource)", [_dependency description]);
+}
 
 @end

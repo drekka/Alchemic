@@ -22,13 +22,35 @@
 	XCTAssertEqual(@protocol(NSCopying), alcProtocol.cacheId);
 }
 
--(void) testIsEqualToClass {
+-(void) testIsEqualWhenSameObject {
+	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
+	XCTAssertTrue([alcProtocol1 isEqual:alcProtocol1]);
+}
+
+-(void) testIsEqualWhenSameProtocolObject {
+	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
+	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(NSCopying)];
+	XCTAssertTrue([alcProtocol1 isEqual:alcProtocol2]);
+}
+
+-(void) testIsEqualWhenDifferentProtocolObject {
+	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
+	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(NSFastEnumeration)];
+	XCTAssertFalse([alcProtocol1 isEqual:alcProtocol2]);
+}
+
+-(void) testIsEqualWhenNil {
+	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
+	XCTAssertFalse([alcProtocol1 isEqual:nil]);
+}
+
+-(void) testIsEqualToProtocol {
 	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
 	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(NSCopying)];
 	XCTAssertTrue([alcProtocol1 isEqualToProtocol:alcProtocol2]);
 }
 
--(void) testIsNotEqualToClass {
+-(void) testIsNotEqualToProtocol {
 	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
 	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(ALCBuilder)];
 	XCTAssertFalse([alcProtocol1 isEqualToProtocol:alcProtocol2]);

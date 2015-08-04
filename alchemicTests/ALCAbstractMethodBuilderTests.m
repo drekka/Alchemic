@@ -7,6 +7,7 @@
 //
 
 @import XCTest;
+#import <OCMock/OCMock.h>
 
 #import "ALCAbstractMethodBuilder.h"
 #import "SimpleObject.h"
@@ -80,6 +81,18 @@
 	SimpleObject *object = [[SimpleObject alloc] init];
 	NSString *result = [methodBuilder invokeMethodOn:object];
 	XCTAssertEqualObjects(@"abc", result);
+}
+
+-(void) testInjectValueDependenciesPassesToParentBuilder {
+	id mockParent = OCMClassMock([ALCClassBuilder class]);
+	SimpleObject *object = [[SimpleObject alloc] init];
+	OCMExpect([mockParent injectValueDependencies:object]);
+	ignoreSelectorWarnings(
+								  ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:mockParent
+																																								selector:@selector(stringFactoryMethod)];
+								  )
+	[methodBuilder injectValueDependencies:object];
+	OCMVerifyAll(mockParent);
 }
 
 

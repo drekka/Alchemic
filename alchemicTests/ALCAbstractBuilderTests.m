@@ -16,14 +16,9 @@
 #import "ALCVariableDependency.h"
 
 @interface FakeBuilder : ALCAbstractBuilder
-@property(nonatomic, assign) BOOL resolveDependenciesCalled;
 @end
 
 @implementation FakeBuilder
-
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
-	self.resolveDependenciesCalled = YES;
-}
 
 -(nonnull id) instantiateObject {
 	return [[SimpleObject alloc] init];
@@ -111,6 +106,50 @@
 	XCTAssertEqual([SimpleObject class], [value class]);
 
 	OCMVerifyAll(mockDependency);
+}
+
+#pragma mark - Resolving
+
+-(void) testResolveWithPostProcessors {
+
+	NSSet *postProcessors = [NSSet set];
+	id mockDependency = OCMClassMock([ALCDependency class]);
+	OCMExpect([mockDependency resolveWithPostProcessors:postProcessors]);
+	Ivar dependencyVar = class_getInstanceVariable([_builder class], "_dependencies");
+	object_setIvar(_builder, dependencyVar, [NSMutableArray arrayWithObject:mockDependency]);
+
+	[_builder resolveWithPostProcessors:postProcessors];
+
+	OCMVerifyAll(mockDependency);
+
+}
+
+-(void) testResolveWithPostProcessorsWhenNoDependencies {
+	NSSet *postProcessors = [NSSet set];
+	[_builder resolveWithPostProcessors:postProcessors];
+	// Does nothing.
+}
+
+-(void) testValidateDependencyStack {
+
+	NSMutableArray *stack = [@[] mutableCopy];
+	id mockDependency = OCMClassMock([ALCDependency class]);
+	OCMExpect([mockDependency validateWithDependencyStack:[OCMArg checkWithBlock:^BOOL(NSMutableArray *passedStack) {
+		return [passedStack containsObject:self->_builder];
+	}]]);
+
+	Ivar dependencyVar = class_getInstanceVariable([_builder class], "_dependencies");
+	object_setIvar(_builder, dependencyVar, [NSMutableArray arrayWithObject:mockDependency]);
+
+	[_builder validateWithDependencyStack:stack];
+
+	OCMVerifyAll(mockDependency);
+	
+}
+
+-(void) testValidateDependencyThrowsWhenCircularDependencyDetected {
+	NSMutableArray *stack = [@[_builder] mutableCopy];
+	XCTAssertThrowsSpecificNamed([_builder validateWithDependencyStack:stack], NSException, @"AlchemicCircularDependency");
 }
 
 #pragma mark - Validations

@@ -12,6 +12,7 @@
 #import "ALCDependency.h"
 #import "ALCDependencyPostProcessor.h"
 #import "ALCValueSource.h"
+#import "ALCConstantValueSource.h"
 
 @interface ALCDependencyTests : XCTestCase
 
@@ -41,6 +42,12 @@
 	XCTAssertEqualObjects(@"abc", value);
 
 	OCMVerifyAll(mockValueSource);
+}
+
+-(void) testDescription {
+	ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithValue:@5];
+	ALCDependency *dependency = [[ALCDependency alloc] initWithValueClass:[NSString class] valueSource:valueSource];
+	XCTAssertEqualObjects(@"NSString using: Constant: 5", [dependency description]);
 }
 
 @end
