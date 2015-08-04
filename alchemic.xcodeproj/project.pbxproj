@@ -619,6 +619,7 @@
 				6C36D74B1B3851680073C4FB /* Frameworks */,
 				6C36D74C1B3851680073C4FB /* Headers */,
 				6C36D74D1B3851680073C4FB /* Resources */,
+				6CFF3BD41B709F8800538BA1 /* Appledoc */,
 			);
 			buildRules = (
 			);
@@ -699,6 +700,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6CFF3BD41B709F8800538BA1 /* Appledoc */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Appledoc;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$PROJECT_DIR/External/appledoc/appledoc \\\n--project-name \"Alchemic\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--exit-threshold 2 \\\nAlchemic\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6C36D74A1B3851680073C4FB /* Sources */ = {
