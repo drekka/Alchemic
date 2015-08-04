@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
 											 selector:(SEL) selector NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, strong, readonly) id<ALCBuilder> parentClassBuilder;
+@property (nonatomic, strong, readonly) ALCClassBuilder *parentClassBuilder;
 
 @property (nonatomic, assign, readonly) SEL selector;
 

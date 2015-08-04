@@ -95,7 +95,8 @@
 #pragma mark - Overrides
 
 -(void) testResolveWithPostProcessors {
-	XCTAssertThrowsSpecificNamed([_source resolveWithPostProcessors:[NSSet set]], NSException, @"NSInvalidArgumentException");
+	[_source resolveWithPostProcessors:[NSSet set]];
+	XCTAssertTrue(_source.resolved);
 }
 
 -(void) testValues {

@@ -8,6 +8,7 @@
 @import ObjectiveC;
 #import "ALCMacroProcessor.h"
 #import "ALCMethodBuilder.h"
+#import "ALCClassBuilder.h"
 #import "ALCAlchemic.h"
 #import "ALCContext.h"
 
@@ -32,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) instantiateObject {
-	id<ALCBuilder> parent = self.parentClassBuilder;
+	ALCClassBuilder *parent = self.parentClassBuilder;
 	STLog(self.valueClass, @"Retrieving method's parent object ...");
 	id factoryObject = parent.value;
 	return [self invokeMethodOn:factoryObject];

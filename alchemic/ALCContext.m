@@ -67,7 +67,7 @@
 
 	STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
 	for (id<ALCBuilder> builder in [_model allBuilders]) {
-		STLog(builder.valueClass, @"Resolving dependencies for builder %@", builder.name);
+		STLog(builder.valueClass, @"Resolving dependencies in %@", builder);
 		STStartScope(builder.valueClass);
 		[builder resolveWithPostProcessors:self->_dependencyPostProcessors];
 	}

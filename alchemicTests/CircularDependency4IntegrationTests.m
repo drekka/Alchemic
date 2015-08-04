@@ -46,8 +46,6 @@ AcInject(_chicken, AcName(@"A chicken"))
 	STStartLogging(@"is [Egg]");
 	STStartLogging(@"is [CircularDependency4IntegrationTests]");
 	XCTAssertThrowsSpecificNamed(([self addClassesToContext:@[[Chicken class], [Egg class], [CircularDependency4IntegrationTests class]]]), NSException, @"AlchemicCircularDependency");
-	AcInjectDependencies(self);
-	XCTAssertNotNil(_chicken);
 }
 
 @end

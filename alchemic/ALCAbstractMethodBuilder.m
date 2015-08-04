@@ -58,6 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
 	[super resolveWithPostProcessors:postProcessors];
 	if ( ! self.parentClassBuilder.resolved) {
+		STLog(self.valueClass, @"resolving dependencies in parent %@", self.parentClassBuilder);
 		[self.parentClassBuilder resolveWithPostProcessors:postProcessors];
 	}
 }

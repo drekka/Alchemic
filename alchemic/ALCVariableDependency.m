@@ -30,7 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {}
+-(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
+	// Ignore dependency checking when a variable dependency as these are injected later and do not trigger circular dependencies.
+}
 
 -(void) injectInto:(id) object {
     STLog([object class], @"Injecting %@.%s with a %@", NSStringFromClass([object class]), ivar_getName(self.variable), NSStringFromClass(self.valueClass));

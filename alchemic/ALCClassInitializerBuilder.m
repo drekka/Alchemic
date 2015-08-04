@@ -10,6 +10,7 @@
 
 #import "ALCClassInitializerBuilder.h"
 #import "ALCMacroProcessor.h"
+#import "ALCClassBuilder.h"
 @import ObjectiveC;
 
 @implementation ALCClassInitializerBuilder
@@ -19,7 +20,7 @@
 }
 
 -(nonnull id) instantiateObject {
-	id<ALCBuilder> parent = self.parentClassBuilder;
+	ALCClassBuilder *parent = self.parentClassBuilder;
 	id newObj = [self invokeMethodOn:[parent.valueClass alloc]];
 	STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), NSStringFromSelector(self.selector));
 	return newObj;

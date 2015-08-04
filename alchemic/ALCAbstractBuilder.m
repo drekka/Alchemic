@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(id) value {
 	// Value will be populated if this is not a factory.
 	if (_value == nil) {
-		STLog(self, @"'%@' is nil, instanting ...", self.name);
+		STLog(self.valueClass, @"'%@' is nil, instanting ...", self.name);
 		id newValue = [self instantiate];
 		[self injectValueDependencies:newValue];
 		return newValue;
@@ -105,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
 
-	STLog(ALCHEMIC_LOG, @"Validating %@", self);
+	STLog(self.valueClass, @"Validating %@", self);
 	if ([dependencyStack containsObject:self]) {
 		[dependencyStack addObject:self];
 		@throw [NSException exceptionWithName:@"AlchemicCircularDependency"
