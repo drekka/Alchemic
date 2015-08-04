@@ -12,7 +12,7 @@ By Derek Clarkson
  * [Macros](#macros)
  * [Declaring objects](#declaring-objects)
       * [Singletons](#singletons)
-      * [Constructors](#constructors)
+      * [Initializers](#initializers)
       * [Factories](#factories)
       * [Object names](#object-names)
       * [Primary objects](#primary-objects)
@@ -28,19 +28,37 @@ By Derek Clarkson
  * [Unmanaged instances](#unmanaged-instances)
  * [Callbacks](#callbacks)
  * [Configuration](#configuration)
+ * [Circular dependencies](#circular-dependencies)
  * [Credits](#credits)
 
  * [Macro reference](./macros.md)
 
 #Intro
 
-Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS.  It's based loosely on ideas from the [Spring](http://projects.spring.io/spring-framework/) Java framework as well as several iOS frameworks. 
+Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS.  It's based loosely on ideas from the [Spring](http://projects.spring.io/spring-framework/) Java framework and after trying out several other iOS DI frameworks. 
 
 The main ideas driving the Alchemic design are:
 
  * Keep it simple to use.
  * Keep it as unobtrusive as possible.
- * It should require less code to use than ['Rolling your own'](http://www.urbandictionary.com/define.php?term=roll+your+own).  Preferrable - ***None !***
+ * Minimal code, preferrable - ***None !***
+ * Flexibility.
+
+##Main features
+* Automatic class singletons
+* Factory classes
+* Singletons from methods
+* Factory methods
+* Initializer argument injection
+* Method argument injection
+* Value resolution by class, protocol or name.
+* Constant value injection
+* Primary instances.
+* Self starting
+* Automatic registration of classes and methods through bundle scanning
+* Automatic array population by class, protocol or name
+* Circular dependency detection
+* Macro driven for minimal code
 
 # Installation
 
@@ -149,9 +167,9 @@ The `AcRegister(...)` macro is how Alchemic recognises classes it will be managi
 
 *Note: Mostly there should only be one `AcRegister(...)` for a class. If you add another, a second instance of the class will then be registered. This can be useful in some situations, but generally it's not something that is commonly done.*
 
-## Constructors
+## Initializers
 
-By default, Alchemic will use the standard `init` method when constructing an instance of a class. However this is not always the best option, so Alchemic provides a method for specifing a different initializer and how to locate any arguments it needs. Here's an example:
+By default, Alchemic will use the standard `init` method when initializing an instance of a class. However this is not always the best option, so Alchemic provides a method for specifing a different initializer and how to locate any arguments it needs. Here's an example:
 
 ```objectivec
 @implementation MyClass
@@ -163,6 +181,8 @@ AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
 ```
 
 The `AcInitiailizer(...)` macro tells Alchemic that when it needs to create an instance of MyClass, it should use the `initWithOtherObject:` initializer. The first argument to this macro is required and specifies the initializer selector. After that is a series of `AcArg(...)` macros which define where to get the value for each argument that the selector has. 
+
+`AcInitializer(...)` takes all the same macros that can be used with `AcRegister(...)` to define various attributes of the instance that will be created. In fact, there is no need to use `AcRegister(...)` at all as the arguments for it will be ignored when there is an `AcInitializer(...)` macro present.
 
 ### AcArg(type, search-criteria, ...)
 
@@ -462,6 +482,14 @@ To let Alchemic know that there are further sources of classes that need injecti
 ```
 
 During scanning, Alchemic will read the list of classes. For each one, it will locate the bundle or framework that it came from and scan all classes within it. So you only need to refer to a single class to get all classes scanned.
+
+# Circular dependencies
+
+It's possible with dependencies to get into a situation where the dependencies of one object reference a second object which needs the first to resolve. In other words, a chicken and egg situation. 
+
+Alchemic attempts to detect these endless loops of dependencies when it starts up by checking through the references that have been created by the macros and looking for loop backs. If it detects one it will immediately throw an exception.
+
+Generally speaking though, they are actually quite hard to create because Alchemic creates as many objects as possible before injecting dependencies. So they are not depending on objects that do not yet exist. 
 
 # Credits
 
