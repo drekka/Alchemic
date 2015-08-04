@@ -52,6 +52,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
 
     STLog(self, @"Resolving %@", self);
+
+	[super resolveWithPostProcessors:postProcessors];
+
     STStartScope(self);
     [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
                                               processingBuildersBlock:^(ProcessBuiderBlockArgs) {

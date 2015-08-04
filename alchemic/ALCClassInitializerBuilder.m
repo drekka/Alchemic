@@ -9,7 +9,6 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCClassInitializerBuilder.h"
-#import "ALCSearchableBuilder.h"
 #import "ALCMacroProcessor.h"
 @import ObjectiveC;
 
@@ -20,7 +19,7 @@
 }
 
 -(nonnull id) instantiateObject {
-	id<ALCSearchableBuilder> parent = self.parentClassBuilder;
+	id<ALCBuilder> parent = self.parentClassBuilder;
 	id newObj = [self invokeMethodOn:[parent.valueClass alloc]];
 	STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), NSStringFromSelector(self.selector));
 	return newObj;

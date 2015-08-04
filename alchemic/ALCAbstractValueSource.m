@@ -10,6 +10,8 @@
 
 @implementation ALCAbstractValueSource
 
+@synthesize resolved = _resolved;
+
 -(id) valueForType:(nullable Class) finalType {
 
 	NSSet<id> *values = [self values];
@@ -50,15 +52,15 @@
 	return values.allObjects;
 }
 
--(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors{
-	[self doesNotRecognizeSelector:_cmd];
+-(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors {
+	_resolved = YES;
 }
 
 -(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
 	[self doesNotRecognizeSelector:_cmd];
 }
 
--(NSSet<id> * _Nonnull)values {
+-(NSSet<id> *)values {
 	[self doesNotRecognizeSelector:_cmd];
 	return nil;
 }

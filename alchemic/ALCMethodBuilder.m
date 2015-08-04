@@ -15,8 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodBuilder
 
-@synthesize valueClass = _valueClass;
-
 -(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
 											 selector:(SEL) selector {
 	return nil;
@@ -28,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 	self = [super initWithParentClassBuilder:parentClassBuilder
 											  selector:selector];
 	if (self) {
-		_valueClass = valueClass;
+		self.valueClass = valueClass;
 	}
 	return self;
 }

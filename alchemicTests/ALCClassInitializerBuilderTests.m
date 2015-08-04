@@ -38,14 +38,14 @@
 -(SimpleObject *) runTestWithInitializer:(SEL) initializer macros:(NSArray<id<ALCMacro>> *) macros {
 
 	ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
-
-	ALCClassInitializerBuilder *initBuilder = [classBuilder createInitializerBuilderForSelector:initializer];
+	ALCClassInitializerBuilder *initBuilder = [[ALCClassInitializerBuilder alloc] initWithParentClassBuilder:classBuilder
+																																	selector:initializer];
 	for (id<ALCMacro> macro in macros) {
 		[initBuilder.macroProcessor addMacro:macro];
 	}
 	[initBuilder configure];
 
-	SimpleObject *object = classBuilder.value;
+	SimpleObject *object = initBuilder.value;
 	XCTAssertNotNil(object);
 	return object;
 }

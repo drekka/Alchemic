@@ -49,7 +49,7 @@
 								  ALCMethodBuilder *methodBuilder = [self createBuilderWithSelector:@selector(stringFactoryMethod)
 																												 macros:@[]];
 								  )
-	XCTAssertEqualObjects(@"SimpleObject::stringFactoryMethod", methodBuilder.name);
+	XCTAssertEqualObjects(@"SimpleObject stringFactoryMethod", methodBuilder.name);
 }
 
 -(void) testConfigureWithMacroProcessorName {
@@ -75,8 +75,9 @@
 -(ALCMethodBuilder *) createBuilderWithSelector:(SEL) selector
 													  macros:(NSArray<id<ALCMacro>> *) macros {
 	ignoreSelectorWarnings(
-								  ALCMethodBuilder *methodBuilder = [_parentBuilder createMethodBuilderForSelector:selector
-																																valueClass:[NSString class]];
+								  ALCMethodBuilder *methodBuilder = [[ALCMethodBuilder alloc] initWithParentBuilder:_parentBuilder
+																																	selector:selector
+																																 valueClass:[NSString class]];
 								  )
 	ALCMacroProcessor *macroProcessor = methodBuilder.macroProcessor;
 	for (id<ALCMacro> macro in macros) {

@@ -11,6 +11,8 @@
 
 @protocol ALCResolvable <NSObject>
 
+@property (nonatomic, assign, readonly) BOOL resolved;
+
 /**
  Called during model setup to resolve dependencies into a list of candidate objects.
 

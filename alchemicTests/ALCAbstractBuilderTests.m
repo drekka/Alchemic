@@ -29,6 +29,8 @@
 	return [[SimpleObject alloc] init];
 }
 
+-(void)injectValueDependencies:(nonnull id)value {}
+
 @end
 
 @interface ALCAbstractBuilderTests : XCTestCase {
@@ -85,20 +87,6 @@
 }
 
 #pragma mark - Creating objects
-
--(void) testValueBuildsAndInjects {
-
-	id mockDependency = OCMStrictClassMock([ALCVariableDependency class]);
-	OCMExpect([mockDependency injectInto:[OCMArg isKindOfClass:[SimpleObject class]]]);
-	[_builder.dependencies addObject:mockDependency];
-
-	id value = _builder.value;
-
-	XCTAssertNotNil(value);
-	XCTAssertEqual([SimpleObject class], [value class]);
-
-	OCMVerifyAll(mockDependency);
-}
 
 -(void) testValueCachesWhenNotAFactory {
 	id value1 = _builder.value;
@@ -158,21 +146,5 @@
 	[macroProcessor addMacro:AcArg(NSString, AcValue(@"def"))];
 	XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor], NSException, @"AlchemicIncorrectNumberArguments");
 }
-#pragma mark - Injecting
-
--(void) testInjectObjectDependencies {
-
-	id mockDependency = OCMClassMock([ALCVariableDependency class]);
-	[_builder.dependencies addObject:mockDependency];
-
-	SimpleObject *object = [[SimpleObject alloc] init];
-	OCMExpect([mockDependency injectInto:object]);
-
-	[_builder injectValueDependencies:object];
-
-	OCMVerifyAll(mockDependency);
-	
-}
-
 
 @end

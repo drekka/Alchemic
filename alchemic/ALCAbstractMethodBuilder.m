@@ -14,7 +14,6 @@
 #import "ALCArg.h"
 #import "ALCAlchemic.h"
 #import "ALCContext.h"
-#import "ALCSearchableBuilder.h"
 #import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -56,10 +55,17 @@ NS_ASSUME_NONNULL_BEGIN
 	return nil;
 }
 
+-(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
+	[super resolveWithPostProcessors:postProcessors];
+	if ( ! self.parentClassBuilder.resolved) {
+		[self.parentClassBuilder resolveWithPostProcessors:postProcessors];
+	}
+}
+
 -(id) invokeMethodOn:(id) target {
 	// Get an invocation ready.
 	if (_inv == nil) {
-		STLog(ALCHEMIC_LOG, @"Creating an invocation for '%@' using selector %@", self.name, NSStringFromSelector(_selector));
+		STLog(self.valueClass, @"Creating an invocation for '%@' using selector %@", self.name, NSStringFromSelector(_selector));
 		NSMethodSignature *sig = [[target class] instanceMethodSignatureForSelector:_selector];
 		_inv = [NSInvocation invocationWithMethodSignature:sig];
 		_inv.selector = _selector;
@@ -80,6 +86,12 @@ NS_ASSUME_NONNULL_BEGIN
 	STLog(ALCHEMIC_LOG, @"Returning a %s", class_getName([returnObj class]));
 	return returnObj;
 }
+
+-(void) injectValueDependencies:(id) value {
+	// Pass this to the parent class to finish injecting.
+	[self.parentClassBuilder injectValueDependencies:value];
+}
+
 
 @end
 

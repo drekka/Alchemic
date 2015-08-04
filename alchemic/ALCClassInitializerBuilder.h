@@ -7,8 +7,7 @@
 //
 
 #import "ALCAbstractMethodBuilder.h"
-#import "ALCSearchableBuilder.h"
 
-@interface ALCClassInitializerBuilder : ALCAbstractMethodBuilder<ALCSearchableBuilder>
+@interface ALCClassInitializerBuilder : ALCAbstractMethodBuilder
 
 @end

@@ -8,9 +8,8 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCClass.h"
-
+#import "ALCBuilder.h"
 #import "ALCRuntime.h"
-#import "ALCSearchableBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
     return _aClass;
 }
 
--(BOOL) matches:(id<ALCSearchableBuilder>) builder {
+-(BOOL) matches:(id<ALCBuilder>) builder {
     return [builder.valueClass isSubclassOfClass:_aClass];
 }
 

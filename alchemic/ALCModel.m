@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
     return @"AllClassBuilders";
 }
 
--(BOOL) matches:(id<ALCSearchableBuilder>)builder {
+-(BOOL) matches:(id<ALCBuilder>)builder {
     return [builder isKindOfClass:[ALCClassBuilder class]];
 }
 
@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @implementation ALCModel {
-    NSMutableSet<id<ALCSearchableBuilder>> *_model;
+    NSMutableSet<id<ALCBuilder>> *_model;
     NSCache *_queryCache;
 }
 
@@ -59,12 +59,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Updating
 
--(void) addBuilder:(id<ALCSearchableBuilder>) builder {
+-(void) addBuilder:(id<ALCBuilder>) builder {
     [_model addObject:builder];
     [_queryCache removeAllObjects];
 }
 
--(void) removeBuilder:(id<ALCSearchableBuilder>) builder {
+-(void) removeBuilder:(id<ALCBuilder>) builder {
 	[_model removeObject:builder];
 	[_queryCache removeAllObjects];
 }
@@ -79,7 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [self buildersForSearchExpression:[[AllClassesExpression alloc] init]];
 }
 
--(NSSet<id<ALCSearchableBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
+-(NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
 
     // Quick short cut for single expression queries. Saves building a new set.
     if ([searchExpressions count] == 1) {
@@ -89,9 +89,9 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSArray<id<ALCModelSearchExpression>> *sortedSearchExpressions = [self sortedSearchExpressions:searchExpressions];
 
-    NSMutableSet<id<ALCSearchableBuilder>> *results;
+    NSMutableSet<id<ALCBuilder>> *results;
     for (id<ALCModelSearchExpression> searchExpression in sortedSearchExpressions) {
-        NSSet<id<ALCSearchableBuilder>> *builders = [self buildersForSearchExpression:searchExpression];
+        NSSet<id<ALCBuilder>> *builders = [self buildersForSearchExpression:searchExpression];
         STLog(ALCHEMIC_LOG, @"Found %lu builders for %@", [builders count], searchExpression);
         if (results == nil) {
             // No results yet to go with the set as a base set.
@@ -124,14 +124,14 @@ NS_ASSUME_NONNULL_BEGIN
     return results;
 }
 
--(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCSearchableBuilder>> *) builders {
+-(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders {
 
     if ([builders count] == 0) {
         return builders;
     }
 
     STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
-    NSSet<ALCClassBuilder *> *newBuilders = (NSSet<ALCClassBuilder *> *)[builders objectsPassingTest:^BOOL(id<ALCSearchableBuilder>  builder, BOOL * stop) {
+    NSSet<ALCClassBuilder *> *newBuilders = (NSSet<ALCClassBuilder *> *)[builders objectsPassingTest:^BOOL(id<ALCBuilder>  builder, BOOL * stop) {
         return [builder isKindOfClass:[ALCClassBuilder class]];
     }];
     STLog(ALCHEMIC_LOG, @"Returning %lu class builders", [newBuilders count]);
@@ -140,10 +140,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Internal
 
--(NSSet<id<ALCSearchableBuilder>> *) buildersForSearchExpression:(id<ALCModelSearchExpression>) searchExpression {
+-(NSSet<id<ALCBuilder>> *) buildersForSearchExpression:(id<ALCModelSearchExpression>) searchExpression {
 
     // Check the cache
-    NSSet<id<ALCSearchableBuilder>> *cachedBuilders = [_queryCache objectForKey:searchExpression.cacheId];
+    NSSet<id<ALCBuilder>> *cachedBuilders = [_queryCache objectForKey:searchExpression.cacheId];
     if (cachedBuilders) {
         STLog(ALCHEMIC_LOG, @"Returning cached list of %lu builders for expressions %@", [cachedBuilders count], searchExpression);
         return cachedBuilders;
@@ -151,7 +151,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Find the builders that match the expression.
     STLog(ALCHEMIC_LOG, @"Searching for builders based on expressions %@", searchExpression);
-    NSSet<id<ALCSearchableBuilder>> *builders = [_model objectsPassingTest:^BOOL(id<ALCSearchableBuilder>  builder, BOOL * stop) {
+    NSSet<id<ALCBuilder>> *builders = [_model objectsPassingTest:^BOOL(id<ALCBuilder> builder, BOOL * stop) {
         if ([searchExpression matches:builder]) {
             STLog(ALCHEMIC_LOG, @"Adding builder '%@' %@", builder.name, builder);
             return YES;

@@ -11,7 +11,6 @@
 @protocol ALCBuilder;
 @protocol ALCModelSearchExpression;
 @class ALCClassBuilder;
-@protocol ALCSearchableBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -33,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Querying
 
--(NSSet<id<ALCSearchableBuilder>> *) allBuilders;
+-(NSSet<id<ALCBuilder>> *) allBuilders;
 
 -(NSSet<ALCClassBuilder *> *) allClassBuilders;
 
@@ -42,9 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return a NSSet of builders that return objects of the class.
  */
--(NSSet<id<ALCSearchableBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions;
+-(NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions;
 
--(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCSearchableBuilder>> *) builders;
+-(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders;
 
 @end
 

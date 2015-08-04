@@ -8,8 +8,8 @@
 
 #import "ALCAbstractBuilder.h"
 
-@protocol ALCSearchableBuilder;
 @class ALCClassBuilder;
+@protocol ALCBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
 											 selector:(SEL) selector NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, weak, readonly) id<ALCSearchableBuilder> parentClassBuilder;
+@property (nonatomic, strong, readonly) id<ALCBuilder> parentClassBuilder;
 
 @property (nonatomic, assign, readonly) SEL selector;
 

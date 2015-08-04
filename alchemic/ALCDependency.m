@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
     id<ALCValueSource> _valueSource;
 }
 
+@synthesize resolved = _resolved;
+
 -(instancetype) initWithValueClass:(Class) valueClass
                                valueSource:(id<ALCValueSource>)valueSource {
     self = [super init];
@@ -30,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
+	_resolved = YES;
     [_valueSource resolveWithPostProcessors:postProcessors];
 }
 

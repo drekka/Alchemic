@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize value = _value;
 @synthesize name = _name;
 @synthesize macroProcessor = _macroProcessor;
+@synthesize resolved = _resolved;
+@synthesize valueClass = _valueClass;
 
 #pragma mark - Lifecycle
 
@@ -87,19 +89,9 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 }
 
--(void) injectValueDependencies:(id) value {
-
-	if ([_dependencies count] == 0u) {
-		return;
-	}
-
-	STLog([value class], @"Injecting %lu dependencies into a %s instance", [_dependencies count], object_getClassName(value));
-	for (ALCVariableDependency *dependency in _dependencies) {
-		[dependency injectInto:value];
-	}
-}
-
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
+
+	_resolved = YES;
 
 	if ([_dependencies count] == 0) {
 		STLog(self, @"No dependencies found.");
@@ -133,6 +125,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 #pragma mark - Overridable points
+
+-(void) injectValueDependencies:(id) value {
+	[self doesNotRecognizeSelector:_cmd];
+}
 
 -(void) configure {
 	self.factory = self.macroProcessor.isFactory;

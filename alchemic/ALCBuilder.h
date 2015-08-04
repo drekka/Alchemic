@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Settings
 
+@property (nonatomic, strong, readonly) Class valueClass;
+
 @property (nonatomic, strong) NSString *name;
 
 @property (nonatomic, assign, readonly) BOOL createOnBoot;
@@ -45,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
  Used to inject dependencies after the value has been created.
  */
 -(void) injectValueDependencies:(id) value;
+
 
 @property (nonatomic, strong) id value;
 

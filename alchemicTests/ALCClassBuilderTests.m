@@ -70,22 +70,6 @@
 	XCTAssertEqual(stringVar, dependency.variable);
 }
 
--(void) testCreatesInitializerBuilder {
-	ALCClassInitializerBuilder *initBuilder = [_builder createInitializerBuilderForSelector:@selector(init)];
-	XCTAssertNotNil(initBuilder);
-	id<ALCBuilder> parentBuilder = initBuilder.parentClassBuilder;
-	XCTAssertEqual(_builder, parentBuilder);
-}
-
--(void) testAddMethodBuilder {
-	ignoreSelectorWarnings(
-								  ALCMethodBuilder *methodBuilder = [_builder createMethodBuilderForSelector:@selector(stringFactoryMethod)
-																														valueClass:[NSString class]];
-								  )
-	id<ALCBuilder> parentBuilder = methodBuilder.parentClassBuilder;
-	XCTAssertEqual(_builder, parentBuilder);
-}
-
 -(void) testResolveDependencies {
 
 	id mockDependency = OCMClassMock([ALCVariableDependency class]);
@@ -101,39 +85,11 @@
 
 }
 
--(void) testResolveDependenciesCascadesToInitializer {
-
-	id mockDependency = OCMClassMock([ALCVariableDependency class]);
-	Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
-	object_setIvar(_builder, dependenciesVar, [NSMutableSet setWithObject:mockDependency]);
-
-	id mockInitializer = OCMClassMock([ALCClassInitializerBuilder class]);
-	Ivar initializerVar = class_getInstanceVariable([ALCClassBuilder class], "_initializerBuilder");
-	object_setIvar(_builder, initializerVar, mockInitializer);
-
-	NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet set];
-	OCMExpect([mockDependency resolveWithPostProcessors:postProcessors]);
-	OCMExpect([mockInitializer resolveWithPostProcessors:postProcessors]);
-
-	[_builder resolveWithPostProcessors:postProcessors];
-
-	OCMVerifyAll(mockDependency);
-	OCMVerifyAll(mockInitializer);
-
-}
-
-
 #pragma mark - Instantiating
 
 -(void) testInstantiateObjectViaInit {
 	id object = [_builder instantiateObject];
 	XCTAssertEqual([SimpleObject class], [object class]);
-}
-
--(void) testInstantiateObjectUsingInitializer {
-	[_builder createInitializerBuilderForSelector:@selector(init)];
-	id resultObject = [_builder instantiateObject];
-	XCTAssertTrue([resultObject isKindOfClass:[SimpleObject class]]);
 }
 
 @end

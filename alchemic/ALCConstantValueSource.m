@@ -30,7 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 	return [NSSet setWithObject:_value];
 }
 
--(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors {}
+-(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors {
+	[super resolveWithPostProcessors:postProcessors];
+}
+
 -(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {}
 
 @end
