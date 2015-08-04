@@ -92,4 +92,33 @@
 	XCTAssertEqual([SimpleObject class], [object class]);
 }
 
+#pragma mark - Injecting
+
+-(void) testInjecting {
+
+	SimpleObject *object = [[SimpleObject alloc] init];
+
+	id mockDependency = OCMClassMock([ALCVariableDependency class]);
+	Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
+	object_setIvar(_builder, dependenciesVar, [NSMutableSet setWithObject:mockDependency]);
+	OCMExpect([mockDependency injectInto:object]);
+
+	[_builder injectValueDependencies:object];
+
+	XCTAssertTrue(object.didInject);
+	OCMVerifyAll(mockDependency);
+}
+
+-(void) testDidInjectDependenciesCalledWhenNoDependencies {
+
+	SimpleObject *object = [[SimpleObject alloc] init];
+
+	Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
+	object_setIvar(_builder, dependenciesVar, [NSMutableSet set]);
+
+	[_builder injectValueDependencies:object];
+
+	XCTAssertTrue(object.didInject);
+}
+
 @end

@@ -298,15 +298,6 @@
 			name = Runtime;
 			sourceTree = "<group>";
 		};
-		6C214EFF1B319B4E00C1D33D /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				6C5F142C1B64B54800E119FC /* SimpleObject.h */,
-				6C5F142D1B64B54800E119FC /* SimpleObject.m */,
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
 		6C4655F21B54D58500FD1D28 /* Value */ = {
 			isa = PBXGroup;
 			children = (
@@ -349,7 +340,8 @@
 		6C5F170A1B61195500F60B1B /* Test support */ = {
 			isa = PBXGroup;
 			children = (
-				6C214EFF1B319B4E00C1D33D /* Model */,
+				6C5F142C1B64B54800E119FC /* SimpleObject.h */,
+				6C5F142D1B64B54800E119FC /* SimpleObject.m */,
 				6C37A6EF1A9B339500ACD0F8 /* ALCTestCase.h */,
 				6C37A6F01A9B339500ACD0F8 /* ALCTestCase.m */,
 			);

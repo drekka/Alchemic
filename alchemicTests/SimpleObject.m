@@ -35,4 +35,8 @@
 	return @"abc";
 }
 
+-(void) didInjectDependencies {
+	_didInject = YES;
+}
+
 @end

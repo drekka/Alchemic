@@ -7,10 +7,12 @@
 //
 
 @import Foundation;
+#import "AlchemicAware.h"
 
-@interface SimpleObject : NSObject
+@interface SimpleObject : NSObject<AlchemicAware>
 @property (nonatomic, strong) NSString *aStringProperty;
 @property (nonatomic, assign) BOOL stringFactoryWithAStringCalled;
+@property (nonatomic, assign, readonly) BOOL didInject;
 -(instancetype) initAlternative;
 -(instancetype) initWithString:(NSString *) aString;
 -(NSString *) stringFactoryMethod;

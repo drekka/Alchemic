@@ -10,11 +10,15 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
-@interface CISimpleObject : NSObject
+@interface CISimpleObject : NSObject<AlchemicAware>
+@property (nonatomic, assign, readonly) BOOL injected;
 @end
 
 @implementation CISimpleObject
 AcRegister()
+-(void)didInjectDependencies {
+	_injected = YES;
+}
 @end
 
 @interface ClassIntegrationTests : ALCTestCase
@@ -32,6 +36,7 @@ AcInject(simpleObject)
 	[self addClassesToContext:@[[CISimpleObject class], [ClassIntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertNotNil(self.simpleObject);
+	XCTAssertTrue(self.simpleObject.injected);
 }
 
 @end

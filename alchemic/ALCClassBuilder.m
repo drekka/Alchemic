@@ -17,6 +17,7 @@
 #import "ALCMacroProcessor.h"
 #import "ALCModelValueSource.h"
 #import "ALCValueSourceFactory.h"
+#import "AlchemicAware.h"
 
 @implementation ALCClassBuilder
 
@@ -52,14 +53,17 @@
 }
 
 -(void) injectValueDependencies:(id) value {
-
-	if ([self.dependencies count] == 0u) {
-		return;
+	
+	if ([self.dependencies count] > 0u) {
+		STLog([value class], @"Injecting %lu dependencies into a %s instance", [self.dependencies count], object_getClassName(value));
+		for (ALCVariableDependency *dependency in self.dependencies) {
+			[dependency injectInto:value];
+		}
 	}
 
-	STLog([value class], @"Injecting %lu dependencies into a %s instance", [self.dependencies count], object_getClassName(value));
-	for (ALCVariableDependency *dependency in self.dependencies) {
-		[dependency injectInto:value];
+	if ([value respondsToSelector:@selector(didInjectDependencies)]) {
+		STLog([value class], @"Notifying that inject did finish");
+		[value didInjectDependencies];
 	}
 }
 

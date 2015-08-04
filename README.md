@@ -437,12 +437,12 @@ If you use a class that had Alchemic dependencies in a story board or in some ot
 
 Alchemic will then inject any known dependencies.
 
-## ![Underconstruction](./images/alchemic-underconstruction.png) Callbacks
+## Callbacks
 
 Sometimes it's useful to know when Alchemic has finished injecting values into an object. To facilitate this, a callback method can be added to your class like this:
 
 ```objectivec
-@implementation {
+@implementation MyClass {
     YetAnotherClass *_yetAnotherClass;
 }
 
@@ -455,7 +455,13 @@ AcInject(_yetAnotherClass)
 @end
 ```
 
-This method will automatically be called after all dependencies have been injected.
+This method will automatically be called after all dependencies have been injected. This call back has also been added as a protocol you can implement if you like:
+
+```objectivec
+@interface MyClass : NSObject<AlchemicAware>
+```
+
+Alchemic does not require this protocol. It's merely there if you want to formalise the callback.
 
 # Configuration
 
