@@ -10,7 +10,7 @@ The problem that we have to deal with as developers is where do we get the *TV* 
 
 #### 1. Singletons
 
-One solution that is (over!) used in Objective-C projects is the [Singleton pattern](https://en.wikipedia.org/wiki/Singleton_pattern). In essence each class hold a reference to an object which can be accessed by sending a message to the class. 
+One solution that is (over!) used in Objective-C projects is the [Singleton pattern](https://en.wikipedia.org/wiki/Singleton_pattern). In essence each class hold a reference to an instance of itself which can be accessed by sending a message to the class. This means that there can be one occurance of that given class.
 
 *TV.h*
 
@@ -106,7 +106,7 @@ This [pattern](https://en.wikipedia.org/wiki/Dependency_injection) is usedful wh
 
 But manual DI like this has problems as well. Mainly that you have to manage the creation and injection of the relevant objects yourself. This can rapidly become quite onerous and annoying and end up costing you a lot of code to create, store and inject objects when needed. Especially when the distance (in code terms) between where an object is created and where it is used is quite large.
 
-*Also note that DI is a core part of [Inversion of Control (IoC)](https://en.wikipedia.org/wiki/Inversion_of_control), which you may also have heard of.*
+DI is also a core part of [Inversion of Control (IoC)](https://en.wikipedia.org/wiki/Inversion_of_control), which you may also have heard of.
 
 My recommendation - *Reality is that the best code is usually a combination of all 3 techniques. It's about knowing what to use where!* 
  
@@ -132,6 +132,6 @@ AcInject(tv)
 
 This is a simple example using ***[Alchemic](README.md)***. There are a number of ways to handle injections, but the above is the simplest. The `AcRegister()` and `AcInject(tv)` macros are recognized by the Alchemic framework which does all the dirty work of managing the objects. In this example, Alchemic will create an instance of *RemoteControl* as a singleton and automatically inject an instance of *TV* into it.
 
-So without having to manually manage everything, you can simply tell the framework what you need, and where you need it. Most DI frameworks will perform a range of other useful functionality as we, but creating and injecting objects is the core functionality they all should provide.
+So without having to manually manage everything, you can simply tell the framework what you need, and where you need it. Most DI frameworks will perform a range of other useful functionality as well, but creating and injecting objects is the core functionality they all should provide.
 
 My final recommendation - *DI frameworks can really help simplify things, especially with large code bases. But if the framework is not making your code simpler and easier to understand, don't use it!*
