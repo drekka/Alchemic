@@ -92,7 +92,7 @@ PEGKit.framework | Used by StoryTeller and already included as a sub-framework. 
 
 ## Starting
 
-Alchemic will automatically start itself when the app loads. During this process it will following this sequence of events:
+Alchemic will automatically start itself when the app loads. During this process it will follow this sequence of events:
 
 1. Start itself on a background thread.
 2. Scan all classes in your app for dependency injection commands. 
@@ -122,7 +122,7 @@ To use Alchemic you will need to do an import at the top of any source code wher
 #import <Alchemic/Alchemic.h>
 ```
 
-*Because Alchemic works with the runtime, it accesses the classes rather than the headers. This means it can access methods and initializers that are not declared in headers or visible to other classes.  The advantage of this s that it gives you the ability to create initializers and methods which only Alchemic can see. This can make the interfaces declared in your headers much simpler.*
+*Because Alchemic works with the runtime, it accesses the classes rather than the headers. This means it can access methods and initializers that are not declared in headers or visible to other classes.  The advantage of this is that it gives you the ability to create initializers and methods which only Alchemic can see. This can make the interfaces declared in your headers much simpler.*
 
 ## The context
 

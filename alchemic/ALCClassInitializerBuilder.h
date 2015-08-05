@@ -8,6 +8,13 @@
 
 #import "ALCAbstractMethodBuilder.h"
 
+/**
+ An ALCBuilder that can construct objects by using a specific initializer. 
+ 
+ @discussion The initiailizer can have arguments and they must be matched by `AcArg(...)` macros.
+ 
+ @see AcInitializer(...) macro.
+ */
 @interface ALCClassInitializerBuilder : ALCAbstractMethodBuilder
 
 @end

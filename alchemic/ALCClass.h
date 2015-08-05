@@ -14,14 +14,25 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Wraps an argument so that it can be conveniantly passed around.
+ Defines a search expression for model objects based on a specific class.
  */
 @interface ALCClass : NSObject<ALCModelSearchExpression, ALCValueDefMacro, ALCMacro>
 
+/// The class to look for on model objects.
 @property (nonatomic, assign, readonly) Class aClass;
 
+/**
+ Default initializer.
+ 
+ @param aClass The class to look for.
+ */
 +(instancetype) withClass:(Class) aClass;
 
+/**
+ Tests the passed class to see if it matches the class desired.
+ 
+ @param withClass The class to test. If it matches or is a decendant of aClass then YES is returned.
+ */
 -(BOOL) isEqualToClass:(ALCClass *) withClass;
 
 @end
