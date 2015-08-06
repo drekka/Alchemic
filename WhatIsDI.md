@@ -102,7 +102,7 @@ So my recommendation here is - *Use method arguments when the method works with 
 
 #### Via initializers
 
-Another technique for injecting dependencies into a class is to pass them as arguments on an intializer. This is similar to passing them to methods, the difference is the timing. With injection via initializers, the dependencies are set before methods are called and must be stored for later use. 
+Another technique for injecting dependencies into a class is to pass them as arguments on an intializer. This is similar to passing them to methods, the difference is the timing. With injection via initializers, the dependencies have to be available before the class is instantiated and must be stored by the initializer for later use. 
 
 *RemoteControl.h*
 
@@ -140,7 +140,7 @@ RemoteControl *rc = [[RemoteControl alloc] initWithTV:tv];
 ```
 
 
-Now the *TV* is injected into the *RemoteControl* class when initializing and stored internally until needed. The real gain from initializer injection is when dealing with dependencies that are long lived. In our example, where a *RemoteControl* will always be using the same *TV*. It aleviates the need to pass dependencies via method arguments as objects already have everything they need.
+Now the *TV* is injected into the *RemoteControl* class when initialising and stored internally until needed. The real gain from initializer injection is that it is clear what the class needs from it's initializer and you cannot accidentally miss anything. It's also especially good when dealing with dependencies that are long lived. for example, where a *RemoteControl* will always be using the same *TV*. finally, alleviates the need to pass dependencies via method arguments as objects already have everything they need.
 
 #### Via Properties
 
@@ -173,15 +173,13 @@ rc.tv = tv;
 
 Whilst taking less code than initializers, using properties for injection is not as reliable as using initializers because there is the chance that the developer will forget to set them. Looking at the interfaces of objects there is also no real indicator as to which properties are essential for the classes operation. But other than that there is no real difference between using properties and using initializers.
 
-My recommendation - *Reality is that the best code is usually a combination of Singletons and the various forms of DI. It's about knowing what to use where!* 
+My recommendation - *The reality of programming is that the best code is usually a combination of Singletons, method argument, initializer and property based DI. It's about knowing what to use where!* 
 
 ## DI frameworks
  
-DI done using the above examples has problems as well. Mainly that you have to manage the creation and injection of the relevant objects yourself, and you have to make sure that they are available wherever in your code you need them. This can become quite onerous, annoying and end up costing you a lot of code to create, store and inject objects when needed. Especially when the distance (in code terms) between where an object is created and where it is used is quite large.
+All of the above examples still have one core problem - that you have to manage the creation and injection of the relevant objects yourself, and make sure that they are available wherever needed in your code. This can become quite onerous, annoying and end up costing you a lot of code to create, store and inject objects. Especially when the distance (in code terms) between where an object is created and where it is used is quite large or the code to access an object is not simple.
 
-So what is a DI framework and why would you use one? 
-
-The idea behind a DI framework is to do the common grunt work of managing objects and injections for you. A DI framework should allow you to write code without worrying about any of this stuff. All you should have to do is tell it what you need and where you need it.
+This is where DI frameworks are designed to help. The idea behind them is to do the common grunt work of managing objects and injections for you. Essentially a DI framework should allow you to write code without worrying about any of this stuff. All you should have to do is tell it what you need and where you need it.
 
 *TV.m*
 
@@ -215,6 +213,6 @@ RemoteControl *rc = AcGet(AcClass(RemoteControl));
 
 This is a simple example using ***[Alchemic](README.md)***. The `AcRegister()` and `AcInject(tv)` macros are the Alchemic framework's technique for managing the objects. In this example, Alchemic will create an instance of *TV* and *RemoteControl* as a singletons and automatically inject the *TV* object into the *RemoteControl* object.
 
-So without having to manually manage everything, you can simply tell the framework what you need, and where you need it. Most DI frameworks will perform a range of other useful functionality as well, but creating and injecting objects is the core functionality they all should provide.
+So without having to manually manage everything, you can simply tell the framework what you need, and where you need it. Most DI frameworks will perform a range of other useful functionality as well, but creating, managing and injecting objects is the core functionality they all should provide with a minimum of fuss.
 
-My final recommendation - *DI frameworks can really help simplify things, especially with large code bases. But if the framework is not making your code simpler and easier to understand, don't use it!*
+My final recommendation - *DI frameworks can really help simplify things, especially with large code bases. But if the framework is not making your code simpler and easier to understand, shop elsewhere!*
