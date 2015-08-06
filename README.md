@@ -1,6 +1,9 @@
 # Alchemic
 By Derek Clarkson
 
+Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Macro reference](./macros.md)
+
+
 ![Underconstruction](./images/alchemic-underconstruction.png) ***Currently Alchemic is in development.*** Wherever you see this logo, it means that this section of Alchemic is still being worked on. 
 
  * [Installation](#installation)
@@ -25,13 +28,12 @@ By Derek Clarkson
          * [Property values](#-property-values)
      * [Arrays](#arrays)
  * [Factory methods](#factory-methods)
+ * [Programmatically obtaining objects](#-programmatically-obtaining-objects)
  * [Unmanaged instances](#unmanaged-instances)
  * [Callbacks](#callbacks)
  * [Configuration](#configuration)
  * [Circular dependencies](#circular-dependencies)
  * [Credits](#credits)
-
- * [Macro reference](./macros.md)
 
 #Intro
 
@@ -329,7 +331,7 @@ AcInject(_message, AcValue(@"hello world"))
 
 *Note: If defining arguments for a [factory method](#factory-method), `AcWithValue(...)` can be used for individual arguments along side other arguments that search the model for objects. See [Factory methods](#factory-methods) for more details.*
 
-## ![Underconstruction](./images/alchemic-underconstruction.png) Property values
+### ![Underconstruction](./images/alchemic-underconstruction.png) Property values
 
 Property values are sourced from data sources such as Plist files or localization files. To access them you need to have the ***key*** of the value you need to obtain and use the `AcProperty(...)` macro like this:
 
@@ -418,6 +420,16 @@ AcMethod(NSURLConnection, serverConnectionWithURL:retries:,
 Here we need to use `AcArg(...)` macros that will allow Alchemic to locate values to be passed to the method's arguments. Alchemic uses this information to select appropriate values and pass them as method arguments to the factory method when it's creating an instance with it. It needs both the type of the argument and how to locate the value.
 
 Unlike variable dependencies, which can appear in any order, `AcArg(...)` arguments **must appear in the same order as the selector arguments**. Alchemic will use the argument order to match the selector arguments.
+
+# ![Underconstruction](./images/alchemic-underconstruction.png) Programmatically obtaining objects
+
+Sometimes (in testing for example) you want to get an object from Alchemic without specifying an injection. this can be easily done via this macro:
+
+```objectivec
+NSDateFormatter *formatter = AcGet(AcName(@"JSON date formatter"));
+```
+
+`AcGet(...)` takes the same arguments as `AcInject(...)`. Namely the `AcClass(...)`, `AcProtocol(...)`, `Acname(...)`, `AcValue(...)` or '`AcProperty(...)` macros. Thus allowing you to obtain any value from Alchemic that you need, using the same code you would use to do an injection. 
 
 # Unmanaged instances
 
