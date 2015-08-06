@@ -13,11 +13,12 @@ Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Macro referen
      * [Adding to your code](#adding-to-your-code)
      * [The context](#the-context)
  * [Macros](#macros)
- * [Declaring objects](#declaring-objects)
+ * [Creating objects](#creating-objects)
       * [Singletons](#singletons)
       * [Initializers](#initializers)
       * [Factories](#factories)
       * [Object names](#object-names)
+      * [Generating objects using methods](#generating-objects-using-methods)
       * [Primary objects](#primary-objects)
           * [Primary objects and testing](#primary-objects-and-testing)
  * [Injecting dependencies](#injecting-dependencies)
@@ -27,9 +28,9 @@ Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Macro referen
          * [Constant values](#constant-values)
          * [Property values](#-property-values)
      * [Arrays](#arrays)
- * [Factory methods](#factory-methods)
- * [Programmatically obtaining objects](#-programmatically-obtaining-objects)
- * [Unmanaged instances](#unmanaged-instances)
+ * [Getting objects](#getting-objects)
+     * [Unmanaged instances](#unmanaged-instances)
+     * [Programmatically obtaining objects](#programmatically-obtaining-objects)
  * [Callbacks](#callbacks)
  * [Configuration](#configuration)
  * [Circular dependencies](#circular-dependencies)
@@ -149,9 +150,9 @@ Most of these macros take one or more arguments. For example the `AcArg(...)` ma
  * Property names are also shortened. So that code completion can assist, they are **not** expressioned as strings. For example `AcInject(myVar)` 
  * Many macros make use of varadic lists so you can add as many criteria as you like in a single line.
 
-# Declaring objects
+# Creating objects
 
-Before we look at resolving dependencies and injecting values, we first need to look at declaring classes so that Alchemic can find them.
+Before we look at resolving dependencies and injecting values, we first need to look at how we tell Alchemic about the objects we want to create.
 
 ## Singletons 
 
@@ -211,6 +212,62 @@ Here's how we assign a custom name during registration:
 ```objectivec
 AcRegister(AcWithName(@"JSON date formatter"))
 ```
+
+## Generating objects using methods
+
+*Note: This is a seperate subject because it's slightly more complex to setup than classes and dependencies.* 
+
+Sometimes we want to use methods to create objects for injecting into dependencies. For example, we might want to have a method that generates a `Transaction` object based on some passed arguments and we want a new transaction each time we inject one into a class.
+
+Unfortunately the Objective-C runtime does not track any information about the argument and return types of methods. Only for variables. It can tell us how many arguments there are and whether they are primitive types, structs or objects, but thats pretty much it. The up shot is that there is no way for Alchemic to automatically discover information about a method at runtime beyond this basic information. So when using methods we have to define more information so that Alchemic knows how to use it.
+
+Lets take a look at two sample methods:
+
+```objectivec
+@implementation Factory {
+    int x;
+}
+
+AcMethod(Database, generateDatabaseConnection)
+-(id<DBConnection>) generateDatabaseConnection {
+    // Complexe connection setup code.
+    return dbConn;
+}
+
+AcMethod(NSString, makeATransaction, AcIsFactory))
+-(NSString *) makeATransaction {
+    return [[Transaction alloc] 
+        initWithName:[NSString stringWithFormat:@"Transaction %i", ++x]];
+}
+@end
+```
+
+We use the `AcMethod(...)` macro to define ay method that can create objects. This macro is similar to `AcRegister(...)` in that it registers a source of objects which can be injected into other things. 
+
+The first example creates a singleton instance. Alchemic will only call the method once and reuse the returned object every time it needs it. This allows you to utilise more complex code to setup singletons when you need it. The second example which generates transactions needs to generate a new one each time it is needed. So this one has the `AcIsFactory` flag. 
+
+*Note: You will also notice that we don't need to register the class separately. Alchemic is smart enough to register the class automatically and create it hen necessary to access it's factory methods. If you want to tweak the class you can still use a `AcRegister(...) macro. Otherwise it's not needed.*
+
+Factory method registrations are stored in the Alchemic context along side the classes. For their names, Alchemic uses a combination of the class and method selector. Like class registrations, you can make use of the `AcWithName(...)` macro to give a factory method a more meaningful and useful associated name. 
+
+Now lets take a look at a factory method that takes arguments:
+
+```objectivec
+AcMethod(NSURLConnection, serverConnectionWithURL:retries:,
+	AcWithName(@"serverConnection"), 
+	AcArg(NSURL, AcName(@"db-server-url")),
+	AcArg(NSNumber, AcValue(@5))
+	)
+-(NSURLConnection *) serverConnectionWithURL:(NSURL *) url 
+                                     retries:(NSNumber *) retries {
+    // lots of complex setup code here that creates newConnection.
+    return newConnection;
+}
+```
+
+Here we need to use `AcArg(...)` macros that will allow Alchemic to locate values to be passed to the method's arguments. Alchemic uses this information to select appropriate values and pass them as method arguments to the factory method when it's creating an instance with it. It needs both the type of the argument and how to locate the value.
+
+Unlike variable dependencies, which can appear in any order, `AcArg(...)` arguments **must appear in the same order as the selector arguments**. Alchemic will use the argument order to match the selector arguments.
 
 ## Primary objects
 
@@ -365,86 +422,15 @@ AcInject(_dateFormatters, AcClass(NSdateFormatter))
 
 When processing the available objects to inject, Alchemic will automatically check for the target type being an array and adjust it's injection accordingly, wrapping objects in NSArrays as required.
 
-# Factory methods
+# Getting objects
 
-*Note: This is a seperate subject because it's slightly more complex to setup than classes and dependencies.* 
+Now that we know how to declare objects and inject them, lets look at how we retieve objects in classes and code which is not managed by Alchemic. In other words, how to access objects in the rest of your app.
 
-Sometimes we want to use methods to create objects for injecting into dependencies. For example, we might want to have a method that generates a `Transaction` object based on some passed arguments and we want a new transaction each time we inject one into a class.
+## Unmanaged instances
 
-Unfortunately the Objective-C runtime does not track any information about the argument and return types of methods. Only for variables. It can tell us how many arguments there are and whether they are primitive types, structs or objects, but thats pretty much it. The up shot is that there is no way for Alchemic to automatically discover information about a method at runtime beyond this basic information. So when using methods we have to define more information so that Alchemic knows how to use it.
+Not all objects can be created and injected by Alchemic. For example, UIViewControllers in storyboards are created by the storyboard. Whilst I looked at several options for automatically injecting these instances, I did not find any that worked reliably and didn't require a lot of effort to code. So for the moment Alchemic does not inject dependencies into these classes them automatically.
 
-Lets take a look at two sample methods:
-
-```objectivec
-@implementation Factory {
-    int x;
-}
-
-AcMethod(Database, generateDatabaseConnection)
--(id<DBConnection>) generateDatabaseConnection {
-    // Complexe connection setup code.
-    return dbConn;
-}
-
-AcMethod(NSString, makeATransaction, AcIsFactory))
--(NSString *) makeATransaction {
-    return [[Transaction alloc] 
-        initWithName:[NSString stringWithFormat:@"Transaction %i", ++x]];
-}
-@end
-```
-
-We use the `AcMethod(...)` macro to define ay method that can create objects. This macro is similar to `AcRegister(...)` in that it registers a source of objects which can be injected into other things. 
-
-The first example creates a singleton instance. Alchemic will only call the method once and reuse the returned object every time it needs it. This allows you to utilise more complex code to setup singletons when you need it. The second example which generates transactions needs to generate a new one each time it is needed. So this one has the `AcIsFactory` flag. 
-
-*Note: You will also notice that we don't need to register the class separately. Alchemic is smart enough to register the class automatically and create it hen necessary to access it's factory methods. If you want to tweak the class you can still use a `AcRegister(...) macro. Otherwise it's not needed.*
-
-Factory method registrations are stored in the Alchemic context along side the classes. For their names, Alchemic uses a combination of the class and method selector. Like class registrations, you can make use of the `AcWithName(...)` macro to give a factory method a more meaningful and useful associated name. 
-
-Now lets take a look at a factory method that takes arguments:
-
-```objectivec
-AcMethod(NSURLConnection, serverConnectionWithURL:retries:,
-	AcWithName(@"serverConnection"), 
-	AcArg(NSURL, AcName(@"db-server-url")),
-	AcArg(NSNumber, AcValue(@5))
-	)
--(NSURLConnection *) serverConnectionWithURL:(NSURL *) url 
-                                     retries:(NSNumber *) retries {
-    // lots of complex setup code here that creates newConnection.
-    return newConnection;
-}
-```
-
-Here we need to use `AcArg(...)` macros that will allow Alchemic to locate values to be passed to the method's arguments. Alchemic uses this information to select appropriate values and pass them as method arguments to the factory method when it's creating an instance with it. It needs both the type of the argument and how to locate the value.
-
-Unlike variable dependencies, which can appear in any order, `AcArg(...)` arguments **must appear in the same order as the selector arguments**. Alchemic will use the argument order to match the selector arguments.
-
-# ![Underconstruction](./images/alchemic-underconstruction.png) Programmatically obtaining objects
-
-Sometimes (in testing for example) you want to get an object from Alchemic without specifying an injection. this can be easily done via this macro:
-
-```objectivec
-NSDateFormatter *formatter = AcGet(NSDateFormatter, AcName(@"JSON date formatter"));
-```
-
-`AcGet(...)` takes similar arguments to `AcInject(...)`. Namely a type (instead of a variable name) followed by one or more `AcClass(...)`, `AcProtocol(...)`, `AcName(...)`, `AcValue(...)` or '`AcProperty(...)` macros. 
-
-The **return type** is needed so that the returned values can be properly set. It also means that you can (if you like) skip defining the search criteria for model objects like this:
-
-```objectivec
-NSDateFormatter *formatter = AcGet(NSDateFormatter);
-```
-
-Without any criteria, Alchemic will use the passed return type to determine the search criteria for scanning the model.
-
-
-# Unmanaged instances
-
-Not all objects are managed by Alchemic. For example, UIViewControllers in storyboards are created by the storyboard. Whilst I looked at several options for automatically injecting these instances, I did not find any that worked reliably and didn't require a lot of effort to code. So for the moment Alchemic does not manage them automatically.
-
-If you use a class that had Alchemic dependencies in a story board or in some other situation where instances are created, you need a way to inject those dependencies. The easiest way is to add a call to Alchemic into it's initializer like this:
+You can still declare dependencies in these classes and get them injected as if Alchemic had automatically done it. You just have to make the call to trigger the injection process programmatically like this:
 
 ```objectivec
 -(instancetype) initWithFrame:(CGRect) aFrame {
@@ -456,7 +442,31 @@ If you use a class that had Alchemic dependencies in a story board or in some ot
 }
 ```
 
-Alchemic will then inject any known dependencies.
+You can add the `AcInjectDependencies(...)` macro anywhere in the class. For example you might do it in the `viewDidLoad` method lf a `UIViewController`. 
+
+## Programmatically obtaining objects
+
+Sometimes (in testing for example) you want to get an object from Alchemic without specifying an injection. this can be easily done via this macro:
+
+```objectivec
+NSDateFormatter *formatter = AcGet(NSDateFormatter, AcName(@"JSON date formatter"));
+```
+
+`AcGet(...)` requires the first argument to be the type of what will be returned. This type is needed because the runtime does not know what is expected to be returned and Alchemic needs this information to finish processing the results. 
+
+Arguments after the type are search criteria macros used to find the object. So `AcClass(...)`, `AcProtocol(...)`, `AcName(...)`, `AcValue(...)` or '`AcProperty(...)` macros are all useable to either search the context for objects or set a specific value. Note that `AcGet(...)` also does standard Alchemic `NSArray` processing. For example the following code will return an array of all Alchemic registered date formatters:*
+
+```objectivec
+NSArray *formatters = AcGet(NSArray, AcClass(NSDateFormatter));
+```
+
+Finally, you can leave out the search criteria macros like this:
+
+```objectivec
+NSDateFormatter *formatter = AcGet(NSDateFormatter);
+```
+
+Without any criteria, Alchemic will use the passed return type to determine the search criteria for scanning the model based in it's class and any applicable protocols.
 
 ## Callbacks
 

@@ -78,6 +78,7 @@
 		6C5F171A1B626A9A00F60B1B /* ALCAbstractValueSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F17181B626A9A00F60B1B /* ALCAbstractValueSource.m */; };
 		6C5F171C1B626FF900F60B1B /* ALCAbstractValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F171B1B626FF900F60B1B /* ALCAbstractValueSourceTests.m */; };
 		6C62C9491B54F339009D57C7 /* ALCConstantValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C62C9461B54F204009D57C7 /* ALCConstantValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C7170001B7391AA00634112 /* RetrievingIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C716FFF1B7391AA00634112 /* RetrievingIntegrationTests.m */; };
 		6C7F24EA1B4B564B007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
 		6C7F24EB1B4B565E007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
 		6C7F24ED1B4B5A9F007A44C8 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -199,6 +200,7 @@
 		6C66DC5E1A903204009F9D94 /* ALCContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCContext.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C6D00A81AB70BB500984CF7 /* AlchemicAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlchemicAware.h; sourceTree = "<group>"; };
 		6C7145601B44238900EBC055 /* StoryTellerConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = StoryTellerConfig.json; sourceTree = "<group>"; };
+		6C716FFF1B7391AA00634112 /* RetrievingIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RetrievingIntegrationTests.m; sourceTree = "<group>"; };
 		6C781EA21B24258C001D86CB /* ALCIsFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCIsFactory.h; sourceTree = "<group>"; };
 		6C781EA31B24258C001D86CB /* ALCIsFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCIsFactory.m; sourceTree = "<group>"; };
 		6C781EAC1B2595B8001D86CB /* ALCWithName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCWithName.h; sourceTree = "<group>"; };
@@ -407,26 +409,27 @@
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;
 			children = (
+				6C55E6381B70617D004A6305 /* ALCAlchemicTests.m */,
+				6CDE85D61B73121F006E24F2 /* ALCContextTests.m */,
 				6C5F170C1B611ADA00F60B1B /* ALCInternalMacroTests.m */,
-				6C5F14271B63DB6400E119FC /* Builders */,
-				6C95EDEA1B68A3D2004D8F74 /* Dependencies */,
-				6C8CD96A1B561E0500C1BC7F /* Macros */,
-				6CFFAED71B44F2E50084A368 /* Model */,
-				6CAC887F1B4A6C4B00AFB8E4 /* Runtime */,
-				6C5F170A1B61195500F60B1B /* Test support */,
-				6C8FF8A11B68EB8400B2B90A /* ClassIntegrationTests.m */,
-				6CFE92031B69FCDD00BEAC0B /* FactoryIntegrationTests.m */,
-				6CFE92061B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m */,
-				6CF28C631B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m */,
-				6CF28C651B6B14EB00E3A36E /* MethodFactoryIntegrationTests.m */,
-				6CF28C671B6B312800E3A36E /* InitializerIntegrationTests.m */,
 				6C55E6321B6B531D004A6305 /* ArraysIntegrationTests.m */,
+				6C5F14271B63DB6400E119FC /* Builders */,
 				6C8FF8A51B6BCBD300B2B90A /* CircularDependency1IntegrationTests.m */,
 				6C8FF8A71B6D12B500B2B90A /* CircularDependency2IntegrationTests.m */,
 				6C8FF8A91B6D17B100B2B90A /* CircularDependency3IntegrationTests.m */,
 				6C55E6341B6F38BF004A6305 /* CircularDependency4IntegrationTests.m */,
-				6C55E6381B70617D004A6305 /* ALCAlchemicTests.m */,
-				6CDE85D61B73121F006E24F2 /* ALCContextTests.m */,
+				6C8FF8A11B68EB8400B2B90A /* ClassIntegrationTests.m */,
+				6C95EDEA1B68A3D2004D8F74 /* Dependencies */,
+				6CFE92031B69FCDD00BEAC0B /* FactoryIntegrationTests.m */,
+				6CF28C671B6B312800E3A36E /* InitializerIntegrationTests.m */,
+				6C8CD96A1B561E0500C1BC7F /* Macros */,
+				6CF28C651B6B14EB00E3A36E /* MethodFactoryIntegrationTests.m */,
+				6CF28C631B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m */,
+				6CFFAED71B44F2E50084A368 /* Model */,
+				6CFE92061B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m */,
+				6C716FFF1B7391AA00634112 /* RetrievingIntegrationTests.m */,
+				6CAC887F1B4A6C4B00AFB8E4 /* Runtime */,
+				6C5F170A1B61195500F60B1B /* Test support */,
 			);
 			name = "Unit tests";
 			path = alchemicTests;
@@ -764,6 +767,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */,
+				6C7170001B7391AA00634112 /* RetrievingIntegrationTests.m in Sources */,
 				6CFE92071B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m in Sources */,
 				6CDE85D71B73121F006E24F2 /* ALCContextTests.m in Sources */,
 				6C2421031B62006000884A93 /* ALCConstantValueSourceTests.m in Sources */,

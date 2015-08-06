@@ -45,6 +45,7 @@
 
 	id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
 	NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
+	OCMStub([_mockModel buildersForSearchExpressions:expressions]).andReturn(builders);
 	OCMStub([_mockModel classBuildersFromBuilders:builders]).andReturn(builders);
 
 	SimpleObject *object = [[SimpleObject alloc] init];
@@ -60,10 +61,12 @@
 
 	id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
 	NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
+	OCMStub([_mockModel numberBuilders]).andReturn(1u);
 	OCMStub([_mockModel allBuilders]).andReturn(builders);
 
 	OCMExpect([mockBuilder resolveWithPostProcessors:OCMOCK_ANY]);
 	OCMExpect([mockBuilder validateWithDependencyStack:OCMOCK_ANY]);
+	OCMStub([mockBuilder valueClass]).andReturn([NSString class]);
 
 	ignoreSelectorWarnings(
 								  [_context performSelector:@selector(resolveBuilderDependencies)];
