@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 															class_getName(aClass),
 															sel_getName(selector),
 															nbrArgs,
-															[macroProcessor valueSourceCount]]
+															(unsigned long)[macroProcessor valueSourceCount]]
 											  userInfo:nil];
 	}
 }

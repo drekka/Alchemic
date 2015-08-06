@@ -56,6 +56,10 @@
  */
 #define AcInjectDependencies(object) [[ALCAlchemic mainContext] injectDependencies:object]
 
+#pragma mark - Retrieving values
+
+#define AcGet(returnType, ...) [[ALCAlchemic mainContext] getValueWithClass:[returnType class], ## __VA_ARGS__, nil]
+
 #pragma mark - Registering
 
 /**

@@ -426,10 +426,19 @@ Unlike variable dependencies, which can appear in any order, `AcArg(...)` argume
 Sometimes (in testing for example) you want to get an object from Alchemic without specifying an injection. this can be easily done via this macro:
 
 ```objectivec
-NSDateFormatter *formatter = AcGet(AcName(@"JSON date formatter"));
+NSDateFormatter *formatter = AcGet(NSDateFormatter, AcName(@"JSON date formatter"));
 ```
 
-`AcGet(...)` takes the same arguments as `AcInject(...)`. Namely the `AcClass(...)`, `AcProtocol(...)`, `Acname(...)`, `AcValue(...)` or '`AcProperty(...)` macros. Thus allowing you to obtain any value from Alchemic that you need, using the same code you would use to do an injection. 
+`AcGet(...)` takes similar arguments to `AcInject(...)`. Namely a type (instead of a variable name) followed by one or more `AcClass(...)`, `AcProtocol(...)`, `AcName(...)`, `AcValue(...)` or '`AcProperty(...)` macros. 
+
+The **return type** is needed so that the returned values can be properly set. It also means that you can (if you like) skip defining the search criteria for model objects like this:
+
+```objectivec
+NSDateFormatter *formatter = AcGet(NSDateFormatter);
+```
+
+Without any criteria, Alchemic will use the passed return type to determine the search criteria for scanning the model.
+
 
 # Unmanaged instances
 
@@ -499,7 +508,7 @@ To let Alchemic know that there are further sources of classes that need injecti
 @end
 ```
 
-During scanning, Alchemic will read the list of classes. For each one, it will locate the bundle or framework that it came from and scan all classes within it. So you only need to refer to a single class to get all classes scanned.
+During scanning, Alchemic will read the list of classes. For each one, it will locate the bundle or framework that it came from and scan all classes within it. So you only need to refer to a single class to get all classes in it's bundle scanned.
 
 # Circular dependencies
 

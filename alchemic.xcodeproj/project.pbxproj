@@ -110,6 +110,7 @@
 		6CB314971B5F5966008393E9 /* ALCClassInitializerBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB314951B5F5966008393E9 /* ALCClassInitializerBuilder.m */; };
 		6CC9D7691B595A0100EFD517 /* ALCMacroProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC9D7671B595A0100EFD517 /* ALCMacroProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CC9D76A1B595A0100EFD517 /* ALCMacroProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */; };
+		6CDE85D71B73121F006E24F2 /* ALCContextTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDE85D61B73121F006E24F2 /* ALCContextTests.m */; };
 		6CDEBF9C1B5FCC32009E3BEF /* ALCValueSourceFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CDEBF9D1B5FCC32009E3BEF /* ALCValueSourceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */; };
 		6CDEBFA01B606EA0009E3BEF /* ALCMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDEBF9F1B606EA0009E3BEF /* ALCMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -250,6 +251,7 @@
 		6CC54B741AFE3D7B00D5D634 /* ALCMethodBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMethodBuilder.m; sourceTree = "<group>"; };
 		6CC9D7671B595A0100EFD517 /* ALCMacroProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMacroProcessor.h; sourceTree = "<group>"; };
 		6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMacroProcessor.m; sourceTree = "<group>"; };
+		6CDE85D61B73121F006E24F2 /* ALCContextTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCContextTests.m; sourceTree = "<group>"; };
 		6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCValueSourceFactory.h; sourceTree = "<group>"; };
 		6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCValueSourceFactory.m; sourceTree = "<group>"; };
 		6CDEBF9F1B606EA0009E3BEF /* ALCMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMacro.h; sourceTree = "<group>"; };
@@ -424,6 +426,7 @@
 				6C8FF8A91B6D17B100B2B90A /* CircularDependency3IntegrationTests.m */,
 				6C55E6341B6F38BF004A6305 /* CircularDependency4IntegrationTests.m */,
 				6C55E6381B70617D004A6305 /* ALCAlchemicTests.m */,
+				6CDE85D61B73121F006E24F2 /* ALCContextTests.m */,
 			);
 			name = "Unit tests";
 			path = alchemicTests;
@@ -660,6 +663,7 @@
 				TargetAttributes = {
 					6C36D74E1B3851680073C4FB = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 3MHZ7974Y8;
 					};
 					6C66DC381A8B82C3009F9D94 = {
 						CreatedOnToolsVersion = 6.2;
@@ -761,6 +765,7 @@
 			files = (
 				6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */,
 				6CFE92071B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m in Sources */,
+				6CDE85D71B73121F006E24F2 /* ALCContextTests.m in Sources */,
 				6C2421031B62006000884A93 /* ALCConstantValueSourceTests.m in Sources */,
 				6C55E6331B6B531D004A6305 /* ArraysIntegrationTests.m in Sources */,
 				6CF28C681B6B312800E3A36E /* InitializerIntegrationTests.m in Sources */,
@@ -812,6 +817,7 @@
 		6C36D7611B3851690073C4FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -834,6 +840,7 @@
 		6C36D7621B3851690073C4FB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
@@ -987,7 +994,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
 					"$(inherited)",
-					./PrivateHeaders,
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -1007,7 +1013,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
 					"$(inherited)",
-					./PrivateHeaders,
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

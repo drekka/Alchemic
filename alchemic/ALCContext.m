@@ -18,6 +18,8 @@
 #import "ALCMethodBuilder.h"
 #import "ALCModel.h"
 #import "ALCMacroProcessor.h"
+#import "ALCDependency.h"
+#import "ALCValueSourceFactory.h"
 
 @interface ALCContext ()
 @property (nonatomic, strong) id<ALCValueResolver> valueResolver;
@@ -72,7 +74,7 @@
 		[builder resolveWithPostProcessors:self->_dependencyPostProcessors];
 	}
 
-	STLog(ALCHEMIC_LOG, @"Validating dependencies into %lu singletons ...", _model.numberBuilders);
+	STLog(ALCHEMIC_LOG, @"Validating dependencies in %lu builders ...", _model.numberBuilders);
 	for (id<ALCBuilder> builder in [_model allBuilders]) {
 		NSMutableArray<id<ALCResolvable>> *stack = [[NSMutableArray alloc] init];
 		[builder validateWithDependencyStack:stack];
@@ -153,6 +155,28 @@
 	if ([builders count] > 0) {
 		processBuildersBlock(builders);
 	}
+}
+
+#pragma mark - Retrieveing objects
+
+-(id) getValueWithClass:(Class) returnType, ... {
+
+	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValueDef];
+	alc_loadMacrosAfter(macroProcessor, returnType);
+
+	// Analyse the return type if no macros where loaded to define it.
+	if ([macroProcessor valueSourceCount] == 0) {
+		NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForClass:returnType];
+		for (id<ALCModelSearchExpression> macro in macros) {
+			[macroProcessor addMacro:(id<ALCMacro>)macro];
+		}
+	}
+
+	ALCDependency *dependency = [[ALCDependency alloc] initWithValueClass:returnType
+																				 valueSource:[[macroProcessor valueSourceFactoryAtIndex:0] valueSource]];
+	[dependency resolveWithPostProcessors:_dependencyPostProcessors];
+	[dependency validateWithDependencyStack:[NSMutableArray array]];
+	return dependency.value;
 }
 
 #pragma mark - Internal

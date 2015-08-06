@@ -15,6 +15,7 @@
 @protocol ALCModelSearchExpression;
 @class ALCClassBuilder;
 @protocol ALCBuilder;
+@protocol ALCValueDefMacro;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -71,6 +72,10 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param object the object which needs dependencies injected.
  */
 -(void) injectDependencies:(id) object;
+
+#pragma mark - Retrieving
+
+-(id) getValueWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Working with builders
 

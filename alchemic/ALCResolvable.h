@@ -9,6 +9,8 @@
 @import Foundation;
 @protocol ALCDependencyPostProcessor;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ALCResolvable <NSObject>
 
 @property (nonatomic, assign, readonly) BOOL resolved;
@@ -26,3 +28,5 @@
 -(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
 
 @end
+
+NS_ASSUME_NONNULL_END
