@@ -1,23 +1,22 @@
 # What is Dependency Injection (DI) and why would I want to use it?
 
-This question comes up quite often when I'm talking about DI frameworks to developers who have never used them. So this document is an attempt to answer it with a bias towards Objective-C programming. First we will look at why we would use DI and finally we will look at how a DI framework can assist.
+This question comes up quite often when I'm talking about DI frameworks to developers who have never used them. So this document is an attempt to answer it with a bias towards Objective-C programming.
 
 ## Understanding the problem
 
-[Object Orientated Programming (OOP)](https://en.wikipedia.org/wiki/Object-oriented_programming) is based on the idea of a collection of objects all working together to create an application. For example, if my *RemoteControl* class needs to change the channel on a TV, it needs a *TV* object to change the channel on. In programming this is what we call a *"dependency"*. *RemoteControl* has a dependency on a *TV* object because it needs to give it instructions.
+[Object Orientated Programming (OOP)](https://en.wikipedia.org/wiki/Object-oriented_programming) is based on the idea of a collection of objects all working together to create an application. For example, if a *RemoteControl* class needs to change the channel on a TV, it requires a *TV* object to change the channel on. In programming this is what we call a *"dependency"*. The *RemoteControl* class has a dependency on a *TV* object which it can then control.
 
-An object's dependencies are usually located in one of two ways: either the the object's code has to *"reach out"* to get what it needs, or the dependencies are *"injected"* into the object so that they are already present when the code needs them.
-
-Lets take a look at some typical scenarios of two options and the pros and cons of each.
+An class's dependencies are usually located in one of two ways: Either the the code has to ***"reach out"*** to find them, or the dependencies are ***"injected"*** into the object from the code that is controlling it. Using our remote control example, either the *RemoteControl* class has to find a *TV* object for itself, or the *Human* object using the *RemoteControl* object gives it a *TV* object to control.
 
 ### Reaching out - Singletons
 
-One solution to finding dependencies that is (over!) used (IMHO) in Objective-C projects is the [Singleton pattern](https://en.wikipedia.org/wiki/Singleton_pattern). The singleton pattern is for when your code should only ever have a single instance of a class. For example, a database connection or comms object. In Objective-C a singleton is usually created by it's own class and is accessible through a class method. 
+One technique for finding dependencies that is used a lot in Objective-C projects is the [Singleton pattern](https://en.wikipedia.org/wiki/Singleton_pattern). This pattern solves the problem where the code should only ever have a single instance of a class. For example, a single database connection or communications object. It does this by using a single central variable to store the object which everything then accesses. In Objective-C the singleton is usually created by it's own class and made available through a class method. This allows them to be accessed easily from anywhere.
 
 *TV.h*
 
 ```objectivec
 @interface TV : NSObject
+// Singleton accessor class method.
 +(TV *) sharedTV;
 @end
 ```
@@ -27,7 +26,7 @@ One solution to finding dependencies that is (over!) used (IMHO) in Objective-C 
 ```objectivec
 @implementation RemoteControl
 -(void) changeChannelTo:(int) newChannel {
-    TV *tv = [TV sharedTV];
+    TV *tv = [TV sharedTV]; // Access the singleton
     [tv changeToChannel:newChannel];
 }
 @end
@@ -40,27 +39,29 @@ RemoteControl *rc = [[RemoteControl alloc] init];
 [rc changeChannelTo:5];
 ```
 
+Singletons sounds like a good solution but there are issues with them:
+ 
+ * They are often over used in iOS apps because they are so easy to access from anywhere.
+ * It's not unusual to see objects that should not be global in scope, being made global because the developer decided to treat them as a singleton. 
+ * They are almost impossible to swap out because the variable storing them in the class is usually completely inacccessible. This makes testing very difficult.
+ * If you discover later that you need more than one instance, it can be lot more work to refactor a singleton into a non-singleton pattern. 
 
-Singletons tend to get overused in Objective-C code because they can be accessed anywhere in the app merely by accessing the class. So it's a fast and easy to code. But there are issues with them. Firstly they are almost impossible to swap out when testing because the way they are stored in the class is usually completely inacccessible. So when testing the code that reaches out to them, it's almost impossible to mock out the singleton instance. Another problem that can arise is that if at a later stage you discover that you need more than one instance, a large chunk of your code has to be refactored because it can no longer access the instance through class methods. 
-
-My general opinion is - *Use [singletons](https://en.wikipedia.org/wiki/Singleton_pattern) sparingly and where you really need them.* 
+My general opinion is - *Use [singletons](https://en.wikipedia.org/wiki/Singleton_pattern) sparingly and only  where you really **need** them.* 
 
 ### Dependency Injection
 
-The [Dependency Injection (DI)](https://en.wikipedia.org/wiki/Dependency_injection) design pattern is where the dependencies of a class are passed (or injected into it) from the external code. there are a number of advantages to using DI:
+The [Dependency Injection (DI)](https://en.wikipedia.org/wiki/Dependency_injection) pattern dictates that the dependencies of a class should be injected into it from elsewhere. DI is a core part of [Inversion of Control (IoC)](https://en.wikipedia.org/wiki/Inversion_of_control). There are a number of significant advantages to using DI:
 
 * The code no longer has to know where to get dependencies from.
 * The code will work regardless of whether a dependency is a singleton or one of many objects.
-* Testing is easy because dependencies can be [mocked out](https://en.wikipedia.org/wiki/Mock_object).
-* Refactoring how objects are created or accessed becomes simpler because there are less locations in the code that need change.
+* Testing is easier because dependencies can be [mocked out](https://en.wikipedia.org/wiki/Mock_object) to provide controlled test scenarios.
+* Refactoring becomes simpler because there are fewer places in the code that need change.
 
-*DI is a core part of [Inversion of Control (IoC)](https://en.wikipedia.org/wiki/Inversion_of_control), which you may also have heard of.*
+In Objective-C terms, dependencies can be injected via 3 methods: **method arguments**, **initializer arguments** or by setting **properties**.
 
-Dependencies can be injected into an object via method arguments, initializer arguments or by setting properties.
+#### Method arguments
 
-#### Via method arguments
-
-In this form of DI dependencies are passed as method arguments to the methods that need to use them.
+In this form of DI dependencies are passed as arguments to the methods that need them.
 
 *RemoteControl.m*
 
@@ -80,9 +81,9 @@ RemoteControl *rc = [[RemoteControl alloc] init];
 [rc changeChannelTo:5 onTV:tv];
 ```
 
-By adding dependencies as arguments to methods, we can pass any *TV* to the remote and it will change channels on it. It can also make your interface clearer because the selector clearly shows what the method needs. Another bonus is that when testing, passing dependencies via method arguments makes it easy to pass dummy *TV* objects.
+By adding dependencies as arguments, we can pass any *TV* to the remote and it will change it's channels. Using method arguments can also make your interface clearer because the selector clearly shows what the method needs. 
 
-But using arguments to pass dependencies can also be a problem as well. As the code grows and more dependencies are needed, the interfaces start to become quite large. Full of dependencies being passed around. It can also end up having to pass objects around that are not directly used by the classes doing the passing.
+But using arguments to pass dependencies can also be a problem as well. As the code grows and more dependencies are needed, the interfaces start to become quite large with lots of arguments. It can quickly get to the point where both classes and methods are passing objects they don't use themselves, just to get the dependencies to where they are needed.
 
 *Couch.m*
 
@@ -96,13 +97,13 @@ But using arguments to pass dependencies can also be a problem as well. As the c
 @end
 ```
 
-In this example, the *Couch* class now has to know about the *TV* and *RemoteControl* classes so it can pass them through. But it doesn't use them itself, yet still has to import the types and the method have two arguments it shouldn't really have. This breaks what is known as The [Law of Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter) and causes classes and methods to become *"polluted"* with things they don't actually use. 
+Here, the *familySitsDownWithDad:remote:tv:* method has to pass *TV* and *RemoteControl* object through to the *Human* class. *Couch* doesn't use these objects itself, but it still has to import the types and pass them to methods. This breaks [The Law of Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter). Causing classes and methods to become *"polluted"* with things they don't use. 
 
-So my recommendation here is - *Use method arguments when the method works with the object directly.*
+So my recommendation is - *Use method arguments when the method works with the object directly.*
 
 #### Via initializers
 
-Another technique for injecting dependencies into a class is to pass them as arguments on an intializer. This is similar to passing them to methods, the difference is the timing. With injection via initializers, the dependencies have to be available before the class is instantiated and must be stored by the initializer for later use. 
+Another popular technique for injecting dependencies into a class is to pass them to an intializer. With initializer injection, the dependencies have to be available before the class is created. In the initializer, the dependencies are stored for later use. 
 
 *RemoteControl.h*
 
@@ -121,7 +122,7 @@ Another technique for injecting dependencies into a class is to pass them as arg
 -(instancetype) initWithTV:(TV *) tv {
     self = [super alloc];
     if (self) {
-        _tv = tv;
+        _tv = tv; // Store for later use
     }
     return self;
 }
@@ -139,8 +140,7 @@ RemoteControl *rc = [[RemoteControl alloc] initWithTV:tv];
 [rc changeChannelTo:5];
 ```
 
-
-Now the *TV* is injected into the *RemoteControl* class when initialising and stored internally until needed. The real gain from initializer injection is that it is clear what the class needs from it's initializer and you cannot accidentally miss anything. It's also especially good when dealing with dependencies that are long lived. for example, where a *RemoteControl* will always be using the same *TV*. finally, alleviates the need to pass dependencies via method arguments as objects already have everything they need.
+Now the *TV* is injected into the *RemoteControl* class when initialising and stored internally until needed. The advantage of initializer injection is that It is clear what the class needs up front. It's also more suited to dependencies that are long lived. For example, where a *RemoteControl* will always be using the same *TV*. Finally, initializer injection alleviates the need to pass dependencies via method arguments because the object already has everything it needs up front.
 
 #### Via Properties
 
@@ -171,21 +171,31 @@ rc.tv = tv;
 [rc changeChannelTo:5];
 ```
 
-Whilst taking less code than initializers, using properties for injection is not as reliable as using initializers because there is the chance that the developer will forget to set them. Looking at the interfaces of objects there is also no real indicator as to which properties are essential for the classes operation. But other than that there is no real difference between using properties and using initializers.
+Whilst taking less code than initializers, using properties for injection is not a reliable solution because there is the chance that the developer will forget to set them. There is also no clue from a class interface as to what properties are required for that class to function.
 
-My recommendation - *The reality of programming is that the best code is usually a combination of Singletons, method argument, initializer and property based DI. It's about knowing what to use where!* 
+*Calling code*
+
+```objectivec
+TV *tv = [[TV alloc] init];
+RemoteControl *rc = [[RemoteControl alloc] init];
+[rc changeChannelTo:5]; // Oops, TV not set !
+```
+
+However there are times when property injection can be better. For example, when a dependency periodically changes.  
+
+My recommendation - *The reality of programming is that the best code is usually a combination of all of these things: Singletons, method argument, initializer and property based DI. It's really about knowing what to use where!* 
 
 ## DI frameworks
  
-All of the above examples still have one core problem - that you have to manage the creation and injection of the relevant objects yourself, and make sure that they are available wherever needed in your code. This can become quite onerous, annoying and end up costing you a lot of code to create, store and inject objects. Especially when the distance (in code terms) between where an object is created and where it is used is quite large or the code to access an object is not simple.
+All of the above examples still have one core problem - that you have to write code to manage the creation, availability and injection of the relevant object. This can become quite onerous, annoying and require a lot of code. Especially when the distance (in design terms) between where an object is created and where it is used is quite large or the code to access an object is not simple.
 
-This is where DI frameworks are designed to help. The idea behind them is to do the common grunt work of managing objects and injections for you. Essentially a DI framework should allow you to write code without worrying about any of this stuff. All you should have to do is tell it what you need and where you need it.
+DI frameworks are designed to help with this. They are designed to do the common grunt work of creating, managing and injecting objects for you. Essentially a DI framework should allow you to write code without worrying about any of this stuff. All you should have to do is tell it what you need and where you need it.
 
 *TV.m*
 
 ```objectivec
 @implementation TV
-AcRegister()
+AcRegister() // declare a managed singleton
 @end
 ```
  
@@ -195,8 +205,8 @@ AcRegister()
 @implementation RemoteControl {
     TV *_tv
 }
-AcRegister()
-AcInject(_tv)
+AcRegister() // declare a managed singleton
+AcInject(_tv) // inject a TV object
 -(void) changeChannelTo:(int) newChannel {
     [_tv changeToChannel:newChannel];
 }
@@ -206,13 +216,16 @@ AcInject(_tv)
 *Calling code*
 
 ```objectivec
-RemoteControl *rc = AcGet(AcClass(RemoteControl));
+// Manually ask for the remote control, assuming it's not injected into this code. 
+RemoteControl *rc = AcGet(RemoteControl, AcClass(RemoteControl)); 
 [rc changeChannelTo:5];
 ```
 
 
-This is a simple example using ***[Alchemic](README.md)***. The `AcRegister()` and `AcInject(tv)` macros are the Alchemic framework's technique for managing the objects. In this example, Alchemic will create an instance of *TV* and *RemoteControl* as a singletons and automatically inject the *TV* object into the *RemoteControl* object.
+This is a simple example using the ***[Alchemic DI framework](README.md)***. In this example, Alchemic will create an instance of *TV* and *RemoteControl* as a singletons and automatically inject the *TV* object into the *RemoteControl* object.
 
-So without having to manually manage everything, you can simply tell the framework what you need, and where you need it. Most DI frameworks will perform a range of other useful functionality as well, but creating, managing and injecting objects is the core functionality they all should provide with a minimum of fuss.
+Notice how the only thing you need to do it tell Alchemic what you want. It does the work of allocating objects and injecting them for itself. You don't even have to start Alchemic as it bootstraps itself when your app starts. So literally the above code is all you would need. 
+
+Most DI frameworks private a range of useful functions, but creating, managing and injecting objects is the core functionality they all should provide, and provide it with a minimum of fuss.
 
 My final recommendation - *DI frameworks can really help simplify things, especially with large code bases. But if the framework is not making your code simpler and easier to understand, shop elsewhere!*
