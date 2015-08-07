@@ -89,7 +89,7 @@
 
 #pragma mark - Registration call backs
 
--(void) registerDependencyInClassBuilder:(ALCClassBuilder *) classBuilder variable:(NSString *) variable, ... {
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder variableDependency:(NSString *) variable, ... {
 
 	STLog(classBuilder.valueClass, @"Registering variable dependency %@ ...", variable);
 
@@ -115,7 +115,7 @@
 	STLog(classBuilder.valueClass, @"Modified builder: %@, %@", classBuilder, classBuilder.macroProcessor);
 }
 
--(void) registerClassInitializer:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... {
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... {
 	STLog(classBuilder.valueClass, @"Registering a class initializer for a %@", NSStringFromClass(classBuilder.valueClass));
 	ALCClassInitializerBuilder *initializerBuilder = [[ALCClassInitializerBuilder alloc] initWithParentClassBuilder:classBuilder selector:initializer];
 	alc_loadMacrosAfter(initializerBuilder.macroProcessor, initializer);
@@ -127,7 +127,7 @@
 
 }
 
--(void) registerMethodBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
+-(void) registerClassBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
 	STLog(classBuilder.valueClass, @"Registering a method builder for %@", NSStringFromSelector(selector));
 	ALCMethodBuilder *methodBuilder = [[ALCMethodBuilder alloc] initWithParentBuilder:classBuilder
 																									 selector:selector

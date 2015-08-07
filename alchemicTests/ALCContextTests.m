@@ -75,4 +75,10 @@
 	OCMVerifyAll(mockBuilder);
 }
 
+-(void) testRegisterDependencyInClassBuilder {
+	ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
+
+	[_context registerClassBuilder:classBuilder variableDependency:@"aStringProperty", nil];
+}
+
 @end

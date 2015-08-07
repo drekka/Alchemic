@@ -74,19 +74,19 @@
 
 #define AcMethod(methodType, methodSel, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodInClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerMethodBuilder:classBuilder selector:@selector(methodSel) returnType:[methodType class], ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerClassBuilder:classBuilder selector:@selector(methodSel) returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
 #define AcInject(variableName, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerDependencyInClassBuilder:classBuilder variable:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerClassBuilder:classBuilder variableDependency:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
 // Registers an initializer for a class.
 #define AcInitializer(initializerSel, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerInitializerForClassBuilder):(ALCClassBuilder *) classBuilder { \
-	[[ALCAlchemic mainContext] registerClassInitializer:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
+	[[ALCAlchemic mainContext] registerClassBuilder:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
 }
 
 
