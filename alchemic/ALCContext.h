@@ -10,7 +10,6 @@
 @import ObjectiveC;
 
 @protocol ALCDependencyPostProcessor;
-@protocol ALCObjectFactory;
 @protocol ALCValueResolver;
 @protocol ALCModelSearchExpression;
 @class ALCClassBuilder;
@@ -33,15 +32,6 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @discussion dependency post processors are executed after depedencies have been resolve and before their values are accessed for injection.
  */
 -(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor;
-
-/**
- Adds a ALCObjectFactory to the list of object factories.
-
- @discussion Factories are checked in reverse order. The last registered object factory is the one asked first for an object.
-
- @param objectFactory the factory to add.
- */
--(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory;
 
 #pragma mark - Registration call backs
 

@@ -28,7 +28,6 @@
 @implementation ALCContext {
 	ALCModel *_model;
 	NSSet<id<ALCDependencyPostProcessor>> *_dependencyPostProcessors;
-	NSSet<id<ALCObjectFactory>> *_objectFactories;
 }
 
 #pragma mark - Lifecycle
@@ -38,7 +37,6 @@
 	if (self) {
 		_model = [[ALCModel alloc] init];
 		_dependencyPostProcessors = [[NSMutableSet alloc] init];
-		_objectFactories = [[NSMutableSet alloc] init];
 	}
 	return self;
 }
@@ -83,11 +81,6 @@
 }
 
 #pragma mark - Configuration
-
--(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory {
-	STLog(ALCHEMIC_LOG, @"Adding object factory: %s", object_getClassName(objectFactory));
-	[(NSMutableSet *)_objectFactories addObject:objectFactory];
-}
 
 -(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor {
 	STLog(ALCHEMIC_LOG, @"Adding dependency post processor: %s", object_getClassName(postProcessor));
