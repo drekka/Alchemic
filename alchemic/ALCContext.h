@@ -21,7 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 #define ProcessBuiderBlockArgs NSSet<id<ALCBuilder>> *builders
 typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
-
+/**
+ An Alchemic context.
+ 
+ @discussion Alchemic makes use of an instance of this class to provide the central storage for the class model provided by an ALCModel instance. All incoming requests to regsister classes, injections, methods,e tc and to obtain objects are routed through here.
+ */
 @interface ALCContext : NSObject
 
 #pragma mark - Configuration

@@ -10,6 +10,9 @@
 
 #import "ALCResourceLocator.h"
 
+/**
+ A ALCResourceLocator that can read the contents of files to access resources.
+ */
 @interface ALCFileContentsResourceLocator : NSObject<ALCResourceLocator>
 
 @end

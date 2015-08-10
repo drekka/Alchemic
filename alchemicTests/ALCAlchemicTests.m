@@ -8,9 +8,10 @@
 
 @import XCTest;
 @import ObjectiveC;
-#import "ALCAlchemic.h"
 #import <OCMock/OCMock.h>
-#import "ALCcontext.h"
+
+#import <Alchemic/ALCAlchemic.h>
+#import <Alchemic/ALCcontext.h>
 
 
 @interface ALCAlchemicTests : XCTestCase

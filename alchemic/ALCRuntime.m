@@ -87,13 +87,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
     object_setIvar(object, variable, value);
 }
 
-+(SEL) alchemicSelectorForSelector:(SEL) selector {
-    const char * prefix = alc_toCharPointer(ALCHEMIC_PREFIX);
-    const char * selName = sel_getName(selector);
-    const char * newSelectorName = [NSString stringWithFormat:@"%s%s", prefix, selName].UTF8String;
-    return sel_registerName(newSelectorName);
-}
-
 +(nullable Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
 
     const char * charName = [inj UTF8String];
@@ -185,37 +178,13 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 }
 
-+(void) wrapClass:(Class) destClass initializer:(SEL) initializer
-		  withClass:(Class) wrapperClass wrapper:(SEL) wrapperSel {
-
-    // Get an alchmeic prefixed selector for the initializer.
-    SEL alchemicSel = [ALCRuntime alchemicSelectorForSelector:initializer];
-
-    // Test if the class has ready had it replaced.
-    if (objc_getAssociatedObject(destClass, sel_getName(alchemicSel)) != nil) {
-        return;
-    }
-
-    // Now get the methods and IMPs we need to do the replacement.
-    Method originalMethod = class_getInstanceMethod(destClass, initializer);
-    Method wrapperMethod = class_getInstanceMethod(wrapperClass, wrapperSel);
-    IMP wrapperImp = method_getImplementation(wrapperMethod);
-
-    // Perform the replacement.
-    IMP originalIMP = method_setImplementation(originalMethod, wrapperImp);
-    if (originalIMP != NULL) {
-        // Add the original method to the class under a name we can find so we can call it from the wrapper.
-        class_addMethod(destClass, alchemicSel, originalIMP, method_getTypeEncoding(originalMethod));
-    }
-}
-
 #pragma mark - Qualifiers
 
-+(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForClass:(Class) class {
-    STLog(class, @"Generating search expressions for class: %@", NSStringFromClass(class));
++(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForClass:(Class) aClass {
+    STLog(aClass, @"Generating search expressions for class: %@", NSStringFromClass(aClass));
     NSMutableSet<id<ALCModelSearchExpression>> * expressions = [[NSMutableSet alloc] init];
-    [expressions addObject:[ALCClass withClass:class]];
-    for (Protocol *protocol in [self aClassProtocols:class]) {
+    [expressions addObject:[ALCClass withClass:aClass]];
+    for (Protocol *protocol in [self aClassProtocols:aClass]) {
         [expressions addObject:[ALCProtocol withProtocol:protocol]];
     }
     return expressions;

@@ -16,6 +16,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ An ALCBuilder that creates objects from class definitions.
+
+ @discussion An instance of this builder is created in the model as soon as an Alchemic method is detected in the class definition during runtime scanning. Only if an ALCInitializerBuilder is also created is it removed. This allows for the model search routines to find the initializer instead of the class builder and therefore correctly create instances using it.
+
+ If an ALCInitializerBuilder is not created and an `AcRegister(...)` macro is encountered then this builder will be used to create objects. If `AcMethod(...)` factory methods are detected then this builder will also be set as their parent so it can be instantiated when needed before the method is called.
+ */
 @interface ALCClassBuilder : ALCAbstractBuilder
 
 -(instancetype) init NS_UNAVAILABLE;

@@ -15,16 +15,45 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ This class provides a variety of functions for accessing the Objective-C runtime and getting information.
+ */
 @interface ALCRuntime : NSObject
 
 #pragma mark - Checking and Querying
 
+/// @name Querying
+
+/**
+ Queries the type of the object to see if it is a class.
+ 
+ @param possibleClass
+ @return YES if possibleClass is a class.
+*/
 +(BOOL) objectIsAClass:(id) possibleClass;
 
+/**
+ Queries the type of the object to see if it is a protocol.
+
+ @param possibleProtocol
+ @return YES if possibleClass is a protocol.
+ */
 +(BOOL) objectIsAProtocol:(id) possiblePrototocol;
 
+/**
+ Queries a class to obtain a list of the protocols it conforms to.
+ 
+ @param aClass The class we are going to query.
+ @return a NSSet containing a list of Protocol pointers.
+ */
 +(NSSet<Protocol *> *) aClassProtocols:(Class) aClass;
 
+/**
+ Queries an Ivar to get it's class.
+ 
+ @param ivar The ivar we are interested in.
+ @return The Class of the ivar or nil if the ivar not an Objective-C object type.
+ */
 +(nullable Class) iVarClass:(Ivar) ivar;
 
 /**
@@ -42,26 +71,52 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - General
 
-+(SEL) alchemicSelectorForSelector:(SEL) selector;
+/// @name Injecting
 
+/**
+ Sets the value of an internal variable in an object.
+ 
+ @param object The object whose variable we want to set.
+ @param variable The variable to be set.
+ @param value The value to set.
+ */
 +(void) object:(id) object injectVariable:(Ivar) variable withValue:(id) value;
 
 #pragma mark - Getting qualifiers
 
-+(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForClass:(Class) class;
+/// @name Search expressions
 
+/**
+ Builds a set of search expressions which match a specific class.
+ 
+ @discussion The set of expressions can then be used to find all occurances of this class in the model.
+ 
+ @param aClass The class to build the set from.
+ @return A NSSet of ALCModelSearchExpression objects derived from aClass.
+ */
++(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForClass:(Class) aClass;
+
+/**
+ Builds a set of search expressions which match a specific variable.
+
+ @discussion The set of expressions can then be used to find all occurances of objects that can be injected into the variable.
+
+ @param variable The variable whose type will be used to build the set of expressions from.
+ @return A NSSet of ALCModelSearchExpression objects derived from the variable's type.
+ */
 +(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForVariable:(Ivar) variable;
 
 #pragma mark - Runtime scanning
 
 /**
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
- @discussion Once found, the block is called to finish the registration of the class.
+ 
+ @discussion This is the method that does the grunt work of registering objects in the model. It scans all the relevant app bundles and frameworks, plus those declared in ALCConfig classes. When it finds a class with Alchemic methods in it, it creates an instance of ALCClassBuilder and adds it to the model before call the methods to execute the registrations.
+ 
+ @param context The ALCContext that is being loaded with information.
+ @param runtimeScanners A NSSet of ALCRuntimeScanner instances which perform the job of interpreting what they find in the classes. Each class found with Alchemic methods in it is passed to each scanner in turn.
  */
 +(void) scanRuntimeWithContext:(ALCContext *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> *) runtimeScanners;
-
-+(void) wrapClass:(Class) destClass initializer:(SEL) initializer
-		  withClass:(Class) wrapperClass wrapper:(SEL) wrapperSel;
 
 @end
 
