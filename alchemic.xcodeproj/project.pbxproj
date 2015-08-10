@@ -673,7 +673,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -721,7 +721,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$PROJECT_DIR/External/appledoc/appledoc \\\n--project-name \"Alchemic\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n";
+			shellScript = "\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--project-name \"Alchemic\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1042,7 +1042,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,
