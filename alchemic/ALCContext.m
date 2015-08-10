@@ -91,7 +91,7 @@
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder variableDependency:(NSString *) variable, ... {
 
-	STLog(classBuilder.valueClass, @"Registering variable dependency %@ ...", variable);
+	STLog(classBuilder.valueClass, @"Registering variable dependency %@.%@ ...", NSStringFromClass(classBuilder.valueClass), variable);
 
 	Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
 	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValueDef];
