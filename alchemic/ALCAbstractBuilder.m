@@ -124,6 +124,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 }
 
+-(void)inject {
+	if (_value != nil) {
+		[self injectValueDependencies:_value];
+	}
+}
+
 #pragma mark - Overridable points
 
 -(void) injectValueDependencies:(id) value {

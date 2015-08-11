@@ -27,6 +27,7 @@
 
 @implementation ALCContext {
 	ALCModel *_model;
+	id _appDelegate;
 	NSSet<id<ALCDependencyPostProcessor>> *_dependencyPostProcessors;
 }
 
@@ -35,6 +36,7 @@
 -(instancetype) init {
 	self = [super init];
 	if (self) {
+		_appDelegate = [UIApplication sharedApplication].delegate;
 		_model = [[ALCModel alloc] init];
 		_dependencyPostProcessors = [[NSMutableSet alloc] init];
 	}
@@ -139,6 +141,11 @@
 }
 
 -(void) addBuilderToModel:(id<ALCBuilder> _Nonnull) builder {
+
+	// Look for the all delegate builder and set it.
+	if ([builder.valueClass isSubclassOfClass:[_appDelegate class]]) {
+		builder.value = _appDelegate;
+	}
 	[_model addBuilder:builder];
 }
 
@@ -179,20 +186,25 @@
 	// This is a two stage process so that all objects are created before dependencies are injected. This helps with defeating circular dependency issues.
 
 	// Use a map table so we can store keys without copying them.
-	NSMapTable<id, id<ALCBuilder>> *singletons = [NSMapTable strongToStrongObjectsMapTable];
+	//NSMapTable<id, id<ALCBuilder>> *singletons = [NSMapTable strongToStrongObjectsMapTable];
 	for (id<ALCBuilder> builder in [_model allBuilders]) {
 		if (builder.createOnBoot) {
 			STLog(builder, @"Creating singleton '%@' using %@", builder.name, builder);
-			id obj = [builder instantiate];
-			[singletons setObject:builder forKey:obj];
+			//id obj =
+			[builder instantiate];
+			//[singletons setObject:builder forKey:obj];
 		}
 	};
 
-	STLog(ALCHEMIC_LOG, @"Injecting dependencies into %lu singletons ...", [singletons count]);
-	for (id obj in [singletons keyEnumerator]) {
-		id<ALCBuilder> builder = [singletons objectForKey:obj];
-		[builder injectValueDependencies:obj];
+	STLog(ALCHEMIC_LOG, @"Injecting dependencies ...");
+	//	STLog(ALCHEMIC_LOG, @"Injecting dependencies into %lu singletons ...", [singletons count]);
+	for (id<ALCBuilder> builder in [_model allBuilders]) {
+		[builder inject];
 	}
+	//for (id obj in [singletons keyEnumerator]) {
+	//	id<ALCBuilder> builder = [singletons objectForKey:obj];
+	//	[builder injectValueDependencies:obj];
+	//}
 
 }
 

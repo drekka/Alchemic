@@ -31,6 +31,7 @@ Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Macro referen
  * [Getting objects](#getting-objects)
      * [Unmanaged instances](#unmanaged-instances)
      * [Programmatically obtaining objects](#programmatically-obtaining-objects)
+ * [UIApplicationDelegate](#uiapplicationdelegate)
  * [Callbacks](#callbacks)
  * [Configuration](#configuration)
  * [Circular dependencies](#circular-dependencies)
@@ -62,6 +63,7 @@ The main ideas driving the Alchemic design are:
 * Automatic array population by class, protocol or name
 * Circular dependency detection
 * Macro driven for minimal code
+* UIApplicationDelegate aware
 
 # Installation
 
@@ -100,6 +102,7 @@ Alchemic will automatically start itself when the app loads. During this process
 1. Start itself on a background thread.
 2. Scan all classes in your app for dependency injection commands. 
 3. Instantiate any classes it recognises as Singletons and wire up their dependencies.
+4. Check for a UIApplicationDelegate and if found, check to see if it needs any injections.
 
 ## Stopping
 
@@ -467,6 +470,10 @@ NSDateFormatter *formatter = AcGet(NSDateFormatter);
 ```
 
 Without any criteria, Alchemic will use the passed return type to determine the search criteria for scanning the model based in it's class and any applicable protocols.
+
+## UIApplicationDelegate
+
+Alchemic has some special processing for UIApplicationDelegates. AFter starting, Alchemic will automatically search for a UIApplicationDelegate and if it finds one, inject any dependencies it needs. There is no need to add any `AcRegister(...)` macros to the app delegate class.
 
 ## Callbacks
 

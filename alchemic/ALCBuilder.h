@@ -74,6 +74,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(id) instantiate;
 
 /**
+ Performs injections during startup.
+ */
+-(void) inject;
+
+/**
  Used to inject dependencies after the value has been created or to populate dependencies in an object not created by Alchemic.
 
  @discussion This is used in the second stage of Alchemics startup processor where each object that was created by the first stage now has it's dependencies injected. It is also called from [ALCContext injectDependencies:] when an object needs injection but has not been created by Alchemic.
