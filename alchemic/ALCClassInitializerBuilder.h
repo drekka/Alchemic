@@ -13,7 +13,7 @@
  
  @discussion The initiailizer can have arguments and they must be matched by `AcArg(...)` macros.
  
- @see AcInitializer(...) macro.
+ See AcInitializer(...) macro.
  */
 @interface ALCClassInitializerBuilder : ALCAbstractMethodBuilder
 

@@ -18,12 +18,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ Block used when processing a set of ACLBuilders.
+ */
 #define ProcessBuiderBlockArgs NSSet<id<ALCBuilder>> *builders
 typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 /**
  An Alchemic context.
- 
+
  @discussion Alchemic makes use of an instance of this class to provide the central storage for the class model provided by an ALCModel instance. All incoming requests to regsister classes, injections, methods,e tc and to obtain objects are routed through here.
  */
 @interface ALCContext : NSObject
@@ -39,8 +42,23 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 #pragma mark - Registration call backs
 
+/**
+ Sets properties on a ALCClassBuilder.
+
+ @param classBuilder The class builder whose properties are to be set.
+ @param ... one or more macros which define the properties.
+ */
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ registers a variable dependency for the classbuilder.
+
+ @discussion Each variable dependency will be injected when the class builder creates an object.
+
+ @param classBuilder	The ALCClassBuilder instance which represents the class which needs the injected variable.
+ @param variable		The name of the variable. Can be the external name in the the case of a property or the internal name. Alchemic will locate and used the internal name regardless of which is specified.
+ @param ... One or more macros which define where to get the dependency from. If none are specified then the variable is examined and a set of default ALCSearchExpression objects generated which sources the value from the model based on the variable's class and protocols.
+ */
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder variableDependency:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
@@ -59,10 +77,10 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 #pragma mark - Dependencies
 
 /**
- Access point for objects which need to have dependencies injected. 
- 
+ Access point for objects which need to have dependencies injected.
+
  @discussion This checks the model against the model. If a class builder is found which matches the class and protocols of the passed object, it is used to inject any listed dependencies into the object.
- 
+
  @param object the object which needs dependencies injected.
  */
 -(void) injectDependencies:(id) object;

@@ -10,6 +10,9 @@
 
 #import "ALCResourceLocator.h"
 
+/**
+ A resource locator that sources values from a specific plist file.
+ */
 @interface ALCPlistResourceLocator : NSObject<ALCResourceLocator>
 
 @end

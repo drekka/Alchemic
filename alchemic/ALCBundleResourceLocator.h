@@ -10,6 +10,9 @@
 
 #import "ALCResourceLocator.h"
 
+/**
+ Resource value locator that sources data from bundles.
+ */
 @interface ALCBundleResourceLocator : NSObject<ALCResourceLocator>
 
 @end

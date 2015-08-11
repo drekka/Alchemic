@@ -25,10 +25,28 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCClassBuilder : ALCAbstractBuilder
 
+/**
+ Default initializer.
+ 
+ @warning Do not use.
+ @return An instance of this class.
+ */
 -(instancetype) init NS_UNAVAILABLE;
 
+/**
+ Default initializer.
+ 
+ @param valueClass The class of the object that will be returned by the builder.
+ @return A fully injected instance of valueClass.
+ */
 -(instancetype) initWithValueClass:(Class) valueClass NS_DESIGNATED_INITIALIZER;
 
+/**
+ Adds the definition of a variable to be injected when the build is asked for an object.
+ 
+ @param variable An IVar reference to the variable to be set.
+ @param macroProcessor An instance of ALCMacroProcessor which contains the definition of the value to be set.
+ */
 -(void) addVariableInjection:(Ivar) variable macroProcessor:(ALCMacroProcessor *) macroProcessor;
 
 @end

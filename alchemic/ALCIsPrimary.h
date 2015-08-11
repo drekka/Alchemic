@@ -9,6 +9,9 @@
 @import Foundation;
 #import "ALCMacro.h"
 
+/**
+ A simple macro that represents objects which are primary objects.
+ */
 @interface ALCIsPrimary : NSObject<ALCMacro>
 
 @end
