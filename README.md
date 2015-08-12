@@ -1,4 +1,4 @@
-# Alchemic
+# Alchemic [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 By Derek Clarkson
 
 Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Macro reference](./macros.md)
@@ -101,7 +101,9 @@ Alchemic will automatically start itself when the app loads. During this process
 3. Instantiate any classes it recognises as Singletons and wire up their dependencies.
 4. Check for a UIApplicationDelegate and if found, checks it for injections.
 5. Executes post-startup blocks.
-5. Posts "AlchemicFinishedLoading" notification.
+5. Posts the ["AlchemicFinishedLoading"](#finished-loading) notification.
+
+*Look at [Asynchronous startup](#asynchronous-startup) for more details on Alchemic's starting and how to know when you can access objects.*
 
 ## Stopping
 
@@ -456,9 +458,11 @@ Without any criteria, Alchemic will use the passed return type to determine the 
 
 ## Asynchronous startup
 
-Alchemic bootstraps itself on a background thread. This helps to keep with application starts quick. However it has a detrimental effect in that any app code that is executing during the starting of your app cannot assume that Alchemic has finished starting.
+Alchemic bootstraps itself in a background thread rather than take up precious time during the  application start. However, it also means that any classes that make calls to `AcInjectDependencies(...)` may execute this call before Alchemic has finished reading the classes and building it's dependency model.
 
-To address this Alchemic provides a block based asynchronous callback facility. This can be used in any code that runs at the beginning of your app. For example you might have a table view controller that needs data from a singleton that Alchemic creates and injects. This table view controller should be engineered to assume that the singleton dependency is nil, and to register a callback which refreshs the table after Alchemic has finished loading.
+To address this Alchemic provides asynchronous callback which can be used in any code that runs at the beginning of your app and needs to ensure that something is execute ***After*** Alchemic has finished starting up. 
+
+For example you might have a table view controller that needs data from a singleton that Alchemic injects. You should engineer the table view controller to work if the singleton dependency is nil, and to register a callback which refreshs the table after Alchemic has finished loading.
 
 ```objectivec
 AcExecuteWhenStarted(^{
@@ -467,6 +471,8 @@ AcExecuteWhenStarted(^{
 ```
 
 If Alchemic has already started then the block is executed immediately on the current thread. If Alchemic has not started then the block is copied, and executed after Alchemic has finished loading on the **main thread**
+
+*Note: Whilst Alchemic can inject values into properties as easily as variables, it does not trigger KVO at this time. So don't depend on KVO to detect injections.*
 
 ### UIApplicationDelegate
 
