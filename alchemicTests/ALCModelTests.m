@@ -96,12 +96,6 @@
 	XCTAssertTrue([results containsObject:_methodBuilder]);
 }
 
--(void) testAllClassBuilders {
-	NSSet<id<ALCBuilder>> *results = [_model allClassBuilders];
-	XCTAssertEqual(1u, [results count]);
-	XCTAssertTrue([results containsObject:_classBuilder]);
-}
-
 -(void) testClassBuildersFromBuilders {
 	NSSet<id<ALCBuilder>> *results = [_model classBuildersFromBuilders:[_model allBuilders]];
 	XCTAssertEqual(1u, [results count]);

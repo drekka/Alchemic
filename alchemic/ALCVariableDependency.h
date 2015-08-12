@@ -12,18 +12,46 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Class for dependencies which are variables in classes.
+ An extension of ALCDependency that can inject the result value into a variable in an object.
+ 
+ @discussion This class is used by the `AcInject(...)` macro.
  */
 @interface ALCVariableDependency : ALCDependency
 
+/**
+ The IVar that will be injected into.
+ */
 @property (nonatomic, assign, readonly) Ivar variable;
 
+/**
+ Default initializer.
+
+ @discussion Do not use.
+
+ @param valueClass  The class of the result value.
+ @param valueSource The ALCValueSource that will supply values.
+
+ @return An instnace of this class.
+ */
 -(instancetype) initWithValueClass:(Class) valueClass
 							  valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
 
+/**
+ Default initializer.
+
+ @param variable    An Ivar to be injected.
+ @param valueSource The value source that will supply the values to be injected.
+
+ @return An instance of this class.
+ */
 -(instancetype) initWithVariable:(Ivar) variable
                      valueSource:(id<ALCValueSource>) valueSource NS_DESIGNATED_INITIALIZER;
 
+/**
+ Perform the injection.
+
+ @param object An object of a suitable type. This is assumed to have the correct Ivar.
+ */
 -(void) injectInto:(id) object;
 
 @end

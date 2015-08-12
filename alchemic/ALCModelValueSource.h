@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCModelValueSource : ALCAbstractValueSource
 
 /**
- A set of ALCSearchExpression objects used to locate the candidates from the model.
+ A set of ALCModelSearchExpression objects used to locate the candidates from the model.
  */
 @property (nonatomic, strong, readonly) NSSet<id<ALCModelSearchExpression>> *searchExpressions;
 

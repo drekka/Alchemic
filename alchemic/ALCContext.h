@@ -47,6 +47,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  Adds an dependency post processor.
 
  @discussion dependency post processors are executed after depedencies have been resolve and before their values are accessed for injection.
+ @param postProcessor The ALCDependencyPostProcessor to be used.
  */
 -(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor;
 
@@ -61,18 +62,39 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
- registers a variable dependency for the classbuilder.
+ Registers a variable dependency for the classbuilder.
 
  @discussion Each variable dependency will be injected when the class builder creates an object.
 
  @param classBuilder	The ALCClassBuilder instance which represents the class which needs the injected variable.
  @param variable		The name of the variable. Can be the external name in the the case of a property or the internal name. Alchemic will locate and used the internal name regardless of which is specified.
- @param ... One or more macros which define where to get the dependency from. If none are specified then the variable is examined and a set of default ALCSearchExpression objects generated which sources the value from the model based on the variable's class and protocols.
+ @param ... One or more macros which define where to get the dependency from. If none are specified then the variable is examined and a set of default ALCModelSearchExpression objects generated which sources the value from the model based on the variable's class and protocols.
  */
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder variableDependency:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ Registers an initializer for the current class builder.
+ 
+ @discussion By registering an initializer with this method, Alchemic will now use the initializer specified rather than the default `init` method.
+ 
+ When constructing, the number of arguments in the initializer selector must match the number of `AcArg(...)` macros supplied.
+
+ @param classBuilder The parent class builder for the initializer.
+ @param initializer  The initializer to use.
+ @param ... Zero or more `AcArg(...)` macros which define the arguments of the initializer and where to source them from. Other macros can also be passed here such as `AcIsFactory`, `AcIsPrimary` and `AcWithName(...)`.
+ */
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ Registers a method for a class that will create an object. 
+ 
+ @discussion This differs from registerClassBuilder:initializer: in that this doesn't create an instance of the parent class builder. It calls the method on the parent builder object to create an instance of returnType.
+
+ @param classBuilder The parent class builder. This ALCBuilder will be asked for a value, and then the method will be executed on that value.
+ @param selector     The selector of the method.
+ @param returnType   The type of the object that will be returned from the method.
+ @param ... Zero or more `AcArg(...)` macros which define the arguments of the selector and where to source them from. Other macros can also be passed here such as `AcIsFactory`, `AcIsPrimary` and `AcWithName(...)`.
+ */
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Callbacks
@@ -110,12 +132,35 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 #pragma mark - Retrieving
 
+/**
+ Searches the model and returns a value matching the requested type.
+
+ @discussion If no ALCModelSearchExpression objects are passed then the returnType is used to generate a list of class and protocol search expressions and they are used to search the model.
+
+ @param returnType The type of object desired.
+ @param ... zero or more ALCModelSearchExpression objects which define where to get the values from.
+
+ @return A value that matches the returnType.
+ */
 -(id) getValueWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Working with builders
 
+/**
+ Adds a ALCBuilder to the model.
+
+ @param builder The builder to add.
+ */
 -(void) addBuilderToModel:(id<ALCBuilder>) builder;
 
+/**
+ Uses a set of ALCModelSearchExpression objects to find a set of builders in the model, the executes a block on each one.
+ 
+ @discussion This is mainly used for processing builders to filter them for a final set.
+
+ @param searchExpressions    A NSSet of ALCModelSearchExpression objects which define the search criteria for finding the builders.
+ @param processBuildersBlock A block which is called, passing each builder in turn.
+ */
 -(void) executeOnBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
                        processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
 

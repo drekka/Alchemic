@@ -406,7 +406,7 @@
 			);
 			name = Alchemic;
 			path = alchemic;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;

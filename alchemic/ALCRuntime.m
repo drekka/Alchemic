@@ -37,8 +37,8 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return class_isMetaClass(object_getClass(possibleClass));
 }
 
-+(BOOL) objectIsAProtocol:(id) possiblePrototocol {
-    return __protocolClass == [possiblePrototocol class];
++(BOOL) objectIsAProtocol:(id) possibleProtocol {
+    return __protocolClass == [possibleProtocol class];
 }
 
 +(nullable Class) iVarClass:(Ivar) ivar {
@@ -147,6 +147,9 @@ static NSCharacterSet *__typeEncodingDelimiters;
         classScanners(context, aClass);
 
         // Now check to see if it's an Alchemic config class.
+
+        // TODO: Can we create another scanner intance to do this?
+
         if ([aClass conformsToProtocol:configProtocol]) {
 
             // Found a config, get a list of classes from the config that define additional bundles to scan.

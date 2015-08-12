@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractMethodBuilder {
 	BOOL _useClassMethod;
+    SEL _selector;
 }
 
 -(instancetype) init {
@@ -33,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 		_parentClassBuilder = parentClassBuilder;
 		_selector = selector;
 		self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg + ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary];
-		self.name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(self.selector)];
+		self.name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(_selector)];
 	}
 	return self;
 }
@@ -46,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 																					  valueSource:[arg valueSource]]];
 	}
 	[self validateClass:self.parentClassBuilder.valueClass
-				  selector:self.selector
+				  selector:_selector
 		  macroProcessor:self.macroProcessor];
 }
 
@@ -93,6 +94,9 @@ NS_ASSUME_NONNULL_BEGIN
 	[self.parentClassBuilder injectValueDependencies:value];
 }
 
+-(nonnull NSString *) description {
+    return [NSString stringWithFormat:@"-[%@ %@]", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(_selector)];
+}
 
 @end
 

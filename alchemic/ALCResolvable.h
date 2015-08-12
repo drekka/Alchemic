@@ -11,8 +11,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ Classes that are resolvable can resolve dependencies agaist the model.
+ */
 @protocol ALCResolvable <NSObject>
 
+/**
+ If the resolvable has already been resolved by the resolveWithPostProcessors: method.
+ */
 @property (nonatomic, assign, readonly) BOOL resolved;
 
 /**
@@ -24,6 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Called during model setup to validate dependencies.
+ 
+ @discussion Normally this is about detecting circular dependencies. This is done by checking this ALCResolvable against the dependencyStack. If it is present then we have looped around and have a circular dependency.
+
+ @param dependencyStack An NSArray containing the ALCBuilder instances and ALCDependency instances that have been validated so far.
  */
 -(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
 

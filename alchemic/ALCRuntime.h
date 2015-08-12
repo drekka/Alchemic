@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Queries the type of the object to see if it is a class.
  
- @param possibleClass
+ @param possibleClass An object that may or may not be a Class.
  @return YES if possibleClass is a class.
 */
 +(BOOL) objectIsAClass:(id) possibleClass;
@@ -35,10 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Queries the type of the object to see if it is a protocol.
 
- @param possibleProtocol
+ @param possibleProtocol An object that may or may not be a Protocol *.
  @return YES if possibleClass is a protocol.
  */
-+(BOOL) objectIsAProtocol:(id) possiblePrototocol;
++(BOOL) objectIsAProtocol:(id) possibleProtocol;
 
 /**
  Queries a class to obtain a list of the protocols it conforms to.
@@ -61,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion The passed injection point is used to locate one of three possibilities.
  Either a matching instance variable with the same name, a class variable of the same name or a property whose variable uses the name. When looking for the variable behind a property, a '_' is prefixed.
 
- @param class the class to look at.
+ @param aClass the class to look at.
  @param inj   The name of the variable.
 
  @return the Ivar for the variable.

@@ -22,12 +22,12 @@
 -(nonnull id) instantiateObject {
 	ALCClassBuilder *parent = self.parentClassBuilder;
 	id newObj = [self invokeMethodOn:[parent.valueClass alloc]];
-	STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), NSStringFromSelector(self.selector));
+	STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), self);
 	return newObj;
 }
 
 -(nonnull NSString *) description {
-	return [NSString stringWithFormat:@"Initializer -[%@ %@]", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(self.selector)];
+	return [NSString stringWithFormat:@"Initializer %@", [super description]];
 }
 
 @end

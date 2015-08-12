@@ -75,10 +75,6 @@ NS_ASSUME_NONNULL_BEGIN
     return _model;
 }
 
--(NSSet<ALCClassBuilder *> *) allClassBuilders {
-    return [self buildersForSearchExpression:[[AllClassesExpression alloc] init]];
-}
-
 -(NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
 
     // Quick short cut for single expression queries. Saves building a new set.
