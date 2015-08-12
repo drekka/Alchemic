@@ -237,6 +237,8 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
         [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicFinishedLoading object:self];
     });
 
+    STLog(self, @"Started model: %@", _model);
+
 }
 
 @end
