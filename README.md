@@ -3,9 +3,6 @@ By Derek Clarkson
 
 Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Macro reference](./macros.md)
 
-
-![Underconstruction](./images/alchemic-underconstruction.png) ***Currently Alchemic is in development.*** Wherever you see this logo, it means that this section of Alchemic is still being worked on. 
-
  * [Installation](#installation)
  * [Alchemic](#alchemic)
      * [Starting](#starting)
@@ -26,7 +23,6 @@ Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Macro referen
          * [Searching by class and protocols](#searching-by-class-and-protocols)
          * [Searching by Name](#searching-by-name)
          * [Constant values](#constant-values)
-         * [Property values](#-property-values)
      * [Arrays](#arrays)
  * [Getting objects](#getting-objects)
      * [Unmanaged instances](#unmanaged-instances)
@@ -393,22 +389,6 @@ AcInject(_message, AcValue(@"hello world"))
 `AcValue(...)` cannot be used with any of the macros that perform searches for objects and must occur by itself. In other words, it makes no sense to define a search criteria that looks for objects and a constant value. It's either one or the other.
 
 *Note: If defining arguments for a [factory method](#factory-method), `AcWithValue(...)` can be used for individual arguments along side other arguments that search the model for objects. See [Factory methods](#factory-methods) for more details.*
-
-### ![Underconstruction](./images/alchemic-underconstruction.png) Property values
-
-Property values are sourced from data sources such as Plist files or localization files. To access them you need to have the ***key*** of the value you need to obtain and use the `AcProperty(...)` macro like this:
-
-```objectivec
-@implementation {
-    NSString *_message;
-}
-
-AcInject(_message, AcProperty(@"my.app.hello.message"))
-// Rest of class ...
-@end
-```
-
-`AcProperty(...)` is like `AcValue(...)` in that it provides a specific value and cannot be used with any of the macros that perform searches for objects.
 
 ## Arrays
 
