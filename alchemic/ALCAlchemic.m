@@ -19,34 +19,34 @@
 static __strong ALCContext *__mainContext;
 
 +(ALCContext *) mainContext {
-	return __mainContext;
+    return __mainContext;
 }
 
 +(void) unload {
-	__mainContext = nil;
+    __mainContext = nil;
 }
 
 +(void) load {
-	dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
-		@autoreleasepool {
-			NSProcessInfo *processInfo = [NSProcessInfo processInfo];
-			if (! [processInfo.arguments containsObject:@"--alchemic-nostart"]) {
-				[self start];
-			}
-		}
-	});
+    dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
+        @autoreleasepool {
+            NSProcessInfo *processInfo = [NSProcessInfo processInfo];
+            if (! [processInfo.arguments containsObject:@"--alchemic-nostart"]) {
+                [self start];
+            }
+        }
+    });
 }
 
 +(void) start {
-	STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
-	__mainContext = [[ALCContext alloc] init];
-	NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
-																					 [ALCRuntimeScanner modelScanner],
-																					 [ALCRuntimeScanner dependencyPostProcessorScanner],
-																					 [ALCRuntimeScanner resourceLocatorScanner]
-																					 ]];
-	[ALCRuntime scanRuntimeWithContext:__mainContext runtimeScanners:scanners];
-	[__mainContext start];
+    STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
+    __mainContext = [[ALCContext alloc] init];
+    NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
+                                                                 [ALCRuntimeScanner modelScanner],
+                                                                 [ALCRuntimeScanner dependencyPostProcessorScanner],
+                                                                 [ALCRuntimeScanner resourceLocatorScanner]
+                                                                 ]];
+    [ALCRuntime scanRuntimeWithContext:__mainContext runtimeScanners:scanners];
+    [__mainContext start];
 }
 
 @end

@@ -21,14 +21,16 @@
 #import "ALCDependency.h"
 #import "ALCValueSourceFactory.h"
 
+NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
+
 @interface ALCContext ()
 @property (nonatomic, strong) id<ALCValueResolver> valueResolver;
 @end
 
 @implementation ALCContext {
 	ALCModel *_model;
-	id _appDelegate;
 	NSSet<id<ALCDependencyPostProcessor>> *_dependencyPostProcessors;
+    NSMutableSet<AcSimpleBlock> *_onLoadBlocks;
 }
 
 #pragma mark - Lifecycle
@@ -36,9 +38,9 @@
 -(instancetype) init {
 	self = [super init];
 	if (self) {
-		_appDelegate = [UIApplication sharedApplication].delegate;
 		_model = [[ALCModel alloc] init];
 		_dependencyPostProcessors = [[NSMutableSet alloc] init];
+        _onLoadBlocks = [[NSMutableSet alloc] init];
 	}
 	return self;
 }
@@ -142,9 +144,10 @@
 
 -(void) addBuilderToModel:(id<ALCBuilder> _Nonnull) builder {
 
-	// Look for the all delegate builder and set it.
-	if ([builder.valueClass isSubclassOfClass:[_appDelegate class]]) {
-		builder.value = _appDelegate;
+	// Look for the all delegate builder and set the delegate into it.
+	if ([builder.valueClass isSubclassOfClass:[[UIApplication sharedApplication].delegate class]]) {
+		STLog(self, @"App delegate builder: %@", [UIApplication sharedApplication].delegate);
+		builder.value = [UIApplication sharedApplication].delegate;
 	}
 	[_model addBuilder:builder];
 }
@@ -155,6 +158,21 @@
 	if ([builders count] > 0) {
 		processBuildersBlock(builders);
 	}
+}
+
+#pragma mark - finished loading
+
+-(void) executeWhenStarted:(AcSimpleBlock) block {
+
+    // if there is no on load set then Alchemic has started and the blocks have either been executed or are in the process of being executed.
+    if (_onLoadBlocks == nil) {
+        STLog(self, @"Alchemic already started. Executing block immediately");
+        block();
+        return;
+    }
+
+    // Otherwise add to the set.
+    [_onLoadBlocks addObject:[block copy]];
 }
 
 #pragma mark - Retrieveing objects
@@ -183,28 +201,41 @@
 
 -(void) instantiateSingletons {
 
-	// This is a two stage process so that all objects are created before dependencies are injected. This helps with defeating circular dependency issues.
+	// This is a multi-stage process so that all objects are created before dependencies are injected. This helps with defeating circular dependency issues.
 
-	// Use a map table so we can store keys without copying them.
-	//NSMapTable<id, id<ALCBuilder>> *singletons = [NSMapTable strongToStrongObjectsMapTable];
 	for (id<ALCBuilder> builder in [_model allBuilders]) {
 		if (builder.createOnBoot) {
 			STLog(builder, @"Creating singleton '%@' using %@", builder.name, builder);
-			//id obj =
 			[builder instantiate];
-			//[singletons setObject:builder forKey:obj];
 		}
 	};
 
 	STLog(ALCHEMIC_LOG, @"Injecting dependencies ...");
-	//	STLog(ALCHEMIC_LOG, @"Injecting dependencies into %lu singletons ...", [singletons count]);
 	for (id<ALCBuilder> builder in [_model allBuilders]) {
 		[builder inject];
 	}
-	//for (id obj in [singletons keyEnumerator]) {
-	//	id<ALCBuilder> builder = [singletons objectForKey:obj];
-	//	[builder injectValueDependencies:obj];
-	//}
+
+    STLog(ALCHEMIC_LOG, @"Executing finished loading blocks ...");
+    // Clear the blocks immediately so we don't risk any synchronization issues with other thread still registering blocks.
+    NSMutableSet<AcSimpleBlock> *blocks;
+    @synchronized(_onLoadBlocks) {
+        blocks = _onLoadBlocks;
+        _onLoadBlocks = nil;
+    }
+
+    // This could take some time so we keep t out of the sync block.
+    // Any more incoming block additions will just execute immediately now.
+    for (AcSimpleBlock block in blocks) {
+        // Put back on main queue.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block();
+        });
+    }
+
+	// Send a notification.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicFinishedLoading object:self];
+    });
 
 }
 

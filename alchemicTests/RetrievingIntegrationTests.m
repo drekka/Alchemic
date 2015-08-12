@@ -26,7 +26,7 @@ AcRegister(AcWithName(@"abc"))
 -(void) setUp {
 	[super setUp];
 	[self setupRealContext];
-	[self addClassesToContext:@[[REObject class]]];
+	[self startContextWithClasses:@[[REObject class]]];
 }
 
 -(void) testGet {

@@ -16,7 +16,7 @@
 
 @implementation CISimpleObject
 AcRegister()
--(void)didInjectDependencies {
+-(void) alchemicDidInjectDependencies {
 	_injected = YES;
 }
 @end
@@ -33,7 +33,7 @@ AcInject(simpleObject)
 	[self setupRealContext];
 	//STStartLogging(ALCHEMIC_LOG);
 	STStartLogging(@"[ClassIntegrationTests]");
-	[self addClassesToContext:@[[CISimpleObject class], [ClassIntegrationTests class]]];
+	[self startContextWithClasses:@[[CISimpleObject class], [ClassIntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertNotNil(self.simpleObject);
 	XCTAssertTrue(self.simpleObject.injected);

@@ -61,7 +61,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) configure;
 
-/// @name Getting objects
+#pragma mark - Lifecycle
+
+/// @name Lifecycle
 
 /**
  Creates the object and puts it into the value cache if this is not a factory builder.
@@ -86,6 +88,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param value The object which needs dependencies injected.
  */
 -(void) injectValueDependencies:(id) value;
+
+#pragma mark - Getting objects
 
 /**
  Returns a "ready-to-go" object, injected with any dependencies it needs.

@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 	OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
 }
 
--(void) addClassesToContext:(NSArray<Class> *) classes {
+-(void) startContextWithClasses:(NSArray<Class> *) classes {
 	NSAssert(_context != nil, @"[ALCTestCase setupRealContext must be called first.");
 	NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
 																					 [ALCRuntimeScanner dependencyPostProcessorScanner],

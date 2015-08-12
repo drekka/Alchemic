@@ -37,7 +37,7 @@ AcInject(_objByEverthing, AcName(@"abc"), AcClass(OSObject), AcProtocol(OSable))
 
 -(void) setUp {
 	[self setupRealContext];
-	[self addClassesToContext:@[[OSObject class], [ObjectSearchIntegrationTests class]]];
+	[self startContextWithClasses:@[[OSObject class], [ObjectSearchIntegrationTests class]]];
 	AcInjectDependencies(self);
 }
 

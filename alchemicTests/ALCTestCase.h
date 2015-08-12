@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) setupMockContext;
 -(void) setupRealContext;
 
--(void) addClassesToContext:(NSArray<Class> *) classes;
+-(void) startContextWithClasses:(NSArray<Class> *) classes;
 
 @end
 

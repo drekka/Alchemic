@@ -61,9 +61,9 @@
 		}
 	}
 
-	if ([value respondsToSelector:@selector(didInjectDependencies)]) {
+	if ([value respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
 		STLog([value class], @"Notifying that inject did finish");
-		[value didInjectDependencies];
+		[value alchemicDidInjectDependencies];
 	}
 }
 

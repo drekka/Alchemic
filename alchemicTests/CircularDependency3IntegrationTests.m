@@ -46,7 +46,7 @@ AcInject(_objA, AcName(@"abc"))
 	STStartLogging(@"is [CI3ObjA]");
 	STStartLogging(@"is [CI3ObjB]");
 	STStartLogging(@"is [CircularDependency3IntegrationTests]");
-	[self addClassesToContext:@[[CI3ObjB class], [CI3ObjA class], [CircularDependency3IntegrationTests class]]];
+	[self startContextWithClasses:@[[CI3ObjB class], [CI3ObjA class], [CircularDependency3IntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertNotNil(_objA);
 }

@@ -13,6 +13,7 @@
 #import "ALCMacroProcessor.h"
 #import "ALCVariableDependency.h"
 #import "ALCInternalMacros.h"
+#import "AlchemicAware.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -49,13 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
 		STLog(self, @"Returning a %@", NSStringFromClass([_value class]));
 		return _value;
 	}
-}
-
-#pragma mark - Start up
-
--(BOOL)createOnBoot {
-	// This allows for when a dependency as caused a object to be created during the singleton startup process.
-	return _createOnBoot && _value == nil;
 }
 
 -(id) instantiate {
@@ -128,6 +122,13 @@ NS_ASSUME_NONNULL_BEGIN
 	if (_value != nil) {
 		[self injectValueDependencies:_value];
 	}
+}
+
+#pragma mark - Start up
+
+-(BOOL)createOnBoot {
+	// This allows for when a dependency as caused a object to be created during the singleton startup process.
+	return _createOnBoot && _value == nil;
 }
 
 #pragma mark - Overridable points

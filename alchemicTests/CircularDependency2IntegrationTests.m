@@ -41,7 +41,7 @@ AcInject(_objA)
 	STStartLogging(@"is [ObjA]");
 	STStartLogging(@"is [ObjB]");
 	STStartLogging(@"is [CircularDependency2IntegrationTests]");
-	[self addClassesToContext:@[[ObjB class], [ObjA class], [CircularDependency2IntegrationTests class]]];
+	[self startContextWithClasses:@[[ObjB class], [ObjA class], [CircularDependency2IntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertNotNil(_objA);
 }

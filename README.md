@@ -31,8 +31,9 @@ Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Macro referen
  * [Getting objects](#getting-objects)
      * [Unmanaged instances](#unmanaged-instances)
      * [Programmatically obtaining objects](#programmatically-obtaining-objects)
- * [UIApplicationDelegate](#uiapplicationdelegate)
- * [Callbacks](#callbacks)
+ * [Asynchronous startup](#asynchronous-startup)
+     * [UIApplicationDelegate](#uiapplicationdelegate)
+ * [Callbacks and notifications](#callbacks-and-notifications)
  * [Configuration](#configuration)
  * [Circular dependencies](#circular-dependencies)
  * [Credits](#credits)
@@ -49,21 +50,21 @@ The main ideas driving the Alchemic design are:
  * Flexibility.
 
 ##Main features
-* Automatic class singletons
+* Singletons by default
 * Factory classes
-* Singletons from methods
-* Factory methods
+* Method based object creation
 * Initializer argument injection
 * Method argument injection
 * Value resolution by class, protocol or name.
 * Constant value injection
-* Primary instances.
+* Primary instances
 * Self starting
 * Automatic registration of classes and methods through bundle scanning
 * Automatic array population by class, protocol or name
 * Circular dependency detection
-* Macro driven for minimal code
+* Macro driven
 * UIApplicationDelegate aware
+* Asynchronous loading
 
 # Installation
 
@@ -102,7 +103,9 @@ Alchemic will automatically start itself when the app loads. During this process
 1. Start itself on a background thread.
 2. Scan all classes in your app for dependency injection commands. 
 3. Instantiate any classes it recognises as Singletons and wire up their dependencies.
-4. Check for a UIApplicationDelegate and if found, check to see if it needs any injections.
+4. Check for a UIApplicationDelegate and if found, checks it for injections.
+5. Executes post-startup blocks.
+5. Posts "AlchemicFinishedLoading" notification.
 
 ## Stopping
 
@@ -471,35 +474,61 @@ NSDateFormatter *formatter = AcGet(NSDateFormatter);
 
 Without any criteria, Alchemic will use the passed return type to determine the search criteria for scanning the model based in it's class and any applicable protocols.
 
-## UIApplicationDelegate
+## Asynchronous startup
+
+Alchemic bootstraps itself on a background thread. This helps to keep with application starts quick. However it has a detrimental effect in that any app code that is executing during the starting of your app cannot assume that Alchemic has finished starting.
+
+To address this Alchemic provides a block based asynchronous callback facility. This can be used in any code that runs at the beginning of your app. For example you might have a table view controller that needs data from a singleton that Alchemic creates and injects. This table view controller should be engineered to assume that the singleton dependency is nil, and to register a callback which refreshs the table after Alchemic has finished loading.
+
+```objectivec
+AcExecuteWhenStarted(^{
+    [self.tableView reloadData];
+});
+```
+
+If Alchemic has already started then the block is executed immediately on the current thread. If Alchemic has not started then the block is copied, and executed after Alchemic has finished loading on the **main thread**
+
+### UIApplicationDelegate
 
 Alchemic has some special processing for UIApplicationDelegates. AFter starting, Alchemic will automatically search for a UIApplicationDelegate and if it finds one, inject any dependencies it needs. There is no need to add any `AcRegister(...)` macros to the app delegate class.
 
-## Callbacks
+## Callbacks and notifications
 
-Sometimes it's useful to know when Alchemic has finished injecting values into an object. To facilitate this, a callback method can be added to your class like this:
+### Dependencies injected
 
-```objectivec
-@implementation MyClass {
-    YetAnotherClass *_yetAnotherClass;
-}
-
-AcInject(_yetAnotherClass)
-
--(void) didInjectDependencies {
-    // Do stuff
-}
-
-@end
-```
-
-This method will automatically be called after all dependencies have been injected. This call back has also been added as a protocol you can implement if you like:
+Sometimes it's useful to know when Alchemic has finished injecting values into an object. To facilitate this, Alchemic supplies a protocol which is called after an object has had dependencies injected:
 
 ```objectivec
 @interface MyClass : NSObject<AlchemicAware>
 ```
 
-Alchemic does not require this protocol. It's merely there if you want to formalise the callback.
+```objectivec
+@implementation MyClass 
+-(void) alchemicDidInjectDependencies {
+    // Do stuff
+}
+@end
+```
+
+This method will automatically be called after all dependencies have been injected. You actually don't need to use the protocol as Alchemic simply looks for the method. The protocol is just a conveniance. 
+
+*Also note that this method is __ONLY__ called on classes which Alchemic is managing or when `AcInjectDependencies(...)` is used.*
+
+### Finished loading
+
+Once all singletons have been loaded and injected, Alchemic sends out a notification through the NSNotificationCenter object. There is a constant called `AlchemicFinishedLoading` in the `ALCAlchemic` class which can be used like this:
+
+```objectivec
+[[NSNotificationCenter 
+    defaultCenter] addObserverForName:AlchemicFinishedLoading
+                               object:nil
+                                queue:[NSOperationQueue mainQueue]
+                           usingBlock:^(NSNotification *notification) {
+                                     // .. do stuff
+                                     }];
+```
+
+This is most useful for classes which are not managed by Alchemic but still need to know when Alchemic has finished loading.
 
 # Configuration
 

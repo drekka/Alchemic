@@ -31,7 +31,7 @@ AcInject(_simpleFactory2)
 -(void) testCreatingASFactory {
 	[self setupRealContext];
 	STStartLogging(@"[FactoryIntegrationTests]");
-	[self addClassesToContext:@[[CISimpleFactory class], [FactoryIntegrationTests class]]];
+	[self startContextWithClasses:@[[CISimpleFactory class], [FactoryIntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertNotNil(_simpleFactory1);
 	XCTAssertNotNil(_simpleFactory2);

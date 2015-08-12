@@ -89,4 +89,12 @@
 	[[ALCAlchemic mainContext] registerClassBuilder:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
 }
 
+#pragma mark - Callbacks
+
+/**
+ Call to add a block which is called after Alchemic has started.
+
+ @param block The block to execute.
+ */
+#define AcExecuteWhenStarted(block) [[ALCAlchemic mainContext] executeWhenStarted:block]
 

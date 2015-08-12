@@ -34,7 +34,7 @@ AcInject(_obj2, AcName(@"o2"))
 -(void) testNoArgInit {
 	STStartLogging(ALCHEMIC_LOG);
 	[self setupRealContext];
-	[self addClassesToContext:@[[ArraysIntegrationTests class]]];
+	[self startContextWithClasses:@[[ArraysIntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertNotNil(_asObjects);
 	XCTAssertNotNil(_obj1);

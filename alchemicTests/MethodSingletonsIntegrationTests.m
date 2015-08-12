@@ -67,7 +67,7 @@ AcInject(_parentClass)
 	STStartLogging(ALCHEMIC_LOG);
 	STStartLogging(@"[MSParentClass]");
 	STStartLogging(@"[MethodSingletonIntegrationTests]");
-	[self addClassesToContext:@[[MSParentClass class], [MethodSingletonsIntegrationTests class]]];
+	[self startContextWithClasses:@[[MSParentClass class], [MethodSingletonsIntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertEqual(1u, [_parentClass.createANumberResults count]);
 	XCTAssertTrue([_parentClass.createANumberResults containsObject:_aNumber1]);
@@ -78,7 +78,7 @@ AcInject(_parentClass)
 -(void) testCreatingASingletonWithAnArg {
 	[self setupRealContext];
 	STStartLogging(@"[MethodSingletonIntegrationTests]");
-	[self addClassesToContext:@[[MSParentClass class], [MethodSingletonsIntegrationTests class]]];
+	[self startContextWithClasses:@[[MSParentClass class], [MethodSingletonsIntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertEqual(1u, [_parentClass.createANumberWithNumberResults count]);
 	XCTAssertTrue([_parentClass.createANumberWithNumberResults containsObject:_aNumber3]);

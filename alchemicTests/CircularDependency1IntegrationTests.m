@@ -28,7 +28,7 @@ AcInject(_obj, AcName(@"obj"))
 	STStartLogging(ALCHEMIC_LOG);
 	STStartLogging(@"is [CircularDependency1IntegrationTests]");
 	[self setupRealContext];
-	[self addClassesToContext:@[[CircularDependency1IntegrationTests class]]];
+	[self startContextWithClasses:@[[CircularDependency1IntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertNotNil(_obj);
 }

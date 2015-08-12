@@ -19,6 +19,16 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
+ *  Simple block definition.
+ */
+typedef void (^AcSimpleBlock) (void);
+
+/**
+ *  Name of a notification sent after Alchemic has finished loading all singletons and performed all relevant injections.
+ */
+extern NSString * const AlchemicFinishedLoading;
+
+/**
  Block used when processing a set of ACLBuilders.
  */
 #define ProcessBuiderBlockArgs NSSet<id<ALCBuilder>> *builders
@@ -40,7 +50,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor;
 
-#pragma mark - Registration call backs
+#pragma mark - Registration
 
 /**
  Sets properties on a ALCClassBuilder.
@@ -64,6 +74,19 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+
+#pragma mark - Callbacks
+
+/**
+ Adds a AcSimpleBlock which is called after Alchemic has finished loading.
+
+ @discussion If Alchemic has not finished it's startup procedure, this block is stored and executed at the end of that procedure. This provides a way for object to know when it is safe to use Alchemic's DI functions.
+ 
+ If Alchemic has finished it's startup when this is called, the block is simple executed immediately.
+
+ @param block The block to call.
+ */
+-(void) executeWhenStarted:(AcSimpleBlock) block;
 
 #pragma mark - Lifecycle
 
@@ -94,7 +117,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(void) addBuilderToModel:(id<ALCBuilder>) builder;
 
 -(void) executeOnBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
-							  processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
+                       processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
 
 @end
 

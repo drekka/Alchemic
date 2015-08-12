@@ -35,7 +35,7 @@
 	return @"abc";
 }
 
--(void) didInjectDependencies {
+-(void) alchemicDidInjectDependencies {
 	_didInject = YES;
 }
 
