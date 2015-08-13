@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
     self = [super initWithValueClass:[ALCRuntime iVarClass:variable]
                          valueSource:valueSource];
     if (self) {
-        STLog(self.valueClass, @"Creating variable injection: %s from source: %@", ivar_getName(variable), valueSource);
+        STLog(self.valueClass, @"Created variable dependency: %s sourced from: %@", ivar_getName(variable), valueSource);
         _variable = variable;
     }
     return self;

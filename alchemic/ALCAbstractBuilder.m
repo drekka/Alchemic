@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(id) value {
 	// Value will be populated if this is not a factory.
 	if (_value == nil) {
-		STLog(self.valueClass, @"'%@' is nil, instanting ...", self.name);
+		STLog(self.valueClass, @"Instanting %@ ...", self);
 		id newValue = [self instantiate];
 		[self injectValueDependencies:newValue];
 		return newValue;

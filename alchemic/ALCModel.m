@@ -88,13 +88,11 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableSet<id<ALCBuilder>> *results;
     for (id<ALCModelSearchExpression> searchExpression in sortedSearchExpressions) {
         NSSet<id<ALCBuilder>> *builders = [self buildersForSearchExpression:searchExpression];
-        STLog(ALCHEMIC_LOG, @"Found %lu builders for %@", [builders count], searchExpression);
         if (results == nil) {
             // No results yet to go with the set as a base set.
             results = [NSMutableSet setWithSet:builders];
         } else {
             // Remove any members which are not in the next expression's set.
-            STLog(ALCHEMIC_LOG, @"Filtering %lu builders with %@", [builders count], searchExpression);
             [results intersectSet:builders];
         }
 
@@ -104,6 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
             break;
         }
     }
+    STLog(ALCHEMIC_LOG, @"Found %lu builders for %@", [results count], searchExpressions);
     return results;
 }
 
@@ -159,6 +158,10 @@ NS_ASSUME_NONNULL_BEGIN
     [_queryCache setObject:builders forKey:searchExpression.cacheId];
     STLog(ALCHEMIC_LOG, @"Returning %li builders", [builders count]);
     return builders;
+}
+
+-(NSString *) description {
+    return [_model description];
 }
 
 @end

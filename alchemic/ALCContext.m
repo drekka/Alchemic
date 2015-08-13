@@ -113,10 +113,10 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
-	STLog(classBuilder.valueClass, @"Updating the current class builder ...");
+	STLog(classBuilder.valueClass, @"Updating the class builder %@ ...", classBuilder);
 	alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
 	[classBuilder configure];
-	STLog(classBuilder.valueClass, @"Modified builder: %@, %@", classBuilder, classBuilder.macroProcessor);
+	STLog(classBuilder.valueClass, @"Builder updated: %@", classBuilder);
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... {

@@ -92,7 +92,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-	return [NSString stringWithFormat:@"model value source: %@", [_searchExpressions.allObjects componentsJoinedByString:@", "]];
+	return [NSString stringWithFormat:@"Model: %@", [_searchExpressions.allObjects componentsJoinedByString:@", "]];
 }
 
 @end

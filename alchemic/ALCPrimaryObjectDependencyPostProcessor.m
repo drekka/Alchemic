@@ -26,8 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
     }
     
     // Replace the list if primaries are present.
-    STLog(ALCHEMIC_LOG, @"Primary objects %@", [primaries count] > 0 ? @"detected": @"not found");
-    return [primaries count] > 0 ? primaries : dependencies;
+    if ([primaries count] > 0) {
+        STLog(ALCHEMIC_LOG, @"%lu primary objects detected", [primaries count]);
+        return primaries;
+    }
+    return dependencies;
 }
 
 @end
