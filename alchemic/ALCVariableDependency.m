@@ -24,8 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
     self = [super initWithValueClass:[ALCRuntime iVarClass:variable]
                          valueSource:valueSource];
     if (self) {
-        STLog(self.valueClass, @"Created variable dependency: %s sourced from: %@", ivar_getName(variable), valueSource);
         _variable = variable;
+        STLog(self.valueClass, @"Created variable dependency: %@", self);
     }
     return self;
 }
@@ -35,13 +35,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) injectInto:(id) object {
-    STLog([object class], @"Injecting %@.%s with a %@", NSStringFromClass([object class]), ivar_getName(self.variable), NSStringFromClass(self.valueClass));
+    STLog([object class], @"Injecting %@.%s with a %@", NSStringFromClass([object class]), ivar_getName(self.variable), [ALCRuntime aClassDescription:self.valueClass]);
     [ALCRuntime object:object injectVariable:self.variable withValue:self.value];
 }
 
 -(NSString *) description {
     NSString *desc = [super description];
-    return [NSString stringWithFormat:@"%2$s = %1$@", desc, ivar_getName(_variable)];
+    return [NSString stringWithFormat:@"%s = %@", ivar_getName(_variable), desc];
 }
 
 @end

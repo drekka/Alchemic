@@ -47,7 +47,7 @@
 -(void) testDescription {
 	ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithValue:@5];
 	ALCDependency *dependency = [[ALCDependency alloc] initWithValueClass:[NSString class] valueSource:valueSource];
-	XCTAssertEqualObjects(@"NSString using: Constant: 5", [dependency description]);
+	XCTAssertEqualObjects(@"type [NSString]<NSMutableCopying><NSSecureCoding><NSCopying> from: Constant: 5", [dependency description]);
 }
 
 @end

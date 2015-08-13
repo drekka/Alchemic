@@ -12,6 +12,7 @@
 #import "ALCValueSource.h"
 #import "ALCDependency.h"
 #import "ALCDependencyPostProcessor.h"
+#import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"%s using: %@", class_getName(_valueClass), _valueSource];
+    return [NSString stringWithFormat:@"type %@ from: %@", [ALCRuntime aClassDescription:self.valueClass], _valueSource];
 }
 
 @end

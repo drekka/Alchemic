@@ -14,6 +14,7 @@
 #import "ALCContext.h"
 #import "ALCDependencyPostProcessor.h"
 #import "ALCInternalMacros.h"
+#import "NSSet+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(instancetype) init {
-	return nil;
+    return nil;
 }
 
 -(instancetype) initWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
@@ -53,9 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     STLog(self, @"Resolving %@", self);
 
-	[super resolveWithPostProcessors:postProcessors];
-
-    STStartScope(self);
+    [super resolveWithPostProcessors:postProcessors];
     [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
                                               processingBuildersBlock:^(ProcessBuiderBlockArgs) {
 
@@ -73,26 +72,20 @@ NS_ASSUME_NONNULL_BEGIN
 
     // If there are no candidates left then error.
     if ([_candidateBuilders count] == 0) {
-
-        NSMutableArray<NSString *> *expressionDescs = [[NSMutableArray alloc] initWithCapacity:[_searchExpressions count]];
-        [_searchExpressions enumerateObjectsUsingBlock:^(NSObject<ALCModelSearchExpression> *searchExpression, BOOL * stop) {
-            [expressionDescs addObject:[searchExpression description]];
-        }];
-
         @throw [NSException exceptionWithName:@"AlchemicNoCandidateBuildersFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve value using %@ - no candidate builders found.", [expressionDescs componentsJoinedByString:@", "]]
+                                       reason:[NSString stringWithFormat:@"Unable to resolve value using %@ - no candidate builders found.", [_searchExpressions componentsJoinedByString:@", "]]
                                      userInfo:nil];
     }
 }
 
 -(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-	for (id<ALCBuilder> candidate in _candidateBuilders) {
-		[candidate validateWithDependencyStack:dependencyStack];
-	}
+    for (id<ALCBuilder> candidate in _candidateBuilders) {
+        [candidate validateWithDependencyStack:dependencyStack];
+    }
 }
 
 -(NSString *) description {
-	return [NSString stringWithFormat:@"Model: %@", [_searchExpressions.allObjects componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"Model: %@", [_searchExpressions componentsJoinedByString:@", "]];
 }
 
 @end

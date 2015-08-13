@@ -69,6 +69,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 +(nullable Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
+/**
+ Returns a Alchemic description of a class. 
+ 
+ @discussion This is formatted as [Class]<protocol>...
+
+ @param aClass The class to get a description of.
+
+ @return The NSString description.
+ */
++(NSString *) aClassDescription:(Class) aClass;
+
 #pragma mark - General
 
 /// @name Injecting

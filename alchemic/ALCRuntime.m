@@ -17,6 +17,7 @@
 #import "ALCProtocol.h"
 #import "ALCConfig.h"
 #import "ALCClass.h"
+#import "NSSet+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -83,7 +84,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - General
 
 +(void) object:(id) object injectVariable:(Ivar) variable withValue:(id) value {
-	STLog([object class], @"Injecting %@.%s", NSStringFromClass([value class]), ivar_getName(variable));
+	STLog([object class], @"Injecting %@.%s", NSStringFromClass([object class]), ivar_getName(variable));
     object_setIvar(object, variable, value);
 }
 
@@ -121,81 +122,67 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return var;
 }
 
++(NSString *) aClassDescription:(Class) aClass {
+    NSMutableString *protocolDescs = [[NSMutableString alloc] init];
+    for (Protocol *nextProtocol in [self aClassProtocols:aClass]) {
+        [protocolDescs appendFormat:@"<%@>", NSStringFromProtocol(nextProtocol)];
+    }
+    return [NSString stringWithFormat:@"[%@]%@", NSStringFromClass(aClass), protocolDescs];
+}
+
 #pragma mark - Scanning
 
 +(void) scanRuntimeWithContext:(ALCContext *) context runtimeScanners:(NSSet<ALCRuntimeScanner *> *) runtimeScanners {
-
-    // Define a block for processing a class.
-    void (^classScanners)(ALCContext *, Class) = ^(ALCContext *scanContext, Class scanClass) {
-        for (ALCRuntimeScanner *scanner in runtimeScanners) {
-            if (scanner.selector(scanClass)) {
-                scanner.processor(scanContext, scanClass);
-            }
-        }
-    };
 
     // Use the app bundles and Alchemic framework as the base bundles to search configs classes.
     NSArray<NSBundle *> *appBundles = [NSBundle allBundles];
     appBundles = [appBundles arrayByAddingObject:[NSBundle bundleForClass:[ALCContext class]]];
 
-    // Scan each bundle, checking each class in the bundle.
-    NSMutableSet<NSBundle *> *scannedBundles = [NSMutableSet setWithArray:appBundles];
-    Protocol *configProtocol = @protocol(ALCConfig);
-    [self scanBundles:appBundles withClassBlock:^(Class  __unsafe_unretained aClass) {
+    // Scan the bundles, checking each class.
+    NSMutableSet<NSBundle *> *scannedBundles = [[NSMutableSet alloc] init];
+    NSSet<NSBundle *> * bundles = [NSSet setWithArray:appBundles];
+    while([bundles count] > 0) {
 
-        // Check the class for Alchemic methods.
-        classScanners(context, aClass);
 
-        // Now check to see if it's an Alchemic config class.
+        NSMutableSet<NSBundle *> *moreBundles = [[NSMutableSet alloc] init];
+        for (NSBundle *bundle in bundles) {
 
-        // TODO: Can we create another scanner intance to do this?
+            STLog(ALCHEMIC_LOG, @"Scanning bundle %@", bundle.bundlePath.lastPathComponent);
+            unsigned int count = 0;
+            const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
 
-        if ([aClass conformsToProtocol:configProtocol]) {
+            for(unsigned int i = 0;i < count;i++) {
 
-            // Found a config, get a list of classes from the config that define additional bundles to scan.
-            NSArray<Class> *configClasses = [((id<ALCConfig>)aClass) scanBundlesWithClasses];
-            [configClasses enumerateObjectsUsingBlock:^(Class  configClass, NSUInteger idx, BOOL * stop) {
-
-                // If the config bundle is not already scanned then scan it.
-                NSBundle *additionalBundle = [NSBundle bundleForClass:configClass];
-                if (![scannedBundles containsObject:additionalBundle]) {
-                    [scannedBundles addObject:additionalBundle];
-                    [self scanBundles:@[additionalBundle] withClassBlock:^(Class  __unsafe_unretained additionalClass) {
-                        classScanners(context, additionalClass);
-                    }];
+                Class nextClass = objc_getClass(classes[i]);
+                for (ALCRuntimeScanner *scanner in runtimeScanners) {
+                    if (scanner.selector(nextClass)) {
+                        scanner.processor(context, moreBundles, nextClass);
+                    }
                 }
-            }];
+            }
         }
-    }];
 
-}
-
-+(void) scanBundles:(NSArray<NSBundle *> *) bundles withClassBlock:(void(^)(Class aClass)) classBlock {
-    for (NSBundle *bundle in bundles) {
-        STLog(ALCHEMIC_LOG, @"Scanning bundle %@", bundle.bundlePath.lastPathComponent);
-        unsigned int count = 0;
-        const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &count);
-        for(unsigned int i = 0;i < count;i++){
-            classBlock(objc_getClass(classes[i]));
-        }
+        // track which bundles we have scanned and ensure any new bundles do not include them.
+        [scannedBundles unionSet:bundles];
+        [moreBundles minusSet:scannedBundles];
+        bundles = moreBundles;
     }
 }
 
 #pragma mark - Qualifiers
 
 +(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForClass:(Class) aClass {
-    STLog(aClass, @"Generating search expressions for class: %@", NSStringFromClass(aClass));
     NSMutableSet<id<ALCModelSearchExpression>> * expressions = [[NSMutableSet alloc] init];
     [expressions addObject:[ALCClass withClass:aClass]];
     for (Protocol *protocol in [self aClassProtocols:aClass]) {
         [expressions addObject:[ALCProtocol withProtocol:protocol]];
     }
+    STLog(aClass, @"Search expressions for class: %@, %@", NSStringFromClass(aClass), [expressions componentsJoinedByString:@","]);
     return expressions;
 }
 
 +(NSSet<id<ALCModelSearchExpression>> *) searchExpressionsForVariable:(Ivar)variable {
 
-    STLog(ALCHEMIC_LOG, @"Generating search expressions for variable: %s", ivar_getName(variable));
     NSMutableSet<id<ALCModelSearchExpression>> *expressions = [[NSMutableSet alloc] init];
 
     // Get the type.
@@ -243,12 +230,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 }
 
-/**
- Executes a block on the class hierarchy starting with the current class and working through the super class structure.
-
- @param aClass				the class to start with.
- @param executeBlock	the block to execute. Return a YES from this block to stop processing.
- */
 +(void) aClass:(Class) aClass executeOnHierarchy:(BOOL (^)(Class nextClass)) executeBlock {
     Class nextClass = aClass;
     while (nextClass != nil && ! executeBlock(nextClass)) {

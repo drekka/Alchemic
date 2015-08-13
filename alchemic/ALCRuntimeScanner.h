@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL(^ClassSelector)(Class aClass);
-typedef void(^ClassProcessor)(ALCContext *context, Class aClass);
+typedef void (^ClassProcessor)(ALCContext *context, NSMutableSet *moreBundles, Class aClass);
 
 /**
  Used to scan the runtime looking for Alchemic methods.
@@ -41,6 +41,13 @@ typedef void(^ClassProcessor)(ALCContext *context, Class aClass);
  */
 -(instancetype) initWithSelector:(ClassSelector) selector
 							  processor:(ClassProcessor) processor;
+
+/**
+ Factory method which returns a scanner which searches for Alchemic config classes.
+
+ @return A scanner.
+ */
++(instancetype) configScanner;
 
 /**
  Factory method which returns a scanner which searches for Alchemic registration class methods.

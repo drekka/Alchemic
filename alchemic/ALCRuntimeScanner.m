@@ -15,6 +15,7 @@
 #import "ALCDependencyPostProcessor.h"
 #import "ALCResourceLocator.h"
 #import "ALCContext.h"
+#import "ALCConfig.h"
 
 @implementation ALCRuntimeScanner
 
@@ -33,7 +34,7 @@
             initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
                 return YES;
             }
-            processor:^(ALCContext * _Nonnull context, Class  _Nonnull __unsafe_unretained aClass) {
+            processor:^(ALCContext * context, NSMutableSet *moreBundlesClass, Class __unsafe_unretained aClass) {
 
                 // Get the class methods. We need to get the class of the class for them.
                 unsigned int methodCount;
@@ -52,7 +53,7 @@
 
                     // If we are here then we have an alchemic method to process, so create a class builder for for the class.
                     if (currentClassBuilder == nil) {
-                        STLog(aClass, @"Creating parent class builder for class %@ ...", NSStringFromClass(aClass));
+                        STLog(aClass, @"Creating class builder for a %@ ...", NSStringFromClass(aClass));
                         currentClassBuilder = [[ALCClassBuilder alloc] initWithValueClass:aClass];
                         [context addBuilderToModel:currentClassBuilder];
                     }
@@ -63,7 +64,6 @@
                 }
 
                 free(classMethods);
-
             }];
 }
 
@@ -72,8 +72,7 @@
             initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
                 return [aClass conformsToProtocol:@protocol(ALCDependencyPostProcessor)];
             }
-            processor:^(ALCContext * _Nonnull context, Class  _Nonnull __unsafe_unretained aClass) {
-                STLog(ALCHEMIC_LOG, @"Adding dependency post processor %@", NSStringFromClass(aClass));
+            processor:^(ALCContext * context, NSMutableSet *moreBundles, Class __unsafe_unretained aClass) {
                 [context addDependencyPostProcessor:[[aClass alloc] init]];
             }];
 }
@@ -83,10 +82,24 @@
             initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
                 return [aClass conformsToProtocol:@protocol(ALCResourceLocator)];
             }
-            processor:^(ALCContext * _Nonnull context, Class  _Nonnull __unsafe_unretained aClass) {
-                STLog(ALCHEMIC_LOG, @"Adding resource locator %@", NSStringFromClass(aClass));
+            processor:^(ALCContext * context, NSMutableSet *moreBundles, Class __unsafe_unretained aClass) {
                 //ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
                 //classBuilder.value = [[aClass alloc] init];
+            }];
+}
+
++(instancetype) configScanner {
+    return [[ALCRuntimeScanner alloc]
+            initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
+                return [aClass conformsToProtocol:@protocol(ALCConfig)];
+            }
+            processor:^(ALCContext * context, NSMutableSet *moreBundles, Class __unsafe_unretained aClass) {
+                STLog(ALCHEMIC_LOG, @"Reading config from %@", NSStringFromClass(aClass));
+                NSArray<Class> *configClasses = [((id<ALCConfig>)aClass) scanBundlesWithClasses];
+                [configClasses enumerateObjectsUsingBlock:^(Class  configClass, NSUInteger idx, BOOL * stop) {
+                    NSBundle *bundle = [NSBundle bundleForClass:configClass];
+                    [moreBundles addObject:bundle];
+                }];
             }];
 }
 

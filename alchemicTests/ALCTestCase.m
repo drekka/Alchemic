@@ -66,8 +66,9 @@ NS_ASSUME_NONNULL_BEGIN
 	[ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
 
 	ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
+    NSMutableSet *moreBundles = [[NSMutableSet alloc] init];
 	[classes enumerateObjectsUsingBlock:^(Class  _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
-		modelScanner.processor(self.context, aClass);
+		modelScanner.processor(self.context, moreBundles, aClass);
 	}];
 
 	[_context start];

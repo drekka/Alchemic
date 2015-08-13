@@ -20,6 +20,7 @@
 #import "ALCMacroProcessor.h"
 #import "ALCDependency.h"
 #import "ALCValueSourceFactory.h"
+#import "NSSet+Alchemic.h"
 
 NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
@@ -96,6 +97,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder variableDependency:(NSString *) variable, ... {
 
 	STLog(classBuilder.valueClass, @"Registering variable dependency %@.%@ ...", NSStringFromClass(classBuilder.valueClass), variable);
+    STStartScope(classBuilder.valueClass);
 
 	Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
 	ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValueDef];
@@ -103,7 +105,8 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 	// Add a default value source for the ivar if no macros where loaded to define it.
 	if ([macroProcessor valueSourceCount] == 0) {
-		NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForVariable:var];
+        STLog(classBuilder.valueClass, @"No defintion macros specified");
+        NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForVariable:var];
 		for (id<ALCModelSearchExpression> macro in macros) {
 			[macroProcessor addMacro:(id<ALCMacro>)macro];
 		}
@@ -113,10 +116,10 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
-	STLog(classBuilder.valueClass, @"Updating the class builder %@ ...", classBuilder);
+	STLog(classBuilder.valueClass, @"Updating %@ ...", classBuilder);
 	alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
 	[classBuilder configure];
-	STLog(classBuilder.valueClass, @"Builder updated: %@", classBuilder);
+	STLog(classBuilder.valueClass, @"Updated: %@", classBuilder);
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... {

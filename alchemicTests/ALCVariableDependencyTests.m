@@ -41,7 +41,7 @@
 }
 
 -(void) testDescription {
-	XCTAssertEqualObjects(@"_aStringProperty = NSString using: OCMockObject(ALCValueSource)", [_dependency description]);
+	XCTAssertEqualObjects(@"_aStringProperty = type [NSString]<NSMutableCopying><NSSecureCoding><NSCopying> from: OCMockObject(ALCValueSource)", [_dependency description]);
 }
 
 @end

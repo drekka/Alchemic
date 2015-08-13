@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  An extension of ALCDependency that can inject the result value into a variable in an object.
- 
+
  @discussion This class is used by the `AcInject(...)` macro.
  */
 @interface ALCVariableDependency : ALCDependency
@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
  @return An instnace of this class.
  */
 -(instancetype) initWithValueClass:(Class) valueClass
-							  valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
+                       valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
 
 /**
  Default initializer.
