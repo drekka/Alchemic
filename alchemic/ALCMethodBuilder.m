@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-	return [NSString stringWithFormat:@"Method builder -(%@ *) %@", NSStringFromClass(self.valueClass), [super description]];
+	return [NSString stringWithFormat:@"Method builder -(%@ *) %@%@", NSStringFromClass(self.valueClass), [super description], self.valuePresent ? @" - instantiated" : @""];
 }
 
 -(void) injectValueDependencies:(id) value {

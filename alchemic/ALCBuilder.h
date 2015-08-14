@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Indicates if the builder should create an instance during Alchemic's startup processing.
 
- @discussion Any `AcRegister(...)` or `AcInitializer(...)` macro can set this to YES. But only if there is no `AcIsFactory` macro. When queried, it will return YES if the builder does not represent a factory and there is not already a value in the builders object cache. Otherwise NO.
+ @discussion Alchemic's startup process needs to check this so it knows whether or not to create an instance of an object as a singleton. By default this is NO. Any `AcRegister(...)` or `AcInitializer(...)` macro can set this to YES if not registering a factory. When queried, it will return YES if the builder does not represent a factory and there isn't a value in the builders object cache. Otherwise NO.
  */
 @property (nonatomic, assign, readonly) BOOL createOnBoot;
 
