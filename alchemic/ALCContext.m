@@ -199,6 +199,17 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     return dependency.value;
 }
 
+-(id) invokeOnMethodBuilders:(id<ALCMacro>) methodLocator, ... {
+
+    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosModelSearch + ALCAllowedMacrosArg];
+    alc_loadMacrosIncluding(macroProcessor, methodLocator);
+
+    ALCValueSourceFactory *factory = [macroProcessor valueSourceFactoryAtIndex:0];
+    NSSet<id<ALCBuilder>> *builders = [_model buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) factory.macros];
+
+    return builders;
+}
+
 #pragma mark - Internal
 
 -(void) instantiateSingletons {

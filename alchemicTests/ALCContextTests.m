@@ -13,11 +13,12 @@
 #import <Alchemic/Alchemic.h>
 
 #import "ALCContext.h"
-#import "ALCClassBUilder.h"
+#import "ALCClassBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCBuilder.h"
 #import "SimpleObject.h"
 #import "ALCModel.h"
+#import "ALCAbstractMethodBuilder.h"
 
 @interface ALCContextTests : XCTestCase
 
@@ -79,6 +80,28 @@
     ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
     
     [_context registerClassBuilder:classBuilder variableDependency:@"aStringProperty", nil];
+}
+
+-(void) testInvokeOnMethodBuilders {
+
+    //NSSet<id<ALCModelSearchExpression>> *expressions = [NSSet setWithObject:nameLocator];
+
+    ALCName *nameLocator = AcName(@"abc");
+    id mockBuilder = OCMClassMock([ALCAbstractMethodBuilder class]);
+    OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
+        return [(NSSet *)arg containsObject:nameLocator];
+    }]]).andReturn([NSSet setWithObject:mockBuilder]);
+
+    id mockInv = OCMClassMock([NSInvocation class]);
+    OCMStub([mockBuilder inv]).andReturn(mockInv);
+
+    OCMStub([mockBuilder instantiateObject]).andReturn(@"xyz");
+
+    id results = [_context invokeOnMethodBuilders:nameLocator, AcArg(NSString, AcValue(@"def")), nil];
+    XCTAssertEqualObjects(@"xyz", results);
+
+
+    OCMVerify([mockBuilder instantiateObject]);
 }
 
 @end

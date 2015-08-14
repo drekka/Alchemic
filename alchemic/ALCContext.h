@@ -14,7 +14,7 @@
 @protocol ALCModelSearchExpression;
 @class ALCClassBuilder;
 @protocol ALCBuilder;
-@protocol ALCValueDefMacro;
+@protocol ALCMacro;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -143,6 +143,20 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @return A value that matches the returnType.
  */
 -(id) getValueWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+
+/**
+ Programmatically invokes a specific method.
+
+ @discussion The method can be a normal instance method registered with AcMethod(...) or an initializer registered with AcInitializer(...). Usually you would use this method rather than an injected value when you need to pass values to the method or initializer which are not available from Alchemic's model or a constant value. In other words, values which are computed just prior to requesting the object from Alchemic.
+
+ Note that this method can be used to invoke multiple methods or initializers. In this case it is assumed that each one takes the same arguments in the same order and an array of result objects will be returned.
+
+ @param methodLocator A model search macro which is used to locate the method or initializer to call.
+ @param ...  zero or more macros. If model search macros are passed they are added to the method locator. If AcArg(...) macros then they are assumed to be used to find argument values for the method to be invoked.
+
+ @return either an object or an array of objects if multiple builders are found.
+ */
+-(id) invokeOnMethodBuilders:(id<ALCMacro>) methodLocator, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Working with builders
 

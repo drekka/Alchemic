@@ -78,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Called to create the object by the [ALCBuilder instantiate] method.
  
- @discussion This method should not be called directly by external code. It is overridden in each builder to create an object according to how the builder is designed to do that. [ALCBuilder instantiate] is where the object is managed and should not be overridden.
+ @discussion This method is overridden in each builder to create an object according to how the builder is designed to do that. [ALCBuilder instantiate] is where the object is managed and should not be overridden.
  @return An instance of the object that the builder has built.
  */
 -(id) instantiateObject;

@@ -12,7 +12,6 @@
 #import "ALCMacro.h"
 
 @protocol ALCValueSource;
-@protocol ALCValueDefMacro;
 
 NS_ASSUME_NONNULL_BEGIN
 
