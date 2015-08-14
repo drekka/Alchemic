@@ -156,6 +156,14 @@ NS_ASSUME_NONNULL_BEGIN
 	return nil;
 }
 
+-(NSString *) stateDescription {
+    return _value == nil ? @"  " : @"* ";
+}
+
+-(NSString *) attributesDescription {
+    return self.factory ? @" - factory" : @"";
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

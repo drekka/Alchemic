@@ -58,6 +58,14 @@
 
 #pragma mark - Retrieving values
 
+/**
+ Programmatically gets an object from Alchemic.
+
+ @param returnType The type of the object to be retrieved. This can be a NSArray class if multiple objects are expected.
+ @param ...        Zero or more macros which define the model search expressions which will find the object.
+
+ @return The found object.
+ */
 #define AcGet(returnType, ...) [[ALCAlchemic mainContext] getValueWithClass:[returnType class], ## __VA_ARGS__, nil]
 
 #pragma mark - Registering

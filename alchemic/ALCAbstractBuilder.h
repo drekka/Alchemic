@@ -32,13 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) Class valueClass;
 
 /**
- Used to find out if there is a value stored. 
- 
- @discussion Do not use the value and check for nil as accessing the value will cause it to be instantiated and will always return an instance.
- */
-@property (nonatomic, assign, readonly) BOOL valuePresent;
-
-/**
  The name assigned to the builder.
 
  @discussion This is mainly used when Alchemic is searching the model to find builders with a specific name. Names can be anything you like and more than one object can have the same name. By default, various builders assign names if one is not specified by the `AcWithName(...)` macro.
@@ -101,6 +94,24 @@ NS_ASSUME_NONNULL_BEGIN
  @exception NSException If there is a problem.
  */
 -(void) validateClass:(Class) aClass selector:(SEL)selector macroProcessor:(ALCMacroProcessor *) macroProcessor;
+
+/**
+ Returns the state of the object as a string.
+
+ @discussion This is mostly used for debug logging.
+
+ @return A string representing the state.
+ */
+-(NSString *) stateDescription;
+
+/**
+ Returns the attributes of the object as a string.
+
+ @discussion This is mostly used for debug logging. Typically it displays if the builder is a factory.
+
+ @return A string representing the attributes.
+ */
+-(NSString *) attributesDescription;
 
 @end
 

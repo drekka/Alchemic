@@ -27,7 +27,7 @@
 }
 
 -(nonnull NSString *) description {
-	return [NSString stringWithFormat:@"Initializer %@", [super description]];
+	return [NSString stringWithFormat:@"%@'%@' Initializer builder %@%@", [self stateDescription], self.name, [super description], self.attributesDescription];
 }
 
 @end
