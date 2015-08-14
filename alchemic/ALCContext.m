@@ -131,7 +131,6 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     // replace the class builder in the model with the initializer builder because now we have an initializer we don't want the class to be found as the source of these objects.
     [_model addBuilder:initializerBuilder];
     [_model removeBuilder:classBuilder];
-
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {

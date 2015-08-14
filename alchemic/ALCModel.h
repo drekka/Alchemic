@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param builder	the builder to be added.
  */
--(void) addBuilder:(id<ALCBuilder>) builder;
+-(void) addBuilder:(NSObject<ALCBuilder> *) builder;
 
 /**
  Removes a builder form the model.
@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param builder The builder to be removed.
  */
--(void) removeBuilder:(id<ALCBuilder>) builder;
+-(void) removeBuilder:(NSObject<ALCBuilder> *) builder;
 
 #pragma mark - Querying
 

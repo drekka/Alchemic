@@ -13,6 +13,7 @@
 #import "ALCClassBuilder.h"
 #import "ALCInternalMacros.h"
 #import "ALCModelSearchExpression.h"
+#import "ALCName.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @implementation ALCModel {
+    NSMapTable<NSString *, id<ALCBuilder>> *_nameIndex;
     NSMutableSet<id<ALCBuilder>> *_model;
     NSCache *_queryCache;
 }
@@ -49,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
         STLog(ALCHEMIC_LOG, @"Initing model instance ...");
         _model = [[NSMutableSet alloc] init];
         _queryCache = [[NSCache alloc] init];
+        _nameIndex = [NSMapTable strongToWeakObjectsMapTable];
     }
     return self;
 }
@@ -59,14 +62,49 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Updating
 
--(void) addBuilder:(id<ALCBuilder>) builder {
+-(void) addBuilder:(NSObject<ALCBuilder> *) builder {
+
+    // We need to know when a builder changes it's name so we can update the index.
+    [builder addObserver:self
+              forKeyPath:@"name"
+                 options:NSKeyValueObservingOptionOld + NSKeyValueObservingOptionNew
+                 context:nil];
+
+    [self indexBuilder:builder];
     [_model addObject:builder];
-    [_queryCache removeAllObjects];
 }
 
--(void) removeBuilder:(id<ALCBuilder>) builder {
+-(void) removeBuilder:(NSObject<ALCBuilder> *) builder {
+    [builder removeObserver:self forKeyPath:@"name"];
+    [_nameIndex removeObjectForKey:builder.name];
 	[_model removeObject:builder];
-	[_queryCache removeAllObjects];
+}
+
+-(void) observeValueForKeyPath:(nullable NSString *) keyPath
+                      ofObject:(nullable id) object
+                        change:(nullable NSDictionary<NSString *,id> *) change
+                       context:(nullable void *) context {
+
+    if ([keyPath isEqualToString:@"name"]) {
+        NSString *oldName = change[NSKeyValueChangeOldKey];
+        NSString *newName = change[NSKeyValueChangeNewKey];
+        STLog(ALCHEMIC_LOG, @"Builder changed name from '%@' to '%@'", oldName, newName);
+        if (oldName != nil) {
+            [_nameIndex removeObjectForKey:oldName];
+        }
+        [self indexBuilder:(id<ALCBuilder>) object];
+    }
+
+}
+
+-(void) indexBuilder:(NSObject<ALCBuilder> *)builder {
+    id<ALCBuilder> currentBuilder = [_nameIndex objectForKey:builder.name];
+    if (currentBuilder != nil) {
+        @throw [NSException exceptionWithName:@"AlchemicDuplicateName"
+                                       reason:[NSString stringWithFormat:@"Builder names must be unique. Duplicate name: %@ found on builder %@ and builder %@", builder.name, builder, currentBuilder]
+                                     userInfo:nil];
+    }
+    [_nameIndex setObject:builder forKey:builder.name];
 }
 
 #pragma mark - Querying
@@ -136,6 +174,17 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Internal
 
 -(NSSet<id<ALCBuilder>> *) buildersForSearchExpression:(id<ALCModelSearchExpression>) searchExpression {
+
+    // Check for a name query first.
+    if ([searchExpression isKindOfClass:[ALCName class]]) {
+        ALCName *nameExpression = (ALCName *)searchExpression;
+        id<ALCBuilder> builder = [_nameIndex objectForKey:nameExpression.aName];
+        if (builder == nil) {
+            return [NSSet set];
+        }
+        STLog(ALCHEMIC_LOG, @"Returning builder with name: %@", builder.name);
+        return [NSSet setWithObject:builder];
+    }
 
     // Check the cache
     NSSet<id<ALCBuilder>> *cachedBuilders = [_queryCache objectForKey:searchExpression.cacheId];

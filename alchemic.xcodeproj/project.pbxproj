@@ -79,6 +79,7 @@
 		6C5F171C1B626FF900F60B1B /* ALCAbstractValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F171B1B626FF900F60B1B /* ALCAbstractValueSourceTests.m */; };
 		6C62C9491B54F339009D57C7 /* ALCConstantValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C62C9461B54F204009D57C7 /* ALCConstantValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7170001B7391AA00634112 /* RetrievingIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C716FFF1B7391AA00634112 /* RetrievingIntegrationTests.m */; };
+		6C7DAF211B7DA3A8003A492A /* NSSet+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7DAF201B7DA3A8003A492A /* NSSet+AlchemicTests.m */; };
 		6C7F24EA1B4B564B007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
 		6C7F24EB1B4B565E007A44C8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; };
 		6C7F24ED1B4B5A9F007A44C8 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -210,6 +211,7 @@
 		6C781EAD1B2595B8001D86CB /* ALCWithName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCWithName.m; sourceTree = "<group>"; };
 		6C781EAF1B25968F001D86CB /* ALCIsPrimary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCIsPrimary.h; sourceTree = "<group>"; };
 		6C781EB01B25968F001D86CB /* ALCIsPrimary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCIsPrimary.m; sourceTree = "<group>"; };
+		6C7DAF201B7DA3A8003A492A /* NSSet+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+AlchemicTests.m"; sourceTree = "<group>"; };
 		6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6C8CD9641B55FC9100C1BC7F /* ALCModelSearchExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCModelSearchExpression.h; sourceTree = "<group>"; };
 		6C8FF89D1B67BEFB00B2B90A /* ALCMethodBuilderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMethodBuilderTests.m; sourceTree = "<group>"; };
@@ -498,6 +500,7 @@
 			isa = PBXGroup;
 			children = (
 				6CAC88801B4A6C6000AFB8E4 /* ALCRuntimeTests.m */,
+				6C7DAF201B7DA3A8003A492A /* NSSet+AlchemicTests.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -799,6 +802,7 @@
 				6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */,
 				6C95EDEC1B68A5D3004D8F74 /* ALCDependencyTests.m in Sources */,
 				6C24210D1B67181F00884A93 /* ALCClassInitializerBuilderTests.m in Sources */,
+				6C7DAF211B7DA3A8003A492A /* NSSet+AlchemicTests.m in Sources */,
 				6CF28C641B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m in Sources */,
 				6C37497E1B7AD8B40012383D /* OnLoadIntegrationTests.m in Sources */,
 				6C5F17101B61282100F60B1B /* ALCArgTests.m in Sources */,

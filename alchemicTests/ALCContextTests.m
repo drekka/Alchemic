@@ -24,61 +24,61 @@
 @end
 
 @implementation ALCContextTests {
-	ALCContext *_context;
-	id _mockRuntime;
-	id _mockModel;
+    ALCContext *_context;
+    id _mockRuntime;
+    id _mockModel;
 }
 
 -(void) setUp {
-	_mockRuntime = OCMClassMock([ALCRuntime class]);
-	_mockModel = OCMClassMock([ALCModel class]);
-	_context = [[ALCContext alloc] init];
-	Ivar modelVar = class_getInstanceVariable([ALCContext class], "_model");
-	object_setIvar(_context, modelVar, _mockModel);
+    _mockRuntime = OCMClassMock([ALCRuntime class]);
+    _mockModel = OCMClassMock([ALCModel class]);
+    _context = [[ALCContext alloc] init];
+    Ivar modelVar = class_getInstanceVariable([ALCContext class], "_model");
+    object_setIvar(_context, modelVar, _mockModel);
 }
 
 
 -(void) testInjectDependencies {
 
-	NSSet<id<ALCModelSearchExpression>> *expressions = [NSSet setWithObject:AcClass(SimpleObject)];
-	OCMStub([_mockRuntime searchExpressionsForClass:[SimpleObject class]]).andReturn(expressions);
+    NSSet<id<ALCModelSearchExpression>> *expressions = [NSSet setWithObject:AcClass(SimpleObject)];
+    OCMStub([_mockRuntime searchExpressionsForClass:[SimpleObject class]]).andReturn(expressions);
 
-	id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
-	NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
-	OCMStub([_mockModel buildersForSearchExpressions:expressions]).andReturn(builders);
-	OCMStub([_mockModel classBuildersFromBuilders:builders]).andReturn(builders);
+    id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
+    NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
+    OCMStub([_mockModel buildersForSearchExpressions:expressions]).andReturn(builders);
+    OCMStub([_mockModel classBuildersFromBuilders:builders]).andReturn(builders);
 
-	SimpleObject *object = [[SimpleObject alloc] init];
-	OCMExpect([mockBuilder injectValueDependencies:object]);
+    SimpleObject *object = [[SimpleObject alloc] init];
+    OCMExpect([mockBuilder injectValueDependencies:object]);
 
-	[_context injectDependencies:object];
+    [_context injectDependencies:object];
 
-	OCMVerifyAll(mockBuilder);
+    OCMVerifyAll(mockBuilder);
 
 }
 
 -(void) testResolveBuilderDependencies {
 
-	id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
-	NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
-	OCMStub([_mockModel numberBuilders]).andReturn(1u);
-	OCMStub([_mockModel allBuilders]).andReturn(builders);
+    id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
+    NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
+    OCMStub([_mockModel numberBuilders]).andReturn(1u);
+    OCMStub([_mockModel allBuilders]).andReturn(builders);
 
-	OCMExpect([mockBuilder resolveWithPostProcessors:OCMOCK_ANY]);
-	OCMExpect([mockBuilder validateWithDependencyStack:OCMOCK_ANY]);
-	OCMStub([mockBuilder valueClass]).andReturn([NSString class]);
+    OCMExpect([mockBuilder resolveWithPostProcessors:OCMOCK_ANY]);
+    OCMExpect([mockBuilder validateWithDependencyStack:OCMOCK_ANY]);
+    OCMStub([mockBuilder valueClass]).andReturn([NSString class]);
 
-	ignoreSelectorWarnings(
-								  [_context performSelector:@selector(resolveBuilderDependencies)];
-								  )
+    ignoreSelectorWarnings(
+                           [_context performSelector:@selector(resolveBuilderDependencies)];
+                           )
 
-	OCMVerifyAll(mockBuilder);
+    OCMVerifyAll(mockBuilder);
 }
 
 -(void) testRegisterDependencyInClassBuilder {
-	ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
-
-	[_context registerClassBuilder:classBuilder variableDependency:@"aStringProperty", nil];
+    ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
+    
+    [_context registerClassBuilder:classBuilder variableDependency:@"aStringProperty", nil];
 }
 
 @end
