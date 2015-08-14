@@ -217,6 +217,8 @@ Here's how we assign a custom name during registration:
 AcRegister(AcWithName(@"JSON date formatter"))
 ```
 
+*Note: names __must__ be unique. This aids in searching.*
+
 ## Generating objects using methods
 
 *Note: This is a seperate subject because it's slightly more complex to setup than classes and dependencies.* 
@@ -374,6 +376,9 @@ AcInject(otherClass, AcName(@"JSON date formatter"))
 
 Again we are making a general reference to a `NSDateFormatter`, but using the name assigned by Alchemic to locate the specific one needed for the injection.
 
+The `AcName(...)` macro cannot occur with any other macros. However, if defining arguments for a [factory method](#factory-method), `AcName(...)` can be used for individual arguments along side other arguments that search the model for objects. See [Factory methods](#factory-methods) for more details.*
+
+
 ### Constant values
 
 Some times you might want to specify a constant value for a dependency. In this case we can use the `AcValue(...)` macro like this:
@@ -388,9 +393,7 @@ AcInject(_message, AcValue(@"hello world"))
 @end
 ```
 
-`AcValue(...)` cannot be used with any of the macros that perform searches for objects and must occur by itself. In other words, it makes no sense to define a search criteria that looks for objects and a constant value. It's either one or the other.
-
-*Note: If defining arguments for a [factory method](#factory-method), `AcWithValue(...)` can be used for individual arguments along side other arguments that search the model for objects. See [Factory methods](#factory-methods) for more details.*
+The `AcValue(...)` macro cannot occur with any other macros. However, if defining arguments for a [factory method](#factory-method), `AcValue(...)` can be used for individual arguments along side other arguments that search the model for objects. See [Factory methods](#factory-methods) for more details.*
 
 ## Arrays
 
@@ -442,7 +445,7 @@ NSDateFormatter *formatter = AcGet(NSDateFormatter, AcName(@"JSON date formatter
 
 `AcGet(...)` requires the first argument to be the type of what will be returned. This type is needed because the runtime does not know what is expected to be returned and Alchemic needs this information to finish processing the results. 
 
-Arguments after the type are search criteria macros used to find the object. So `AcClass(...)`, `AcProtocol(...)`, `AcName(...)`, `AcValue(...)` or '`AcProperty(...)` macros are all useable to either search the context for objects or set a specific value. Note that `AcGet(...)` also does standard Alchemic `NSArray` processing. For example the following code will return an array of all Alchemic registered date formatters:*
+Arguments after the type are search criteria macros used to find the object. So `AcClass(...)`, `AcProtocol(...)`, `AcName(...)`, or `AcValue(...)` macros are all useable to either search the context for objects or set a specific value. Note that `AcGet(...)` also does standard Alchemic `NSArray` processing. For example the following code will return an array of all Alchemic registered date formatters:*
 
 ```objectivec
 NSArray *formatters = AcGet(NSArray, AcClass(NSDateFormatter));
