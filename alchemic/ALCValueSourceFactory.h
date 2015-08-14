@@ -9,7 +9,7 @@
 @import Foundation;
 
 @protocol ALCValueSource;
-@protocol ALCValueDefMacro;
+@protocol ALCMacro;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,14 +27,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The macros that have been store in the factory.
  */
-@property(nonatomic, strong, readonly) NSSet<id<ALCValueDefMacro>> *macros;
+@property(nonatomic, strong, readonly) NSSet<id<ALCMacro>> *macros;
 
 /**
  Add a macro to the set of macros.
  
  @param macro The macro to be added.
  */
--(void) addMacro:(id<ALCValueDefMacro>) macro;
+-(void) addMacro:(id<ALCMacro>) macro;
 
 /**
  Generates and returns a ALCValueSource instance based on the macros previously stored. 

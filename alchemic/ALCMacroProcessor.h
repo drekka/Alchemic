@@ -16,15 +16,17 @@
  */
 typedef NS_OPTIONS(NSUInteger, ALCAllowedMacros){
 	/// Allow the factory macro to be used.
-	ALCAllowedMacrosFactory  = 1 << 0,
+	ALCAllowedMacrosFactory     = 1 << 0,
 	/// Alloc the primary macro to be used.
-	ALCAllowedMacrosPrimary  = 1 << 1,
+	ALCAllowedMacrosPrimary     = 1 << 1,
 	/// Allow the with name macro to be used.
-	ALCAllowedMacrosName     = 1 << 2,
-	/// Allow the search and constant macros to be used.
-	ALCAllowedMacrosValueDef = 1 << 3,
+	ALCAllowedMacrosName        = 1 << 2,
+	/// Allow the search macros to be used.
+	ALCAllowedMacrosModelSearch = 1 << 3,
+    /// Allow the constant value macro
+    ALCAllowedMacrosValue       = 1 << 4,
 	/// Allow the Arg macro to be used.
-	ALCAllowedMacrosArg      = 1 << 4
+	ALCAllowedMacrosArg         = 1 << 5
 };
 
 NS_ASSUME_NONNULL_BEGIN

@@ -7,7 +7,6 @@
 //
 
 @import Foundation;
-#import "ALCValueDefMacro.h"
 #import "ALCMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @discussion Instances of this class will always return the same value and do not search the model or any other source. Effectively providing constant values to the dependencies that reference them.
  */
-@interface ALCConstantValue : NSObject<ALCValueDefMacro, ALCMacro>
+@interface ALCConstantValue : NSObject<ALCMacro>
 
 /**
  The constant value.

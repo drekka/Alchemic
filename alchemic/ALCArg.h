@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param ... A nil terminated list of macro arguments which give further definition to the data to be used for the method argument.
  @return An instance of this class.
  */
-+(instancetype) argWithType:(Class) argType macros:(id<ALCValueDefMacro>) firstMacro, ... NS_REQUIRES_NIL_TERMINATION;
++(instancetype) argWithType:(Class) argType macros:(id<ALCMacro>) firstMacro, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end
 

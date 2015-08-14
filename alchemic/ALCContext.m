@@ -100,7 +100,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     STStartScope(classBuilder.valueClass);
 
     Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
-    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValueDef];
+    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValue + ALCAllowedMacrosModelSearch];
     alc_loadMacrosAfter(macroProcessor, variable);
 
     // Add a default value source for the ivar if no macros where loaded to define it.
@@ -181,7 +181,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 -(id) getValueWithClass:(Class) returnType, ... {
 
-    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValueDef];
+    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosModelSearch];
     alc_loadMacrosAfter(macroProcessor, returnType);
 
     // Analyse the return type if no macros where loaded to define it.

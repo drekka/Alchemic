@@ -33,7 +33,6 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 #import <Alchemic/ALCConfig.h>
 
 // #Internal
-#import <Alchemic/ALCValueDefMacro.h>
 #import <Alchemic/ALCMacro.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCValueSourceFactory.h>

@@ -13,11 +13,11 @@
 
 #import "ALCValueSourceFactory.h"
 #import "ALCModelSearchExpression.h"
-#import "ALCValueDefMacro.h"
 #import "ALCMacro.h"
 #import "ALCIsFactory.h"
 #import "ALCWithName.h"
 #import "ALCIsPrimary.h"
+#import "ALCConstantValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -49,11 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
 	} else if ([macro isKindOfClass:[ALCValueSourceFactory class]] && _allowedMacros & ALCAllowedMacrosArg) {
 		[_valueSourceFactories addObject:(ALCValueSourceFactory *)macro];
 
-	} else if ([macro conformsToProtocol:@protocol(ALCValueDefMacro)] && _allowedMacros & ALCAllowedMacrosValueDef) {
+    } else if (([macro conformsToProtocol:@protocol(ALCModelSearchExpression)] && _allowedMacros & ALCAllowedMacrosModelSearch)
+               || ([macro isKindOfClass:[ALCConstantValue class]] && _allowedMacros & ALCAllowedMacrosValue)) {
 		if ([_valueSourceFactories count] == 0) {
 			[_valueSourceFactories addObject:[[ALCValueSourceFactory alloc] init]];
 		}
-		[_valueSourceFactories[0] addMacro:(id<ALCValueDefMacro>)macro];
+		[_valueSourceFactories[0] addMacro:(id<ALCMacro>)macro];
 
 	} else {
 		@throw [NSException exceptionWithName:@"AlchemicUnexpectedMacro"

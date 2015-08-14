@@ -38,10 +38,31 @@
 	XCTAssertTrue([searchExpressions containsObject:AcName(@"abc")]);
 }
 
--(void) testValidateFailsWhenConstantAndSearchExpression {
+-(void) testAddingConstantToOtherMacrosFails {
 	[_factory addMacro:AcValue(@5)];
-	[_factory addMacro:AcName(@"abc")];
-	XCTAssertThrowsSpecificNamed([_factory valueSource], NSException, @"AlchemicInvalidArguments");
+	XCTAssertThrowsSpecificNamed([_factory addMacro:AcClass(NSString)], NSException, @"AlchemicInvalidMacroCombination");
 }
+
+-(void) testAddingMacroToConstantFails {
+    [_factory addMacro:AcClass(NSString)];
+    XCTAssertThrowsSpecificNamed([_factory addMacro:AcValue(@5)], NSException, @"AlchemicInvalidMacroCombination");
+}
+
+-(void) testAddingNameToOtherMacrosFails {
+    [_factory addMacro:AcName(@"abc")];
+    XCTAssertThrowsSpecificNamed([_factory addMacro:AcClass(NSString)], NSException, @"AlchemicInvalidMacroCombination");
+}
+
+-(void) testAddingMacroToNameFails {
+    [_factory addMacro:AcClass(NSString)];
+    XCTAssertThrowsSpecificNamed([_factory addMacro:AcName(@"abc")], NSException, @"AlchemicInvalidMacroCombination");
+}
+
+
+-(void) testAddingMoreThanOneClassFails {
+    [_factory addMacro:AcClass(NSString)];
+    XCTAssertThrowsSpecificNamed([_factory addMacro:AcClass(NSNumber)], NSException, @"AlchemicInvalidMacroCombination");
+}
+
 
 @end

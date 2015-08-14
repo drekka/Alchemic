@@ -8,7 +8,6 @@
 
 @import Foundation;
 #import "ALCModelSearchExpression.h"
-#import "ALCValueDefMacro.h"
 #import "ALCMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @discussion ALCProtocol objects define search expressions for locating ALCBuilder instances in the model based on what protocols their values implement.
  */
-@interface ALCProtocol : NSObject<ALCModelSearchExpression, ALCValueDefMacro, ALCMacro>
+@interface ALCProtocol : NSObject<ALCModelSearchExpression, ALCMacro>
 
 /// The protocol to be used as a search expression.
 @property (nonatomic, strong, readonly) Protocol *aProtocol;

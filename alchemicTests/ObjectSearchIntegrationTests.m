@@ -33,7 +33,7 @@ AcRegister(AcWithName(@"abc"))
 AcInject(_objByClass, AcClass(OSObject))
 AcInject(_objByProtocol, AcProtocol(OSable))
 AcInject(_objByName, AcName(@"abc"))
-AcInject(_objByEverthing, AcName(@"abc"), AcClass(OSObject), AcProtocol(OSable))
+AcInject(_objByEverthing, AcClass(OSObject), AcProtocol(OSable))
 
 -(void) setUp {
 	[self setupRealContext];

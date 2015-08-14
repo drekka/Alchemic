@@ -61,7 +61,7 @@
 
 	Ivar stringVar = class_getInstanceVariable([SimpleObject class], "_aStringProperty");
 
-	ALCMacroProcessor *dependencyMacroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValueDef];
+	ALCMacroProcessor *dependencyMacroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValue];
 	[dependencyMacroProcessor addMacro:AcValue(@"abc")];
 
 	[_builder addVariableInjection:stringVar macroProcessor:dependencyMacroProcessor];

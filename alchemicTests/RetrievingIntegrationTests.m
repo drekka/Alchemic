@@ -46,7 +46,7 @@ AcRegister(AcWithName(@"abc"))
 }
 
 -(void) testGetbyEverything {
-	[self checkIsREObject:AcGet(REObject, AcClass(REObject), AcProtocol(REProtocol), AcName(@"abc"))];
+	[self checkIsREObject:AcGet(REObject, AcClass(REObject), AcProtocol(REProtocol))];
 }
 
 -(void) testGetThrowsWhenFactory {
