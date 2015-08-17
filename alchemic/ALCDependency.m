@@ -16,17 +16,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCDependency {
-    id<ALCValueSource> _valueSource;
-}
+@implementation ALCDependency
 
 @synthesize resolved = _resolved;
 
--(instancetype) initWithValueClass:(Class) valueClass
-                               valueSource:(id<ALCValueSource>)valueSource {
+-(instancetype) initWithValueSource:(id<ALCValueSource>)valueSource {
     self = [super init];
     if (self) {
-        _valueClass = valueClass;
         _valueSource = valueSource;
     }
     return self;
@@ -42,11 +38,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) value {
-    return [_valueSource valueForType:self.valueClass];
+    return _valueSource.value;
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"type %@ from: %@", [ALCRuntime aClassDescription:self.valueClass], _valueSource];
+    return [NSString stringWithFormat:@"type %@ from: %@", [ALCRuntime aClassDescription:_valueSource.valueClass], _valueSource];
 }
 
 @end

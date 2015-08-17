@@ -26,7 +26,7 @@
 	id mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
 	OCMExpect([mockValueSource resolveWithPostProcessors:postProcessors]);
 
-	ALCDependency *dependency = [[ALCDependency alloc] initWithValueClass:[NSString class] valueSource:mockValueSource];
+	ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:mockValueSource];
 	[dependency resolveWithPostProcessors:postProcessors];
 
 	OCMVerifyAll(mockValueSource);
@@ -35,9 +35,9 @@
 -(void) testGetsValueFromValueSource {
 
 	id mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
-	OCMExpect([mockValueSource valueForType:[NSString class]]).andReturn(@"abc");
+	OCMExpect([(id<ALCValueSource>)mockValueSource value]).andReturn(@"abc");
 
-	ALCDependency *dependency = [[ALCDependency alloc] initWithValueClass:[NSString class] valueSource:mockValueSource];
+	ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:mockValueSource];
 	id value = dependency.value;
 	XCTAssertEqualObjects(@"abc", value);
 
@@ -45,9 +45,9 @@
 }
 
 -(void) testDescription {
-	ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithValue:@5];
-	ALCDependency *dependency = [[ALCDependency alloc] initWithValueClass:[NSString class] valueSource:valueSource];
-	XCTAssertEqualObjects(@"type [NSString]<NSMutableCopying><NSSecureCoding><NSCopying> from: Constant: 5", [dependency description]);
+    ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
+	ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSource];
+	XCTAssertEqualObjects(@"type [NSNumber]<NSSecureCoding><NSCopying> from: Constant: 5", [dependency description]);
 }
 
 @end

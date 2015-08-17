@@ -121,6 +121,7 @@
 		6CF28C661B6B14EB00E3A36E /* MethodFactoryIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF28C651B6B14EB00E3A36E /* MethodFactoryIntegrationTests.m */; };
 		6CF28C681B6B312800E3A36E /* InitializerIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF28C671B6B312800E3A36E /* InitializerIntegrationTests.m */; };
 		6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46ECB1B4618630009007A /* ALCModelTests.m */; };
+		6CFCD2611B7E44BB00F67C18 /* NSObject+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFCD2601B7E44BB00F67C18 /* NSObject+Alchemic.m */; };
 		6CFD6E981B456D27008B6695 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
 		6CFE92051B69FD6200BEAC0B /* FactoryIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFE92031B69FCDD00BEAC0B /* FactoryIntegrationTests.m */; };
 		6CFE92071B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFE92061B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m */; };
@@ -267,6 +268,8 @@
 		6CF46EC81B4610EE0009007A /* ALCModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCModel.h; sourceTree = "<group>"; };
 		6CF46EC91B4610EE0009007A /* ALCModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModel.m; sourceTree = "<group>"; };
 		6CF46ECB1B4618630009007A /* ALCModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelTests.m; sourceTree = "<group>"; };
+		6CFCD25F1B7E44BB00F67C18 /* NSObject+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Alchemic.h"; sourceTree = "<group>"; };
+		6CFCD2601B7E44BB00F67C18 /* NSObject+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Alchemic.m"; sourceTree = "<group>"; };
 		6CFD6E971B456D27008B6695 /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOCMock.a; path = "External/OCMock-3.1.2/iOS/libOCMock.a"; sourceTree = "<group>"; };
 		6CFE92031B69FCDD00BEAC0B /* FactoryIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactoryIntegrationTests.m; sourceTree = "<group>"; };
 		6CFE92061B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectSearchIntegrationTests.m; sourceTree = "<group>"; };
@@ -303,6 +306,8 @@
 				6CB074071B4CF49D00CA9002 /* ALCRuntimeScanner.m */,
 				6CCF58631B7C500E009655E9 /* NSSet+Alchemic.h */,
 				6CCF58641B7C500E009655E9 /* NSSet+Alchemic.m */,
+				6CFCD25F1B7E44BB00F67C18 /* NSObject+Alchemic.h */,
+				6CFCD2601B7E44BB00F67C18 /* NSObject+Alchemic.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -310,15 +315,15 @@
 		6C4655F21B54D58500FD1D28 /* Value */ = {
 			isa = PBXGroup;
 			children = (
-				6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */,
-				6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */,
+				6C5F17171B626A9A00F60B1B /* ALCAbstractValueSource.h */,
+				6C5F17181B626A9A00F60B1B /* ALCAbstractValueSource.m */,
 				6C2D4CC11B573D560024AE82 /* ALCConstantValueSource.h */,
 				6C2D4CC21B573D560024AE82 /* ALCConstantValueSource.m */,
 				6C4655F51B54D62400FD1D28 /* ALCModelValueSource.h */,
 				6C4655F61B54D62400FD1D28 /* ALCModelValueSource.m */,
 				6C4655F31B54D59F00FD1D28 /* ALCValueSource.h */,
-				6C5F17171B626A9A00F60B1B /* ALCAbstractValueSource.h */,
-				6C5F17181B626A9A00F60B1B /* ALCAbstractValueSource.m */,
+				6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */,
+				6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */,
 			);
 			name = Value;
 			sourceTree = "<group>";
@@ -812,6 +817,7 @@
 				6C2421051B6200B900884A93 /* ALCModelValueSourceTests.m in Sources */,
 				6C5F170D1B611ADA00F60B1B /* ALCInternalMacroTests.m in Sources */,
 				6C24210B1B6707F400884A93 /* ALCAbstractBuilderTests.m in Sources */,
+				6CFCD2611B7E44BB00F67C18 /* NSObject+Alchemic.m in Sources */,
 				6CFE92051B69FD6200BEAC0B /* FactoryIntegrationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

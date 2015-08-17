@@ -20,73 +20,68 @@
 
 @end
 
-@implementation ALCAbstractValueSourceTests {
-	DummyValueSource *_source;
-}
+@implementation ALCAbstractValueSourceTests
 
--(void) setUp {
-	_source = [[DummyValueSource alloc] init];
-}
-
--(void) testValueForTypeNullWhenSingleValue {
-	_source.values = [NSSet setWithObject:@"abc"];
-	id result = [_source valueForType:NULL];
+-(void) testObjectValueWhenSingleValue {
+    DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSObject class]];
+	source.values = [NSSet setWithObject:@"abc"];
+	id result =source.value;
 	XCTAssertTrue([result isKindOfClass:[NSString class]]);
 	XCTAssertEqualObjects(@"abc", result);
 }
 
--(void) testValueForTypeNullWhenMultipleValue {
-	_source.values = [NSSet setWithObjects:@"abc", @"def", nil];
-	id result = [_source valueForType:NULL];
+-(void) testObjectValueWhenMultipleValue {
+    DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSObject class]];
+	source.values = [NSSet setWithObjects:@"abc", @"def", nil];
+	id result =source.value;
 	XCTAssertTrue([result isKindOfClass:[NSArray class]]);
 	XCTAssertTrue([result containsObject:@"abc"]);
 	XCTAssertTrue([result containsObject:@"def"]);
 }
 
--(void) testValueForTypeObjectWhenSingleValue {
-	_source.values = [NSSet setWithObject:@"abc"];
-	id result = [_source valueForType:[NSString class]];
-	XCTAssertTrue([result isKindOfClass:[NSString class]]);
-	XCTAssertEqualObjects(@"abc", result);
+-(void) testObjectValueWhenNoValuesThrows {
+    DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSObject class]];
+	source.values = [NSSet set];
+	XCTAssertThrowsSpecificNamed(source.value, NSException, @"AlchemicNoValuesFound");
 }
 
--(void) testValueForTypeObjectWhenNoValuesThrows {
-	_source.values = [NSSet set];
-	XCTAssertThrowsSpecificNamed([_source valueForType:[NSString class]], NSException, @"AlchemicNoValuesFound");
+-(void) testStringValueWhenMultipleValuesThrows {
+    DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSString class]];
+	source.values = [NSSet setWithObjects:@"abc", @"def", nil];
+	XCTAssertThrowsSpecificNamed(source.value, NSException, @"AlchemicTooManyValues");
 }
 
--(void) testValueForTypeObjectWhenMultipleValuesThrows {
-	_source.values = [NSSet setWithObjects:@"abc", @"def", nil];
-	XCTAssertThrowsSpecificNamed([_source valueForType:[NSString class]], NSException, @"AlchemicTooManyValues");
-}
-
--(void) testValueForTypeArrayWhenSingleValue {
-	_source.values = [NSSet setWithObject:@"abc"];
-	id result = [_source valueForType:[NSArray class]];
+-(void) testArrayValueWhenSingleValue {
+    DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSArray class]];
+	source.values = [NSSet setWithObject:@"abc"];
+	id result = source.value;
 	XCTAssertTrue([result isKindOfClass:[NSArray class]]);
 	XCTAssertEqual(1u, [result count]);
 	XCTAssertEqualObjects(@"abc", result[0]);
 }
 
--(void) testValueForTypeArrayWhenNoValuesThrows {
-	_source.values = [NSSet set];
-	id result = [_source valueForType:[NSArray class]];
+-(void) testArrayValueWhenNoValuesThrows {
+    DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSArray class]];
+	source.values = [NSSet set];
+	id result = source.value;
 	XCTAssertTrue([result isKindOfClass:[NSArray class]]);
 	XCTAssertEqual(0u, [result count]);
 }
 
--(void) testValueForTypeArrayWhenMultipleValuesThrows {
-	_source.values = [NSSet setWithObjects:@"abc", @"def", nil];
-	id result = [_source valueForType:[NSArray class]];
+-(void) testArrayValueWhenMultipleValuesThrows {
+    DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSArray class]];
+	source.values = [NSSet setWithObjects:@"abc", @"def", nil];
+	id result = source.value;
 	XCTAssertTrue([result isKindOfClass:[NSArray class]]);
 	XCTAssertEqual(2u, [result count]);
 	XCTAssertTrue([result containsObject:@"abc"]);
 	XCTAssertTrue([result containsObject:@"def"]);
 }
 
--(void) testValueForTypeArrayWhenSingleValueIsArray {
-	_source.values = [NSSet setWithObject:@[@"abc"]];
-	id result = [_source valueForType:[NSArray class]];
+-(void) testArrayValueWhenSingleValueIsArray {
+    DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSArray class]];
+	source.values = [NSSet setWithObject:@[@"abc"]];
+	id result = source.value;
 	XCTAssertTrue([result isKindOfClass:[NSArray class]]);
 	XCTAssertEqual(1u, [result count]);
 	XCTAssertEqualObjects(@"abc", result[0]);
@@ -95,12 +90,13 @@
 #pragma mark - Overrides
 
 -(void) testResolveWithPostProcessors {
-	[_source resolveWithPostProcessors:[NSSet set]];
-	XCTAssertTrue(_source.resolved);
+    DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSObject class]];
+	[source resolveWithPostProcessors:[NSSet set]];
+	XCTAssertTrue(source.resolved);
 }
 
 -(void) testValues {
-	ALCAbstractValueSource *abstractSource = [[ALCAbstractValueSource alloc] init];
+	ALCAbstractValueSource *abstractSource = [[ALCAbstractValueSource alloc] initWithType:[NSObject class]];
 	XCTAssertThrowsSpecificNamed([abstractSource values], NSException, @"NSInvalidArgumentException");
 }
 

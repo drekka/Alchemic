@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return An instance of this class.
  */
--(instancetype) init NS_UNAVAILABLE;
+-(instancetype) initWithType:(Class) argumentType NS_UNAVAILABLE;
 
 /**
  Default initializer.
@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return An instance of this class.
  */
--(instancetype) initWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithType:(Class) argumentType searchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions NS_DESIGNATED_INITIALIZER;
 
 @end
 

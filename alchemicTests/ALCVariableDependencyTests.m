@@ -23,11 +23,11 @@
 
 -(void) setUp {
 	id mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
-	OCMStub([mockValueSource valueForType:[NSString class]]).andReturn(@"abc");
+	OCMStub([(id<ALCValueSource>)mockValueSource value]).andReturn(@"abc");
+    OCMStub([(id<ALCValueSource>)mockValueSource valueClass]).andReturn([NSString class]);
 
 	Ivar var = class_getInstanceVariable([SimpleObject class], "_aStringProperty");
-	_dependency = [[ALCVariableDependency alloc] initWithVariable:var
-																	  valueSource:mockValueSource];
+	_dependency = [[ALCVariableDependency alloc] initWithVariable:var valueSource:mockValueSource];
 }
 
 -(void) testInjectsVariable {

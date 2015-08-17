@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Represents a single dependency of a variable or method argument.
  
- @discussion ALCDependency objects are the core link between a ALCBuilder and the values it needs. A builder will define a dependency for any variables it needs (in the case of ALCClassBuilder) or method arguments. Each ALCDependency contains a class reference representing the type of object that will be set and a ALCValueSource instance that defines where to get it from.
+ @discussion ALCDependency objects are the core link between a ALCBuilder and the values it needs. A builder will define a dependency for any variables it needs (in the case of ALCClassBuilder) or method arguments. Each ALCDependency contains a class reference representing the type of object that will be set and a ALCArgument instance that defines where to get it from.
  */
 @interface ALCDependency : NSObject<ALCResolvable>
 
@@ -28,10 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly) id value;
 
-/**
- The class of the value. Mainly used for resolving candiates for the value.
- */
-@property (nonatomic, strong, readonly) Class valueClass;
+@property (nonatomic, strong, readonly) id<ALCValueSource> valueSource;
 
 #pragma mark - Resolving
 
@@ -47,13 +44,11 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Default initializer.
 
- @param valueClass	The type of object this dependency requires.
- @param valueSource	A ALCValueSource instance which can source the value.
+ @param valueSource An ALCArgument instance which can source the value.
 
  @return An instance of this class.
  */
--(instancetype) initWithValueClass:(Class) valueClass
-                       valueSource:(id<ALCValueSource>) valueSource;
+-(instancetype) initWithValueSource:(id<ALCValueSource>) valueSource;
 
 @end
 

@@ -32,11 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
 	return self;
 }
 
--(id) instantiateObject {
+-(id) instantiateObjectWithArguments:(NSArray<id> *) arguments {
 	ALCClassBuilder *parent = self.parentClassBuilder;
 	STLog(self.valueClass, @"Retrieving method's parent object ...");
 	id factoryObject = parent.value;
-	return [self invokeMethodOn:factoryObject];
+	return [self invokeMethodOn:factoryObject withArguments:arguments];
 }
 
 -(NSString *) description {

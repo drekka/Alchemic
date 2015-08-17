@@ -84,8 +84,6 @@
 
 -(void) testInvokeOnMethodBuilders {
 
-    //NSSet<id<ALCModelSearchExpression>> *expressions = [NSSet setWithObject:nameLocator];
-
     ALCName *nameLocator = AcName(@"abc");
     id mockBuilder = OCMClassMock([ALCAbstractMethodBuilder class]);
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
@@ -95,13 +93,13 @@
     id mockInv = OCMClassMock([NSInvocation class]);
     OCMStub([mockBuilder inv]).andReturn(mockInv);
 
-    OCMStub([mockBuilder instantiateObject]).andReturn(@"xyz");
+    OCMStub([mockBuilder instantiateObjectWithArguments:@[@"def"]]).andReturn(@"xyz");
 
-    id results = [_context invokeOnMethodBuilders:nameLocator, AcArg(NSString, AcValue(@"def")), nil];
+    id results = [_context invokeMethodBuilders:nameLocator, AcArg(NSString, AcValue(@"def")), nil];
     XCTAssertEqualObjects(@"xyz", results);
 
 
-    OCMVerify([mockBuilder instantiateObject]);
+    OCMVerify([mockBuilder instantiateObjectWithArguments:OCMOCK_ANY]);
 }
 
 @end

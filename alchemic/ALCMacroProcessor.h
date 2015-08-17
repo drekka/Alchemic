@@ -9,7 +9,7 @@
 @import Foundation;
 
 @protocol ALCMacro;
-@class ALCValueSourceFactory;
+@protocol ALCValueSource;
 
 /**
  Flags which define what macros the processor will allow.
@@ -65,14 +65,14 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) addMacro:(id<ALCMacro>) macro;
 
 /**
- returns the value source factory for a specific argument index.
+ returns the value source for a specific argument index.
  
  @discussion All macros which define search expressions or values are grouped according to the argument index used to match to selectors for method builders. If the macro processor is being used to processor macros for other builders which do no have selectors, then they are all grouped up under index 0.
 
  @param index the argument index.
 
  */
--(ALCValueSourceFactory *) valueSourceFactoryAtIndex:(NSUInteger) index;
+-(id<ALCValueSource>) valueSourceAtIndex:(NSUInteger) index;
 
 /**
  How many value sources are in the array of selector argument values sources.

@@ -48,7 +48,7 @@
 #pragma mark - Adding dependencies
 
 -(void) addVariableInjection:(Ivar) variable macroProcessor:(ALCMacroProcessor *) macroProcessor {
-    id<ALCValueSource> valueSource = [[macroProcessor valueSourceFactoryAtIndex:0] valueSource];
+    id<ALCValueSource> valueSource = [macroProcessor valueSourceAtIndex:0];
     ALCVariableDependency *dep = [[ALCVariableDependency alloc] initWithVariable:variable valueSource:valueSource];
     STLog(self.valueClass, @"Adding variable dependency %@.%@", NSStringFromClass(self.valueClass), dep);
     [self.dependencies addObject:dep];

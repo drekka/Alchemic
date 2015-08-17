@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion Do not use.
 
  @param valueClass  The class of the result value.
- @param valueSource The ALCValueSource that will supply values.
+ @param valueSource The ALCArgument that will supply values.
 
  @return An instnace of this class.
  */

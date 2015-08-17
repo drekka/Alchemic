@@ -21,6 +21,7 @@
 #import "ALCDependency.h"
 #import "ALCValueSourceFactory.h"
 #import "NSSet+Alchemic.h"
+#import "ALCModelValueSource.h"
 
 NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
@@ -192,22 +193,41 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
         }
     }
 
-    ALCDependency *dependency = [[ALCDependency alloc] initWithValueClass:returnType
-                                                              valueSource:[[macroProcessor valueSourceFactoryAtIndex:0] valueSource]];
+    ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:[macroProcessor valueSourceAtIndex:0]];
     [dependency resolveWithPostProcessors:_dependencyPostProcessors];
     [dependency validateWithDependencyStack:[NSMutableArray array]];
     return dependency.value;
 }
 
--(id) invokeOnMethodBuilders:(id<ALCMacro>) methodLocator, ... {
+-(id) invokeMethodBuilders:(id<ALCModelSearchExpression>) methodLocator, ... {
 
-    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosModelSearch + ALCAllowedMacrosArg];
-    alc_loadMacrosIncluding(macroProcessor, methodLocator);
+    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
+    alc_loadMacrosAfter(macroProcessor, methodLocator);
 
-    ALCValueSourceFactory *factory = [macroProcessor valueSourceFactoryAtIndex:0];
-    NSSet<id<ALCBuilder>> *builders = [_model buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) factory.macros];
+    NSSet<id<ALCBuilder>> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:methodLocator]];
 
-    return builders;
+    // TODO this should loop and execute on each builder.
+    id<ALCBuilder> builder = [builders anyObject];
+    if ([builders count] == 0u || ![builder isKindOfClass:[ALCAbstractMethodBuilder class]]) {
+        @throw [NSException exceptionWithName:@"MethodNotFoundFound"
+                                       reason:[NSString stringWithFormat:@"No builder found with %@", methodLocator]
+                                     userInfo:nil];
+    }
+
+    // Execute.
+    ALCAbstractMethodBuilder *methodBuilder = builder;
+
+    // Resolve the data sources and generate an array of values.
+    NSUInteger nbrArgs = [macroProcessor valueSourceCount];
+    NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:nbrArgs];
+    for (NSUInteger i = 0; i < nbrArgs; i++) {
+        id<ALCValueSource> valueSource = [macroProcessor valueSourceAtIndex:i];
+        [valueSource resolveWithPostProcessors:_dependencyPostProcessors];
+        [values addObject:valueSource.value];
+    }
+
+    // Make the call.
+    return [methodBuilder instantiateObjectWithArguments:values];
 }
 
 #pragma mark - Internal

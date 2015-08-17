@@ -1,5 +1,5 @@
 //
-//  ALCValueSource.h
+//  ALCArgument.h
 //  Alchemic
 //
 //  Created by Derek Clarkson on 14/07/2015.
@@ -20,14 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol ALCValueSource <NSObject, ALCResolvable>
 
 /**
- Called to obtain a value based on a passed in type.
- 
- @discussion this allows the value source to do any additional processing of the value depending on the finalType class.
- 
- @param finalType The class of the object that is expected to be returned.
- @return The final value.
+ The value.
  */
--(id) valueForType:(nullable Class) finalType;
+@property (nonatomic, strong, readonly) id value;
+
+/**
+ The expected class.
+ */
+@property (nonatomic, strong, readonly) Class valueClass;
 
 /**
  Called during dependency resolving to tell the dependency to resolve itself against the model.

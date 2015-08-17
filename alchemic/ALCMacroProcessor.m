@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
     } else if (([macro conformsToProtocol:@protocol(ALCModelSearchExpression)] && _allowedMacros & ALCAllowedMacrosModelSearch)
                || ([macro isKindOfClass:[ALCConstantValue class]] && _allowedMacros & ALCAllowedMacrosValue)) {
 		if ([_valueSourceFactories count] == 0) {
-			[_valueSourceFactories addObject:[[ALCValueSourceFactory alloc] init]];
+			[_valueSourceFactories addObject:[[ALCValueSourceFactory alloc] initWithType:[NSObject class]]];
 		}
 		[_valueSourceFactories[0] addMacro:(id<ALCMacro>)macro];
 
@@ -63,8 +63,8 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 }
 
--(ALCValueSourceFactory *) valueSourceFactoryAtIndex:(NSUInteger) index {
-	return _valueSourceFactories[index];
+-(id<ALCValueSource>) valueSourceAtIndex:(NSUInteger) index {
+	return [_valueSourceFactories[index] valueSource];
 }
 
 -(NSUInteger) valueSourceCount {

@@ -11,18 +11,38 @@
 @implementation ALCAbstractValueSource
 
 @synthesize resolved = _resolved;
+@synthesize valueClass = _valueClass;
 
--(id) valueForType:(nullable Class) finalType {
+-(instancetype) init {
+    return nil;
+}
+
+-(instancetype) initWithType:(Class)argumentType {
+    self = [super init];
+    if (self) {
+        _valueClass = argumentType;
+    }
+    return self;
+}
+
+-(id) value {
 
 	NSSet<id> *values = [self values];
 
 	// If we can return an array then do so. Empty arrays are also valid.
-	if ((finalType == NULL && [values count] > 1)
-		|| [finalType isSubclassOfClass:[NSArray class]]) {
+    // NULL means we are dealing with an id type.
+    if ([self returnArrayForValues:values]) {
 		return [self valuesAsArray:values];
 	}
 
 	return [self valuesAsObject:values];
+}
+
+-(BOOL) returnArrayForValues:(NSSet<id> *) values {
+    // If the type is an id or an NSObject and there is more than one result,
+    // Or the type is an array.
+    return ((_valueClass == NULL || _valueClass == [NSObject class]) && [values count] > 1)
+    || [_valueClass isSubclassOfClass:[NSArray class]];
 }
 
 -(id) valuesAsObject:(NSSet<id> *) values {
@@ -55,6 +75,8 @@
 -(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors {
 	_resolved = YES;
 }
+
+#pragma mark - Override points
 
 -(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
 	[self doesNotRecognizeSelector:_cmd];

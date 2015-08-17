@@ -22,20 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCArg : ALCValueSourceFactory<ALCMacro>
 
-/// The class of the argument.
-@property (nonatomic, assign, readonly) Class argType;
-
-/// Not available in this class.
--(instancetype) init NS_UNAVAILABLE;
-
-/**
- Default initializer.
- 
- @param argType The type of the argument. Used for matching when values have been sourced from the model.
- @return An instance of this class.
- */
--(instancetype) initWithArgType:(Class) argType NS_DESIGNATED_INITIALIZER;
-
 /**
  Factorymethod used by `AcArg(...)`.
 

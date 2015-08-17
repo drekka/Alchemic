@@ -156,7 +156,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
  @return either an object or an array of objects if multiple builders are found.
  */
--(id) invokeOnMethodBuilders:(id<ALCMacro>) methodLocator, ... NS_REQUIRES_NIL_TERMINATION;
+-(id) invokeMethodBuilders:(id<ALCModelSearchExpression>) methodLocator, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Working with builders
 

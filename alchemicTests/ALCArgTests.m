@@ -11,6 +11,8 @@
 #import "ALCConstantValue.h"
 #import "ALCValueSource.h"
 #import "ALCConstantValueSource.h"
+#import "ALCValueSource.h"
+#import <Alchemic/Alchemic.h>
 
 @interface ALCArgTests : XCTestCase
 
@@ -19,13 +21,14 @@
 @implementation ALCArgTests
 
 -(void) testWithClass {
-	ALCArg *arg = [[ALCArg alloc] initWithArgType:[NSString class]];
-	XCTAssertEqual([NSString class], arg.argType);
+	ALCArg *arg = [[ALCArg alloc] initWithType:[NSString class]];
+    [arg addMacro:AcValue(@"abc")];
+	XCTAssertEqual([NSString class], arg.valueSource.valueClass);
 }
 
 -(void) testArgWithTypeMacros {
 	ALCArg *arg = [ALCArg argWithType:[NSString class] macros:[ALCConstantValue constantValue:@5], nil];
-	XCTAssertEqual([NSString class], arg.argType);
+	XCTAssertEqual([NSString class], arg.valueSource.valueClass);
 	ALCConstantValueSource *valueSource = [arg valueSource];
 	XCTAssertEqualObjects(@5, [valueSource.values anyObject]);
 }

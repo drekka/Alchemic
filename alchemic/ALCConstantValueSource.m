@@ -11,33 +11,33 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCConstantValueSource {
-	id _value;
+    id _value;
 }
 
--(instancetype) init {
-	return nil;
+-(instancetype) initWithType:(Class) argumentType {
+    return nil;
 }
 
--(instancetype) initWithValue:(id) value {
-    self = [super init];
+-(instancetype) initWithType:(Class) argumentType value:(id) value {
+    self = [super initWithType:argumentType];
     if (self) {
-		 _value = value;
+        _value = value;
     }
     return self;
 }
 
 -(NSSet<id> *) values {
-	return [NSSet setWithObject:_value];
+    return [NSSet setWithObject:_value];
 }
 
 -(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors {
-	[super resolveWithPostProcessors:postProcessors];
+    [super resolveWithPostProcessors:postProcessors];
 }
 
 -(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {}
 
 -(NSString *)description {
-	return [NSString stringWithFormat:@"Constant: %@", [_value description]];
+    return [NSString stringWithFormat:@"Constant: %@", [_value description]];
 }
 
 @end

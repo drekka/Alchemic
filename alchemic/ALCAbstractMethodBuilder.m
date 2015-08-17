@@ -15,83 +15,71 @@
 #import "ALCAlchemic.h"
 #import "ALCContext.h"
 #import "ALCInternalMacros.h"
+#import "NSObject+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractMethodBuilder {
-	BOOL _useClassMethod;
+    BOOL _useClassMethod;
     SEL _selector;
 }
 
 -(instancetype) init {
-	return nil;
+    return nil;
 }
 
 -(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
-											 selector:(SEL) selector {
-	self = [super init];
-	if (self) {
-		_parentClassBuilder = parentClassBuilder;
-		_selector = selector;
-		self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg + ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary];
-		self.name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(_selector)];
-	}
-	return self;
+                                  selector:(SEL) selector {
+    self = [super init];
+    if (self) {
+        _parentClassBuilder = parentClassBuilder;
+        _selector = selector;
+        self.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg + ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary];
+        self.name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(_selector)];
+    }
+    return self;
 }
 
 -(void)configure {
-	[super configure];
-	for (NSUInteger i = 0; i < [self.macroProcessor valueSourceCount]; i++) {
-		ALCArg *arg = (ALCArg *)[self.macroProcessor valueSourceFactoryAtIndex:i];
-		[self.dependencies addObject:[[ALCDependency alloc] initWithValueClass:arg.argType
-																					  valueSource:[arg valueSource]]];
-	}
-	[self validateClass:self.parentClassBuilder.valueClass
-				  selector:_selector
-		  macroProcessor:self.macroProcessor];
-}
-
--(id) instantiateObject {
-	[self doesNotRecognizeSelector:_cmd];
-	return nil;
+    [super configure];
+    for (NSUInteger i = 0; i < [self.macroProcessor valueSourceCount]; i++) {
+        id<ALCValueSource> arg = [self.macroProcessor valueSourceAtIndex:i];
+        [self.dependencies addObject:[[ALCDependency alloc] initWithValueSource:arg]];
+    }
+    [self validateClass:self.parentClassBuilder.valueClass
+               selector:_selector
+         macroProcessor:self.macroProcessor];
 }
 
 -(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
-	[super resolveWithPostProcessors:postProcessors];
-	if ( ! self.parentClassBuilder.resolved) {
-		STLog(self.valueClass, @"resolving dependencies in parent %@", self.parentClassBuilder);
-		[self.parentClassBuilder resolveWithPostProcessors:postProcessors];
-	}
+    [super resolveWithPostProcessors:postProcessors];
+    if ( ! self.parentClassBuilder.resolved) {
+        STLog(self.valueClass, @"resolving dependencies in parent %@", self.parentClassBuilder);
+        [self.parentClassBuilder resolveWithPostProcessors:postProcessors];
+    }
 }
 
--(id) invokeMethodOn:(id) target {
-	// Get an invocation ready.
-	if (_inv == nil) {
-		STLog(self.valueClass, @"Creating an invocation for '%@' using selector %@", self.name, NSStringFromSelector(_selector));
-		NSMethodSignature *sig = [[target class] instanceMethodSignatureForSelector:_selector];
-		_inv = [NSInvocation invocationWithMethodSignature:sig];
-		_inv.selector = _selector;
-		[_inv retainArguments];
-	}
+-(id)instantiateObject {
+    // Generate an array of arguments from the dependencies.
+    NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:[self.dependencies count]];
+    for (ALCDependency *dependency in self.dependencies) {
+        [arguments addObject:dependency.value];
+    }
+    return [self instantiateObjectWithArguments:arguments];
+}
 
-	// Load the arguments.
-	[self.dependencies enumerateObjectsUsingBlock:^(ALCDependency *dependency, NSUInteger idx, BOOL *stop) {
-		id argumentValue = dependency.value;
-		[self->_inv setArgument:&argumentValue atIndex:(NSInteger) idx + 2];
-	}];
+-(id) instantiateObjectWithArguments:(NSArray<id> *) arguments {
+    [self doesNotRecognizeSelector:_cmd];
+    return nil;
+}
 
-	STLog(ALCHEMIC_LOG, @"Creating object with %@", [self description]);
-	[_inv invokeWithTarget:target];
-
-	id __unsafe_unretained returnObj;
-	[_inv getReturnValue:&returnObj];
-	STLog(ALCHEMIC_LOG, @"Returning a %s", class_getName([returnObj class]));
-	return returnObj;
+-(id) invokeMethodOn:(id) target withArguments:(NSArray<id> *) arguments {
+    return [target invokeSelector:_selector arguments:arguments];
 }
 
 -(void) injectValueDependencies:(id) value {
-	// Pass this to the parent class to finish injecting.
-	[self.parentClassBuilder injectValueDependencies:value];
+    // Pass this to the parent class to finish injecting.
+    [self.parentClassBuilder injectValueDependencies:value];
 }
 
 -(nonnull NSString *) description {

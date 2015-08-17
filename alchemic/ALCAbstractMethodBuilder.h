@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  The abstract parent of ALCBuilder's that call a method to create the object.
- 
+
  @discussion There are two types of method builders. ALCMethodBuilder which can build an object from a method call to an object. And ALCInitializerBuilder which is used to create objects by calling a specific initializer.
  */
 @interface ALCAbstractMethodBuilder : ALCAbstractBuilder
@@ -42,12 +42,14 @@ NS_ASSUME_NONNULL_BEGIN
  @return An instance of this builder.
  */
 -(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
-											 selector:(SEL) selector NS_DESIGNATED_INITIALIZER;
+                                  selector:(SEL) selector NS_DESIGNATED_INITIALIZER;
 
 /**
  The parent class builder.
  */
 @property (nonatomic, strong, readonly) ALCClassBuilder *parentClassBuilder;
+
+-(id) instantiateObjectWithArguments:(NSArray<id> *) arguments;
 
 /**
  Called to invoke the target selector on an object.
@@ -56,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return A value from the target method. It is assumed that there will always be a return value.
  */
--(id) invokeMethodOn:(id) target;
+-(id) invokeMethodOn:(id) target withArguments:(NSArray<id> *) arguments;
 
 @end
 

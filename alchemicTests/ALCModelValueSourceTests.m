@@ -26,7 +26,7 @@
 	[self setupMockContext];
 
 	_searchExpressions = [NSSet setWithObject:AcName(@"abc")];
-	_source = [[ALCModelValueSource alloc] initWithSearchExpressions:_searchExpressions];
+    _source = [[ALCModelValueSource alloc] initWithType:[NSString class] searchExpressions:_searchExpressions];
 }
 
 -(void) testBasicResolving {

@@ -1,5 +1,5 @@
 //
-//  ALCValueSourceFactoryTests.m
+//  ALCArgumentFactoryTests.m
 //  Alchemic
 //
 //  Created by Derek Clarkson on 24/07/2015.
@@ -12,57 +12,57 @@
 #import "ALCConstantValueSource.h"
 #import "ALCModelValueSource.h"
 
-@interface ALCValueSourceFactoryTests : XCTestCase
+@interface ALCArgumentFactoryTests : XCTestCase
 @end
 
-@implementation ALCValueSourceFactoryTests {
-	ALCValueSourceFactory *_factory;
-}
-
--(void) setUp {
-	_factory = [[ALCValueSourceFactory alloc] init];
-}
+@implementation ALCArgumentFactoryTests
 
 -(void) testValueSourceForConstant {
-	[_factory addMacro:AcValue(@5)];
-	id<ALCValueSource> valueSource = [_factory valueSource];
+    ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
+	[factory addMacro:AcValue(@5)];
+	id<ALCValueSource> valueSource = [factory valueSource];
 	XCTAssertTrue([valueSource isKindOfClass:[ALCConstantValueSource class]]);
-	XCTAssertEqualObjects(@5, [valueSource valueForType:[NSNumber class]]);
+	XCTAssertEqualObjects(@5, valueSource.value);
 }
 
 -(void) testValueSourceForModel {
-	[_factory addMacro:AcName(@"abc")];
-	id<ALCValueSource> valueSource = [_factory valueSource];
+    ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
+	[factory addMacro:AcName(@"abc")];
+	id<ALCValueSource> valueSource = [factory valueSource];
 	XCTAssertTrue([valueSource isKindOfClass:[ALCModelValueSource class]]);
 	NSSet<id<ALCModelSearchExpression>> *searchExpressions = ((ALCModelValueSource *)valueSource).searchExpressions;
 	XCTAssertTrue([searchExpressions containsObject:AcName(@"abc")]);
 }
 
 -(void) testAddingConstantToOtherMacrosFails {
-	[_factory addMacro:AcValue(@5)];
-	XCTAssertThrowsSpecificNamed([_factory addMacro:AcClass(NSString)], NSException, @"AlchemicInvalidMacroCombination");
+    ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
+	[factory addMacro:AcValue(@5)];
+	XCTAssertThrowsSpecificNamed([factory addMacro:AcClass(NSString)], NSException, @"AlchemicInvalidMacroCombination");
 }
 
 -(void) testAddingMacroToConstantFails {
-    [_factory addMacro:AcClass(NSString)];
-    XCTAssertThrowsSpecificNamed([_factory addMacro:AcValue(@5)], NSException, @"AlchemicInvalidMacroCombination");
+    ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
+    [factory addMacro:AcClass(NSString)];
+    XCTAssertThrowsSpecificNamed([factory addMacro:AcValue(@5)], NSException, @"AlchemicInvalidMacroCombination");
 }
 
 -(void) testAddingNameToOtherMacrosFails {
-    [_factory addMacro:AcName(@"abc")];
-    XCTAssertThrowsSpecificNamed([_factory addMacro:AcClass(NSString)], NSException, @"AlchemicInvalidMacroCombination");
+    ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
+    [factory addMacro:AcName(@"abc")];
+    XCTAssertThrowsSpecificNamed([factory addMacro:AcClass(NSString)], NSException, @"AlchemicInvalidMacroCombination");
 }
 
 -(void) testAddingMacroToNameFails {
-    [_factory addMacro:AcClass(NSString)];
-    XCTAssertThrowsSpecificNamed([_factory addMacro:AcName(@"abc")], NSException, @"AlchemicInvalidMacroCombination");
+    ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
+    [factory addMacro:AcClass(NSString)];
+    XCTAssertThrowsSpecificNamed([factory addMacro:AcName(@"abc")], NSException, @"AlchemicInvalidMacroCombination");
 }
 
 
 -(void) testAddingMoreThanOneClassFails {
-    [_factory addMacro:AcClass(NSString)];
-    XCTAssertThrowsSpecificNamed([_factory addMacro:AcClass(NSNumber)], NSException, @"AlchemicInvalidMacroCombination");
+    ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
+    [factory addMacro:AcClass(NSString)];
+    XCTAssertThrowsSpecificNamed([factory addMacro:AcClass(NSNumber)], NSException, @"AlchemicInvalidMacroCombination");
 }
-
 
 @end

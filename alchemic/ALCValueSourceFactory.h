@@ -14,18 +14,36 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- A value source factory is a builder that generates ALCValueSource instances.
+ An argument factory is a builder that generates ALCArgument instances.
 
- @discussion what type of ALCValueSource is returned depends on the macros it is fed. So the basic flow for using this class is:
+ @discussion what type of ALCArgument is returned depends on the macros it is fed. So the basic flow for using this class is:
  
  1. Create an instance.
  2. Populated with one or more macros through the addMacro: method.
- 3. Request a value source from the valueSource method.
+ 3. Request an argument from the argument method.
  */
 @interface ALCValueSourceFactory : NSObject
 
 /**
- The macros that have been store in the factory.
+ Default initializer.
+
+ @discussion Do not use.
+
+ @return An instance of this class.
+ */
+-(instancetype) init NS_UNAVAILABLE;
+
+/**
+ Default initializer
+
+ @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.
+
+ @return And instance of this class.
+ */
+-(instancetype) initWithType:(Class) valueType NS_DESIGNATED_INITIALIZER;
+
+/**
+ The macros that have been stored in the factory.
  */
 @property(nonatomic, strong, readonly) NSSet<id<ALCMacro>> *macros;
 
@@ -37,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) addMacro:(id<ALCMacro>) macro;
 
 /**
- Generates and returns a ALCValueSource instance based on the macros previously stored. 
+ Generates and returns a ALCValueSource instance based on the macros previously stored.
  */
 -(id<ALCValueSource>) valueSource;
 
