@@ -13,7 +13,7 @@
 @synthesize resolved = _resolved;
 @synthesize valueClass = _valueClass;
 
--(instancetype) init {
+-(instancetype) init NS_UNAVAILABLE {
     return nil;
 }
 

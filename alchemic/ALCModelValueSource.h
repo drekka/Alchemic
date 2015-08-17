@@ -25,15 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Default initializer.
- 
- Do not use.
-
- @return An instance of this class.
- */
--(instancetype) initWithType:(Class) argumentType NS_UNAVAILABLE;
-
-/**
- Default initializer.
 
  @param searchExpressions	A NSSet of ALCSearchExpresion objects which will be used to search the model.
 

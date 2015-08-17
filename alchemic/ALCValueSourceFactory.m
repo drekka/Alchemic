@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
     Class _valueType;
 }
 
--(instancetype) init {
+-(instancetype) init NS_UNAVAILABLE {
     return nil;
 }
 

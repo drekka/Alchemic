@@ -25,15 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCValueSourceFactory : NSObject
 
 /**
- Default initializer.
-
- @discussion Do not use.
-
- @return An instance of this class.
- */
--(instancetype) init NS_UNAVAILABLE;
-
-/**
  Default initializer
 
  @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.

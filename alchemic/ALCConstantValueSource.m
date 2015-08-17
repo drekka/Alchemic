@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
     id _value;
 }
 
--(instancetype) initWithType:(Class) argumentType {
+-(instancetype) initWithType:(Class) argumentType NS_UNAVAILABLE {
     return nil;
 }
 

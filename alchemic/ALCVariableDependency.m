@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCVariableDependency
 
 -(instancetype) initWithValueClass:(Class) valueClass
-							  valueSource:(id<ALCValueSource>) valueSource {
+							  valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE {
 	return nil;
 }
 

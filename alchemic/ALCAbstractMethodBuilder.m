@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
     SEL _selector;
 }
 
--(instancetype) init {
+-(instancetype) init NS_UNAVAILABLE {
     return nil;
 }
 

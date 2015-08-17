@@ -26,19 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Default initializer.
 
- @discussion Do not use.
-
- @param valueClass  The class of the result value.
- @param valueSource The ALCArgument that will supply values.
-
- @return An instnace of this class.
- */
--(instancetype) initWithValueClass:(Class) valueClass
-                       valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
-
-/**
- Default initializer.
-
  @param variable    An Ivar to be injected.
  @param valueSource The value source that will supply the values to be injected.
 
