@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6C235AD61B82D05F0015CA0B /* InvokeIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C235AD51B82D05F0015CA0B /* InvokeIntegrationTests.m */; };
+		6C235AD81B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C235AD71B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m */; };
+		6C235AD91B831D520015CA0B /* NSObject+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFCD2601B7E44BB00F67C18 /* NSObject+Alchemic.m */; };
+		6C235ADA1B831D550015CA0B /* NSObject+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFCD25F1B7E44BB00F67C18 /* NSObject+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C2420F71B61BFFB00884A93 /* ALCConstantValueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2420F61B61BFFB00884A93 /* ALCConstantValueTests.m */; };
 		6C2420F91B61C3FD00884A93 /* ALCWithNameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2420F81B61C3FD00884A93 /* ALCWithNameTests.m */; };
 		6C2420FB1B61C4D200884A93 /* ALCMacroProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2420FA1B61C4D200884A93 /* ALCMacroProcessorTests.m */; };
@@ -74,7 +77,7 @@
 		6C5F17121B612C9E00F60B1B /* ALCClassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F17111B612C9E00F60B1B /* ALCClassTests.m */; };
 		6C5F17141B612F4700F60B1B /* ALCNameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F17131B612F4700F60B1B /* ALCNameTests.m */; };
 		6C5F17161B6130F400F60B1B /* ALCProtocolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F17151B6130F400F60B1B /* ALCProtocolTests.m */; };
-		6C5F17191B626A9A00F60B1B /* ALCAbstractValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C5F17171B626A9A00F60B1B /* ALCAbstractValueSource.h */; };
+		6C5F17191B626A9A00F60B1B /* ALCAbstractValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C5F17171B626A9A00F60B1B /* ALCAbstractValueSource.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C5F171A1B626A9A00F60B1B /* ALCAbstractValueSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F17181B626A9A00F60B1B /* ALCAbstractValueSource.m */; };
 		6C5F171C1B626FF900F60B1B /* ALCAbstractValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F171B1B626FF900F60B1B /* ALCAbstractValueSourceTests.m */; };
 		6C62C9491B54F339009D57C7 /* ALCConstantValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C62C9461B54F204009D57C7 /* ALCConstantValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -122,7 +125,6 @@
 		6CF28C661B6B14EB00E3A36E /* MethodFactoryIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF28C651B6B14EB00E3A36E /* MethodFactoryIntegrationTests.m */; };
 		6CF28C681B6B312800E3A36E /* InitializerIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF28C671B6B312800E3A36E /* InitializerIntegrationTests.m */; };
 		6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46ECB1B4618630009007A /* ALCModelTests.m */; };
-		6CFCD2611B7E44BB00F67C18 /* NSObject+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFCD2601B7E44BB00F67C18 /* NSObject+Alchemic.m */; };
 		6CFD6E981B456D27008B6695 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
 		6CFE92051B69FD6200BEAC0B /* FactoryIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFE92031B69FCDD00BEAC0B /* FactoryIntegrationTests.m */; };
 		6CFE92071B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFE92061B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m */; };
@@ -156,6 +158,7 @@
 		6C1C6A6F1AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCPrimaryObjectDependencyPostProcessor.h; sourceTree = "<group>"; };
 		6C1C6A701AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCPrimaryObjectDependencyPostProcessor.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C235AD51B82D05F0015CA0B /* InvokeIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InvokeIntegrationTests.m; sourceTree = "<group>"; };
+		6C235AD71B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiRegistrationsIntegrationTests.m; sourceTree = "<group>"; };
 		6C2420F61B61BFFB00884A93 /* ALCConstantValueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConstantValueTests.m; sourceTree = "<group>"; };
 		6C2420F81B61C3FD00884A93 /* ALCWithNameTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCWithNameTests.m; sourceTree = "<group>"; };
 		6C2420FA1B61C4D200884A93 /* ALCMacroProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCMacroProcessorTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -444,6 +447,7 @@
 				6C716FFF1B7391AA00634112 /* RetrievingIntegrationTests.m */,
 				6CAC887F1B4A6C4B00AFB8E4 /* Runtime */,
 				6C5F170A1B61195500F60B1B /* Test support */,
+				6C235AD71B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m */,
 			);
 			name = "Unit tests";
 			path = alchemicTests;
@@ -582,7 +586,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C5F17191B626A9A00F60B1B /* ALCAbstractValueSource.h in Headers */,
 				6C55E6371B6F3D3B004A6305 /* ALCResolvable.h in Headers */,
 				6CAE80701B42535A00217F9D /* Alchemic.h in Headers */,
 				6CB0740F1B4D078C00CA9002 /* ALCConfig.h in Headers */,
@@ -619,8 +622,10 @@
 				6C36D7BC1B3853F10073C4FB /* ALCResourceLocator.h in Headers */,
 				6C36D7BD1B3853F10073C4FB /* ALCPlistResourceLocator.h in Headers */,
 				6C36D7BE1B3853F10073C4FB /* ALCBundleResourceLocator.h in Headers */,
+				6C235ADA1B831D550015CA0B /* NSObject+Alchemic.h in Headers */,
 				6C36D7BF1B3853F20073C4FB /* ALCFileContentsResourceLocator.h in Headers */,
 				6C4655F41B54D59F00FD1D28 /* ALCValueSource.h in Headers */,
+				6C5F17191B626A9A00F60B1B /* ALCAbstractValueSource.h in Headers */,
 				6CB314921B5F52F6008393E9 /* ALCAbstractMethodBuilder.h in Headers */,
 				6C36D7C01B3853F20073C4FB /* ALCRuntime.h in Headers */,
 				6C2D4CC31B573D560024AE82 /* ALCConstantValueSource.h in Headers */,
@@ -759,6 +764,7 @@
 				6CB314931B5F52F6008393E9 /* ALCAbstractMethodBuilder.m in Sources */,
 				6C36D7851B38531E0073C4FB /* ALCBundleResourceLocator.m in Sources */,
 				6C36D7741B38531E0073C4FB /* ALCMethodBuilder.m in Sources */,
+				6C235AD91B831D520015CA0B /* NSObject+Alchemic.m in Sources */,
 				6C3CB9771B59570E001F6EB6 /* ALCArg.m in Sources */,
 				6C36D7751B38531E0073C4FB /* ALCClassBuilder.m in Sources */,
 				6C36D77B1B38531E0073C4FB /* ALCIsPrimary.m in Sources */,
@@ -784,6 +790,7 @@
 				6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */,
 				6C7170001B7391AA00634112 /* RetrievingIntegrationTests.m in Sources */,
 				6CFE92071B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m in Sources */,
+				6C235AD81B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m in Sources */,
 				6CDE85D71B73121F006E24F2 /* ALCContextTests.m in Sources */,
 				6C2421031B62006000884A93 /* ALCConstantValueSourceTests.m in Sources */,
 				6C55E6331B6B531D004A6305 /* ArraysIntegrationTests.m in Sources */,
@@ -821,7 +828,6 @@
 				6C2421051B6200B900884A93 /* ALCModelValueSourceTests.m in Sources */,
 				6C5F170D1B611ADA00F60B1B /* ALCInternalMacroTests.m in Sources */,
 				6C24210B1B6707F400884A93 /* ALCAbstractBuilderTests.m in Sources */,
-				6CFCD2611B7E44BB00F67C18 /* NSObject+Alchemic.m in Sources */,
 				6CFE92051B69FD6200BEAC0B /* FactoryIntegrationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
