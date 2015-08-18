@@ -28,6 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Default initializer.
  
+ @warning Do not use.
+ @return An instance of this class.
+ */
+-(instancetype) init NS_UNAVAILABLE;
+
+/**
+ Default initializer.
+ 
  @param valueClass The class of the object that will be returned by the builder.
  @return A fully injected instance of valueClass.
  */

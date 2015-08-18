@@ -28,6 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Default initializer.
 
+ @discussion Do not use.
+ @return An instance of this class.
+ */
+-(instancetype) init NS_UNAVAILABLE;
+
+/**
+ Default initializer.
+
  @param parentClassBuilder A ALCClassBuilder which represents the class that the method belongs to.
  @param selector           The selector to call.
 
@@ -56,7 +64,6 @@ NS_ASSUME_NONNULL_BEGIN
  Called to invoke the target selector on an object by derived classes.
 
  @param target    An object which contains the method to be executed.
- @param arguments The arguments to pass to the method call.
 
  @return A value from the target method. It is assumed that there will always be a return value.
  */

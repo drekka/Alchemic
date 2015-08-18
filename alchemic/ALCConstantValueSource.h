@@ -21,6 +21,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Default initializer.
+ 
+ @discussion Do not use.
+
+ @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.
+
+ @return An instance of this class.
+ */
+-(instancetype) initWithType:(Class)argumentType NS_UNAVAILABLE;
+
+/**
+ Default initializer.
 
  @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.
  @param value The value that will be the constant value.

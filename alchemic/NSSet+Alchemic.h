@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSSet (Alchemic)
 
 /**
- Provides the same functionality as [NSString componentsJoinedByString:].
+ Provides the same functionality as NSString componentsJoinedByString:.
 
  @param delimiter The delimiter to insert between each component.
 

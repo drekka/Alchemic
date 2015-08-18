@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCMethodBuilder
 
 -(instancetype) initWithParentClassBuilder:(ALCClassBuilder *) parentClassBuilder
-                                  selector:(SEL) selector NS_UNAVAILABLE {
+                                  selector:(SEL) selector {
     return nil;
 }
 

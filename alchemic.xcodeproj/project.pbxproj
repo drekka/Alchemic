@@ -434,6 +434,7 @@
 				6C95EDEA1B68A3D2004D8F74 /* Dependencies */,
 				6CFE92031B69FCDD00BEAC0B /* FactoryIntegrationTests.m */,
 				6CF28C671B6B312800E3A36E /* InitializerIntegrationTests.m */,
+				6C235AD51B82D05F0015CA0B /* InvokeIntegrationTests.m */,
 				6C8CD96A1B561E0500C1BC7F /* Macros */,
 				6CF28C651B6B14EB00E3A36E /* MethodFactoryIntegrationTests.m */,
 				6CF28C631B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m */,
@@ -443,7 +444,6 @@
 				6C716FFF1B7391AA00634112 /* RetrievingIntegrationTests.m */,
 				6CAC887F1B4A6C4B00AFB8E4 /* Runtime */,
 				6C5F170A1B61195500F60B1B /* Test support */,
-				6C235AD51B82D05F0015CA0B /* InvokeIntegrationTests.m */,
 			);
 			name = "Unit tests";
 			path = alchemicTests;

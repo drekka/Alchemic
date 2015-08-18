@@ -21,7 +21,7 @@
 
 @implementation ALCClassBuilder
 
--(instancetype) init NS_UNAVAILABLE {
+-(instancetype) init {
     return nil;
 }
 

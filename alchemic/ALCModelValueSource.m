@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSSet<id<ALCBuilder>> *_candidateBuilders;
 }
 
--(instancetype) initWithType:(Class) argumentType NS_UNAVAILABLE {
+-(instancetype) initWithType:(Class) argumentType {
     return nil;
 }
 
