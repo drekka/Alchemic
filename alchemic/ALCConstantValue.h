@@ -9,8 +9,6 @@
 @import Foundation;
 #import "ALCMacro.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
 /**
  ALCConstantValue objects store objects which are to be injected into a dependency.
  
@@ -32,4 +30,3 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END

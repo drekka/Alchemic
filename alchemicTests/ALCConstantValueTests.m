@@ -21,4 +21,9 @@
 	XCTAssertEqualObjects(@5, value.value);
 }
 
+-(void) testWithNil {
+    ALCConstantValue *value = [ALCConstantValue constantValue:nil];
+    XCTAssertEqualObjects([NSNull null], value.value);
+}
+
 @end

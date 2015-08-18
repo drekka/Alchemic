@@ -72,8 +72,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 	Method method = class_getInstanceMethod(aClass, selector);
 	unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
-	if (nbrArgs != [macroProcessor valueSourceCount]) {
-		@throw [NSException exceptionWithName:@"AlchemicIncorrectNumberArguments"
+	if (nbrArgs < [macroProcessor valueSourceCount]) {
+		@throw [NSException exceptionWithName:@"AlchemicTooManyArguments"
 												 reason:[NSString stringWithFormat:@"-[%s %s] - Expecting %lu argument matchers, got %lu",
 															class_getName(aClass),
 															sel_getName(selector),

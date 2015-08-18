@@ -24,7 +24,8 @@
 
     // Load the arguments.
     [arguments enumerateObjectsUsingBlock:^(id value, NSUInteger idx, BOOL *stop) {
-        [inv setArgument:&value atIndex:(NSInteger) idx + 2];
+        id finalValue = [value isKindOfClass:[NSNull class]] ? nil : value;
+        [inv setArgument:&finalValue atIndex:(NSInteger) idx + 2];
     }];
 
     [inv invokeWithTarget:self];

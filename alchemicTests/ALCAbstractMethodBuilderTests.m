@@ -41,6 +41,15 @@
     XCTAssertEqualObjects(@"abc", dependency.value);
 }
 
+-(void) testConfigureWithMacroProcessorNotEnoughArguments {
+    ignoreSelectorWarnings(
+                           ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
+                                                                                                                         selector:@selector(stringFactoryMethodUsingAString:)];
+                           )
+    methodBuilder.macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
+    [methodBuilder configure];
+}
+
 -(void) testConfigureWithMacroProcessorWithInvalidSelector {
     ignoreSelectorWarnings(
                            ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
@@ -54,7 +63,9 @@
                            ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
                                                                                                                          selector:@selector(stringFactoryMethodUsingAString:)];
                            )
-    XCTAssertThrowsSpecificNamed([methodBuilder configure], NSException, @"AlchemicIncorrectNumberArguments");
+    [methodBuilder.macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
+    [methodBuilder.macroProcessor addMacro:AcArg(NSString, AcValue(@"def"))];
+    XCTAssertThrowsSpecificNamed([methodBuilder configure], NSException, @"AlchemicTooManyArguments");
 }
 
 #pragma mark - Invoking

@@ -28,7 +28,8 @@ AcRegister()
 
 AcInject(singleton)
 
-AcInitializer(initWithString:, AcIsFactory, AcArg(NSString, AcValue(@"abc")))
+// Note missing arg definitions
+AcInitializer(initWithString:, AcIsFactory)
 -(instancetype) initWithString:(NSString *) aString {
     self = [super init];
     if (self) {
@@ -54,6 +55,19 @@ AcInitializer(initWithString:, AcIsFactory, AcArg(NSString, AcValue(@"abc")))
     XCTAssertNotNil(result.singleton);
     XCTAssertEqualObjects(@"def", result.aString);
 
+}
+
+-(void) testInvokingAFactoryInititializerWithMissingArgsPassesNil {
+
+    [self setupRealContext];
+    [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
+
+    IVFactory *result = AcInvoke(AcName(@"IVFactory initWithString:"));
+
+    XCTAssertNotNil(result);
+    XCTAssertNotNil(result.singleton);
+    XCTAssertNil(result.aString);
+    
 }
 
 @end

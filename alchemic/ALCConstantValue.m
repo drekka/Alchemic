@@ -12,7 +12,7 @@
 
 +(instancetype) constantValue:(id) value {
     ALCConstantValue *constantValue = [[ALCConstantValue alloc] init];
-    constantValue->_value = value;
+    constantValue->_value = value == nil ? [NSNull null] : value;
     return constantValue;
 }
 
