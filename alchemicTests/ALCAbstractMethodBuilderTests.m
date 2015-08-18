@@ -59,23 +59,43 @@
 
 #pragma mark - Invoking
 
--(void) testInvokeMethodOn {
+-(void) testInvokeWithNoArgsOnSimpleMethod {
+
     ignoreSelectorWarnings(
                            ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
                                                                                                                          selector:@selector(stringFactoryMethod)];
                            )
-    SimpleObject *object = [[SimpleObject alloc] init];
-    NSString *result = [methodBuilder invokeMethodOn:object withArguments:@[]];
+
+    // Mock the abstract instantiate object to call the method on a SO.
+    id partialMockBuilder = OCMPartialMock(methodBuilder);
+    OCMStub([partialMockBuilder instantiateObject]).andDo(^(NSInvocation *inv){
+        [inv retainArguments];
+        SimpleObject *so = [[SimpleObject alloc] init];
+        id result = [methodBuilder invokeMethodOn:so];
+        [inv setReturnValue:&result];
+    });
+
+    NSString *result = [methodBuilder invokeWithArgs:@[]];
     XCTAssertEqualObjects(@"abc", result);
 }
 
--(void) testInvokeMethodOnWithArgs {
+-(void) testInvokeWithNoArgsOnMethodWithArg {
+
     ignoreSelectorWarnings(
                            ALCAbstractMethodBuilder *methodBuilder = [[ALCAbstractMethodBuilder alloc] initWithParentClassBuilder:_parentBuilder
                                                                                                                          selector:@selector(stringFactoryMethodUsingAString:)];
                            )
-    SimpleObject *object = [[SimpleObject alloc] init];
-    NSString *result = [methodBuilder invokeMethodOn:object withArguments:@[@"def"]];
+
+    // Mock the abstract instantiate object to call the method on a SO.
+    id partialMockBuilder = OCMPartialMock(methodBuilder);
+    OCMStub([partialMockBuilder instantiateObject]).andDo(^(NSInvocation *inv){
+        [inv retainArguments];
+        SimpleObject *so = [[SimpleObject alloc] init];
+        id result = [methodBuilder invokeMethodOn:so];
+        [inv setReturnValue:&result];
+    });
+
+    NSString *result = [methodBuilder invokeWithArgs:@[@"def"]];
     XCTAssertEqualObjects(@"abc", result);
 }
 

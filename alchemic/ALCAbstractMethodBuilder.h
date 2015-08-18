@@ -41,16 +41,26 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly) ALCClassBuilder *parentClassBuilder;
 
--(id) instantiateObjectWithArguments:(NSArray<id> *) arguments;
+/**
+ Called from the context to invoke the builder with a different set of argument values. 
+ 
+ @discussion This is the access point for using the method to build an object with custom method arguments.
+
+ @param arguments The arguments to use to build the object.
+
+ @return A new object, built using the passed arguments and injected with dependencies, ready to go.
+ */
+-(id) invokeWithArgs:(NSArray *) arguments;
 
 /**
- Called to invoke the target selector on an object.
+ Called to invoke the target selector on an object by derived classes.
 
- @param target An object which contains the method to be executed.
+ @param target    An object which contains the method to be executed.
+ @param arguments The arguments to pass to the method call.
 
  @return A value from the target method. It is assumed that there will always be a return value.
  */
--(id) invokeMethodOn:(id) target withArguments:(NSArray<id> *) arguments;
+-(id) invokeMethodOn:(id) target;
 
 @end
 

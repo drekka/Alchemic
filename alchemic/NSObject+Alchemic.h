@@ -6,10 +6,21 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
+/**
+ Extension to NSObject.
+ */
 @interface NSObject (Alchemic)
 
+/**
+ Executes the specified selector.
+
+ @param selector  The selector to execute.
+ @param arguments The arguments required by the selector.
+
+ @return <#return value description#>
+ */
 -(id) invokeSelector:(SEL) selector arguments:(NSArray *) arguments;
 
 @end

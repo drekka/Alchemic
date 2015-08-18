@@ -201,33 +201,23 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 -(id) invokeMethodBuilders:(id<ALCModelSearchExpression>) methodLocator, ... {
 
-    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
-    alc_loadMacrosAfter(macroProcessor, methodLocator);
+    NSMutableArray *args = [[NSMutableArray alloc] init];
+    alc_processVarArgsAfter(id, methodLocator, ^(id value){[args addObject:value];});
 
     NSSet<id<ALCBuilder>> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:methodLocator]];
 
-    // TODO this should loop and execute on each builder.
-    id<ALCBuilder> builder = [builders anyObject];
-    if ([builders count] == 0u || ![builder isKindOfClass:[ALCAbstractMethodBuilder class]]) {
-        @throw [NSException exceptionWithName:@"MethodNotFoundFound"
-                                       reason:[NSString stringWithFormat:@"No builder found with %@", methodLocator]
-                                     userInfo:nil];
-    }
+    NSMutableSet<id> *results = [[NSMutableSet alloc] init];
+    [builders enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop) {
+        if (![builder isKindOfClass:[ALCAbstractMethodBuilder class]]) {
+            @throw [NSException exceptionWithName:@"AlchemicWrongBuilderType"
+                                           reason:[NSString stringWithFormat:@"A non-method builder was returned from the query: %@, builder: %@", methodLocator, builder]
+                                         userInfo:nil];
+        }
 
-    // Execute.
-    ALCAbstractMethodBuilder *methodBuilder = builder;
-
-    // Resolve the data sources and generate an array of values.
-    NSUInteger nbrArgs = [macroProcessor valueSourceCount];
-    NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:nbrArgs];
-    for (NSUInteger i = 0; i < nbrArgs; i++) {
-        id<ALCValueSource> valueSource = [macroProcessor valueSourceAtIndex:i];
-        [valueSource resolveWithPostProcessors:_dependencyPostProcessors];
-        [values addObject:valueSource.value];
-    }
-
-    // Make the call.
-    return [methodBuilder instantiateObjectWithArguments:values];
+        // Execute.
+        [results addObject:[(ALCAbstractMethodBuilder *) builder invokeWithArgs:args]];
+    }];
+    return [results count] == 1 ? [results anyObject] : results;
 }
 
 #pragma mark - Internal

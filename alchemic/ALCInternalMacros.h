@@ -25,7 +25,7 @@
 #define alc_toNSString(chars) _alc_toNSString(chars)
 #define _alc_toNSString(chars) @#chars
 
-// Processes varadic args
+// Processes varadic args including the arg that delimits the var arg list.
 #define alc_processVarArgsIncluding(argType, firstArg, codeBlock) \
 { \
 va_list argList; \
@@ -36,17 +36,21 @@ codeBlock(nextArg); \
 va_end(argList); \
 }
 
+// Processes varadic args excluding the arg that delimits the var arg list.
+#define alc_processVarArgsAfter(argType, afterArg, codeBlock) \
+{ \
+va_list argList; \
+va_start(argList, afterArg); \
+id nextArg; \
+while ((nextArg = va_arg(argList, id)) != nil) { \
+codeBlock(nextArg); \
+} \
+va_end(argList); \
+}
+
 // Processes varadic args into a macro processor, excluding the arg that is used to guard them.
 #define alc_loadMacrosAfter(processorVar, afterArg) \
-{ \
-va_list macroList; \
-va_start(macroList, afterArg); \
-id macro; \
-while ((macro = va_arg(macroList, id)) != nil) { \
-[processorVar addMacro:macro]; \
-} \
-va_end(macroList); \
-}
+alc_processVarArgsAfter(id<ALCMacro>, afterArg, ^(id<ALCMacro> macro){[processorVar addMacro:macro];});
 
 // Processes varadic args into a macro processor, including the arg that is used to guard them.
 #define alc_loadMacrosIncluding(processorVar, firstArg) \

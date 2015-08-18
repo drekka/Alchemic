@@ -9,7 +9,7 @@
 @import XCTest;
 @import ObjectiveC;
 #import <OCMock/OCMock.h>
-
+#import <StoryTeller/Storyteller.h>
 #import <Alchemic/Alchemic.h>
 
 #import "ALCContext.h"
@@ -82,24 +82,62 @@
     [_context registerClassBuilder:classBuilder variableDependency:@"aStringProperty", nil];
 }
 
--(void) testInvokeOnMethodBuilders {
+#pragma mark - Invoking builders
+
+-(void) testInvokeMethodBuildersSingleBuilder {
 
     ALCName *nameLocator = AcName(@"abc");
+
     id mockBuilder = OCMClassMock([ALCAbstractMethodBuilder class]);
+    OCMStub([mockBuilder invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
+
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
         return [(NSSet *)arg containsObject:nameLocator];
     }]]).andReturn([NSSet setWithObject:mockBuilder]);
 
-    id mockInv = OCMClassMock([NSInvocation class]);
-    OCMStub([mockBuilder inv]).andReturn(mockInv);
-
-    OCMStub([mockBuilder instantiateObjectWithArguments:@[@"def"]]).andReturn(@"xyz");
-
-    id results = [_context invokeMethodBuilders:nameLocator, AcArg(NSString, AcValue(@"def")), nil];
+    id results = [_context invokeMethodBuilders:nameLocator, @"def", nil];
     XCTAssertEqualObjects(@"xyz", results);
 
-
-    OCMVerify([mockBuilder instantiateObjectWithArguments:OCMOCK_ANY]);
+    OCMVerify([mockBuilder invokeWithArgs:OCMOCK_ANY]);
 }
+
+-(void) testInvokeMethodBuildersThrowsWhenNonMethodBuilderReturned {
+
+    ALCName *nameLocator = AcName(@"abc");
+
+    id mockBuilder = OCMClassMock([ALCClassBuilder class]);
+
+    OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
+        return [(NSSet *)arg containsObject:nameLocator];
+    }]]).andReturn([NSSet setWithObject:mockBuilder]);
+
+    XCTAssertThrowsSpecificNamed(([_context invokeMethodBuilders:nameLocator, @"def", nil]), NSException, @"AlchemicWrongBuilderType");
+}
+
+-(void) testInvokeMethodBuildersWithMulitpleBuilders {
+
+    ALCClass *classLocator = AcClass([SimpleObject class]);
+
+    id mockBuilder1 = OCMClassMock([ALCAbstractMethodBuilder class]);
+    OCMStub([mockBuilder1 invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
+
+    id mockBuilder2 = OCMClassMock([ALCAbstractMethodBuilder class]);
+    OCMStub([mockBuilder2 invokeWithArgs:@[@"def"]]).andReturn(@12);
+
+    OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
+        return [(NSSet *)arg containsObject:classLocator];
+    }]]).andReturn(([NSSet setWithObjects:mockBuilder1, mockBuilder2, nil]));
+
+
+    id results = [_context invokeMethodBuilders:classLocator, @"def", nil];
+    XCTAssertTrue([results isKindOfClass:[NSSet class]]);
+    XCTAssertEqual(2u, [results count]);
+    XCTAssertTrue([results containsObject:@"xyz"]);
+    XCTAssertTrue([results containsObject:@12]);
+
+    OCMVerify([mockBuilder1 invokeWithArgs:OCMOCK_ANY]);
+    OCMVerify([mockBuilder2 invokeWithArgs:OCMOCK_ANY]);
+}
+
 
 @end

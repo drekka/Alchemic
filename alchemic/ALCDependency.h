@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly) id value;
 
+/**
+ The value source that will provide the value for the dependency.
+ */
 @property (nonatomic, strong, readonly) id<ALCValueSource> valueSource;
 
 #pragma mark - Resolving

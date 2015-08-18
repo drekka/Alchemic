@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Default initializer
 
- @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.
+ @param valueType The class of the object that will be returned.
 
  @return And instance of this class.
  */

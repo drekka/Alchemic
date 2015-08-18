@@ -15,6 +15,11 @@
 
 @implementation ALCConstantValueSourceTests
 
+-(void) testInitWithType {
+    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class]];
+    XCTAssertNil(source);
+}
+
 -(void) testStoresValues {
 	ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
 	XCTAssertEqualObjects(@5, [source.values anyObject]);

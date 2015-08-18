@@ -52,10 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 }
 
--(BOOL)valuePresent {
-    return _value != nil;
-}
-
 -(id) instantiate {
 	id newValue = [self instantiateObject];
 	if (!_factory) {

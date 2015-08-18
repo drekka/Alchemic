@@ -20,6 +20,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractMethodBuilder {
+    NSArray *_overrideArguments;
     BOOL _useClassMethod;
     SEL _selector;
 }
@@ -59,22 +60,48 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(id)instantiateObject {
-    // Generate an array of arguments from the dependencies.
-    NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:[self.dependencies count]];
-    for (ALCDependency *dependency in self.dependencies) {
-        [arguments addObject:dependency.value];
+// Override the the value property to check for a one off request.
+-(id) value {
+
+    if (_overrideArguments == nil) {
+        return super.value;
     }
-    return [self instantiateObjectWithArguments:arguments];
+
+    // Create a instance, inject it and return without storing.
+    STLog(self.valueClass, @"Instanting with override args %@ ...", self);
+    id newValue = [self instantiateObject];
+    [self injectValueDependencies:newValue];
+    return newValue;
+
 }
 
--(id) instantiateObjectWithArguments:(NSArray<id> *) arguments {
+-(id) instantiateObject {
     [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 
--(id) invokeMethodOn:(id) target withArguments:(NSArray<id> *) arguments {
-    return [target invokeSelector:_selector arguments:arguments];
+-(id) invokeMethodOn:(id) target {
+
+    // If there are override arguments then use those. Otherwise get the arguments from the dependencies.
+    NSArray *finalArguments;
+    if (_overrideArguments == nil) {
+        // Generate an array of arguments from the dependencies.
+        finalArguments = [[NSMutableArray alloc] initWithCapacity:[self.dependencies count]];
+        for (ALCDependency *dependency in self.dependencies) {
+            [(NSMutableArray *)finalArguments addObject:dependency.value];
+        }
+    } else {
+        // Use the overrides and clear as they are always a one shot thing.
+        finalArguments = _overrideArguments;
+        _overrideArguments = nil;
+    }
+
+    return [target invokeSelector:_selector arguments:finalArguments];
+}
+
+-(id) invokeWithArgs:(NSArray *) arguments {
+    _overrideArguments = arguments;
+    return self.value;
 }
 
 -(void) injectValueDependencies:(id) value {

@@ -19,9 +19,9 @@
 	return self.parentClassBuilder.valueClass;
 }
 
--(id) instantiateObjectWithArguments:(NSArray<id> *) arguments {
+-(id) instantiateObject {
 	ALCClassBuilder *parent = self.parentClassBuilder;
-	id newObj = [self invokeMethodOn:[parent.valueClass alloc] withArguments:arguments];
+	id newObj = [self invokeMethodOn:[parent.valueClass alloc]];
 	STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(parent.valueClass), self);
 	return newObj;
 }

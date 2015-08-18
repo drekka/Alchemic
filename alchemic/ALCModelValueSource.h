@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Default initializer.
 
+ @param argumentType        The class of the object that will be returned.
  @param searchExpressions	A NSSet of ALCSearchExpresion objects which will be used to search the model.
 
  @return An instance of this class.

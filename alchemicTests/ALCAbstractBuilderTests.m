@@ -16,6 +16,7 @@
 #import "ALCVariableDependency.h"
 
 @interface FakeBuilder : ALCAbstractBuilder
+@property (nonatomic, strong) id injectedValue;
 @end
 
 @implementation FakeBuilder
@@ -24,7 +25,9 @@
 	return [[SimpleObject alloc] init];
 }
 
--(void)injectValueDependencies:(nonnull id)value {}
+-(void)injectValueDependencies:(nonnull id)value {
+    self.injectedValue = value;
+}
 
 @end
 
@@ -55,7 +58,7 @@
 	XCTAssertTrue(_builder.primary);
 }
 
-#pragma mark - Create on boot
+#pragma mark - Querying
 
 -(void) testCreateOnBootWhenNotAFactoryAndNoValue {
 	[_builder configure];
@@ -79,6 +82,38 @@
 	[_builder configure];
 	_builder.value = @"abc";
 	XCTAssertFalse(_builder.createOnBoot);
+}
+
+-(void) testInject {
+    SimpleObject *so = [[SimpleObject alloc] init];
+    _builder.value = so;
+    [_builder inject];
+    XCTAssertEqual(so, _builder.injectedValue);
+}
+
+-(void) testInjectDependencies {
+    SimpleObject *so = [[SimpleObject alloc] init];
+    [_builder injectValueDependencies:so];
+    XCTAssertEqual(so, _builder.injectedValue);
+}
+
+-(void) testStateDescriptionWhenNoValue {
+    XCTAssertEqualObjects(@"  ", [_builder stateDescription]);
+}
+
+-(void) testStateDescriptionWhenValue {
+    _builder.value = @"abc";
+    XCTAssertEqualObjects(@"* ", [_builder stateDescription]);
+}
+
+-(void) testAttributeDescriptionWhenNothingSet {
+    XCTAssertEqualObjects(@"", [_builder attributesDescription]);
+}
+
+-(void) testAttributeDescriptionWhenFactory {
+    [_builder.macroProcessor addMacro:AcIsFactory];
+    [_builder configure];
+    XCTAssertEqualObjects(@" - factory", [_builder attributesDescription]);
 }
 
 #pragma mark - Creating objects
