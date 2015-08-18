@@ -191,9 +191,9 @@ The `AcInitiailizer(...)` macro tells Alchemic that when it needs to create an i
 
 `AcInitializer(...)` takes all the same macros that can be used with `AcRegister(...)` to define various attributes of the instance that will be created. In fact, there is no need to use `AcRegister(...)` at all as the arguments for it will be ignored when there is an `AcInitializer(...)` macro present.
 
-### AcArg(type, search-criteria, ...)
+### AcArg(type, value, ...)
 
-`AcArg(...)` is a macro that helps both `AcInitializer(...)` and `AcMethod(...)` locate argument values to be passed to the methods they are going to be calling. The first argument to `AcArg(...)` is the type of the argument. After that is a list of one or more [Object search criteria](#object-search-criteria) which tell Alchemic where and how to obtain the value for that argument. 
+`AcArg(...)` is a macro that helps both `AcInitializer(...)` and `AcMethod(...)` locate argument values to be passed to the methods they are going to be calling. The first argument to `AcArg(...)` is the type of the argument. After that is a list of one or more [Object search criteria](#object-search-criteria) or macros that define values. These tell Alchemic where and how to obtain the value for that argument. The value can also be **nil** if you want to pass a nil. 
 
 ## Factories
 
@@ -254,7 +254,7 @@ The first example creates a singleton instance. Alchemic will only call the meth
 
 *Note: You will also notice that we don't need to register the class separately. Alchemic is smart enough to register the class automatically and create it hen necessary to access it's factory methods. If you want to tweak the class you can still use a `AcRegister(...) macro. Otherwise it's not needed.*
 
-Factory method registrations are stored in the Alchemic context along side the classes. For their names, Alchemic uses a combination of the class and method selector. Like class registrations, you can make use of the `AcWithName(...)` macro to give a factory method a more meaningful and useful associated name. 
+Factory method registrations are stored in the Alchemic context along side the classes. For their names, Alchemic uses a combination of the class and method selector using the format "*ClassName method:signature:*". Like class registrations, you can make use of the `AcWithName(...)` macro to give a factory method a more meaningful and useful associated name. 
 
 Now lets take a look at a factory method that takes arguments:
 
@@ -274,6 +274,20 @@ AcMethod(NSURLConnection, serverConnectionWithURL:retries:,
 Here we need to use `AcArg(...)` macros that will allow Alchemic to locate values to be passed to the method's arguments. Alchemic uses this information to select appropriate values and pass them as method arguments to the factory method when it's creating an instance with it. It needs both the type of the argument and how to locate the value.
 
 Unlike variable dependencies, which can appear in any order, `AcArg(...)` arguments **must appear in the same order as the selector arguments**. Alchemic will use the argument order to match the selector arguments.
+
+Method arguments call also pass nils. If you need to pass a nil argument you can use `AcValue(nil)` as the value part of `AcArg(...)`. Also if all the remaining arguments to a method are nil, then you can simly leave then out.
+
+Here are some examples of the above declarations: 
+
+```objectivec
+// Nil URL.
+AcMethod(NSURLConnection, serverConnectionWithURL:retries:,
+	AcArg(NSURL, AcValue(nil)),
+	AcArg(NSNumber, AcValue(@5))
+	)
+// All nils
+AcMethod(NSURLConnection, serverConnectionWithURL:retries:)
+```
 
 ## Primary objects
 
@@ -393,7 +407,9 @@ AcInject(_message, AcValue(@"hello world"))
 @end
 ```
 
-The `AcValue(...)` macro cannot occur with any other macros. However, if defining arguments for a [factory method](#factory-method), `AcValue(...)` can be used for individual arguments along side other arguments that search the model for objects. See [Factory methods](#factory-methods) for more details.*
+The `AcValue(...)` macro cannot occur with any other macros. However, if defining arguments for a [factory method](#factory-method), `AcValue(...)` can be used for individual arguments along side other arguments that search the model for objects. See [Factory methods](#factory-methods) for more details.
+
+`AcValue(nil)` is also valid and will pass a nil to the target method.
 
 ## Arrays
 
