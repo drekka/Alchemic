@@ -47,9 +47,9 @@ NS_ASSUME_NONNULL_BEGIN
         id<ALCValueSource> arg = [self.macroProcessor valueSourceAtIndex:i];
         [self.dependencies addObject:[[ALCDependency alloc] initWithValueSource:arg]];
     }
-    [self validateClass:self.parentClassBuilder.valueClass
-               selector:_selector
-         macroProcessor:self.macroProcessor];
+    [ALCRuntime validateClass:self.parentClassBuilder.valueClass
+                     selector:_selector
+               macroProcessor:self.macroProcessor];
 }
 
 -(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {

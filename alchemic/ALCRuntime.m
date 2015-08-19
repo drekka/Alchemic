@@ -18,6 +18,7 @@
 #import "ALCConfig.h"
 #import "ALCClass.h"
 #import "NSSet+Alchemic.h"
+#import "ALCMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -128,6 +129,27 @@ static NSCharacterSet *__typeEncodingDelimiters;
         [protocolDescs appendFormat:@"<%@>", NSStringFromProtocol(nextProtocol)];
     }
     return [NSString stringWithFormat:@"[%@]%@", NSStringFromClass(aClass), protocolDescs];
+}
+
++(void) validateClass:(Class) aClass selector:(SEL)selector macroProcessor:(ALCMacroProcessor *) macroProcessor {
+
+    if (! [aClass instancesRespondToSelector:selector]) {
+        @throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"
+                                       reason:[NSString stringWithFormat:@"Failed to find selector -[%@ %@]", NSStringFromClass(aClass), NSStringFromSelector(selector)]
+                                     userInfo:nil];
+    }
+
+    Method method = class_getInstanceMethod(aClass, selector);
+    unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
+    if (nbrArgs < [macroProcessor valueSourceCount]) {
+        @throw [NSException exceptionWithName:@"AlchemicTooManyArguments"
+                                       reason:[NSString stringWithFormat:@"-[%s %s] - Expecting %lu argument matchers, got %lu",
+                                               class_getName(aClass),
+                                               sel_getName(selector),
+                                               nbrArgs,
+                                               (unsigned long)[macroProcessor valueSourceCount]]
+                                     userInfo:nil];
+    }
 }
 
 #pragma mark - Scanning

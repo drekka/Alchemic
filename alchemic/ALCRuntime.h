@@ -12,6 +12,7 @@
 @class ALCRuntimeScanner;
 @class ALCContext;
 @protocol ALCModelSearchExpression;
+@class ALCMacroProcessor;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -92,6 +93,18 @@ NS_ASSUME_NONNULL_BEGIN
  @param value The value to set.
  */
 +(void) object:(id) object injectVariable:(Ivar) variable withValue:(id) value;
+
+/// @name Validation
+
+/**
+ Validates that the passed selector occurs on the passed class and has a correct set of arguments stored in the macro processor.
+
+ @param aClass The class to be used to check the selector again.
+ @param selector The selector to check.
+ @param macroProcessor An instance of ALCMacroProcessor containing the dependencies that will be required for the selector to be called.
+ @exception NSException If there is a problem.
+ */
++(void) validateClass:(Class) aClass selector:(SEL)selector macroProcessor:(ALCMacroProcessor *) macroProcessor;
 
 #pragma mark - Getting qualifiers
 

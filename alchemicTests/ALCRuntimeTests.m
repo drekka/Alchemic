@@ -11,6 +11,8 @@
 
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
+#import "ALCMacroProcessor.h"
+#import "SimpleObject.h"
 
 #import "ALCRuntime.h"
 
@@ -225,6 +227,40 @@
     NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForVariable:var];
     XCTAssertEqual(1u, [expressions count]);
     XCTAssertTrue([expressions containsObject:[ALCClass withClass:[NSString class]]]);
+}
+
+#pragma mark - Validations
+
+-(void) testValidateClassSelectorWhenNoArgs {
+    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
+    [ALCRuntime validateClass:[SimpleObject class] selector:@selector(description) macroProcessor:macroProcessor];
+}
+
+-(void) testValidateClassSelectorWhenUnknownSelector {
+    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
+    ignoreSelectorWarnings(
+                           XCTAssertThrowsSpecificNamed([ALCRuntime validateClass:[SimpleObject class] selector:@selector(xxxx) macroProcessor:macroProcessor], NSException, @"AlchemicSelectorNotFound");
+                           )
+}
+
+-(void) testValidateArgumentsForSelector {
+    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
+    [macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
+    ignoreSelectorWarnings(
+                           [ALCRuntime validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor];
+                           )
+}
+
+-(void) testValidateArgumentsForSelectorWithToFewNumberArguments {
+    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
+    [ALCRuntime validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor];
+}
+
+-(void) testValidateArgumentsForSelectorWithToManyNumberArguments {
+    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
+    [macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
+    [macroProcessor addMacro:AcArg(NSString, AcValue(@"def"))];
+    XCTAssertThrowsSpecificNamed([ALCRuntime validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor], NSException, @"AlchemicTooManyArguments");
 }
 
 @end

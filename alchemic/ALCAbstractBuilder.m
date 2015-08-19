@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractBuilder
 
+#pragma mark - Properties
+
 // Properties from protocol
 @synthesize primary = _primary;
 @synthesize factory = _factory;
@@ -39,118 +41,82 @@ NS_ASSUME_NONNULL_BEGIN
 	return self;
 }
 
--(id) value {
-	// Value will be populated if this is not a factory.
-	if (_value == nil) {
-		STLog(self.valueClass, @"Instanting %@ ...", self);
-		id newValue = [self instantiate];
-		[self injectValueDependencies:newValue];
-		return newValue;
-	} else {
-		STLog(self, @"Returning a %@", NSStringFromClass([_value class]));
-		return _value;
-	}
+-(BOOL)createOnBoot {
+    // This allows for when a dependency as caused a object to be created during the singleton startup process.
+    return _createOnBoot && _value == nil;
 }
 
--(id) instantiate {
-	id newValue = [self instantiateObject];
-	if (!_factory) {
-		// Only store the value if this is not a factory.
-		STLog(self, @"Caching a %@", NSStringFromClass([newValue class]));
-		_value = newValue;
-	}
-	return newValue;
-}
-
--(void) validateClass:(Class) aClass selector:(SEL)selector macroProcessor:(ALCMacroProcessor *) macroProcessor {
-
-	if (! [aClass instancesRespondToSelector:selector]) {
-		@throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"
-												 reason:[NSString stringWithFormat:@"Failed to find selector -[%@ %@]", NSStringFromClass(aClass), NSStringFromSelector(selector)]
-											  userInfo:nil];
-	}
-
-	Method method = class_getInstanceMethod(aClass, selector);
-	unsigned long nbrArgs = method_getNumberOfArguments(method) - 2;
-	if (nbrArgs < [macroProcessor valueSourceCount]) {
-		@throw [NSException exceptionWithName:@"AlchemicTooManyArguments"
-												 reason:[NSString stringWithFormat:@"-[%s %s] - Expecting %lu argument matchers, got %lu",
-															class_getName(aClass),
-															sel_getName(selector),
-															nbrArgs,
-															(unsigned long)[macroProcessor valueSourceCount]]
-											  userInfo:nil];
-	}
+-(void) configure {
+    self.factory = self.macroProcessor.isFactory;
+    self.primary = self.macroProcessor.isPrimary;
+    self.createOnBoot = !self.factory;
+    NSString *name = self.macroProcessor.asName;
+    if (name != nil) {
+        self.name = name;
+    }
 }
 
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
 
-	_resolved = YES;
+    _resolved = YES;
 
-	if ([_dependencies count] == 0) {
-		STLog(self, @"No dependencies found.");
-		return;
-	}
+    if ([_dependencies count] == 0) {
+        STLog(self, @"No dependencies found.");
+        return;
+    }
 
-	for(ALCDependency *dependency in _dependencies) {
-		[dependency resolveWithPostProcessors:postProcessors];
-	};
+    for(ALCDependency *dependency in _dependencies) {
+        [dependency resolveWithPostProcessors:postProcessors];
+    };
 }
 
 -(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
 
-	STLog(self.valueClass, @"Validating %@", self);
-	if ([dependencyStack containsObject:self]) {
-		[dependencyStack addObject:self];
-		@throw [NSException exceptionWithName:@"AlchemicCircularDependency"
-												 reason:[NSString stringWithFormat:@"Circular dependency detected: %@",
-															[dependencyStack componentsJoinedByString:@" -> "]]
-											  userInfo:nil];
-	}
+    STLog(self.valueClass, @"Validating %@", self);
+    if ([dependencyStack containsObject:self]) {
+        [dependencyStack addObject:self];
+        @throw [NSException exceptionWithName:@"AlchemicCircularDependency"
+                                       reason:[NSString stringWithFormat:@"Circular dependency detected: %@",
+                                               [dependencyStack componentsJoinedByString:@" -> "]]
+                                     userInfo:nil];
+    }
 
-	[dependencyStack addObject:self];
-	for (ALCDependency *dependency in _dependencies) {
-		[dependency validateWithDependencyStack:dependencyStack];
-	}
+    [dependencyStack addObject:self];
+    for (ALCDependency *dependency in _dependencies) {
+        [dependency validateWithDependencyStack:dependencyStack];
+    }
 
-	// remove ourselves before we fall back.
-	[dependencyStack removeObject:self];
-
+    // remove ourselves before we fall back.
+    [dependencyStack removeObject:self];
+    
 }
 
--(void)inject {
-	if (_value != nil) {
-		[self injectValueDependencies:_value];
-	}
-}
-
-#pragma mark - Start up
-
--(BOOL)createOnBoot {
-	// This allows for when a dependency as caused a object to be created during the singleton startup process.
-	return _createOnBoot && _value == nil;
-}
-
-#pragma mark - Overridable points
-
--(void) injectValueDependencies:(id) value {
-	[self doesNotRecognizeSelector:_cmd];
-}
-
--(void) configure {
-	self.factory = self.macroProcessor.isFactory;
-	self.primary = self.macroProcessor.isPrimary;
-	self.createOnBoot = !self.factory;
-	NSString *name = self.macroProcessor.asName;
-	if (name != nil) {
-		self.name = name;
-	}
+-(id) instantiate {
+    id newValue = [self instantiateObject];
+    if (!_factory) {
+        // Only store the value if this is not a factory.
+        STLog(self, @"Caching a %@", NSStringFromClass([newValue class]));
+        self.value = newValue;
+    }
+    return newValue;
 }
 
 -(id) instantiateObject {
-	[self doesNotRecognizeSelector:_cmd];
-	return nil;
+    [self doesNotRecognizeSelector:_cmd];
+    return nil;
 }
+
+-(void)inject {
+    if (_value != nil) {
+        [self injectValueDependencies:_value];
+    }
+}
+
+-(void) injectValueDependencies:(id) value {
+    [self doesNotRecognizeSelector:_cmd];
+}
+
+#pragma mark - Descriptions
 
 -(NSString *) stateDescription {
     return _value == nil ? @"  " : @"* ";
@@ -159,6 +125,22 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSString *) attributesDescription {
     return self.factory ? @" - factory" : @"";
 }
+
+#pragma mark - Accessing the value
+
+-(id) value {
+    // Value will be populated if this is not a factory.
+    if (_value == nil) {
+        STLog(self.valueClass, @"Instanting %@ ...", self);
+        id newValue = [self instantiate];
+        [self injectValueDependencies:newValue];
+        return newValue;
+    } else {
+        STLog(self, @"Returning a %@", NSStringFromClass([_value class]));
+        return _value;
+    }
+}
+
 
 @end
 

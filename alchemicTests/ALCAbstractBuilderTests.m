@@ -33,6 +33,7 @@
 
 @interface ALCAbstractBuilderTests : XCTestCase {
     FakeBuilder *_builder;
+    BOOL _kvoCalled;
 }
 
 @end
@@ -143,6 +144,17 @@
     OCMVerifyAll(mockDependency);
 }
 
+-(void) testKVOFiresWhenObjectCreated {
+    _kvoCalled = NO;
+    [_builder addObserver:self forKeyPath:@"value" options:0 context:nil];
+    XCTAssertNotNil(_builder.value);
+    XCTAssertTrue(_kvoCalled);
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    _kvoCalled = YES;
+}
+
 #pragma mark - Resolving
 
 -(void) testResolveWithPostProcessors {
@@ -185,40 +197,6 @@
 -(void) testValidateDependencyThrowsWhenCircularDependencyDetected {
     NSMutableArray *stack = [@[_builder] mutableCopy];
     XCTAssertThrowsSpecificNamed([_builder validateWithDependencyStack:stack], NSException, @"AlchemicCircularDependency");
-}
-
-#pragma mark - Validations
-
--(void) testValidateClassSelectorWhenNoArgs {
-    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
-    [_builder validateClass:[SimpleObject class] selector:@selector(description) macroProcessor:macroProcessor];
-}
-
--(void) testValidateClassSelectorWhenUnknownSelector {
-    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
-    ignoreSelectorWarnings(
-                           XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(xxxx) macroProcessor:macroProcessor], NSException, @"AlchemicSelectorNotFound");
-                           )
-}
-
--(void) testValidateArgumentsForSelector {
-    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
-    [macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
-    ignoreSelectorWarnings(
-                           [_builder validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor];
-                           )
-}
-
--(void) testValidateArgumentsForSelectorWithToFewNumberArguments {
-    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] init];
-    [_builder validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor];
-}
-
--(void) testValidateArgumentsForSelectorWithToManyNumberArguments {
-    ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
-    [macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
-    [macroProcessor addMacro:AcArg(NSString, AcValue(@"def"))];
-    XCTAssertThrowsSpecificNamed([_builder validateClass:[SimpleObject class] selector:@selector(stringFactoryMethodUsingAString:) macroProcessor:macroProcessor], NSException, @"AlchemicTooManyArguments");
 }
 
 @end
