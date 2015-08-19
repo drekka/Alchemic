@@ -11,6 +11,7 @@ Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Quick guide](
      * [The context](#the-context)
  * [Macros](#macros)
  * [Creating objects](#creating-objects)
+      * [Builders](#builders)
       * [Singletons](#singletons)
       * [Initializers](#initializers)
       * [Factories](#factories)
@@ -157,6 +158,15 @@ Most of these macros take one or more arguments. For example the `AcArg(...)` ma
 # Creating objects
 
 Before we look at resolving dependencies and injecting values, we first need to look at how we tell Alchemic about the objects we want to create.
+
+## Builders
+
+In order to be able to know about the objects it manages, Alchamic needs to store information about them. How they will be managed, how they will be built, classes, protocols, etc. It does this by using what are called '**Builders**'. Builders are objects which Alchemic uses to build objects and inject dependencies. There are 3 main types of builders:
+
+* **Class builders** which define information about a class and can build instances of that class. Class builders also hold information about dependencies that the class may have and how they are located and injected.
+* **Initializer builders** which define information about a class's initializer and can build instances of the class by executing the initializer and passing it arguments. 
+* **Method builder** which define information about a method in a class and can build objects by calling the method and returning the result. Method builders are very similar to initializer builder, only differing in how the method is called.
+
 
 ## Singletons 
 
