@@ -50,7 +50,7 @@ AcRegister(AcWithName(@"abc"))
 }
 
 -(void) testGetThrowsWhenFactory {
-	XCTAssertThrowsSpecificNamed((AcGet(REObject, AcIsFactory)), NSException, @"AlchemicUnexpectedMacro");
+	XCTAssertThrowsSpecificNamed((AcGet(REObject, AcFactory)), NSException, @"AlchemicUnexpectedMacro");
 }
 
 #pragma mark - Internal

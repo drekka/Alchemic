@@ -54,8 +54,8 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     STStartScope(ALCHEMIC_LOG);
     STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
     [self resolveBuilderDependencies];
-    STLog(ALCHEMIC_LOG, @"Instantiating singletons ...");
-    [self instantiateSingletons];
+    STLog(ALCHEMIC_LOG, @"Finishing startup ...");
+    [self finishStartup];
     STLog(ALCHEMIC_LOG, @"Alchemic started.");
 }
 
@@ -66,24 +66,16 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
     NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForClass:[object class]];
     NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:expressions]];
-    [[builders anyObject] injectValueDependencies:object];
+    [[builders anyObject]injectDependencies:object];
 }
 
 -(void) resolveBuilderDependencies {
-
     STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
     for (id<ALCBuilder> builder in [_model allBuilders]) {
         STLog(builder.valueClass, @"Resolving dependencies in %@", builder);
         STStartScope(builder.valueClass);
-        [builder resolveWithPostProcessors:self->_dependencyPostProcessors];
+        [builder resolveWithPostProcessors:self->_dependencyPostProcessors dependencyStack:[[NSMutableArray alloc] init]];
     }
-
-    STLog(ALCHEMIC_LOG, @"Validating dependencies in %lu builders ...", _model.numberBuilders);
-    for (id<ALCBuilder> builder in [_model allBuilders]) {
-        NSMutableArray<id<ALCResolvable>> *stack = [[NSMutableArray alloc] init];
-        [builder validateWithDependencyStack:stack];
-    }
-
 }
 
 #pragma mark - Configuration
@@ -97,7 +89,6 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder variableDependency:(NSString *) variable, ... {
 
-    STLog(classBuilder.valueClass, @"Registering variable dependency %@.%@ ...", NSStringFromClass(classBuilder.valueClass), variable);
     STStartScope(classBuilder.valueClass);
 
     Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
@@ -105,15 +96,16 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     alc_loadMacrosAfter(macroProcessor, variable);
 
     // Add a default value source for the ivar if no macros where loaded to define it.
+    Class varClass = [ALCRuntime iVarClass:var];
     if ([macroProcessor valueSourceCount] == 0) {
-        STLog(classBuilder.valueClass, @"No defintion macros specified");
-        NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForVariable:var];
+        STLog(classBuilder.valueClass, @"No value macros specified, generating from variable class %@", NSStringFromClass(varClass));
+        NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForClass:varClass];
         for (id<ALCModelSearchExpression> macro in macros) {
             [macroProcessor addMacro:(id<ALCMacro>)macro];
         }
     }
 
-    [classBuilder addVariableInjection:var macroProcessor:macroProcessor];
+    [classBuilder addVariableInjection:var class:varClass macroProcessor:macroProcessor];
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
@@ -135,14 +127,13 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 }
 
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
-    STLog(classBuilder.valueClass, @"Registering a method builder for %@", NSStringFromSelector(selector));
     ALCMethodBuilder *methodBuilder = [[ALCMethodBuilder alloc] initWithParentBuilder:classBuilder
                                                                              selector:selector
                                                                            valueClass:returnType];
     alc_loadMacrosAfter(methodBuilder.macroProcessor, returnType);
     [methodBuilder configure];
     [_model addBuilder:methodBuilder];
-    STLog(classBuilder.valueClass, @"Created: %@, %@", methodBuilder, methodBuilder.macroProcessor);
+    STLog(classBuilder.valueClass, @"Created: %@", methodBuilder);
 }
 
 -(void) addBuilderToModel:(id<ALCBuilder> _Nonnull) builder {
@@ -194,8 +185,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     }
 
     ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:[macroProcessor valueSourceAtIndex:0]];
-    [dependency resolveWithPostProcessors:_dependencyPostProcessors];
-    [dependency validateWithDependencyStack:[NSMutableArray array]];
+    [dependency resolveWithPostProcessors:_dependencyPostProcessors dependencyStack:[[NSMutableArray alloc] init]];
     return dependency.value;
 }
 
@@ -222,21 +212,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 #pragma mark - Internal
 
--(void) instantiateSingletons {
-
-    // This is a multi-stage process so that all objects are created before dependencies are injected. This helps with defeating circular dependency issues.
-
-    for (id<ALCBuilder> builder in [_model allBuilders]) {
-        if (builder.createOnBoot) {
-            STLog(builder, @"Creating singleton '%@' using %@", builder.name, builder);
-            [builder instantiate];
-        }
-    };
-
-    STLog(ALCHEMIC_LOG, @"Injecting dependencies ...");
-    for (id<ALCBuilder> builder in [_model allBuilders]) {
-        [builder inject];
-    }
+-(void) finishStartup {
 
     STLog(ALCHEMIC_LOG, @"Executing finished loading blocks ...");
     // Clear the blocks immediately so we don't risk any synchronization issues with other thread still registering blocks.
@@ -246,7 +222,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
         _onLoadBlocks = nil;
     }
     
-    // This could take some time so we keep t out of the sync block.
+    // This could take some time so we keep it out of the sync block.
     // Any more incoming block additions will just execute immediately now.
     for (AcSimpleBlock block in blocks) {
         // Put back on main queue.

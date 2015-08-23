@@ -33,25 +33,22 @@
 #pragma mark - Configuration
 
 -(void) testConfigureSetsFactory {
-	[_builder.macroProcessor addMacro:AcIsFactory];
-	[_builder configure];
+    [self configureWithMacros:@[AcFactory]];
 	XCTAssertTrue(_builder.factory);
 }
 
 -(void) testConfigureSetsPrimary {
-	[_builder.macroProcessor addMacro:AcIsPrimary];
-	[_builder configure];
+    [self configureWithMacros:@[AcPrimary]];
 	XCTAssertTrue(_builder.primary);
 }
 
 -(void) testConfigureSetsName {
-	[_builder configure];
+    [self configureWithMacros:@[]];
 	XCTAssertEqualObjects(@"SimpleObject", _builder.name);
 }
 
 -(void) testConfigureSetsCustomName {
-	[_builder.macroProcessor addMacro:AcWithName(@"abc")];
-	[_builder configure];
+    [self configureWithMacros:@[AcWithName(@"abc")]];
 	XCTAssertEqualObjects(@"abc", _builder.name);
 }
 
@@ -64,22 +61,37 @@
 	ALCMacroProcessor *dependencyMacroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValue];
 	[dependencyMacroProcessor addMacro:AcValue(@"abc")];
 
-	[_builder addVariableInjection:stringVar macroProcessor:dependencyMacroProcessor];
+    [_builder addVariableInjection:stringVar class:[NSString class] macroProcessor:dependencyMacroProcessor];
 
 	ALCVariableDependency *dependency = (ALCVariableDependency *)_builder.dependencies[0];
 	XCTAssertEqual(stringVar, dependency.variable);
 }
 
+-(void) testAddVariableInjectionAddsKVOWatch {
+
+    Ivar stringVar = class_getInstanceVariable([SimpleObject class], "_aStringProperty");
+
+    ALCMacroProcessor *dependencyMacroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosValue];
+    [dependencyMacroProcessor addMacro:AcValue(@"abc")];
+
+    [_builder addVariableInjection:stringVar class:[NSString class] macroProcessor:dependencyMacroProcessor];
+    ALCVariableDependency *dependency = (ALCVariableDependency *)_builder.dependencies[0];
+
+    [_builder resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+    XCTAssertTrue(dependency.available);
+    XCTAssertTrue(_builder.available);
+}
+
 -(void) testResolveDependencies {
 
 	id mockDependency = OCMClassMock([ALCVariableDependency class]);
-	Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
-	object_setIvar(_builder, dependenciesVar, [NSMutableSet setWithObject:mockDependency]);
+	[self injectDependencies:@[mockDependency]];
 
 	NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet set];
-	OCMExpect([mockDependency resolveWithPostProcessors:postProcessors]);
+    NSMutableArray *stack = [NSMutableArray array];
+	OCMExpect([mockDependency resolveWithPostProcessors:postProcessors dependencyStack:stack]);
 
-	[_builder resolveWithPostProcessors:postProcessors];
+	[_builder resolveWithPostProcessors:postProcessors dependencyStack:stack];
 
 	OCMVerifyAll(mockDependency);
 
@@ -87,9 +99,52 @@
 
 #pragma mark - Instantiating
 
+-(void) testAvailableWhenNotExternalAndValueSet {
+    [self configureWithMacros:@[]];
+    _builder.value = [[SimpleObject alloc] init];
+    XCTAssertTrue(_builder.available);
+}
+
+-(void) testAvailableWhenNotExternalAndNoValue {
+    [self configureWithMacros:@[]];
+    XCTAssertTrue(_builder.available);
+}
+
+-(void) testAvailableWhenExternalAndValueSet {
+    _builder.external = YES;
+    [self configureWithMacros:@[]];
+    _builder.value = [[SimpleObject alloc] init];
+    XCTAssertTrue(_builder.available);
+}
+
+-(void) testAvailableWhenExternalAndNoValue {
+    _builder.external = YES;
+    [self configureWithMacros:@[]];
+    XCTAssertFalse(_builder.available);
+}
+
 -(void) testInstantiateObjectViaInit {
 	id object = [_builder instantiateObject];
 	XCTAssertEqual([SimpleObject class], [object class]);
+}
+
+-(void) testValueInstantiatesObject {
+    [self configureWithMacros:@[]];
+    id object = _builder.value;
+    XCTAssertEqual([SimpleObject class], [object class]);
+}
+
+-(void) testValueWhenExternalAndNoValueThrows {
+    _builder.external = YES;
+    XCTAssertThrowsSpecificNamed([_builder value], NSException, @"AlchemicCannotCreateValue");
+}
+
+-(void) testValueWhenExternalAndValueSet {
+    _builder.external = YES;
+    [self configureWithMacros:@[]];
+    SimpleObject *so = [[SimpleObject alloc] init];
+    _builder.value = so;
+    XCTAssertEqual(so, _builder.value);
 }
 
 #pragma mark - Injecting
@@ -99,11 +154,10 @@
 	SimpleObject *object = [[SimpleObject alloc] init];
 
 	id mockDependency = OCMClassMock([ALCVariableDependency class]);
-	Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
-	object_setIvar(_builder, dependenciesVar, [NSMutableSet setWithObject:mockDependency]);
+    [self injectDependencies:@[mockDependency]];
 	OCMExpect([mockDependency injectInto:object]);
 
-	[_builder injectValueDependencies:object];
+	[_builderinjectDependencies:object];
 
 	XCTAssertTrue(object.didInject);
 	OCMVerifyAll(mockDependency);
@@ -112,13 +166,39 @@
 -(void) testDidInjectDependenciesCalledWhenNoDependencies {
 
 	SimpleObject *object = [[SimpleObject alloc] init];
+    [self injectDependencies:@[]];
 
-	Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
-	object_setIvar(_builder, dependenciesVar, [NSMutableSet set]);
-
-	[_builder injectValueDependencies:object];
+	[_builderinjectDependencies:object];
 
 	XCTAssertTrue(object.didInject);
 }
+
+#pragma mark - Description
+
+-(void) testDescription {
+    XCTAssertEqualObjects(@"  'SimpleObject' Class builder for type SimpleObject", [_builder description]);
+}
+
+-(void) testDescriptionWhenExternal {
+    _builder.external = YES;
+    XCTAssertEqualObjects(@"  'SimpleObject' Class builder for type SimpleObject (external)", [_builder description]);
+}
+
+
+#pragma mark - Internal
+
+-(void) configureWithMacros:(NSArray *) macros {
+    for (id<ALCMacro> macro in macros) {
+        [_builder.macroProcessor addMacro:macro];
+    }
+    [_builder configure];
+    [_builder resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+}
+
+-(void) injectDependencies:(NSArray *) dependencies {
+    Ivar dependenciesVar = class_getInstanceVariable([ALCClassBuilder class], "_dependencies");
+    object_setIvar(_builder, dependenciesVar, [NSMutableSet setWithArray:dependencies]);
+}
+
 
 @end

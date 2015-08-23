@@ -24,12 +24,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// @name Settings
 
-/** 
- The class of the value that will be returned by the builder.
- 
- @discussion This is mainly used when Alchemic is searching the model to find builders that can create an instance of a specific class or potocol.
-*/
-@property (nonatomic, strong) Class valueClass;
+/**
+ Used by builders when they need to know if there is a value present.
+ */
+@property (nonatomic, assign, readonly) BOOL valuePresent;
+
+/**
+ Set when all dependencies become available.
+ */
+@property (nonatomic, assign, readonly) BOOL dependenciesAvailable;
 
 /**
  The name assigned to the builder.

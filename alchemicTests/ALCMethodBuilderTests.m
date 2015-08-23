@@ -30,7 +30,7 @@
 -(void) testConfigureWithMacroProcessorIsFactory {
 	ignoreSelectorWarnings(
 								  ALCMethodBuilder *methodBuilder = [self createBuilderWithSelector:@selector(stringFactoryMethod)
-																												 macros:@[AcIsFactory]];
+																												 macros:@[AcFactory]];
 								  )
 	XCTAssertTrue(methodBuilder.factory);
 	XCTAssertFalse(methodBuilder.createOnBoot);
@@ -39,7 +39,7 @@
 -(void) testConfigureWithMacroProcessorIsPrimary {
 	ignoreSelectorWarnings(
 								  ALCMethodBuilder *methodBuilder = [self createBuilderWithSelector:@selector(stringFactoryMethod)
-																												 macros:@[AcIsPrimary]];
+																												 macros:@[AcPrimary]];
 								  )
 	XCTAssertTrue(methodBuilder.primary);
 }

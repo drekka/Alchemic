@@ -29,7 +29,7 @@ AcRegister()
 AcInject(singleton)
 
 // Note missing arg definitions
-AcInitializer(initWithString:, AcIsFactory)
+AcInitializer(initWithString:, AcFactory)
 -(instancetype) initWithString:(NSString *) aString {
     self = [super init];
     if (self) {

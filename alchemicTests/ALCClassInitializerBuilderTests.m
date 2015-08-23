@@ -43,6 +43,7 @@
         [initBuilder.macroProcessor addMacro:macro];
     }
     [initBuilder configure];
+    [initBuilder resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
     
     SimpleObject *object = initBuilder.value;
     XCTAssertNotNil(object);

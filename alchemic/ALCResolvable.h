@@ -12,30 +12,36 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Classes that are resolvable can resolve dependencies agaist the model.
+ Classes that are resolvable can resolve and return values.
  */
 @protocol ALCResolvable <NSObject>
 
 /**
- If the resolvable has already been resolved by the resolveWithPostProcessors: method.
+ The value.
  */
-@property (nonatomic, assign, readonly) BOOL resolved;
+@property (nonatomic, strong, readonly) id value;
 
 /**
- Called during model setup to resolve dependencies into a list of candidate objects.
+ The class of the object that will be returned from the resolvable.
+ */
+@property (nonatomic, strong, readonly) Class valueClass;
+
+/**
+ Indicates that the resolvables value can be accessed and a value is either present or can be created.
+ 
+ @discussion This is about supporting externally created objects which are injected into Alchemic at some future time. Until those objects are injected, the resolvable is marked as not being available. Builders can then watch this property to known when the resolvable is available.
+ */
+@property (nonatomic, assign) BOOL available;
+
+/**
+ Called during model setup to resolve dependencies and validate the model.
+
+ @discussion Normally validation is about detecting circular dependencies. This is done by checking this ALCResolvable against the dependencyStack. If it is present then we have looped around and have a circular dependency.
 
  @param postProcessors a set of post processors which can be used to resolve results further if needed.
  */
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
-
-/**
- Called during model setup to validate dependencies.
- 
- @discussion Normally this is about detecting circular dependencies. This is done by checking this ALCResolvable against the dependencyStack. If it is present then we have looped around and have a circular dependency.
-
- @param dependencyStack An NSArray containing the ALCBuilder instances and ALCDependency instances that have been validated so far.
- */
--(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
+                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
 
 @end
 

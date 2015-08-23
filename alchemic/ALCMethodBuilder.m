@@ -40,10 +40,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"%@'%@' Method builder -(%@ *) %@%@", [self stateDescription], self.name, NSStringFromClass(self.valueClass), [super description], self.attributesDescription];
+    return [NSString stringWithFormat:@"%@'%@' Method builder %@%@", [self stateDescription], self.name, [super description], self.attributesDescription];
 }
 
--(void) injectValueDependencies:(id) value {
+-(void)injectDependencies:(id) value {
     STLog([value class], @"Handing a %s instance to the context for dependency injection", object_getClassName(value));
     [[ALCAlchemic mainContext] injectDependencies:value];
 }

@@ -26,6 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCClassBuilder : ALCAbstractBuilder
 
 /**
+ When YES, means that the value is not to be generated as it will be set from an external source.
+
+ @discussion At the moment only class builder can be external, but we need to consider it in various methods. External is mutually exclusive with factory.
+ */
+@property (nonatomic, assign, readonly) BOOL external;
+
+/**
  Default initializer.
  
  @warning Do not use.
@@ -44,10 +51,11 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Adds the definition of a variable to be injected when the build is asked for an object.
  
- @param variable An IVar reference to the variable to be set.
+ @param variable       An IVar reference to the variable to be set.
+ @param aClass         The class of the variable.
  @param macroProcessor An instance of ALCMacroProcessor which contains the definition of the value to be set.
  */
--(void) addVariableInjection:(Ivar) variable macroProcessor:(ALCMacroProcessor *) macroProcessor;
+-(void) addVariableInjection:(Ivar) variable class:(Class) aClass macroProcessor:(ALCMacroProcessor *) macroProcessor;
 
 @end
 

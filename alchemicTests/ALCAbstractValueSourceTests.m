@@ -7,6 +7,8 @@
 //
 
 @import XCTest;
+
+#import "ALCResolvable.h"
 #import "ALCAbstractValueSource.h"
 
 @interface DummyValueSource : ALCAbstractValueSource
@@ -14,6 +16,14 @@
 @end
 
 @implementation DummyValueSource
+@synthesize values = _values;
+-(instancetype) initWithType:(Class)argumentType {
+    self = [super initWithType:argumentType];
+    if (self) {
+        self.available = YES;
+    }
+    return self;
+}
 @end
 
 @interface ALCAbstractValueSourceTests : XCTestCase
@@ -25,7 +35,7 @@
 -(void) testObjectValueWhenSingleValue {
     DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSObject class]];
 	source.values = [NSSet setWithObject:@"abc"];
-	id result =source.value;
+	id result = source.value;
 	XCTAssertTrue([result isKindOfClass:[NSString class]]);
 	XCTAssertEqualObjects(@"abc", result);
 }
@@ -33,7 +43,7 @@
 -(void) testObjectValueWhenMultipleValue {
     DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSObject class]];
 	source.values = [NSSet setWithObjects:@"abc", @"def", nil];
-	id result =source.value;
+	id result = source.value;
 	XCTAssertTrue([result isKindOfClass:[NSArray class]]);
 	XCTAssertTrue([result containsObject:@"abc"]);
 	XCTAssertTrue([result containsObject:@"def"]);
@@ -91,13 +101,12 @@
 
 -(void) testResolveWithPostProcessors {
     DummyValueSource *source = [[DummyValueSource alloc] initWithType:[NSObject class]];
-	[source resolveWithPostProcessors:[NSSet set]];
-	XCTAssertTrue(source.resolved);
+	[source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 }
 
 -(void) testValues {
 	ALCAbstractValueSource *abstractSource = [[ALCAbstractValueSource alloc] initWithType:[NSObject class]];
-	XCTAssertThrowsSpecificNamed([abstractSource values], NSException, @"NSInvalidArgumentException");
+	XCTAssertThrowsSpecificNamed(abstractSource.values, NSException, @"NSInvalidArgumentException");
 }
 
 @end

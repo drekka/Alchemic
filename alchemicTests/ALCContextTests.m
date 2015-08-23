@@ -50,7 +50,7 @@
     OCMStub([_mockModel classBuildersFromBuilders:builders]).andReturn(builders);
 
     SimpleObject *object = [[SimpleObject alloc] init];
-    OCMExpect([mockBuilder injectValueDependencies:object]);
+    OCMExpect([mockBuilderinjectDependencies:object]);
 
     [_context injectDependencies:object];
 
@@ -65,8 +65,7 @@
     OCMStub([_mockModel numberBuilders]).andReturn(1u);
     OCMStub([_mockModel allBuilders]).andReturn(builders);
 
-    OCMExpect([mockBuilder resolveWithPostProcessors:OCMOCK_ANY]);
-    OCMExpect([mockBuilder validateWithDependencyStack:OCMOCK_ANY]);
+    OCMExpect([mockBuilder resolveWithPostProcessors:OCMOCK_ANY dependencyStack:OCMOCK_ANY]);
     OCMStub([mockBuilder valueClass]).andReturn([NSString class]);
 
     ignoreSelectorWarnings(

@@ -13,36 +13,53 @@
 #import "ALCDependency.h"
 #import "ALCDependencyPostProcessor.h"
 #import "ALCRuntime.h"
+#import "NSObject+ALCResolvable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCDependency
 
-@synthesize resolved = _resolved;
+@synthesize available = _available;
+
+-(void) dealloc {
+    [self kvoRemoveWatchAvailable:_valueSource];
+}
 
 -(instancetype) initWithValueSource:(id<ALCValueSource>)valueSource {
     self = [super init];
     if (self) {
         _valueSource = valueSource;
+        _available = valueSource.available;
+        [self kvoWatchAvailable:_valueSource];
     }
     return self;
 }
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
-	_resolved = YES;
-    [_valueSource resolveWithPostProcessors:postProcessors];
-}
-
--(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
-	[_valueSource validateWithDependencyStack:dependencyStack];
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
+                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
+    [_valueSource resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+    _available = _valueSource.available;
 }
 
 -(id) value {
     return _valueSource.value;
 }
 
+-(void) observeValueForKeyPath:(nullable NSString *) keyPath
+                      ofObject:(nullable id)object
+                        change:(nullable NSDictionary<NSString *,id> *) change
+                       context:(nullable void *) context {
+    // We are tracking the value source availability so indicate a change.
+    STLog(self, @"Value source availability");
+    self.available = _valueSource.available;
+}
+
+-(Class)valueClass {
+    return _valueSource.valueClass;
+}
+
 -(NSString *) description {
-    return [NSString stringWithFormat:@"type %@ from: %@", [ALCRuntime aClassDescription:_valueSource.valueClass], _valueSource];
+    return [NSString stringWithFormat:@"%@ -> %@", [ALCRuntime aClassDescription:_valueSource.valueClass], _valueSource];
 }
 
 @end

@@ -19,6 +19,15 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCAbstractValueSource : NSObject<ALCValueSource>
 
 /**
+ The values to be returned.
+
+ @discussion This should be overridden to produce a set of one or more values. These will be further processed based on the argument type.
+
+ @return A NSSet containing zero or more values.
+ */
+@property (nonatomic, strong, readonly) NSSet<id> *values;
+
+/**
  Default initializer.
  
  @discussion Do not use.
@@ -35,15 +44,6 @@ NS_ASSUME_NONNULL_BEGIN
  @return And instance of this class.
  */
 -(instancetype) initWithType:(Class) argumentType NS_DESIGNATED_INITIALIZER;
-
-/**
- The values.
- 
- @discussion This should be overridden to produce a set of one or more values. These will be further processed based on the argument type.
-
- @return A NSSet containing zero or more values.
- */
--(NSSet<id> *) values;
 
 @end
 

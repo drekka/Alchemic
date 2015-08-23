@@ -15,6 +15,7 @@
 #import "ALCDependencyPostProcessor.h"
 #import "ALCInternalMacros.h"
 #import "NSSet+Alchemic.h"
+#import "NSObject+ALCResolvable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,6 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @implementation ALCModelValueSource {
     NSSet<id<ALCBuilder>> *_candidateBuilders;
+}
+
+@synthesize available = _available;
+
+-(void) dealloc {
+    [self kvoRemoveWatchAvailableFromResolvables:_candidateBuilders];
 }
 
 -(instancetype) initWithType:(Class) argumentType {
@@ -50,11 +57,12 @@ NS_ASSUME_NONNULL_BEGIN
     return results;
 }
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
+                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
 
-    STLog(self, @"Resolving %@", self);
+    [super resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 
-    [super resolveWithPostProcessors:postProcessors];
+    STLog(self, @"Resolving value source -> %@", self);
     [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
                                               processingBuildersBlock:^(ProcessBuiderBlockArgs) {
 
@@ -67,21 +75,41 @@ NS_ASSUME_NONNULL_BEGIN
                                                   }
 
                                                   STLog(ALCHEMIC_LOG, @"Found %lu candidates", [finalBuilders count]);
+                                                  [self kvoRemoveWatchAvailableFromResolvables:self->_candidateBuilders];
                                                   self->_candidateBuilders = finalBuilders;
                                               }];
 
     // If there are no candidates left then error.
     if ([_candidateBuilders count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicNoCandidateBuildersFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve value using %@ - no candidate builders found.", [_searchExpressions componentsJoinedByString:@", "]]
+                                       reason:[NSString stringWithFormat:@"Unable to resolve value source -> %@ - no candidate builders found.", [_searchExpressions componentsJoinedByString:@", "]]
                                      userInfo:nil];
+    }
+
+    // Now resolve all candidates
+    for (id<ALCBuilder> candidate in _candidateBuilders) {
+        [candidate resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+    }
+
+    // Start watching the builders.
+    [self kvoWatchAvailableInResolvables:_candidateBuilders];
+    _available = [self candidatesAvailable];
+
+}
+
+-(void) observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString *,id> *)change context:(nullable void *)context {
+    if ([self candidatesAvailable]) {
+        self.available = YES; // Trigger KVO.
     }
 }
 
--(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-    for (id<ALCBuilder> candidate in _candidateBuilders) {
-        [candidate validateWithDependencyStack:dependencyStack];
+-(BOOL) candidatesAvailable {
+    for (id<ALCBuilder> builder in _candidateBuilders) {
+        if (!builder.available) {
+            return NO;
+        }
     }
+    return YES;
 }
 
 -(NSString *) description {

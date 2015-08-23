@@ -16,6 +16,7 @@
 #import "ALCContext.h"
 #import "ALCInternalMacros.h"
 #import "NSObject+Alchemic.h"
+#import "NSObject+ALCResolvable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,22 +43,31 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)configure {
+
     [super configure];
-    for (NSUInteger i = 0; i < [self.macroProcessor valueSourceCount]; i++) {
-        id<ALCValueSource> arg = [self.macroProcessor valueSourceAtIndex:i];
-        [self.dependencies addObject:[[ALCDependency alloc] initWithValueSource:arg]];
-    }
+
+    // Validate the selector.
     [ALCRuntime validateClass:self.parentClassBuilder.valueClass
                      selector:_selector
                macroProcessor:self.macroProcessor];
+
+    // Add dependencies.
+    NSUInteger nbrArgs = [self.macroProcessor valueSourceCount];
+    for (NSUInteger i = 0; i < nbrArgs; i++) {
+        id<ALCValueSource> arg = [self.macroProcessor valueSourceAtIndex:i];
+        ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:arg];
+        [self.dependencies addObject:dependency];
+    }
+
+    // Add KVO watches for state changes.
+    [self kvoWatchAvailableInResolvables:[NSSet setWithArray:self.dependencies]];
 }
 
--(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors {
-    [super resolveWithPostProcessors:postProcessors];
-    if ( ! self.parentClassBuilder.resolved) {
-        STLog(self.valueClass, @"resolving dependencies in parent %@", self.parentClassBuilder);
-        [self.parentClassBuilder resolveWithPostProcessors:postProcessors];
-    }
+-(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
+                 dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
+    [super resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+    STLog(self, @"Resolving parent class");
+    [self.parentClassBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 }
 
 // Override the the value property to check for a one off request.
@@ -70,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
     // Create a instance, inject it and return without storing.
     STLog(self.valueClass, @"Instanting with override args %@ ...", self);
     id newValue = [self instantiateObject];
-    [self injectValueDependencies:newValue];
+    [selfinjectDependencies:newValue];
     return newValue;
 
 }
@@ -104,13 +114,13 @@ NS_ASSUME_NONNULL_BEGIN
     return self.value;
 }
 
--(void) injectValueDependencies:(id) value {
+-(void)injectDependencies:(id) value {
     // Pass this to the parent class to finish injecting.
-    [self.parentClassBuilder injectValueDependencies:value];
+    [self.parentClassBuilderinjectDependencies:value];
 }
 
 -(nonnull NSString *) description {
-    return [NSString stringWithFormat:@"-[%@ %@]", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(_selector)];
+    return [NSString stringWithFormat:@"-(%@ *)[%@ %@]", NSStringFromClass(self.valueClass), NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(_selector)];
 }
 
 @end

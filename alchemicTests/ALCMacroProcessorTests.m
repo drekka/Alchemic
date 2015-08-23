@@ -39,12 +39,12 @@
 }
 
 -(void) testAddMacroFactory {
-    [_processor addMacro:AcIsFactory];
+    [_processor addMacro:AcFactory];
     XCTAssertTrue(_processor.isFactory);
 }
 
 -(void) testAddMacroPrimary {
-    [_processor addMacro:AcIsPrimary];
+    [_processor addMacro:AcPrimary];
     XCTAssertTrue(_processor.isPrimary);
 }
 
@@ -83,6 +83,7 @@
     [_processor addMacro:value];
 
     id<ALCValueSource> valueSource = [_processor valueSourceAtIndex:0];
+    [valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
     XCTAssertEqualObjects(@5, valueSource.value);
 
 }

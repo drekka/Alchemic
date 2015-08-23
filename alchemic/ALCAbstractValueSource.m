@@ -10,7 +10,7 @@
 
 @implementation ALCAbstractValueSource
 
-@synthesize resolved = _resolved;
+@synthesize available = _available;
 @synthesize valueClass = _valueClass;
 
 -(instancetype) init {
@@ -27,7 +27,14 @@
 
 -(id) value {
 
-	NSSet<id> *values = [self values];
+    // Check the state
+    if (! self.available) {
+        @throw [NSException exceptionWithName:@"AlchemicValueNotAvailable"
+                                       reason:[NSString stringWithFormat:@"Cannot access a value source's value when it is not available."]
+                                     userInfo:nil];
+    }
+
+	NSSet<id> *values = self.values;
 
 	// If we can return an array then do so. Empty arrays are also valid.
     // NULL means we are dealing with an id type.
@@ -72,15 +79,10 @@
 	return values.allObjects;
 }
 
--(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors {
-	_resolved = YES;
-}
+-(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors
+                 dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {}
 
 #pragma mark - Override points
-
--(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-	[self doesNotRecognizeSelector:_cmd];
-}
 
 -(NSSet<id> *)values {
 	[self doesNotRecognizeSelector:_cmd];

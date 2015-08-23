@@ -81,7 +81,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
  @param classBuilder The parent class builder for the initializer.
  @param initializer  The initializer to use.
- @param ... Zero or more `AcArg(...)` macros which define the arguments of the initializer and where to source them from. Other macros can also be passed here such as `AcIsFactory`, `AcIsPrimary` and `AcWithName(...)`.
+ @param ... Zero or more `AcArg(...)` macros which define the arguments of the initializer and where to source them from. Other macros can also be passed here such as `AcFactory`, `AcPrimary` and `AcWithName(...)`.
  */
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
@@ -93,7 +93,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param classBuilder The parent class builder. This ALCBuilder will be asked for a value, and then the method will be executed on that value.
  @param selector     The selector of the method.
  @param returnType   The type of the object that will be returned from the method.
- @param ... Zero or more `AcArg(...)` macros which define the arguments of the selector and where to source them from. Other macros can also be passed here such as `AcIsFactory`, `AcIsPrimary` and `AcWithName(...)`.
+ @param ... Zero or more `AcArg(...)` macros which define the arguments of the selector and where to source them from. Other macros can also be passed here such as `AcFactory`, `AcPrimary` and `AcWithName(...)`.
  */
 -(void) registerClassBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 

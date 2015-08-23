@@ -18,12 +18,15 @@
 #import "ALCModelValueSource.h"
 #import "ALCValueSourceFactory.h"
 #import "AlchemicAware.h"
+#import "NSObject+ALCResolvable.h"
 
 @implementation ALCClassBuilder
 
 -(instancetype) init {
     return nil;
 }
+
+@synthesize external = _external;
 
 -(instancetype) initWithValueClass:(__unsafe_unretained Class) valueClass {
     self = [super init];
@@ -45,16 +48,24 @@
     }
 }
 
-#pragma mark - Adding dependencies
+-(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
+    _available = _dependenciesAvailable && !_external;
 
--(void) addVariableInjection:(Ivar) variable macroProcessor:(ALCMacroProcessor *) macroProcessor {
-    id<ALCValueSource> valueSource = [macroProcessor valueSourceAtIndex:0];
-    ALCVariableDependency *dep = [[ALCVariableDependency alloc] initWithVariable:variable valueSource:valueSource];
-    STLog(self.valueClass, @"Adding variable dependency %@.%@", NSStringFromClass(self.valueClass), dep);
-    [self.dependencies addObject:dep];
 }
 
--(void) injectValueDependencies:(id) value {
+#pragma mark - Adding dependencies
+
+-(void) addVariableInjection:(Ivar) variable class:(Class) aClass macroProcessor:(ALCMacroProcessor *) macroProcessor {
+    id<ALCValueSource> valueSource = [macroProcessor valueSourceAtIndex:0];
+    valueSource.valueClass = aClass;
+    ALCVariableDependency *dep = [[ALCVariableDependency alloc] initWithVariable:variable valueSource:valueSource];
+    STLog(self.valueClass, @"Adding variable dependency %@.%@", NSStringFromClass(self.valueClass), dep);
+    [self kvoWatchAvailable:dep];
+    [self.dependencies addObject:dep];
+    // Don't update state as this executes before resolving occurs.
+}
+
+-(void)injectDependencies:(id) value {
 
     if ([self.dependencies count] > 0u) {
         STLog([value class], @"Injecting %lu dependencies into a %s instance", [self.dependencies count], object_getClassName(value));
@@ -74,6 +85,10 @@
 -(nonnull id) instantiateObject {
     STLog(self.valueClass, @"Creating a %@", NSStringFromClass(self.valueClass));
     return [[self.valueClass alloc] init];
+}
+
+-(NSString *) attributesDescription {
+    return [super.attributesDescription stringByAppendingString: self.external ? @" (external)" : @""];
 }
 
 -(nonnull NSString *) description {

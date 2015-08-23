@@ -41,10 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// If the AcWithName(...) macro is passed then this will be populated with the value.
 @property (nonatomic, strong) NSString *asName;
 
-/// If the AcIsFactory macro is passed then this will be set to YES.
+/// If the AcFactory macro is passed then this will be set to YES.
 @property (nonatomic, assign, readonly) BOOL isFactory;
 
-/// If the AcIsPrimary macro is passed then this will be set to YES.
+/// If the AcPrimary macro is passed then this will be set to YES.
 @property (nonatomic, assign, readonly) BOOL isPrimary;
 
 /// @name Tasks

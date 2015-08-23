@@ -10,15 +10,12 @@
 #import <StoryTeller/StoryTeller.h>
 
 @interface ASObject : NSObject
-
 @end
 
 @implementation ASObject
-
 @end
 
 @interface ArraysIntegrationTests : ALCTestCase
-
 @end
 
 @implementation ArraysIntegrationTests {

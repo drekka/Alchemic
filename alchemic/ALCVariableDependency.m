@@ -16,22 +16,21 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCVariableDependency
 
 -(instancetype) initWithValueClass:(Class) valueClass
-							  valueSource:(id<ALCValueSource>) valueSource {
-	return nil;
+                       valueSource:(id<ALCValueSource>) valueSource {
+    return nil;
 }
 
 -(instancetype) initWithVariable:(Ivar)variable
-                             valueSource:(id<ALCValueSource>)valueSource {
+                     valueSource:(id<ALCValueSource>)valueSource {
     self = [super initWithValueSource:valueSource];
     if (self) {
         _variable = variable;
-        STLog(self.valueSource.valueClass, @"Created variable dependency: %@", self);
     }
     return self;
 }
 
 -(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
-	// Ignore dependency checking when a variable dependency as these are injected later and do not trigger circular dependencies.
+    // Ignore dependency checking when a variable dependency as these are injected later and do not trigger circular dependencies.
 }
 
 -(void) injectInto:(id) object {

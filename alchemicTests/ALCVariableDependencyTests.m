@@ -12,6 +12,7 @@
 #import "ALCVariableDependency.h"
 #import "ALCValueSource.h"
 #import "SimpleObject.h"
+#import "ALCConstantValueSource.h"
 
 @interface ALCVariableDependencyTests : XCTestCase
 
@@ -22,12 +23,10 @@
 }
 
 -(void) setUp {
-	id mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
-	OCMStub([(id<ALCValueSource>)mockValueSource value]).andReturn(@"abc");
-    OCMStub([(id<ALCValueSource>)mockValueSource valueClass]).andReturn([NSString class]);
-
+	ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSString class] value:@"abc"];
 	Ivar var = class_getInstanceVariable([SimpleObject class], "_aStringProperty");
-	_dependency = [[ALCVariableDependency alloc] initWithVariable:var valueSource:mockValueSource];
+	_dependency = [[ALCVariableDependency alloc] initWithVariable:var valueSource:valueSource];
+    [_dependency resolveWithPostProcessors:[NSSet set]  dependencyStack:[NSMutableArray array]];
 }
 
 -(void) testInjectsVariable {
@@ -36,12 +35,8 @@
 	XCTAssertEqualObjects(@"abc", object.aStringProperty);
 }
 
--(void) testValidateWithDependencyStackDoesNothing {
-	[_dependency validateWithDependencyStack:[@[] mutableCopy]];
-}
-
 -(void) testDescription {
-	XCTAssertEqualObjects(@"_aStringProperty = type [NSString]<NSMutableCopying><NSSecureCoding><NSCopying> from: OCMockObject(ALCValueSource)", [_dependency description]);
+	XCTAssertEqualObjects(@"_aStringProperty = [NSString]<NSMutableCopying><NSSecureCoding><NSCopying> -> Constant: abc", [_dependency description]);
 }
 
 @end

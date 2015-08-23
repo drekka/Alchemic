@@ -22,27 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCDependency : NSObject<ALCResolvable>
 
 /**
- The value. 
-
- @discussion Normally the value is not resolved until this property is accessed.
- */
-@property (nonatomic, strong, readonly) id value;
-
-/**
  The value source that will provide the value for the dependency.
  */
 @property (nonatomic, strong, readonly) id<ALCValueSource> valueSource;
-
-#pragma mark - Resolving
-
-/**
- Called when resolving candiate ALCBuilders for a dependency.
- 
- @discussion This call gives the post processors a chance to process the candidates before they are stored as the final set.
-
- @param postProcessors	A NSSet of ALCPostProcessor instances.
- */
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
 
 /**
  Default initializer.
