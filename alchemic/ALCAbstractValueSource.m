@@ -30,7 +30,7 @@
     // Check the state
     if (! self.available) {
         @throw [NSException exceptionWithName:@"AlchemicValueNotAvailable"
-                                       reason:[NSString stringWithFormat:@"Cannot access a value source's value when it is not available."]
+                                       reason:@"Cannot access a value source's value when it is not available."
                                      userInfo:nil];
     }
 
@@ -57,7 +57,7 @@
 	// Object type and no values.
 	if ([values count] == 0u) {
 		@throw [NSException exceptionWithName:@"AlchemicNoValuesFound"
-												 reason:[NSString stringWithFormat:@"Expecting 1 object, but none found"]
+												 reason:@"Expecting 1 object, but none found"
 											  userInfo:nil];
 	}
 

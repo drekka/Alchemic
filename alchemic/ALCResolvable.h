@@ -17,21 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol ALCResolvable <NSObject>
 
 /**
- The value.
- */
-@property (nonatomic, strong, readonly) id value;
-
-/**
- The class of the object that will be returned from the resolvable.
- */
-@property (nonatomic, strong, readonly) Class valueClass;
-
-/**
  Indicates that the resolvables value can be accessed and a value is either present or can be created.
  
  @discussion This is about supporting externally created objects which are injected into Alchemic at some future time. Until those objects are injected, the resolvable is marked as not being available. Builders can then watch this property to known when the resolvable is available.
  */
-@property (nonatomic, assign) BOOL available;
+@property (nonatomic, assign, readonly) BOOL available;
 
 /**
  Called during model setup to resolve dependencies and validate the model.

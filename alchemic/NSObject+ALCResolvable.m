@@ -10,13 +10,25 @@
 
 @implementation NSObject (ALCResolvable)
 
--(void) kvoWatchAvailableInResolvables:(NSSet<NSObject<ALCResolvable> *> *) resolvables {
+-(void) kvoWatchAvailableInResolvableArray:(NSArray<NSObject<ALCResolvable> *> *) resolvables {
     for (NSObject<ALCResolvable> *resolvable in resolvables) {
         [self kvoWatchAvailable:resolvable];
     }
 }
 
--(void) kvoRemoveWatchAvailableFromResolvables:(NSSet<NSObject<ALCResolvable> *> *) resolvables {
+-(void) kvoRemoveWatchAvailableFromResolvableArray:(NSArray<NSObject<ALCResolvable> *> *) resolvables {
+    for (NSObject<ALCResolvable> *resolvable in resolvables) {
+        [self kvoRemoveWatchAvailable:resolvable];
+    }
+}
+
+-(void) kvoWatchAvailableInResolvableSet:(NSSet<NSObject<ALCResolvable> *> *) resolvables {
+    for (NSObject<ALCResolvable> *resolvable in resolvables) {
+        [self kvoWatchAvailable:resolvable];
+    }
+}
+
+-(void) kvoRemoveWatchAvailableFromResolvableSet:(NSSet<NSObject<ALCResolvable> *> *) resolvables {
     for (NSObject<ALCResolvable> *resolvable in resolvables) {
         [self kvoRemoveWatchAvailable:resolvable];
     }

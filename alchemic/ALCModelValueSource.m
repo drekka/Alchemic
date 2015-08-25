@@ -19,6 +19,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface ALCModelValueSource ()
+@property (nonatomic, assign) BOOL available;
+@end
+
 /**
  Sources values from the model.
  */
@@ -29,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize available = _available;
 
 -(void) dealloc {
-    [self kvoRemoveWatchAvailableFromResolvables:_candidateBuilders];
+    [self kvoRemoveWatchAvailableFromResolvableSet:_candidateBuilders];
 }
 
 -(instancetype) initWithType:(Class) argumentType {
@@ -42,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
         _searchExpressions = searchExpressions;
         if ([searchExpressions count] == 0) {
             @throw [NSException exceptionWithName:@"AlchemicMissingSearchExpressions"
-                                           reason:[NSString stringWithFormat:@"No search expressions passed"]
+                                           reason:@"No search expressions passed"
                                          userInfo:nil];
         }
     }
@@ -75,7 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                   }
 
                                                   STLog(ALCHEMIC_LOG, @"Found %lu candidates", [finalBuilders count]);
-                                                  [self kvoRemoveWatchAvailableFromResolvables:self->_candidateBuilders];
+                                                  [self kvoRemoveWatchAvailableFromResolvableSet:self->_candidateBuilders];
                                                   self->_candidateBuilders = finalBuilders;
                                               }];
 
@@ -92,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     // Start watching the builders.
-    [self kvoWatchAvailableInResolvables:_candidateBuilders];
+    [self kvoWatchAvailableInResolvableSet:_candidateBuilders];
     _available = [self candidatesAvailable];
 
 }

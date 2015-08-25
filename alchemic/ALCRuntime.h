@@ -12,7 +12,6 @@
 @class ALCRuntimeScanner;
 @class ALCContext;
 @protocol ALCModelSearchExpression;
-@class ALCMacroProcessor;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -104,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param macroProcessor An instance of ALCMacroProcessor containing the dependencies that will be required for the selector to be called.
  @exception NSException If there is a problem.
  */
-+(void) validateClass:(Class) aClass selector:(SEL)selector macroProcessor:(ALCMacroProcessor *) macroProcessor;
++(void) validateClass:(Class) aClass selector:(SEL)selector;
 
 #pragma mark - Getting qualifiers
 

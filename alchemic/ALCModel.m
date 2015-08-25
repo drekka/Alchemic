@@ -10,32 +10,12 @@
 
 #import "ALCModel.h"
 #import "ALCRuntime.h"
-#import "ALCClassBuilder.h"
 #import "ALCInternalMacros.h"
 #import "ALCModelSearchExpression.h"
 #import "ALCName.h"
+#import "ALCBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface AllClassesExpression: NSObject<ALCModelSearchExpression>
-@end
-
-@implementation AllClassesExpression
-
--(int) priority {
-    return 0;
-}
-
--(id) cacheId {
-    return @"AllClassBuilders";
-}
-
--(BOOL) matches:(id<ALCBuilder>)builder {
-    return [builder isKindOfClass:[ALCClassBuilder class]];
-}
-
-@end
-
 
 @implementation ALCModel {
     NSMapTable<NSString *, id<ALCBuilder>> *_nameIndex;
@@ -157,15 +137,15 @@ NS_ASSUME_NONNULL_BEGIN
     return results;
 }
 
--(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders {
+-(NSSet<id<ALCBuilder>> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders {
 
     if ([builders count] == 0) {
         return builders;
     }
 
     STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
-    NSSet<ALCClassBuilder *> *newBuilders = (NSSet<ALCClassBuilder *> *)[builders objectsPassingTest:^BOOL(id<ALCBuilder>  builder, BOOL * stop) {
-        return [builder isKindOfClass:[ALCClassBuilder class]];
+    NSSet<id<ALCBuilder>> *newBuilders = [builders objectsPassingTest:^BOOL(id<ALCBuilder> builder, BOOL * stop) {
+        return builder.builderType == ALCBuilderTypeClass;
     }];
     STLog(ALCHEMIC_LOG, @"Returning %lu class builders", [newBuilders count]);
     return newBuilders;

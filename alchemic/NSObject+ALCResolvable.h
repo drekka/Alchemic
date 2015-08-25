@@ -9,6 +9,8 @@
 @import Foundation;
 #import "ALCResolvable.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Methods for working with objects which implement the ALCResolvable protocol.
  */
@@ -19,14 +21,28 @@
 
  @param resolvables A NSSet of resolveables.
  */
--(void) kvoWatchAvailableInResolvables:(NSSet<NSObject<ALCResolvable> *> *) resolvables;
+-(void) kvoWatchAvailableInResolvableArray:(NSArray<NSObject<ALCResolvable> *> *) resolvables;
 
 /**
  Removes KVO watches on the state field from a list of resolvables.
 
  @param resolvables A NSSet of resolvables.
  */
--(void) kvoRemoveWatchAvailableFromResolvables:(NSSet<NSObject<ALCResolvable> *> *) resolvables;
+-(void) kvoRemoveWatchAvailableFromResolvableArray:(NSArray<NSObject<ALCResolvable> *> *) resolvables;
+
+/**
+ Adds KVO watches to the state field.
+
+ @param resolvables A NSSet of resolveables.
+ */
+-(void) kvoWatchAvailableInResolvableSet:(NSSet<NSObject<ALCResolvable> *> *) resolvables;
+
+/**
+ Removes KVO watches on the state field from a list of resolvables.
+
+ @param resolvables A NSSet of resolvables.
+ */
+-(void) kvoRemoveWatchAvailableFromResolvableSet:(NSSet<NSObject<ALCResolvable> *> *) resolvables;
 
 /**
  Adds KVO watches to the state field.
@@ -43,3 +59,5 @@
 -(void) kvoRemoveWatchAvailable:(NSObject<ALCResolvable> *) resolvable;
 
 @end
+
+NS_ASSUME_NONNULL_END

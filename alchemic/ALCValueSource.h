@@ -9,6 +9,7 @@
 @import Foundation;
 @import ObjectiveC;
 #import "ALCResolvable.h"
+#import "ALCValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,14 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @discussion At the moment this is pretty much a placeholder protocol which doesn't do anything.
  */
-@protocol ALCValueSource <ALCResolvable>
-
-// Make writable
-
-/**
- The class of the object that will be returned from the resolvable.
- */
-@property (nonatomic, strong) Class valueClass;
+@protocol ALCValueSource <ALCResolvable, ALCValue>
 
 @end
 

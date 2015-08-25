@@ -31,10 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param valueClass  The class of the result value.
  @param valueSource The ALCArgument that will supply values.
 
- @return An instnace of this class.
+ @return An instance of this class.
  */
--(instancetype) initWithValueClass:(Class) valueClass
-                       valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
+-(instancetype) initWithValueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
 
 /**
  Default initializer.

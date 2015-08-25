@@ -43,6 +43,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) addMacro:(id<ALCMacro>) macro {
 
+    if (!([macro conformsToProtocol:@protocol(ALCModelSearchExpression)]
+          || [macro isKindOfClass:[ALCConstantValue class]])) {
+        @throw [NSException exceptionWithName:@"AlchemicUnexpectedMacro"
+                                       reason:[NSString stringWithFormat:@"Unexpected macro %@", macro]
+                                     userInfo:nil];
+    }
+
     [(NSMutableSet *)_macros addObject:macro];
 
     // If any argument is a constant then it must be the only one.

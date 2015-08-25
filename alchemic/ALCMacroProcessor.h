@@ -21,12 +21,8 @@ typedef NS_OPTIONS(NSUInteger, ALCAllowedMacros){
 	ALCAllowedMacrosPrimary     = 1 << 1,
 	/// Allow the with name macro to be used.
 	ALCAllowedMacrosName        = 1 << 2,
-	/// Allow the search macros to be used.
-	ALCAllowedMacrosModelSearch = 1 << 3,
-    /// Allow the constant value macro
-    ALCAllowedMacrosValue       = 1 << 4,
 	/// Allow the Arg macro to be used.
-	ALCAllowedMacrosArg         = 1 << 5
+	ALCAllowedMacrosArg         = 1 << 3
 };
 
 NS_ASSUME_NONNULL_BEGIN

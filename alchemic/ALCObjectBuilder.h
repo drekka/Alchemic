@@ -8,13 +8,35 @@
 
 @import Foundation;
 #import "ALCBuilder.h"
+@protocol ALCValueStorage;
+@protocol ALCInstantiator;
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
- Base builder for creating objects. 
- 
+ Base builder for creating objects.
+
  @discussion This class uses a variety of strategy classes to implement a variety of builder functions.
  */
 
 @interface ALCObjectBuilder : NSObject<ALCBuilder>
 
+-(instancetype) init NS_UNAVAILABLE;
+
+/**
+ defaul initializer.
+
+ @param storage          An instance of ALCValueStorage that looks after storing generated objects. This is also how external and factory objects are managed.
+ @param instantiator     An instance of ALCInstantiator which implements the code which builds objects and injects them with dependencies.
+ @param forClass         The class of the object that the builder will create.
+
+ @return An instance of a ALCBuilder.
+ */
+
+-(instancetype) initWithStorage:(id<ALCValueStorage>) storage
+                   instantiator:(id<ALCInstantiator>) instantiator
+                       forClass:(Class) aClass NS_DESIGNATED_INITIALIZER;
+
 @end
+
+NS_ASSUME_NONNULL_END

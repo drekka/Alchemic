@@ -10,12 +10,15 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntimeScanner.h"
-#import "ALCClassBuilder.h"
+#import "ALCObjectBuilder.h"
+#import "ALCBuilder.h"
 #import "ALCInternalMacros.h"
 #import "ALCDependencyPostProcessor.h"
 #import "ALCResourceLocator.h"
 #import "ALCContext.h"
 #import "ALCConfig.h"
+#import "ALCSingletonStorage.h"
+#import "ALCClassInstantiator.h"
 
 @implementation ALCRuntimeScanner
 
@@ -41,7 +44,7 @@
                 Method *classMethods = class_copyMethodList(object_getClass(aClass), &methodCount);
 
                 // Search the methods for registration methods.
-                ALCClassBuilder *currentClassBuilder = nil;
+                ALCObjectBuilder *currentClassBuilder = nil;
                 NSString *alchemicMethodPrefix = alc_toNSString(ALCHEMIC_PREFIX);
                 for (size_t idx = 0; idx < methodCount; ++idx) {
 
@@ -54,12 +57,14 @@
                     // If we are here then we have an alchemic method to process, so create a class builder for for the class.
                     if (currentClassBuilder == nil) {
                         STLog(aClass, @"Creating class builder for a %@ ...", NSStringFromClass(aClass));
-                        currentClassBuilder = [[ALCClassBuilder alloc] initWithValueClass:aClass];
+                        currentClassBuilder = [[ALCObjectBuilder alloc] initWithStorage:[[ALCSingletonStorage alloc] init]
+                                                                           instantiator:[[ALCClassInstantiator alloc] initWithObjectType:aClass]
+                                                                               forClass:aClass ];
                         [context addBuilderToModel:currentClassBuilder];
                     }
 
                     // Call the method, passing it the current class builder.
-                    ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(aClass, sel, currentClassBuilder);
+                    ((void (*)(id, SEL, ALCObjectBuilder *))objc_msgSend)(aClass, sel, currentClassBuilder);
 
                 }
 

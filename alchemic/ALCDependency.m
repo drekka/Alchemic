@@ -17,6 +17,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface ALCDependency ()
+@property (nonatomic, assign) BOOL available;
+@end
+
 @implementation ALCDependency
 
 @synthesize available = _available;

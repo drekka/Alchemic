@@ -16,7 +16,7 @@ typedef void (^ClassProcessor)(ALCContext *context, NSMutableSet *moreBundles, C
 
 /**
  Used to scan the runtime looking for Alchemic methods.
- 
+
  @discussion These methods are then called to perform the various registration that build Alchemic's model of objects.
  */
 @interface ALCRuntimeScanner : NSObject
@@ -40,7 +40,7 @@ typedef void (^ClassProcessor)(ALCContext *context, NSMutableSet *moreBundles, C
  @return An instance of this class.
  */
 -(instancetype) initWithSelector:(ClassSelector) selector
-							  processor:(ClassProcessor) processor;
+                       processor:(ClassProcessor) processor;
 
 /**
  Factory method which returns a scanner which searches for Alchemic config classes.

@@ -11,6 +11,7 @@
 @protocol ALCDependencyPostProcessor;
 @protocol ALCValueSource;
 #import "ALCResolvable.h"
+#import "ALCValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @discussion ALCDependency objects are the core link between a ALCBuilder and the values it needs. A builder will define a dependency for any variables it needs (in the case of ALCClassBuilder) or method arguments. Each ALCDependency contains a class reference representing the type of object that will be set and a ALCArgument instance that defines where to get it from.
  */
-@interface ALCDependency : NSObject<ALCResolvable>
+@interface ALCDependency : NSObject<ALCResolvable, ALCValue>
 
 /**
  The value source that will provide the value for the dependency.
