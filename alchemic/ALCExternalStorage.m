@@ -29,4 +29,8 @@
     return [self hasValue];
 }
 
+-(NSString *)attributeText {
+    return @", external";
+}
+
 @end

@@ -13,6 +13,10 @@
  */
 @protocol ALCValueStorage <NSObject>
 
+/**
+ Used when builders are describing themselves.
+ */
+@property (nonatomic, strong, readonly) NSString *attributeText;
 
 /**
  The object being managed.

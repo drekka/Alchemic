@@ -40,7 +40,7 @@
 -(void) injectWithDependencies:(ALCBuilderDependencyManager<ALCVariableDependency *> *) dependencyManager {
 
     if (dependencyManager.numberOfDependencies > 0u) {
-        STLog([self class], @"Injecting %lu dependencies into a %s instance", dependencyManager.numberOfDependencies, NSStringFromClass([self class]));
+        STLog([self class], @"Injecting %lu dependencies into a %@ instance", dependencyManager.numberOfDependencies, NSStringFromClass([self class]));
         [dependencyManager enumerateDependencies:^(ALCVariableDependency * dependency, NSUInteger idx, BOOL * stop) {
             [(ALCVariableDependency *)dependency injectInto:self];
         }];
@@ -50,6 +50,11 @@
         STLog([self class], @"Notifying that inject did finish");
         [(id<AlchemicAware>)self alchemicDidInjectDependencies];
     }
+}
+
+-(void) injectVariable:(Ivar) variable withValue:(id) value {
+    STLog([self class], @"Injecting %@.%s", NSStringFromClass([self class]), ivar_getName(variable));
+    object_setIvar(self, variable, value);
 }
 
 @end

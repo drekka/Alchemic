@@ -10,10 +10,12 @@
 #import <OCMock/OCMock.h>
 #import <StoryTeller/StoryTeller.h>
 #import <Alchemic/Alchemic.h>
+#import "ALCBuilder.h"
+#import "ALCObjectBuilder.h"
+#import "ALCSingletonStorage.h"
+#import "ALCMethodInstantiator.h"
 
 #import "ALCModel.h"
-#import "ALCClassBuilder.h"
-#import "ALCMethodBuilder.h"
 
 @interface ALCModelTests : ALCTestCase
 
@@ -31,13 +33,14 @@
     [self setupMockContext];
 
     _model = [[ALCModel alloc] init];
-    _classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[ALCModelTests class]];
-    _classBuilder.name = @"abc";
+    _classBuilder = [self simpleBuilderForClass:[ALCModelTests class]];
+    [_classBuilder.macroProcessor addMacro:AcWithName(@"abc")];
+    [_classBuilder configure];
 
-    _methodBuilder = [[ALCMethodBuilder alloc] initWithParentBuilder:_classBuilder
-                                                            selector:@selector(someMethod)
-                                                          valueClass:[NSString class]];
-    _methodBuilder.name = @"def";
+    _methodBuilder = [[ALCObjectBuilder alloc] initWithInstantiator:[[ALCMethodInstantiator alloc] initWithClassBuilder:_classBuilder selector:@selector(someMethod)]
+                                                          forClass:[NSString class]];
+    [_methodBuilder.macroProcessor addMacro:AcWithName(@"def")];
+    [_methodBuilder configure];
 
     [_model addBuilder:_classBuilder];
     [_model addBuilder:_methodBuilder];
@@ -105,26 +108,10 @@
 #pragma mark - Names and indexing
 
 -(void) testRegisteringDuplicateNames {
-    id<ALCBuilder> dupClassBuilder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
-    dupClassBuilder.name = @"abc";
+    id<ALCBuilder> dupClassBuilder = [self simpleBuilderForClass:[ALCModelTests class]];
+    [dupClassBuilder.macroProcessor addMacro:AcWithName(@"abc")];
+    [dupClassBuilder configure];
     XCTAssertThrowsSpecificNamed([_model addBuilder:dupClassBuilder], NSException, @"AlchemicDuplicateName");
-}
-
--(void) testChangingBuilderNameToDuplicateName {
-    XCTAssertThrowsSpecificNamed([_methodBuilder setName:@"abc"], NSException, @"AlchemicDuplicateName");
-}
-
--(void) testChangingNameAddressesIndex {
-
-    id<ALCBuilder> classBuilder = [[_model buildersForSearchExpressions:[NSSet setWithObjects:AcName(@"abc"), nil]] anyObject];
-    XCTAssertEqual(_classBuilder, classBuilder);
-
-    _classBuilder.name = @"xyz";
-
-    classBuilder = [[_model buildersForSearchExpressions:[NSSet setWithObjects:AcName(@"abc"), nil]] anyObject];
-    XCTAssertNil(classBuilder);
-    classBuilder = [[_model buildersForSearchExpressions:[NSSet setWithObjects:AcName(@"xyz"), nil]] anyObject];
-    XCTAssertEqual(_classBuilder, classBuilder);
 }
 
 #pragma mark - Internal

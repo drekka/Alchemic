@@ -40,6 +40,7 @@
                   dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack{
     [ALCRuntime validateClass:_classBuilder.valueClass
                      selector:_methodSelector];
+    STLog(_classBuilder.valueClass, @"Resolving parent %@", _classBuilder);
     [_classBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 }
 
@@ -51,6 +52,10 @@
     STLog(_classBuilder.valueClass, @"Retrieving method's parent object ...");
     id factoryObject = _classBuilder.value;
     return [factoryObject invokeSelector:_methodSelector arguments:arguments];
+}
+
+-(NSString *)attributeText {
+    return [NSString stringWithFormat:@", using method [%@ %@]", NSStringFromClass(_classBuilder.valueClass), NSStringFromSelector(_methodSelector)];
 }
 
 @end

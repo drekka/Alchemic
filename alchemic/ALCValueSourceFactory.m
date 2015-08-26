@@ -13,12 +13,11 @@
 #import "ALCConstantValue.h"
 #import "ALCName.h"
 #import "ALCClass.h"
+#import "NSSet+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCValueSourceFactory {
-    Class _valueType;
-}
+@implementation ALCValueSourceFactory
 
 -(instancetype) init {
     return nil;
@@ -81,6 +80,10 @@ NS_ASSUME_NONNULL_BEGIN
             }
         }
     }
+}
+
+-(NSString *)description {
+    return [NSString stringWithFormat:@"%@ value source factory with macros %@", NSStringFromClass(_valueType), [_macros componentsJoinedByString:@", "]];
 }
 
 @end

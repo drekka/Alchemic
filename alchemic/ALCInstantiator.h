@@ -15,6 +15,11 @@
 @protocol ALCInstantiator <ALCResolvable>
 
 /**
+ Used when builders are describing themselves.
+ */
+@property (nonatomic, strong, readonly) NSString *attributeText;
+
+/**
  Returns the name to use for the builder.
  */
 @property (nonatomic, strong, readonly) NSString *builderName;

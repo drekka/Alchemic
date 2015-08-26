@@ -12,10 +12,10 @@
 #import "ALCConstantValueSource.h"
 #import "ALCModelValueSource.h"
 
-@interface ALCArgumentFactoryTests : XCTestCase
+@interface ALCValueSourceFactoryTests : XCTestCase
 @end
 
-@implementation ALCArgumentFactoryTests
+@implementation ALCValueSourceFactoryTests
 
 -(void) testValueSourceForConstant {
     ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
@@ -64,6 +64,12 @@
     ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
     [factory addMacro:AcClass(NSString)];
     XCTAssertThrowsSpecificNamed([factory addMacro:AcClass(NSNumber)], NSException, @"AlchemicInvalidMacroCombination");
+}
+
+-(void) testDescription {
+    ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
+    [factory addMacro:AcValue(@5)];
+    XCTAssertEqualObjects(@"NSNumber value source factory with macros AcValue:5", [factory description]);
 }
 
 @end

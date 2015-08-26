@@ -83,11 +83,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - General
 
-+(void) object:(id) object injectVariable:(Ivar) variable withValue:(id) value {
-	STLog([object class], @"Injecting %@.%s", NSStringFromClass([object class]), ivar_getName(variable));
-    object_setIvar(object, variable, value);
-}
-
 +(nullable Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
 
     const char * charName = [inj UTF8String];

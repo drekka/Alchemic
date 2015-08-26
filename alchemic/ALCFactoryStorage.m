@@ -24,4 +24,9 @@
     return YES;
 }
 
+-(NSString *)attributeText {
+    return @", factory";
+}
+
+
 @end

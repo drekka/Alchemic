@@ -31,9 +31,8 @@
 -(void) setUp {
     _processor = [[ALCMacroProcessor alloc] initWithAllowedMacros:
                   ALCAllowedMacrosArg
-                  + ALCAllowedMacrosModelSearch
-                  + ALCAllowedMacrosValue
                   + ALCAllowedMacrosFactory
+                  + ALCAllowedMacrosExternal
                   + ALCAllowedMacrosName
                   + ALCAllowedMacrosPrimary];
 }
@@ -48,6 +47,11 @@
     XCTAssertTrue(_processor.isPrimary);
 }
 
+-(void) testAddMacroExternal {
+    [_processor addMacro:AcExternal];
+    XCTAssertTrue(_processor.isExternal);
+}
+
 -(void) testAddMacroName {
     [_processor addMacro:AcWithName(@"abc")];
     XCTAssertEqualObjects(@"abc", _processor.asName);
@@ -60,7 +64,7 @@
     XCTAssertEqualObjects(AcName(@"abc"), [valueSource.searchExpressions anyObject]);
 }
 
--(void) testAddMacroArgs {
+-(void) testAddMacroArgsAndValueSourceAtIndex {
 
     ALCArg *arg1 = AcArg(NSString, AcName(@"abc"));
     ALCArg *arg2 = AcArg(NSString, AcName(@"def"));
@@ -76,35 +80,21 @@
     XCTAssertEqual(2u, [_processor valueSourceCount]);
 }
 
--(void) testAddMacroFirstExpression {
-
-    ALCConstantValue *value = AcValue(@5);
-
-    [_processor addMacro:value];
-
-    id<ALCValueSource> valueSource = [_processor valueSourceAtIndex:0];
-    [valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
-    XCTAssertEqualObjects(@5, valueSource.value);
-
-}
-
--(void) testAddMacroCombinesExpressions {
-
-    ALCClass *classMacro = AcClass(NSString);
-    ALCProtocol *protocolMacro = AcProtocol(NSCopying);
-
-    [_processor addMacro:classMacro];
-    [_processor addMacro:protocolMacro];
-
-    ALCModelValueSource *valueSource = [_processor valueSourceAtIndex:0];
-    XCTAssertTrue([valueSource.searchExpressions containsObject:classMacro]);
-    XCTAssertTrue([valueSource.searchExpressions containsObject:protocolMacro]);
-}
-
 -(void) testAddMacroInvalidMacro {
     ALCMacroProcessor *processor = [[ALCMacroProcessor alloc] initWithAllowedMacros:0];
     XCTAssertThrowsSpecificNamed([processor addMacro:[[ALCIsFactory alloc] init]], NSException, @"AlchemicUnexpectedMacro");
 }
 
+-(void) testDescription {
+
+    [_processor addMacro:AcFactory];
+    [_processor addMacro:AcPrimary];
+    [_processor addMacro:AcExternal];
+    [_processor addMacro:AcWithName(@"name")];
+    [_processor addMacro:AcArg(NSString, AcName(@"abc"))];
+    [_processor addMacro:AcArg(NSNumber, AcValue(@12))];
+
+    XCTAssertEqualObjects(@"Macro processor: factory, primary, external, name: 'name', AcArg(NSString, 'abc'), AcArg(NSNumber, AcValue:12)", [_processor description]);
+}
 
 @end

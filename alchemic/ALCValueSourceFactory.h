@@ -25,6 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCValueSourceFactory : NSObject
 
 /**
+ The class of the value that the factory represents.
+ */
+@property (nonatomic, assign, readonly) Class valueType;
+
+/**
  Default initializer.
 
  @discussion Do not use.

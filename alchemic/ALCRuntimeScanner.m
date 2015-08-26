@@ -57,9 +57,8 @@
                     // If we are here then we have an alchemic method to process, so create a class builder for for the class.
                     if (currentClassBuilder == nil) {
                         STLog(aClass, @"Creating class builder for a %@ ...", NSStringFromClass(aClass));
-                        currentClassBuilder = [[ALCObjectBuilder alloc] initWithStorage:[[ALCSingletonStorage alloc] init]
-                                                                           instantiator:[[ALCClassInstantiator alloc] initWithObjectType:aClass]
-                                                                               forClass:aClass ];
+                        currentClassBuilder = [[ALCObjectBuilder alloc] initWithInstantiator:[[ALCClassInstantiator alloc] initWithObjectType:aClass]
+                                                                                    forClass:aClass ];
                         [context addBuilderToModel:currentClassBuilder];
                     }
 

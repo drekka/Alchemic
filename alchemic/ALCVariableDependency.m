@@ -7,9 +7,10 @@
 //
 
 #import "ALCVariableDependency.h"
-#import "ALCRuntime.h"
 #import <StoryTeller/StoryTeller.h>
+#import "NSObject+Builder.h"
 #import "ALCValueSource.h"
+#import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) injectInto:(id) object {
     STLog([object class], @"Injecting %@.%s with a %@", NSStringFromClass([object class]), ivar_getName(self.variable), [ALCRuntime aClassDescription:self.valueSource.valueClass]);
-    [ALCRuntime object:object injectVariable:self.variable withValue:self.value];
+    [object injectVariable:self.variable withValue:self.value];
 }
 
 -(NSString *) description {

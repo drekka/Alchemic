@@ -8,8 +8,10 @@
 #import <OCMock/OCMock.h>
 #import "ALCTestCase.h"
 #import "ALCModelValueSource.h"
-#import "ALCClassBuilder.h"
 #import "ALCDependencyPostProcessor.h"
+#import "ALCBuilder.h"
+#import "ALCMacroProcessor.h"
+#import "ALCobjectBuilder.h"
 
 @interface ALCModelValueSourceTests : ALCTestCase
 
@@ -29,7 +31,7 @@
 	_searchExpressions = [NSSet setWithObject:AcName(@"abc")];
     _source = [[ALCModelValueSource alloc] initWithType:[NSString class] searchExpressions:_searchExpressions];
 
-    _mockBuilder = OCMClassMock([ALCClassBuilder class]); // Cant use protocol mocks due to KVO.
+    _mockBuilder = OCMClassMock([ALCObjectBuilder class]); // Cant use protocol mocks due to KVO.
     OCMStub([(id<ALCBuilder>)_mockBuilder value]).andReturn(@"def");
 
 }
@@ -51,7 +53,7 @@
 
 -(void) testResolveUnavailableWhenBuildersMixedAvailable {
 
-    id mockBuilder2 = OCMClassMock([ALCClassBuilder class]);
+    id mockBuilder2 = OCMClassMock([ALCObjectBuilder class]); // Allows KVO
     OCMStub([(id<ALCBuilder>)_mockBuilder available]).andReturn(YES);
     OCMStub([(id<ALCBuilder>)mockBuilder2 available]).andReturn(NO);
     [self stubModelToReturnBuilders:@[_mockBuilder, mockBuilder2]];
@@ -64,8 +66,9 @@
 -(void) testKVOTriggersWhenStateChanges {
 
     // Use an external class builder so we can control the available setting
-    ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
-    classBuilder.external = YES;
+    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[NSString class]];
+    [classBuilder.macroProcessor addMacro:AcExternal];
+    [classBuilder configure];
     [self stubModelToReturnBuilders:@[classBuilder]];
 
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
@@ -80,10 +83,14 @@
 
 -(void) testKVODoesntTriggerUntilLastBuilderAvailable {
 
-    ALCClassBuilder *classBuilder1 = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
-    classBuilder1.external = YES;
-    ALCClassBuilder *classBuilder2 = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
-    classBuilder2.external = YES;
+    id<ALCBuilder> classBuilder1 = [self simpleBuilderForClass:[NSString class]];
+    [classBuilder1.macroProcessor addMacro:AcExternal];
+    [classBuilder1 configure];
+
+    id<ALCBuilder> classBuilder2 = [self simpleBuilderForClass:[NSString class]];
+    [classBuilder2.macroProcessor addMacro:AcExternal];
+    [classBuilder2 configure];
+
     [self stubModelToReturnBuilders:@[classBuilder1, classBuilder2]];
 
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
@@ -100,9 +107,15 @@
 
 -(void) testStateWhenBuildersAreAlreadyAvailable {
 
-    ALCClassBuilder *classBuilder1 = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
+
+    id<ALCBuilder> classBuilder1 = [self simpleBuilderForClass:[NSString class]];
+    [classBuilder1.macroProcessor addMacro:AcExternal];
+    [classBuilder1 configure];
     classBuilder1.value = @"abc";
-    ALCClassBuilder *classBuilder2 = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
+
+    id<ALCBuilder> classBuilder2 = [self simpleBuilderForClass:[NSString class]];
+    [classBuilder2.macroProcessor addMacro:AcExternal];
+    [classBuilder2 configure];
     classBuilder2.value = @"def";
 
     [self stubModelToReturnBuilders:@[classBuilder1, classBuilder2]];

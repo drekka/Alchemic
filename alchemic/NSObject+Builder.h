@@ -34,4 +34,14 @@
  */
 -(void) injectWithDependencies:(ALCBuilderDependencyManager<ALCVariableDependency *> *) dependencyManager;
 
+/// @name Injecting
+
+/**
+ Sets the value of an internal variable in an object.
+
+ @param variable The variable to be set.
+ @param value The value to set.
+ */
+-(void) injectVariable:(Ivar) variable withValue:(id) value;
+
 @end

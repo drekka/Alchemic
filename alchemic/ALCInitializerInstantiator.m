@@ -40,6 +40,7 @@
                   dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack{
     [ALCRuntime validateClass:_classBuilder.valueClass
                      selector:_initializerSelector];
+    STLog(_classBuilder.valueClass, @"Resolving parent %@", _classBuilder);
     [_classBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 }
 
@@ -50,6 +51,10 @@
 -(id) instantiateWithArguments:(NSArray *) arguments {
     STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(_classBuilder.valueClass), self);
     return [[_classBuilder.valueClass alloc] invokeSelector:_initializerSelector arguments:arguments];
+}
+
+-(NSString *)attributeText {
+    return [NSString stringWithFormat:@", using initializer [%@ %@]", NSStringFromClass(_classBuilder.valueClass), NSStringFromSelector(_initializerSelector)];
 }
 
 @end

@@ -79,10 +79,12 @@
 	return values.allObjects;
 }
 
--(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors
-                 dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {}
-
 #pragma mark - Override points
+
+-(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors
+                 dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
+    [self doesNotRecognizeSelector:_cmd];
+}
 
 -(NSSet<id> *)values {
 	[self doesNotRecognizeSelector:_cmd];

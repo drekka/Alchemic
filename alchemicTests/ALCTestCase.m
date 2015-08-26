@@ -16,6 +16,10 @@
 #import "ALCRuntimeScanner.h"
 #import "ALCMacroProcessor.h"
 #import "ALCInternalMacros.h"
+#import "ALCObjectBuilder.h"
+#import "ALCSingletonStorage.h"
+#import "ALCExternalStorage.h"
+#import "ALCClassInstantiator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,55 +28,60 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @implementation ALCTestCase {
-	id _mockAlchemic;
+    id _mockAlchemic;
 }
 
 +(void)initialize {
-	[STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%4$@ %1$@ %2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine, STLoggerTemplateKeyKey];
+    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%4$@ %1$@ %2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine, STLoggerTemplateKeyKey];
 }
 
 -(void) tearDown {
-	// Stop the mocking.
-	_mockAlchemic = nil;
-	_mockContext = nil;
+    // Stop the mocking.
+    _mockAlchemic = nil;
+    _mockContext = nil;
 
-	// Clear Alchemic's singleton reference.
-	[ALCAlchemic unload];
+    // Clear Alchemic's singleton reference.
+    [ALCAlchemic unload];
 
-	// Reset logging.
-	[[STStoryTeller storyTeller] reset];
+    // Reset logging.
+    [[STStoryTeller storyTeller] reset];
 }
 
 -(void)setupMockContext {
-	NSAssert(_context == nil, @"Cannot setup both a real and mock context");
-	_mockContext = OCMClassMock([ALCContext class]);
-	_mockAlchemic = OCMClassMock([ALCAlchemic class]);
-	OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_mockContext);
+    NSAssert(_context == nil, @"Cannot setup both a real and mock context");
+    _mockContext = OCMClassMock([ALCContext class]);
+    _mockAlchemic = OCMClassMock([ALCAlchemic class]);
+    OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_mockContext);
 }
 
 -(void)setupRealContext {
-	NSAssert(_mockContext == nil, @"Cannot setup both a real and mock context");
-	_context = [[ALCContext alloc] init];
-	_mockAlchemic = OCMClassMock([ALCAlchemic class]);
-	OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
+    NSAssert(_mockContext == nil, @"Cannot setup both a real and mock context");
+    _context = [[ALCContext alloc] init];
+    _mockAlchemic = OCMClassMock([ALCAlchemic class]);
+    OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
 }
 
 -(void) startContextWithClasses:(NSArray<Class> *) classes {
-	NSAssert(_context != nil, @"[ALCTestCase setupRealContext must be called first.");
-	NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
-																					 [ALCRuntimeScanner dependencyPostProcessorScanner],
-																					 [ALCRuntimeScanner resourceLocatorScanner]
-																					 ]];
-	[ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
+    NSAssert(_context != nil, @"[ALCTestCase setupRealContext must be called first.");
+    NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
+                                                                 [ALCRuntimeScanner dependencyPostProcessorScanner],
+                                                                 [ALCRuntimeScanner resourceLocatorScanner]
+                                                                 ]];
+    [ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
 
-	ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
+    ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
     NSMutableSet *moreBundles = [[NSMutableSet alloc] init];
-	[classes enumerateObjectsUsingBlock:^(Class  _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
-		modelScanner.processor(self.context, moreBundles, aClass);
-	}];
+    [classes enumerateObjectsUsingBlock:^(Class  _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
+        modelScanner.processor(self.context, moreBundles, aClass);
+    }];
 
-	[_context start];
+    [_context start];
 
+}
+
+-(id<ALCBuilder>) simpleBuilderForClass:(Class) aClass {
+    return [[ALCObjectBuilder alloc] initWithInstantiator:[[ALCClassInstantiator alloc] initWithObjectType:aClass]
+                                                 forClass:aClass];
 }
 
 @end

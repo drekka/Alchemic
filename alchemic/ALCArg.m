@@ -11,6 +11,7 @@
 #import "ALCModelValueSource.h"
 #import "ALCConstantValueSource.h"
 #import "ALCConstantValue.h"
+#import "NSSet+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,6 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 	ALCArg *newArg = [[ALCArg alloc] initWithType:argType];
 	alc_processVarArgsIncluding(id<ALCMacro>, firstMacro, ^(id<ALCMacro> arg){[newArg addMacro:arg];});
 	return newArg;
+}
+
+-(NSString *)description {
+    return [NSString stringWithFormat:@"AcArg(%@, %@)", NSStringFromClass(self.valueType), [self.macros componentsJoinedByString:@", "]];
 }
 
 @end

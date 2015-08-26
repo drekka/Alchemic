@@ -54,8 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
                         change:(nullable NSDictionary<NSString *,id> *) change
                        context:(nullable void *) context {
     // We are tracking the value source availability so indicate a change.
-    STLog(self, @"Value source availability");
-    self.available = _valueSource.available;
+    STLog(self.valueClass, @"Value source %@ availability, triggering KVO", _valueSource);
+    self.available = YES;
 }
 
 -(Class)valueClass {

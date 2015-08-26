@@ -64,8 +64,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
                   dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
 
-    [super resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
-
     STLog(self, @"Resolving value source -> %@", self);
     [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
                                               processingBuildersBlock:^(ProcessBuiderBlockArgs) {
@@ -78,7 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                       }
                                                   }
 
-                                                  STLog(ALCHEMIC_LOG, @"Found %lu candidates", [finalBuilders count]);
+                                                  STLog(ALCHEMIC_LOG, @"%lu final candidates", [finalBuilders count]);
                                                   [self kvoRemoveWatchAvailableFromResolvableSet:self->_candidateBuilders];
                                                   self->_candidateBuilders = finalBuilders;
                                               }];
@@ -92,6 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Now resolve all candidates
     for (id<ALCBuilder> candidate in _candidateBuilders) {
+        STLog(self, @"Resolving candidate %@", candidate);
         [candidate resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
     }
 
@@ -102,7 +101,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString *,id> *)change context:(nullable void *)context {
-    if ([self candidatesAvailable]) {
+    if (!self.available && [self candidatesAvailable]) {
+        STLog(self.valueClass, @"Candidates available, triggering KVO.");
         self.available = YES; // Trigger KVO.
     }
 }

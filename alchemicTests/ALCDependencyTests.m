@@ -14,8 +14,10 @@
 #import "ALCDependencyPostProcessor.h"
 #import "ALCValueSource.h"
 #import "ALCConstantValueSource.h"
-#import "ALCClassBuilder.h"
 #import "ALCModelValueSource.h"
+#import "ALCTestCase.h"
+#import "ALCMacroProcessor.h"
+#import "ALCBuilder.h"
 
 @interface ALCDependencyTests : ALCTestCase
 
@@ -69,8 +71,9 @@
 
     [self setupMockContext];
 
-    ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
-    classBuilder.external = YES;
+    id<ALCBuilder>classBuilder = [self simpleBuilderForClass:[NSString class]];
+    [classBuilder.macroProcessor addMacro:AcExternal];
+    [classBuilder configure];
 
     NSSet *searchExpressions = [NSSet setWithObject:AcClass(NSString)];
     OCMStub([self.mockContext executeOnBuildersWithSearchExpressions:searchExpressions processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){

@@ -22,7 +22,9 @@ typedef NS_OPTIONS(NSUInteger, ALCAllowedMacros){
 	/// Allow the with name macro to be used.
 	ALCAllowedMacrosName        = 1 << 2,
 	/// Allow the Arg macro to be used.
-	ALCAllowedMacrosArg         = 1 << 3
+	ALCAllowedMacrosArg         = 1 << 3,
+    /// Alloc the primary macro to be used.
+    ALCAllowedMacrosExternal    = 1 << 4
 };
 
 NS_ASSUME_NONNULL_BEGIN
@@ -42,6 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// If the AcPrimary macro is passed then this will be set to YES.
 @property (nonatomic, assign, readonly) BOOL isPrimary;
+
+/// If the AcExternal macro is passed then this will be set to YES.
+@property (nonatomic, assign, readonly) BOOL isExternal;
 
 /// @name Tasks
 

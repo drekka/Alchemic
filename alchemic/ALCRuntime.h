@@ -82,17 +82,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - General
 
-/// @name Injecting
-
-/**
- Sets the value of an internal variable in an object.
- 
- @param object The object whose variable we want to set.
- @param variable The variable to be set.
- @param value The value to set.
- */
-+(void) object:(id) object injectVariable:(Ivar) variable withValue:(id) value;
-
 /// @name Validation
 
 /**

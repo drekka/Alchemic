@@ -20,4 +20,8 @@
     return YES;
 }
 
+-(NSString *)attributeText {
+    return @", singleton";
+}
+
 @end

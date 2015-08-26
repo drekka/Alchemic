@@ -18,6 +18,7 @@
 #import "ALCWithName.h"
 #import "ALCIsPrimary.h"
 #import "ALCConstantValue.h"
+#import "ALCIsExternal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -46,6 +47,9 @@ NS_ASSUME_NONNULL_BEGIN
     } else if ([macro isKindOfClass:[ALCIsPrimary class]] && _allowedMacros & ALCAllowedMacrosPrimary) {
         _isPrimary = YES;
 
+    } else if ([macro isKindOfClass:[ALCIsExternal class]] && _allowedMacros & ALCAllowedMacrosExternal) {
+        _isExternal = YES;
+
     } else if ([macro isKindOfClass:[ALCValueSourceFactory class]] && _allowedMacros & ALCAllowedMacrosArg) {
         [_valueSourceFactories addObject:(ALCValueSourceFactory *)macro];
 
@@ -71,6 +75,9 @@ NS_ASSUME_NONNULL_BEGIN
     }
     if (self.isPrimary) {
         [flags addObject:@"primary"];
+    }
+    if (self.isExternal) {
+        [flags addObject:@"external"];
     }
     if (self.asName != nil) {
         [flags addObject:[NSString stringWithFormat:@"name: '%@'", self.asName]];

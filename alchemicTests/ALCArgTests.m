@@ -33,4 +33,10 @@
 	XCTAssertEqualObjects(@5, [valueSource.values anyObject]);
 }
 
+-(void) testDescription {
+    ALCArg *arg = [[ALCArg alloc] initWithType:[NSString class]];
+    [arg addMacro:AcValue(@"abc")];
+    XCTAssertEqualObjects(@"AcArg(NSString, AcValue:abc)", [arg description]);
+}
+
 @end

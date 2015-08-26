@@ -8,9 +8,12 @@
 
 @import XCTest;
 #import "ALCName.h"
-#import "ALCClassBuilder.h"
+#import "ALCTestCase.h"
+#import "ALCBuilder.h"
+#import "ALCMacroProcessor.h"
+#import <Alchemic/Alchemic.h>
 
-@interface ALCNameTests : XCTestCase
+@interface ALCNameTests : ALCTestCase
 
 @end
 
@@ -48,15 +51,17 @@
 
 -(void) testMatchesBuilder {
 	ALCName *alcName = [ALCName withName:@"abc"];
-	ALCClassBuilder *builder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
-	builder.name = @"abc";
+	id<ALCBuilder> builder = [self simpleBuilderForClass:[NSString class]];
+    [builder.macroProcessor addMacro:AcWithName(@"abc")];
+    [builder configure];
 	XCTAssertTrue([alcName matches:builder]);
 }
 
 -(void) testNotMatchesBuilder {
 	ALCName *alcName = [ALCName withName:@"abc"];
-	ALCClassBuilder *builder = [[ALCClassBuilder alloc] initWithValueClass:[NSNumber class]];
-	builder.name = @"def";
+    id<ALCBuilder> builder = [self simpleBuilderForClass:[NSNumber class]];
+    [builder.macroProcessor addMacro:AcWithName(@"def")];
+    [builder configure];
 	XCTAssertFalse([alcName matches:builder]);
 }
 

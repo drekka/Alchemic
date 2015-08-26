@@ -8,19 +8,22 @@
 
 @import XCTest;
 @import ObjectiveC;
+
+#import "ALCTestCase.h"
 #import <OCMock/OCMock.h>
 #import <StoryTeller/Storyteller.h>
 #import <Alchemic/Alchemic.h>
 
 #import "ALCContext.h"
-#import "ALCClassBuilder.h"
 #import "ALCRuntime.h"
 #import "ALCBuilder.h"
+#import "ALCObjectBuilder.h"
 #import "SimpleObject.h"
 #import "ALCModel.h"
-#import "ALCAbstractMethodBuilder.h"
+#import "ALCObjectBuilder+MethodBuilder.h"
+#import "ALCObjectBuilder+ClassBuilder.h"
 
-@interface ALCContextTests : XCTestCase
+@interface ALCContextTests : ALCTestCase
 
 @end
 
@@ -44,13 +47,13 @@
     NSSet<id<ALCModelSearchExpression>> *expressions = [NSSet setWithObject:AcClass(SimpleObject)];
     OCMStub([_mockRuntime searchExpressionsForClass:[SimpleObject class]]).andReturn(expressions);
 
-    id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
+    id mockBuilder = OCMClassMock([ALCObjectBuilder class]);
     NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
     OCMStub([_mockModel buildersForSearchExpressions:expressions]).andReturn(builders);
     OCMStub([_mockModel classBuildersFromBuilders:builders]).andReturn(builders);
 
     SimpleObject *object = [[SimpleObject alloc] init];
-    OCMExpect([mockBuilderinjectDependencies:object]);
+    OCMExpect([mockBuilder injectDependencies:object]);
 
     [_context injectDependencies:object];
 
@@ -76,8 +79,7 @@
 }
 
 -(void) testRegisterDependencyInClassBuilder {
-    ALCClassBuilder *classBuilder = [[ALCClassBuilder alloc] initWithValueClass:[SimpleObject class]];
-    
+    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     [_context registerClassBuilder:classBuilder variableDependency:@"aStringProperty", nil];
 }
 
@@ -87,7 +89,7 @@
 
     ALCName *nameLocator = AcName(@"abc");
 
-    id mockBuilder = OCMClassMock([ALCAbstractMethodBuilder class]);
+    id mockBuilder = OCMClassMock([ALCObjectBuilder class]);
     OCMStub([mockBuilder invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
@@ -100,27 +102,14 @@
     OCMVerify([mockBuilder invokeWithArgs:OCMOCK_ANY]);
 }
 
--(void) testInvokeMethodBuildersThrowsWhenNonMethodBuilderReturned {
-
-    ALCName *nameLocator = AcName(@"abc");
-
-    id mockBuilder = OCMClassMock([ALCClassBuilder class]);
-
-    OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
-        return [(NSSet *)arg containsObject:nameLocator];
-    }]]).andReturn([NSSet setWithObject:mockBuilder]);
-
-    XCTAssertThrowsSpecificNamed(([_context invokeMethodBuilders:nameLocator, @"def", nil]), NSException, @"AlchemicWrongBuilderType");
-}
-
 -(void) testInvokeMethodBuildersWithMulitpleBuilders {
 
     ALCClass *classLocator = AcClass([SimpleObject class]);
 
-    id mockBuilder1 = OCMClassMock([ALCAbstractMethodBuilder class]);
+    id mockBuilder1 = OCMClassMock([ALCObjectBuilder class]);
     OCMStub([mockBuilder1 invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
 
-    id mockBuilder2 = OCMClassMock([ALCAbstractMethodBuilder class]);
+    id mockBuilder2 = OCMClassMock([ALCObjectBuilder class]);
     OCMStub([mockBuilder2 invokeWithArgs:@[@"def"]]).andReturn(@12);
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){

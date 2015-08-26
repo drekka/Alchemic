@@ -32,7 +32,7 @@
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
                   dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack{}
 
--(NSString *)builderName {
+-(NSString *) builderName {
     return NSStringFromClass(_objectType);
 }
 
@@ -46,6 +46,10 @@
     STLog(_objectType, @"Creating a %@", NSStringFromClass(_objectType));
     id value = [[_objectType alloc] init];
     return value;
+}
+
+-(NSString *)attributeText {
+    return @", class builder";
 }
 
 @end

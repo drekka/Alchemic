@@ -26,8 +26,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// These properties are being made writable.
 @interface ALCObjectBuilder ()
 @property (nonatomic, assign) BOOL available;
+@property (nonatomic, strong) NSString *name;
 @end
 
 @implementation ALCObjectBuilder {
@@ -35,48 +37,38 @@ NS_ASSUME_NONNULL_BEGIN
     id<ALCInstantiator> _instantiator;
     ALCBuilderDependencyManager<ALCVariableDependency *> *_variableDependencies;
     ALCBuilderDependencyManager<ALCDependency *> *_methodArguments;
+    BOOL _autoStart;
 }
 
 #pragma mark - Properties
 
 @synthesize builderType = _builderType;
-@synthesize createOnBoot = _createOnBoot;
-@synthesize available = _available;
 @synthesize valueClass = _valueClass;
-@synthesize name = _name;
 @synthesize primary = _primary;
 @synthesize macroProcessor = _macroProcessor;
 
 #pragma mark - Lifecycle
 
 -(void) dealloc {
-    [_variableDependencies removeObserver:self forKeyPath:@"dependencyManager"];
-    [_methodArguments removeObserver:self forKeyPath:@"dependencyManager"];
+    [self kvoRemoveWatchAvailable:_methodArguments];
+    [self kvoRemoveWatchAvailable:_variableDependencies];
 }
 
 -(instancetype) init {
     return nil;
 }
 
--(instancetype) initWithStorage:(id<ALCValueStorage>) storage
-                   instantiator:(id<ALCInstantiator>) instantiator
-                       forClass:(Class) aClass {
+-(instancetype) initWithInstantiator:(id<ALCInstantiator>) instantiator
+                            forClass:(Class) aClass {
     self = [super init];
     if (self) {
-        _valueStorage = storage;
+
+        _autoStart = YES;
+        _valueStorage = [[ALCSingletonStorage alloc] init];
         _instantiator = instantiator;
         _valueClass = aClass;
-        _macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:[self macroProcessorFlagsForBuilder:instantiator]];
-        _methodArguments = [[ALCBuilderDependencyManager alloc] init];
-        [_methodArguments addObserver:self
-                           forKeyPath:@"dependencyManager"
-                              options:NSKeyValueObservingOptionNew
-                              context:&_methodArguments];
-        _variableDependencies = [[ALCBuilderDependencyManager alloc] init];
-        [_variableDependencies addObserver:self
-                                forKeyPath:@"dependencyManager"
-                                   options:NSKeyValueObservingOptionNew
-                                   context:&_variableDependencies];
+        _name = _instantiator.builderName;
+
         if ([instantiator isKindOfClass:[ALCClassInstantiator class]]) {
             _builderType = ALCBuilderTypeClass;
         } else if ([instantiator isKindOfClass:[ALCMethodInstantiator class]]) {
@@ -84,6 +76,12 @@ NS_ASSUME_NONNULL_BEGIN
         } else {
             _builderType = ALCBuilderTypeInitializer;
         }
+        _macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:[self macroProcessorFlagsForBuilderType:_builderType]];
+
+        _methodArguments = [[ALCBuilderDependencyManager alloc] init];
+        [self kvoWatchAvailable:_methodArguments];
+        _variableDependencies = [[ALCBuilderDependencyManager alloc] init];
+        [self kvoWatchAvailable:_variableDependencies];
     }
     return self;
 }
@@ -92,13 +90,16 @@ NS_ASSUME_NONNULL_BEGIN
 
     if (self.macroProcessor.isFactory) {
         _valueStorage = [[ALCFactoryStorage alloc] init];
+        _autoStart = NO;
+    } else if (self.macroProcessor.isExternal) {
+        _valueStorage = [[ALCExternalStorage alloc] init];
+        _autoStart = NO;
     }
 
     _primary = self.macroProcessor.isPrimary;
-    _createOnBoot = !self.macroProcessor.isFactory;
-    _name = self.macroProcessor.asName;
-    if (_name != nil) {
-        _name = _instantiator.builderName;
+    NSString *newName = self.macroProcessor.asName;
+    if (newName != nil) {
+        self.name = newName; // Triggers KVO in the model to update the name.
     }
 
     // Add dependencies.
@@ -118,8 +119,6 @@ NS_ASSUME_NONNULL_BEGIN
                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
 
     // Check for circular dependencies
-    STLog(self.valueClass, @"Resolving %@", self);
-
     if ([dependencyStack containsObject:self]) {
         [dependencyStack addObject:self];
         @throw [NSException exceptionWithName:@"AlchemicCircularDependency"
@@ -135,12 +134,13 @@ NS_ASSUME_NONNULL_BEGIN
                                 dependencyStack:dependencyStack];
     [dependencyStack removeObject:self];
 
-    // Now pass the rsolve through to the initiator which may pass through to the parent builder.
+    // Now pass the resolve through to the initiator which may pass through to the parent builder.
     [_instantiator resolveWithPostProcessors:postProcessors
                              dependencyStack:dependencyStack];
 
+    STLog(self.valueClass, @"Finished resolving, checking availability");
     _available = [self isAvailable];
-
+    [self autoBoot];
 }
 
 #pragma mark - Tasks
@@ -149,7 +149,6 @@ NS_ASSUME_NONNULL_BEGIN
                  valueSource:(id<ALCValueSource>) valueSource {
     ALCVariableDependency *dep = [[ALCVariableDependency alloc] initWithVariable:variable valueSource:valueSource];
     STLog(self.valueClass, @"Adding variable dependency %@.%@", NSStringFromClass(self.valueClass), dep);
-    [self kvoWatchAvailable:dep];
     [_variableDependencies addDependency:dep];
 }
 
@@ -158,23 +157,33 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) invokeWithArgs:(NSArray *) arguments {
-    if (self.builderType != ALCBuilderTypeMethod) {
+    if (self.builderType == ALCBuilderTypeClass) {
         @throw [NSException exceptionWithName:@"AlchemicWrongBuilderType"
-                                       reason:[NSString stringWithFormat:@"Cannot execute a method on a non-method builder: %@", self]
+                                       reason:[NSString stringWithFormat:@"Invoke requires a method or initializer builder, current builder: %@", self]
                                      userInfo:nil];
     }
-    return [self valueWithArguments:arguments];
+    id value = [_instantiator instantiateWithArguments:arguments];
+    [self injectDependencies:value];
+    return value;
 }
 
 #pragma mark - Getters and setters
 
 -(id)value {
-    return [self valueWithArguments:_methodArguments.dependencyValues];
+    id value = _valueStorage.value;
+    if (value == nil) {
+        value = [_instantiator instantiateWithArguments:_methodArguments.dependencyValues];
+        self.value = value;
+    }
+    return value;
 }
 
 -(void)setValue:(id)value {
-    [self injectDependencies:value];
+    STLog(self.valueClass, @"Storing a %@", NSStringFromClass([value class]));
     _valueStorage.value = value;
+    STLog(self.valueClass, @"Injecting a %@", NSStringFromClass([value class]));
+    [self injectDependencies:value];
+    [self updateAvailable];
 }
 
 #pragma mark - KVO
@@ -184,55 +193,51 @@ NS_ASSUME_NONNULL_BEGIN
                        change:(nullable NSDictionary<NSString *,id> *)change
                       context:(nullable void *)context {
     // Dependencies have come online.
-    self.available = [self isAvailable];
-
-    // If we are available and we represent something that is not a factory or external then we are a singleton so auto build.
-    if (self.available
-        && [_valueStorage isKindOfClass:[ALCSingletonStorage class]]) {
-        [self value];
-    }
+    STLog(self.valueClass, @"Dependencies available");
+    [self updateAvailable];
+    [self autoBoot];
 }
 
 #pragma mark - Debug
 
 -(nonnull NSString *) description {
     NSString *instantiated = _valueStorage.hasValue ? @"* " : @"  ";
-    NSString *attributes = @"";
-    return [NSString stringWithFormat:@"%@'%@' Class builder for type %@%@", instantiated, self.name, NSStringFromClass(self.valueClass), attributes];
+    return [NSString stringWithFormat:@"%@builder for type %@, name '%@'%@%@", instantiated, NSStringFromClass(self.valueClass), self.name, _valueStorage.attributeText, _instantiator.attributeText];
 }
 
 #pragma mark - Internal
 
--(NSUInteger) macroProcessorFlagsForBuilder:(id<ALCInstantiator>) instantiator {
-    if ([instantiator isKindOfClass:[ALCClassInstantiator class]]) {
-        return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary;
+-(NSUInteger) macroProcessorFlagsForBuilderType:(ALCBuilderType) builderType {
+    if (builderType == ALCBuilderTypeClass) {
+        return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosExternal;
     } else {
         return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosArg;
     }
 }
 
+-(void) autoBoot {
+    if (self.available
+        && _autoStart
+        && !_valueStorage.hasValue) {
+        STLog(self.valueClass, @"All dependencies now available, auto-creating a %@ ...", NSStringFromClass(self.valueClass));
+        [self value];
+    }
+}
+
+-(void) updateAvailable {
+    if (!self.available && [self isAvailable]) {
+        self.available = YES; // Trigger KVO
+    }
+}
+
 -(BOOL) isAvailable {
-    return _variableDependencies.available
+    return _valueStorage.hasValue || (
+    _variableDependencies.available
     && _methodArguments.available
     && _valueStorage.available
-    && _instantiator.available;
+    && _instantiator.available
+    );
 }
-
--(id) valueWithArguments:(NSArray *) arguments {
-
-    id value = _valueStorage.value;
-
-    // If a factory or not created yet. Build.
-    if (value == nil) {
-        STLog(self.valueClass, @"Instanting %@ ...", self);
-        value = [_instantiator instantiateWithArguments:arguments];
-        [value injectWithDependencies:_variableDependencies];
-    }
-
-    STLog(self, @"Returning a %@", NSStringFromClass([value class]));
-    return value;
-}
-
 
 @end
 

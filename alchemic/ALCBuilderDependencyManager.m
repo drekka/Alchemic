@@ -10,6 +10,7 @@
 #import "ALCBuilderDependencyManager.h"
 #import "NSObject+ALCResolvable.h"
 #import "ALCDependency.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -47,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) addDependency:(ALCDependency *) dependency {
     [self kvoWatchAvailable:dependency];
     [_dependencies addObject:dependency];
+    _available = NO;
 
 }
 
@@ -62,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     if (!self.available) {
         @throw [NSException exceptionWithName:@"AlchemicDependenciesNotAvailable"
-                                       reason:@"Cannot set a value when dependencies are not available to be injected."
+                                       reason:@"Cannot enumerate dependencies when they are not available."
                                      userInfo:nil];
     }
 
@@ -72,7 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
     for(ALCDependency *dependency in _dependencies) {
-        STLog(self, @"Resolving dependency %@", dependency);
+        STLog(ALCHEMIC_LOG, @"Resolving dependency %@", dependency);
         [dependency resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
     };
     _available = [self dependenciesAvailable];
@@ -84,7 +86,8 @@ NS_ASSUME_NONNULL_BEGIN
                      ofObject:(nullable id)object
                        change:(nullable NSDictionary<NSString *,id> *)change
                       context:(nullable void *)context {
-    if ([self dependenciesAvailable]) {
+    if (!self.available && [self dependenciesAvailable]) {
+        STLog(ALCHEMIC_LOG, @"Dependencies are available, triggering KVO");
         self.available = YES; // Trigger KVO.
     }
 }
