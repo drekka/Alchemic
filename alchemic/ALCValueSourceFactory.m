@@ -32,12 +32,12 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(nonnull id<ALCValueSource>) valueSource {
+-(id<ALCValueSource>) valueSourceWithWhenAvailable:(nullable ALCWhenAvailableBlock) whenAvailable {
     id macro =_macros.anyObject;
     if ([macro isKindOfClass:[ALCConstantValue class]]) {
-        return [[ALCConstantValueSource alloc] initWithType:_valueType value:((ALCConstantValue *)macro).value];
+        return [[ALCConstantValueSource alloc] initWithType:_valueType value:((ALCConstantValue *)macro).value whenAvailable:whenAvailable];
     }
-    return [[ALCModelValueSource alloc] initWithType:_valueType searchExpressions:(NSSet<id<ALCModelSearchExpression>> *)_macros];
+    return [[ALCModelValueSource alloc] initWithType:_valueType searchExpressions:(NSSet<id<ALCModelSearchExpression>> *)_macros whenAvailable:whenAvailable];
 }
 
 -(void) addMacro:(id<ALCMacro>) macro {

@@ -8,27 +8,32 @@
 
 #import "ALCAbstractValueSource.h"
 
-@implementation ALCAbstractValueSource
+@implementation ALCAbstractValueSource {
+    ALCWhenAvailableBlock _whenAvailable;
+    BOOL _available;
+}
 
-@synthesize available = _available;
 @synthesize valueClass = _valueClass;
 
 -(instancetype) init {
     return nil;
 }
 
--(instancetype) initWithType:(Class)argumentType {
+-(instancetype) initWithType:(Class)argumentType whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailable {
     self = [super init];
     if (self) {
         _valueClass = argumentType;
+        _whenAvailable = [whenAvailable copy];
     }
     return self;
 }
 
+#pragma mark - Getting the value
+
 -(id) value {
 
     // Check the state
-    if (! self.available) {
+    if (!_available) {
         @throw [NSException exceptionWithName:@"AlchemicValueNotAvailable"
                                        reason:@"Cannot access a value source's value when it is not available."
                                      userInfo:nil];
@@ -90,5 +95,16 @@
 	[self doesNotRecognizeSelector:_cmd];
 	return nil;
 }
+
+#pragma mark - Tasks
+
+-(void) nowAvailable {
+    _available = YES;
+    if (_whenAvailable != NULL) {
+        _whenAvailable(self);
+        _whenAvailable = NULL;
+    }
+}
+
 
 @end

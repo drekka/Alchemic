@@ -8,6 +8,7 @@
 
 #import "ALCTestCase.h"
 #import <StoryTeller/StoryTeller.h>
+#import <Alchemic/Alchemic.h>
 
 @interface MUObject : NSObject
 @property (nonatomic, strong, readonly) NSString *aString;

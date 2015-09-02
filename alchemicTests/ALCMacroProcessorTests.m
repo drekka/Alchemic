@@ -60,7 +60,7 @@
 -(void) testAddMacroArg {
     ALCArg *arg = AcArg(NSString, AcName(@"abc"));
     [_processor addMacro:arg];
-    ALCModelValueSource *valueSource = [_processor valueSourceAtIndex:0];
+    ALCModelValueSource *valueSource = [_processor valueSourceAtIndex:0 whenAvailable:NULL];
     XCTAssertEqualObjects(AcName(@"abc"), [valueSource.searchExpressions anyObject]);
 }
 
@@ -72,8 +72,8 @@
     [_processor addMacro:arg1];
     [_processor addMacro:arg2];
 
-    ALCModelValueSource *source1 = [_processor valueSourceAtIndex:0];
-    ALCModelValueSource *source2 = [_processor valueSourceAtIndex:1];
+    ALCModelValueSource *source1 = [_processor valueSourceAtIndex:0 whenAvailable:NULL];
+    ALCModelValueSource *source2 = [_processor valueSourceAtIndex:1 whenAvailable:NULL];
 
     XCTAssertEqualObjects(AcName(@"abc"), [source1.searchExpressions anyObject]);
     XCTAssertEqualObjects(AcName(@"def"), [source2.searchExpressions anyObject]);

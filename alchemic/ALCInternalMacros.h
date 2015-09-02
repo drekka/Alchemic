@@ -10,6 +10,8 @@
 
 #define ALCHEMIC_PREFIX _alc_
 
+#define blockSelf __weak __typeof(self) weakSelf = self;__typeof(self) strongSelf = weakSelf
+
 // Used to assemble two strings. We use double macros to ensure any
 // embedded macros are resolved.
 #define alc_concat(prefix, suffix) _alc_concat(prefix, suffix)

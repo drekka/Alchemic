@@ -6,32 +6,29 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-@import Foundation;
-#import "ALCInstantiator.h"
-@protocol ALCBuilder;
+#import "ALCAbstractInstantiator.h"
 
 /**
  Creates an object using a custom initializer.
  */
-@interface ALCInitializerInstantiator : NSObject<ALCInstantiator>
+@interface ALCInitializerInstantiator : ALCAbstractInstantiator
 
 /**
- Unused.
+ Do not use.
 
- @return An instance of this class.
+ @return An instance of the instantiator.
  */
 -(instancetype) init NS_UNAVAILABLE;
 
 /**
  Default initializer.
 
- @param classBuilder   The class builder that represents the class where the initializer resides.
- @param initializerSelector The initializer selector to execute.
+ @param aClass      The class to instantiate.
+ @param initializer The method selector to execute.
 
  @return An instance of this initiator.
  */
--(instancetype) initWithClassBuilder:(id<ALCBuilder>) classBuilder
-                         initializer:(SEL) initializerSelector NS_DESIGNATED_INITIALIZER;
-
+-(instancetype) initWithClass:(Class) aClass
+                  initializer:(SEL) initializer NS_DESIGNATED_INITIALIZER;
 
 @end

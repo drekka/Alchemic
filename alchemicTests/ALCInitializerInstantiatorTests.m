@@ -11,8 +11,8 @@
 #import "ALCTestCase.h"
 #import "SimpleObject.h"
 #import "ALCInitializerInstantiator.h"
-#import "ALCBuilder.h"
 #import "ALCInternalMacros.h"
+#import "ALCClassBuilder.h"
 
 @interface ALCInitializerInstantiatorTests : ALCTestCase
 
@@ -21,28 +21,30 @@
 @implementation ALCInitializerInstantiatorTests
 
 -(void) testBuilderName {
-    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     ignoreSelectorWarnings(
-                           ALCInitializerInstantiator *instantiator = [[ALCInitializerInstantiator alloc] initWithClassBuilder:classBuilder initializer:@selector(initAlternative)];
-    )
+                           ALCInitializerInstantiator *instantiator = [[ALCInitializerInstantiator alloc] initWithClass:[SimpleObject class]
+                                                                                                            initializer:@selector(initAlternative)];
+                           )
     XCTAssertEqualObjects(@"SimpleObject initAlternative", instantiator.builderName);
 }
 
 -(void) testInstantiateWithSimpleMethod {
-    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     ignoreSelectorWarnings(
-                           ALCInitializerInstantiator *instantiator = [[ALCInitializerInstantiator alloc] initWithClassBuilder:classBuilder initializer:@selector(initAlternative)];
+                           ALCInitializerInstantiator *instantiator = [[ALCInitializerInstantiator alloc] initWithClass:[SimpleObject class]
+                                                                                                            initializer:@selector(initAlternative)];
                            )
-    SimpleObject *so = [instantiator instantiateWithArguments:@[]];
+    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
+    SimpleObject *so = [instantiator instantiateWithClassBuilder:classBuilder arguments:@[]];
     XCTAssertNotNil(so);
 }
 
 -(void) testInstantiateWithMethodWithArg {
-    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     ignoreSelectorWarnings(
-                           ALCInitializerInstantiator *instantiator = [[ALCInitializerInstantiator alloc] initWithClassBuilder:classBuilder initializer:@selector(initWithString:)];
+                           ALCInitializerInstantiator *instantiator = [[ALCInitializerInstantiator alloc] initWithClass:[SimpleObject class]
+                                                                                                            initializer:@selector(initWithString:)];
                            )
-    SimpleObject *so = [instantiator instantiateWithArguments:@[@"abc"]];
+    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
+    SimpleObject *so = [instantiator instantiateWithClassBuilder:classBuilder arguments:@[@"abc"]];
     XCTAssertNotNil(so);
     XCTAssertEqualObjects(@"abc", so.aStringProperty);
 }

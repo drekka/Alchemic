@@ -29,6 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
+                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
+    // Variable dependencies start a new stack because they are injected after instantiation and therefore break any possible loops.
+    STLog(self.valueClass, @"Starting new stack for circular dependency detection");
+    [super resolveWithPostProcessors:postProcessors dependencyStack:[NSMutableArray array]];
+}
+
 -(void) injectInto:(id) object {
     STLog([object class], @"Injecting %@.%s with a %@", NSStringFromClass([object class]), ivar_getName(self.variable), [ALCRuntime aClassDescription:self.valueSource.valueClass]);
     [object injectVariable:self.variable withValue:self.value];

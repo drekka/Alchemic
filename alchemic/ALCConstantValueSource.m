@@ -15,14 +15,15 @@ NS_ASSUME_NONNULL_BEGIN
     id _value;
 }
 
-@synthesize available = _available; // Need to directly set value.
-
--(instancetype) initWithType:(Class) argumentType {
+-(instancetype) initWithType:(Class)argumentType
+               whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailableBlock {
     return nil;
 }
 
--(instancetype) initWithType:(Class) argumentType value:(id) value {
-    self = [super initWithType:argumentType];
+-(instancetype) initWithType:(Class)argumentType
+                       value:(id) value
+               whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailableBlock {
+    self = [super initWithType:argumentType whenAvailable:whenAvailableBlock];
     if (self) {
         _value = value;
     }
@@ -36,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors
                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
     STLog(self, @"Resolving constant %@, setting available", self);
-    _available = YES; // Don't trigger KVO here.
+    [self nowAvailable];
 }
 
 -(NSString *)description {

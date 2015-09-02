@@ -14,28 +14,11 @@
 @class ALCMacroProcessor;
 @protocol ALCValueSource;
 @class ALCBuilderDependencyManager;
+
 #import "ALCResolvable.h"
 #import "ALCValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-/**
- What type of builder this is.
- */
-typedef NS_ENUM(NSUInteger, ALCBuilderType){
-    /**
-     Builds objects from a class definition.
-     */
-    ALCBuilderTypeClass,
-    /**
-     Builds objects using a custom initializer.
-     */
-    ALCBuilderTypeInitializer,
-    /**
-     Builds objects using a method on another object.
-     */
-    ALCBuilderTypeMethod
-};
 
 /**
  Builders are classes that can create objects.
@@ -46,11 +29,6 @@ typedef NS_ENUM(NSUInteger, ALCBuilderType){
 
 /// @name Properties
 #pragma mark - Properties
-
-/**
- Returns The type of the builder.
- */
-@property (nonatomic, assign) ALCBuilderType builderType;
 
 /**
  The value. Writable in builders.
@@ -88,6 +66,13 @@ typedef NS_ENUM(NSUInteger, ALCBuilderType){
  @discussion It's job is to finish the configuartion of the builder based on what the macroProcessor has been passed.
  */
 -(void) configure;
+
+/**
+ Registers a block to call when the builder is available. 
+
+ @param whenAvailable The block to execute, passing a reference to the builder.
+ */
+-(void) executeWhenAvailable:(ALCWhenAvailableBlock) whenAvailable;
 
 @end
 

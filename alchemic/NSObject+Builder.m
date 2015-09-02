@@ -37,13 +37,11 @@
     return returnObj;
 }
 
--(void) injectWithDependencies:(ALCBuilderDependencyManager<ALCVariableDependency *> *) dependencyManager {
+-(void) injectWithDependencies:(NSArray<ALCVariableDependency *> *) dependencies {
 
-    if (dependencyManager.numberOfDependencies > 0u) {
-        STLog([self class], @"Injecting %lu dependencies into a %@ instance", dependencyManager.numberOfDependencies, NSStringFromClass([self class]));
-        [dependencyManager enumerateDependencies:^(ALCVariableDependency * dependency, NSUInteger idx, BOOL * stop) {
-            [(ALCVariableDependency *)dependency injectInto:self];
-        }];
+    STLog([self class], @"Injecting %lu dependencies into a %@ instance", [dependencies count], NSStringFromClass([self class]));
+    for (ALCVariableDependency *dependency in dependencies) {
+        [(ALCVariableDependency *)dependency injectInto:self];
     }
 
     if ([self respondsToSelector:@selector(alchemicDidInjectDependencies)]) {

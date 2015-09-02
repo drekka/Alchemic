@@ -9,7 +9,6 @@
 @import Foundation;
 
 // Must import or Generics don't resolve.
-#import "ALCBuilderDependencyManager.h"
 #import "ALCVariableDependency.h"
 
 /**
@@ -32,7 +31,7 @@
 
  @param object The object to be injected.
  */
--(void) injectWithDependencies:(ALCBuilderDependencyManager<ALCVariableDependency *> *) dependencyManager;
+-(void) injectWithDependencies:(NSArray<ALCVariableDependency *> *) dependencies;
 
 /// @name Injecting
 

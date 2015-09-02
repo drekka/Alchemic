@@ -23,7 +23,9 @@
 }
 
 -(void) setUp {
-	ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSString class] value:@"abc"];
+	ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSString class]
+                                                                                 value:@"abc"
+                                           whenAvailable:NULL];
 	Ivar var = class_getInstanceVariable([SimpleObject class], "_aStringProperty");
 	_dependency = [[ALCVariableDependency alloc] initWithVariable:var valueSource:valueSource];
     [_dependency resolveWithPostProcessors:[NSSet set]  dependencyStack:[NSMutableArray array]];

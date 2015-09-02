@@ -6,12 +6,16 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 #import <OCMock/OCMock.h>
+#import <Alchemic/Alchemic.h>
+
 #import "ALCTestCase.h"
 #import "ALCModelValueSource.h"
 #import "ALCDependencyPostProcessor.h"
 #import "ALCBuilder.h"
 #import "ALCMacroProcessor.h"
-#import "ALCobjectBuilder.h"
+#import "ALCResolvable.h"
+#import "SimpleObject.h"
+#import "ALCClassBuilder.h"
 
 @interface ALCModelValueSourceTests : ALCTestCase
 
@@ -20,7 +24,8 @@
 @implementation ALCModelValueSourceTests {
 	ALCModelValueSource *_source;
 	NSSet<id<ALCModelSearchExpression>> * _searchExpressions;
-    id _mockBuilder;
+    ALCClassBuilder *_builder;
+    __block BOOL _whenAvailableCalled;
 }
 
 -(void) setUp {
@@ -29,123 +34,96 @@
 	[self setupMockContext];
 
 	_searchExpressions = [NSSet setWithObject:AcName(@"abc")];
-    _source = [[ALCModelValueSource alloc] initWithType:[NSString class] searchExpressions:_searchExpressions];
+    _whenAvailableCalled = NO;
+    _source = [[ALCModelValueSource alloc] initWithType:[SimpleObject class]
+                                      searchExpressions:_searchExpressions
+                                          whenAvailable:^(id<ALCResolvable> resolvable){
+                                              self->_whenAvailableCalled = YES;
+                                          }];
 
-    _mockBuilder = OCMClassMock([ALCObjectBuilder class]); // Cant use protocol mocks due to KVO.
-    OCMStub([(id<ALCBuilder>)_mockBuilder value]).andReturn(@"def");
+    _builder = [self simpleBuilderForClass:[SimpleObject class]];
+    [_builder configure];
 
 }
 
-#pragma mark - State
+#pragma mark - Callbacks
 
--(void) testResolveMatchesBuilderAvailableWhenBuilderNotAvailable {
-    [self stubModelToReturnBuilders:@[_mockBuilder]];
+-(void) testResolveTriggersBuilderResolveAndCallback {
+    [self stubMockContextToReturnBuilders:@[_builder]];
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
-    XCTAssertFalse(_source.available);
+    XCTAssertTrue(_whenAvailableCalled);
 }
 
--(void) testResolveMatchesBuilderAvailableWhenBuilderAvailable {
-    [self stubModelToReturnBuilders:@[_mockBuilder]];
-    OCMStub([_mockBuilder available]).andReturn(YES);
-    [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
-    XCTAssertTrue(_source.available);
-}
+-(void) testResolveAsUnavailableIfBuilderNotAvailable {
 
--(void) testResolveUnavailableWhenBuildersMixedAvailable {
-
-    id mockBuilder2 = OCMClassMock([ALCObjectBuilder class]); // Allows KVO
-    OCMStub([(id<ALCBuilder>)_mockBuilder available]).andReturn(YES);
-    OCMStub([(id<ALCBuilder>)mockBuilder2 available]).andReturn(NO);
-    [self stubModelToReturnBuilders:@[_mockBuilder, mockBuilder2]];
+    id<ALCBuilder> builder2 = [self externalBuilderForClass:[SimpleObject class]];
+    [builder2 configure];
+    [self stubMockContextToReturnBuilders:@[_builder, builder2]];
 
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 
-    XCTAssertFalse(_source.available);
+    XCTAssertFalse(_whenAvailableCalled);
 }
 
--(void) testKVOTriggersWhenStateChanges {
+-(void) testExecutesCallbackWhenBuilderBecomesAvailable {
 
-    // Use an external class builder so we can control the available setting
-    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[NSString class]];
-    [classBuilder.macroProcessor addMacro:AcExternal];
-    [classBuilder configure];
-    [self stubModelToReturnBuilders:@[classBuilder]];
+    id<ALCBuilder> builder2 = [self externalBuilderForClass:[SimpleObject class]];
+    [builder2 configure];
+    [self stubMockContextToReturnBuilders:@[builder2]];
 
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 
-    XCTAssertFalse(_source.available);
+    XCTAssertFalse(_whenAvailableCalled);
 
-    classBuilder.value = @"abc";
-
-    XCTAssertTrue(_source.available);
+    builder2.value = @"abc";
+    XCTAssertTrue(_whenAvailableCalled);
 
 }
 
--(void) testKVODoesntTriggerUntilLastBuilderAvailable {
+-(void) testCallbackDoesntTriggerUntilLastBuilderAvailable {
 
-    id<ALCBuilder> classBuilder1 = [self simpleBuilderForClass:[NSString class]];
-    [classBuilder1.macroProcessor addMacro:AcExternal];
+    id<ALCBuilder> classBuilder1 = [self externalBuilderForClass:[NSString class]];
     [classBuilder1 configure];
 
-    id<ALCBuilder> classBuilder2 = [self simpleBuilderForClass:[NSString class]];
-    [classBuilder2.macroProcessor addMacro:AcExternal];
+    id<ALCBuilder> classBuilder2 = [self externalBuilderForClass:[NSString class]];
     [classBuilder2 configure];
 
-    [self stubModelToReturnBuilders:@[classBuilder1, classBuilder2]];
+    [self stubMockContextToReturnBuilders:@[classBuilder1, classBuilder2]];
 
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 
-    XCTAssertFalse(_source.available);
+    XCTAssertFalse(_whenAvailableCalled);
 
     classBuilder1.value = @"abc";
-    XCTAssertFalse(_source.available);
+    XCTAssertFalse(_whenAvailableCalled);
 
     classBuilder2.value = @"def";
-    XCTAssertTrue(_source.available);
+    XCTAssertTrue(_whenAvailableCalled);
 
-}
-
--(void) testStateWhenBuildersAreAlreadyAvailable {
-
-
-    id<ALCBuilder> classBuilder1 = [self simpleBuilderForClass:[NSString class]];
-    [classBuilder1.macroProcessor addMacro:AcExternal];
-    [classBuilder1 configure];
-    classBuilder1.value = @"abc";
-
-    id<ALCBuilder> classBuilder2 = [self simpleBuilderForClass:[NSString class]];
-    [classBuilder2.macroProcessor addMacro:AcExternal];
-    [classBuilder2 configure];
-    classBuilder2.value = @"def";
-
-    [self stubModelToReturnBuilders:@[classBuilder1, classBuilder2]];
-    [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
-
-    XCTAssertTrue(_source.available);
 }
 
 #pragma mark - Resolving
 
 -(void) testBasicResolving {
 
-	[self stubModelToReturnBuilders:@[_mockBuilder]];
+	[self stubMockContextToReturnBuilders:@[_builder]];
 
 	[_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 
 	NSSet<id> *results = _source.values;
 	XCTAssertEqual(1u, [results count]);
-	XCTAssertEqualObjects(@"def", [results anyObject]);
+    XCTAssertTrue([[results anyObject] isKindOfClass:[SimpleObject class]]);
 }
 
 -(void) testResolvingSetsState {
-    [self stubModelToReturnBuilders:@[_mockBuilder]];
+    [self stubMockContextToReturnBuilders:@[_builder]];
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 }
 
--(void) testResolversCalled {
+-(void) testResolveExecutesPostProcessors {
 
-    NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:_mockBuilder];
-	[self stubModelToReturnBuilders:builders.allObjects];
+    NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:_builder];
+	[self stubMockContextToReturnBuilders:builders.allObjects];
 
 	id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));
 	OCMExpect([mockPostProcessor process:builders]).andReturn(builders);
@@ -154,37 +132,26 @@
 
 	NSSet<id> *results = _source.values;
 	XCTAssertEqual(1u, [results count]);
-	XCTAssertEqualObjects(@"def", [results anyObject]);
+	XCTAssertTrue([[results anyObject] isKindOfClass:[SimpleObject class]]);
 	OCMVerifyAll(mockPostProcessor);
 }
 
 -(void) testBasicResolvingFailsToFindCandidates {
-	[self stubModelToReturnBuilders:@[]];
+	[self stubMockContextToReturnBuilders:@[]];
 	XCTAssertThrowsSpecificNamed([_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]], NSException, @"AlchemicNoCandidateBuildersFound");
 
 }
 
 -(void) testResolversReturnEmptySet {
 
-    NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:_mockBuilder];
-    [self stubModelToReturnBuilders:builders.allObjects];
+    NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:_builder];
+    [self stubMockContextToReturnBuilders:builders.allObjects];
 
 	id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));
 	OCMExpect([mockPostProcessor process:builders]).andReturn([NSSet set]);
 
 	XCTAssertThrowsSpecificNamed([_source resolveWithPostProcessors:[NSSet setWithObject:mockPostProcessor] dependencyStack:[NSMutableArray array]], NSException, @"AlchemicNoCandidateBuildersFound");
 	OCMVerifyAll(mockPostProcessor);
-}
-
-
-#pragma mark - Internal
-
--(void) stubModelToReturnBuilders:(NSArray<id<ALCBuilder>> *) builders {
-	OCMStub([self.mockContext executeOnBuildersWithSearchExpressions:_searchExpressions processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
-		__unsafe_unretained ProcessBuilderBlock processBuilderBlock;
-		[inv getArgument:&processBuilderBlock atIndex:3];
-		processBuilderBlock([NSSet setWithArray:builders]);
-	});
 }
 
 

@@ -6,31 +6,32 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-@import Foundation;
-#import "ALCInstantiator.h"
+#import "ALCAbstractInstantiator.h"
 @protocol ALCBuilder;
 
 /**
  Class that can create objects using a method.
  */
-@interface ALCMethodInstantiator : NSObject<ALCInstantiator>
+@interface ALCMethodInstantiator : ALCAbstractInstantiator
 
 /**
- Unused.
+ Do not use.
 
- @return An instance of this class.
+ @return An instance of the instantiator.
  */
 -(instancetype) init NS_UNAVAILABLE;
 
 /**
  Default initializer.
 
- @param classBuilder   The class builder that represents the class where the method resides.
- @param methodSelector The method selector to execute.
+ @param aClass      The class where the method resides.
+ @param returnType  The class of the value that will be returned from the builder.
+ @param initializer The method selector to execute.
 
  @return An instance of this initiator.
  */
--(instancetype) initWithClassBuilder:(id<ALCBuilder>) classBuilder
-                            selector:(SEL) methodSelector NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithClass:(Class) aClass
+                           returnType:(Class) returnType
+                             selector:(SEL) selector NS_DESIGNATED_INITIALIZER;
 
 @end

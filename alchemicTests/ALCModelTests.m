@@ -10,10 +10,13 @@
 #import <OCMock/OCMock.h>
 #import <StoryTeller/StoryTeller.h>
 #import <Alchemic/Alchemic.h>
+
 #import "ALCBuilder.h"
-#import "ALCObjectBuilder.h"
+#import "ALCClassBuilder.h"
+#import "ALCMethodBuilder.h"
 #import "ALCSingletonStorage.h"
 #import "ALCMethodInstantiator.h"
+#import "ALCMacroProcessor.h"
 
 #import "ALCModel.h"
 
@@ -23,8 +26,8 @@
 
 @implementation ALCModelTests {
     ALCModel *_model;
-    id<ALCBuilder> _classBuilder;
-    id<ALCBuilder> _methodBuilder;
+    ALCClassBuilder *_classBuilder;
+    ALCMethodBuilder *_methodBuilder;
 }
 
 -(void) setUp {
@@ -37,8 +40,12 @@
     [_classBuilder.macroProcessor addMacro:AcWithName(@"abc")];
     [_classBuilder configure];
 
-    _methodBuilder = [[ALCObjectBuilder alloc] initWithInstantiator:[[ALCMethodInstantiator alloc] initWithClassBuilder:_classBuilder selector:@selector(someMethod)]
-                                                          forClass:[NSString class]];
+    id<ALCInstantiator> instantiator = [[ALCMethodInstantiator alloc] initWithClass:[ALCModelTests class]
+                                                                         returnType:[NSString class]
+                                                                           selector:@selector(someMethod)];
+    _methodBuilder = [[ALCMethodBuilder alloc] initWithInstantiator:instantiator
+                                                           forClass:[NSString class]
+                                                      parentBuilder:_classBuilder];
     [_methodBuilder.macroProcessor addMacro:AcWithName(@"def")];
     [_methodBuilder configure];
 

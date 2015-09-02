@@ -99,24 +99,24 @@
  @discussion This is the main macro for setting up objects within Alchemic. It take a number of other macros as 
  */
 #define AcRegister(...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(id<ALCBuilder>) classBuilder { \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
 #define AcMethod(methodType, methodSel, ...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodInClassBuilder):(id<ALCBuilder>) classBuilder { \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodInClassBuilder):(ALCClassBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder selector:@selector(methodSel) returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
 #define AcInject(variableName, ...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(id<ALCBuilder>) classBuilder { \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder variableDependency:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
 // Registers an initializer for a class.
 #define AcInitializer(initializerSel, ...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerInitializerForClassBuilder):(id<ALCBuilder>) classBuilder { \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerInitializerForClassBuilder):(ALCClassBuilder *) classBuilder { \
 	[[ALCAlchemic mainContext] registerClassBuilder:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
 }
 

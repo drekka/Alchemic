@@ -28,13 +28,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) id<ALCValueSource> valueSource;
 
 /**
+ Do not use.
+
+ @return An instance of this class.
+ */
+-(instancetype) init NS_UNAVAILABLE;
+
+/**
  Default initializer.
 
  @param valueSource An ALCArgument instance which can source the value.
 
  @return An instance of this class.
  */
--(instancetype) initWithValueSource:(id<ALCValueSource>) valueSource;
+-(instancetype) initWithValueSource:(id<ALCValueSource>) valueSource NS_DESIGNATED_INITIALIZER;
 
 @end
 

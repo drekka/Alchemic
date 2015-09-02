@@ -8,20 +8,22 @@
 
 @import Foundation;
 @protocol ALCDependencyPostProcessor;
+@protocol ALCResolvable;
 
 NS_ASSUME_NONNULL_BEGIN
+
+/**
+ Defines a block type used when making callbacks to objects to indicates that a resolvable is available.
+
+ @param ALCWhenAvailableBlockArgs A reference to the resolvable that is now available.
+ */
+#define ALCWhenAvailableBlockArgs id<ALCResolvable> resolvable
+typedef void (^ALCWhenAvailableBlock) (ALCWhenAvailableBlockArgs);
 
 /**
  Classes that are resolvable can resolve and return values.
  */
 @protocol ALCResolvable <NSObject>
-
-/**
- Indicates that the resolvables value can be accessed and a value is either present or can be created.
- 
- @discussion This is about supporting externally created objects which are injected into Alchemic at some future time. Until those objects are injected, the resolvable is marked as not being available. Builders can then watch this property to known when the resolvable is available.
- */
-@property (nonatomic, assign, readonly) BOOL available;
 
 /**
  Called during model setup to resolve dependencies and validate the model.

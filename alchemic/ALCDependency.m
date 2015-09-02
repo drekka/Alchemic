@@ -13,28 +13,19 @@
 #import "ALCDependency.h"
 #import "ALCDependencyPostProcessor.h"
 #import "ALCRuntime.h"
-#import "NSObject+ALCResolvable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCDependency ()
-@property (nonatomic, assign) BOOL available;
-@end
-
 @implementation ALCDependency
 
-@synthesize available = _available;
-
--(void) dealloc {
-    [self kvoRemoveWatchAvailable:_valueSource];
+-(instancetype) init {
+    return nil;
 }
 
--(instancetype) initWithValueSource:(id<ALCValueSource>)valueSource {
+-(instancetype) initWithValueSource:(id<ALCValueSource>) valueSource {
     self = [super init];
     if (self) {
         _valueSource = valueSource;
-        _available = valueSource.available;
-        [self kvoWatchAvailable:_valueSource];
     }
     return self;
 }
@@ -42,20 +33,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
                   dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
     [_valueSource resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
-    _available = _valueSource.available;
 }
 
 -(id) value {
     return _valueSource.value;
-}
-
--(void) observeValueForKeyPath:(nullable NSString *) keyPath
-                      ofObject:(nullable id)object
-                        change:(nullable NSDictionary<NSString *,id> *) change
-                       context:(nullable void *) context {
-    // We are tracking the value source availability so indicate a change.
-    STLog(self.valueClass, @"Value source %@ availability, triggering KVO", _valueSource);
-    self.available = YES;
 }
 
 -(Class)valueClass {

@@ -11,7 +11,6 @@
 #import <OCMock/OCMock.h>
 #import "NSObject+Builder.h"
 #import "ALCRuntime.h"
-#import "ALCBuilderDependencyManager.h"
 #import "ALCVariableDependency.h"
 #import "ALCConstantValueSource.h"
 #import "AlchemicAware.h"
@@ -44,14 +43,11 @@
 
     _dependenciesInjected = NO;
     Ivar stringVar = class_getInstanceVariable([self class], "_stringVar");
-    ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSString class] value:@"abc"];
+    ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSString class] value:@"abc" whenAvailable:NULL];
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithVariable:stringVar valueSource:valueSource];
-    ALCBuilderDependencyManager *dependencyManager = [[ALCBuilderDependencyManager alloc] init];
-    [dependencyManager addDependency:dependency];
+    [dependency resolveWithPostProcessors:[NSSet set] dependencyStack:[[NSMutableArray alloc] init]];
 
-    [dependencyManager resolveWithPostProcessors:[NSSet set] dependencyStack:[[NSMutableArray alloc] init]];
-
-    [self injectWithDependencies:dependencyManager];
+    [self injectWithDependencies:@[dependency]];
 
     XCTAssertEqualObjects(@"abc", _stringVar);
     XCTAssertTrue(_dependenciesInjected);

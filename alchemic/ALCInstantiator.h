@@ -8,11 +8,17 @@
 
 @import Foundation;
 #import "ALCResolvable.h"
+@class ALCClassBuilder;
 
 /**
  These objects are used to create instances and handle injections for a builder.
  */
 @protocol ALCInstantiator <ALCResolvable>
+
+/**
+ If set, this block is called when the instantiators dependencies come online.
+ */
+@property (nonatomic, copy) ALCWhenAvailableBlock whenAvailable;
 
 /**
  Used when builders are describing themselves.
@@ -27,8 +33,10 @@
 /**
  Create an object using the passed arguments for any method arguments.
 
+ @param classBuilder The class builder being asked to instantiate.
+ @param arguments    An array of arguments being passed, mostly used in methods and initializers.
  @return An instance of the object that the builder represents.
  */
--(id) instantiateWithArguments:(NSArray *) arguments;
+-(id) instantiateWithClassBuilder:(ALCClassBuilder *) classBuilder arguments:(NSArray *) arguments;
 
 @end

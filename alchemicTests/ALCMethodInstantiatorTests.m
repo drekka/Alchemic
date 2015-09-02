@@ -12,6 +12,7 @@
 #import "SimpleObject.h"
 #import "ALCMethodInstantiator.h"
 #import "ALCBuilder.h"
+#import "ALCClassBuilder.h"
 
 @interface ALCMethodInstantiatorTests : ALCTestCase
 
@@ -20,29 +21,39 @@
 @implementation ALCMethodInstantiatorTests
 
 -(void) testBuilderName {
-    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
-    ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClassBuilder:classBuilder selector:@selector(createSO)];
+    ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClass:[ALCMethodInstantiatorTests class]
+                                                                            returnType:[SimpleObject class]
+                                                                              selector:@selector(createSO)];
     XCTAssertEqualObjects(@"ALCMethodInstantiatorTests createSO", instantiator.builderName);
 }
 
 -(void) testInstantiateWithSimpleMethod {
-    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
-    ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClassBuilder:classBuilder selector:@selector(createSO)];
-    SimpleObject *so = [instantiator instantiateWithArguments:@[]];
+    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
+    [self configureAndResolveBuilder:classBuilder];
+    ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClass:[ALCMethodInstantiatorTests class]
+                                                                            returnType:[SimpleObject class]
+                                                                              selector:@selector(createSO)];
+    SimpleObject *so = [instantiator instantiateWithClassBuilder:classBuilder arguments:@[]];
     XCTAssertNotNil(so);
 }
 
 -(void) testInstantiateWithMethodWithOneArg {
-    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
-    ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClassBuilder:classBuilder selector:@selector(createSOWithString:)];
-    SimpleObject *so = [instantiator instantiateWithArguments:@[@"abc"]];
+    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
+    [self configureAndResolveBuilder:classBuilder];
+    ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClass:[ALCMethodInstantiatorTests class]
+                                                                            returnType:[SimpleObject class]
+                                                                              selector:@selector(createSOWithString:)];
+    SimpleObject *so = [instantiator instantiateWithClassBuilder:classBuilder arguments:@[@"abc"]];
     XCTAssertNotNil(so);
 }
 
 -(void) testInstantiateWithMethodWithOneNilArg {
-    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
-    ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClassBuilder:classBuilder selector:@selector(createSOWithNilString:)];
-    SimpleObject *so = [instantiator instantiateWithArguments:@[]];
+    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
+    [self configureAndResolveBuilder:classBuilder];
+    ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClass:[ALCMethodInstantiatorTests class]
+                                                                            returnType:[SimpleObject class]
+                                                                              selector:@selector(createSOWithNilString:)];
+    SimpleObject *so = [instantiator instantiateWithClassBuilder:classBuilder arguments:@[]];
     XCTAssertNotNil(so);
 }
 

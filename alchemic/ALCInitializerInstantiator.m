@@ -10,51 +10,50 @@
 
 #import "ALCInitializerInstantiator.h"
 #import "ALCBuilder.h"
+#import "ALCClassBuilder.h"
 #import "NSObject+Builder.h"
 #import "ALCRuntime.h"
 
 @implementation ALCInitializerInstantiator {
-    id<ALCBuilder> _classBuilder;
-    SEL _initializerSelector;
+    SEL _initializer;
+    Class _class;
 }
 
 -(instancetype) init {
     return nil;
 }
 
--(instancetype) initWithClassBuilder:(id<ALCBuilder>) classBuilder
-                         initializer:(SEL) initializerSelector {
+-(instancetype) initWithClass:(Class) aClass
+                  initializer:(SEL) initializer {
     self = [super init];
     if (self) {
-        _classBuilder = classBuilder;
-        _initializerSelector = initializerSelector;
+        _initializer = initializer;
+        _class = aClass;
     }
     return self;
 }
 
--(BOOL) available {
-    return _classBuilder.available;
-}
-
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack{
-    [ALCRuntime validateClass:_classBuilder.valueClass
-                     selector:_initializerSelector];
-    STLog(_classBuilder.valueClass, @"Resolving parent %@", _classBuilder);
-    [_classBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
+
+    // Verify the selector.
+    [ALCRuntime validateClass:_class selector:_initializer];
+    [self nowAvailable];
 }
 
 -(NSString *)builderName {
-    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(_classBuilder.valueClass), NSStringFromSelector(_initializerSelector)];
+    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(_class), NSStringFromSelector(_initializer)];
 }
 
--(id) instantiateWithArguments:(NSArray *) arguments {
-    STLog(self, @"Instantiating a %@ using %@", NSStringFromClass(_classBuilder.valueClass), self);
-    return [[_classBuilder.valueClass alloc] invokeSelector:_initializerSelector arguments:arguments];
+-(id) instantiateWithClassBuilder:(ALCClassBuilder *) classBuilder arguments:(NSArray *) arguments {
+    STLog(_class, @"Instantiating a %@ using %@", NSStringFromClass(_class), self);
+    id object = [[_class alloc] invokeSelector:_initializer arguments:arguments];
+    [classBuilder injectDependencies:object];
+    return object;
 }
 
 -(NSString *)attributeText {
-    return [NSString stringWithFormat:@", using initializer [%@ %@]", NSStringFromClass(_classBuilder.valueClass), NSStringFromSelector(_initializerSelector)];
+    return [NSString stringWithFormat:@", using initializer [%@ %@]", NSStringFromClass(_class), NSStringFromSelector(_initializer)];
 }
 
 @end

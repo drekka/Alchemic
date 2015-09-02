@@ -14,6 +14,7 @@
 #import "ALCModelSearchExpression.h"
 #import "ALCName.h"
 #import "ALCBuilder.h"
+#import "ALCClassBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -57,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) removeBuilder:(NSObject<ALCBuilder> *) builder {
     [builder removeObserver:self forKeyPath:@"name"];
     [_nameIndex removeObjectForKey:builder.name];
-	[_model removeObject:builder];
+    [_model removeObject:builder];
 }
 
 -(void) observeValueForKeyPath:(nullable NSString *) keyPath
@@ -137,7 +138,7 @@ NS_ASSUME_NONNULL_BEGIN
     return results;
 }
 
--(NSSet<id<ALCBuilder>> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders {
+-(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders {
 
     if ([builders count] == 0) {
         return builders;
@@ -145,7 +146,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
     NSSet<id<ALCBuilder>> *newBuilders = [builders objectsPassingTest:^BOOL(id<ALCBuilder> builder, BOOL * stop) {
-        return builder.builderType == ALCBuilderTypeClass;
+        return [builder isKindOfClass:[ALCClassBuilder class]];
     }];
     STLog(ALCHEMIC_LOG, @"Returning %lu class builders", [newBuilders count]);
     return newBuilders;

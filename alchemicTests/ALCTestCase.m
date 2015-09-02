@@ -9,6 +9,7 @@
 #import <OCMock/OCMock.h>
 #import <StoryTeller/StoryTeller.h>
 @import ObjectiveC;
+#import <Alchemic/Alchemic.h>
 
 #import "ALCTestCase.h"
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
@@ -16,10 +17,11 @@
 #import "ALCRuntimeScanner.h"
 #import "ALCMacroProcessor.h"
 #import "ALCInternalMacros.h"
-#import "ALCObjectBuilder.h"
 #import "ALCSingletonStorage.h"
 #import "ALCExternalStorage.h"
 #import "ALCClassInstantiator.h"
+#import "ALCResolvable.h"
+#import "ALCClassBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -79,9 +81,30 @@ NS_ASSUME_NONNULL_BEGIN
 
 }
 
--(id<ALCBuilder>) simpleBuilderForClass:(Class) aClass {
-    return [[ALCObjectBuilder alloc] initWithInstantiator:[[ALCClassInstantiator alloc] initWithObjectType:aClass]
-                                                 forClass:aClass];
+-(ALCClassBuilder *) simpleBuilderForClass:(Class) aClass {
+    id <ALCInstantiator> instantiator = [[ALCClassInstantiator alloc] initWithClass:aClass];
+    return [[ALCClassBuilder alloc] initWithInstantiator:instantiator forClass:aClass];
+}
+
+-(ALCClassBuilder *) externalBuilderForClass:(Class) aClass {
+    ALCClassBuilder *builder = [self simpleBuilderForClass:aClass];
+    [builder.macroProcessor addMacro:AcExternal];
+    return builder;
+}
+
+-(void) stubMockContextToReturnBuilders:(NSArray<id<ALCBuilder>> *) builders {
+    OCMStub([self.mockContext executeOnBuildersWithSearchExpressions:OCMOCK_ANY
+                                             processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
+        __unsafe_unretained ProcessBuilderBlock processBuilderBlock;
+        [inv getArgument:&processBuilderBlock atIndex:3];
+        processBuilderBlock([NSSet setWithArray:builders]);
+    });
+}
+
+-(void) configureAndResolveBuilder:(id<ALCBuilder>) builder {
+    [builder configure];
+    [builder resolveWithPostProcessors:[NSSet set]
+                       dependencyStack:[NSMutableArray array]];
 }
 
 @end

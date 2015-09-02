@@ -7,15 +7,15 @@
 //
 
 @import Foundation;
-#import "ALCInstantiator.h"
+#import "ALCAbstractInstantiator.h"
 
 /**
  Strategory for building objects defines simply as classes.
  */
-@interface ALCClassInstantiator : NSObject<ALCInstantiator>
+@interface ALCClassInstantiator : ALCAbstractInstantiator
 
 /**
- Not used
+ Do not use.
 
  @return An instance of this class.
  */
@@ -24,12 +24,10 @@
 /**
  Default initializer.
 
- @discussion This instantiator makes use of the default init method to create an object.
+ @param aClass The class of the object this instantiator will create.
 
- @param objectType The type of object that will be created.
-
- @return An instance of the instantiator.
+ @return An instance of this class.
  */
--(instancetype) initWithObjectType:(Class) objectType NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithClass:(Class) aClass NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -40,10 +40,14 @@ NS_ASSUME_NONNULL_BEGIN
  Default initializer
 
  @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.
-
+ @param whenAvailableBlock A block to call when the value source is available.
  @return And instance of this class.
  */
--(instancetype) initWithType:(Class) argumentType NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithType:(Class) argumentType whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailable NS_DESIGNATED_INITIALIZER;
+/**
+ Call to execute the call back block.
+ */
+-(void) nowAvailable;
 
 @end
 

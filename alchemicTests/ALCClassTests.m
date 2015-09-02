@@ -9,6 +9,7 @@
 @import XCTest;
 #import "ALCClass.h"
 #import "ALCTestCase.h"
+#import "ALCClassBuilder.h"
 
 @interface ALCClassTests : ALCTestCase
 

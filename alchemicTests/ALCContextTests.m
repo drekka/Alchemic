@@ -17,11 +17,11 @@
 #import "ALCContext.h"
 #import "ALCRuntime.h"
 #import "ALCBuilder.h"
-#import "ALCObjectBuilder.h"
 #import "SimpleObject.h"
 #import "ALCModel.h"
-#import "ALCObjectBuilder+MethodBuilder.h"
-#import "ALCObjectBuilder+ClassBuilder.h"
+
+#import "ALCClassBuilder.h"
+#import "ALCMethodBuilder.h"
 
 @interface ALCContextTests : ALCTestCase
 
@@ -47,7 +47,7 @@
     NSSet<id<ALCModelSearchExpression>> *expressions = [NSSet setWithObject:AcClass(SimpleObject)];
     OCMStub([_mockRuntime searchExpressionsForClass:[SimpleObject class]]).andReturn(expressions);
 
-    id mockBuilder = OCMClassMock([ALCObjectBuilder class]);
+    id mockBuilder = OCMClassMock([ALCClassBuilder class]);
     NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
     OCMStub([_mockModel buildersForSearchExpressions:expressions]).andReturn(builders);
     OCMStub([_mockModel classBuildersFromBuilders:builders]).andReturn(builders);
@@ -79,7 +79,7 @@
 }
 
 -(void) testRegisterDependencyInClassBuilder {
-    id<ALCBuilder> classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
+    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     [_context registerClassBuilder:classBuilder variableDependency:@"aStringProperty", nil];
 }
 
@@ -89,7 +89,7 @@
 
     ALCName *nameLocator = AcName(@"abc");
 
-    id mockBuilder = OCMClassMock([ALCObjectBuilder class]);
+    id mockBuilder = OCMClassMock([ALCMethodBuilder class]);
     OCMStub([mockBuilder invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
@@ -106,10 +106,10 @@
 
     ALCClass *classLocator = AcClass([SimpleObject class]);
 
-    id mockBuilder1 = OCMClassMock([ALCObjectBuilder class]);
+    id mockBuilder1 = OCMClassMock([ALCMethodBuilder class]);
     OCMStub([mockBuilder1 invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
 
-    id mockBuilder2 = OCMClassMock([ALCObjectBuilder class]);
+    id mockBuilder2 = OCMClassMock([ALCMethodBuilder class]);
     OCMStub([mockBuilder2 invokeWithArgs:@[@"def"]]).andReturn(@12);
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){

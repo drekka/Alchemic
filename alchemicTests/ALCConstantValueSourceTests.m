@@ -8,44 +8,34 @@
 
 @import XCTest;
 #import "ALCConstantValueSource.h"
-#import "NSObject+ALCResolvable.h"
+#import "ALCResolvable.h"
 
 @interface ALCConstantValueSourceTests : XCTestCase
 
 @end
 
-@implementation ALCConstantValueSourceTests {
-    BOOL _kvoCalled;
-}
-
--(void)setUp {
-    _kvoCalled = NO;
-}
+@implementation ALCConstantValueSourceTests
 
 -(void) testStoresValues {
-	ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
+    __block BOOL blockCalled;
+	ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class]
+                                                                            value:@5
+                                                                    whenAvailable:^(ALCWhenAvailableBlockArgs){
+                                                                        blockCalled = YES;
+                                                                    }];
 	XCTAssertEqualObjects(@5, [source.values anyObject]);
+    XCTAssertFalse(blockCalled);
 }
 
 -(void) testResolves {
-    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
+    __block BOOL blockCalled;
+    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class]
+                                                                            value:@5
+                                                                    whenAvailable:^(ALCWhenAvailableBlockArgs){
+                                                                        blockCalled = YES;
+                                                                    }];
 	[source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
-    XCTAssertTrue(source.available);
-}
-
--(void) testRsolveDoesNottriggerKVO {
-
-    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
-    [self kvoWatchAvailable:source];
-
-    [source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
-    [self kvoRemoveWatchAvailable:source];
-
-    XCTAssertFalse(_kvoCalled);
-}
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    _kvoCalled = YES;
+    XCTAssertTrue(blockCalled);
 }
 
 @end

@@ -15,33 +15,26 @@
 #import "ALCDependencyPostProcessor.h"
 #import "ALCInternalMacros.h"
 #import "NSSet+Alchemic.h"
-#import "NSObject+ALCResolvable.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface ALCModelValueSource ()
-@property (nonatomic, assign) BOOL available;
-@end
 
 /**
  Sources values from the model.
  */
 @implementation ALCModelValueSource {
     NSSet<id<ALCBuilder>> *_candidateBuilders;
+    NSMutableSet<id<ALCResolvable>> *_unavailableCandidates;
 }
 
-@synthesize available = _available;
-
--(void) dealloc {
-    [self kvoRemoveWatchAvailableFromResolvableSet:_candidateBuilders];
-}
-
--(instancetype) initWithType:(Class) argumentType {
+-(instancetype) initWithType:(Class)argumentType
+               whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailableBlock {
     return nil;
 }
 
--(instancetype) initWithType:(Class) argumentType searchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
-    self = [super initWithType:argumentType];
+-(instancetype) initWithType:(Class) argumentType
+           searchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
+               whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailableBlock {
+    self = [super initWithType:argumentType whenAvailable:whenAvailableBlock];
     if (self) {
         _searchExpressions = searchExpressions;
         if ([searchExpressions count] == 0) {
@@ -77,7 +70,6 @@ NS_ASSUME_NONNULL_BEGIN
                                                   }
 
                                                   STLog(ALCHEMIC_LOG, @"%lu final candidates", [finalBuilders count]);
-                                                  [self kvoRemoveWatchAvailableFromResolvableSet:self->_candidateBuilders];
                                                   self->_candidateBuilders = finalBuilders;
                                               }];
 
@@ -88,32 +80,25 @@ NS_ASSUME_NONNULL_BEGIN
                                      userInfo:nil];
     }
 
-    // Now resolve all candidates
+    // Add the candidates to the unresolved pool.
+    _unavailableCandidates = [_candidateBuilders mutableCopy];
+
+    // Now resolve all candidates and add callback blocks
     for (id<ALCBuilder> candidate in _candidateBuilders) {
+
         STLog(self, @"Resolving candidate %@", candidate);
+
+        [candidate executeWhenAvailable:^(id<ALCResolvable>  _Nonnull resolvable) {
+            [self->_unavailableCandidates removeObject:resolvable];
+            if ([self->_unavailableCandidates count] == 0) {
+                STLog(self, @"All candidates available, executing when available callback");
+                [self nowAvailable];
+            }
+        }];
+
         [candidate resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
     }
 
-    // Start watching the builders.
-    [self kvoWatchAvailableInResolvableSet:_candidateBuilders];
-    _available = [self candidatesAvailable];
-
-}
-
--(void) observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString *,id> *)change context:(nullable void *)context {
-    if (!self.available && [self candidatesAvailable]) {
-        STLog(self.valueClass, @"Candidates available, triggering KVO.");
-        self.available = YES; // Trigger KVO.
-    }
-}
-
--(BOOL) candidatesAvailable {
-    for (id<ALCBuilder> builder in _candidateBuilders) {
-        if (!builder.available) {
-            return NO;
-        }
-    }
-    return YES;
 }
 
 -(NSString *) description {

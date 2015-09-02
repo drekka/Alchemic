@@ -8,44 +8,38 @@
 
 #import "ALCClassInstantiator.h"
 #import <StoryTeller/StoryTeller.h>
+#import "ALCClassBuilder.h"
 
 @implementation ALCClassInstantiator {
-    Class _objectType;
+    Class _objectClass;
 }
 
 -(instancetype) init {
     return nil;
 }
 
--(instancetype) initWithObjectType:(Class) objectType {
+-(instancetype) initWithClass:(Class) aClass {
     self = [super init];
     if (self) {
-        _objectType = objectType;
+        _objectClass = aClass;
     }
     return self;
 }
 
--(BOOL) available {
-    return YES;
-}
-
 -(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack{}
+                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
+    [self nowAvailable];
+}
 
 -(NSString *) builderName {
-    return NSStringFromClass(_objectType);
+    return NSStringFromClass(_objectClass);
 }
 
-/**
- Injects an object with dependencies.
-
- @param object The object to be injected.
- */
-
--(id) instantiateWithArguments:(NSArray *) arguments {
-    STLog(_objectType, @"Creating a %@", NSStringFromClass(_objectType));
-    id value = [[_objectType alloc] init];
-    return value;
+-(id) instantiateWithClassBuilder:(ALCClassBuilder *) classBuilder arguments:(NSArray *) arguments {
+    STLog(_objectClass, @"Creating a %@", NSStringFromClass(_objectClass));
+    id object = [[_objectClass alloc] init];
+    [classBuilder injectDependencies:object];
+    return object;
 }
 
 -(NSString *)attributeText {

@@ -10,6 +10,7 @@
 
 @protocol ALCBuilder;
 @protocol ALCModelSearchExpression;
+@class ALCClassBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -63,9 +64,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param builders The original NSSet to filter.
 
- @return A new NSSet containing just ALCClassBuilder instances.
+ @return A new NSSet containing just builders which are class builder.
  */
--(NSSet<id<ALCBuilder>> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders;
+-(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders;
 
 @end
 

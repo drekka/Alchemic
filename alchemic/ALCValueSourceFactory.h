@@ -11,6 +11,8 @@
 @protocol ALCValueSource;
 @protocol ALCMacro;
 
+#import "ALCResolvable.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -61,8 +63,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Generates and returns a ALCValueSource instance based on the macros previously stored.
+ @param whenAvailable A block to execute when the ALCValueSource becomes available.
  */
--(id<ALCValueSource>) valueSource;
+-(id<ALCValueSource>) valueSourceWithWhenAvailable:(nullable ALCWhenAvailableBlock) whenAvailable;
 
 @end
 

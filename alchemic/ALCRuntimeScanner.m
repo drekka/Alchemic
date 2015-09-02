@@ -10,7 +10,7 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntimeScanner.h"
-#import "ALCObjectBuilder.h"
+#import "ALCClassBuilder.h"
 #import "ALCBuilder.h"
 #import "ALCInternalMacros.h"
 #import "ALCDependencyPostProcessor.h"
@@ -44,7 +44,7 @@
                 Method *classMethods = class_copyMethodList(object_getClass(aClass), &methodCount);
 
                 // Search the methods for registration methods.
-                ALCObjectBuilder *currentClassBuilder = nil;
+                ALCClassBuilder *currentClassBuilder = nil;
                 NSString *alchemicMethodPrefix = alc_toNSString(ALCHEMIC_PREFIX);
                 for (size_t idx = 0; idx < methodCount; ++idx) {
 
@@ -57,13 +57,13 @@
                     // If we are here then we have an alchemic method to process, so create a class builder for for the class.
                     if (currentClassBuilder == nil) {
                         STLog(aClass, @"Creating class builder for a %@ ...", NSStringFromClass(aClass));
-                        currentClassBuilder = [[ALCObjectBuilder alloc] initWithInstantiator:[[ALCClassInstantiator alloc] initWithObjectType:aClass]
-                                                                                    forClass:aClass ];
+                        id<ALCInstantiator> instantiator =[[ALCClassInstantiator alloc] initWithClass:aClass];
+                        currentClassBuilder = [[ALCClassBuilder alloc] initWithInstantiator:instantiator forClass:aClass];
                         [context addBuilderToModel:currentClassBuilder];
                     }
 
                     // Call the method, passing it the current class builder.
-                    ((void (*)(id, SEL, ALCObjectBuilder *))objc_msgSend)(aClass, sel, currentClassBuilder);
+                    ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(aClass, sel, currentClassBuilder);
 
                 }
 

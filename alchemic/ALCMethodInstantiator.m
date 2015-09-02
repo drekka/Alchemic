@@ -9,53 +9,73 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCMethodInstantiator.h"
-#import "ALCBuilder.h"
+#import "ALCClassBuilder.h"
 #import "NSObject+Builder.h"
 #import "ALCRuntime.h"
+#import "ALCAlchemic.h"
+#import "ALCContext.h"
 
 @implementation ALCMethodInstantiator {
-    id<ALCBuilder> _classBuilder;
-    SEL _methodSelector;
+    SEL _selector;
+    Class _returnType;
+    ALCClassBuilder *_returnTypeBuilder;
+    Class _class;
 }
 
 -(instancetype) init {
     return nil;
 }
 
--(instancetype) initWithClassBuilder:(id<ALCBuilder>) classBuilder
-                            selector:(SEL) methodSelector {
+-(instancetype) initWithClass:(Class) aClass
+                   returnType:(Class) returnType
+                     selector:(SEL) selector {
     self = [super init];
     if (self) {
-        _classBuilder = classBuilder;
-        _methodSelector = methodSelector;
+        _class = aClass;
+        _returnType = returnType;
+        _selector = selector;
     }
     return self;
 }
 
--(BOOL) available {
-    return _classBuilder.available;
+-(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
+                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
+
+    // Go find the class builder for the return type and get it to tell us when it's available.
+    STLog(_returnType, @"Searching for class builder for a %@", NSStringFromClass(_returnType));
+    _returnTypeBuilder = [[ALCAlchemic mainContext] builderForClass:_returnType];
+
+    // Verify the selector.
+    [ALCRuntime validateClass:_class selector:_selector];
+
+    STLog(_returnType, @"Resolving parent and return type builders ...");
+    if (_returnTypeBuilder == nil) {
+        // Make available if not waiting for the return type builder.
+        [self nowAvailable];
+    } else {
+        [_returnTypeBuilder executeWhenAvailable:^(id<ALCResolvable>  _Nonnull resolvable) {
+            [self nowAvailable];
+        }];
+        [_returnTypeBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+    }
 }
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack{
-    [ALCRuntime validateClass:_classBuilder.valueClass
-                     selector:_methodSelector];
-    STLog(_classBuilder.valueClass, @"Resolving parent %@", _classBuilder);
-    [_classBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+-(id) instantiateWithClassBuilder:(id<ALCBuilder>) classBuilder arguments:(NSArray *) arguments {
+    STLog(_returnType, @"Retrieving method's parent object ...");
+    id factoryObject = classBuilder.value;
+    id object = [factoryObject invokeSelector:_selector arguments:arguments];
+    if (_returnTypeBuilder != nil) {
+        [_returnTypeBuilder injectDependencies:object];
+    }
+    return object;
 }
 
 -(NSString *)builderName {
-    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(_classBuilder.valueClass), NSStringFromSelector(_methodSelector)];
-}
-
--(id) instantiateWithArguments:(NSArray *) arguments {
-    STLog(_classBuilder.valueClass, @"Retrieving method's parent object ...");
-    id factoryObject = _classBuilder.value;
-    return [factoryObject invokeSelector:_methodSelector arguments:arguments];
+    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(_class), NSStringFromSelector(_selector)];
 }
 
 -(NSString *)attributeText {
-    return [NSString stringWithFormat:@", using method [%@ %@]", NSStringFromClass(_classBuilder.valueClass), NSStringFromSelector(_methodSelector)];
+    return [NSString stringWithFormat:@", using method [%@ %@]", NSStringFromClass(_class), NSStringFromSelector(_selector)];
 }
 
 @end
