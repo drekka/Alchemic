@@ -42,8 +42,11 @@ hideInitializerImpl(init)
     // Go find the class builder for the return type and get it to tell us when it's available.
     STLog(_returnType, @"Searching for class builder for a %@", NSStringFromClass(_returnType));
     _returnTypeBuilder = [[ALCAlchemic mainContext] builderForClass:_returnType];
-    [self watchResolvable:_returnTypeBuilder];
-    [_returnTypeBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+    if (_returnTypeBuilder != nil) {
+        STLog(_returnType, @"Watching builder");
+        [self watchResolvable:_returnTypeBuilder];
+        [_returnTypeBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+    }
 
     // Verify the selector.
     [ALCRuntime validateClass:_class selector:_selector];

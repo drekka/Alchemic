@@ -26,14 +26,22 @@
     return self;
 }
 
--(void) watchResolvable:(id<ALCResolvable>) resolvable {
-    [_watchedResolvables addObject:resolvable];
+-(void) executeWhenAvailable:(ALCResolvableAvailableBlock) whenAvailableBlock {
+    if (self.available) {
+        whenAvailableBlock(self);
+    } else {
+        [_whenAvailableBlocks addObject:whenAvailableBlock];
+    }
+}
+
+-(void) watchResolvable:(ALCAbstractResolvable *) resolvable {
 
     // If the resolvable is not available then add a when available block to it.
+    // If it's already available we don't do anything.
     if (!resolvable.available) {
-
+        [_watchedResolvables addObject:resolvable];
         blockSelf;
-        [_whenAvailableBlocks addObject:^(id<ALCResolvable> availableResolvable) {
+        [resolvable executeWhenAvailable:^(id<ALCResolvable> availableResolvable) {
             [strongSelf->_watchedResolvables removeObject:availableResolvable];
             [strongSelf checkIfAvailable];
         }];
@@ -41,15 +49,25 @@
 }
 
 -(BOOL) available {
-    return [_whenAvailableBlocks count] == 0;
+    return _resolved && [_watchedResolvables count] == 0;
 }
 
 -(void) checkIfAvailable {
+
     if (self.available) {
-        [_whenAvailableBlocks enumerateObjectsUsingBlock:^(ALCResolvableAvailableBlock block, BOOL * stop) {
+
+        // Copy the set so that circular resolving doesn't go into a loop.
+        NSSet<ALCResolvableAvailableBlock> *blocks = _whenAvailableBlocks;
+
+        // Clear memory.
+        _whenAvailableBlocks = nil;
+        _watchedResolvables = nil;
+
+        // Now call the blocks.
+        [blocks enumerateObjectsUsingBlock:^(ALCResolvableAvailableBlock block, BOOL * stop) {
             block(self);
         }];
-        _whenAvailableBlocks = nil;
+
         [self didBecomeAvailable];
     }
 }

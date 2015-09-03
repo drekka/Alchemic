@@ -23,13 +23,13 @@
 -(void) testWithClass {
 	ALCArg *arg = [[ALCArg alloc] initWithType:[NSString class]];
     [arg addMacro:AcValue(@"abc")];
-	XCTAssertEqual([NSString class], [arg valueSourceWithWhenAvailable:NULL].valueClass);
+	XCTAssertEqual([NSString class], arg.valueSource.valueClass);
 }
 
 -(void) testArgWithTypeMacros {
 	ALCArg *arg = [ALCArg argWithType:[NSString class] macros:[ALCConstantValue constantValue:@5], nil];
-	XCTAssertEqual([NSString class], [arg valueSourceWithWhenAvailable:NULL].valueClass);
-	ALCConstantValueSource *valueSource = [arg valueSourceWithWhenAvailable:NULL];
+	XCTAssertEqual([NSString class], arg.valueSource.valueClass);
+	ALCConstantValueSource *valueSource = arg.valueSource;
 	XCTAssertEqualObjects(@5, [valueSource.values anyObject]);
 }
 

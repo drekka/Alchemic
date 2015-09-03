@@ -30,13 +30,6 @@
     _dependency = [[ALCDependency alloc] initWithValueSource:_mockValueSource];
 }
 
--(void) testResolveForwardsToValueSource {
-    NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet set];
-    NSMutableArray *stack = [NSMutableArray array];
-    [_dependency resolveWithPostProcessors:postProcessors dependencyStack:stack];
-    OCMVerify([_mockValueSource resolveWithPostProcessors:postProcessors dependencyStack:stack]);
-}
-
 -(void) testGetsValueFromValueSource {
     OCMExpect([(id<ALCValueSource>)_mockValueSource value]).andReturn(@"abc");
     id value = _dependency.value;
@@ -52,9 +45,7 @@
 }
 
 -(void) testDescription {
-    ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSNumber class]
-                                                                                 value:@5
-                                                                         whenAvailable:NULL];
+    ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
     ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSource];
     XCTAssertEqualObjects(@"[NSNumber]<NSSecureCoding><NSCopying> -> Constant: 5", [dependency description]);
 }

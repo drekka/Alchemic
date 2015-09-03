@@ -20,48 +20,40 @@
     id _mockValueSource;
 }
 
--(void) testNowAvailableCallsBlock {
-    __block BOOL blockCalled;
-    [self setUpAndResolveValueSourceClass:[NSObject class] toReturn:@[@"abc"] whenAvailable:^(ALCWhenAvailableBlockArgs){
-        blockCalled = YES;
-    }];
-    [_valueSource nowAvailable];
-}
-
 -(void) testNotAvailableWhenValueAccessed {
-    [self setUpWithValueSourceClass:[NSObject class] toReturn:@[@"abc"] whenAvailable:NULL];
-    XCTAssertThrowsSpecificNamed(_valueSource.value, NSException, @"AlchemicValueNotAvailable");
+    [self setUpWithValueSourceClass:[NSObject class] toReturn:@[]];
+    XCTAssertThrowsSpecificNamed(_valueSource.value, NSException, @"AlchemicNoValuesFound");
 }
 
 #pragma mark - Values
 
 -(void) testObjectValueWhenSingleValue {
-    [self setUpAndResolveValueSourceClass:[NSObject class] toReturn:@[@"abc"] whenAvailable:NULL];
+    [self setUpWithResolvedValueSourceClass:[NSObject class] toReturn:@[@"abc"]];
     id result = _valueSource.value;
     XCTAssertTrue([result isKindOfClass:[NSString class]]);
     XCTAssertEqualObjects(@"abc", result);
 }
 
 -(void) testObjectValueWhenMultipleValue {
-    [self setUpAndResolveValueSourceClass:[NSObject class] toReturn:@[@"abc", @"def"] whenAvailable:NULL];
+    [self setUpWithResolvedValueSourceClass:[NSObject class] toReturn:@[@"abc", @"def"]];
     id result = _valueSource.value;
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertTrue([result containsObject:@"abc"]);
     XCTAssertTrue([result containsObject:@"def"]);
 }
 
--(void) testObjectValueWhenNoValuesThrows {
-    [self setUpAndResolveValueSourceClass:[NSObject class] toReturn:@[] whenAvailable:NULL];
+-(void) setUpWithResolvedValueSourceClass {
+    [self setUpWithResolvedValueSourceClass:[NSObject class] toReturn:@[]];
     XCTAssertThrowsSpecificNamed(_valueSource.value, NSException, @"AlchemicNoValuesFound");
 }
 
 -(void) testStringValueWhenMultipleValuesThrows {
-    [self setUpAndResolveValueSourceClass:[NSString class] toReturn:@[@"abc", @"def"] whenAvailable:NULL];
+    [self setUpWithResolvedValueSourceClass:[NSString class] toReturn:@[@"abc", @"def"]];
     XCTAssertThrowsSpecificNamed(_valueSource.value, NSException, @"AlchemicTooManyValues");
 }
 
 -(void) testArrayValueWhenSingleValue {
-    [self setUpAndResolveValueSourceClass:[NSArray class] toReturn:@[@"abc"] whenAvailable:NULL];
+    [self setUpWithResolvedValueSourceClass:[NSArray class] toReturn:@[@"abc"]];
     id result = _valueSource.value;
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(1u, [result count]);
@@ -69,14 +61,14 @@
 }
 
 -(void) testArrayValueWhenNoValuesThrows {
-    [self setUpAndResolveValueSourceClass:[NSArray class] toReturn:@[] whenAvailable:NULL];
+    [self setUpWithResolvedValueSourceClass:[NSArray class] toReturn:@[]];
     id result = _valueSource.value;
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(0u, [result count]);
 }
 
 -(void) testArrayValueWhenMultipleValuesThrows {
-    [self setUpAndResolveValueSourceClass:[NSArray class] toReturn:@[@"abc", @"def"] whenAvailable:NULL];
+    [self setUpWithResolvedValueSourceClass:[NSArray class] toReturn:@[@"abc", @"def"]];
     id result = _valueSource.value;
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(2u, [result count]);
@@ -85,7 +77,7 @@
 }
 
 -(void) testArrayValueWhenSingleValueIsArray {
-    [self setUpAndResolveValueSourceClass:[NSArray class] toReturn:@[@[@"abc"]] whenAvailable:NULL];
+    [self setUpWithResolvedValueSourceClass:[NSArray class] toReturn:@[@[@"abc"]]];
     id result = _valueSource.value;
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(1u, [result count]);
@@ -94,30 +86,21 @@
 
 #pragma mark - Override points
 
--(void) testResolveWithPostProcessors {
-    [self setUpWithValueSourceClass:[NSString class] toReturn:@[] whenAvailable:NULL];
-    XCTAssertThrowsSpecificNamed([_valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]], NSException, @"NSInvalidArgumentException");
-}
-
 -(void) testValues {
-    ALCAbstractValueSource *abstractSource = [[ALCAbstractValueSource alloc] initWithType:[NSObject class] whenAvailable:NULL];
-    XCTAssertThrowsSpecificNamed(abstractSource.values, NSException, @"NSInvalidArgumentException");
+    ALCAbstractValueSource *abstractSource = [[ALCAbstractValueSource alloc] initWithType:[NSObject class]];
+    XCTAssertThrowsSpecificNamed(abstractSource.values, NSException, @"NSInternalInconsistencyException");
 }
 
 #pragma mark - Internal
 
--(void) setUpAndResolveValueSourceClass:(Class) vsClass
-                               toReturn:(NSArray *) values
-                          whenAvailable:(ALCWhenAvailableBlock) whenAvailable {
-    [self setUpWithValueSourceClass:vsClass toReturn:values whenAvailable:whenAvailable];
-    [_valueSource nowAvailable];
+-(void) setUpWithResolvedValueSourceClass:(Class) vsClass toReturn:(NSArray *) values {
+    [self setUpWithValueSourceClass:vsClass toReturn:values];
+    [_valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 }
 
--(void) setUpWithValueSourceClass:(Class) vsClass
-                         toReturn:(NSArray *) values
-                    whenAvailable:(ALCWhenAvailableBlock) whenAvailable {
-    _valueSource = [[ALCAbstractValueSource alloc] initWithType:vsClass
-                                                  whenAvailable:whenAvailable];
+-(void) setUpWithValueSourceClass:(Class) vsClass toReturn:(NSArray *) values {
+    _valueSource = [[ALCAbstractValueSource alloc] initWithType:vsClass];
+    [_valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
     _mockValueSource = OCMPartialMock(_valueSource);
     NSSet *valueSet = [NSSet setWithArray:values];
     OCMStub([(ALCAbstractValueSource *)_mockValueSource values]).andReturn(valueSet);

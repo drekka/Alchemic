@@ -8,7 +8,6 @@
 
 @import XCTest;
 #import "ALCConstantValueSource.h"
-#import "ALCResolvable.h"
 
 @interface ALCConstantValueSourceTests : XCTestCase
 
@@ -17,25 +16,13 @@
 @implementation ALCConstantValueSourceTests
 
 -(void) testStoresValues {
-    __block BOOL blockCalled;
-	ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class]
-                                                                            value:@5
-                                                                    whenAvailable:^(ALCWhenAvailableBlockArgs){
-                                                                        blockCalled = YES;
-                                                                    }];
+	ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
 	XCTAssertEqualObjects(@5, [source.values anyObject]);
-    XCTAssertFalse(blockCalled);
 }
 
 -(void) testResolves {
-    __block BOOL blockCalled;
-    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class]
-                                                                            value:@5
-                                                                    whenAvailable:^(ALCWhenAvailableBlockArgs){
-                                                                        blockCalled = YES;
-                                                                    }];
+    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
 	[source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
-    XCTAssertTrue(blockCalled);
 }
 
 @end

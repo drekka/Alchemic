@@ -43,11 +43,11 @@
 
     _dependenciesInjected = NO;
     Ivar stringVar = class_getInstanceVariable([self class], "_stringVar");
-    ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSString class] value:@"abc" whenAvailable:NULL];
+    ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSString class] value:@"abc"];
+    [valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithVariable:stringVar valueSource:valueSource];
-    [dependency resolveWithPostProcessors:[NSSet set] dependencyStack:[[NSMutableArray alloc] init]];
 
-    [self injectWithDependencies:@[dependency]];
+    [self injectWithDependencies:[NSSet setWithObject:dependency]];
 
     XCTAssertEqualObjects(@"abc", _stringVar);
     XCTAssertTrue(_dependenciesInjected);

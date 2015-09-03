@@ -24,17 +24,6 @@ typedef void (^ALCResolvableAvailableBlock) (ALCResolvableAvailableBlockArgs);
 @protocol ALCResolvable <NSObject>
 
 /**
- Called after resolving has occured. 
- 
- @discussion This method is part of the code which establishes if an object can be auto created. If it returns YES then the resolvable can be instantiated as part of fulfilling an objects dependencies.
-
- @param resolvableAvailable If the resolvable is not currently available, then this block is copied and executed when the resolvable is available.
-
- @return YES if the resolvable is available, NO otherwise.
- */
-@property (nonatomic, assign, readonly) BOOL available;
-
-/**
  Called during model setup to resolve dependencies and validate the model.
 
  @discussion Normally validation is about detecting circular dependencies. This is done by checking this ALCResolvable against the dependencyStack. If it is present then we have looped around and have a circular dependency.

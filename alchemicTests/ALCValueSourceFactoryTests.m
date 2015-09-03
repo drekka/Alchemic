@@ -21,7 +21,7 @@
 -(void) testValueSourceForConstant {
     ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
 	[factory addMacro:AcValue(@5)];
-	id<ALCValueSource> valueSource = [factory valueSourceWithWhenAvailable:NULL];
+	id<ALCValueSource> valueSource = factory.valueSource;
     [valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 	XCTAssertTrue([valueSource isKindOfClass:[ALCConstantValueSource class]]);
 	XCTAssertEqualObjects(@5, valueSource.value);
@@ -30,7 +30,7 @@
 -(void) testValueSourceForModel {
     ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
 	[factory addMacro:AcName(@"abc")];
-	id<ALCValueSource> valueSource = [factory valueSourceWithWhenAvailable:NULL];
+	id<ALCValueSource> valueSource = factory.valueSource;
 	XCTAssertTrue([valueSource isKindOfClass:[ALCModelValueSource class]]);
 	NSSet<id<ALCModelSearchExpression>> *searchExpressions = ((ALCModelValueSource *)valueSource).searchExpressions;
 	XCTAssertTrue([searchExpressions containsObject:AcName(@"abc")]);

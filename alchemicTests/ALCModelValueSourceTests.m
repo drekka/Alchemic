@@ -25,7 +25,6 @@
 	ALCModelValueSource *_source;
 	NSSet<id<ALCModelSearchExpression>> * _searchExpressions;
     ALCClassBuilder *_builder;
-    __block BOOL _whenAvailableCalled;
 }
 
 -(void) setUp {
@@ -34,13 +33,8 @@
 	[self setupMockContext];
 
 	_searchExpressions = [NSSet setWithObject:AcName(@"abc")];
-    _whenAvailableCalled = NO;
     _source = [[ALCModelValueSource alloc] initWithType:[SimpleObject class]
-                                      searchExpressions:_searchExpressions
-                                          whenAvailable:^(id<ALCResolvable> resolvable){
-                                              self->_whenAvailableCalled = YES;
-                                          }];
-
+                                      searchExpressions:_searchExpressions];
     _builder = [self simpleBuilderForClass:[SimpleObject class]];
     [_builder configure];
 
@@ -51,7 +45,6 @@
 -(void) testResolveTriggersBuilderResolveAndCallback {
     [self stubMockContextToReturnBuilders:@[_builder]];
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
-    XCTAssertTrue(_whenAvailableCalled);
 }
 
 -(void) testResolveAsUnavailableIfBuilderNotAvailable {
@@ -62,7 +55,6 @@
 
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 
-    XCTAssertFalse(_whenAvailableCalled);
 }
 
 -(void) testExecutesCallbackWhenBuilderBecomesAvailable {
@@ -73,10 +65,7 @@
 
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 
-    XCTAssertFalse(_whenAvailableCalled);
-
     builder2.value = @"abc";
-    XCTAssertTrue(_whenAvailableCalled);
 
 }
 
@@ -92,13 +81,10 @@
 
     [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
 
-    XCTAssertFalse(_whenAvailableCalled);
 
     classBuilder1.value = @"abc";
-    XCTAssertFalse(_whenAvailableCalled);
 
     classBuilder2.value = @"def";
-    XCTAssertTrue(_whenAvailableCalled);
 
 }
 
