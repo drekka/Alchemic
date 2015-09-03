@@ -7,19 +7,16 @@
 //
 
 @import Foundation;
-#import "ALCAbstractInstantiator.h"
+#import "ALCAbstractResolvable.h"
+#import "ALCInternalMacros.h"
+#import "ALCInstantiator.h"
 
 /**
  Strategory for building objects defines simply as classes.
  */
-@interface ALCClassInstantiator : ALCAbstractInstantiator
+@interface ALCClassInstantiator : ALCAbstractResolvable<ALCInstantiator>
 
-/**
- Do not use.
-
- @return An instance of this class.
- */
--(instancetype) init NS_UNAVAILABLE;
+hideInitializer(init);
 
 /**
  Default initializer.

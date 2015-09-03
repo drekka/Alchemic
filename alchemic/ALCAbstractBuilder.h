@@ -8,6 +8,9 @@
 
 @import Foundation;
 #import "ALCBuilder.h"
+#import "ALCAbstractResolvable.h"
+#import "ALCInternalMacros.h"
+
 @protocol ALCValueStorage;
 @protocol ALCInstantiator;
 
@@ -19,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion This class uses a variety of strategy classes to implement a variety of builder functions.
  */
 
-@interface ALCAbstractBuilder : NSObject<ALCBuilder>
+@interface ALCAbstractBuilder : ALCAbstractResolvable<ALCBuilder>
 
 /**
  Provides access to the instantiator used to build the objects that the builder represents.
@@ -27,11 +30,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) id<ALCInstantiator> instantiator;
 
 /**
- Do not use.
-
- @return An instance of this class.
+ Return a set of flags for configuring what macros are accepted by the builder.
  */
--(instancetype) init NS_UNAVAILABLE;
+@property (nonatomic, assign, readonly) NSUInteger macroProcessorFlags;
+
+hideInitializer(init);
 
 /**
  defaul initializer.
@@ -44,37 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(instancetype) initWithInstantiator:(id<ALCInstantiator>) instantiator
                             forClass:(Class) aClass NS_DESIGNATED_INITIALIZER;
-
-/**
- Call when the builder wants to check if it can instantiate.
- */
--(void) autoBoot;
-
-#pragma mark - Override methods
-
-/**
- Return a set of flags for configuring what macros are accepted by the builder.
- */
-@property (nonatomic, assign, readonly) NSUInteger macroProcessorFlags;
-
-/**
- Return YES if the builder can be used. 
- 
- @discussion Usually this is always YES, but may be NO if there are dependencies that are waiting on external objects.
- */
-@property (nonatomic, assign, readonly) BOOL builderReady;
-
-/**
- Called when the builder has not already been resolved.
-
- @discussion Override to resolve dependencies for the builder.
-
- @param postProcessors  Instances of ALCDependencyPostProcessor used for filtering the list of candidate builders for any given dependency.
- @param dependencyStack A stack of already resolved builders representing a path from the first builder resolved. This is used for circular dependency checking.
-
- */
--(void)resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
-                             dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack;
 
 /**
  Called when we need to instantiate an object.

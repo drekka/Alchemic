@@ -21,8 +21,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCClassBuilder {
-    NSMutableSet<ALCDependency *> *_dependencies;
-    NSMutableSet<id<ALCResolvable>> *_unavailableDependencies;
+    NSMutableSet<ALCVariableDependency *> *_dependencies;
 }
 
 #pragma mark - Overrides
@@ -40,44 +39,20 @@ NS_ASSUME_NONNULL_BEGIN
     return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosExternal;
 }
 
--(void) autoBoot {
-
-    if ([_unavailableDependencies count] > 0) {
-        return;
-    }
-
-    // Clear the storage.
-    _unavailableDependencies = nil;
-
-    [super autoBoot];
-}
-
 -(void)resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
                              dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
 
-    // Copy the instantiator and dependencies to the unresolved dependencies set so we tick them off by removing them.
-    // Note we need to add the value sources as that is what will be returned by the callbacks.
-    _unavailableDependencies = [NSMutableSet setWithCapacity:[_dependencies count]];
-    [_dependencies enumerateObjectsUsingBlock:^(ALCDependency * dependency, BOOL * stop) {
-        [self->_unavailableDependencies addObject:dependency.valueSource];
-    }];
+    [super resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 
-    // We don't add ourselves to the stack here because variable dependencies are injected at a later stage.
+    // Variable dependencies are regarded as a new dependency stack because they are not immediately required when processing objects.
     for (ALCDependency *dependency in _dependencies) {
         STLog(self.valueClass, @"Resolving %@", dependency);
-        [dependency resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+        [dependency.valueSource resolveWithPostProcessors:postProcessors dependencyStack:[NSMutableArray array]];
     }
-
-    // Call super last so that dependencie checking is done when instantiators, etc come online.
-    [super resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 }
 
 -(id)instantiateObject {
     return [self.instantiator instantiateWithClassBuilder:self arguments:nil];
-}
-
--(BOOL)builderReady {
-    return super.builderReady && [_unavailableDependencies count] == 0;
 }
 
 -(void)setValue:(id)value {
@@ -97,20 +72,16 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) addVariableInjection:(Ivar) variable
           valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory {
 
-    blockSelf;
-    id<ALCValueSource> valueSource = [valueSourceFactory valueSourceWithWhenAvailable:^(id<ALCResolvable> resolvable) {
-        // Remove the dependency from the unavaulable list.
-        [strongSelf->_unavailableDependencies removeObject:resolvable];
-        [strongSelf autoBoot];
-    }];
+    id<ALCValueSource> valueSource = valueSourceFactory.valueSource;
     ALCVariableDependency *dep = [[ALCVariableDependency alloc] initWithVariable:variable valueSource:valueSource];
 
     STLog(self.valueClass, @"Adding variable dependency %@.%@", NSStringFromClass(self.valueClass), dep);
     [_dependencies addObject:dep];
+    [self watchResolvable:valueSource];
 }
 
 -(void)injectDependencies:(id)object {
-    [object injectWithDependencies:(NSArray<ALCVariableDependency *> *)_dependencies];
+    [object injectWithDependencies:_dependencies];
 }
 
 @end

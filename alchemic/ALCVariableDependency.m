@@ -16,9 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCVariableDependency
 
--(instancetype) initWithValueSource:(id<ALCValueSource>) valueSource {
-    return nil;
-}
+hideInitializerImpl(initWithValueSource:(id<ALCValueSource>) valueSource)
 
 -(instancetype) initWithVariable:(Ivar)variable
                      valueSource:(id<ALCValueSource>)valueSource {
@@ -27,13 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
         _variable = variable;
     }
     return self;
-}
-
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-    // Variable dependencies start a new stack because they are injected after instantiation and therefore break any possible loops.
-    STLog(self.valueClass, @"Starting new stack for circular dependency detection");
-    [super resolveWithPostProcessors:postProcessors dependencyStack:[NSMutableArray array]];
 }
 
 -(void) injectInto:(id) object {

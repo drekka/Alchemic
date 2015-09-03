@@ -8,6 +8,7 @@
 
 #import <Alchemic/ALCDependency.h>
 @import ObjectiveC;
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,17 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly) Ivar variable;
 
-/**
- Default initializer.
-
- @discussion Do not use.
-
- @param valueClass  The class of the result value.
- @param valueSource The ALCArgument that will supply values.
-
- @return An instance of this class.
- */
--(instancetype) initWithValueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
+hideInitializer(initWithValueSource:(id<ALCValueSource>) valueSource);
 
 /**
  Default initializer.

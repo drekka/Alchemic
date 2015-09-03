@@ -7,18 +7,13 @@
 //
 
 @import Foundation;
-#import "ALCResolvable.h"
 @class ALCClassBuilder;
+#import "ALCResolvable.h"
 
 /**
  These objects are used to create instances and handle injections for a builder.
  */
 @protocol ALCInstantiator <ALCResolvable>
-
-/**
- If set, this block is called when the instantiators dependencies come online.
- */
-@property (nonatomic, copy) ALCWhenAvailableBlock whenAvailable;
 
 /**
  Used when builders are describing themselves.

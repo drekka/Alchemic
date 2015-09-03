@@ -60,8 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(id<ALCValueSource>) valueSourceAtIndex:(NSUInteger) index whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailable {
-    return [_valueSourceFactories[index] valueSourceWithWhenAvailable:whenAvailable];
+-(id<ALCValueSource>) valueSourceAtIndex:(NSUInteger) index {
+    return _valueSourceFactories[index].valueSource;
 }
 
 -(NSUInteger) valueSourceCount {

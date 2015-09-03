@@ -14,9 +14,7 @@
     Class _objectClass;
 }
 
--(instancetype) init {
-    return nil;
-}
+hideInitializerImpl(init)
 
 -(instancetype) initWithClass:(Class) aClass {
     self = [super init];
@@ -24,11 +22,6 @@
         _objectClass = aClass;
     }
     return self;
-}
-
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
-    [self nowAvailable];
 }
 
 -(NSString *) builderName {

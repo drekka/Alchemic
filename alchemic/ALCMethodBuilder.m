@@ -24,15 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodBuilder {
     NSMutableArray<ALCDependency *> *_arguments;
-    NSMutableSet<id<ALCResolvable>> *_unavailableArguments;
     ALCClassBuilder *_parentBuilder;
     BOOL _parentBuilderReady;
 }
 
--(instancetype) initWithInstantiator:(id<ALCInstantiator>) instantiator
-                            forClass:(Class) aClass {
-    return nil;
-}
+hideInitializerImpl(initWithInstantiator:(id<ALCInstantiator>) instantiator forClass:(Class) aClass)
 
 -(instancetype) initWithInstantiator:(id<ALCInstantiator>) instantiator
                             forClass:(Class) aClass
@@ -41,11 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (self) {
         _arguments = [NSMutableArray array];
         _parentBuilder = parentBuilder;
-        blockSelf;
-        [_parentBuilder executeWhenAvailable:^(id<ALCResolvable>  _Nonnull resolvable) {
-            strongSelf->_parentBuilderReady = YES;
-            [self autoBoot];
-        }];
+        [self watchResolvable:_parentBuilder];
     }
     return self;
 }
@@ -63,37 +55,14 @@ NS_ASSUME_NONNULL_BEGIN
     // Any dependencies added to this builder macro processor will contain argument data for methods.
     NSUInteger nbrArgs = [self.macroProcessor valueSourceCount];
     if (nbrArgs > 0) {
-        blockSelf;
         for (NSUInteger i = 0; i < nbrArgs; i++) {
-            id<ALCValueSource> arg = [self.macroProcessor valueSourceAtIndex:i
-                                                               whenAvailable:^(id<ALCResolvable> resolvable) {
-                                                                   // Remove the dependency from the unavailable list.
-                                                                   [strongSelf->_unavailableArguments removeObject:resolvable];
-                                                                   [strongSelf autoBoot];
-                                                               }];
-            ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:arg];
+            id<ALCValueSource> valueSource = [self.macroProcessor valueSourceAtIndex:i];
+            ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSource];
             [_arguments addObject:dependency];
+            [self watchResolvable:valueSource];
         }
     }
 
-}
-
--(void) autoBoot {
-
-    if ([_unavailableArguments count] > 0) {
-        return;
-    }
-
-    // Clear the storage.
-    _unavailableArguments = nil;
-
-    [super autoBoot];
-}
-
--(BOOL)builderReady {
-    return super.builderReady
-    && _parentBuilderReady
-    && [_unavailableArguments count] == 0;
 }
 
 -(void)setValue:(id)value {
@@ -111,26 +80,20 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
                              dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
 
-    // Copy the instantiator and dependencies to the unresolved dependencies set so we tick them off by removing them.
-    // Note we are copying th value sources as that is what is checked.
-    _unavailableArguments = [NSMutableSet setWithCapacity:[_arguments count]];
-    [_arguments enumerateObjectsUsingBlock:^(ALCDependency * argument, NSUInteger idx, BOOL * stop) {
-        [self->_unavailableArguments addObject:argument.valueSource];
-    }];
+    // Call super last so that everything is setup for dependency checking.
+    [super resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+
+    // Make sure that the parent is resolved.
+    [_parentBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 
     // Add ourselves to the stack and resolve so we can detect circular dependencies through arguments when creating objects.
     [dependencyStack addObject:self];
     for (ALCDependency *argument in _arguments) {
         STLog(self.valueClass, @"Resolving %@", argument);
-        [argument resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+        [argument.valueSource resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
     }
     [dependencyStack removeObject:self];
 
-    // Make sure that the parent is resolved.
-    [_parentBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
-
-    // Call super last so that everything is setup for dependency checking.
-    [super resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 }
 
 -(id)instantiateObject {

@@ -12,6 +12,7 @@
 @protocol ALCMacro;
 
 #import "ALCResolvable.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,13 +33,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) Class valueType;
 
 /**
- Default initializer.
-
- @discussion Do not use.
-
- @return An instance of this class.
+ Returns a values source based on the factories state.
  */
--(instancetype) init NS_UNAVAILABLE;
+@property (nonatomic, strong, readonly) id<ALCValueSource> valueSource;
+
+/**
+ The macros that have been stored in the factory.
+ */
+@property(nonatomic, strong, readonly) NSSet<id<ALCMacro>> *macros;
+
+hideInitializer(init);
 
 /**
  Default initializer
@@ -50,22 +54,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) initWithType:(Class) valueType NS_DESIGNATED_INITIALIZER;
 
 /**
- The macros that have been stored in the factory.
- */
-@property(nonatomic, strong, readonly) NSSet<id<ALCMacro>> *macros;
-
-/**
  Add a macro to the set of macros.
  
  @param macro The macro to be added.
  */
 -(void) addMacro:(id<ALCMacro>) macro;
-
-/**
- Generates and returns a ALCValueSource instance based on the macros previously stored.
- @param whenAvailable A block to execute when the ALCValueSource becomes available.
- */
--(id<ALCValueSource>) valueSourceWithWhenAvailable:(nullable ALCWhenAvailableBlock) whenAvailable;
 
 @end
 

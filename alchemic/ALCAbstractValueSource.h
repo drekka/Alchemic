@@ -8,6 +8,8 @@
 
 @import Foundation;
 #import "ALCValueSource.h"
+#import "ALCAbstractResolvable.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @discussion An argumnet is an object that can provide one or more values to satisfy a dependency.
  */
-@interface ALCAbstractValueSource : NSObject<ALCValueSource>
+@interface ALCAbstractValueSource : ALCAbstractResolvable<ALCValueSource>
 
 /**
  The values to be returned.
@@ -27,27 +29,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly) NSSet<id> *values;
 
-/**
- Default initializer.
- 
- @discussion Do not use.
-
- @return An instance of this class.
- */
--(instancetype) init NS_UNAVAILABLE;
+hideInitializer(init);
 
 /**
  Default initializer
 
  @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.
- @param whenAvailableBlock A block to call when the value source is available.
+
  @return And instance of this class.
  */
--(instancetype) initWithType:(Class) argumentType whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailable NS_DESIGNATED_INITIALIZER;
-/**
- Call to execute the call back block.
- */
--(void) nowAvailable;
+-(instancetype) initWithType:(Class) argumentType NS_DESIGNATED_INITIALIZER;
 
 @end
 

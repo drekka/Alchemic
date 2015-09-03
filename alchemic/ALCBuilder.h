@@ -15,8 +15,8 @@
 @protocol ALCValueSource;
 @class ALCBuilderDependencyManager;
 
-#import "ALCResolvable.h"
 #import "ALCValue.h"
+#import "ALCResolvable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -66,13 +66,6 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion It's job is to finish the configuartion of the builder based on what the macroProcessor has been passed.
  */
 -(void) configure;
-
-/**
- Registers a block to call when the builder is available. 
-
- @param whenAvailable The block to execute, passing a reference to the builder.
- */
--(void) executeWhenAvailable:(ALCWhenAvailableBlock) whenAvailable;
 
 @end
 

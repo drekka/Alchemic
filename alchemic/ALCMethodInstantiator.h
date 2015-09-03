@@ -6,20 +6,17 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractInstantiator.h"
+#import "ALCAbstractResolvable.h"
+#import "ALCInstantiator.h"
+#import "ALCinternalMacros.h"
 @protocol ALCBuilder;
 
 /**
  Class that can create objects using a method.
  */
-@interface ALCMethodInstantiator : ALCAbstractInstantiator
+@interface ALCMethodInstantiator : ALCAbstractResolvable<ALCInstantiator>
 
-/**
- Do not use.
-
- @return An instance of the instantiator.
- */
--(instancetype) init NS_UNAVAILABLE;
+hideInitializer(init);
 
 /**
  Default initializer.

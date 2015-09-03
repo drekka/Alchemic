@@ -37,7 +37,7 @@
     return returnObj;
 }
 
--(void) injectWithDependencies:(NSArray<ALCVariableDependency *> *) dependencies {
+-(void) injectWithDependencies:(NSSet<ALCVariableDependency *> *) dependencies {
 
     STLog([self class], @"Injecting %lu dependencies into a %@ instance", [dependencies count], NSStringFromClass([self class]));
     for (ALCVariableDependency *dependency in dependencies) {

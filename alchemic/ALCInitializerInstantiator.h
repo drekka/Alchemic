@@ -6,19 +6,16 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractInstantiator.h"
+#import "ALCAbstractResolvable.h"
+#import "ALCInstantiator.h"
+#import "ALCInternalMacros.h"
 
 /**
  Creates an object using a custom initializer.
  */
-@interface ALCInitializerInstantiator : ALCAbstractInstantiator
+@interface ALCInitializerInstantiator : ALCAbstractResolvable<ALCInstantiator>
 
-/**
- Do not use.
-
- @return An instance of the instantiator.
- */
--(instancetype) init NS_UNAVAILABLE;
+hideInitializer(init);
 
 /**
  Default initializer.

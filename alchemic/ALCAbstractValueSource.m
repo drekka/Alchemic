@@ -7,23 +7,18 @@
 //
 
 #import "ALCAbstractValueSource.h"
+#import "ALCInternalMacros.h"
 
-@implementation ALCAbstractValueSource {
-    ALCWhenAvailableBlock _whenAvailable;
-    BOOL _available;
-}
+@implementation ALCAbstractValueSource
 
 @synthesize valueClass = _valueClass;
 
--(instancetype) init {
-    return nil;
-}
+hideInitializerImpl(init)
 
--(instancetype) initWithType:(Class)argumentType whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailable {
+-(instancetype) initWithType:(Class)argumentType {
     self = [super init];
     if (self) {
         _valueClass = argumentType;
-        _whenAvailable = [whenAvailable copy];
     }
     return self;
 }
@@ -33,7 +28,7 @@
 -(id) value {
 
     // Check the state
-    if (!_available) {
+    if (!self.available) {
         @throw [NSException exceptionWithName:@"AlchemicValueNotAvailable"
                                        reason:@"Cannot access a value source's value when it is not available."
                                      userInfo:nil];
@@ -86,25 +81,8 @@
 
 #pragma mark - Override points
 
--(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors
-                 dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-    [self doesNotRecognizeSelector:_cmd];
-}
-
 -(NSSet<id> *)values {
-	[self doesNotRecognizeSelector:_cmd];
-	return nil;
+	methodNotImplementedObject;
 }
-
-#pragma mark - Tasks
-
--(void) nowAvailable {
-    _available = YES;
-    if (_whenAvailable != NULL) {
-        _whenAvailable(self);
-        _whenAvailable = NULL;
-    }
-}
-
 
 @end

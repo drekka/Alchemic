@@ -18,9 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCDependency
 
--(instancetype) init {
-    return nil;
-}
+hideInitializerImpl(init)
 
 -(instancetype) initWithValueSource:(id<ALCValueSource>) valueSource {
     self = [super init];
@@ -28,11 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
         _valueSource = valueSource;
     }
     return self;
-}
-
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-    [_valueSource resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 }
 
 -(id) value {

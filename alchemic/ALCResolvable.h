@@ -13,17 +13,26 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Defines a block type used when making callbacks to objects to indicates that a resolvable is available.
-
- @param ALCWhenAvailableBlockArgs A reference to the resolvable that is now available.
+ Defines a block used when making callbacks to objects to indicates that a resolvable can now be instantiated.
  */
-#define ALCWhenAvailableBlockArgs id<ALCResolvable> resolvable
-typedef void (^ALCWhenAvailableBlock) (ALCWhenAvailableBlockArgs);
+#define ALCResolvableAvailableBlockArgs id<ALCResolvable> resolvable
+typedef void (^ALCResolvableAvailableBlock) (ALCResolvableAvailableBlockArgs);
 
 /**
  Classes that are resolvable can resolve and return values.
  */
 @protocol ALCResolvable <NSObject>
+
+/**
+ Called after resolving has occured. 
+ 
+ @discussion This method is part of the code which establishes if an object can be auto created. If it returns YES then the resolvable can be instantiated as part of fulfilling an objects dependencies.
+
+ @param resolvableAvailable If the resolvable is not currently available, then this block is copied and executed when the resolvable is available.
+
+ @return YES if the resolvable is available, NO otherwise.
+ */
+@property (nonatomic, assign, readonly) BOOL available;
 
 /**
  Called during model setup to resolve dependencies and validate the model.

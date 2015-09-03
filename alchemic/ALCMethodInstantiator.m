@@ -22,9 +22,7 @@
     Class _class;
 }
 
--(instancetype) init {
-    return nil;
-}
+hideInitializerImpl(init)
 
 -(instancetype) initWithClass:(Class) aClass
                    returnType:(Class) returnType
@@ -38,26 +36,17 @@
     return self;
 }
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
+-(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
                   dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
 
     // Go find the class builder for the return type and get it to tell us when it's available.
     STLog(_returnType, @"Searching for class builder for a %@", NSStringFromClass(_returnType));
     _returnTypeBuilder = [[ALCAlchemic mainContext] builderForClass:_returnType];
+    [self watchResolvable:_returnTypeBuilder];
+    [_returnTypeBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 
     // Verify the selector.
     [ALCRuntime validateClass:_class selector:_selector];
-
-    STLog(_returnType, @"Resolving parent and return type builders ...");
-    if (_returnTypeBuilder == nil) {
-        // Make available if not waiting for the return type builder.
-        [self nowAvailable];
-    } else {
-        [_returnTypeBuilder executeWhenAvailable:^(id<ALCResolvable>  _Nonnull resolvable) {
-            [self nowAvailable];
-        }];
-        [_returnTypeBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
-    }
 }
 
 -(id) instantiateWithClassBuilder:(id<ALCBuilder>) classBuilder arguments:(NSArray *) arguments {

@@ -31,7 +31,7 @@
 
  @param object The object to be injected.
  */
--(void) injectWithDependencies:(NSArray<ALCVariableDependency *> *) dependencies;
+-(void) injectWithDependencies:(NSSet<ALCVariableDependency *> *) dependencies;
 
 /// @name Injecting
 

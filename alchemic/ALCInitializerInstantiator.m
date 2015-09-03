@@ -19,9 +19,7 @@
     Class _class;
 }
 
--(instancetype) init {
-    return nil;
-}
+hideInitializerImpl(init)
 
 -(instancetype) initWithClass:(Class) aClass
                   initializer:(SEL) initializer {
@@ -33,12 +31,10 @@
     return self;
 }
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                  dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
-
-    // Verify the selector.
+-(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
+                              dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
+    [super resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
     [ALCRuntime validateClass:_class selector:_initializer];
-    [self nowAvailable];
 }
 
 -(NSString *)builderName {

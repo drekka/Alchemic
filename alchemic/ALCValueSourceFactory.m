@@ -19,9 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCValueSourceFactory
 
--(instancetype) init {
-    return nil;
-}
+hideInitializerImpl(init)
 
 -(instancetype) initWithType:(Class)valueType {
     self = [super init];
@@ -32,12 +30,12 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(id<ALCValueSource>) valueSourceWithWhenAvailable:(nullable ALCWhenAvailableBlock) whenAvailable {
+-(id<ALCValueSource>) valueSource {
     id macro =_macros.anyObject;
     if ([macro isKindOfClass:[ALCConstantValue class]]) {
-        return [[ALCConstantValueSource alloc] initWithType:_valueType value:((ALCConstantValue *)macro).value whenAvailable:whenAvailable];
+        return [[ALCConstantValueSource alloc] initWithType:_valueType value:((ALCConstantValue *)macro).value];
     }
-    return [[ALCModelValueSource alloc] initWithType:_valueType searchExpressions:(NSSet<id<ALCModelSearchExpression>> *)_macros whenAvailable:whenAvailable];
+    return [[ALCModelValueSource alloc] initWithType:_valueType searchExpressions:(NSSet<id<ALCModelSearchExpression>> *)_macros];
 }
 
 -(void) addMacro:(id<ALCMacro>) macro {

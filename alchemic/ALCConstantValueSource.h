@@ -19,31 +19,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCConstantValueSource : ALCAbstractValueSource
 
-/**
- Default initializer.
- 
- @discussion Do not use.
-
- @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.
- @param whenAvailableBlock A block to call when the value source is available.
-
- @return An instance of this class.
- */
--(instancetype) initWithType:(Class)argumentType
-               whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailableBlock NS_UNAVAILABLE;
+hideInitializer(initWithType:(Class)argumentType);
 
 /**
  Default initializer.
 
  @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.
  @param value The value that will be the constant value.
- @param whenAvailableBlock A block to call when the value source is available.
 
  @return An instance of this class.
  */
 -(instancetype) initWithType:(Class)argumentType
-                       value:(id) value
-               whenAvailable:(nullable ALCWhenAvailableBlock) whenAvailableBlock NS_DESIGNATED_INITIALIZER;
+                       value:(id) value NS_DESIGNATED_INITIALIZER;
 
 @end
 

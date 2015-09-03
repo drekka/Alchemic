@@ -158,10 +158,10 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     [_model addBuilder:builder];
 }
 
--(id<ALCBuilder>) builderForClass:(Class) aClass {
+-(ALCClassBuilder *) builderForClass:(Class) aClass {
     NSSet<id<ALCBuilder>> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:[ALCClass withClass:aClass]]];
-    builders = [_model classBuildersFromBuilders:builders];
-    return [builders anyObject];
+    NSSet<ALCClassBuilder *> *classBuilders = [_model classBuildersFromBuilders:builders];
+    return [classBuilders anyObject];
 }
 
 -(void) executeOnBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
@@ -202,8 +202,8 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
         }
     }
 
-    ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:[valueSourceFactory valueSourceWithWhenAvailable:NULL]];
-    [dependency resolveWithPostProcessors:_dependencyPostProcessors dependencyStack:[[NSMutableArray alloc] init]];
+    ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSourceFactory.valueSource];
+    [dependency.valueSource resolveWithPostProcessors:_dependencyPostProcessors dependencyStack:[[NSMutableArray alloc] init]];
     return dependency.value;
 }
 
