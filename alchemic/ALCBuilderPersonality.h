@@ -15,12 +15,20 @@
 @class ALCBuilder;
 @class ALCValueSourceFactory;
 
+typedef NS_ENUM(NSUInteger, ALCPersonalityType) {
+    ALCPersonalityTypeClass,
+    ALCPersonalityTypeMethod,
+    ALCPersonalityTypeInitializer
+};
+
 /**
  Defines class that can define the unique functionality that defines how a builder works.
  */
 @protocol ALCBuilderPersonality <NSObject>
 
 @property (nonatomic, weak) ALCBuilder *builder;
+
+@property (nonatomic, assign, readonly) ALCPersonalityType type;
 
 /**
  Returns the name to use for the builder.

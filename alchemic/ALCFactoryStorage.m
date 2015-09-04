@@ -20,10 +20,6 @@
     return NO;
 }
 
--(BOOL) available {
-    return YES;
-}
-
 -(NSString *)attributeText {
     return @", factory";
 }

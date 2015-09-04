@@ -39,6 +39,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
                              dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {}
 
+-(ALCPersonalityType)type{
+    methodNotImplementedInt;
+}
+
 -(id) instantiateObject {
     methodNotImplementedObject;
 }

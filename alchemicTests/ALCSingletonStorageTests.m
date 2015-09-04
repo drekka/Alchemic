@@ -17,7 +17,6 @@
 -(void) testNoValue {
     ALCSingletonStorage *storage = [[ALCSingletonStorage alloc] init];
     XCTAssertFalse(storage.hasValue);
-    XCTAssertTrue(storage.available);
 }
 
 -(void) testStoresValues {
@@ -25,7 +24,6 @@
     storage.value = @"abc";
     XCTAssertEqualObjects(@"abc", storage.value);
     XCTAssertTrue(storage.hasValue);
-    XCTAssertTrue(storage.available);
 }
 
 @end

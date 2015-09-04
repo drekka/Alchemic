@@ -30,6 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
+-(ALCPersonalityType)type {
+    return ALCPersonalityTypeClass;
+}
+
 -(NSString *) builderName {
     return NSStringFromClass(self.builder.valueClass);
 }

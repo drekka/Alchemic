@@ -215,7 +215,8 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
     NSMutableSet<id> *results = [[NSMutableSet alloc] init];
     [builders enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL *stop) {
-        if (![builder isKindOfClass:[ALCBuilder class]]) {
+        if (builder.type != ALCPersonalityTypeClass) {
+            // We only execute on method or initializer builders.
             [results addObject:[builder invokeWithArgs:args]];
         }
     }];

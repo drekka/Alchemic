@@ -53,6 +53,20 @@
                BlueprintName = "Alchemic tests"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "ArraysIntegrationTests">
+               </Test>
+               <Test
+                  Identifier = "CircularDependency1IntegrationTests">
+               </Test>
+               <Test
+                  Identifier = "CircularDependency2IntegrationTests">
+               </Test>
+               <Test
+                  Identifier = "CircularDependency4IntegrationTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

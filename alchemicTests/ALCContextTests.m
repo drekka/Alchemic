@@ -48,7 +48,7 @@
     OCMStub([_mockRuntime searchExpressionsForClass:[SimpleObject class]]).andReturn(expressions);
 
     id mockBuilder = OCMClassMock([ALCBuilder class]);
-    NSSet<ALCBuilder> *builders = [NSSet setWithObject:mockBuilder];
+    NSSet<ALCBuilder *> *builders = [NSSet setWithObject:mockBuilder];
     OCMStub([_mockModel buildersForSearchExpressions:expressions]).andReturn(builders);
     OCMStub([_mockModel classBuildersFromBuilders:builders]).andReturn(builders);
 
@@ -63,8 +63,8 @@
 
 -(void) testResolveBuilderDependencies {
 
-    id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
-    NSSet<ALCBuilder> *builders = [NSSet setWithObject:mockBuilder];
+    id mockBuilder = OCMClassMock([ALCBuilder class]);
+    NSSet<ALCBuilder *> *builders = [NSSet setWithObject:mockBuilder];
     OCMStub([_mockModel numberBuilders]).andReturn(1u);
     OCMStub([_mockModel allBuilders]).andReturn(builders);
 
@@ -90,6 +90,7 @@
     ALCName *nameLocator = AcName(@"abc");
 
     id mockBuilder = OCMClassMock([ALCBuilder class]);
+    OCMStub([(ALCBuilder *)mockBuilder type]).andReturn(ALCPersonalityTypeMethod);
     OCMStub([mockBuilder invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
@@ -108,9 +109,11 @@
 
     id mockBuilder1 = OCMClassMock([ALCBuilder class]);
     OCMStub([mockBuilder1 invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
+    OCMStub([(ALCBuilder *)mockBuilder1 type]).andReturn(ALCPersonalityTypeMethod);
 
     id mockBuilder2 = OCMClassMock([ALCBuilder class]);
     OCMStub([mockBuilder2 invokeWithArgs:@[@"def"]]).andReturn(@12);
+    OCMStub([(ALCBuilder *)mockBuilder2 type]).andReturn(ALCPersonalityTypeMethod);
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
         return [(NSSet *)arg containsObject:classLocator];

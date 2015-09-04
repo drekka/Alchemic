@@ -25,10 +25,6 @@
     return _value != nil;
 }
 
--(BOOL) available {
-    return [self hasValue];
-}
-
 -(NSString *)attributeText {
     return @", external";
 }

@@ -8,12 +8,13 @@
 
 @import Foundation;
 @import ObjectiveC;
+
 #import "ALCAbstractResolvable.h"
 #import "ALCValue.h"
 #import "ALCInternalMacros.h"
+#import "ALCBuilderPersonality.h"
 
 @protocol ALCValueStorage;
-@protocol ALCBuilderPersonality;
 @class ALCMacroProcessor;
 @class ALCValueSourceFactory;
 
@@ -28,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCBuilder : ALCAbstractResolvable<ALCValue>
 
 #pragma mark - Properties
+
+@property (nonatomic, assign, readonly) ALCPersonalityType type;
 
 /**
  Override of value so it can be writable in builders.

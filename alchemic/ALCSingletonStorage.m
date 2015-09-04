@@ -16,10 +16,6 @@
     return _value != nil;
 }
 
--(BOOL) available {
-    return YES;
-}
-
 -(NSString *)attributeText {
     return @", singleton";
 }

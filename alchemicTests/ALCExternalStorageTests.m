@@ -19,7 +19,6 @@
     ALCExternalStorage *storage = [[ALCExternalStorage alloc] init];
     XCTAssertThrowsSpecificNamed([storage value], NSException, @"AlchemicCannotCreateValue");
     XCTAssertFalse(storage.hasValue);
-    XCTAssertFalse(storage.available);
 }
 
 -(void) testStoresValues {
@@ -27,7 +26,6 @@
     storage.value = @"abc";
     XCTAssertEqualObjects(@"abc", storage.value);
     XCTAssertTrue(storage.hasValue);
-    XCTAssertTrue(storage.available);
 }
 
 @end

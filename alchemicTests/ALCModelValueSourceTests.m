@@ -49,7 +49,7 @@
 
 -(void) testResolveAsUnavailableIfBuilderNotAvailable {
 
-    ALCBuilder builder2 = [self externalBuilderForClass:[SimpleObject class]];
+    ALCBuilder *builder2 = [self externalBuilderForClass:[SimpleObject class]];
     [builder2 configure];
     [self stubMockContextToReturnBuilders:@[_builder, builder2]];
 
@@ -59,7 +59,7 @@
 
 -(void) testExecutesCallbackWhenBuilderBecomesAvailable {
 
-    ALCBuilder builder2 = [self externalBuilderForClass:[SimpleObject class]];
+    ALCBuilder *builder2 = [self externalBuilderForClass:[SimpleObject class]];
     [builder2 configure];
     [self stubMockContextToReturnBuilders:@[builder2]];
 
@@ -71,10 +71,10 @@
 
 -(void) testCallbackDoesntTriggerUntilLastBuilderAvailable {
 
-    ALCBuilder classBuilder1 = [self externalBuilderForClass:[NSString class]];
+    ALCBuilder *classBuilder1 = [self externalBuilderForClass:[NSString class]];
     [classBuilder1 configure];
 
-    ALCBuilder classBuilder2 = [self externalBuilderForClass:[NSString class]];
+    ALCBuilder *classBuilder2 = [self externalBuilderForClass:[NSString class]];
     [classBuilder2 configure];
 
     [self stubMockContextToReturnBuilders:@[classBuilder1, classBuilder2]];
@@ -108,7 +108,7 @@
 
 -(void) testResolveExecutesPostProcessors {
 
-    NSSet<ALCBuilder> *builders = [NSSet setWithObject:_builder];
+    NSSet<ALCBuilder *> *builders = [NSSet setWithObject:_builder];
 	[self stubMockContextToReturnBuilders:builders.allObjects];
 
 	id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));
@@ -130,7 +130,7 @@
 
 -(void) testResolversReturnEmptySet {
 
-    NSSet<ALCBuilder> *builders = [NSSet setWithObject:_builder];
+    NSSet<ALCBuilder *> *builders = [NSSet setWithObject:_builder];
     [self stubMockContextToReturnBuilders:builders.allObjects];
 
 	id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));

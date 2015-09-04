@@ -107,15 +107,15 @@ hideInitializerImpl(init)
     [_personality resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 }
 
--(BOOL) available {
-    return super.available && _valueStorage.available;
-}
-
 -(id) invokeWithArgs:(NSArray<id> *) arguments {
     return [_personality invokeWithArgs:arguments];
 }
 
 #pragma mark - Getters and setters
+
+-(ALCPersonalityType) type {
+    return _personality.type;
+}
 
 -(id)value {
 

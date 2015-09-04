@@ -14,6 +14,7 @@
 #import "ALCModelSearchExpression.h"
 #import "ALCName.h"
 #import "ALCBuilder.h"
+#import "ALCBuilderPersonality.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -145,7 +146,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
     NSSet<ALCBuilder *> *newBuilders = [builders objectsPassingTest:^BOOL(ALCBuilder *builder, BOOL * stop) {
-        return [builder isKindOfClass:[ALCBuilder class]];
+        return builder.type == ALCPersonalityTypeClass;
     }];
     STLog(ALCHEMIC_LOG, @"Returning %lu class builders", [newBuilders count]);
     return newBuilders;

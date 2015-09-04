@@ -19,13 +19,13 @@
 
 -(void) testReturnsPrimaryObject {
 
-	id mockBuilder1 = OCMProtocolMock(@protocol(ALCBuilder));
-	id mockBuilder2 = OCMProtocolMock(@protocol(ALCBuilder));
+	id mockBuilder1 = OCMClassMock([ALCBuilder class]);
+	id mockBuilder2 = OCMClassMock([ALCBuilder class]);
 
 	OCMStub([mockBuilder1 primary]).andReturn(YES);
 
 	ALCPrimaryObjectDependencyPostProcessor *postProcessor = [[ALCPrimaryObjectDependencyPostProcessor alloc] init];
-	NSSet<ALCBuilder> *results = [postProcessor process:[NSSet setWithObjects:mockBuilder1, mockBuilder2, nil]];
+	NSSet<ALCBuilder *> *results = [postProcessor process:[NSSet setWithObjects:mockBuilder1, mockBuilder2, nil]];
 
 	XCTAssertTrue([results containsObject:mockBuilder1]);
 	XCTAssertFalse([results containsObject:mockBuilder2]);
@@ -34,11 +34,11 @@
 
 -(void) testReturnsAllObjectsWhenNoPrimary {
 
-	id mockBuilder1 = OCMProtocolMock(@protocol(ALCBuilder));
-	id mockBuilder2 = OCMProtocolMock(@protocol(ALCBuilder));
+	id mockBuilder1 = OCMClassMock([ALCBuilder class]);
+	id mockBuilder2 = OCMClassMock([ALCBuilder class]);
 
 	ALCPrimaryObjectDependencyPostProcessor *postProcessor = [[ALCPrimaryObjectDependencyPostProcessor alloc] init];
-	NSSet<ALCBuilder> *results = [postProcessor process:[NSSet setWithObjects:mockBuilder1, mockBuilder2, nil]];
+	NSSet<ALCBuilder *> *results = [postProcessor process:[NSSet setWithObjects:mockBuilder1, mockBuilder2, nil]];
 
 	XCTAssertTrue([results containsObject:mockBuilder1]);
 	XCTAssertTrue([results containsObject:mockBuilder2]);

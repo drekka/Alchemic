@@ -60,7 +60,7 @@
 
 -(void) testNotMatchesBuilder {
 	ALCName *alcName = [ALCName withName:@"abc"];
-    ALCBuilder builder = [self simpleBuilderForClass:[NSNumber class]];
+    ALCBuilder *builder = [self simpleBuilderForClass:[NSNumber class]];
     [builder.macroProcessor addMacro:AcWithName(@"def")];
     [builder configure];
 	XCTAssertFalse([alcName matches:builder]);

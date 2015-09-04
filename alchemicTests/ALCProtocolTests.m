@@ -54,7 +54,7 @@
 
 -(void) testIsNotEqualToProtocol {
 	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
-	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(ALCBuilder)];
+	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(NSFastEnumeration)];
 	XCTAssertFalse([alcProtocol1 isEqualToProtocol:alcProtocol2]);
 }
 
@@ -66,7 +66,7 @@
 
 -(void) testNotHashMatches {
 	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
-	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(ALCBuilder)];
+	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(NSFastEnumeration)];
 	XCTAssertNotEqual(alcProtocol1.hash, alcProtocol2.hash);
 }
 
@@ -77,7 +77,7 @@
 }
 
 -(void) testNotMatchesBuilder {
-	ALCProtocol *alcProtocol = [ALCProtocol withProtocol:@protocol(ALCBuilder)];
+	ALCProtocol *alcProtocol = [ALCProtocol withProtocol:@protocol(NSFastEnumeration)];
     ALCBuilder *builder = [self simpleBuilderForClass:[NSNumber class]];
 	XCTAssertFalse([alcProtocol matches:builder]);
 }

@@ -19,9 +19,10 @@
 #import "ALCInternalMacros.h"
 #import "ALCSingletonStorage.h"
 #import "ALCExternalStorage.h"
-#import "ALCClassInstantiator.h"
 #import "ALCResolvable.h"
 #import "ALCBuilder.h"
+#import "ALCBuilderPersonality.h"
+#import "ALCClassBuilderPersonality.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -82,8 +83,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ALCBuilder *) simpleBuilderForClass:(Class) aClass {
-    id <ALCInstantiator> instantiator = [[ALCClassInstantiator alloc] initWithClass:aClass];
-    return [[ALCBuilder alloc] initWithInstantiator:instantiator forClass:aClass];
+    id <ALCBuilderPersonality> personality = [[ALCClassBuilderPersonality alloc] init];
+    return [[ALCBuilder alloc] initWithPersonality:personality forClass:aClass];
 }
 
 -(ALCBuilder *) externalBuilderForClass:(Class) aClass {
@@ -92,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
     return builder;
 }
 
--(void) stubMockContextToReturnBuilders:(NSArray<ALCBuilder> *) builders {
+-(void) stubMockContextToReturnBuilders:(NSArray<ALCBuilder *> *) builders {
     OCMStub([self.mockContext executeOnBuildersWithSearchExpressions:OCMOCK_ANY
                                              processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
         __unsafe_unretained ProcessBuilderBlock processBuilderBlock;
@@ -101,7 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
     });
 }
 
--(void) configureAndResolveBuilder:(ALCBuilder) builder {
+-(void) configureAndResolveBuilder:(ALCBuilder *) builder {
     [builder configure];
     [builder resolveWithPostProcessors:[NSSet set]
                        dependencyStack:[NSMutableArray array]];

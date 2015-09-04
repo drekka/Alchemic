@@ -19,14 +19,12 @@
     ALCFactoryStorage *storage = [[ALCFactoryStorage alloc] init];
     XCTAssertNil(storage.value);
     XCTAssertFalse(storage.hasValue);
-    XCTAssertTrue(storage.available);
 }
 
 -(void) testStoresValues {
     ALCFactoryStorage *storage = [[ALCFactoryStorage alloc] init];
     storage.value = @"abc";
     XCTAssertFalse(storage.hasValue);
-    XCTAssertTrue(storage.available);
 }
 
 @end
