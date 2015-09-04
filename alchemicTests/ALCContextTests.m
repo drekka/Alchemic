@@ -20,8 +20,8 @@
 #import "SimpleObject.h"
 #import "ALCModel.h"
 
-#import "ALCClassBuilder.h"
-#import "ALCMethodBuilder.h"
+#import "ALCBuilder.h"
+#import "ALCBuilder.h"
 
 @interface ALCContextTests : ALCTestCase
 
@@ -47,8 +47,8 @@
     NSSet<id<ALCModelSearchExpression>> *expressions = [NSSet setWithObject:AcClass(SimpleObject)];
     OCMStub([_mockRuntime searchExpressionsForClass:[SimpleObject class]]).andReturn(expressions);
 
-    id mockBuilder = OCMClassMock([ALCClassBuilder class]);
-    NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
+    id mockBuilder = OCMClassMock([ALCBuilder class]);
+    NSSet<ALCBuilder> *builders = [NSSet setWithObject:mockBuilder];
     OCMStub([_mockModel buildersForSearchExpressions:expressions]).andReturn(builders);
     OCMStub([_mockModel classBuildersFromBuilders:builders]).andReturn(builders);
 
@@ -64,7 +64,7 @@
 -(void) testResolveBuilderDependencies {
 
     id mockBuilder = OCMProtocolMock(@protocol(ALCBuilder));
-    NSSet<id<ALCBuilder>> *builders = [NSSet setWithObject:mockBuilder];
+    NSSet<ALCBuilder> *builders = [NSSet setWithObject:mockBuilder];
     OCMStub([_mockModel numberBuilders]).andReturn(1u);
     OCMStub([_mockModel allBuilders]).andReturn(builders);
 
@@ -79,7 +79,7 @@
 }
 
 -(void) testRegisterDependencyInClassBuilder {
-    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
+    ALCBuilder *classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     [_context registerClassBuilder:classBuilder variableDependency:@"aStringProperty", nil];
 }
 
@@ -89,7 +89,7 @@
 
     ALCName *nameLocator = AcName(@"abc");
 
-    id mockBuilder = OCMClassMock([ALCMethodBuilder class]);
+    id mockBuilder = OCMClassMock([ALCBuilder class]);
     OCMStub([mockBuilder invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
@@ -106,10 +106,10 @@
 
     ALCClass *classLocator = AcClass([SimpleObject class]);
 
-    id mockBuilder1 = OCMClassMock([ALCMethodBuilder class]);
+    id mockBuilder1 = OCMClassMock([ALCBuilder class]);
     OCMStub([mockBuilder1 invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
 
-    id mockBuilder2 = OCMClassMock([ALCMethodBuilder class]);
+    id mockBuilder2 = OCMClassMock([ALCBuilder class]);
     OCMStub([mockBuilder2 invokeWithArgs:@[@"def"]]).andReturn(@12);
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){

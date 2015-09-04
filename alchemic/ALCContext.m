@@ -10,22 +10,25 @@
 
 #import <StoryTeller/StoryTeller.h>
 
+#import "ALCInternalMacros.h"
+
 #import "ALCContext.h"
 #import "ALCRuntime.h"
-#import "ALCBuilder.h"
-#import "ALCInternalMacros.h"
+
 #import "ALCModel.h"
-#import "ALCClass.h"
-#import "ALCMacroProcessor.h"
+#import "ALCBuilder.h"
 #import "ALCDependency.h"
+#import "ALCMacroProcessor.h"
 #import "ALCValueSourceFactory.h"
-#import "NSSet+Alchemic.h"
 #import "ALCModelValueSource.h"
-#import "ALCSingletonStorage.h"
-#import "ALCInitializerInstantiator.h"
-#import "ALCMethodInstantiator.h"
-#import "ALCClassBuilder.h"
-#import "ALCMethodBuilder.h"
+
+#import "ALCBuilderPersonality.h"
+#import "ALCInitializerBuilderPersonality.h"
+#import "ALCMethodBuilderPersonality.h"
+
+#import "ALCClass.h"
+
+#import "NSSet+Alchemic.h"
 
 NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
@@ -69,13 +72,13 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     STStartScope(object);
     STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
     NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForClass:[object class]];
-    NSSet<ALCClassBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:expressions]];
+    NSSet<ALCBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:expressions]];
     [[builders anyObject] injectDependencies:object];
 }
 
 -(void) resolveBuilderDependencies {
     STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
-    for (id<ALCBuilder> builder in [_model allBuilders]) {
+    for (ALCBuilder *builder in [_model allBuilders]) {
         STLog(builder.valueClass, @"Resolving %@", builder);
         STStartScope(builder.valueClass);
         [builder resolveWithPostProcessors:self->_dependencyPostProcessors dependencyStack:[[NSMutableArray alloc] init]];
@@ -91,15 +94,15 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 #pragma mark - Registration call backs
 
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... {
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... {
     alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
     [classBuilder configure];
 
     // Remove and re-add the builder to the model to ensure it's name us updated.
-    STLog(classBuilder.valueClass, @"Updated %@", classBuilder);
+    STLog(classBuilder.valueClass, @"Updated class %@", classBuilder);
 }
 
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder variableDependency:(NSString *) variable, ... {
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder variableDependency:(NSString *) variable, ... {
 
     STStartScope(classBuilder.valueClass);
 
@@ -120,35 +123,31 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     [classBuilder addVariableInjection:var valueSourceFactory:valueSourceFactory];
 }
 
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... {
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder initializer:(SEL) initializer, ... {
     STLog(classBuilder.valueClass, @"Registering a class initializer for a %@", NSStringFromClass(classBuilder.valueClass));
-    id<ALCInstantiator> instantiator = [[ALCInitializerInstantiator alloc] initWithClass:classBuilder.valueClass
-                                                                             initializer:initializer];
-    id<ALCBuilder> initializerBuilder = [[ALCMethodBuilder alloc] initWithInstantiator:instantiator
-                                                                              forClass:classBuilder.valueClass
-                                                                         parentBuilder:classBuilder];
+    id<ALCBuilderPersonality> personality = [[ALCInitializerBuilderPersonality alloc] initWithClassBuilder:classBuilder initializer:initializer];
+    ALCBuilder *initializerBuilder = [[ALCBuilder alloc] initWithPersonality:personality forClass:classBuilder.valueClass];
     alc_loadMacrosAfter(initializerBuilder.macroProcessor, initializer);
     [initializerBuilder configure];
 
     // replace the class builder in the model with the initializer builder because now we have an initializer we don't want the class to be found as the source of these objects.
     [_model addBuilder:initializerBuilder];
     [_model removeBuilder:classBuilder];
+    STLog(classBuilder.valueClass, @"Created initializer %@", initializerBuilder);
 }
 
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
-    id<ALCInstantiator> instantiator = [[ALCMethodInstantiator alloc] initWithClass:classBuilder.valueClass
-                                                                         returnType:returnType
-                                                                           selector:selector];
-    id<ALCBuilder> methodBuilder = [[ALCMethodBuilder alloc] initWithInstantiator:instantiator
-                                                                         forClass:returnType
-                                                                    parentBuilder:classBuilder];
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
+    id<ALCBuilderPersonality> personality = [[ALCMethodBuilderPersonality alloc] initWithClassBuilder:classBuilder
+                                                                                             selector:selector
+                                                                                           returnType:returnType];
+    ALCBuilder *methodBuilder = [[ALCBuilder alloc] initWithPersonality:personality forClass:returnType];
     alc_loadMacrosAfter(methodBuilder.macroProcessor, returnType);
     [methodBuilder configure];
     [_model addBuilder:methodBuilder];
-    STLog(classBuilder.valueClass, @"Created: %@", methodBuilder);
+    STLog(classBuilder.valueClass, @"Created method %@", methodBuilder);
 }
 
--(void) addBuilderToModel:(id<ALCBuilder>) builder {
+-(void) addBuilderToModel:(ALCBuilder*) builder {
 
     // Look for the all delegate builder and set the delegate into it.
     if ([builder.valueClass isSubclassOfClass:[[UIApplication sharedApplication].delegate class]]) {
@@ -158,15 +157,15 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     [_model addBuilder:builder];
 }
 
--(ALCClassBuilder *) builderForClass:(Class) aClass {
-    NSSet<id<ALCBuilder>> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:[ALCClass withClass:aClass]]];
-    NSSet<ALCClassBuilder *> *classBuilders = [_model classBuildersFromBuilders:builders];
+-(ALCBuilder *) builderForClass:(Class) aClass {
+    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:[ALCClass withClass:aClass]]];
+    NSSet<ALCBuilder *> *classBuilders = [_model classBuildersFromBuilders:builders];
     return [classBuilders anyObject];
 }
 
 -(void) executeOnBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
                        processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock {
-    NSSet<id<ALCBuilder>> *builders = [_model buildersForSearchExpressions:searchExpressions];
+    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:searchExpressions];
     if ([builders count] > 0) {
         processBuildersBlock(builders);
     }
@@ -212,12 +211,12 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     NSMutableArray *args = [[NSMutableArray alloc] init];
     alc_processVarArgsAfter(id, methodLocator, ^(id value){[args addObject:value];});
 
-    NSSet<id<ALCBuilder>> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:methodLocator]];
+    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:methodLocator]];
 
     NSMutableSet<id> *results = [[NSMutableSet alloc] init];
-    [builders enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL *stop) {
-        if (![builder isKindOfClass:[ALCClassBuilder class]]) {
-            [results addObject:[(ALCMethodBuilder *)builder invokeWithArgs:args]];
+    [builders enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL *stop) {
+        if (![builder isKindOfClass:[ALCBuilder class]]) {
+            [results addObject:[builder invokeWithArgs:args]];
         }
     }];
     return [results count] == 1 ? [results anyObject] : results;
@@ -248,7 +247,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicFinishedLoading object:self];
     });
-    
+
     STLog(ALCHEMIC_LOG, @"Started model (* - instantiated):...\n%@\n", _model);
     
 }

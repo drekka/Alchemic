@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Represents a single dependency of a variable or method argument.
  
- @discussion ALCDependency objects are the core link between a ALCBuilder and the values it needs. A builder will define a dependency for any variables it needs (in the case of ALCClassBuilder) or method arguments. Each ALCDependency contains a class reference representing the type of object that will be set and a ALCArgument instance that defines where to get it from.
+ @discussion ALCDependency objects are the core link between a ALCBuilder and the values it needs. A builder will define a dependency for any variables it needs (in the case of ALCBuilder) or method arguments. Each ALCDependency contains a class reference representing the type of object that will be set and a ALCArgument instance that defines where to get it from.
  */
 @interface ALCDependency : NSObject<ALCValue>
 

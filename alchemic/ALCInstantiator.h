@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-@class ALCClassBuilder;
+@class ALCBuilder;
 #import "ALCResolvable.h"
 
 /**
@@ -20,18 +20,13 @@
  */
 @property (nonatomic, strong, readonly) NSString *attributeText;
 
-/**
- Returns the name to use for the builder.
- */
-@property (nonatomic, strong, readonly) NSString *builderName;
 
 /**
  Create an object using the passed arguments for any method arguments.
 
- @param classBuilder The class builder being asked to instantiate.
  @param arguments    An array of arguments being passed, mostly used in methods and initializers.
  @return An instance of the object that the builder represents.
  */
--(id) instantiateWithClassBuilder:(ALCClassBuilder *) classBuilder arguments:(NSArray *) arguments;
+-(id) instantiateWithArguments:(NSArray *) arguments;
 
 @end

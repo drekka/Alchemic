@@ -123,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
  
- @discussion This is the method that does the grunt work of registering objects in the model. It scans all the relevant app bundles and frameworks, plus those declared in ALCConfig classes. When it finds a class with Alchemic methods in it, it creates an instance of ALCClassBuilder and adds it to the model before call the methods to execute the registrations.
+ @discussion This is the method that does the grunt work of registering objects in the model. It scans all the relevant app bundles and frameworks, plus those declared in ALCConfig classes. When it finds a class with Alchemic methods in it, it creates an instance of ALCBuilder and adds it to the model before call the methods to execute the registrations.
  
  @param context The ALCContext that is being loaded with information.
  @param runtimeScanners A NSSet of ALCRuntimeScanner instances which perform the job of interpreting what they find in the classes. Each class found with Alchemic methods in it is passed to each scanner in turn.

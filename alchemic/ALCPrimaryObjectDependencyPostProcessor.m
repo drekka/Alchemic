@@ -7,19 +7,19 @@
 //
 
 #import "ALCPrimaryObjectDependencyPostProcessor.h"
-#import <Alchemic/ALCBuilder.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <StoryTeller/StoryTeller.h>
+#import "ALCBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCPrimaryObjectDependencyPostProcessor
 
--(NSSet<id<ALCBuilder>> *) process:(NSSet<id<ALCBuilder>> *) dependencies {
+-(NSSet<ALCBuilder *> *) process:(NSSet<ALCBuilder *> *) dependencies {
 
     // Build a list of primary objects.
-    NSMutableSet<id<ALCBuilder>> *primaries = [[NSMutableSet alloc] init];
-    for (id<ALCBuilder> candidateBuilder in dependencies) {
+    NSMutableSet<ALCBuilder *> *primaries = [[NSMutableSet alloc] init];
+    for (ALCBuilder *candidateBuilder in dependencies) {
         if (candidateBuilder.primary) {
             [primaries addObject:candidateBuilder];
         }

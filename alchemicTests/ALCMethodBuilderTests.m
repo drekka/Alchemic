@@ -1,5 +1,5 @@
 //
-//  ALCMethodBuilderTests.m
+//  ALCBuilderTests.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 1/09/2015.
@@ -8,7 +8,7 @@
 
 #import <Alchemic/Alchemic.h>
 
-#import "ALCMethodBuilder.h"
+#import "ALCBuilder.h"
 #import "ALCTestCase.h"
 #import "SimpleObject.h"
 #import "ALCInternalMacros.h"
@@ -16,33 +16,33 @@
 #import "ALCMethodInstantiator.h"
 #import "ALCInitializerInstantiator.h"
 
-@interface ALCMethodBuilderTests : ALCTestCase
+@interface ALCBuilderTests : ALCTestCase
 
 @end
 
-@implementation ALCMethodBuilderTests
+@implementation ALCBuilderTests
 
 -(void) testMacroProcessorMethodExternalThrows {
     ignoreSelectorWarnings(
-                           ALCMethodBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethod)];
+                           ALCBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethod)];
                            )
     XCTAssertThrowsSpecificNamed([builder.macroProcessor addMacro:AcExternal], NSException, @"AlchemicUnexpectedMacro");
 }
 -(void) testMacroProcessorInitializerExternalThrows {
     ignoreSelectorWarnings(
-                           ALCMethodBuilder *builder = [self initializerBuilderFor:@selector(initAlternative)];
+                           ALCBuilder *builder = [self initializerBuilderFor:@selector(initAlternative)];
                            )
     XCTAssertThrowsSpecificNamed([builder.macroProcessor addMacro:AcExternal], NSException, @"AlchemicUnexpectedMacro");
 }
 -(void) testConfigureWithMethodArg {
     ignoreSelectorWarnings(
-                           ALCMethodBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethodUsingAString:)];
+                           ALCBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethodUsingAString:)];
                            )
     [builder.macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
 
     [builder configure];
 
-    Ivar methodArgsVar = class_getInstanceVariable([ALCMethodBuilder class], "_arguments");
+    Ivar methodArgsVar = class_getInstanceVariable([ALCBuilder class], "_arguments");
     NSArray *dependencies = object_getIvar(builder, methodArgsVar);
 
     XCTAssertEqual(1u, [dependencies count]);
@@ -50,7 +50,7 @@
 }
 
 -(void) testValueFromMethod {
-    ALCMethodBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethod)];
+    ALCBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethod)];
     [self configureAndResolveBuilder:builder];
     NSString *result = builder.value;
     XCTAssertEqual(@"abc", result);
@@ -58,7 +58,7 @@
 
 -(void) testValueFromMethodWithArg {
     ignoreSelectorWarnings(
-                           ALCMethodBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethodUsingAString:)];
+                           ALCBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethodUsingAString:)];
                            )
     [builder.macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
     [self configureAndResolveBuilder:builder];
@@ -68,7 +68,7 @@
 
 -(void) testValueFromInitializer {
     ignoreSelectorWarnings(
-                           ALCMethodBuilder *builder = [self initializerBuilderFor:@selector(initAlternative)];
+                           ALCBuilder *builder = [self initializerBuilderFor:@selector(initAlternative)];
                            )
     [self configureAndResolveBuilder:builder];
     SimpleObject *so = builder.value;
@@ -76,7 +76,7 @@
 }
 
 -(void) testValueFromInitializerWithArg {
-    ALCMethodBuilder *builder = [self initializerBuilderFor:@selector(initWithString:)];
+    ALCBuilder *builder = [self initializerBuilderFor:@selector(initWithString:)];
     [builder.macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
     [self configureAndResolveBuilder:builder];
     SimpleObject *so = builder.value;
@@ -85,7 +85,7 @@
 }
 
 -(void) testInvokeOnMethodWithArgs {
-    ALCMethodBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethodUsingAString:)];
+    ALCBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethodUsingAString:)];
 
     NSSet *postProcessors = [NSSet set];
     NSMutableArray *stack = [NSMutableArray array];
@@ -96,7 +96,7 @@
 }
 
 -(void) testInvokeOnInitializerWithArgs {
-    ALCMethodBuilder *builder = [self initializerBuilderFor:@selector(initWithString:)];
+    ALCBuilder *builder = [self initializerBuilderFor:@selector(initWithString:)];
 
     NSSet *postProcessors = [NSSet set];
     NSMutableArray *stack = [NSMutableArray array];
@@ -109,28 +109,28 @@
 
 -(void) testDescriptionForMethod {
     ignoreSelectorWarnings(
-                           ALCMethodBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethodUsingAString:)];
+                           ALCBuilder *builder = [self methodBuilderFor:@selector(stringFactoryMethodUsingAString:)];
                            )
     [builder.macroProcessor addMacro:AcArg(NSString, AcValue(@"abc"))];
     [builder configure];
     XCTAssertEqualObjects(@"  builder for type SimpleObject, name 'SimpleObject stringFactoryMethodUsingAString:', singleton, using method [SimpleObject stringFactoryMethodUsingAString:]", [builder description]);
 }
 
--(ALCMethodBuilder *) methodBuilderFor:(SEL) selector {
-    ALCClassBuilder *parentBuilder = [self simpleBuilderForClass:[SimpleObject class]];
+-(ALCBuilder *) methodBuilderFor:(SEL) selector {
+    ALCBuilder *parentBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     id<ALCInstantiator> initiator = [[ALCMethodInstantiator alloc] initWithClass:[SimpleObject class]
                                                                       returnType:[SimpleObject class]
                                                                         selector:selector];
-    return [[ALCMethodBuilder alloc] initWithInstantiator:initiator
+    return [[ALCBuilder alloc] initWithInstantiator:initiator
                                                  forClass:[SimpleObject class]
                                             parentBuilder:parentBuilder];
 }
 
--(ALCMethodBuilder *) initializerBuilderFor:(SEL) selector {
-    ALCClassBuilder *simpleObjectBuilder = [self simpleBuilderForClass:[SimpleObject class]];
+-(ALCBuilder *) initializerBuilderFor:(SEL) selector {
+    ALCBuilder *simpleObjectBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     id<ALCInstantiator> initiator = [[ALCInitializerInstantiator alloc] initWithClass:[SimpleObject class]
                                                                           initializer:selector];
-    return [[ALCMethodBuilder alloc] initWithInstantiator:initiator
+    return [[ALCBuilder alloc] initWithInstantiator:initiator
                                                  forClass:[SimpleObject class]
                                             parentBuilder:simpleObjectBuilder];
 }

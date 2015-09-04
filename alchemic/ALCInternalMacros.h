@@ -85,6 +85,10 @@ return nil
 methodNotImplementedVoid; \
 return 0
 
+#define methodNotImplementedBoolean \
+methodNotImplementedVoid; \
+return NO
+
 #pragma mark - Initializers
 
 // These are used when hiding an unused initializer.

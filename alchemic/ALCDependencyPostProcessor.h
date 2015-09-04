@@ -7,7 +7,9 @@
 //
 
 @import Foundation;
-@protocol ALCBuilder;
+@class ALCBuilder;
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  Dependency post processors are applied after a list of candidate objects has been returned from a search of the model.
@@ -22,6 +24,8 @@
  @param dependencies A NSSet containing the current candidates for the dependency.
  @return a new list of candidates objects. If the post processor didn't change anything then this might be the original dependencies list passed in.
  */
--(nonnull NSSet<id<ALCBuilder>> *) process:(NSSet<id<ALCBuilder>> * _Nonnull) dependencies;
+-(NSSet<ALCBuilder *> *) process:(NSSet<ALCBuilder *> *) dependencies;
 
 @end
+
+NS_ASSUME_NONNULL_END

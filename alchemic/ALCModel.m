@@ -14,13 +14,12 @@
 #import "ALCModelSearchExpression.h"
 #import "ALCName.h"
 #import "ALCBuilder.h"
-#import "ALCClassBuilder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCModel {
-    NSMapTable<NSString *, id<ALCBuilder>> *_nameIndex;
-    NSMutableSet<id<ALCBuilder>> *_model;
+    NSMapTable<NSString *, ALCBuilder *> *_nameIndex;
+    NSMutableSet<ALCBuilder *> *_model;
     NSCache *_queryCache;
 }
 
@@ -43,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Updating
 
--(void) addBuilder:(NSObject<ALCBuilder> *) builder {
+-(void) addBuilder:(ALCBuilder *) builder {
 
     // We need to know when a builder changes it's name so we can update the index.
     [builder addObserver:self
@@ -55,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
     [_model addObject:builder];
 }
 
--(void) removeBuilder:(NSObject<ALCBuilder> *) builder {
+-(void) removeBuilder:(ALCBuilder *) builder {
     [builder removeObserver:self forKeyPath:@"name"];
     [_nameIndex removeObjectForKey:builder.name];
     [_model removeObject:builder];
@@ -73,13 +72,13 @@ NS_ASSUME_NONNULL_BEGIN
         if (oldName != nil) {
             [_nameIndex removeObjectForKey:oldName];
         }
-        [self indexBuilder:(id<ALCBuilder>) object];
+        [self indexBuilder:(ALCBuilder *) object];
     }
 
 }
 
--(void) indexBuilder:(NSObject<ALCBuilder> *)builder {
-    id<ALCBuilder> currentBuilder = [_nameIndex objectForKey:builder.name];
+-(void) indexBuilder:(ALCBuilder *)builder {
+    ALCBuilder *currentBuilder = [_nameIndex objectForKey:builder.name];
     if (currentBuilder != nil) {
         @throw [NSException exceptionWithName:@"AlchemicDuplicateName"
                                        reason:[NSString stringWithFormat:@"Builder names must be unique. Duplicate name: %@ found on builder %@ and builder %@", builder.name, builder, currentBuilder]
@@ -90,11 +89,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Querying
 
--(NSSet<id<ALCBuilder>> *) allBuilders {
+-(NSSet<ALCBuilder *> *) allBuilders {
     return _model;
 }
 
--(NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
+-(NSSet<ALCBuilder *> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions {
 
     // Quick short cut for single expression queries. Saves building a new set.
     if ([searchExpressions count] == 1) {
@@ -104,9 +103,9 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSArray<id<ALCModelSearchExpression>> *sortedSearchExpressions = [self sortedSearchExpressions:searchExpressions];
 
-    NSMutableSet<id<ALCBuilder>> *results;
+    NSMutableSet<ALCBuilder *> *results;
     for (id<ALCModelSearchExpression> searchExpression in sortedSearchExpressions) {
-        NSSet<id<ALCBuilder>> *builders = [self buildersForSearchExpression:searchExpression];
+        NSSet<ALCBuilder *> *builders = [self buildersForSearchExpression:searchExpression];
         if (results == nil) {
             // No results yet to go with the set as a base set.
             results = [NSMutableSet setWithSet:builders];
@@ -138,15 +137,15 @@ NS_ASSUME_NONNULL_BEGIN
     return results;
 }
 
--(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders {
+-(NSSet<ALCBuilder *> *) classBuildersFromBuilders:(NSSet<ALCBuilder *> *) builders {
 
     if ([builders count] == 0) {
         return builders;
     }
 
     STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
-    NSSet<id<ALCBuilder>> *newBuilders = [builders objectsPassingTest:^BOOL(id<ALCBuilder> builder, BOOL * stop) {
-        return [builder isKindOfClass:[ALCClassBuilder class]];
+    NSSet<ALCBuilder *> *newBuilders = [builders objectsPassingTest:^BOOL(ALCBuilder *builder, BOOL * stop) {
+        return [builder isKindOfClass:[ALCBuilder class]];
     }];
     STLog(ALCHEMIC_LOG, @"Returning %lu class builders", [newBuilders count]);
     return newBuilders;
@@ -154,21 +153,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Internal
 
--(NSSet<id<ALCBuilder>> *) buildersForSearchExpression:(id<ALCModelSearchExpression>) searchExpression {
+-(NSSet<ALCBuilder *> *) buildersForSearchExpression:(id<ALCModelSearchExpression>) searchExpression {
 
     // Check for a name query first.
     if ([searchExpression isKindOfClass:[ALCName class]]) {
         ALCName *nameExpression = (ALCName *)searchExpression;
-        id<ALCBuilder> builder = [_nameIndex objectForKey:nameExpression.aName];
+        ALCBuilder *builder = [_nameIndex objectForKey:nameExpression.aName];
         if (builder == nil) {
             return [NSSet set];
         }
-        STLog(ALCHEMIC_LOG, @"Name matched %@", builder);
+        STLog(ALCHEMIC_LOG, @"Name matched: %@ -> %@", nameExpression.aName, builder);
         return [NSSet setWithObject:builder];
     }
 
     // Check the cache
-    NSSet<id<ALCBuilder>> *cachedBuilders = [_queryCache objectForKey:searchExpression.cacheId];
+    NSSet<ALCBuilder *> *cachedBuilders = [_queryCache objectForKey:searchExpression.cacheId];
     if (cachedBuilders) {
         STLog(ALCHEMIC_LOG, @"Returning cached list of %lu builders for expressions %@", [cachedBuilders count], searchExpression);
         return cachedBuilders;
@@ -176,7 +175,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Find the builders that match the expression.
     STLog(ALCHEMIC_LOG, @"Searching for builders based on expressions %@", searchExpression);
-    NSSet<id<ALCBuilder>> *builders = [_model objectsPassingTest:^BOOL(id<ALCBuilder> builder, BOOL * stop) {
+    NSSet<ALCBuilder *> *builders = [_model objectsPassingTest:^BOOL(ALCBuilder *builder, BOOL * stop) {
         if ([searchExpression matches:builder]) {
             STLog(ALCHEMIC_LOG, @"Adding builder '%@' %@", builder.name, builder);
             return YES;
@@ -186,7 +185,6 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Store and return.
     [_queryCache setObject:builders forKey:searchExpression.cacheId];
-    STLog(ALCHEMIC_LOG, @"Returning %li builders", [builders count]);
     return builders;
 }
 

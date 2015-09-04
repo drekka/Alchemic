@@ -9,7 +9,7 @@
 @import XCTest;
 #import "ALCClass.h"
 #import "ALCTestCase.h"
-#import "ALCClassBuilder.h"
+#import "ALCBuilder.h"
 
 @interface ALCClassTests : ALCTestCase
 
@@ -49,13 +49,13 @@
 
 -(void) testMatchesBuilder {
 	ALCClass *alcClass = [ALCClass withClass:[NSString class]];
-	id<ALCBuilder> builder = [self simpleBuilderForClass:[NSString class]];
+	ALCBuilder builder = [self simpleBuilderForClass:[NSString class]];
 	XCTAssertTrue([alcClass matches:builder]);
 }
 
 -(void) testNotMatchesBuilder {
 	ALCClass *alcClass = [ALCClass withClass:[NSString class]];
-    id<ALCBuilder> builder = [self simpleBuilderForClass:[NSNumber class]];
+    ALCBuilder builder = [self simpleBuilderForClass:[NSNumber class]];
 	XCTAssertFalse([alcClass matches:builder]);
 }
 

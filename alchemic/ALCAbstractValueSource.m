@@ -30,7 +30,7 @@ hideInitializerImpl(init)
     // Check the state
     if (!self.available) {
         @throw [NSException exceptionWithName:@"AlchemicValueNotAvailable"
-                                       reason:@"Cannot access a value source's value when it is not available."
+                                       reason:[NSString stringWithFormat:@"Value not available - %@", self]
                                      userInfo:nil];
     }
 
@@ -57,7 +57,7 @@ hideInitializerImpl(init)
 	// Object type and no values.
 	if ([values count] == 0u) {
 		@throw [NSException exceptionWithName:@"AlchemicNoValuesFound"
-												 reason:@"Expecting 1 object, but none found"
+												 reason:@"Expecting 1 value, but none found"
 											  userInfo:nil];
 	}
 
@@ -68,7 +68,7 @@ hideInitializerImpl(init)
 
 	// finally error.
 	@throw [NSException exceptionWithName:@"AlchemicTooManyValues"
-											 reason:[NSString stringWithFormat:@"Expecting 1 object, but found %lu", (unsigned long)[values count]]
+											 reason:[NSString stringWithFormat:@"Expecting 1 value, but found %lu instead", (unsigned long)[values count]]
 										  userInfo:nil];
 }
 

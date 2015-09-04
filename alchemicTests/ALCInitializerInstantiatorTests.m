@@ -12,7 +12,7 @@
 #import "SimpleObject.h"
 #import "ALCInitializerInstantiator.h"
 #import "ALCInternalMacros.h"
-#import "ALCClassBuilder.h"
+#import "ALCBuilder.h"
 
 @interface ALCInitializerInstantiatorTests : ALCTestCase
 
@@ -33,7 +33,7 @@
                            ALCInitializerInstantiator *instantiator = [[ALCInitializerInstantiator alloc] initWithClass:[SimpleObject class]
                                                                                                             initializer:@selector(initAlternative)];
                            )
-    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
+    ALCBuilder *classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     SimpleObject *so = [instantiator instantiateWithClassBuilder:classBuilder arguments:@[]];
     XCTAssertNotNil(so);
 }
@@ -43,7 +43,7 @@
                            ALCInitializerInstantiator *instantiator = [[ALCInitializerInstantiator alloc] initWithClass:[SimpleObject class]
                                                                                                             initializer:@selector(initWithString:)];
                            )
-    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
+    ALCBuilder *classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
     SimpleObject *so = [instantiator instantiateWithClassBuilder:classBuilder arguments:@[@"abc"]];
     XCTAssertNotNil(so);
     XCTAssertEqualObjects(@"abc", so.aStringProperty);

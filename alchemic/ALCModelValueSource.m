@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  Sources values from the model.
  */
 @implementation ALCModelValueSource {
-    NSSet<id<ALCBuilder>> *_candidateBuilders;
+    NSSet<ALCBuilder *> *_candidateBuilders;
 }
 
 hideInitializerImpl(initWithType:(Class)argumentType)
@@ -43,7 +43,7 @@ hideInitializerImpl(initWithType:(Class)argumentType)
 
 -(NSSet<id> *) values {
     NSMutableSet<id> *results = [[NSMutableSet alloc] init];
-    [_candidateBuilders enumerateObjectsUsingBlock:^(id<ALCBuilder> builder, BOOL * stop) {
+    [_candidateBuilders enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL * stop) {
         [results addObject:builder.value];
     }];
     return results;
@@ -68,7 +68,7 @@ hideInitializerImpl(initWithType:(Class)argumentType)
 
 -(void) resolveCandidatesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
     STLog(self, @"Resolving value source -> %@", self);
-    __block NSSet<id<ALCBuilder>> *finalBuilders;
+    __block NSSet<ALCBuilder *> *finalBuilders;
     [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
                                               processingBuildersBlock:^(ProcessBuiderBlockArgs) {
                                                   finalBuilders = builders;

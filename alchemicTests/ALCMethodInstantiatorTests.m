@@ -12,7 +12,7 @@
 #import "SimpleObject.h"
 #import "ALCMethodInstantiator.h"
 #import "ALCBuilder.h"
-#import "ALCClassBuilder.h"
+#import "ALCBuilder.h"
 
 @interface ALCMethodInstantiatorTests : ALCTestCase
 
@@ -28,7 +28,7 @@
 }
 
 -(void) testInstantiateWithSimpleMethod {
-    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
+    ALCBuilder *classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
     [self configureAndResolveBuilder:classBuilder];
     ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClass:[ALCMethodInstantiatorTests class]
                                                                             returnType:[SimpleObject class]
@@ -38,7 +38,7 @@
 }
 
 -(void) testInstantiateWithMethodWithOneArg {
-    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
+    ALCBuilder *classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
     [self configureAndResolveBuilder:classBuilder];
     ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClass:[ALCMethodInstantiatorTests class]
                                                                             returnType:[SimpleObject class]
@@ -48,7 +48,7 @@
 }
 
 -(void) testInstantiateWithMethodWithOneNilArg {
-    ALCClassBuilder *classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
+    ALCBuilder *classBuilder = [self simpleBuilderForClass:[ALCMethodInstantiatorTests class]];
     [self configureAndResolveBuilder:classBuilder];
     ALCMethodInstantiator *instantiator = [[ALCMethodInstantiator alloc] initWithClass:[ALCMethodInstantiatorTests class]
                                                                             returnType:[SimpleObject class]

@@ -9,28 +9,29 @@
 @import ObjectiveC;
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCAbstractBuilder.h"
+#import "ALCBuilder.h"
 
 #import "ALCSingletonStorage.h"
 #import "ALCFactoryStorage.h"
 #import "ALCExternalStorage.h"
 
-#import "ALCMethodInstantiator.h"
-
+#import "ALCBuilderPersonality.h"
 #import "ALCMacroProcessor.h"
+
 #import "NSObject+Builder.h"
 #import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 // These properties are being made writable.
-@interface ALCAbstractBuilder ()
+@interface ALCBuilder ()
 @property (nonatomic, strong) NSString *name;
 @end
 
-@implementation ALCAbstractBuilder {
+@implementation ALCBuilder {
     id<ALCValueStorage> _valueStorage;
     BOOL _autoStart;
+    id<ALCBuilderPersonality> _personality;
 }
 
 #pragma mark - Properties
@@ -43,22 +44,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 hideInitializerImpl(init)
 
--(instancetype) initWithInstantiator:(id<ALCInstantiator>) instantiator
-                            forClass:(Class) aClass {
+-(instancetype)initWithPersonality:(id<ALCBuilderPersonality>)personality forClass:(Class)aClass {
+
     self = [super init];
     if (self) {
 
-        _autoStart = YES;
-        _valueStorage = [[ALCSingletonStorage alloc] init];
-        _instantiator = instantiator;
-        _valueClass = aClass;
-        _name = _instantiator.builderName;
+        // Set the back ref in the personality.
+        personality.builder = self;
 
-        // Add the instantiator as a dependency.
-        [self watchResolvable:instantiator];
+        _autoStart = YES;
+        _personality = personality;
+        _valueClass = aClass;
+        _name = _personality.builderName;
 
         // Setup the macro processor with the appropriate flags.
-        _macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:self.macroProcessorFlags];
+        _macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:_personality.macroProcessorFlags];
 
     }
     return self;
@@ -72,6 +72,9 @@ hideInitializerImpl(init)
     } else if (self.macroProcessor.isExternal) {
         _valueStorage = [[ALCExternalStorage alloc] init];
         _autoStart = NO;
+    } else {
+        _valueStorage = [[ALCSingletonStorage alloc] init];
+        _autoStart = YES;
     }
 
     _primary = self.macroProcessor.isPrimary;
@@ -80,9 +83,17 @@ hideInitializerImpl(init)
         self.name = newName; // Triggers KVO so that the model updates the name.
     }
 
+    [_personality configureWithMacroProcessor:_macroProcessor];
+
 }
 
 #pragma mark - Tasks
+
+
+-(void) addVariableInjection:(Ivar) variable
+          valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory {
+    [_personality addVariableInjection:variable valueSourceFactory:valueSourceFactory];
+}
 
 -(void)didBecomeAvailable {
     if (_autoStart && !_valueStorage.hasValue) {
@@ -93,12 +104,15 @@ hideInitializerImpl(init)
 
 -(void)resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
                              dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-    [self watchResolvable:_instantiator];
-    [_instantiator resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+    [_personality resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
 }
 
 -(BOOL) available {
     return super.available && _valueStorage.available;
+}
+
+-(id) invokeWithArgs:(NSArray<id> *) arguments {
+    return [_personality invokeWithArgs:arguments];
 }
 
 #pragma mark - Getters and setters
@@ -112,7 +126,7 @@ hideInitializerImpl(init)
 
     id value = _valueStorage.value;
     if (value == nil) {
-        value = [self instantiateObject];
+        value = [_personality instantiateObject];
         _valueStorage.value = value;// Dont go through the setter because the instantiator will have injected dependencies.
     }
 
@@ -121,26 +135,28 @@ hideInitializerImpl(init)
 
 // Allows us to inject dependencies on objects created outside of Alchemic.
 -(void)setValue:(id)value {
+
+    if (! _personality.canInjectDependencies) {
+        @throw [NSException exceptionWithName:@"AlchemicDependenciesNotAvailable"
+                                       reason:[NSString stringWithFormat:@"Dependencies not available: %@, cannot set a value.", self]
+                                     userInfo:nil];
+    }
+
     STLog(self.valueClass, @"Storing a %@", NSStringFromClass([value class]));
+    [_personality injectDependencies:value];
     _valueStorage.value = value;
     [self checkIfAvailable];
+}
+
+-(void)injectDependencies:(id) object {
+    [_personality injectDependencies:object];
 }
 
 #pragma mark - Debug
 
 -(nonnull NSString *) description {
     NSString *instantiated = _valueStorage.hasValue ? @"* " : @"  ";
-    return [NSString stringWithFormat:@"%@builder for type %@, name '%@'%@%@", instantiated, NSStringFromClass(self.valueClass), self.name, _valueStorage.attributeText, _instantiator.attributeText];
-}
-
-#pragma mark - Override methods
-
--(NSUInteger) macroProcessorFlags {
-    methodNotImplementedInt;
-}
-
--(id) instantiateObject {
-    methodNotImplementedObject;
+    return [NSString stringWithFormat:@"%@builder for type %@, name '%@'%@%@", instantiated, NSStringFromClass(self.valueClass), self.name, _valueStorage.attributeText, _personality.attributeText];
 }
 
 @end

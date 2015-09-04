@@ -10,7 +10,7 @@
 #import "ALCProtocol.h"
 #import "ALCBuilder.h"
 #import "ALCTestCase.h"
-#import "ALCClassBuilder.h"
+#import "ALCBuilder.h"
 
 @interface ALCProtocolTests : ALCTestCase
 
@@ -72,13 +72,13 @@
 
 -(void) testMatchesBuilder {
 	ALCProtocol *alcProtocol = [ALCProtocol withProtocol:@protocol(NSCopying)];
-    ALCClassBuilder *builder = [self simpleBuilderForClass:[NSString class]];
+    ALCBuilder *builder = [self simpleBuilderForClass:[NSString class]];
 	XCTAssertTrue([alcProtocol matches:builder]);
 }
 
 -(void) testNotMatchesBuilder {
 	ALCProtocol *alcProtocol = [ALCProtocol withProtocol:@protocol(ALCBuilder)];
-    ALCClassBuilder *builder = [self simpleBuilderForClass:[NSNumber class]];
+    ALCBuilder *builder = [self simpleBuilderForClass:[NSNumber class]];
 	XCTAssertFalse([alcProtocol matches:builder]);
 }
 

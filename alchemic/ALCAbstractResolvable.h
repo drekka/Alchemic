@@ -9,6 +9,8 @@
 @import Foundation;
 #import "ALCResolvable.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Parent of all resolvable classes.
  */
@@ -58,4 +60,9 @@
 -(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
                               dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
 
+-(BOOL) canBecomeAvailableWithInitiatingResolvable:(ALCAbstractResolvable *) originatingResolvable;
+
 @end
+
+NS_ASSUME_NONNULL_END
+

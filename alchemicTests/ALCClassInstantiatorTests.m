@@ -10,7 +10,7 @@
 #import "ALCInstantiator.h"
 #import "ALCClassInstantiator.h"
 #import "SimpleObject.h"
-#import "ALCClassBuilder.h"
+#import "ALCBuilder.h"
 
 @interface ALCClassInstantiatorTests : XCTestCase
 @end
@@ -24,7 +24,7 @@
 
 -(void) testCreatingAnObject {
     ALCClassInstantiator *instantiator = [[ALCClassInstantiator alloc] initWithClass:[SimpleObject class]];
-    ALCClassBuilder *builder = [[ALCClassBuilder alloc] initWithInstantiator:instantiator forClass:[SimpleObject class]];
+    ALCBuilder *builder = [[ALCBuilder alloc] initWithInstantiator:instantiator forClass:[SimpleObject class]];
     SimpleObject *so = [instantiator instantiateWithClassBuilder:builder arguments:@[]];
     XCTAssertNotNil(so);
 }

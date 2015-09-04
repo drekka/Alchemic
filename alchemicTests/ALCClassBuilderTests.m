@@ -1,5 +1,5 @@
 //
-//  ALCClassBuilderTests.m
+//  ALCBuilderTests.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 1/09/2015.
@@ -11,18 +11,18 @@
 #import <StoryTeller/StoryTeller.h>
 #import "ALCTestCase.h"
 
-#import "ALCClassBuilder.h"
+#import "ALCBuilder.h"
 #import "SimpleObject.h"
 #import "ALCMacroProcessor.h"
 
-@interface ALCClassBuilderTests : ALCTestCase
+@interface ALCBuilderTests : ALCTestCase
 @end
 
-@implementation ALCClassBuilderTests
+@implementation ALCBuilderTests
 
 -(void) testInject {
     STStartLogging(@"LogAll");
-    ALCClassBuilder *builder = [self simpleBuilderForClass:[SimpleObject class]];
+    ALCBuilder *builder = [self simpleBuilderForClass:[SimpleObject class]];
 
     SimpleObject *so = [[SimpleObject alloc] init];
     Ivar var = class_getInstanceVariable([SimpleObject class], "_aStringProperty");

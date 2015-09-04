@@ -11,8 +11,8 @@
 #import <OCMock/OCMock.h>
 #import <Alchemic/Alchemic.h>
 
-#import "ALCAbstractBuilder.h"
-#import "ALCClassBuilder.h"
+#import "ALCBuilder.h"
+#import "ALCBuilder.h"
 
 #import "ALCInstantiator.h"
 
@@ -23,11 +23,11 @@
 #import "SimpleObject.h"
 #import "ALCMacroProcessor.h"
 
-@interface ALCAbstractBuilderTests : ALCTestCase
+@interface ALCBuilderTests : ALCTestCase
 @end
 
-@implementation ALCAbstractBuilderTests {
-    ALCAbstractBuilder *_builder;
+@implementation ALCBuilderTests {
+    ALCBuilder *_builder;
 }
 
 -(void)setUp {
@@ -38,7 +38,7 @@
 
 -(void) testConfigureDefaultSingletonStorage {
     [_builder configure];
-    Ivar storageVar = class_getInstanceVariable([ALCAbstractBuilder class], "_valueStorage");
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_valueStorage");
     id storage = object_getIvar(_builder, storageVar);
     XCTAssertTrue([storage isKindOfClass:[ALCSingletonStorage class]]);
 }
@@ -46,7 +46,7 @@
 -(void) testConfigureFactoryStorage {
     [_builder.macroProcessor addMacro:AcFactory];
     [_builder configure];
-    Ivar storageVar = class_getInstanceVariable([ALCAbstractBuilder class], "_valueStorage");
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_valueStorage");
     id storage = object_getIvar(_builder, storageVar);
     XCTAssertTrue([storage isKindOfClass:[ALCFactoryStorage class]]);
 }
@@ -54,7 +54,7 @@
 -(void) testConfigureExternalStorage {
     [_builder.macroProcessor addMacro:AcExternal];
     [_builder configure];
-    Ivar storageVar = class_getInstanceVariable([ALCAbstractBuilder class], "_valueStorage");
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_valueStorage");
     id storage = object_getIvar(_builder, storageVar);
     XCTAssertTrue([storage isKindOfClass:[ALCExternalStorage class]]);
 }
