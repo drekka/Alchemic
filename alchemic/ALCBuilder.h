@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Properties
 
-@property (nonatomic, assign, readonly) ALCPersonalityType type;
+@property (nonatomic, assign, readonly) ALCBuilderPersonalityType type;
 
 /**
  Override of value so it can be writable in builders.

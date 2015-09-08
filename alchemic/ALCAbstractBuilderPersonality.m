@@ -36,10 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(void)resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
-                             dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {}
+-(void)willResolve {}
 
--(ALCPersonalityType)type{
+-(ALCBuilderPersonalityType)type{
     methodNotImplementedInt;
 }
 

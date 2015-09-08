@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCAbstractMethodBuilderPersonality : ALCAbstractBuilderPersonality
 
 @property (nonatomic, strong, readonly) ALCBuilder *classBuilder;
-@property (nonatomic, strong, readonly) NSArray<ALCDependency *> *arguments;
 @property (nonatomic, strong, readonly) NSArray<id> *argumentValues;
 
 hideInitializer(init);

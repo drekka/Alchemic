@@ -81,7 +81,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     for (ALCBuilder *builder in [_model allBuilders]) {
         STLog(builder.valueClass, @"Resolving %@", builder);
         STStartScope(builder.valueClass);
-        [builder resolveWithPostProcessors:self->_dependencyPostProcessors dependencyStack:[[NSMutableArray alloc] init]];
+        [builder resolveWithDependencyStack:[[NSMutableArray alloc] init]];
     }
 }
 
@@ -202,7 +202,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     }
 
     ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSourceFactory.valueSource];
-    [dependency.valueSource resolveWithPostProcessors:_dependencyPostProcessors dependencyStack:[[NSMutableArray alloc] init]];
+    [dependency.valueSource resolve];
     return dependency.value;
 }
 
@@ -215,7 +215,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
     NSMutableSet<id> *results = [[NSMutableSet alloc] init];
     [builders enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL *stop) {
-        if (builder.type != ALCPersonalityTypeClass) {
+        if (builder.type != ALCBuilderPersonalityTypeClass) {
             // We only execute on method or initializer builders.
             [results addObject:[builder invokeWithArgs:args]];
         }

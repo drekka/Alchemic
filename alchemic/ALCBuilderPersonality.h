@@ -15,10 +15,10 @@
 @class ALCBuilder;
 @class ALCValueSourceFactory;
 
-typedef NS_ENUM(NSUInteger, ALCPersonalityType) {
-    ALCPersonalityTypeClass,
-    ALCPersonalityTypeMethod,
-    ALCPersonalityTypeInitializer
+typedef NS_ENUM(NSUInteger, ALCBuilderPersonalityType) {
+    ALCBuilderPersonalityTypeClass,
+    ALCBuilderPersonalityTypeMethod,
+    ALCBuilderPersonalityTypeInitializer
 };
 
 /**
@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, ALCPersonalityType) {
 
 @property (nonatomic, weak) ALCBuilder *builder;
 
-@property (nonatomic, assign, readonly) ALCPersonalityType type;
+@property (nonatomic, assign, readonly) ALCBuilderPersonalityType type;
 
 /**
  Returns the name to use for the builder.
@@ -46,8 +46,10 @@ typedef NS_ENUM(NSUInteger, ALCPersonalityType) {
 
 -(void) configureWithMacroProcessor:(ALCMacroProcessor *) macroProcessor;
 
--(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
-                             dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack;
+/**
+ Forwarded from the ALCResolvable willResolve method.
+ */
+-(void) willResolve;
 
 -(void) addVariableInjection:(Ivar) variable
           valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory;

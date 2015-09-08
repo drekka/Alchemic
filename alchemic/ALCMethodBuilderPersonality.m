@@ -36,18 +36,15 @@ hideInitializerImpl(initClassBuilder:(ALCBuilder *) classBuilder)
     return self;
 }
 
--(ALCPersonalityType)type {
-    return ALCPersonalityTypeMethod;
+-(ALCBuilderPersonalityType)type {
+    return ALCBuilderPersonalityTypeMethod;
 }
 
 -(NSString *) builderName {
-    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.builder.valueClass), NSStringFromSelector(_selector)];
+    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.classBuilder.valueClass), NSStringFromSelector(_selector)];
 }
 
--(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                              dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
-
-    [super resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+-(void) willResolve {
 
     [ALCRuntime validateClass:self.classBuilder.valueClass selector:_selector];
 
@@ -57,8 +54,7 @@ hideInitializerImpl(initClassBuilder:(ALCBuilder *) classBuilder)
     _returnTypeBuilder = [[ALCAlchemic mainContext] builderForClass:builder.valueClass];
     if (_returnTypeBuilder != nil) {
         STLog(builder.valueClass, @"Watching return type builder");
-        [builder watchResolvable:_returnTypeBuilder];
-        [_returnTypeBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+        [builder addDependency:_returnTypeBuilder];
     }
 }
 

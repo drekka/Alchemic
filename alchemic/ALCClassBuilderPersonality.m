@@ -30,8 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(ALCPersonalityType)type {
-    return ALCPersonalityTypeClass;
+-(ALCBuilderPersonalityType)type {
+    return ALCBuilderPersonalityTypeClass;
 }
 
 -(NSString *) builderName {
@@ -51,19 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
     ALCBuilder *builder = self.builder;
     STLog(builder.valueClass, @"Adding variable dependency %@.%@", NSStringFromClass(builder.valueClass), dep);
     [_dependencies addObject:dep];
-    [builder watchResolvable:valueSource];
-}
-
--(void)resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
-                             dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-
-    [super resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
-
-    // Variable dependencies are regarded as a new dependency stack because they are not immediately required when processing objects.
-    for (ALCVariableDependency *dependency in _dependencies) {
-        STLog(self.builder.valueClass, @"Resolving variable dependency %@", dependency);
-        [dependency.valueSource resolveWithPostProcessors:postProcessors dependencyStack:[NSMutableArray array]];
-    }
+    [builder addDependency:valueSource];
 }
 
 -(id) instantiateObject {

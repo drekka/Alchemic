@@ -12,7 +12,6 @@
 #import "ALCBuilder.h"
 #import "ALCAlchemic.h"
 #import "ALCContext.h"
-#import "ALCDependencyPostProcessor.h"
 #import "ALCInternalMacros.h"
 #import "NSSet+Alchemic.h"
 
@@ -21,9 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Sources values from the model.
  */
-@implementation ALCModelValueSource {
-    NSSet<ALCBuilder *> *_candidateBuilders;
-}
+@implementation ALCModelValueSource
 
 hideInitializerImpl(initWithType:(Class)argumentType)
 
@@ -43,56 +40,51 @@ hideInitializerImpl(initWithType:(Class)argumentType)
 
 -(NSSet<id> *) values {
     NSMutableSet<id> *results = [[NSMutableSet alloc] init];
-    [_candidateBuilders enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL * stop) {
+    [self.dependencies enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL * stop) {
         [results addObject:builder.value];
     }];
     return results;
 }
 
--(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                              dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
+-(void) willResolve {
 
-    // Find all candidate builders from the model.
-    [self resolveCandidatesWithPostProcessors:postProcessors];
-
-    // resolve and watch them.
-    for (id<ALCResolvable> candidate in _candidateBuilders) {
-        [self watchResolvable:candidate];
-        [candidate resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
-    }
-}
-
--(NSString *) description {
-    return [NSString stringWithFormat:@"Model: %@", [_searchExpressions componentsJoinedByString:@", "]];
-}
-
--(void) resolveCandidatesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
     STLog(self, @"Resolving value source -> %@", self);
-    __block NSSet<ALCBuilder *> *finalBuilders;
+    __block NSSet<ALCBuilder *> *candidates;
     [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
                                               processingBuildersBlock:^(ProcessBuiderBlockArgs) {
-                                                  finalBuilders = builders;
+                                                  candidates = builders;
                                               }];
 
-    // Post process the candidates.
-    for (id<ALCDependencyPostProcessor> postProcessor in postProcessors) {
-        finalBuilders = [postProcessor process:finalBuilders];
-        if ([finalBuilders count] == 0) {
-            break;
+    // Find primary objects.
+    NSMutableSet<ALCBuilder *> *primaries = [[NSMutableSet alloc] init];
+    for (ALCBuilder *candidateBuilder in candidates) {
+        if (candidateBuilder.primary) {
+            [primaries addObject:candidateBuilder];
         }
     }
 
-    STLog(ALCHEMIC_LOG, @"%lu final candidates", [finalBuilders count]);
-    self->_candidateBuilders = finalBuilders;
-
+    // Replace the list if primaries are present.
+    if ([primaries count] > 0) {
+        STLog(ALCHEMIC_LOG, @"%lu primary objects detected", [primaries count]);
+        candidates = primaries;
+    }
 
     // If there are no candidates left then error.
-    if ([_candidateBuilders count] == 0) {
+    if ([candidates count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicNoCandidateBuildersFound"
                                        reason:[NSString stringWithFormat:@"Unable to resolve value source -> %@ - no candidate builders found.", [_searchExpressions componentsJoinedByString:@", "]]
                                      userInfo:nil];
     }
 
+    // Add the candidates to the resolvables dependencies.
+    STLog(ALCHEMIC_LOG, @"%lu final candidates", [candidates count]);
+    for (ALCBuilder *candidateBuilder in candidates) {
+        [self addDependency:candidateBuilder];
+    }
+}
+
+-(NSString *) description {
+    return [NSString stringWithFormat:@"Model: %@", [_searchExpressions componentsJoinedByString:@", "]];
 }
 
 @end

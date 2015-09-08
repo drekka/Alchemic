@@ -55,9 +55,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "ArraysIntegrationTests">
-               </Test>
-               <Test
                   Identifier = "CircularDependency1IntegrationTests">
                </Test>
                <Test

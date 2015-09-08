@@ -9,7 +9,6 @@
 @import Foundation;
 @import ObjectiveC;
 
-@protocol ALCDependencyPostProcessor;
 @protocol ALCValueResolver;
 @protocol ALCModelSearchExpression;
 @class ALCBuilder;
@@ -40,16 +39,6 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @discussion Alchemic makes use of an instance of this class to provide the central storage for the class model provided by an ALCModel instance. All incoming requests to regsister classes, injections, methods,e tc and to obtain objects are routed through here.
  */
 @interface ALCContext : NSObject
-
-#pragma mark - Configuration
-
-/**
- Adds an dependency post processor.
-
- @discussion dependency post processors are executed after depedencies have been resolve and before their values are accessed for injection.
- @param postProcessor The ALCDependencyPostProcessor to be used.
- */
--(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor;
 
 #pragma mark - Registration
 

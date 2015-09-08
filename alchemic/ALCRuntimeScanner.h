@@ -57,13 +57,6 @@ typedef void (^ClassProcessor)(ALCContext *context, NSMutableSet *moreBundles, C
 +(instancetype) modelScanner;
 
 /**
- Factory method which returns a scanner which searches for dependency post processors.
-
- @return A scanner.
- */
-+(instancetype) dependencyPostProcessorScanner;
-
-/**
  Factory method which returns a scanner which searches for resource locator classes.
 
  @return A scanner.

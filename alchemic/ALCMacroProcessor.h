@@ -11,8 +11,6 @@
 @protocol ALCMacro;
 @protocol ALCValueSource;
 
-#import "ALCResolvable.h"
-
 /**
  Flags which define what macros the processor will allow.
  */

@@ -30,22 +30,20 @@ hideInitializerImpl(initWithClassBuilder:(ALCBuilder *) classBuilder)
     return self;
 }
 
--(ALCPersonalityType)type {
-    return ALCPersonalityTypeInitializer;
+-(ALCBuilderPersonalityType)type {
+    return ALCBuilderPersonalityTypeInitializer;
 }
 
 -(NSString *) builderName {
-    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.builder.valueClass), NSStringFromSelector(_initializer)];
+    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.classBuilder.valueClass), NSStringFromSelector(_initializer)];
 }
 
--(void) resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors
-                              dependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
-    [super resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
-    [ALCRuntime validateClass:self.builder.valueClass selector:_initializer];
+-(void) willResolve {
+    [ALCRuntime validateClass:self.classBuilder.valueClass selector:_initializer];
 }
 
 -(id) invokeWithArgs:(NSArray<id> *) arguments {
-    ALCBuilder *builder = self.builder;
+    ALCBuilder *builder = self.classBuilder;
     STLog(builder.valueClass, @"Instantiating a %@ using %@", NSStringFromClass(builder.valueClass), self);
     id object = [[builder.valueClass alloc] invokeSelector:_initializer arguments:arguments];
     [self injectDependencies:object];

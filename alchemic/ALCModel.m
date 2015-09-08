@@ -146,7 +146,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
     NSSet<ALCBuilder *> *newBuilders = [builders objectsPassingTest:^BOOL(ALCBuilder *builder, BOOL * stop) {
-        return builder.type == ALCPersonalityTypeClass;
+        return builder.type == ALCBuilderPersonalityTypeClass;
     }];
     STLog(ALCHEMIC_LOG, @"Returning %lu class builders", [newBuilders count]);
     return newBuilders;

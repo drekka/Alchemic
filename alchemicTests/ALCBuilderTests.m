@@ -71,25 +71,22 @@
 #pragma mark - Resolving
 
 -(void) testResolveDefault {
-    NSSet *postProcessors = [NSSet set];
     NSMutableArray *stack = [NSMutableArray array];
-    [_builder resolveWithPostProcessors:postProcessors dependencyStack:stack]; // Doesn't throw.
+    [_builder resolveWithDependencyStack:stack]; // Doesn't throw.
 }
 
 -(void) testResolveWhenCircularDependency {
-    NSSet *postProcessors = [NSSet set];
     NSMutableArray *stack = [NSMutableArray arrayWithObject:_builder];
-    XCTAssertThrowsSpecificNamed([_builder resolveWithPostProcessors:postProcessors dependencyStack:stack], NSException, @"AlchemicCircularDependency");
+    XCTAssertThrowsSpecificNamed([_builder resolveWithDependencyStack:stack], NSException, @"AlchemicCircularDependency");
 }
 
 #pragma mark - Value
 
 -(void) testValue {
     [_builder configure];
-    NSSet *postProcessors = [NSSet set];
     NSMutableArray *stack = [NSMutableArray array];
 
-    [_builder resolveWithPostProcessors:postProcessors dependencyStack:stack];
+    [_builder resolveWithDependencyStack:stack];
 
     SimpleObject *so = _builder.value;
     XCTAssertNotNil(so);
@@ -97,10 +94,9 @@
 
 -(void) testValueCachesValue {
     [_builder configure];
-    NSSet *postProcessors = [NSSet set];
     NSMutableArray *stack = [NSMutableArray array];
 
-    [_builder resolveWithPostProcessors:postProcessors dependencyStack:stack];
+    [_builder resolveWithDependencyStack:stack];
 
     SimpleObject *so1 = _builder.value;
     SimpleObject *so2 = _builder.value;

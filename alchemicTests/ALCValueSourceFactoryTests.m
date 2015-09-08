@@ -22,7 +22,7 @@
     ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
 	[factory addMacro:AcValue(@5)];
 	id<ALCValueSource> valueSource = factory.valueSource;
-    [valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+    [valueSource resolve];
 	XCTAssertTrue([valueSource isKindOfClass:[ALCConstantValueSource class]]);
 	XCTAssertEqualObjects(@5, valueSource.value);
 }

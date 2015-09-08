@@ -13,7 +13,9 @@
 #import "ALCDependency.h"
 #import "ALCBuilder.h"
 
-@implementation ALCAbstractMethodBuilderPersonality
+@implementation ALCAbstractMethodBuilderPersonality {
+    NSMutableArray<ALCDependency *> *_arguments;
+}
 
 hideInitializerImpl(init)
 
@@ -21,6 +23,7 @@ hideInitializerImpl(init)
     self = [super init];
     if (self) {
         _classBuilder = classBuilder;
+        _arguments = [NSMutableArray array];
     }
     return self;
 }
@@ -35,33 +38,17 @@ hideInitializerImpl(init)
 
     // Any dependencies added to this builder macro processor will contain argument data for methods.
     NSUInteger nbrArgs = [macroProcessor valueSourceCount];
-    _arguments = [NSMutableArray array];
-    if (nbrArgs > 0) {
-        for (NSUInteger i = 0; i < nbrArgs; i++) {
-            id<ALCValueSource> valueSource = [macroProcessor valueSourceAtIndex:i];
-            ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSource];
-            [(NSMutableArray *)_arguments addObject:dependency];
-            [self.builder watchResolvable:valueSource];
-        }
+    for (NSUInteger i = 0; i < nbrArgs; i++) {
+        id<ALCValueSource> valueSource = [macroProcessor valueSourceAtIndex:i];
+        ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSource];
+        [(NSMutableArray *)_arguments addObject:dependency];
+        [self.builder addDependency:valueSource];
     }
 }
 
--(void)resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
-                             dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-
-    [super resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
-
-    // Resolve the class builder.
-    [_classBuilder resolveWithPostProcessors:postProcessors dependencyStack:dependencyStack];
-
-    // Variable dependencies are regarded as a new dependency stack because they are not immediately required when processing objects.
-    ALCBuilder *builder = self.builder;
-    [dependencyStack addObject:builder];
-    for (ALCDependency *argument in _arguments) {
-        STLog(builder.valueClass, @"Resolving dependency %@", argument);
-        [argument.valueSource resolveWithPostProcessors:postProcessors dependencyStack:[NSMutableArray array]];
-    }
-    [dependencyStack addObject:builder];
+-(void)willResolve {
+    // Add the class builder as a dependency because we cannot execute a method if the class is still not available.
+    [self.builder addDependency:_classBuilder];
 }
 
 -(NSArray<id> *)argumentValues {

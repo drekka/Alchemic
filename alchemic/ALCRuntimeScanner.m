@@ -11,7 +11,6 @@
 
 #import "ALCRuntimeScanner.h"
 #import "ALCInternalMacros.h"
-#import "ALCDependencyPostProcessor.h"
 #import "ALCResourceLocator.h"
 #import "ALCContext.h"
 #import "ALCConfig.h"
@@ -68,16 +67,6 @@
                 }
 
                 free(classMethods);
-            }];
-}
-
-+(nonnull instancetype) dependencyPostProcessorScanner {
-    return [[ALCRuntimeScanner alloc]
-            initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
-                return [aClass conformsToProtocol:@protocol(ALCDependencyPostProcessor)];
-            }
-            processor:^(ALCContext * context, NSMutableSet *moreBundles, Class __unsafe_unretained aClass) {
-                [context addDependencyPostProcessor:[[aClass alloc] init]];
             }];
 }
 

@@ -68,7 +68,7 @@
     OCMStub([_mockModel numberBuilders]).andReturn(1u);
     OCMStub([_mockModel allBuilders]).andReturn(builders);
 
-    OCMExpect([mockBuilder resolveWithPostProcessors:OCMOCK_ANY dependencyStack:OCMOCK_ANY]);
+    OCMExpect([mockBuilder resolveWithDependencyStack:OCMOCK_ANY]);
     OCMStub([mockBuilder valueClass]).andReturn([NSString class]);
 
     ignoreSelectorWarnings(
@@ -90,7 +90,7 @@
     ALCName *nameLocator = AcName(@"abc");
 
     id mockBuilder = OCMClassMock([ALCBuilder class]);
-    OCMStub([(ALCBuilder *)mockBuilder type]).andReturn(ALCPersonalityTypeMethod);
+    OCMStub([(ALCBuilder *)mockBuilder type]).andReturn(ALCBuilderPersonalityTypeMethod);
     OCMStub([mockBuilder invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
@@ -109,11 +109,11 @@
 
     id mockBuilder1 = OCMClassMock([ALCBuilder class]);
     OCMStub([mockBuilder1 invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
-    OCMStub([(ALCBuilder *)mockBuilder1 type]).andReturn(ALCPersonalityTypeMethod);
+    OCMStub([(ALCBuilder *)mockBuilder1 type]).andReturn(ALCBuilderPersonalityTypeMethod);
 
     id mockBuilder2 = OCMClassMock([ALCBuilder class]);
     OCMStub([mockBuilder2 invokeWithArgs:@[@"def"]]).andReturn(@12);
-    OCMStub([(ALCBuilder *)mockBuilder2 type]).andReturn(ALCPersonalityTypeMethod);
+    OCMStub([(ALCBuilder *)mockBuilder2 type]).andReturn(ALCBuilderPersonalityTypeMethod);
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
         return [(NSSet *)arg containsObject:classLocator];

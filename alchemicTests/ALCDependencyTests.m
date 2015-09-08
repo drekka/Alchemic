@@ -11,7 +11,6 @@
 #import <Alchemic/Alchemic.h>
 
 #import "ALCDependency.h"
-#import "ALCDependencyPostProcessor.h"
 #import "ALCValueSource.h"
 #import "ALCTestCase.h"
 #import "ALCConstantValueSource.h"

@@ -12,7 +12,6 @@
 #import <Alchemic/Alchemic.h>
 
 #import "ALCTestCase.h"
-#import "ALCPrimaryObjectDependencyPostProcessor.h"
 #import "ALCRuntime.h"
 #import "ALCRuntimeScanner.h"
 #import "ALCMacroProcessor.h"
@@ -67,7 +66,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) startContextWithClasses:(NSArray<Class> *) classes {
     NSAssert(_context != nil, @"[ALCTestCase setupRealContext must be called first.");
     NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
-                                                                 [ALCRuntimeScanner dependencyPostProcessorScanner],
                                                                  [ALCRuntimeScanner resourceLocatorScanner]
                                                                  ]];
     [ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
@@ -104,8 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) configureAndResolveBuilder:(ALCBuilder *) builder {
     [builder configure];
-    [builder resolveWithPostProcessors:[NSSet set]
-                       dependencyStack:[NSMutableArray array]];
+    [builder resolveWithDependencyStack:[NSMutableArray array]];
 }
 
 @end

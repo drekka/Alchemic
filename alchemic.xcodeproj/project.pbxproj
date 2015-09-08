@@ -31,6 +31,8 @@
 		6C2421011B61FB5E00884A93 /* ALCValueSourceFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2421001B61FB5E00884A93 /* ALCValueSourceFactoryTests.m */; };
 		6C2421031B62006000884A93 /* ALCConstantValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2421021B62006000884A93 /* ALCConstantValueSourceTests.m */; };
 		6C2421051B6200B900884A93 /* ALCModelValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2421041B6200B900884A93 /* ALCModelValueSourceTests.m */; };
+		6C258F9D1B99EA9200347369 /* ALCAbstractBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C258F9C1B99EA9200347369 /* ALCAbstractBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
+		6C258F9F1B99EBEB00347369 /* ALCAbstractMethodBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C258F9E1B99EBEB00347369 /* ALCAbstractMethodBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
 		6C2D4CC31B573D560024AE82 /* ALCConstantValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C2D4CC11B573D560024AE82 /* ALCConstantValueSource.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C2D4CC41B573D560024AE82 /* ALCConstantValueSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2D4CC21B573D560024AE82 /* ALCConstantValueSource.m */; };
 		6C31B0711B9815B000F59A83 /* ALCAbtractResolvableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C31B0701B9815B000F59A83 /* ALCAbtractResolvableTests.m */; settings = {ASSET_TAGS = (); }; };
@@ -42,7 +44,6 @@
 		6C36D7791B38531E0073C4FB /* ALCIsFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C781EA31B24258C001D86CB /* ALCIsFactory.m */; };
 		6C36D77B1B38531E0073C4FB /* ALCIsPrimary.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C781EB01B25968F001D86CB /* ALCIsPrimary.m */; };
 		6C36D77C1B38531E0073C4FB /* ALCDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9ADAC11ADFF9F700A240F2 /* ALCDependency.m */; };
-		6C36D77D1B38531E0073C4FB /* ALCPrimaryObjectDependencyPostProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1C6A701AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.m */; };
 		6C36D77E1B38531E0073C4FB /* ALCVariableDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB309EE1B149976003C1DE6 /* ALCVariableDependency.m */; };
 		6C36D7841B38531E0073C4FB /* ALCPlistResourceLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9ADAB81ADFEC7D00A240F2 /* ALCPlistResourceLocator.m */; };
 		6C36D7851B38531E0073C4FB /* ALCBundleResourceLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9ADABB1ADFF51C00A240F2 /* ALCBundleResourceLocator.m */; };
@@ -57,14 +58,15 @@
 		6C36D7AD1B3853F10073C4FB /* ALCIsFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C781EA21B24258C001D86CB /* ALCIsFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C36D7AF1B3853F10073C4FB /* ALCIsPrimary.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C781EAF1B25968F001D86CB /* ALCIsPrimary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C36D7B01B3853F10073C4FB /* ALCDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9ADAC01ADFF9F700A240F2 /* ALCDependency.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C36D7B11B3853F10073C4FB /* ALCDependencyPostProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1C6A6E1AF108F90074BB26 /* ALCDependencyPostProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C36D7B21B3853F10073C4FB /* ALCPrimaryObjectDependencyPostProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1C6A6F1AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7B31B3853F10073C4FB /* ALCVariableDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB309ED1B149976003C1DE6 /* ALCVariableDependency.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7BC1B3853F10073C4FB /* ALCResourceLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9ADAB61ADFEB1500A240F2 /* ALCResourceLocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7BD1B3853F10073C4FB /* ALCPlistResourceLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9ADAB71ADFEC7D00A240F2 /* ALCPlistResourceLocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7BE1B3853F10073C4FB /* ALCBundleResourceLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9ADABA1ADFF51C00A240F2 /* ALCBundleResourceLocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7BF1B3853F20073C4FB /* ALCFileContentsResourceLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9ADABD1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7C01B3853F20073C4FB /* ALCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C66DC491A8B85E1009F9D94 /* ALCRuntime.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6C36F6261B9E9FD20075967E /* ALCClassBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C36F6251B9E9FD10075967E /* ALCClassBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
+		6C36F6281B9EA3EF0075967E /* ALCInitializerBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C36F6271B9EA3EF0075967E /* ALCInitializerBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
+		6C36F62A1B9EB2310075967E /* ALCMethodBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C36F6291B9EB2310075967E /* ALCMethodBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
 		6C37497E1B7AD8B40012383D /* OnLoadIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37497D1B7AD8B40012383D /* OnLoadIntegrationTests.m */; };
 		6C3CB9771B59570E001F6EB6 /* ALCArg.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3CB9751B595706001F6EB6 /* ALCArg.m */; };
 		6C3CB9781B595713001F6EB6 /* ALCArg.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C3CB9741B595706001F6EB6 /* ALCArg.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -106,7 +108,6 @@
 		6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C91F9EE1B399009002DF241 /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C95EDEC1B68A5D3004D8F74 /* ALCDependencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C95EDEB1B68A5D2004D8F74 /* ALCDependencyTests.m */; };
 		6C95EDEE1B68A977004D8F74 /* ALCVariableDependencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C95EDED1B68A977004D8F74 /* ALCVariableDependencyTests.m */; };
-		6C95EDF01B68AB5C004D8F74 /* ALCPrimaryObjectDependencyPostProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C95EDEF1B68AB5C004D8F74 /* ALCPrimaryObjectDependencyPostProcessorTests.m */; };
 		6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CF46EC81B4610EE0009007A /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CAC887C1B4A5AA000AFB8E4 /* ALCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46EC91B4610EE0009007A /* ALCModel.m */; };
 		6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAC88801B4A6C6000AFB8E4 /* ALCRuntimeTests.m */; };
@@ -183,9 +184,6 @@
 		6C1A4F191B994E9400B3C25D /* ALCAbstractBuilderPersonality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractBuilderPersonality.m; sourceTree = "<group>"; };
 		6C1A4F1D1B995C3100B3C25D /* ALCAbstractMethodBuilderPersonality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractMethodBuilderPersonality.h; sourceTree = "<group>"; };
 		6C1A4F1E1B995C3200B3C25D /* ALCAbstractMethodBuilderPersonality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractMethodBuilderPersonality.m; sourceTree = "<group>"; };
-		6C1C6A6E1AF108F90074BB26 /* ALCDependencyPostProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependencyPostProcessor.h; sourceTree = "<group>"; };
-		6C1C6A6F1AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCPrimaryObjectDependencyPostProcessor.h; sourceTree = "<group>"; };
-		6C1C6A701AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCPrimaryObjectDependencyPostProcessor.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C215CB61B8CA2D9002EFF58 /* ALCSingletonStorageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCSingletonStorageTests.m; sourceTree = "<group>"; };
 		6C215CB81B8CA41F002EFF58 /* ALCFactoryStorageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCFactoryStorageTests.m; sourceTree = "<group>"; };
 		6C215CBA1B8CA54F002EFF58 /* ALCExternalStorageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCExternalStorageTests.m; sourceTree = "<group>"; };
@@ -197,12 +195,17 @@
 		6C2421001B61FB5E00884A93 /* ALCValueSourceFactoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCValueSourceFactoryTests.m; sourceTree = "<group>"; };
 		6C2421021B62006000884A93 /* ALCConstantValueSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConstantValueSourceTests.m; sourceTree = "<group>"; };
 		6C2421041B6200B900884A93 /* ALCModelValueSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelValueSourceTests.m; sourceTree = "<group>"; };
+		6C258F9C1B99EA9200347369 /* ALCAbstractBuilderPersonalityTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractBuilderPersonalityTests.m; sourceTree = "<group>"; };
+		6C258F9E1B99EBEB00347369 /* ALCAbstractMethodBuilderPersonalityTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractMethodBuilderPersonalityTests.m; sourceTree = "<group>"; };
 		6C2D4CC11B573D560024AE82 /* ALCConstantValueSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCConstantValueSource.h; sourceTree = "<group>"; };
 		6C2D4CC21B573D560024AE82 /* ALCConstantValueSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConstantValueSource.m; sourceTree = "<group>"; };
 		6C31B0701B9815B000F59A83 /* ALCAbtractResolvableTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbtractResolvableTests.m; sourceTree = "<group>"; };
 		6C3273A61B8362ED006A7581 /* NSObject+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+AlchemicTests.m"; sourceTree = "<group>"; };
 		6C3273A81B83671C006A7581 /* MacroTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MacroTests.m; sourceTree = "<group>"; };
 		6C36D74F1B3851680073C4FB /* Alchemic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alchemic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C36F6251B9E9FD10075967E /* ALCClassBuilderPersonalityTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCClassBuilderPersonalityTests.m; sourceTree = "<group>"; };
+		6C36F6271B9EA3EF0075967E /* ALCInitializerBuilderPersonalityTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCInitializerBuilderPersonalityTests.m; sourceTree = "<group>"; };
+		6C36F6291B9EB2310075967E /* ALCMethodBuilderPersonalityTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMethodBuilderPersonalityTests.m; sourceTree = "<group>"; };
 		6C37497D1B7AD8B40012383D /* OnLoadIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnLoadIntegrationTests.m; sourceTree = "<group>"; };
 		6C37A6EF1A9B339500ACD0F8 /* ALCTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCTestCase.h; sourceTree = "<group>"; };
 		6C37A6F01A9B339500ACD0F8 /* ALCTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCTestCase.m; sourceTree = "<group>"; };
@@ -265,7 +268,6 @@
 		6C91F9EE1B399009002DF241 /* ALCMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C95EDEB1B68A5D2004D8F74 /* ALCDependencyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCDependencyTests.m; sourceTree = "<group>"; };
 		6C95EDED1B68A977004D8F74 /* ALCVariableDependencyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCVariableDependencyTests.m; sourceTree = "<group>"; };
-		6C95EDEF1B68AB5C004D8F74 /* ALCPrimaryObjectDependencyPostProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCPrimaryObjectDependencyPostProcessorTests.m; sourceTree = "<group>"; };
 		6C9ADAB61ADFEB1500A240F2 /* ALCResourceLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALCResourceLocator.h; path = alchemic/ALCResourceLocator.h; sourceTree = "<group>"; };
 		6C9ADAB71ADFEC7D00A240F2 /* ALCPlistResourceLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALCPlistResourceLocator.h; path = alchemic/ALCPlistResourceLocator.h; sourceTree = "<group>"; };
 		6C9ADAB81ADFEC7D00A240F2 /* ALCPlistResourceLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCPlistResourceLocator.m; path = alchemic/ALCPlistResourceLocator.m; sourceTree = "<group>"; };
@@ -378,6 +380,18 @@
 			name = Storage;
 			sourceTree = "<group>";
 		};
+		6C258F9B1B99EA6500347369 /* Personality */ = {
+			isa = PBXGroup;
+			children = (
+				6C258F9C1B99EA9200347369 /* ALCAbstractBuilderPersonalityTests.m */,
+				6C258F9E1B99EBEB00347369 /* ALCAbstractMethodBuilderPersonalityTests.m */,
+				6C36F6251B9E9FD10075967E /* ALCClassBuilderPersonalityTests.m */,
+				6C36F6271B9EA3EF0075967E /* ALCInitializerBuilderPersonalityTests.m */,
+				6C36F6291B9EB2310075967E /* ALCMethodBuilderPersonalityTests.m */,
+			);
+			name = Personality;
+			sourceTree = "<group>";
+		};
 		6C4655F21B54D58500FD1D28 /* Value */ = {
 			isa = PBXGroup;
 			children = (
@@ -408,6 +422,7 @@
 		6C5F14271B63DB6400E119FC /* Builders */ = {
 			isa = PBXGroup;
 			children = (
+				6C258F9B1B99EA6500347369 /* Personality */,
 				6CEE8EAE1B8D721C002EADC5 /* ALCBuilderTests.m */,
 				6C2420FA1B61C4D200884A93 /* ALCMacroProcessorTests.m */,
 				6CEE8EA81B8D414F002EADC5 /* NSObject+BuilderTests.m */,
@@ -550,7 +565,6 @@
 			children = (
 				6C95EDEB1B68A5D2004D8F74 /* ALCDependencyTests.m */,
 				6C95EDED1B68A977004D8F74 /* ALCVariableDependencyTests.m */,
-				6C95EDEF1B68AB5C004D8F74 /* ALCPrimaryObjectDependencyPostProcessorTests.m */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -560,9 +574,6 @@
 			children = (
 				6C9ADAC01ADFF9F700A240F2 /* ALCDependency.h */,
 				6C9ADAC11ADFF9F700A240F2 /* ALCDependency.m */,
-				6C1C6A6E1AF108F90074BB26 /* ALCDependencyPostProcessor.h */,
-				6C1C6A6F1AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.h */,
-				6C1C6A701AF10D900074BB26 /* ALCPrimaryObjectDependencyPostProcessor.m */,
 				6CB309ED1B149976003C1DE6 /* ALCVariableDependency.h */,
 				6CB309EE1B149976003C1DE6 /* ALCVariableDependency.m */,
 			);
@@ -687,7 +698,6 @@
 				6C1A4F161B994DDB00B3C25D /* ALCInitializerBuilderPersonality.h in Headers */,
 				6C36D7AA1B3853F10073C4FB /* ALCWithName.h in Headers */,
 				6C36D7981B3853F10073C4FB /* ALCInternalMacros.h in Headers */,
-				6C36D7B11B3853F10073C4FB /* ALCDependencyPostProcessor.h in Headers */,
 				6CDEBFA01B606EA0009E3BEF /* ALCMacro.h in Headers */,
 				6C36D7B01B3853F10073C4FB /* ALCDependency.h in Headers */,
 				6C36D7AD1B3853F10073C4FB /* ALCIsFactory.h in Headers */,
@@ -696,7 +706,6 @@
 				6C901DF11B58DB570046CF9E /* ALCProtocol.h in Headers */,
 				6CAED5471B8C2F6E008208DA /* ALCValueStorage.h in Headers */,
 				6C36D7AF1B3853F10073C4FB /* ALCIsPrimary.h in Headers */,
-				6C36D7B21B3853F10073C4FB /* ALCPrimaryObjectDependencyPostProcessor.h in Headers */,
 				6C36D7B31B3853F10073C4FB /* ALCVariableDependency.h in Headers */,
 				6CC9D7691B595A0100EFD517 /* ALCMacroProcessor.h in Headers */,
 				6C36D7BC1B3853F10073C4FB /* ALCResourceLocator.h in Headers */,
@@ -863,7 +872,6 @@
 				6C36D7761B38531E0073C4FB /* ALCWithName.m in Sources */,
 				6C36D77C1B38531E0073C4FB /* ALCDependency.m in Sources */,
 				6CAED53A1B8C2F1C008208DA /* ALCFactoryStorage.m in Sources */,
-				6C36D77D1B38531E0073C4FB /* ALCPrimaryObjectDependencyPostProcessor.m in Sources */,
 				6C36D7871B38531E0073C4FB /* ALCRuntime.m in Sources */,
 				6C1A4F171B994DDB00B3C25D /* ALCInitializerBuilderPersonality.m in Sources */,
 				6C901DEE1B58D81B0046CF9E /* ALCClass.m in Sources */,
@@ -881,6 +889,7 @@
 			files = (
 				6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */,
 				6CEE8EB11B8DA6C6002EADC5 /* MethodFactoryWithArgIntegrationTests.m in Sources */,
+				6C36F6261B9E9FD20075967E /* ALCClassBuilderPersonalityTests.m in Sources */,
 				6C215CBB1B8CA54F002EFF58 /* ALCExternalStorageTests.m in Sources */,
 				6C7170001B7391AA00634112 /* RetrievingIntegrationTests.m in Sources */,
 				6CEE8EA91B8D414F002EADC5 /* NSObject+BuilderTests.m in Sources */,
@@ -892,6 +901,7 @@
 				6C55E6331B6B531D004A6305 /* ArraysIntegrationTests.m in Sources */,
 				6CF28C681B6B312800E3A36E /* InitializerIntegrationTests.m in Sources */,
 				6C5F17121B612C9E00F60B1B /* ALCClassTests.m in Sources */,
+				6C36F6281B9EA3EF0075967E /* ALCInitializerBuilderPersonalityTests.m in Sources */,
 				6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */,
 				6C2421011B61FB5E00884A93 /* ALCValueSourceFactoryTests.m in Sources */,
 				6C5F142E1B64B54800E119FC /* SimpleObject.m in Sources */,
@@ -905,7 +915,6 @@
 				6C8FF8A61B6BCBD300B2B90A /* CircularDependency1IntegrationTests.m in Sources */,
 				6C8FF8A81B6D12B500B2B90A /* CircularDependency2IntegrationTests.m in Sources */,
 				6C55E6351B6F38BF004A6305 /* CircularDependency4IntegrationTests.m in Sources */,
-				6C95EDF01B68AB5C004D8F74 /* ALCPrimaryObjectDependencyPostProcessorTests.m in Sources */,
 				6C2420F91B61C3FD00884A93 /* ALCWithNameTests.m in Sources */,
 				6C235AD61B82D05F0015CA0B /* InvokeIntegrationTests.m in Sources */,
 				6CF46ECC1B4618630009007A /* ALCModelTests.m in Sources */,
@@ -914,7 +923,9 @@
 				6CF28C641B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m in Sources */,
 				6C215CB91B8CA41F002EFF58 /* ALCFactoryStorageTests.m in Sources */,
 				6C37497E1B7AD8B40012383D /* OnLoadIntegrationTests.m in Sources */,
+				6C258F9D1B99EA9200347369 /* ALCAbstractBuilderPersonalityTests.m in Sources */,
 				6C5F17101B61282100F60B1B /* ALCArgTests.m in Sources */,
+				6C36F62A1B9EB2310075967E /* ALCMethodBuilderPersonalityTests.m in Sources */,
 				6C5F17161B6130F400F60B1B /* ALCProtocolTests.m in Sources */,
 				6C2420F71B61BFFB00884A93 /* ALCConstantValueTests.m in Sources */,
 				6C5F17141B612F4700F60B1B /* ALCNameTests.m in Sources */,
@@ -924,6 +935,7 @@
 				6C215CB71B8CA2D9002EFF58 /* ALCSingletonStorageTests.m in Sources */,
 				6C5F170D1B611ADA00F60B1B /* ALCInternalMacroTests.m in Sources */,
 				6CFE92051B69FD6200BEAC0B /* FactoryIntegrationTests.m in Sources */,
+				6C258F9F1B99EBEB00347369 /* ALCAbstractMethodBuilderPersonalityTests.m in Sources */,
 				6C3273A71B8362ED006A7581 /* NSObject+AlchemicTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

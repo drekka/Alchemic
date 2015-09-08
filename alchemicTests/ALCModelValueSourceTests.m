@@ -10,7 +10,6 @@
 
 #import "ALCTestCase.h"
 #import "ALCModelValueSource.h"
-#import "ALCDependencyPostProcessor.h"
 #import "ALCBuilder.h"
 #import "ALCMacroProcessor.h"
 #import "ALCResolvable.h"
@@ -44,7 +43,7 @@
 
 -(void) testResolveTriggersBuilderResolveAndCallback {
     [self stubMockContextToReturnBuilders:@[_builder]];
-    [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+    [_source resolveWithDependencyStack:[NSMutableArray array]];
 }
 
 -(void) testResolveAsUnavailableIfBuilderNotAvailable {
@@ -53,7 +52,7 @@
     [builder2 configure];
     [self stubMockContextToReturnBuilders:@[_builder, builder2]];
 
-    [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+    [_source resolveWithDependencyStack:[NSMutableArray array]];
 
 }
 
@@ -63,7 +62,7 @@
     [builder2 configure];
     [self stubMockContextToReturnBuilders:@[builder2]];
 
-    [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+    [_source resolveWithDependencyStack:[NSMutableArray array]];
 
     builder2.value = @"abc";
 
@@ -79,7 +78,7 @@
 
     [self stubMockContextToReturnBuilders:@[classBuilder1, classBuilder2]];
 
-    [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+    [_source resolveWithDependencyStack:[NSMutableArray array]];
 
 
     classBuilder1.value = @"abc";
@@ -94,7 +93,7 @@
 
 	[self stubMockContextToReturnBuilders:@[_builder]];
 
-	[_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+	[_source resolveWithDependencyStack:[NSMutableArray array]];
 
 	NSSet<id> *results = _source.values;
 	XCTAssertEqual(1u, [results count]);
@@ -103,7 +102,7 @@
 
 -(void) testResolvingSetsState {
     [self stubMockContextToReturnBuilders:@[_builder]];
-    [_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+    [_source resolveWithDependencyStack:[NSMutableArray array]];
 }
 
 -(void) testResolveExecutesPostProcessors {
@@ -111,20 +110,16 @@
     NSSet<ALCBuilder *> *builders = [NSSet setWithObject:_builder];
 	[self stubMockContextToReturnBuilders:builders.allObjects];
 
-	id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));
-	OCMExpect([mockPostProcessor process:builders]).andReturn(builders);
-
-	[_source resolveWithPostProcessors:[NSSet setWithObject:mockPostProcessor] dependencyStack:[NSMutableArray array]];
+	[_source resolveWithDependencyStack:[NSMutableArray array]];
 
 	NSSet<id> *results = _source.values;
 	XCTAssertEqual(1u, [results count]);
 	XCTAssertTrue([[results anyObject] isKindOfClass:[SimpleObject class]]);
-	OCMVerifyAll(mockPostProcessor);
 }
 
 -(void) testBasicResolvingFailsToFindCandidates {
 	[self stubMockContextToReturnBuilders:@[]];
-	XCTAssertThrowsSpecificNamed([_source resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]], NSException, @"AlchemicNoCandidateBuildersFound");
+	XCTAssertThrowsSpecificNamed([_source resolveWithDependencyStack:[NSMutableArray array]], NSException, @"AlchemicNoCandidateBuildersFound");
 
 }
 
@@ -133,11 +128,7 @@
     NSSet<ALCBuilder *> *builders = [NSSet setWithObject:_builder];
     [self stubMockContextToReturnBuilders:builders.allObjects];
 
-	id mockPostProcessor = OCMProtocolMock(@protocol(ALCDependencyPostProcessor));
-	OCMExpect([mockPostProcessor process:builders]).andReturn([NSSet set]);
-
-	XCTAssertThrowsSpecificNamed([_source resolveWithPostProcessors:[NSSet setWithObject:mockPostProcessor] dependencyStack:[NSMutableArray array]], NSException, @"AlchemicNoCandidateBuildersFound");
-	OCMVerifyAll(mockPostProcessor);
+	XCTAssertThrowsSpecificNamed([_source resolveWithDependencyStack:[NSMutableArray array]], NSException, @"AlchemicNoCandidateBuildersFound");
 }
 
 

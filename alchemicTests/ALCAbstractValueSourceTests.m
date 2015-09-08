@@ -95,12 +95,12 @@
 
 -(void) setUpWithResolvedValueSourceClass:(Class) vsClass toReturn:(NSArray *) values {
     [self setUpWithValueSourceClass:vsClass toReturn:values];
-    [_valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+    [_valueSource resolveWithDependencyStack:[NSMutableArray array]];
 }
 
 -(void) setUpWithValueSourceClass:(Class) vsClass toReturn:(NSArray *) values {
     _valueSource = [[ALCAbstractValueSource alloc] initWithType:vsClass];
-    [_valueSource resolveWithPostProcessors:[NSSet set] dependencyStack:[NSMutableArray array]];
+    [_valueSource resolveWithDependencyStack:[NSMutableArray array]];
     _mockValueSource = OCMPartialMock(_valueSource);
     NSSet *valueSet = [NSSet setWithArray:values];
     OCMStub([(ALCAbstractValueSource *)_mockValueSource values]).andReturn(valueSet);

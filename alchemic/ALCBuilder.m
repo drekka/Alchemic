@@ -102,9 +102,8 @@ hideInitializerImpl(init)
     }
 }
 
--(void)resolveDependenciesWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *)postProcessors
-                             dependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-    [_personality resolveDependenciesWithPostProcessors:postProcessors dependencyStack:dependencyStack];
+-(void) willResolve {
+    [_personality willResolve];
 }
 
 -(id) invokeWithArgs:(NSArray<id> *) arguments {
@@ -113,7 +112,7 @@ hideInitializerImpl(init)
 
 #pragma mark - Getters and setters
 
--(ALCPersonalityType) type {
+-(ALCBuilderPersonalityType) type {
     return _personality.type;
 }
 
