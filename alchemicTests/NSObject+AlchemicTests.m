@@ -7,7 +7,7 @@
 //
 
 @import XCTest;
-#import "NSObject+Alchemic.h"
+#import "NSObject+Builder.h"
 
 @interface NSObject_AlchemicTests : XCTestCase
 

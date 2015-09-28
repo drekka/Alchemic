@@ -10,7 +10,6 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntime.h"
-#import "ALCClassBuilder.h"
 #import "ALCRuntimeScanner.h"
 #import "ALCInternalMacros.h"
 #import "ALCContext.h"
@@ -18,6 +17,7 @@
 #import "ALCConfig.h"
 #import "ALCClass.h"
 #import "NSSet+Alchemic.h"
+#import "ALCMacroProcessor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -83,11 +83,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - General
 
-+(void) object:(id) object injectVariable:(Ivar) variable withValue:(id) value {
-	STLog([object class], @"Injecting %@.%s", NSStringFromClass([object class]), ivar_getName(variable));
-    object_setIvar(object, variable, value);
-}
-
 +(nullable Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
 
     const char * charName = [inj UTF8String];
@@ -128,6 +123,14 @@ static NSCharacterSet *__typeEncodingDelimiters;
         [protocolDescs appendFormat:@"<%@>", NSStringFromProtocol(nextProtocol)];
     }
     return [NSString stringWithFormat:@"[%@]%@", NSStringFromClass(aClass), protocolDescs];
+}
+
++(void) validateClass:(Class) aClass selector:(SEL)selector {
+    if (! [aClass instancesRespondToSelector:selector]) {
+        @throw [NSException exceptionWithName:@"AlchemicSelectorNotFound"
+                                       reason:[NSString stringWithFormat:@"Failed to find selector -[%@ %@]", NSStringFromClass(aClass), NSStringFromSelector(selector)]
+                                     userInfo:nil];
+    }
 }
 
 #pragma mark - Scanning

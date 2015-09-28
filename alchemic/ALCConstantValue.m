@@ -16,4 +16,8 @@
     return constantValue;
 }
 
+-(NSString *)description {
+    return [NSString stringWithFormat:@"AcValue:%@", _value];
+}
+
 @end

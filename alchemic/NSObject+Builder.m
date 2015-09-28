@@ -7,10 +7,11 @@
 //
 
 @import ObjectiveC;
-
-#import "NSObject+Alchemic.h"
 #import <StoryTeller/StoryTeller.h>
-#import "ALCInternalMAcros.h"
+
+#import "NSObject+Builder.h"
+#import "AlchemicAware.h"
+#import "ALCInternalMacros.h"
 
 @implementation NSObject (Alchemic)
 
@@ -36,5 +37,22 @@
     return returnObj;
 }
 
+-(void) injectWithDependencies:(NSSet<ALCVariableDependency *> *) dependencies {
+
+    STLog([self class], @"Injecting %lu dependencies into a %@ instance", [dependencies count], NSStringFromClass([self class]));
+    for (ALCVariableDependency *dependency in dependencies) {
+        [(ALCVariableDependency *)dependency injectInto:self];
+    }
+
+    if ([self respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
+        STLog([self class], @"Notifying that inject did finish");
+        [(id<AlchemicAware>)self alchemicDidInjectDependencies];
+    }
+}
+
+-(void) injectVariable:(Ivar) variable withValue:(id) value {
+    STLog([self class], @"Injecting %@.%s", NSStringFromClass([self class]), ivar_getName(variable));
+    object_setIvar(self, variable, value);
+}
 
 @end

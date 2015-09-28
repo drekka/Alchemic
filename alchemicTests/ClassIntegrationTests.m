@@ -31,7 +31,6 @@ AcInject(simpleObject)
 
 -(void) testCreatingASingleton {
 	[self setupRealContext];
-	//STStartLogging(ALCHEMIC_LOG);
 	STStartLogging(@"[ClassIntegrationTests]");
 	[self startContextWithClasses:@[[CISimpleObject class], [ClassIntegrationTests class]]];
 	AcInjectDependencies(self);

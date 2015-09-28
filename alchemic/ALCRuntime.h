@@ -82,16 +82,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - General
 
-/// @name Injecting
+/// @name Validation
 
 /**
- Sets the value of an internal variable in an object.
- 
- @param object The object whose variable we want to set.
- @param variable The variable to be set.
- @param value The value to set.
+ Validates that the passed selector occurs on the passed class and has a correct set of arguments stored in the macro processor.
+
+ @param aClass The class to be used to check the selector again.
+ @param selector The selector to check.
+ @param macroProcessor An instance of ALCMacroProcessor containing the dependencies that will be required for the selector to be called.
+ @exception NSException If there is a problem.
  */
-+(void) object:(id) object injectVariable:(Ivar) variable withValue:(id) value;
++(void) validateClass:(Class) aClass selector:(SEL)selector;
 
 #pragma mark - Getting qualifiers
 
@@ -122,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Scans the classes in the runtime, looking for Alchemic signatures and declarations.
  
- @discussion This is the method that does the grunt work of registering objects in the model. It scans all the relevant app bundles and frameworks, plus those declared in ALCConfig classes. When it finds a class with Alchemic methods in it, it creates an instance of ALCClassBuilder and adds it to the model before call the methods to execute the registrations.
+ @discussion This is the method that does the grunt work of registering objects in the model. It scans all the relevant app bundles and frameworks, plus those declared in ALCConfig classes. When it finds a class with Alchemic methods in it, it creates an instance of ALCBuilder and adds it to the model before call the methods to execute the registrations.
  
  @param context The ALCContext that is being loaded with information.
  @param runtimeScanners A NSSet of ALCRuntimeScanner instances which perform the job of interpreting what they find in the classes. Each class found with Alchemic methods in it is passed to each scanner in turn.

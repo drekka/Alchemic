@@ -26,4 +26,13 @@
     XCTAssertEqualObjects([NSNull null], value.value);
 }
 
+-(void) testDescriptionWithString {
+    ALCConstantValue *value = [ALCConstantValue constantValue:@"abc"];
+    XCTAssertEqualObjects(@"AcValue:abc", [value description]);
+}
+
+-(void) testDescriptionWithNumber {
+    ALCConstantValue *value = [ALCConstantValue constantValue:@12];
+    XCTAssertEqualObjects(@"AcValue:12", [value description]);
+}
 @end

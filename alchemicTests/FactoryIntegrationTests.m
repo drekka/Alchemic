@@ -14,7 +14,7 @@
 @end
 
 @implementation CISimpleFactory
-AcRegister(AcIsFactory)
+AcRegister(AcFactory)
 @end
 
 @interface FactoryIntegrationTests : ALCTestCase

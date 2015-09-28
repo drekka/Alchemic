@@ -19,16 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCConstantValueSource : ALCAbstractValueSource
 
-/**
- Default initializer.
- 
- @discussion Do not use.
-
- @param argumentType The expected type of the argument. This is used when deciding what to return from resolving.
-
- @return An instance of this class.
- */
--(instancetype) initWithType:(Class)argumentType NS_UNAVAILABLE;
+hideInitializer(initWithType:(Class) argumentType);
 
 /**
  Default initializer.
@@ -38,7 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return An instance of this class.
  */
--(instancetype) initWithType:(Class)argumentType value:(id) value NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithType:(Class)argumentType
+                       value:(id) value NS_DESIGNATED_INITIALIZER;
 
 @end
 

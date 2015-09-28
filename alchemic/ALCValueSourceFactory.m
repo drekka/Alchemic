@@ -13,16 +13,13 @@
 #import "ALCConstantValue.h"
 #import "ALCName.h"
 #import "ALCClass.h"
+#import "NSSet+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCValueSourceFactory {
-    Class _valueType;
-}
+@implementation ALCValueSourceFactory
 
--(instancetype) init {
-    return nil;
-}
+hideInitializerImpl(init)
 
 -(instancetype) initWithType:(Class)valueType {
     self = [super init];
@@ -33,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(nonnull id<ALCValueSource>) valueSource {
+-(id<ALCValueSource>) valueSource {
     id macro =_macros.anyObject;
     if ([macro isKindOfClass:[ALCConstantValue class]]) {
         return [[ALCConstantValueSource alloc] initWithType:_valueType value:((ALCConstantValue *)macro).value];
@@ -42,6 +39,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) addMacro:(id<ALCMacro>) macro {
+
+    if (!([macro conformsToProtocol:@protocol(ALCModelSearchExpression)]
+          || [macro isKindOfClass:[ALCConstantValue class]])) {
+        @throw [NSException exceptionWithName:@"AlchemicUnexpectedMacro"
+                                       reason:[NSString stringWithFormat:@"Unexpected macro %@", macro]
+                                     userInfo:nil];
+    }
 
     [(NSMutableSet *)_macros addObject:macro];
 
@@ -74,6 +78,10 @@ NS_ASSUME_NONNULL_BEGIN
             }
         }
     }
+}
+
+-(NSString *)description {
+    return [NSString stringWithFormat:@"%@ value source factory with macros %@", NSStringFromClass(_valueType), [_macros componentsJoinedByString:@", "]];
 }
 
 @end

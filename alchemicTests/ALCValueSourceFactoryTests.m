@@ -7,20 +7,22 @@
 //
 
 @import XCTest;
-#import "ALCValueSourceFactory.h"
 #import <Alchemic/Alchemic.h>
+
+#import "ALCValueSourceFactory.h"
 #import "ALCConstantValueSource.h"
 #import "ALCModelValueSource.h"
 
-@interface ALCArgumentFactoryTests : XCTestCase
+@interface ALCValueSourceFactoryTests : XCTestCase
 @end
 
-@implementation ALCArgumentFactoryTests
+@implementation ALCValueSourceFactoryTests
 
 -(void) testValueSourceForConstant {
     ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
 	[factory addMacro:AcValue(@5)];
-	id<ALCValueSource> valueSource = [factory valueSource];
+	id<ALCValueSource> valueSource = factory.valueSource;
+    [valueSource resolve];
 	XCTAssertTrue([valueSource isKindOfClass:[ALCConstantValueSource class]]);
 	XCTAssertEqualObjects(@5, valueSource.value);
 }
@@ -28,7 +30,7 @@
 -(void) testValueSourceForModel {
     ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
 	[factory addMacro:AcName(@"abc")];
-	id<ALCValueSource> valueSource = [factory valueSource];
+	id<ALCValueSource> valueSource = factory.valueSource;
 	XCTAssertTrue([valueSource isKindOfClass:[ALCModelValueSource class]]);
 	NSSet<id<ALCModelSearchExpression>> *searchExpressions = ((ALCModelValueSource *)valueSource).searchExpressions;
 	XCTAssertTrue([searchExpressions containsObject:AcName(@"abc")]);
@@ -63,6 +65,12 @@
     ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
     [factory addMacro:AcClass(NSString)];
     XCTAssertThrowsSpecificNamed([factory addMacro:AcClass(NSNumber)], NSException, @"AlchemicInvalidMacroCombination");
+}
+
+-(void) testDescription {
+    ALCValueSourceFactory *factory = [[ALCValueSourceFactory alloc] initWithType:[NSNumber class]];
+    [factory addMacro:AcValue(@5)];
+    XCTAssertEqualObjects(@"NSNumber value source factory with macros AcValue:5", [factory description]);
 }
 
 @end

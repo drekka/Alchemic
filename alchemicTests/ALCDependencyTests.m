@@ -6,48 +6,47 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-@import XCTest;
+#import "ALCTestCase.h"
 #import <OCMock/OCMock.h>
+#import <Alchemic/Alchemic.h>
 
 #import "ALCDependency.h"
-#import "ALCDependencyPostProcessor.h"
 #import "ALCValueSource.h"
+#import "ALCTestCase.h"
 #import "ALCConstantValueSource.h"
 
-@interface ALCDependencyTests : XCTestCase
+@interface ALCDependencyTests : ALCTestCase
 
 @end
 
-@implementation ALCDependencyTests
+@implementation ALCDependencyTests {
+    id _mockValueSource;
+    ALCDependency *_dependency;
+}
 
--(void) testHandsOffPostProcessingToValueSource {
-
-	NSSet<id<ALCDependencyPostProcessor>> *postProcessors = [NSSet set];
-	id mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
-	OCMExpect([mockValueSource resolveWithPostProcessors:postProcessors]);
-
-	ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:mockValueSource];
-	[dependency resolveWithPostProcessors:postProcessors];
-
-	OCMVerifyAll(mockValueSource);
+-(void) setUp {
+    _mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
+    _dependency = [[ALCDependency alloc] initWithValueSource:_mockValueSource];
 }
 
 -(void) testGetsValueFromValueSource {
+    OCMExpect([(id<ALCValueSource>)_mockValueSource value]).andReturn(@"abc");
+    id value = _dependency.value;
+    XCTAssertEqualObjects(@"abc", value);
+    OCMVerifyAll(_mockValueSource);
+}
 
-	id mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
-	OCMExpect([(id<ALCValueSource>)mockValueSource value]).andReturn(@"abc");
-
-	ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:mockValueSource];
-	id value = dependency.value;
-	XCTAssertEqualObjects(@"abc", value);
-
-	OCMVerifyAll(mockValueSource);
+-(void) testGetsValueClassFromValueSource {
+    OCMExpect([(id<ALCValueSource>)_mockValueSource valueClass]).andReturn([NSString class]);
+    Class valueClass = _dependency.valueClass;
+    XCTAssertEqualObjects([NSString class], valueClass);
+    OCMVerifyAll(_mockValueSource);
 }
 
 -(void) testDescription {
     ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
-	ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSource];
-	XCTAssertEqualObjects(@"type [NSNumber]<NSSecureCoding><NSCopying> from: Constant: 5", [dependency description]);
+    ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSource];
+    XCTAssertEqualObjects(@"[NSNumber]<NSSecureCoding><NSCopying> -> Constant: 5", [dependency description]);
 }
 
 @end

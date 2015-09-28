@@ -43,7 +43,6 @@ static __strong ALCContext *__mainContext;
     NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
                                                                  [ALCRuntimeScanner modelScanner],
                                                                  [ALCRuntimeScanner configScanner],
-                                                                 [ALCRuntimeScanner dependencyPostProcessorScanner],
                                                                  [ALCRuntimeScanner resourceLocatorScanner]
                                                                  ]];
     [ALCRuntime scanRuntimeWithContext:__mainContext runtimeScanners:scanners];

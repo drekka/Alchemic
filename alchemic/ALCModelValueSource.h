@@ -10,6 +10,7 @@
 @class ALCContext;
 @protocol ALCModelSearchExpression;
 #import "ALCAbstractValueSource.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,15 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly) NSSet<id<ALCModelSearchExpression>> *searchExpressions;
 
-/**
- Default initializer.
- 
- Do not use.
-
- @param argumentType The type of the return value from the value source.
- @return An instance of this class.
- */
--(instancetype) initWithType:(Class) argumentType NS_UNAVAILABLE;
+hideInitializer(initWithType:(Class)argumentType);
 
 /**
  Default initializer.
@@ -41,7 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return An instance of this class.
  */
--(instancetype) initWithType:(Class) argumentType searchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithType:(Class) argumentType
+           searchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions NS_DESIGNATED_INITIALIZER;
 
 @end
 

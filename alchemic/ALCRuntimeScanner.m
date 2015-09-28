@@ -10,12 +10,14 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntimeScanner.h"
-#import "ALCClassBuilder.h"
 #import "ALCInternalMacros.h"
-#import "ALCDependencyPostProcessor.h"
 #import "ALCResourceLocator.h"
 #import "ALCContext.h"
 #import "ALCConfig.h"
+#import "ALCSingletonStorage.h"
+#import "ALCBuilderPersonality.h"
+#import "ALCClassBuilderPersonality.h"
+#import "ALCBuilder.h"
 
 @implementation ALCRuntimeScanner
 
@@ -41,7 +43,7 @@
                 Method *classMethods = class_copyMethodList(object_getClass(aClass), &methodCount);
 
                 // Search the methods for registration methods.
-                ALCClassBuilder *currentClassBuilder = nil;
+                ALCBuilder *currentClassBuilder = nil;
                 NSString *alchemicMethodPrefix = alc_toNSString(ALCHEMIC_PREFIX);
                 for (size_t idx = 0; idx < methodCount; ++idx) {
 
@@ -54,26 +56,22 @@
                     // If we are here then we have an alchemic method to process, so create a class builder for for the class.
                     if (currentClassBuilder == nil) {
                         STLog(aClass, @"Creating class builder for a %@ ...", NSStringFromClass(aClass));
-                        currentClassBuilder = [[ALCClassBuilder alloc] initWithValueClass:aClass];
+                        id<ALCBuilderPersonality> personality = [[ALCClassBuilderPersonality alloc] init];
+                        currentClassBuilder = [[ALCBuilder alloc] initWithPersonality:personality forClass:aClass];
                         [context addBuilderToModel:currentClassBuilder];
                     }
 
                     // Call the method, passing it the current class builder.
-                    ((void (*)(id, SEL, ALCClassBuilder *))objc_msgSend)(aClass, sel, currentClassBuilder);
+                    ((void (*)(id, SEL, ALCBuilder *))objc_msgSend)(aClass, sel, currentClassBuilder);
 
                 }
 
-                free(classMethods);
-            }];
-}
+                // If there is a class builder then configure it.
+                if (currentClassBuilder != nil) {
+                    [currentClassBuilder configure];
+                }
 
-+(nonnull instancetype) dependencyPostProcessorScanner {
-    return [[ALCRuntimeScanner alloc]
-            initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
-                return [aClass conformsToProtocol:@protocol(ALCDependencyPostProcessor)];
-            }
-            processor:^(ALCContext * context, NSMutableSet *moreBundles, Class __unsafe_unretained aClass) {
-                [context addDependencyPostProcessor:[[aClass alloc] init]];
+                free(classMethods);
             }];
 }
 
@@ -83,7 +81,7 @@
                 return [aClass conformsToProtocol:@protocol(ALCResourceLocator)];
             }
             processor:^(ALCContext * context, NSMutableSet *moreBundles, Class __unsafe_unretained aClass) {
-                //ALCClassBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
+                //ALCBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
                 //classBuilder.value = [[aClass alloc] init];
             }];
 }

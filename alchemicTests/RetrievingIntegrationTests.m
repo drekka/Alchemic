@@ -7,6 +7,7 @@
 //
 
 #import "ALCTestCase.h"
+#import <Alchemic/Alchemic.h>
 
 @protocol REProtocol <NSObject>
 @end
@@ -24,7 +25,6 @@ AcRegister(AcWithName(@"abc"))
 @implementation RetrievingIntegrationTests
 
 -(void) setUp {
-	[super setUp];
 	[self setupRealContext];
 	[self startContextWithClasses:@[[REObject class]]];
 }
@@ -50,7 +50,7 @@ AcRegister(AcWithName(@"abc"))
 }
 
 -(void) testGetThrowsWhenFactory {
-	XCTAssertThrowsSpecificNamed((AcGet(REObject, AcIsFactory)), NSException, @"AlchemicUnexpectedMacro");
+	XCTAssertThrowsSpecificNamed((AcGet(REObject, AcFactory)), NSException, @"AlchemicUnexpectedMacro");
 }
 
 #pragma mark - Internal

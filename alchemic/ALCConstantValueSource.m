@@ -7,6 +7,7 @@
 //
 
 #import "ALCConstantValueSource.h"
+#import <StoryTeller/StoryTeller.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,11 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
     id _value;
 }
 
--(instancetype) initWithType:(Class) argumentType {
-    return nil;
-}
+hideInitializerImpl(initWithType:(Class) argumentType)
 
--(instancetype) initWithType:(Class) argumentType value:(id) value {
+-(instancetype) initWithType:(Class)argumentType
+                       value:(id) value {
     self = [super initWithType:argumentType];
     if (self) {
         _value = value;
@@ -29,12 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSSet<id> *) values {
     return [NSSet setWithObject:_value];
 }
-
--(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors {
-    [super resolveWithPostProcessors:postProcessors];
-}
-
--(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {}
 
 -(NSString *)description {
     return [NSString stringWithFormat:@"Constant: %@", [_value description]];

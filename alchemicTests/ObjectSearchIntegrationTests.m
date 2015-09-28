@@ -36,6 +36,7 @@ AcInject(_objByName, AcName(@"abc"))
 AcInject(_objByEverthing, AcClass(OSObject), AcProtocol(OSable))
 
 -(void) setUp {
+    STStartLogging(@"LogAll");
 	[self setupRealContext];
 	[self startContextWithClasses:@[[OSObject class], [ObjectSearchIntegrationTests class]]];
 	AcInjectDependencies(self);

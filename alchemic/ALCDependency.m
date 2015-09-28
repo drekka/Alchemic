@@ -11,16 +11,15 @@
 
 #import "ALCValueSource.h"
 #import "ALCDependency.h"
-#import "ALCDependencyPostProcessor.h"
 #import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCDependency
 
-@synthesize resolved = _resolved;
+hideInitializerImpl(init)
 
--(instancetype) initWithValueSource:(id<ALCValueSource>)valueSource {
+-(instancetype) initWithValueSource:(id<ALCValueSource>) valueSource {
     self = [super init];
     if (self) {
         _valueSource = valueSource;
@@ -28,21 +27,16 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors {
-	_resolved = YES;
-    [_valueSource resolveWithPostProcessors:postProcessors];
-}
-
--(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
-	[_valueSource validateWithDependencyStack:dependencyStack];
-}
-
 -(id) value {
     return _valueSource.value;
 }
 
+-(Class)valueClass {
+    return _valueSource.valueClass;
+}
+
 -(NSString *) description {
-    return [NSString stringWithFormat:@"type %@ from: %@", [ALCRuntime aClassDescription:_valueSource.valueClass], _valueSource];
+    return [NSString stringWithFormat:@"%@%@", _valueSource, self.valueSource.ready ? @" - instantiable" : @""];
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "ALCTestCase.h"
+#import <Alchemic/Alchemic.h>
 
 @interface OnLoadIntegrationTests : ALCTestCase
 

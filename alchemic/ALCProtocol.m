@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
     return _aProtocol;
 }
 
--(BOOL) matches:(id<ALCBuilder>) builder {
+-(BOOL) matches:(ALCBuilder *) builder {
     return [builder.valueClass conformsToProtocol:_aProtocol];
 }
 

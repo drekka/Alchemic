@@ -8,6 +8,7 @@
 
 #import <Alchemic/Alchemic.h>
 #import "ALCTestCase.h"
+#import <StoryTeller/StoryTeller.h>
 
 // Scenario: Using an initializer on a factory with a non-managed value. Resulting object should be injected.
 
@@ -29,7 +30,7 @@ AcRegister()
 AcInject(singleton)
 
 // Note missing arg definitions
-AcInitializer(initWithString:, AcIsFactory)
+AcInitializer(initWithString:, AcFactory)
 -(instancetype) initWithString:(NSString *) aString {
     self = [super init];
     if (self) {
@@ -45,7 +46,7 @@ AcInitializer(initWithString:, AcIsFactory)
 @implementation InvokeIntegrationTests
 
 -(void) testInvokingAFactoryInititializer {
-
+    STStartLogging(@"LogAll");
     [self setupRealContext];
     [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
 

@@ -8,9 +8,11 @@
 
 @import XCTest;
 #import "ALCProtocol.h"
-#import "ALCClassBuilder.h"
+#import "ALCBuilder.h"
+#import "ALCTestCase.h"
+#import "ALCBuilder.h"
 
-@interface ALCProtocolTests : XCTestCase
+@interface ALCProtocolTests : ALCTestCase
 
 @end
 
@@ -52,7 +54,7 @@
 
 -(void) testIsNotEqualToProtocol {
 	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
-	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(ALCBuilder)];
+	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(NSFastEnumeration)];
 	XCTAssertFalse([alcProtocol1 isEqualToProtocol:alcProtocol2]);
 }
 
@@ -64,19 +66,19 @@
 
 -(void) testNotHashMatches {
 	ALCProtocol *alcProtocol1 = [ALCProtocol withProtocol:@protocol(NSCopying)];
-	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(ALCBuilder)];
+	ALCProtocol *alcProtocol2 = [ALCProtocol withProtocol:@protocol(NSFastEnumeration)];
 	XCTAssertNotEqual(alcProtocol1.hash, alcProtocol2.hash);
 }
 
 -(void) testMatchesBuilder {
 	ALCProtocol *alcProtocol = [ALCProtocol withProtocol:@protocol(NSCopying)];
-	ALCClassBuilder *builder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
+    ALCBuilder *builder = [self simpleBuilderForClass:[NSString class]];
 	XCTAssertTrue([alcProtocol matches:builder]);
 }
 
 -(void) testNotMatchesBuilder {
-	ALCProtocol *alcProtocol = [ALCProtocol withProtocol:@protocol(ALCBuilder)];
-	ALCClassBuilder *builder = [[ALCClassBuilder alloc] initWithValueClass:[NSNumber class]];
+	ALCProtocol *alcProtocol = [ALCProtocol withProtocol:@protocol(NSFastEnumeration)];
+    ALCBuilder *builder = [self simpleBuilderForClass:[NSNumber class]];
 	XCTAssertFalse([alcProtocol matches:builder]);
 }
 
