@@ -34,7 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 +(void)initialize {
-    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%4$@ %1$@ %2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine, STLoggerTemplateKeyKey];
+    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%@", STLoggerTemplateKeyMessage];
+//    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%4$@ %1$@ %2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine, STLoggerTemplateKeyKey];
 }
 
 -(void) tearDown {
@@ -102,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) configureAndResolveBuilder:(ALCBuilder *) builder {
     [builder configure];
-    [builder resolveWithDependencyStack:[NSMutableArray array]];
+    [builder resolve];
 }
 
 @end

@@ -14,8 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Defines a block used when making callbacks to objects to indicates that a resolvable can now be instantiated.
  */
-#define ALCResolvableAvailableBlockArgs id<ALCResolvable> resolvable
-typedef void (^ALCResolvableAvailableBlock) (ALCResolvableAvailableBlockArgs);
+#define ALCDependencyReadyBlockArgs id<ALCResolvable> resolvable
+typedef void (^ALCDependencyReadyBlock) (ALCDependencyReadyBlockArgs);
 
 /**
  Classes that are resolvable can resolve and return values.
@@ -43,11 +43,23 @@ typedef void (^ALCResolvableAvailableBlock) (ALCResolvableAvailableBlockArgs);
  
  @discussion If the resolvable is already available then the block will be immediately exexcuted.
 
- @param whenAvailableBlock The block to execute.
+ @param dependencyReadyBlock The block to execute.
  */
--(void) executeWhenAvailable:(ALCResolvableAvailableBlock) whenAvailableBlock;
+-(void) whenReadyToInject:(ALCDependencyReadyBlock) dependencyReadyBlock;
 
 #pragma mark - Resolving
+
+/**
+ True when the resolvable has resolved all it's dependencies.
+ */
+@property (nonatomic, assign) BOOL resolved;
+
+/**
+ When resolving and this is YES, will use a fresh stack for circular dependency detection.
+
+ @discussion Circular dependency detection is about detecting circular dependencies which alll need to resolve at the same time. For example, arguments to methods. When resolving, each resolvable adds itself to the dependencyStack before calling it's dependencies to resolve. So by checking the stack we can establish if there is a loop. But some resolveables such as injected variables are not required immediately because they are injected later, so in effect they break the dependency stack.
+ */
+@property (nonatomic, assign) BOOL startsResolvingStack;
 
 /**
  Initiates resolving using this resolvable as a starting point.
@@ -66,26 +78,16 @@ typedef void (^ALCResolvableAvailableBlock) (ALCResolvableAvailableBlockArgs);
  */
 -(void) didResolve;
 
-#pragma mark - Availability
+#pragma mark - instantiating and injecting
 
 /**
- Call this to trigger availability checking on the current resolvable and it's dependencies.
- */
--(void) checkIfAvailable;
-
-/**
- Automatically called by checkIfAvailable if the resolvable has just become available.
-
- @discussion This is an override point where sub classes can enact behaviour when the resolvable becomes available. For example they might create instances.
- */
--(void) didBecomeAvailable;
-
-/**
- Returns YES if the resolvable is available for use by other objects.
+ Returns YES if the resolvable can be instantiated.
 
  @discussion This is established based on a number of criteria including the status of this resolvables dependencies. This property's getter should be overridden to include the checking for objects when necessary.
  */
-@property (nonatomic, assign, readonly) BOOL available;
+@property (nonatomic, assign, readonly) BOOL ready;
+
+-(void) instantiate;
 
 @end
 

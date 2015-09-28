@@ -12,21 +12,13 @@
 #import <StoryTeller/StoryTeller.h>
 
 @implementation ALCAbstractResolvable {
-    NSMutableSet<ALCResolvableAvailableBlock> *_whenAvailableBlocks;
-    NSMutableSet<id<ALCResolvable>> *_dependenciesNotAvailable;
-    BOOL _resolved;
+    NSMutableSet<ALCDependencyReadyBlock> *_whenCanInjectBlocks;
 }
 
+@synthesize resolved = _resolved;
 @synthesize dependencies = _dependencies;
-@synthesize available = _available;
-
--(instancetype) init {
-    self = [super init];
-    if (self) {
-        _whenAvailableBlocks = [NSMutableSet set];
-    }
-    return self;
-}
+@synthesize ready = _ready;
+@synthesize startsResolvingStack = _startsResolvingStack;
 
 #pragma mark - Setting up
 
@@ -41,92 +33,96 @@
     // Store the dependency.
     if (_dependencies == nil) {
         _dependencies = [NSMutableSet set];
-        _dependenciesNotAvailable = [NSMutableSet set];
     }
     [(NSMutableSet *) _dependencies addObject:resolvable];
-
-    // If the resolvable is not available then add a when available block to it.
-    // If it's already available we don't do anything.
-    if (!resolvable.available) {
-        [_dependenciesNotAvailable addObject:resolvable];
-        blockSelf;
-        [(ALCAbstractResolvable *)resolvable executeWhenAvailable:^(id<ALCResolvable> availableResolvable) {
-            [strongSelf->_dependenciesNotAvailable removeObject:availableResolvable];
-            [strongSelf checkIfAvailable];
-        }];
-    }
 }
 
--(void) executeWhenAvailable:(ALCResolvableAvailableBlock) whenAvailableBlock {
-    if (_whenAvailableBlocks == nil) {
-        whenAvailableBlock(self);
-    } else {
-        [_whenAvailableBlocks addObject:whenAvailableBlock];
-    }
-}
+-(void) whenReadyToInject:(ALCDependencyReadyBlock) block {
 
-#pragma mark - Checking availability
-
--(void) checkIfAvailable {
-
-    if (!_resolved) {
-        @throw [NSException exceptionWithName:@"AlchemicNotResolved"
-                                       reason:@"Cannot check availability when resolving has not occurred."
+    if (_ready) {
+        @throw [NSException exceptionWithName:@"AlchemicAlreadyCanInject"
+                                       reason:@"Builder is already ready to instantiate. Cannot add when ready to inject block."
                                      userInfo:nil];
     }
 
-    // Loop through the list of unavailable dependencies we are still waiting on and check to see if we are unavailable because one or more of them form a loop.
-    _available = YES;
-    for (ALCAbstractResolvable *resolvable in _dependenciesNotAvailable) {
-        _available = [resolvable checkAvailabilityWithInProgress:[NSMutableSet setWithObject:self]];
-        if (!_available) {
-            return;
-        }
+    if (_whenCanInjectBlocks == nil) {
+        _whenCanInjectBlocks = [NSMutableSet set];
     }
+    [_whenCanInjectBlocks addObject:block];
+}
 
-    // All previously unavailable dependecies are now available.
-    STLog(ALCHEMIC_LOG, @"Resolvable is available, calling %lu when available blocks", [_whenAvailableBlocks count]);
+#pragma mark - Injection status
+
+-(BOOL) setInitialCanInjectStatus {
+
+    return [self checkIfDependenciesCanInjectWithBlock:^BOOL(ALCAbstractResolvable *dependency) {
+
+        // If the dependeny cannot inject then get it to tell us when it can inject.
+        if ([dependency setInitialCanInjectStatus]) {
+            return YES;
+        }
+
+        [dependency whenReadyToInject:^(ALCDependencyReadyBlockArgs) {
+            [self checkCanInjectStatus];
+        }];
+        return NO;
+    }];
+}
+
+-(BOOL) checkCanInjectStatus {
+
+    if ([self checkIfDependenciesCanInjectWithBlock:^BOOL(ALCAbstractResolvable *dependency) {
+        return [dependency checkCanInjectStatus];
+    }]) {
+        // Resolvable can inject. If there are blocks, execute them. This will resolve out to nils if there are none
+        [self executeWhenReadyCallbackBlocks];
+    }
+    return self.ready;
+}
+
+-(void) executeWhenReadyCallbackBlocks {
 
     // Copy the blocks to a seperate set for processing.
     // Otherwise we can get into a loop when there are circular dependencies.
-    NSMutableSet<ALCResolvableAvailableBlock> *blocks = _whenAvailableBlocks;
-    _whenAvailableBlocks = nil;
-    _dependenciesNotAvailable = nil;
+    NSMutableSet<ALCDependencyReadyBlock> *blocks = _whenCanInjectBlocks;
+    _whenCanInjectBlocks = nil;
 
-    // Call the when available blocks.
-    [blocks enumerateObjectsUsingBlock:^(ALCResolvableAvailableBlock block, BOOL * stop) {
-        block(self);
+    // Call the blocks.
+    [blocks enumerateObjectsUsingBlock:^(ALCDependencyReadyBlock dependencyReadyBlock, BOOL * stop) {
+        dependencyReadyBlock(self);
     }];
-
-    [self didBecomeAvailable];
 }
 
--(BOOL) checkAvailabilityWithInProgress:(NSMutableSet<id<ALCResolvable>> *) inProgress {
+-(BOOL) checkIfDependenciesCanInjectWithBlock:(BOOL (^)(ALCAbstractResolvable *dependency)) canDependencyInjectBlock {
 
-    // If we are in the in progress set then we are regarded as available.
-    if ([inProgress containsObject:self]) {
+    // If we can already inject or we are being resolved then say we can inject.
+    if (self.ready) {
         return YES;
     }
 
-    // If any of the resolvables dependencies say no, then return NO.
-    for (ALCAbstractResolvable *resolvable in _dependenciesNotAvailable) {
-        [inProgress addObject:self];
-        if (![resolvable checkAvailabilityWithInProgress:inProgress]) {
-            return NO;
-        }
-        [inProgress removeObject:self];
+    // Set this dependency as available so a loop back in the dependencies will not cause an endless loop.
+    _ready = YES;
+
+    // Check all dependencies with the block and switch to NO if any are not ready.
+    BOOL dependenciesCanInject = YES;
+    for (ALCAbstractResolvable *dependency in _dependencies) {
+        dependenciesCanInject = canDependencyInjectBlock(dependency) ? dependenciesCanInject : NO;
     }
 
-    // Otherwise 
-    return YES;
+    _ready = dependenciesCanInject;
+    return self.ready;
 }
 
--(void) didBecomeAvailable {}
+#pragma mark - Instantiating
+
+-(void) instantiate {}
 
 #pragma mark - Resolving
 
 -(void) resolve {
+    STLog(ALCHEMIC_LOG, @"Initiating resolve ...");
     [self resolveWithDependencyStack:[NSMutableArray array]];
+    [self setInitialCanInjectStatus];
 }
 
 -(void) resolveWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {
@@ -146,24 +142,26 @@
     }
 
     // Call the override method.
+    STLog(ALCHEMIC_LOG, @"Resolving %@", self);
     [self willResolve];
 
     // Flag that we are resolved so we can abort endless resolution loops.
     _resolved = YES;
 
-    // If there is nothing to resolve then just exit.
+    // Resolve dependencies
     if ([_dependencies count] > 0) {
-        // Resolve any resolvables we are dependant on.
+        // If this resolvable is set to start a new stand, then do so, otherwise continue with the current state.
+        NSMutableArray *stack = self.startsResolvingStack ? [NSMutableArray array] : dependencyStack;
+        [stack addObject:self];
+        STLog(ALCHEMIC_LOG, @"Resolving %lu dependencies for %@", [_dependencies count], self);
         for (ALCAbstractResolvable *resolvable in _dependencies) {
-            [resolvable resolveWithDependencyStack:dependencyStack];
+            [resolvable resolveWithDependencyStack:stack];
         }
+        [stack removeObject:self];
     }
 
     // Call the override point.
     [self didResolve];
-
-    // Check if we can become available.
-    [self checkIfAvailable];
 }
 
 -(void) willResolve {}

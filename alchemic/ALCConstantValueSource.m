@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
     id _value;
 }
 
-hideInitializerImpl(initWithType:(Class)argumentType)
+hideInitializerImpl(initWithType:(Class) argumentType)
 
 -(instancetype) initWithType:(Class)argumentType
                        value:(id) value {

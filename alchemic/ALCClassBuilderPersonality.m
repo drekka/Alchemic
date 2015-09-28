@@ -58,12 +58,11 @@ NS_ASSUME_NONNULL_BEGIN
     ALCBuilder *builder = self.builder;
     STLog(builder.valueClass, @"Creating a %@", NSStringFromClass(builder.valueClass));
     id object = [[builder.valueClass alloc] init];
-    [self injectDependencies:object];
     return object;
 }
 
 -(BOOL)canInjectDependencies {
-    return self.builder.available;
+    return self.builder.ready;
 }
 
 -(void)injectDependencies:(id)object {
@@ -78,6 +77,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSString *)attributeText {
     return @", class builder";
+}
+
+-(NSString *) description {
+    return [NSString stringWithFormat:@"class builder for %@", NSStringFromClass(self.builder.valueClass)];
 }
 
 @end

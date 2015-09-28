@@ -66,6 +66,11 @@
 
                 }
 
+                // If there is a class builder then configure it.
+                if (currentClassBuilder != nil) {
+                    [currentClassBuilder configure];
+                }
+
                 free(classMethods);
             }];
 }

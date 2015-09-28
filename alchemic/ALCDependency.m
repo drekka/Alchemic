@@ -36,7 +36,7 @@ hideInitializerImpl(init)
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"%@ -> %@", [ALCRuntime aClassDescription:_valueSource.valueClass], _valueSource];
+    return [NSString stringWithFormat:@"%@%@", _valueSource, self.valueSource.ready ? @" - instantiable" : @""];
 }
 
 @end

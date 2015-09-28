@@ -22,6 +22,7 @@ hideInitializerImpl(initWithValueSource:(id<ALCValueSource>) valueSource)
                      valueSource:(id<ALCValueSource>)valueSource {
     self = [super initWithValueSource:valueSource];
     if (self) {
+        self.valueSource.startsResolvingStack = YES;
         _variable = variable;
     }
     return self;

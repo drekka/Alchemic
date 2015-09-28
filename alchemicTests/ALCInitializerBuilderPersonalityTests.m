@@ -47,6 +47,18 @@
     [_personality willResolve]; // No errors.
 }
 
+-(void) testWillResolveAddsClassBuilderAsDependency {
+
+    id mockBuilder = OCMClassMock([ALCBuilder class]);
+    OCMExpect([(ALCBuilder *)_mockInitializerBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id obj) {
+        return obj == self->_mockClassBuilder;
+    }]]);
+
+    [_personality willResolve];
+
+    OCMVerifyAll(mockBuilder);
+}
+
 -(void) testWillResolveThrows {
     ignoreSelectorWarnings(
                            ALCInitializerBuilderPersonality *personality = [[ALCInitializerBuilderPersonality alloc] initWithClassBuilder:_mockClassBuilder
@@ -64,9 +76,9 @@
 }
 
 -(void) testCanInjectDependencies {
-    OCMStub([_mockClassBuilder available]).andReturn(YES);
+    OCMStub([_mockClassBuilder ready]).andReturn(YES);
     XCTAssertTrue(_personality.canInjectDependencies);
-    OCMVerify([_mockClassBuilder available]);
+    OCMVerify([_mockClassBuilder ready]);
 }
 
 -(void) testinjectDependencies {

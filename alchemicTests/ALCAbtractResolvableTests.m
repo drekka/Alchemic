@@ -9,220 +9,190 @@
 @import XCTest;
 @import ObjectiveC;
 #import "ALCAbstractResolvable.h"
+#import "ALCResolvable.h"
 #import <OCMock/OCMock.h>
+
+@interface DummyResolvable : ALCAbstractResolvable
+@property (nonatomic, assign) BOOL instantiateCalled;
+@end
+
+@implementation DummyResolvable
+-(void) instantiate {
+    self.instantiateCalled = YES;
+}
+@end
+
+@interface ALCAbstractResolvable (_internal)
+-(BOOL) checkCanInjectStatus;
+-(void) resolveWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
+@end
 
 @interface ALCAbtractResolvableTests : XCTestCase
 @end
 
-@implementation ALCAbtractResolvableTests {
-    ALCAbstractResolvable *_resolvableA;
-    ALCAbstractResolvable *_resolvableB;
-    ALCAbstractResolvable *_resolvableC;
-    id _partialMockResolvableA;
-    id _partialMockResolvableB;
-    id _partialMockResolvableC;
-}
+@implementation ALCAbtractResolvableTests
 
--(void)setUp {
-    _resolvableA = [[ALCAbstractResolvable alloc] init];
-    _resolvableB = [[ALCAbstractResolvable alloc] init];
-    _resolvableC = [[ALCAbstractResolvable alloc] init];
-    _partialMockResolvableA = OCMPartialMock(_resolvableA);
-    _partialMockResolvableB = OCMPartialMock(_resolvableB);
-    _partialMockResolvableC = OCMPartialMock(_resolvableC);
+#pragma mark - When ready to inject
+
+-(void) testWhenReadyToInject {
+    ALCAbstractResolvable *resolvable = [[ALCAbstractResolvable alloc] init];
+    __block BOOL readyToInject = NO;
+    [resolvable whenReadyToInject:^(id<ALCResolvable> resolvableComingOnline) {
+        readyToInject = YES;
+    }];
+
+    [resolvable resolve];
+    [resolvable checkCanInjectStatus];
+
+    XCTAssertTrue(readyToInject);
+
 }
 
 #pragma mark - Dependencies
 
--(void) testAddDependencyWhenAlreadyResolved {
-    [_resolvableA resolve];
-    XCTAssertThrowsSpecificNamed([_resolvableA addDependency:_resolvableB], NSException, @"AlchemicResolved");
+-(void) testAddDependencyThrowsWhenAlreadyResolved {
+    id<ALCResolvable> resolvable = [[ALCAbstractResolvable alloc] init];
+    [resolvable resolve];
+    XCTAssertThrowsSpecificNamed([resolvable addDependency:[[ALCAbstractResolvable alloc] init]], NSException, @"AlchemicResolved");
 }
 
-#pragma mark - Availability
+#pragma mark - Can instantiate
 
--(void) testAvailableBeforeResolving {
-    XCTAssertFalse(_resolvableA.available);
+-(void) testCanInjectIsFalseBeforeResolving {
+    id<ALCResolvable> resolvable = [[ALCAbstractResolvable alloc] init];
+    XCTAssertFalse(resolvable.ready);
 }
 
--(void) testAvailableAfterResolving {
-    [_resolvableA resolve];
-    XCTAssertTrue(_resolvableA.available);
+-(void) testCanInjectIsTrueAfterResolving {
+    id<ALCResolvable> resolvable = [[ALCAbstractResolvable alloc] init];
+    [resolvable resolve];
+    XCTAssertTrue(resolvable.ready);
 }
 
--(void) testAvailableAfterResolvingPendingDependency {
+-(void) testCanInjectIsFalseWhenDependencyCannotInject {
 
-    __block BOOL available = NO;
-    [self setFlag:&available whenAvailable:_resolvableA];
-    OCMStub([_partialMockResolvableB available]).andReturn(NO);
-    [self addUnavailableDependencyTo:_resolvableB];
+    id<ALCResolvable> resolvable = [[ALCAbstractResolvable alloc] init];
+    id mockDependency = OCMClassMock([ALCAbstractResolvable class]);
+    OCMStub([mockDependency ready]).andReturn(NO);
 
-    [_resolvableA addDependency:_resolvableB];
-    [_resolvableA resolve];
+    [resolvable addDependency:mockDependency];
+    [resolvable resolve];
 
-    XCTAssertFalse(available);
-    XCTAssertFalse(_resolvableA.available);
+    XCTAssertFalse(resolvable.ready);
 }
 
--(void) testAvailableWhenImmediatelyAvailable {
+-(void) testCanInjectIsTrueWhenImmediatelyAvailable {
 
-    __block BOOL available = NO;
-    [self setFlag:&available whenAvailable:_resolvableA];
+    id<ALCResolvable> resolvable = [[ALCAbstractResolvable alloc] init];
+    id mockDependency = OCMClassMock([ALCAbstractResolvable class]);
+    OCMStub([mockDependency ready]).andReturn(YES);
 
-    [_resolvableA addDependency:_resolvableB];
-    [_resolvableA resolve];
+    [resolvable addDependency:mockDependency];
+    [resolvable resolve];
 
-    XCTAssertTrue(available);
-    XCTAssertTrue(_resolvableA.available);
+    XCTAssertFalse(resolvable.ready);
 }
 
--(void) testAvailableWhenDependencyComesOnline {
+-(void) testCanInjectWhenDependencyComesOnline {
 
-    // Capture the when available block we need to trigger availability.
-    __block ALCResolvableAvailableBlock bAvailable = NULL;
-    OCMStub([(id<ALCResolvable>)_partialMockResolvableB executeWhenAvailable:[OCMArg checkWithBlock:^BOOL(id arg){
-        bAvailable = arg;
+    id<ALCResolvable> resolvable = [[ALCAbstractResolvable alloc] init];
+    id mockDependency = OCMClassMock([ALCAbstractResolvable class]);
+    OCMStub([mockDependency ready]).andReturn(NO);
+
+    // Capture the when available block passed to the dependency.
+    __block ALCDependencyReadyBlock whenAvailableCallbackBlock = NULL;
+    OCMStub([mockDependency whenReadyToInject:[OCMArg checkWithBlock:^BOOL(id arg){
+        whenAvailableCallbackBlock = arg;
         return YES;
-    }]]).andForwardToRealObject;
+    }]]);
 
-    __block BOOL available = NO;
-    [self setFlag:&available whenAvailable:_resolvableA];
+    // Start tests
+    [resolvable addDependency:mockDependency];
+    [resolvable resolve];
 
-    [_resolvableA addDependency:_resolvableB];
-    [self addUnavailableDependencyTo:_resolvableB];
-
-    [_resolvableA resolve];
-
-    XCTAssertFalse(available);
-    XCTAssertFalse(_resolvableA.available);
+    XCTAssertFalse(resolvable.ready);
 
     // Simulate the dependency coming online.
-    [self removeDependenciesFrom:_resolvableB];
-    [_resolvableB checkIfAvailable];
+    OCMStub([mockDependency ready]).andReturn(YES);
+    OCMStub([mockDependency checkCanInjectStatus]).andReturn(YES);
+    whenAvailableCallbackBlock(mockDependency);
 
-    XCTAssertTrue(available);
-    XCTAssertTrue(_resolvableA.available);
+    XCTAssertTrue(resolvable.ready);
 
 }
 
--(void) testCheckAvailableWhenNotResolvedThrows {
-    XCTAssertThrowsSpecificNamed([_resolvableA checkIfAvailable], NSException, @"AlchemicNotResolved");
-}
+-(void) testCanInjectWhenTwoResolvableWithCommonDependencyComesOnline {
 
-#pragma mark - Circular dependencies and availability
+    id<ALCResolvable> resolvableA = [[ALCAbstractResolvable alloc] init];
+    id<ALCResolvable> resolvableB = [[ALCAbstractResolvable alloc] init];
+    id mockDependency = OCMClassMock([ALCAbstractResolvable class]);
+    OCMStub([mockDependency ready]).andReturn(NO);
 
--(void) testCheckAvailabilityAB {
+    // Capture the when available block passed to the dependency.
+    NSMutableSet<ALCDependencyReadyBlock> *blocks = [NSMutableSet set];
+    OCMStub([mockDependency whenReadyToInject:[OCMArg checkWithBlock:^BOOL(id arg){
+        [blocks addObject:arg];
+        return YES;
+    }]]);
 
-    //OCMStub([_partialMockResolvableB available]).andReturn(YES);
-    [_resolvableA addDependency:_resolvableB];
-    [_resolvableB addDependency:_resolvableA];
+    [resolvableA addDependency:mockDependency];
+    [resolvableB addDependency:mockDependency];
 
-    [_resolvableA resolve];
+    // Start tests
+    [resolvableA resolve];
+    [resolvableB resolve];
 
-    XCTAssertTrue(_resolvableA.available);
-}
+    XCTAssertFalse(resolvableA.ready);
+    XCTAssertFalse(resolvableB.ready);
 
--(void) testCheckAvailabilityABWhenBNotReady {
+    // Simulate the dependency coming online.
+    OCMStub([mockDependency ready]).andReturn(YES);
+    OCMStub([mockDependency checkCanInjectStatus]).andReturn(YES);
+    for (ALCDependencyReadyBlock block in blocks) {
+        block(mockDependency);
+    }
 
-    OCMStub([_partialMockResolvableB available]).andReturn(NO);
-    [self addUnavailableDependencyTo:_resolvableB];
-    [_resolvableA addDependency:_resolvableB];
-    [_resolvableA resolve];
+    XCTAssertTrue(resolvableA.ready);
+    XCTAssertTrue(resolvableB.ready);
 
-    [_resolvableA checkIfAvailable];
-
-    XCTAssertFalse(_resolvableA.available);
-}
-
--(void) testCheckAvailabilityABEnteredFromC {
-
-    [_resolvableA addDependency:_resolvableB];
-    [_resolvableA resolve];
-
-    [_resolvableA checkIfAvailable];
-
-    XCTAssertTrue(_resolvableA.available);
-}
-
-
-#pragma mark - Execute when available
-
--(void) testExecuteWhenAvailableCallsBlock {
-    [_resolvableA resolve];
-    __block BOOL called = NO;
-    [_resolvableA executeWhenAvailable:^(id<ALCResolvable> resolvable) {
-        called = YES;
-    }];
-    XCTAssertTrue(called);
-}
-
--(void) testExecuteWhenAvailableWhenNotResolved {
-    __block BOOL called = NO;
-    [_resolvableA executeWhenAvailable:^(id<ALCResolvable> resolvable) {
-        called = YES;
-    }];
-    XCTAssertFalse(called);
-}
-
-#pragma mark - Did become available
-
--(void) testDidBecomeAvailableCalled {
-
-    __block BOOL didBecomeAvailable = NO;
-    OCMStub([_partialMockResolvableA didBecomeAvailable]).andDo(^(NSInvocation *inv){
-        didBecomeAvailable = YES;
-    });
-
-    [_resolvableA resolve];
-
-    XCTAssertTrue(didBecomeAvailable);
 }
 
 #pragma mark - Resolving
 
--(void) testDetectsCircularDependency {
+-(void) testResolveThrowsWhenABLoop {
 
-    [_resolvableA addDependency:_resolvableB];
-    [_resolvableB addDependency:_resolvableA];
+    id<ALCResolvable> resolvableA = [[ALCAbstractResolvable alloc] init];
+    id<ALCResolvable> resolvableB = [[ALCAbstractResolvable alloc] init];
 
-    OCMStub([_partialMockResolvableA available]).andReturn(YES);
-    OCMStub([_partialMockResolvableB available]).andReturn(YES);
+    [resolvableA addDependency:resolvableB];
+    [resolvableB addDependency:resolvableA];
 
-    XCTAssertThrowsSpecificNamed([_resolvableA resolveWithDependencyStack:[NSMutableArray arrayWithObject:_resolvableB]], NSException, @"AlchemicCircularDependency");
+    XCTAssertThrowsSpecificNamed([resolvableA resolve], NSException, @"AlchemicCircularDependency");
 }
 
--(void) testResolveWithPostProcessorsAB {
+-(void) testResolveWhenABAndBStartsANewStack {
 
-    [_resolvableA addDependency:_resolvableB];
-    [_resolvableB addDependency:_resolvableA];
+    id<ALCResolvable> resolvableA = [[ALCAbstractResolvable alloc] init];
+    id<ALCResolvable> resolvableB = [[ALCAbstractResolvable alloc] init];
+    resolvableB.startsResolvingStack = YES;
 
-    OCMStub([_partialMockResolvableA available]).andReturn(YES);
-    OCMStub([_partialMockResolvableB available]).andReturn(YES);
+    [resolvableA addDependency:resolvableB];
+    [resolvableB addDependency:resolvableA];
 
-    [_resolvableA resolve];
+    [resolvableA resolve];
 
-    // Use availility to check. We should not have entered an endless loop or crahed by here.
-    XCTAssertTrue(_resolvableA.available);
-    XCTAssertTrue(_resolvableB.available);
+    XCTAssertTrue(resolvableA.resolved);
+    XCTAssertTrue(resolvableB.resolved);
 
 }
 
-#pragma mark - Internal
+#pragma mark - Instantiate 
 
--(void) setFlag:(BOOL *) boolVar whenAvailable:(id<ALCResolvable>) resolvable {
-    [resolvable executeWhenAvailable:^(id<ALCResolvable> availableResolvable) {
-        *boolVar = YES;
-    }];
-}
+-(void) testInstantiateCalledWhenCanInject {
+    DummyResolvable *resolvableA = [[DummyResolvable alloc] init];
+    [resolvableA resolve];
+    XCTAssertTrue(resolvableA.instantiateCalled);
 
--(void) addUnavailableDependencyTo:(id<ALCResolvable>) resolvable {
-    id mockDep = OCMClassMock([ALCAbstractResolvable class]);
-    [resolvable addDependency:mockDep];
-}
-
--(void) removeDependenciesFrom:(id<ALCResolvable>) resolvable {
-    Ivar dependencyVar = class_getInstanceVariable([ALCAbstractResolvable class], "_dependenciesNotAvailable");
-    object_setIvar(resolvable, dependencyVar, [NSSet set]);
 }
 
 @end

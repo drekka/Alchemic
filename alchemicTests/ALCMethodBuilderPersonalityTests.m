@@ -56,6 +56,18 @@
     OCMVerify([(ALCBuilder *)_mockMethodBuilder addDependency:mockStringBuilder]);
 }
 
+-(void) testWillResolveAddsClassBuilderAsDependency {
+
+    id mockBuilder = OCMClassMock([ALCBuilder class]);
+    OCMExpect([(ALCBuilder *)_mockMethodBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id obj) {
+        return obj == self->_mockClassBuilder;
+    }]]);
+
+    [_personality willResolve];
+
+    OCMVerifyAll(mockBuilder);
+}
+
 -(void) testWillResolveWhenNoReturnTypeBuilder {
 
     // mock not getting a builder from the context.
@@ -76,7 +88,7 @@
 
 -(void) testCanInjectDependencies {
     id mockStringBuilder = [self mockReturnTypeBuilder];
-    OCMStub([mockStringBuilder available]).andReturn(YES);
+    OCMStub([mockStringBuilder ready]).andReturn(YES);
     [_personality willResolve];
     XCTAssertTrue(_personality.canInjectDependencies);
 }

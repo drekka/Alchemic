@@ -44,7 +44,7 @@
     _dependenciesInjected = NO;
     Ivar stringVar = class_getInstanceVariable([self class], "_stringVar");
     ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSString class] value:@"abc"];
-    [valueSource resolveWithDependencyStack:[NSMutableArray array]];
+    [valueSource resolve];
     ALCVariableDependency *dependency = [[ALCVariableDependency alloc] initWithVariable:stringVar valueSource:valueSource];
 
     [self injectWithDependencies:[NSSet setWithObject:dependency]];

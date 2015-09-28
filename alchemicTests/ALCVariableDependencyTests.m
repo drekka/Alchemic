@@ -24,7 +24,7 @@
 
 -(void) setUp {
 	ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSString class] value:@"abc"];
-    [valueSource resolveWithDependencyStack:[NSMutableArray array]];
+    [valueSource resolve];
 	Ivar var = class_getInstanceVariable([SimpleObject class], "_aStringProperty");
 	_dependency = [[ALCVariableDependency alloc] initWithVariable:var valueSource:valueSource];
 }
@@ -36,7 +36,7 @@
 }
 
 -(void) testDescription {
-	XCTAssertEqualObjects(@"_aStringProperty = [NSString]<NSMutableCopying><NSSecureCoding><NSCopying> -> Constant: abc", [_dependency description]);
+	XCTAssertEqualObjects(@"_aStringProperty = [NSString]<NSMutableCopying><NSSecureCoding><NSCopying> -> Constant: abc - available", [_dependency description]);
 }
 
 @end

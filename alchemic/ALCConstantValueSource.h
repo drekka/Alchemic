@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCConstantValueSource : ALCAbstractValueSource
 
-hideInitializer(initWithType:(Class)argumentType);
+hideInitializer(initWithType:(Class) argumentType);
 
 /**
  Default initializer.

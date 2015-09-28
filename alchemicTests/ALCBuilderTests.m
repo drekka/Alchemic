@@ -10,6 +10,7 @@
 #import "ALCTestCase.h"
 #import <OCMock/OCMock.h>
 #import <Alchemic/Alchemic.h>
+#import <StoryTeller/StoryTeller.h>
 
 #import "ALCBuilder.h"
 
@@ -19,6 +20,10 @@
 
 #import "SimpleObject.h"
 #import "ALCMacroProcessor.h"
+
+@interface ALCBuilder (_internal)
+-(void) resolveWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
+@end
 
 @interface ALCBuilderTests : ALCTestCase
 @end
@@ -71,8 +76,8 @@
 #pragma mark - Resolving
 
 -(void) testResolveDefault {
-    NSMutableArray *stack = [NSMutableArray array];
-    [_builder resolveWithDependencyStack:stack]; // Doesn't throw.
+    [_builder configure];
+    [_builder resolve]; // Doesn't throw.
 }
 
 -(void) testResolveWhenCircularDependency {
@@ -84,9 +89,8 @@
 
 -(void) testValue {
     [_builder configure];
-    NSMutableArray *stack = [NSMutableArray array];
 
-    [_builder resolveWithDependencyStack:stack];
+    [_builder resolve];
 
     SimpleObject *so = _builder.value;
     XCTAssertNotNil(so);
@@ -94,9 +98,8 @@
 
 -(void) testValueCachesValue {
     [_builder configure];
-    NSMutableArray *stack = [NSMutableArray array];
 
-    [_builder resolveWithDependencyStack:stack];
+    [_builder resolve];
 
     SimpleObject *so1 = _builder.value;
     SimpleObject *so2 = _builder.value;
@@ -118,14 +121,15 @@
 #pragma mark - Description
 
 -(void) testDescriptionForClass {
+    STStartLogging(@"LogAll");
     [self configureAndResolveBuilder:_builder];
-    XCTAssertEqualObjects(@"* builder for type SimpleObject, name 'SimpleObject', singleton, class builder", [_builder description]);
+    XCTAssertEqualObjects(@"* builder for type SimpleObject, name 'SimpleObject', singleton, value present, class builder", [_builder description]);
 }
 
 -(void) testDescriptionForClassWhenInstantiated {
     [self configureAndResolveBuilder:_builder];
     [_builder value];
-    XCTAssertEqualObjects(@"* builder for type SimpleObject, name 'SimpleObject', singleton, class builder", [_builder description]);
+    XCTAssertEqualObjects(@"* builder for type SimpleObject, name 'SimpleObject', singleton, value present, class builder", [_builder description]);
 
 }
 

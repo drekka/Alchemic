@@ -23,7 +23,7 @@
 @implementation ALCModelValueSourceTests {
 	ALCModelValueSource *_source;
 	NSSet<id<ALCModelSearchExpression>> * _searchExpressions;
-    ALCBuilder *_builder;
+    id _mockBuilder;
 }
 
 -(void) setUp {
@@ -34,102 +34,54 @@
 	_searchExpressions = [NSSet setWithObject:AcName(@"abc")];
     _source = [[ALCModelValueSource alloc] initWithType:[SimpleObject class]
                                       searchExpressions:_searchExpressions];
-    _builder = [self simpleBuilderForClass:[SimpleObject class]];
-    [_builder configure];
-
+    _mockBuilder = OCMClassMock([ALCBuilder class]);
 }
 
-#pragma mark - Callbacks
+#pragma mark - Setup
 
--(void) testResolveTriggersBuilderResolveAndCallback {
-    [self stubMockContextToReturnBuilders:@[_builder]];
-    [_source resolveWithDependencyStack:[NSMutableArray array]];
+-(void) testInitWithTypeThrowsWhenNoExpressions {
+    XCTAssertThrowsSpecificNamed([[ALCModelValueSource alloc] initWithType:[SimpleObject class]
+                                      searchExpressions:[NSSet set]], NSException, @"AlchemicMissingSearchExpressions");
 }
 
--(void) testResolveAsUnavailableIfBuilderNotAvailable {
+#pragma mark - Values
 
-    ALCBuilder *builder2 = [self externalBuilderForClass:[SimpleObject class]];
-    [builder2 configure];
-    [self stubMockContextToReturnBuilders:@[_builder, builder2]];
-
-    [_source resolveWithDependencyStack:[NSMutableArray array]];
-
+-(void) testValues {
+    [self stubMockContextToReturnBuilders:@[_mockBuilder]];
+    OCMStub([(ALCBuilder *)_mockBuilder value]).andReturn(@"abc");
+    [_source resolve];
+    NSSet<id> *values = _source.values;
+    XCTAssertEqual(1u, [values count]);
+    XCTAssertEqualObjects(@"abc", [values anyObject]);
 }
 
--(void) testExecutesCallbackWhenBuilderBecomesAvailable {
+#pragma mark - Will Resolve
 
-    ALCBuilder *builder2 = [self externalBuilderForClass:[SimpleObject class]];
-    [builder2 configure];
-    [self stubMockContextToReturnBuilders:@[builder2]];
-
-    [_source resolveWithDependencyStack:[NSMutableArray array]];
-
-    builder2.value = @"abc";
-
+-(void) testWillResolve {
+    [self stubMockContextToReturnBuilders:@[_mockBuilder]];
+    [_source resolve];
+    NSSet<id<ALCResolvable>> *dependencies = _source.dependencies;
+    XCTAssertEqual(1u, [dependencies count]);
+    XCTAssertTrue([dependencies containsObject:_mockBuilder]);
 }
 
--(void) testCallbackDoesntTriggerUntilLastBuilderAvailable {
-
-    ALCBuilder *classBuilder1 = [self externalBuilderForClass:[NSString class]];
-    [classBuilder1 configure];
-
-    ALCBuilder *classBuilder2 = [self externalBuilderForClass:[NSString class]];
-    [classBuilder2 configure];
-
-    [self stubMockContextToReturnBuilders:@[classBuilder1, classBuilder2]];
-
-    [_source resolveWithDependencyStack:[NSMutableArray array]];
-
-
-    classBuilder1.value = @"abc";
-
-    classBuilder2.value = @"def";
-
+-(void) testWillResolveWhenPrimaryObjectPresent {
+    id mockBuilder2 = OCMClassMock([ALCBuilder class]);
+    OCMStub([mockBuilder2 primary]).andReturn(YES);
+    [self stubMockContextToReturnBuilders:@[_mockBuilder, mockBuilder2]];
+    [_source resolve];
+    NSSet<id<ALCResolvable>> *dependencies = _source.dependencies;
+    XCTAssertEqual(1u, [dependencies count]);
+    XCTAssertTrue([dependencies containsObject:mockBuilder2]);
 }
 
-#pragma mark - Resolving
-
--(void) testBasicResolving {
-
-	[self stubMockContextToReturnBuilders:@[_builder]];
-
-	[_source resolveWithDependencyStack:[NSMutableArray array]];
-
-	NSSet<id> *results = _source.values;
-	XCTAssertEqual(1u, [results count]);
-    XCTAssertTrue([[results anyObject] isKindOfClass:[SimpleObject class]]);
+-(void) testWillResolveThrowsWhenNoResults {
+    [self stubMockContextToReturnBuilders:@[]];
+    XCTAssertThrowsSpecificNamed([_source resolve], NSException, @"AlchemicNoCandidateBuildersFound");
 }
 
--(void) testResolvingSetsState {
-    [self stubMockContextToReturnBuilders:@[_builder]];
-    [_source resolveWithDependencyStack:[NSMutableArray array]];
+-(void) testDescription {
+    XCTAssertEqualObjects(@"Value Source for SimpleObject -> Model search: 'abc'", [_source description]);
 }
-
--(void) testResolveExecutesPostProcessors {
-
-    NSSet<ALCBuilder *> *builders = [NSSet setWithObject:_builder];
-	[self stubMockContextToReturnBuilders:builders.allObjects];
-
-	[_source resolveWithDependencyStack:[NSMutableArray array]];
-
-	NSSet<id> *results = _source.values;
-	XCTAssertEqual(1u, [results count]);
-	XCTAssertTrue([[results anyObject] isKindOfClass:[SimpleObject class]]);
-}
-
--(void) testBasicResolvingFailsToFindCandidates {
-	[self stubMockContextToReturnBuilders:@[]];
-	XCTAssertThrowsSpecificNamed([_source resolveWithDependencyStack:[NSMutableArray array]], NSException, @"AlchemicNoCandidateBuildersFound");
-
-}
-
--(void) testResolversReturnEmptySet {
-
-    NSSet<ALCBuilder *> *builders = [NSSet setWithObject:_builder];
-    [self stubMockContextToReturnBuilders:builders.allObjects];
-
-	XCTAssertThrowsSpecificNamed([_source resolveWithDependencyStack:[NSMutableArray array]], NSException, @"AlchemicNoCandidateBuildersFound");
-}
-
 
 @end

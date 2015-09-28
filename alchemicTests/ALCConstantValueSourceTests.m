@@ -22,7 +22,7 @@
 
 -(void) testResolves {
     ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
-	[source resolveWithDependencyStack:[NSMutableArray array]];
+	[source resolve];
 }
 
 @end

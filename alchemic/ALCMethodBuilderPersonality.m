@@ -46,15 +46,20 @@ hideInitializerImpl(initClassBuilder:(ALCBuilder *) classBuilder)
 
 -(void) willResolve {
 
+    [super willResolve];
+
     [ALCRuntime validateClass:self.classBuilder.valueClass selector:_selector];
 
     // Go find the class builder for the return type and get it to tell us when it's available.
     ALCBuilder *builder = self.builder;
-    STLog(builder.valueClass, @"Searching for class builder for return type %@", NSStringFromClass(builder.valueClass));
-    _returnTypeBuilder = [[ALCAlchemic mainContext] builderForClass:builder.valueClass];
+    Class valueClass = builder.valueClass;
+    STLog(builder.valueClass, @"Searching for class builder for method return type %@", NSStringFromClass(valueClass));
+    _returnTypeBuilder = [[ALCAlchemic mainContext] builderForClass:valueClass];
     if (_returnTypeBuilder != nil) {
-        STLog(builder.valueClass, @"Watching return type builder");
+        STLog(builder.valueClass, @"Watching method return type builder");
         [builder addDependency:_returnTypeBuilder];
+    } else {
+        STLog(builder.valueClass, @"No class builder found for method return type %@", NSStringFromClass(valueClass));
     }
 }
 
@@ -62,12 +67,11 @@ hideInitializerImpl(initClassBuilder:(ALCBuilder *) classBuilder)
     STLog(_returnType, @"Instantiating a %@ using %@", NSStringFromClass(_returnType), self);
     id factoryObject = self.classBuilder.value;
     id object = [factoryObject invokeSelector:_selector arguments:arguments];
-    [self injectDependencies:object];
     return object;
 }
 
 -(BOOL)canInjectDependencies {
-    return _returnTypeBuilder.available;
+    return _returnTypeBuilder.ready;
 }
 
 -(void)injectDependencies:(id)object {
@@ -78,6 +82,10 @@ hideInitializerImpl(initClassBuilder:(ALCBuilder *) classBuilder)
 
 -(NSString *)attributeText {
     return [NSString stringWithFormat:@", using method [%@]", [self builderName]];
+}
+
+-(NSString *) description {
+    return [NSString stringWithFormat:@"method [%@]", self.builderName];
 }
 
 @end

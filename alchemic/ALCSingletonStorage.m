@@ -17,7 +17,7 @@
 }
 
 -(NSString *)attributeText {
-    return @", singleton";
+    return [NSString stringWithFormat:@", singleton%@", (self.hasValue ? @", value present" : @"")];
 }
 
 @end

@@ -41,14 +41,15 @@ hideInitializerImpl(initWithType:(Class)argumentType)
 -(NSSet<id> *) values {
     NSMutableSet<id> *results = [[NSMutableSet alloc] init];
     [self.dependencies enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL * stop) {
-        [results addObject:builder.value];
+        id value = builder.value;
+        [results addObject:value];
     }];
     return results;
 }
 
 -(void) willResolve {
 
-    STLog(self, @"Resolving value source -> %@", self);
+    STLog(self.valueClass, @"About to resolve %@", self);
     __block NSSet<ALCBuilder *> *candidates;
     [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
                                               processingBuildersBlock:^(ProcessBuiderBlockArgs) {
@@ -56,6 +57,7 @@ hideInitializerImpl(initWithType:(Class)argumentType)
                                               }];
 
     // Find primary objects.
+    STLog(self.valueClass, @"Checking for primary builders ...");
     NSMutableSet<ALCBuilder *> *primaries = [[NSMutableSet alloc] init];
     for (ALCBuilder *candidateBuilder in candidates) {
         if (candidateBuilder.primary) {
@@ -72,19 +74,19 @@ hideInitializerImpl(initWithType:(Class)argumentType)
     // If there are no candidates left then error.
     if ([candidates count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicNoCandidateBuildersFound"
-                                       reason:[NSString stringWithFormat:@"Unable to resolve value source -> %@ - no candidate builders found.", [_searchExpressions componentsJoinedByString:@", "]]
+                                       reason:[NSString stringWithFormat:@"Unable to resolve %@ - no candidate builders found.", self]
                                      userInfo:nil];
     }
 
     // Add the candidates to the resolvables dependencies.
-    STLog(ALCHEMIC_LOG, @"%lu final candidates", [candidates count]);
+    STLog(ALCHEMIC_LOG, @"Adding %lu final candidates to dependencies", [candidates count]);
     for (ALCBuilder *candidateBuilder in candidates) {
         [self addDependency:candidateBuilder];
     }
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"Model: %@", [_searchExpressions componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"Value Source for %@ -> Model search: %@", NSStringFromClass(self.valueClass), [_searchExpressions componentsJoinedByString:@", "]];
 }
 
 @end

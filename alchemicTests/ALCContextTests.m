@@ -68,7 +68,7 @@
     OCMStub([_mockModel numberBuilders]).andReturn(1u);
     OCMStub([_mockModel allBuilders]).andReturn(builders);
 
-    OCMExpect([mockBuilder resolveWithDependencyStack:OCMOCK_ANY]);
+    OCMExpect([mockBuilder resolve]);
     OCMStub([mockBuilder valueClass]).andReturn([NSString class]);
 
     ignoreSelectorWarnings(

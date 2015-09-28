@@ -15,7 +15,7 @@
 
 hideInitializerImpl(init)
 
--(instancetype) initWithType:(Class)argumentType {
+-(instancetype) initWithType:(Class) argumentType {
     self = [super init];
     if (self) {
         _valueClass = argumentType;
@@ -28,7 +28,7 @@ hideInitializerImpl(init)
 -(id) value {
 
     // Check the state
-    if (!self.available) {
+    if (!self.ready) {
         @throw [NSException exceptionWithName:@"AlchemicValueNotAvailable"
                                        reason:[NSString stringWithFormat:@"Value not available - %@", self]
                                      userInfo:nil];

@@ -9,18 +9,18 @@
 /* Begin PBXBuildFile section */
 		6C1A4F0B1B9949F600B3C25D /* ALCBuilderPersonality.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F0A1B9949F600B3C25D /* ALCBuilderPersonality.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C1A4F0E1B994D9100B3C25D /* ALCClassBuilderPersonality.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F0C1B994D9100B3C25D /* ALCClassBuilderPersonality.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C1A4F0F1B994D9100B3C25D /* ALCClassBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F0D1B994D9100B3C25D /* ALCClassBuilderPersonality.m */; settings = {ASSET_TAGS = (); }; };
+		6C1A4F0F1B994D9100B3C25D /* ALCClassBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F0D1B994D9100B3C25D /* ALCClassBuilderPersonality.m */; };
 		6C1A4F121B994DCB00B3C25D /* ALCMethodBuilderPersonality.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F101B994DCB00B3C25D /* ALCMethodBuilderPersonality.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C1A4F131B994DCB00B3C25D /* ALCMethodBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F111B994DCB00B3C25D /* ALCMethodBuilderPersonality.m */; settings = {ASSET_TAGS = (); }; };
+		6C1A4F131B994DCB00B3C25D /* ALCMethodBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F111B994DCB00B3C25D /* ALCMethodBuilderPersonality.m */; };
 		6C1A4F161B994DDB00B3C25D /* ALCInitializerBuilderPersonality.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F141B994DDB00B3C25D /* ALCInitializerBuilderPersonality.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C1A4F171B994DDB00B3C25D /* ALCInitializerBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F151B994DDB00B3C25D /* ALCInitializerBuilderPersonality.m */; settings = {ASSET_TAGS = (); }; };
+		6C1A4F171B994DDB00B3C25D /* ALCInitializerBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F151B994DDB00B3C25D /* ALCInitializerBuilderPersonality.m */; };
 		6C1A4F1A1B994E9400B3C25D /* ALCAbstractBuilderPersonality.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F181B994E9400B3C25D /* ALCAbstractBuilderPersonality.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C1A4F1B1B994E9400B3C25D /* ALCAbstractBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F191B994E9400B3C25D /* ALCAbstractBuilderPersonality.m */; settings = {ASSET_TAGS = (); }; };
+		6C1A4F1B1B994E9400B3C25D /* ALCAbstractBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F191B994E9400B3C25D /* ALCAbstractBuilderPersonality.m */; };
 		6C1A4F1F1B995C3200B3C25D /* ALCAbstractMethodBuilderPersonality.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F1D1B995C3100B3C25D /* ALCAbstractMethodBuilderPersonality.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C1A4F201B995C3200B3C25D /* ALCAbstractMethodBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F1E1B995C3200B3C25D /* ALCAbstractMethodBuilderPersonality.m */; settings = {ASSET_TAGS = (); }; };
-		6C215CB71B8CA2D9002EFF58 /* ALCSingletonStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CB61B8CA2D9002EFF58 /* ALCSingletonStorageTests.m */; settings = {ASSET_TAGS = (); }; };
-		6C215CB91B8CA41F002EFF58 /* ALCFactoryStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CB81B8CA41F002EFF58 /* ALCFactoryStorageTests.m */; settings = {ASSET_TAGS = (); }; };
-		6C215CBB1B8CA54F002EFF58 /* ALCExternalStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CBA1B8CA54F002EFF58 /* ALCExternalStorageTests.m */; settings = {ASSET_TAGS = (); }; };
+		6C1A4F201B995C3200B3C25D /* ALCAbstractMethodBuilderPersonality.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F1E1B995C3200B3C25D /* ALCAbstractMethodBuilderPersonality.m */; };
+		6C215CB71B8CA2D9002EFF58 /* ALCSingletonStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CB61B8CA2D9002EFF58 /* ALCSingletonStorageTests.m */; };
+		6C215CB91B8CA41F002EFF58 /* ALCFactoryStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CB81B8CA41F002EFF58 /* ALCFactoryStorageTests.m */; };
+		6C215CBB1B8CA54F002EFF58 /* ALCExternalStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CBA1B8CA54F002EFF58 /* ALCExternalStorageTests.m */; };
 		6C235AD61B82D05F0015CA0B /* InvokeIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C235AD51B82D05F0015CA0B /* InvokeIntegrationTests.m */; };
 		6C235AD81B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C235AD71B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m */; };
 		6C235AD91B831D520015CA0B /* NSObject+Builder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFCD2601B7E44BB00F67C18 /* NSObject+Builder.m */; };
@@ -31,11 +31,11 @@
 		6C2421011B61FB5E00884A93 /* ALCValueSourceFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2421001B61FB5E00884A93 /* ALCValueSourceFactoryTests.m */; };
 		6C2421031B62006000884A93 /* ALCConstantValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2421021B62006000884A93 /* ALCConstantValueSourceTests.m */; };
 		6C2421051B6200B900884A93 /* ALCModelValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2421041B6200B900884A93 /* ALCModelValueSourceTests.m */; };
-		6C258F9D1B99EA9200347369 /* ALCAbstractBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C258F9C1B99EA9200347369 /* ALCAbstractBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
-		6C258F9F1B99EBEB00347369 /* ALCAbstractMethodBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C258F9E1B99EBEB00347369 /* ALCAbstractMethodBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
+		6C258F9D1B99EA9200347369 /* ALCAbstractBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C258F9C1B99EA9200347369 /* ALCAbstractBuilderPersonalityTests.m */; };
+		6C258F9F1B99EBEB00347369 /* ALCAbstractMethodBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C258F9E1B99EBEB00347369 /* ALCAbstractMethodBuilderPersonalityTests.m */; };
 		6C2D4CC31B573D560024AE82 /* ALCConstantValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C2D4CC11B573D560024AE82 /* ALCConstantValueSource.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C2D4CC41B573D560024AE82 /* ALCConstantValueSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2D4CC21B573D560024AE82 /* ALCConstantValueSource.m */; };
-		6C31B0711B9815B000F59A83 /* ALCAbtractResolvableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C31B0701B9815B000F59A83 /* ALCAbtractResolvableTests.m */; settings = {ASSET_TAGS = (); }; };
+		6C31B0711B9815B000F59A83 /* ALCAbtractResolvableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C31B0701B9815B000F59A83 /* ALCAbtractResolvableTests.m */; };
 		6C3273A71B8362ED006A7581 /* NSObject+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3273A61B8362ED006A7581 /* NSObject+AlchemicTests.m */; };
 		6C3273A91B83671C006A7581 /* MacroTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3273A81B83671C006A7581 /* MacroTests.m */; };
 		6C36D7681B38531E0073C4FB /* ALCContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C66DC5E1A903204009F9D94 /* ALCContext.m */; };
@@ -64,15 +64,23 @@
 		6C36D7BE1B3853F10073C4FB /* ALCBundleResourceLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9ADABA1ADFF51C00A240F2 /* ALCBundleResourceLocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7BF1B3853F20073C4FB /* ALCFileContentsResourceLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9ADABD1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C36D7C01B3853F20073C4FB /* ALCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C66DC491A8B85E1009F9D94 /* ALCRuntime.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C36F6261B9E9FD20075967E /* ALCClassBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C36F6251B9E9FD10075967E /* ALCClassBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
-		6C36F6281B9EA3EF0075967E /* ALCInitializerBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C36F6271B9EA3EF0075967E /* ALCInitializerBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
-		6C36F62A1B9EB2310075967E /* ALCMethodBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C36F6291B9EB2310075967E /* ALCMethodBuilderPersonalityTests.m */; settings = {ASSET_TAGS = (); }; };
+		6C36F6261B9E9FD20075967E /* ALCClassBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C36F6251B9E9FD10075967E /* ALCClassBuilderPersonalityTests.m */; };
+		6C36F6281B9EA3EF0075967E /* ALCInitializerBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C36F6271B9EA3EF0075967E /* ALCInitializerBuilderPersonalityTests.m */; };
+		6C36F62A1B9EB2310075967E /* ALCMethodBuilderPersonalityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C36F6291B9EB2310075967E /* ALCMethodBuilderPersonalityTests.m */; };
 		6C37497E1B7AD8B40012383D /* OnLoadIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37497D1B7AD8B40012383D /* OnLoadIntegrationTests.m */; };
 		6C3CB9771B59570E001F6EB6 /* ALCArg.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3CB9751B595706001F6EB6 /* ALCArg.m */; };
 		6C3CB9781B595713001F6EB6 /* ALCArg.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C3CB9741B595706001F6EB6 /* ALCArg.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C4655F41B54D59F00FD1D28 /* ALCValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4655F31B54D59F00FD1D28 /* ALCValueSource.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C4655F71B54D62400FD1D28 /* ALCModelValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4655F51B54D62400FD1D28 /* ALCModelValueSource.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C4655F81B54D62400FD1D28 /* ALCModelValueSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4655F61B54D62400FD1D28 /* ALCModelValueSource.m */; };
+		6C469BAE1BB0200200CD2286 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 6C469BAD1BB0200200CD2286 /* Cartfile */; };
+		6C469BB01BB020D000CD2286 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C469BAF1BB020D000CD2286 /* PEGKit.framework */; };
+		6C469BB11BB020FB00CD2286 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C469BAF1BB020D000CD2286 /* PEGKit.framework */; };
+		6C469BB41BB020FB00CD2286 /* PEGKit.framework.dSYM in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C469BB21BB020FB00CD2286 /* PEGKit.framework.dSYM */; };
+		6C469BB51BB020FB00CD2286 /* StoryTeller.framework.dSYM in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C469BB31BB020FB00CD2286 /* StoryTeller.framework.dSYM */; };
+		6C469BB71BB021EE00CD2286 /* PEGKit.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C469BB21BB020FB00CD2286 /* PEGKit.framework.dSYM */; };
+		6C469BB81BB021EE00CD2286 /* StoryTeller.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C469BB31BB020FB00CD2286 /* StoryTeller.framework.dSYM */; };
+		6C469BB91BB021EE00CD2286 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C469BAF1BB020D000CD2286 /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C4F34F11B4AB8CF005E19A0 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C55E6331B6B531D004A6305 /* ArraysIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C55E6321B6B531D004A6305 /* ArraysIntegrationTests.m */; };
 		6C55E6351B6F38BF004A6305 /* CircularDependency4IntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C55E6341B6F38BF004A6305 /* CircularDependency4IntegrationTests.m */; };
@@ -128,7 +136,7 @@
 		6CB0740A1B4D000F00CA9002 /* ALCRuntimeScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB074061B4CF49D00CA9002 /* ALCRuntimeScanner.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CB0740F1B4D078C00CA9002 /* ALCConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB0740B1B4D066200CA9002 /* ALCConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CBB019C1B96D8D400863F09 /* ALCAbstractResolvable.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBB019A1B96D8D400863F09 /* ALCAbstractResolvable.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6CBB019D1B96D8D400863F09 /* ALCAbstractResolvable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB019B1B96D8D400863F09 /* ALCAbstractResolvable.m */; settings = {ASSET_TAGS = (); }; };
+		6CBB019D1B96D8D400863F09 /* ALCAbstractResolvable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB019B1B96D8D400863F09 /* ALCAbstractResolvable.m */; };
 		6CC9D7691B595A0100EFD517 /* ALCMacroProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC9D7671B595A0100EFD517 /* ALCMacroProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CC9D76A1B595A0100EFD517 /* ALCMacroProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */; };
 		6CCF58661B7C5530009655E9 /* NSSet+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CCF58631B7C500E009655E9 /* NSSet+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -137,9 +145,9 @@
 		6CDEBF9C1B5FCC32009E3BEF /* ALCValueSourceFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CDEBF9D1B5FCC32009E3BEF /* ALCValueSourceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */; };
 		6CDEBFA01B606EA0009E3BEF /* ALCMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDEBF9F1B606EA0009E3BEF /* ALCMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6CEE8EA91B8D414F002EADC5 /* NSObject+BuilderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE8EA81B8D414F002EADC5 /* NSObject+BuilderTests.m */; settings = {ASSET_TAGS = (); }; };
-		6CEE8EAF1B8D721C002EADC5 /* ALCBuilderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE8EAE1B8D721C002EADC5 /* ALCBuilderTests.m */; settings = {ASSET_TAGS = (); }; };
-		6CEE8EB11B8DA6C6002EADC5 /* MethodFactoryWithArgIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE8EB01B8DA6C6002EADC5 /* MethodFactoryWithArgIntegrationTests.m */; settings = {ASSET_TAGS = (); }; };
+		6CEE8EA91B8D414F002EADC5 /* NSObject+BuilderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE8EA81B8D414F002EADC5 /* NSObject+BuilderTests.m */; };
+		6CEE8EAF1B8D721C002EADC5 /* ALCBuilderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE8EAE1B8D721C002EADC5 /* ALCBuilderTests.m */; };
+		6CEE8EB11B8DA6C6002EADC5 /* MethodFactoryWithArgIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CEE8EB01B8DA6C6002EADC5 /* MethodFactoryWithArgIntegrationTests.m */; };
 		6CF28C641B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF28C631B6A0F6100E3A36E /* MethodSingletonsIntegrationTests.m */; };
 		6CF28C661B6B14EB00E3A36E /* MethodFactorySimpleIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF28C651B6B14EB00E3A36E /* MethodFactorySimpleIntegrationTests.m */; };
 		6CF28C681B6B312800E3A36E /* InitializerIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF28C671B6B312800E3A36E /* InitializerIntegrationTests.m */; };
@@ -166,6 +174,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				6C469BB71BB021EE00CD2286 /* PEGKit.framework.dSYM in CopyFiles */,
+				6C469BB81BB021EE00CD2286 /* StoryTeller.framework.dSYM in CopyFiles */,
+				6C469BB91BB021EE00CD2286 /* PEGKit.framework in CopyFiles */,
 				6C7F24ED1B4B5A9F007A44C8 /* StoryTeller.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -173,7 +184,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6C1A4F0A1B9949F600B3C25D /* ALCBuilderPersonality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCBuilderPersonality.h; sourceTree = "<group>"; };
+		6C1A4F0A1B9949F600B3C25D /* ALCBuilderPersonality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCBuilderPersonality.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C1A4F0C1B994D9100B3C25D /* ALCClassBuilderPersonality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassBuilderPersonality.h; sourceTree = "<group>"; };
 		6C1A4F0D1B994D9100B3C25D /* ALCClassBuilderPersonality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCClassBuilderPersonality.m; sourceTree = "<group>"; };
 		6C1A4F101B994DCB00B3C25D /* ALCMethodBuilderPersonality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMethodBuilderPersonality.h; sourceTree = "<group>"; };
@@ -181,7 +192,7 @@
 		6C1A4F141B994DDB00B3C25D /* ALCInitializerBuilderPersonality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInitializerBuilderPersonality.h; sourceTree = "<group>"; };
 		6C1A4F151B994DDB00B3C25D /* ALCInitializerBuilderPersonality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCInitializerBuilderPersonality.m; sourceTree = "<group>"; };
 		6C1A4F181B994E9400B3C25D /* ALCAbstractBuilderPersonality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractBuilderPersonality.h; sourceTree = "<group>"; };
-		6C1A4F191B994E9400B3C25D /* ALCAbstractBuilderPersonality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractBuilderPersonality.m; sourceTree = "<group>"; };
+		6C1A4F191B994E9400B3C25D /* ALCAbstractBuilderPersonality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractBuilderPersonality.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C1A4F1D1B995C3100B3C25D /* ALCAbstractMethodBuilderPersonality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractMethodBuilderPersonality.h; sourceTree = "<group>"; };
 		6C1A4F1E1B995C3200B3C25D /* ALCAbstractMethodBuilderPersonality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractMethodBuilderPersonality.m; sourceTree = "<group>"; };
 		6C215CB61B8CA2D9002EFF58 /* ALCSingletonStorageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCSingletonStorageTests.m; sourceTree = "<group>"; };
@@ -214,9 +225,13 @@
 		6C4655F31B54D59F00FD1D28 /* ALCValueSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCValueSource.h; sourceTree = "<group>"; };
 		6C4655F51B54D62400FD1D28 /* ALCModelValueSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCModelValueSource.h; sourceTree = "<group>"; };
 		6C4655F61B54D62400FD1D28 /* ALCModelValueSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelValueSource.m; sourceTree = "<group>"; };
+		6C469BAD1BB0200200CD2286 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		6C469BAF1BB020D000CD2286 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = ../../Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
+		6C469BB21BB020FB00CD2286 /* PEGKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = PEGKit.framework.dSYM; path = ../../Build/iOS/PEGKit.framework.dSYM; sourceTree = "<group>"; };
+		6C469BB31BB020FB00CD2286 /* StoryTeller.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = StoryTeller.framework.dSYM; path = ../../Build/iOS/StoryTeller.framework.dSYM; sourceTree = "<group>"; };
 		6C55E6321B6B531D004A6305 /* ArraysIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArraysIntegrationTests.m; sourceTree = "<group>"; };
 		6C55E6341B6F38BF004A6305 /* CircularDependency4IntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularDependency4IntegrationTests.m; sourceTree = "<group>"; };
-		6C55E6361B6F3D3B004A6305 /* ALCResolvable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCResolvable.h; sourceTree = "<group>"; };
+		6C55E6361B6F3D3B004A6305 /* ALCResolvable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCResolvable.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C55E6381B70617D004A6305 /* ALCAlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAlchemicTests.m; sourceTree = "<group>"; };
 		6C5F142C1B64B54800E119FC /* SimpleObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleObject.h; sourceTree = "<group>"; };
 		6C5F142D1B64B54800E119FC /* SimpleObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleObject.m; sourceTree = "<group>"; };
@@ -249,7 +264,7 @@
 		6C781EAF1B25968F001D86CB /* ALCIsPrimary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCIsPrimary.h; sourceTree = "<group>"; };
 		6C781EB01B25968F001D86CB /* ALCIsPrimary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCIsPrimary.m; sourceTree = "<group>"; };
 		6C7DAF201B7DA3A8003A492A /* NSSet+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+AlchemicTests.m"; sourceTree = "<group>"; };
-		6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
+		6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = ../../Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6C88B8EF1B8A9EA50040D996 /* ALCFactoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCFactoryStorage.h; sourceTree = "<group>"; };
 		6C88B8F01B8A9EA50040D996 /* ALCFactoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCFactoryStorage.m; sourceTree = "<group>"; };
 		6C88B8F21B8AA0E40040D996 /* ALCExternalStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCExternalStorage.h; sourceTree = "<group>"; };
@@ -323,6 +338,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C469BB01BB020D000CD2286 /* PEGKit.framework in Frameworks */,
 				6C7F24EA1B4B564B007A44C8 /* StoryTeller.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,6 +347,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C469BB41BB020FB00CD2286 /* PEGKit.framework.dSYM in Frameworks */,
+				6C469BB51BB020FB00CD2286 /* StoryTeller.framework.dSYM in Frameworks */,
+				6C469BB11BB020FB00CD2286 /* PEGKit.framework in Frameworks */,
 				6C4F34F11B4AB8CF005E19A0 /* Alchemic.framework in Frameworks */,
 				6C7F24EB1B4B565E007A44C8 /* StoryTeller.framework in Frameworks */,
 				6CFD6E981B456D27008B6695 /* libOCMock.a in Frameworks */,
@@ -408,6 +427,17 @@
 			name = Value;
 			sourceTree = "<group>";
 		};
+		6C469BB61BB0210A00CD2286 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C469BB21BB020FB00CD2286 /* PEGKit.framework.dSYM */,
+				6C469BB31BB020FB00CD2286 /* StoryTeller.framework.dSYM */,
+				6C469BAF1BB020D000CD2286 /* PEGKit.framework */,
+				6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6C5EDC991B55464000EE88EF /* Value */ = {
 			isa = PBXGroup;
 			children = (
@@ -467,7 +497,8 @@
 		6C66DC251A8B82C3009F9D94 = {
 			isa = PBXGroup;
 			children = (
-				6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */,
+				6C469BB61BB0210A00CD2286 /* Frameworks */,
+				6C469BAD1BB0200200CD2286 /* Cartfile */,
 				6CFD6E971B456D27008B6695 /* libOCMock.a */,
 				6C7145601B44238900EBC055 /* StoryTellerConfig.json */,
 				6C66DC3F1A8B82C3009F9D94 /* Info.plist */,
@@ -737,7 +768,6 @@
 				6C36D74A1B3851680073C4FB /* Sources */,
 				6C36D74B1B3851680073C4FB /* Frameworks */,
 				6C36D74C1B3851680073C4FB /* Headers */,
-				6C36D74D1B3851680073C4FB /* Resources */,
 				6CFF3BD41B709F8800538BA1 /* Appledoc */,
 			);
 			buildRules = (
@@ -805,17 +835,11 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		6C36D74D1B3851680073C4FB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6C66DC371A8B82C3009F9D94 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C469BAE1BB0200200CD2286 /* Cartfile in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1030,13 +1054,11 @@
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/iOS";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;

@@ -49,6 +49,8 @@ hideInitializerImpl(init)
     self = [super init];
     if (self) {
 
+        STLog(@"Creating builder for class %@", NSStringFromClass(aClass));
+
         // Set the back ref in the personality.
         personality.builder = self;
 
@@ -95,7 +97,7 @@ hideInitializerImpl(init)
     [_personality addVariableInjection:variable valueSourceFactory:valueSourceFactory];
 }
 
--(void)didBecomeAvailable {
+-(void) instantiate {
     if (_autoStart && !_valueStorage.hasValue) {
         STLog(self.valueClass, @"All dependencies now available, auto-creating a %@ ...", NSStringFromClass(self.valueClass));
         [self value];
@@ -118,33 +120,34 @@ hideInitializerImpl(init)
 
 -(id)value {
 
-    if (!self.available) {
+    if (!self.ready) {
         @throw [NSException exceptionWithName:@"AlchemicBuilderNotAvailable"
-                                       reason:[NSString stringWithFormat:@"Builder %@ is not available. Dependencies are still pending.", self]
+                                       reason:[NSString stringWithFormat:@"Builder %@ still has pending dependencies.", self]
                                      userInfo:nil];}
 
     id value = _valueStorage.value;
     if (value == nil) {
         value = [_personality instantiateObject];
-        _valueStorage.value = value;// Dont go through the setter because the instantiator will have injected dependencies.
+        [self setValue:value];
     }
 
     return value;
 }
 
 // Allows us to inject dependencies on objects created outside of Alchemic.
--(void)setValue:(id)value {
+-(void)setValue:(id) value {
 
     if (! _personality.canInjectDependencies) {
         @throw [NSException exceptionWithName:@"AlchemicDependenciesNotAvailable"
-                                       reason:[NSString stringWithFormat:@"Dependencies not available: %@, cannot set a value.", self]
+                                       reason:[NSString stringWithFormat:@"Dependencies not available for builder: %@", self]
                                      userInfo:nil];
     }
 
     STLog(self.valueClass, @"Storing a %@", NSStringFromClass([value class]));
-    [_personality injectDependencies:value];
+    // Always store first in case circular dependencies trigger via the dependency injection and loop back here before we have stored it.
     _valueStorage.value = value;
-    [self checkIfAvailable];
+    [_personality injectDependencies:value];
+    [self ready];
 }
 
 -(void)injectDependencies:(id) object {

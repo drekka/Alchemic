@@ -163,7 +163,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (builder == nil) {
             return [NSSet set];
         }
-        STLog(ALCHEMIC_LOG, @"Name matched: %@ -> %@", nameExpression.aName, builder);
+        STLog(ALCHEMIC_LOG, @"Found builder with name: %@ -> %@", nameExpression.aName, builder);
         return [NSSet setWithObject:builder];
     }
 

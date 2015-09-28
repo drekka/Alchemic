@@ -39,6 +39,7 @@ hideInitializerImpl(initWithClassBuilder:(ALCBuilder *) classBuilder)
 }
 
 -(void) willResolve {
+    [super willResolve];
     [ALCRuntime validateClass:self.classBuilder.valueClass selector:_initializer];
 }
 
@@ -46,12 +47,11 @@ hideInitializerImpl(initWithClassBuilder:(ALCBuilder *) classBuilder)
     ALCBuilder *builder = self.classBuilder;
     STLog(builder.valueClass, @"Instantiating a %@ using %@", NSStringFromClass(builder.valueClass), self);
     id object = [[builder.valueClass alloc] invokeSelector:_initializer arguments:arguments];
-    [self injectDependencies:object];
     return object;
 }
 
 -(BOOL)canInjectDependencies {
-    return self.classBuilder.available;
+    return self.classBuilder.ready;
 }
 
 -(void)injectDependencies:(id)object {
@@ -60,6 +60,10 @@ hideInitializerImpl(initWithClassBuilder:(ALCBuilder *) classBuilder)
 
 -(NSString *)attributeText {
     return [NSString stringWithFormat:@", using initializer [%@]", [self builderName]];
+}
+
+-(NSString *) description {
+    return [NSString stringWithFormat:@"initializer [%@]", self.builderName];
 }
 
 @end

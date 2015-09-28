@@ -79,9 +79,8 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 -(void) resolveBuilderDependencies {
     STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
     for (ALCBuilder *builder in [_model allBuilders]) {
-        STLog(builder.valueClass, @"Resolving %@", builder);
         STStartScope(builder.valueClass);
-        [builder resolveWithDependencyStack:[[NSMutableArray alloc] init]];
+        [builder resolve];
     }
 }
 
@@ -96,9 +95,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... {
     alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
-    [classBuilder configure];
-
-    // Remove and re-add the builder to the model to ensure it's name us updated.
+    //[classBuilder configure];
     STLog(classBuilder.valueClass, @"Updated class %@", classBuilder);
 }
 
