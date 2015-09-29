@@ -38,7 +38,7 @@ AcInject(objA, AcClass(ObjA))
 
 AcInject(_objA)
 
--(void) testCircularDep {
+-(void) testIntegrationCircularDep {
 	[self setupRealContext];
 	[self startContextWithClasses:@[[ObjB class], [ObjA class], [CircularDependency2IntegrationTests class]]];
 	AcInjectDependencies(self);

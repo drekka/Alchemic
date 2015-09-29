@@ -36,7 +36,7 @@
 }
 
 -(void) testDescription {
-	XCTAssertEqualObjects(@"_aStringProperty = [NSString]<NSMutableCopying><NSSecureCoding><NSCopying> -> Constant: abc - available", [_dependency description]);
+	XCTAssertEqualObjects(@"_aStringProperty = Constant: abc - instantiable", [_dependency description]);
 }
 
 @end

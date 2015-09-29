@@ -35,7 +35,7 @@ AcMethod(ASObject, newAsObject, AcWithName(@"o1"))
     return [[ASObject alloc] init];
 }
 
--(void) testInjectingArray {
+-(void) testIntegrationInjectingArray {
 	STStartLogging(@"LogAll");
 	[self setupRealContext];
 	[self startContextWithClasses:@[[ArraysIntegrationTests class]]];

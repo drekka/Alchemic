@@ -15,7 +15,7 @@
 
 @implementation OnLoadIntegrationTests
 
--(void) testCallbackBlock {
+-(void) testIntegrationCallbackBlock {
 
     XCTestExpectation *blockExecuted = [self expectationWithDescription:@"callback-executed"];
 
@@ -35,7 +35,7 @@
 
 }
 
--(void) testCallbackBlockWhenAlreadyStarted {
+-(void) testIntegrationCallbackBlockWhenAlreadyStarted {
 
     XCTestExpectation *blockExecuted = [self expectationWithDescription:@"callback-executed"];
 

@@ -59,7 +59,7 @@ AcInitializer(initWithSimpleObject1:, AcArg(ITSimpleObject1, AcClass(ITSimpleObj
 AcInject(_so1)
 AcInject(_so2)
 
--(void) testNoArgInit {
+-(void) testIntegrationNoArgInit {
 	STStartLogging(ALCHEMIC_LOG);
 	[self setupRealContext];
 	[self startContextWithClasses:@[[ITSimpleObject1 class], [ITSimpleObject2 class], [InitializerIntegrationTests class]]];
@@ -68,7 +68,7 @@ AcInject(_so2)
 	XCTAssertEqualObjects(@"abc", _so1.prop);
 }
 
--(void) testSingleArgInit {
+-(void) testIntegrationSingleArgInit {
 	[self setupRealContext];
 	[self startContextWithClasses:@[[ITSimpleObject1 class], [ITSimpleObject2 class], [InitializerIntegrationTests class]]];
 	AcInjectDependencies(self);

@@ -75,7 +75,7 @@ AcInject(_parentClass)
 	XCTAssertTrue([_parentClass.createANumberResults containsObject:@2]);
 }
 
--(void) testCreatingASingletonWithAnArg {
+-(void) testIntegrationCreatingASingletonWithAnArg {
 	[self setupRealContext];
 	STStartLogging(@"[MethodFactoryIntegrationTests]");
 	[self startContextWithClasses:@[[MSParentClass class], [MethodSingletonsIntegrationTests class]]];

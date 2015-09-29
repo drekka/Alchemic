@@ -28,7 +28,7 @@ AcRegister(AcFactory)
 AcInject(_simpleFactory1)
 AcInject(_simpleFactory2)
 
--(void) testCreatingASFactory {
+-(void) testIntegrationCreatingASFactory {
 	[self setupRealContext];
 	STStartLogging(@"[FactoryIntegrationTests]");
 	[self startContextWithClasses:@[[CISimpleFactory class], [FactoryIntegrationTests class]]];

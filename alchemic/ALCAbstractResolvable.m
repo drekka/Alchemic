@@ -37,7 +37,7 @@
     [(NSMutableSet *) _dependencies addObject:resolvable];
 }
 
--(void) whenReadyToInject:(ALCDependencyReadyBlock) block {
+-(void) whenReadyDo:(ALCDependencyReadyBlock) block {
 
     if (_ready) {
         @throw [NSException exceptionWithName:@"AlchemicAlreadyCanInject"
@@ -53,34 +53,33 @@
 
 #pragma mark - Injection status
 
--(BOOL) setInitialCanInjectStatus {
+-(BOOL) setInitialStatus {
 
-    return [self checkIfDependenciesCanInjectWithBlock:^BOOL(ALCAbstractResolvable *dependency) {
+    return [self checkStatusUsingBlock:^BOOL(ALCAbstractResolvable *dependency) {
 
         // If the dependeny cannot inject then get it to tell us when it can inject.
-        if ([dependency setInitialCanInjectStatus]) {
-            return YES;
+        if ( ! [dependency setInitialStatus]) {
+            [dependency whenReadyDo:^(ALCDependencyReadyBlockArgs) {
+                [self checkStatus];
+            }];
+            return NO;
         }
-
-        [dependency whenReadyToInject:^(ALCDependencyReadyBlockArgs) {
-            [self checkCanInjectStatus];
-        }];
-        return NO;
+        return YES;
     }];
 }
 
--(BOOL) checkCanInjectStatus {
+-(BOOL) checkStatus {
 
-    if ([self checkIfDependenciesCanInjectWithBlock:^BOOL(ALCAbstractResolvable *dependency) {
-        return [dependency checkCanInjectStatus];
+    if ([self checkStatusUsingBlock:^BOOL(ALCAbstractResolvable *dependency) {
+        return [dependency checkStatus];
     }]) {
         // Resolvable can inject. If there are blocks, execute them. This will resolve out to nils if there are none
-        [self executeWhenReadyCallbackBlocks];
+        [self resolvableIsNowReady];
     }
     return self.ready;
 }
 
--(void) executeWhenReadyCallbackBlocks {
+-(void) resolvableIsNowReady {
 
     // Copy the blocks to a seperate set for processing.
     // Otherwise we can get into a loop when there are circular dependencies.
@@ -91,9 +90,11 @@
     [blocks enumerateObjectsUsingBlock:^(ALCDependencyReadyBlock dependencyReadyBlock, BOOL * stop) {
         dependencyReadyBlock(self);
     }];
+
+    [self instantiate];
 }
 
--(BOOL) checkIfDependenciesCanInjectWithBlock:(BOOL (^)(ALCAbstractResolvable *dependency)) canDependencyInjectBlock {
+-(BOOL) checkStatusUsingBlock:(BOOL (^)(ALCAbstractResolvable *dependency)) canDependencyInjectBlock {
 
     // If we can already inject or we are being resolved then say we can inject.
     if (self.ready) {
@@ -122,7 +123,9 @@
 -(void) resolve {
     STLog(ALCHEMIC_LOG, @"Initiating resolve ...");
     [self resolveWithDependencyStack:[NSMutableArray array]];
-    [self setInitialCanInjectStatus];
+    if ([self setInitialStatus]) {
+        [self instantiate];
+    }
 }
 
 -(void) resolveWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack {

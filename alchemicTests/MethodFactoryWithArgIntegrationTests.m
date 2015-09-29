@@ -48,7 +48,7 @@ AcInject(_aNumber3, AcName(@"def"))
 AcInject(_aNumber4, AcName(@"def"))
 AcInject(_parentClass)
 
--(void) testCreatingASingletonWithAnArg {
+-(void) testIntegrationCreatingASingletonWithAnArg {
     [self setupRealContext];
     STStartLogging(@"[MethodFactoryIntegrationTests]");
     [self startContextWithClasses:@[[MFWithArgParentClass class], [MethodFactoryWithArgIntegrationTests class]]];

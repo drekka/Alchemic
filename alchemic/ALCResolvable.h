@@ -45,7 +45,7 @@ typedef void (^ALCDependencyReadyBlock) (ALCDependencyReadyBlockArgs);
 
  @param dependencyReadyBlock The block to execute.
  */
--(void) whenReadyToInject:(ALCDependencyReadyBlock) dependencyReadyBlock;
+-(void) whenReadyDo:(ALCDependencyReadyBlock) dependencyReadyBlock;
 
 #pragma mark - Resolving
 

@@ -34,7 +34,7 @@ AcMethod(CD1Object, newObject, AcWithName(@"obj"))
     return [[CD1Object alloc] init];
 }
 
--(void) testCircularDependencyWithMethod {
+-(void) testIntegrationCircularDependencyWithMethod {
     STStartLogging(ALCHEMIC_LOG);
     STStartLogging(@"is [CircularDependency1IntegrationTests]");
     [self setupRealContext];

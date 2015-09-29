@@ -45,7 +45,7 @@ AcInitializer(initWithString:, AcFactory)
 
 @implementation InvokeIntegrationTests
 
--(void) testInvokingAFactoryInititializer {
+-(void) testIntegrationInvokingAFactoryInititializer {
     STStartLogging(@"LogAll");
     [self setupRealContext];
     [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
@@ -58,7 +58,7 @@ AcInitializer(initWithString:, AcFactory)
 
 }
 
--(void) testInvokingAFactoryInititializerWithMissingArgsPassesNil {
+-(void) testIntegrationInvokingAFactoryInititializerWithMissingArgsPassesNil {
 
     [self setupRealContext];
     [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];

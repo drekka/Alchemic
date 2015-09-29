@@ -23,7 +23,7 @@
 @end
 
 @interface ALCAbstractResolvable (_internal)
--(BOOL) checkCanInjectStatus;
+-(BOOL) checkStatus;
 -(void) resolveWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
 @end
 
@@ -37,12 +37,12 @@
 -(void) testWhenReadyToInject {
     ALCAbstractResolvable *resolvable = [[ALCAbstractResolvable alloc] init];
     __block BOOL readyToInject = NO;
-    [resolvable whenReadyToInject:^(id<ALCResolvable> resolvableComingOnline) {
+    [resolvable whenReadyDo:^(id<ALCResolvable> resolvableComingOnline) {
         readyToInject = YES;
     }];
 
     [resolvable resolve];
-    [resolvable checkCanInjectStatus];
+    [resolvable checkStatus];
 
     XCTAssertTrue(readyToInject);
 
@@ -101,7 +101,7 @@
 
     // Capture the when available block passed to the dependency.
     __block ALCDependencyReadyBlock whenAvailableCallbackBlock = NULL;
-    OCMStub([mockDependency whenReadyToInject:[OCMArg checkWithBlock:^BOOL(id arg){
+    OCMStub([mockDependency whenReadyDo:[OCMArg checkWithBlock:^BOOL(id arg){
         whenAvailableCallbackBlock = arg;
         return YES;
     }]]);
@@ -114,7 +114,7 @@
 
     // Simulate the dependency coming online.
     OCMStub([mockDependency ready]).andReturn(YES);
-    OCMStub([mockDependency checkCanInjectStatus]).andReturn(YES);
+    OCMStub([mockDependency checkStatus]).andReturn(YES);
     whenAvailableCallbackBlock(mockDependency);
 
     XCTAssertTrue(resolvable.ready);
@@ -130,7 +130,7 @@
 
     // Capture the when available block passed to the dependency.
     NSMutableSet<ALCDependencyReadyBlock> *blocks = [NSMutableSet set];
-    OCMStub([mockDependency whenReadyToInject:[OCMArg checkWithBlock:^BOOL(id arg){
+    OCMStub([mockDependency whenReadyDo:[OCMArg checkWithBlock:^BOOL(id arg){
         [blocks addObject:arg];
         return YES;
     }]]);
@@ -147,7 +147,7 @@
 
     // Simulate the dependency coming online.
     OCMStub([mockDependency ready]).andReturn(YES);
-    OCMStub([mockDependency checkCanInjectStatus]).andReturn(YES);
+    OCMStub([mockDependency checkStatus]).andReturn(YES);
     for (ALCDependencyReadyBlock block in blocks) {
         block(mockDependency);
     }
@@ -192,7 +192,6 @@
     DummyResolvable *resolvableA = [[DummyResolvable alloc] init];
     [resolvableA resolve];
     XCTAssertTrue(resolvableA.instantiateCalled);
-
 }
 
 @end

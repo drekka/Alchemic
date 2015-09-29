@@ -29,27 +29,27 @@ AcRegister(AcWithName(@"abc"))
 	[self startContextWithClasses:@[[REObject class]]];
 }
 
--(void) testGet {
+-(void) testIntegrationGet {
 	[self checkIsREObject:AcGet(REObject)];
 }
 
--(void) testGetbyClass {
+-(void) testIntegrationGetbyClass {
 	[self checkIsREObject:AcGet(REObject, AcClass(REObject))];
 }
 
--(void) testGetbyProtocol {
+-(void) testIntegrationGetbyProtocol {
 	[self checkIsREObject:AcGet(REObject, AcProtocol(REProtocol))];
 }
 
--(void) testGetbyName {
+-(void) testIntegrationGetbyName {
 	[self checkIsREObject:AcGet(REObject, AcName(@"abc"))];
 }
 
--(void) testGetbyEverything {
+-(void) testIntegrationGetbyEverything {
 	[self checkIsREObject:AcGet(REObject, AcClass(REObject), AcProtocol(REProtocol))];
 }
 
--(void) testGetThrowsWhenFactory {
+-(void) testIntegrationGetThrowsWhenFactory {
 	XCTAssertThrowsSpecificNamed((AcGet(REObject, AcFactory)), NSException, @"AlchemicUnexpectedMacro");
 }
 

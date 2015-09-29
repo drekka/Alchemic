@@ -40,7 +40,7 @@ AcMethod(CI3ObjA, createObjA)
 
 AcInject(_objA, AcName(@"abc"))
 
--(void) testCircularDep {
+-(void) testIntegrationCircularDep {
 	[self setupRealContext];
 	STStartLogging(ALCHEMIC_LOG);
 	STStartLogging(@"is [CI3ObjA]");

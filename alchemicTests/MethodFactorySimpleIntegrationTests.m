@@ -48,7 +48,7 @@ AcInject(_aNumber1, AcName(@"abc"))
 AcInject(_aNumber2, AcName(@"abc"))
 AcInject(_parentClass)
 
--(void) testSimpleFactory {
+-(void) testIntegrationSimpleFactory {
 
     STStartLogging(@"LogAll");
 	[self setupRealContext];

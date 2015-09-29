@@ -40,7 +40,7 @@ AcInject(_def, AcName(@"defObj"))
 AcMethod(MUObject, muObjectWithString:, AcWithName(@"abcObj"), AcArg(NSString, AcValue(@"abc")))
 AcMethod(MUObject, muObjectWithString:, AcWithName(@"defObj"), AcArg(NSString, AcValue(@"def")))
 
--(void) testMultiObjects {
+-(void) testIntegrationMultiObjects {
     STStartLogging(@"LogAll");
     [super setupRealContext];
     [super startContextWithClasses:@[[MultiRegistrationsIntegrationTests class]]];
