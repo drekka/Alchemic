@@ -49,8 +49,6 @@ hideInitializerImpl(init)
     self = [super init];
     if (self) {
 
-        STLog(@"Creating builder for class %@", NSStringFromClass(aClass));
-
         // Set the back ref in the personality.
         personality.builder = self;
 
@@ -86,6 +84,7 @@ hideInitializerImpl(init)
     }
 
     [_personality configureWithMacroProcessor:_macroProcessor];
+    STLog(self.valueClass, @"Builder for %@ configured: %@", NSStringFromClass(self.valueClass), [self description]);
 
 }
 
@@ -109,7 +108,9 @@ hideInitializerImpl(init)
 }
 
 -(id) invokeWithArgs:(NSArray<id> *) arguments {
-    return [_personality invokeWithArgs:arguments];
+    id value = [_personality invokeWithArgs:arguments];
+    [_personality injectDependencies:value];
+    return value;
 }
 
 #pragma mark - Getters and setters

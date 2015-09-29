@@ -53,13 +53,13 @@ hideInitializerImpl(initClassBuilder:(ALCBuilder *) classBuilder)
     // Go find the class builder for the return type and get it to tell us when it's available.
     ALCBuilder *builder = self.builder;
     Class valueClass = builder.valueClass;
-    STLog(builder.valueClass, @"Searching for class builder for method return type %@", NSStringFromClass(valueClass));
+    STLog(builder.valueClass, @"Locating class builder for return type %@", NSStringFromClass(valueClass));
     _returnTypeBuilder = [[ALCAlchemic mainContext] builderForClass:valueClass];
     if (_returnTypeBuilder != nil) {
-        STLog(builder.valueClass, @"Watching method return type builder");
+        STLog(builder.valueClass, @"Watching class builder for return type");
         [builder addDependency:_returnTypeBuilder];
     } else {
-        STLog(builder.valueClass, @"No class builder found for method return type %@", NSStringFromClass(valueClass));
+        STLog(builder.valueClass, @"No class builder found for method returning a %@", NSStringFromClass(valueClass));
     }
 }
 
@@ -71,7 +71,7 @@ hideInitializerImpl(initClassBuilder:(ALCBuilder *) classBuilder)
 }
 
 -(BOOL)canInjectDependencies {
-    return _returnTypeBuilder.ready;
+    return ! _returnTypeBuilder || _returnTypeBuilder.ready;
 }
 
 -(void)injectDependencies:(id)object {

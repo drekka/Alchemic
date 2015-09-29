@@ -20,17 +20,17 @@
 @end
 
 @implementation ArraysIntegrationTests {
-//	NSArray *_asObjects;
+	NSArray *_asObjects;
 	ASObject *_obj1;
-//	ASObject *_obj2;
+    ASObject *_obj2;
 }
 
-//AcInject(_asObjects, AcClass(ASObject))
+AcInject(_asObjects, AcClass(ASObject))
 AcInject(_obj1, AcName(@"o1"))
-//AcInject(_obj2, AcName(@"o2"))
+AcInject(_obj2, AcName(@"o2"))
 
 AcMethod(ASObject, newAsObject, AcWithName(@"o1"))
-//AcMethod(ASObject, newAsObject, AcWithName(@"o2"))
+AcMethod(ASObject, newAsObject, AcWithName(@"o2"))
 -(ASObject *) newAsObject {
     return [[ASObject alloc] init];
 }
@@ -40,12 +40,12 @@ AcMethod(ASObject, newAsObject, AcWithName(@"o1"))
 	[self setupRealContext];
 	[self startContextWithClasses:@[[ArraysIntegrationTests class]]];
 	AcInjectDependencies(self);
-//	XCTAssertNotNil(_asObjects);
+	XCTAssertNotNil(_asObjects);
 	XCTAssertNotNil(_obj1);
-//	XCTAssertNotNil(_obj2);
-//	XCTAssertNotEqual(_obj1, _obj2);
-//	XCTAssertTrue([_asObjects containsObject:_obj1]);
-//	XCTAssertTrue([_asObjects containsObject:_obj2]);
+	XCTAssertNotNil(_obj2);
+	XCTAssertNotEqual(_obj1, _obj2);
+	XCTAssertTrue([_asObjects containsObject:_obj1]);
+	XCTAssertTrue([_asObjects containsObject:_obj2]);
 }
 
 @end

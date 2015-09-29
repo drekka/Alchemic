@@ -94,9 +94,9 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 #pragma mark - Registration call backs
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... {
+    STLog(classBuilder.valueClass, @"Registering class %@", NSStringFromClass(classBuilder.valueClass));
     alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
-    //[classBuilder configure];
-    STLog(classBuilder.valueClass, @"Updated class %@", classBuilder);
+    // Don't configure here because the class scanner will do it after all alchemic methods have been executed and the builder config loaded.
 }
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder variableDependency:(NSString *) variable, ... {
@@ -110,7 +110,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     // Add a default value source for the ivar if no macros where loaded to define it.
     alc_loadMacrosAfter(valueSourceFactory, variable);
     if ([valueSourceFactory.macros count] == 0) {
-        STLog(classBuilder.valueClass, @"No value macros specified, generating from variable class %@", NSStringFromClass(varClass));
+        STLog(classBuilder.valueClass, @"Generating search criteria from class %@", NSStringFromClass(varClass));
         NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForClass:varClass];
         for (id<ALCModelSearchExpression> macro in macros) {
             [valueSourceFactory addMacro:(id<ALCMacro>)macro];
@@ -121,7 +121,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 }
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder initializer:(SEL) initializer, ... {
-    STLog(classBuilder.valueClass, @"Registering a class initializer for a %@", NSStringFromClass(classBuilder.valueClass));
+    STLog(classBuilder.valueClass, @"Registering initializer -[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(initializer));
     id<ALCBuilderPersonality> personality = [[ALCInitializerBuilderPersonality alloc] initWithClassBuilder:classBuilder initializer:initializer];
     ALCBuilder *initializerBuilder = [[ALCBuilder alloc] initWithPersonality:personality forClass:classBuilder.valueClass];
     alc_loadMacrosAfter(initializerBuilder.macroProcessor, initializer);
@@ -137,11 +137,11 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     id<ALCBuilderPersonality> personality = [[ALCMethodBuilderPersonality alloc] initWithClassBuilder:classBuilder
                                                                                              selector:selector
                                                                                            returnType:returnType];
+    STLog(classBuilder.valueClass, @"Registering method -(%@) [%@ %@]", NSStringFromClass(returnType), NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(selector));
     ALCBuilder *methodBuilder = [[ALCBuilder alloc] initWithPersonality:personality forClass:returnType];
     alc_loadMacrosAfter(methodBuilder.macroProcessor, returnType);
     [methodBuilder configure];
     [_model addBuilder:methodBuilder];
-    STLog(classBuilder.valueClass, @"Created method %@", methodBuilder);
 }
 
 -(void) addBuilderToModel:(ALCBuilder*) builder {

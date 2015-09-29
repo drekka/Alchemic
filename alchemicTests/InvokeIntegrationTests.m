@@ -20,21 +20,21 @@ AcRegister()
 @end
 
 @interface IVFactory : NSObject
-@property (nonatomic, strong, readonly) IVSingleton *singleton;
-@property (nonatomic, strong, readonly) NSString *aString;
+@property (nonatomic, strong, readonly) IVSingleton *injectedSingleton;
+@property (nonatomic, strong, readonly) NSString *initializerInjectedString;
 -(instancetype) initWithString:(NSString *) aString;
 @end
 
 @implementation IVFactory
 
-AcInject(singleton)
+AcInject(injectedSingleton)
 
 // Note missing arg definitions
 AcInitializer(initWithString:, AcFactory)
 -(instancetype) initWithString:(NSString *) aString {
     self = [super init];
     if (self) {
-        _aString = aString;
+        _initializerInjectedString = aString;
     }
     return self;
 }
@@ -47,14 +47,15 @@ AcInitializer(initWithString:, AcFactory)
 
 -(void) testIntegrationInvokingAFactoryInititializer {
     STStartLogging(@"LogAll");
+
     [self setupRealContext];
     [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
 
     IVFactory *result = AcInvoke(AcName(@"IVFactory initWithString:"), @"def");
 
     XCTAssertNotNil(result);
-    XCTAssertNotNil(result.singleton);
-    XCTAssertEqualObjects(@"def", result.aString);
+    XCTAssertNotNil(result.injectedSingleton);
+    XCTAssertEqualObjects(@"def", result.initializerInjectedString);
 
 }
 
@@ -66,8 +67,8 @@ AcInitializer(initWithString:, AcFactory)
     IVFactory *result = AcInvoke(AcName(@"IVFactory initWithString:"));
 
     XCTAssertNotNil(result);
-    XCTAssertNotNil(result.singleton);
-    XCTAssertNil(result.aString);
+    XCTAssertNotNil(result.injectedSingleton);
+    XCTAssertNil(result.initializerInjectedString);
     
 }
 

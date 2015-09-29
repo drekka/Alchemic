@@ -49,7 +49,6 @@ hideInitializerImpl(initWithType:(Class)argumentType)
 
 -(void) willResolve {
 
-    STLog(self.valueClass, @"About to resolve %@", self);
     __block NSSet<ALCBuilder *> *candidates;
     [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
                                               processingBuildersBlock:^(ProcessBuiderBlockArgs) {
@@ -57,7 +56,6 @@ hideInitializerImpl(initWithType:(Class)argumentType)
                                               }];
 
     // Find primary objects.
-    STLog(self.valueClass, @"Checking for primary builders ...");
     NSMutableSet<ALCBuilder *> *primaries = [[NSMutableSet alloc] init];
     for (ALCBuilder *candidateBuilder in candidates) {
         if (candidateBuilder.primary) {
@@ -79,7 +77,7 @@ hideInitializerImpl(initWithType:(Class)argumentType)
     }
 
     // Add the candidates to the resolvables dependencies.
-    STLog(ALCHEMIC_LOG, @"Adding %lu final candidates to dependencies", [candidates count]);
+    STLog(ALCHEMIC_LOG, @"%lu final candidates", [candidates count]);
     for (ALCBuilder *candidateBuilder in candidates) {
         [self addDependency:candidateBuilder];
     }

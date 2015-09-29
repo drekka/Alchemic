@@ -113,7 +113,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
                                      userInfo:nil];
     }
 
-    STLog(aClass, @"Mapping name %@ -> variable: %s", inj, ivar_getName(var));
     return var;
 }
 
