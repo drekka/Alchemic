@@ -13,5 +13,5 @@
  Tag macro that indicates that the source of objects is external to Alchemic.
  */
 @interface ALCIsExternal : NSObject<ALCMacro>
-
++ (instancetype) externalMacro;
 @end

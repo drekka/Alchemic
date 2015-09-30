@@ -27,21 +27,21 @@
  
  @param _objectName the name to set on the registration.
  */
-#define AcFactory [[ALCIsFactory alloc] init]
+#define AcFactory [ALCIsFactory factoryMacro]
 
 /**
  When there is more than one candidate object for a dependency, Primary objects are used first. 
  
  @discussion This is mainly used for a couple of situations. Firstly where there are a number of candiates and you don't want to use names to define a default. Secondly during unit testing, this can be used to set registrations in unit test code as overrides to the app's instances.
  */
-#define AcPrimary [[ALCIsPrimary alloc] init]
+#define AcPrimary [ALCIsPrimary primaryMacro]
 
 /**
  Indicates that the builder will have it's objects sourced externally. 
  
  @discussion Can only be used on class builders as it makes no sense when set on method or initializers.
  */
-#define AcExternal [[ALCIsExternal alloc] init]
+#define AcExternal [ALCIsExternal externalMacro]
 
 #pragma mark - Dependency expressions
 

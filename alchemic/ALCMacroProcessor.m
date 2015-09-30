@@ -38,16 +38,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) addMacro:(id<ALCMacro>) macro {
 
-    if ([macro isKindOfClass:[ALCIsFactory class]] && _allowedMacros & ALCAllowedMacrosFactory) {
+    if (macro == [ALCIsFactory factoryMacro] && _allowedMacros & ALCAllowedMacrosFactory) {
         _isFactory = YES;
 
     } else if ([macro isKindOfClass:[ALCWithName class]] && _allowedMacros & ALCAllowedMacrosName) {
         _asName = ((ALCWithName *)macro).asName;
 
-    } else if ([macro isKindOfClass:[ALCIsPrimary class]] && _allowedMacros & ALCAllowedMacrosPrimary) {
+    } else if (macro == [ALCIsPrimary primaryMacro] && _allowedMacros & ALCAllowedMacrosPrimary) {
         _isPrimary = YES;
 
-    } else if ([macro isKindOfClass:[ALCIsExternal class]] && _allowedMacros & ALCAllowedMacrosExternal) {
+    } else if (macro == [ALCIsExternal externalMacro] && _allowedMacros & ALCAllowedMacrosExternal) {
         _isExternal = YES;
 
     } else if ([macro isKindOfClass:[ALCValueSourceFactory class]] && _allowedMacros & ALCAllowedMacrosArg) {
