@@ -10,27 +10,21 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
-@interface MFWithArgParentClass : NSObject
-@property (nonatomic, strong) NSMutableArray *createANumberResults;
+@interface MFWithArg : NSObject
 @end
 
-@implementation MFWithArgParentClass {
-    NSUInteger _createANumberMutator;
+@implementation MFWithArg {
+    int _counter;
 }
 
--(instancetype) init {
-    self = [super init];
-    if (self) {
-        self.createANumberResults = [[NSMutableArray alloc] init];
-    }
-    return self;
+AcMethod(NSNumber, counter, AcWithName(@"abc"), AcFactory)
+-(NSNumber *) counter {
+    return @(++_counter);
 }
 
 AcMethod(NSNumber, createANumberFromANumber:, AcArg(NSNumber, AcName(@"abc")), AcWithName(@"def"), AcFactory)
 -(NSNumber *) createANumberFromANumber:(NSNumber *) aNumber {
-    NSNumber *number = @(2 * ++_createANumberMutator + [aNumber unsignedLongValue]);
-    [self.createANumberResults addObject:number];
-    return number;
+    return @(2 * [aNumber unsignedLongValue]);
 }
 
 @end
@@ -39,24 +33,24 @@ AcMethod(NSNumber, createANumberFromANumber:, AcArg(NSNumber, AcName(@"abc")), A
 @end
 
 @implementation MethodFactoryWithArgIntegrationTests {
-    NSNumber *_aNumber3;
-    NSNumber *_aNumber4;
-    MFWithArgParentClass *_parentClass;
+    NSNumber *_aNumber1;
+    NSNumber *_aNumber2;
+    MFWithArg *_mfArg;
 }
 
-AcInject(_aNumber3, AcName(@"def"))
-AcInject(_aNumber4, AcName(@"def"))
-AcInject(_parentClass)
+AcInject(_aNumber1, AcName(@"def"))
+AcInject(_aNumber2, AcName(@"def"))
+AcInject(_mfArg)
 
 -(void) testIntegrationCreatingASingletonWithAnArg {
     [self setupRealContext];
-    STStartLogging(@"[MethodFactoryIntegrationTests]");
-    [self startContextWithClasses:@[[MFWithArgParentClass class], [MethodFactoryWithArgIntegrationTests class]]];
+    STStartLogging(@"[MethodFactoryWithArgIntegrationTests]");
+    [self startContextWithClasses:@[[MFWithArg class], [MethodFactoryWithArgIntegrationTests class]]];
     AcInjectDependencies(self);
-    XCTAssertEqual(2u, [_parentClass.createANumberResults count]);
-    XCTAssertTrue([_parentClass.createANumberResults containsObject:_aNumber3]);
-    XCTAssertTrue([_parentClass.createANumberResults containsObject:_aNumber4]);
-    XCTAssertNotEqual(_aNumber3, _aNumber4);
+    NSArray<NSNumber *> *checkResults = @[@6, @8];
+    XCTAssertTrue([checkResults containsObject:_aNumber1]);
+    XCTAssertTrue([checkResults containsObject:_aNumber2]);
+    XCTAssertNotEqual(_aNumber1, _aNumber2);
 }
 
 @end

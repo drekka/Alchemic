@@ -18,7 +18,7 @@
 -(id) invokeSelector:(SEL) selector arguments:(NSArray *) arguments {
 
     // Get an invocation ready.
-    STLog(ALCHEMIC_LOG, @"Creating an invocation using selector %@", NSStringFromSelector(selector));
+    STLog(ALCHEMIC_LOG, @"Invoking %@", NSStringFromSelector(selector));
     NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:selector];
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
     inv.selector = selector;
@@ -33,7 +33,6 @@
 
     id __unsafe_unretained returnObj;
     [inv getReturnValue:&returnObj];
-    STLog(ALCHEMIC_LOG, @"Returning a %s", class_getName([returnObj class]));
     return returnObj;
 }
 
