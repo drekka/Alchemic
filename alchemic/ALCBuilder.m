@@ -147,7 +147,6 @@ hideInitializerImpl(init)
     // Always store first in case circular dependencies trigger via the dependency injection and loop back here before we have stored it.
     _valueStorage.value = value;
     [_personality injectDependencies:value];
-    [self ready];
 }
 
 -(void)injectDependencies:(id) object {

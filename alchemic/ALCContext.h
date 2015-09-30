@@ -59,7 +59,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param variable		The name of the variable. Can be the external name in the the case of a property or the internal name. Alchemic will locate and used the internal name regardless of which is specified.
  @param ... One or more macros which define where to get the dependency from. If none are specified then the variable is examined and a set of default ALCModelSearchExpression objects generated which sources the value from the model based on the variable's class and protocols.
  */
--(void) registerClassBuilder:(ALCBuilder *) classBuilder variableDependency:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+          variableDependency:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  Registers an initializer for the current class builder.
@@ -72,7 +73,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param initializer  The initializer to use.
  @param ... Zero or more `AcArg(...)` macros which define the arguments of the initializer and where to source them from. Other macros can also be passed here such as `AcFactory`, `AcPrimary` and `AcWithName(...)`.
  */
--(void) registerClassBuilder:(ALCBuilder *) classBuilder initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                 initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  Registers a method for a class that will create an object.
@@ -84,7 +86,9 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param returnType   The type of the object that will be returned from the method.
  @param ... Zero or more `AcArg(...)` macros which define the arguments of the selector and where to source them from. Other macros can also be passed here such as `AcFactory`, `AcPrimary` and `AcWithName(...)`.
  */
--(void) registerClassBuilder:(ALCBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                    selector:(SEL) selector
+                  returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Callbacks
 
