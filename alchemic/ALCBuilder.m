@@ -30,7 +30,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCBuilder {
     id<ALCBuilderStorage> _builderStorage;
-    BOOL _autoStart;
     id<ALCBuilderType> _builderType;
 }
 
@@ -52,7 +51,6 @@ hideInitializerImpl(init)
         // Set the back ref in the builderType.
         builderType.builder = self;
 
-        _autoStart = YES;
         _builderType = builderType;
         _valueClass = aClass;
         _name = _builderType.builderName;
@@ -68,13 +66,10 @@ hideInitializerImpl(init)
 
     if (self.macroProcessor.isFactory) {
         _builderStorage = [[ALCBuilderStorageFactory alloc] init];
-        _autoStart = NO;
     } else if (self.macroProcessor.isExternal) {
         _builderStorage = [[ALCBuilderStorageExternal alloc] init];
-        _autoStart = NO;
     } else {
         _builderStorage = [[ALCBuilderStorageSingleton alloc] init];
-        _autoStart = YES;
     }
 
     _primary = self.macroProcessor.isPrimary;
@@ -97,7 +92,7 @@ hideInitializerImpl(init)
 }
 
 -(void) instantiate {
-    if (_autoStart && !_builderStorage.hasValue) {
+    if ([_builderStorage isKindOfClass:[ALCBuilderStorageSingleton class]] && !_builderStorage.hasValue) {
         STLog(self.valueClass, @"All dependencies now available, auto-creating a %@ ...", NSStringFromClass(self.valueClass));
         [self value];
     }
