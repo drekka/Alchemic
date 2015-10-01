@@ -6,9 +6,9 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCExternalStorage.h"
+#import "ALCBuilderStorageExternal.h"
 
-@implementation ALCExternalStorage
+@implementation ALCBuilderStorageExternal
 
 @synthesize value = _value;
 

@@ -1,22 +1,22 @@
 //
-//  ALCAbstractPersonality.m
+//  ALCAbstractALCBuilderType.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 4/09/2015.
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractBuilderPersonality.h"
+#import "ALCAbstractBuilderType.h"
 
 #import "ALCMacroProcessor.h"
 
-#import "ALCSingletonStorage.h"
-#import "ALCFactoryStorage.h"
-#import "ALCExternalStorage.h"
+#import "ALCBuilderStorageSingleton.h"
+#import "ALCBuilderStorageFactory.h"
+#import "ALCBuilderStorageExternal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCAbstractBuilderPersonality
+@implementation ALCAbstractBuilderType
 
 @synthesize builder = _builder;
 
@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)willResolve {}
 
--(ALCBuilderPersonalityType)type{
+-(ALCBuilderType)type{
     methodNotImplementedInt;
 }
 

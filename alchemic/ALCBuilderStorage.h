@@ -11,7 +11,7 @@
 /**
  Manages the storage of the objects that the builder supplies.
  */
-@protocol ALCValueStorage <NSObject>
+@protocol ALCBuilderStorage <NSObject>
 
 /**
  Used when builders are describing themselves.

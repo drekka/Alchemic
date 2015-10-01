@@ -12,9 +12,9 @@
 #import "ALCAbstractResolvable.h"
 #import "ALCValue.h"
 #import "ALCInternalMacros.h"
-#import "ALCBuilderPersonality.h"
+#import "ALCBuilderType.h"
 
-@protocol ALCValueStorage;
+@protocol ALCBuilderStorage;
 @class ALCMacroProcessor;
 @class ALCValueSourceFactory;
 
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Properties
 
-@property (nonatomic, assign, readonly) ALCBuilderPersonalityType type;
+@property (nonatomic, assign, readonly) ALCBuilderType type;
 
 /**
  Override of value so it can be writable in builders.
@@ -57,13 +57,13 @@ hideInitializer(init);
 /**
  default initializer.
 
- @param personality An instance of ALCBuilderPersonality which provides the functility which defines what type of builder this is.
+ @param builderType An instance of ALCBuilderType which provides the functility which defines what type of builder this is.
  @param forClass    The class of the object that the builder will create.
 
  @return An instance of a ALCBuilder.
  */
 
--(instancetype) initWithPersonality:(id<ALCBuilderPersonality>) personality
+-(instancetype) initWithALCBuilderType:(id<ALCBuilderType>) builderType
                            forClass:(Class) aClass NS_DESIGNATED_INITIALIZER;
 
 #pragma mark - Tasks

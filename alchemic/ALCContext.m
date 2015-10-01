@@ -22,9 +22,9 @@
 #import "ALCValueSourceFactory.h"
 #import "ALCModelValueSource.h"
 
-#import "ALCBuilderPersonality.h"
-#import "ALCInitializerBuilderPersonality.h"
-#import "ALCMethodBuilderPersonality.h"
+#import "ALCBuilderType.h"
+#import "ALCInitializerBuilderType.h"
+#import "ALCMethodBuilderType.h"
 
 #import "ALCClass.h"
 
@@ -122,8 +122,8 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder initializer:(SEL) initializer, ... {
     STLog(classBuilder.valueClass, @"Registering initializer -[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(initializer));
-    id<ALCBuilderPersonality> personality = [[ALCInitializerBuilderPersonality alloc] initWithClassBuilder:classBuilder initializer:initializer];
-    ALCBuilder *initializerBuilder = [[ALCBuilder alloc] initWithPersonality:personality forClass:classBuilder.valueClass];
+    id<ALCBuilderType> builderType = [[ALCInitializerBuilderType alloc] initWithClassBuilder:classBuilder initializer:initializer];
+    ALCBuilder *initializerBuilder = [[ALCBuilder alloc] initWithALCBuilderType:builderType forClass:classBuilder.valueClass];
     alc_loadMacrosAfter(initializerBuilder.macroProcessor, initializer);
     [initializerBuilder configure];
 
@@ -134,11 +134,11 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 }
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... {
-    id<ALCBuilderPersonality> personality = [[ALCMethodBuilderPersonality alloc] initWithClassBuilder:classBuilder
+    id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithClassBuilder:classBuilder
                                                                                              selector:selector
                                                                                            returnType:returnType];
     STLog(classBuilder.valueClass, @"Registering method -(%@) [%@ %@]", NSStringFromClass(returnType), NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(selector));
-    ALCBuilder *methodBuilder = [[ALCBuilder alloc] initWithPersonality:personality forClass:returnType];
+    ALCBuilder *methodBuilder = [[ALCBuilder alloc] initWithALCBuilderType:builderType forClass:returnType];
     alc_loadMacrosAfter(methodBuilder.macroProcessor, returnType);
     [methodBuilder configure];
     [_model addBuilder:methodBuilder];
@@ -212,7 +212,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
     NSMutableSet<id> *results = [[NSMutableSet alloc] init];
     [builders enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL *stop) {
-        if (builder.type != ALCBuilderPersonalityTypeClass) {
+        if (builder.type != ALCBuilderTypeClass) {
             // We only execute on method or initializer builders.
             [results addObject:[builder invokeWithArgs:args]];
         }

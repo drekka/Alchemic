@@ -6,11 +6,11 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 @import Foundation;
-#import "ALCValueStorage.h"
+#import "ALCBuilderStorage.h"
 
 /**
  Storage used when deailing with objects created externally.
  */
-@interface ALCExternalStorage : NSObject<ALCValueStorage>
+@interface ALCBuilderStorageExternal : NSObject<ALCBuilderStorage>
 
 @end

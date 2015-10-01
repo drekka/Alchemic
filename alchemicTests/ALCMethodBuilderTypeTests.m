@@ -1,5 +1,5 @@
 //
-//  ALCMethodBuilderPersonalityTests.m
+//  ALCMethodBuilderTypeTests.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 8/09/2015.
@@ -8,18 +8,18 @@
 
 @import XCTest;
 #import <OCMock/OCMock.h>
-#import "ALCMethodBuilderPersonality.h"
+#import "ALCMethodBuilderType.h"
 #import "ALCBuilder.h"
 #import "SimpleObject.h"
 #import "ALCContext.h"
 #import "ALCAlchemic.h"
 
-@interface ALCMethodBuilderPersonalityTests : XCTestCase
+@interface ALCMethodBuilderTypeTests : XCTestCase
 
 @end
 
-@implementation ALCMethodBuilderPersonalityTests{
-    ALCMethodBuilderPersonality *_personality;
+@implementation ALCMethodBuilderTypeTests{
+    ALCMethodBuilderType *_builderType;
     id _mockMethodBuilder;
     id _mockClassBuilder;
 }
@@ -30,19 +30,19 @@
     OCMStub([_mockClassBuilder valueClass]).andReturn([SimpleObject class]);
     OCMStub([_mockMethodBuilder valueClass]).andReturn([NSString class]);
     ignoreSelectorWarnings(
-                           _personality = [[ALCMethodBuilderPersonality alloc] initWithClassBuilder:_mockClassBuilder
+                           _builderType = [[ALCMethodBuilderType alloc] initWithClassBuilder:_mockClassBuilder
                                                                                            selector:@selector(stringFactoryMethodUsingAString:)
                                                                                          returnType:[NSString class]];
                            )
-    _personality.builder = _mockMethodBuilder;
+    _builderType.builder = _mockMethodBuilder;
 }
 
 -(void) testBuilderType {
-    XCTAssertEqual(ALCBuilderPersonalityTypeMethod, _personality.type);
+    XCTAssertEqual(ALCBuilderTypeMethod, _builderType.type);
 }
 
 -(void) testBuilderName {
-    XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _personality.builderName);
+    XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _builderType.builderName);
 }
 
 -(void) testWillResolve {
@@ -50,7 +50,7 @@
     // mock out getting a builder from the context.
     id mockStringBuilder = [self mockReturnTypeBuilder];
 
-    [_personality willResolve]; // No errors.
+    [_builderType willResolve]; // No errors.
 
     // Verify that the method builder should now have the return type builder as a dependency.
     OCMVerify([(ALCBuilder *)_mockMethodBuilder addDependency:mockStringBuilder]);
@@ -63,7 +63,7 @@
         return obj == self->_mockClassBuilder;
     }]]);
 
-    [_personality willResolve];
+    [_builderType willResolve];
 
     OCMVerifyAll(mockBuilder);
 }
@@ -73,7 +73,7 @@
     // mock not getting a builder from the context.
     [self mockFindingABuilderInContext:nil];
 
-    [_personality willResolve]; // No errors.
+    [_builderType willResolve]; // No errors.
 
     // Verify that nothing was called.
     OCMVerifyAll(_mockMethodBuilder);
@@ -82,34 +82,34 @@
 -(void) testInvokeWithArgs {
     SimpleObject *object = [[SimpleObject alloc] init];
     OCMStub([(ALCBuilder *)_mockClassBuilder value]).andReturn(object);
-    NSString *result = [_personality invokeWithArgs:@[@"def"]];
+    NSString *result = [_builderType invokeWithArgs:@[@"def"]];
     XCTAssertEqualObjects(@"abc", result);
 }
 
 -(void) testCanInjectDependencies {
     id mockStringBuilder = [self mockReturnTypeBuilder];
     OCMStub([mockStringBuilder ready]).andReturn(YES);
-    [_personality willResolve];
-    XCTAssertTrue(_personality.canInjectDependencies);
+    [_builderType willResolve];
+    XCTAssertTrue(_builderType.canInjectDependencies);
 }
 
 -(void) testInjectDependenciesWhenBuilderForReturnType {
     id mockStringBuilder = [self mockReturnTypeBuilder];
     NSString *aString = @"abc";
-    [_personality willResolve];
-    [_personality injectDependencies:aString];
+    [_builderType willResolve];
+    [_builderType injectDependencies:aString];
     OCMVerify([mockStringBuilder injectDependencies:@"abc"]);
 }
 
 -(void) testInjectDependenciesWhenNoBuilderForReturnType {
     [self mockFindingABuilderInContext:nil];
     NSString *aString = @"abc";
-    [_personality willResolve];
-    [_personality injectDependencies:aString]; // Nothing should happen.
+    [_builderType willResolve];
+    [_builderType injectDependencies:aString]; // Nothing should happen.
 }
 
 -(void) testAttributeText {
-    XCTAssertEqualObjects(@", using method [SimpleObject stringFactoryMethodUsingAString:]", _personality.attributeText);
+    XCTAssertEqualObjects(@", using method [SimpleObject stringFactoryMethodUsingAString:]", _builderType.attributeText);
 }
 
 #pragma mark - Internal

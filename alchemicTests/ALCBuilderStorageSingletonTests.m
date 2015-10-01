@@ -7,20 +7,20 @@
 //
 
 @import XCTest;
-#import "ALCSingletonStorage.h"
+#import "ALCBuilderStorageSingleton.h"
 
-@interface ALCSingletonStorageTests : XCTestCase
+@interface ALCBuilderStorageSingletonTests : XCTestCase
 @end
 
-@implementation ALCSingletonStorageTests
+@implementation ALCBuilderStorageSingletonTests
 
 -(void) testNoValue {
-    ALCSingletonStorage *storage = [[ALCSingletonStorage alloc] init];
+    ALCBuilderStorageSingleton *storage = [[ALCBuilderStorageSingleton alloc] init];
     XCTAssertFalse(storage.hasValue);
 }
 
 -(void) testStoresValues {
-    ALCSingletonStorage *storage = [[ALCSingletonStorage alloc] init];
+    ALCBuilderStorageSingleton *storage = [[ALCBuilderStorageSingleton alloc] init];
     storage.value = @"abc";
     XCTAssertEqualObjects(@"abc", storage.value);
     XCTAssertTrue(storage.hasValue);

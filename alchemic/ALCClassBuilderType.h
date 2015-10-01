@@ -1,5 +1,5 @@
 //
-//  ALCBuilderPersonality.h
+//  ALCBuilderType.h
 //  alchemic
 //
 //  Created by Derek Clarkson on 4/09/2015.
@@ -8,12 +8,12 @@
 
 @import Foundation;
 @import ObjectiveC;
-#import "ALCAbstractBuilderPersonality.h"
+#import "ALCAbstractBuilderType.h"
 @class ALCValueSourceFactory;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCClassBuilderPersonality : ALCAbstractBuilderPersonality
+@interface ALCClassBuilderType : ALCAbstractBuilderType
 
 -(void) addVariableInjection:(Ivar) variable
           valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory;

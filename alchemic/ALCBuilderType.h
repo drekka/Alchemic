@@ -1,5 +1,5 @@
 //
-//  ALCBuilderPersonality.h
+//  ALCBuilderType.h
 //  alchemic
 //
 //  Created by Derek Clarkson on 4/09/2015.
@@ -9,26 +9,26 @@
 @import Foundation;
 @import ObjectiveC;
 @class ALCMacroProcessor;
-@protocol ALCValueStorage;
+@protocol ALCBuilderStorage;
 @protocol ALCResolvable;
 @protocol ALCDependencyPostProcessor;
 @class ALCBuilder;
 @class ALCValueSourceFactory;
 
-typedef NS_ENUM(NSUInteger, ALCBuilderPersonalityType) {
-    ALCBuilderPersonalityTypeClass,
-    ALCBuilderPersonalityTypeMethod,
-    ALCBuilderPersonalityTypeInitializer
+typedef NS_ENUM(NSUInteger, ALCBuilderType) {
+    ALCBuilderTypeClass,
+    ALCBuilderTypeMethod,
+    ALCBuilderTypeInitializer
 };
 
 /**
  Defines class that can define the unique functionality that defines how a builder works.
  */
-@protocol ALCBuilderPersonality <NSObject>
+@protocol ALCBuilderType <NSObject>
 
 @property (nonatomic, weak) ALCBuilder *builder;
 
-@property (nonatomic, assign, readonly) ALCBuilderPersonalityType type;
+@property (nonatomic, assign, readonly) ALCBuilderType type;
 
 /**
  Returns the name to use for the builder.

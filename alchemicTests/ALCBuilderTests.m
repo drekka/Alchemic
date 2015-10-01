@@ -14,9 +14,9 @@
 
 #import "ALCBuilder.h"
 
-#import "ALCSingletonStorage.h"
-#import "ALCFactoryStorage.h"
-#import "ALCExternalStorage.h"
+#import "ALCBuilderStorageSingleton.h"
+#import "ALCBuilderStorageFactory.h"
+#import "ALCBuilderStorageExternal.h"
 
 #import "SimpleObject.h"
 #import "ALCMacroProcessor.h"
@@ -40,25 +40,25 @@
 
 -(void) testConfigureDefaultSingletonStorage {
     [_builder configure];
-    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_valueStorage");
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
     id storage = object_getIvar(_builder, storageVar);
-    XCTAssertTrue([storage isKindOfClass:[ALCSingletonStorage class]]);
+    XCTAssertTrue([storage isKindOfClass:[ALCBuilderStorageSingleton class]]);
 }
 
 -(void) testConfigureFactoryStorage {
     [_builder.macroProcessor addMacro:AcFactory];
     [_builder configure];
-    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_valueStorage");
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
     id storage = object_getIvar(_builder, storageVar);
-    XCTAssertTrue([storage isKindOfClass:[ALCFactoryStorage class]]);
+    XCTAssertTrue([storage isKindOfClass:[ALCBuilderStorageFactory class]]);
 }
 
 -(void) testConfigureExternalStorage {
     [_builder.macroProcessor addMacro:AcExternal];
     [_builder configure];
-    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_valueStorage");
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
     id storage = object_getIvar(_builder, storageVar);
-    XCTAssertTrue([storage isKindOfClass:[ALCExternalStorage class]]);
+    XCTAssertTrue([storage isKindOfClass:[ALCBuilderStorageExternal class]]);
 }
 
 -(void) testConfigureDefaultName {

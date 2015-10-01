@@ -6,9 +6,9 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCSingletonStorage.h"
+#import "ALCBuilderStorageSingleton.h"
 
-@implementation ALCSingletonStorage
+@implementation ALCBuilderStorageSingleton
 
 @synthesize value = _value;
 

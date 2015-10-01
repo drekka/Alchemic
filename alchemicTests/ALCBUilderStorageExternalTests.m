@@ -7,22 +7,22 @@
 //
 
 @import XCTest;
-#import "ALCExternalStorage.h"
+#import "ALCBuilderStorageExternal.h"
 
-@interface ALCExternalStorageTests : XCTestCase
+@interface ALCBUilderStorageExternalTests : XCTestCase
 
 @end
 
-@implementation ALCExternalStorageTests
+@implementation ALCBUilderStorageExternalTests
 
 -(void) testNoValue {
-    ALCExternalStorage *storage = [[ALCExternalStorage alloc] init];
+    ALCBuilderStorageExternal *storage = [[ALCBuilderStorageExternal alloc] init];
     XCTAssertThrowsSpecificNamed([storage value], NSException, @"AlchemicCannotCreateValue");
     XCTAssertFalse(storage.hasValue);
 }
 
 -(void) testStoresValues {
-    ALCExternalStorage *storage = [[ALCExternalStorage alloc] init];
+    ALCBuilderStorageExternal *storage = [[ALCBuilderStorageExternal alloc] init];
     storage.value = @"abc";
     XCTAssertEqualObjects(@"abc", storage.value);
     XCTAssertTrue(storage.hasValue);
