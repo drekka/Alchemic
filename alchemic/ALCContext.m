@@ -185,6 +185,24 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 #pragma mark - Retrieveing objects
 
+-(void) setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>) searchMacro, ... {
+
+    NSMutableSet<id<ALCModelSearchExpression>> *searchExpressions = [[NSMutableSet alloc] init];
+    alc_processVarArgsIncluding(id<ALCModelSearchExpression>, searchMacro, ^(id macro){
+        [searchExpressions addObject:macro];
+    });
+
+    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:searchExpressions];
+
+    if ([builders count] != 1) {
+        @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberOfBuilders"
+                                       reason:[NSString stringWithFormat:@"Expected 1, but got %lu builders trying to set a value on %@", (unsigned long)[builders count], self]
+                                     userInfo:nil];
+    }
+
+    [builders anyObject].value = value;
+}
+
 -(id) getValueWithClass:(Class) returnType, ... {
 
     ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:returnType];

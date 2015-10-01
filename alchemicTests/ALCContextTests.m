@@ -130,5 +130,29 @@
     OCMVerify([mockBuilder2 invokeWithArgs:OCMOCK_ANY]);
 }
 
+#pragma mark - Getting and setting
+
+-(void) testSetValue {
+
+    id<ALCModelSearchExpression> nameSearch = AcName(@"abc");
+    id mockBuilder = OCMClassMock([ALCBuilder class]);
+    OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(NSSet *expressions) {
+        return [expressions containsObject:nameSearch];
+    }]]).andReturn([NSSet setWithObject:mockBuilder]);
+
+    [_context setValue:@12 inBuilderWith:nameSearch, nil];
+
+    OCMVerify([(ALCBuilder *)mockBuilder setValue:@12]);
+}
+
+-(void) testSetValueThrowsIfBuilderNotFound {
+
+    OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(NSSet *expressions) {
+        return [expressions containsObject:AcName(@"abc")];
+    }]]).andReturn([NSSet set]);
+
+    XCTAssertThrowsSpecificNamed(([_context setValue:@12 inBuilderWith:AcName(@"abc"), nil]), NSException, @"AlchemicIncorrectNumberOfBuilders");
+}
+
 
 @end

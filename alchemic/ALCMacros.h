@@ -76,6 +76,8 @@
  */
 #define AcGet(returnType, ...) [[ALCAlchemic mainContext] getValueWithClass:[returnType class], ## __VA_ARGS__, nil]
 
+#define AcSet(object, searchMacro, ...) [[ALCAlchemic mainContext] setValue:object inBuilderWith:searchMacro, ## __VA_ARGS__, nil]
+
 /**
  Programmatically invokes a specific method. 
  

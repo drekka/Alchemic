@@ -40,9 +40,12 @@ AcInject(_obj)
 }
 
 -(void) testInsertingObjectIntoModel {
+    EOObject *o2 = [[EOObject alloc] init];
     XCTAssertNil(_obj);
-    Ac(self);
+    AcSet(o2, AcClass(EOObject));
+    AcInjectDependencies(self);
     XCTAssertNotNil(_obj);
+    XCTAssertEqual(o2, _obj);
 }
 
 @end

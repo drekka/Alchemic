@@ -123,7 +123,8 @@ hideInitializerImpl(init)
     if (!self.ready) {
         @throw [NSException exceptionWithName:@"AlchemicBuilderNotAvailable"
                                        reason:[NSString stringWithFormat:@"Builder %@ still has pending dependencies.", self]
-                                     userInfo:nil];}
+                                     userInfo:nil];
+    }
 
     id value = _builderStorage.value;
     if (value == nil) {

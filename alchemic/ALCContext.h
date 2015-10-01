@@ -123,7 +123,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) injectDependencies:(id) object;
 
-#pragma mark - Retrieving
+#pragma mark - Setting and retrieving
 
 /**
  Searches the model and returns a value matching the requested type.
@@ -136,6 +136,15 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @return A value that matches the returnType.
  */
 -(id) getValueWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+
+/**
+ Sets the value on a specific builder.
+
+ @param value       The value to be set.
+ @param searchMacro One or more search macros used to locate the builde whose value will be set.
+ */
+-(void) setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>) searchMacro, ... NS_REQUIRES_NIL_TERMINATION;
+//[[ALCAlchemic mainContext] setValue:object inBuilderWith:searchMacro, ## __VA_ARGS__, nil]
 
 /**
  Programmatically invokes a specific method.

@@ -71,4 +71,10 @@
 	XCTAssertEqualObjects(@"'abc'", [alcName description]);
 }
 
+-(void) testSetChecking {
+    ALCName *name1 = AcName(@"abc");
+    NSSet *set = [NSSet setWithObject:name1];
+    XCTAssertTrue([set containsObject:AcName(@"abc")]);
+}
+
 @end
