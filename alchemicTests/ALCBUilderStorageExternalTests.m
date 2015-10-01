@@ -28,4 +28,15 @@
     XCTAssertTrue(storage.hasValue);
 }
 
+-(void) testIsReadyWhenHasValue {
+    ALCBuilderStorageExternal *storage = [[ALCBuilderStorageExternal alloc] init];
+    storage.value = @"abc";
+    XCTAssertTrue(storage.ready);
+}
+
+-(void) testIsNotReadyWhenNoValue {
+    ALCBuilderStorageExternal *storage = [[ALCBuilderStorageExternal alloc] init];
+    XCTAssertFalse(storage.ready);
+}
+
 @end

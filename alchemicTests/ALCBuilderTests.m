@@ -72,12 +72,10 @@
     XCTAssertEqualObjects(@"abc", _builder.name);
 }
 
-
 #pragma mark - Resolving
 
 -(void) testResolveDefault {
-    [_builder configure];
-    [_builder resolve]; // Doesn't throw.
+    [self configureAndResolveBuilder:_builder]; // Doesn't throw.
 }
 
 -(void) testResolveWhenCircularDependency {
@@ -85,21 +83,44 @@
     XCTAssertThrowsSpecificNamed([_builder resolveWithDependencyStack:stack], NSException, @"AlchemicCircularDependency");
 }
 
+#pragma mark - Ready
+
+-(void) testBuilderReadyWhenSingletonStorage {
+    [_builder.macroProcessor addMacro:AcWithName(@"abc")];
+    [self configureAndResolveBuilder:_builder];
+    XCTAssertTrue(_builder.ready);
+}
+
+-(void) testBuilderReadyWhenFactoryStorage {
+    [_builder.macroProcessor addMacro:AcFactory];
+    [self configureAndResolveBuilder:_builder];
+    XCTAssertTrue(_builder.ready);
+}
+
+-(void) testBuilderReadyWhenExternalStorageWithValue {
+    [_builder.macroProcessor addMacro:AcExternal];
+    [self configureAndResolveBuilder:_builder];
+    _builder.value = [[SimpleObject alloc] init];
+    XCTAssertTrue(_builder.ready);
+}
+
+-(void) testBuilderNotReadyWhenExternalStorageWithoutValue {
+    [_builder.macroProcessor addMacro:AcExternal];
+    [self configureAndResolveBuilder:_builder];
+    XCTAssertFalse(_builder.ready);
+}
+
 #pragma mark - Value
 
 -(void) testValue {
-    [_builder configure];
-
-    [_builder resolve];
+    [self configureAndResolveBuilder:_builder];
 
     SimpleObject *so = _builder.value;
     XCTAssertNotNil(so);
 }
 
 -(void) testValueCachesValue {
-    [_builder configure];
-
-    [_builder resolve];
+    [self configureAndResolveBuilder:_builder];
 
     SimpleObject *so1 = _builder.value;
     SimpleObject *so2 = _builder.value;

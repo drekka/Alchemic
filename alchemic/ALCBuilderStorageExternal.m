@@ -21,6 +21,10 @@
     return _value;
 }
 
+-(BOOL) ready {
+    return self.hasValue;
+}
+
 -(BOOL)hasValue {
     return _value != nil;
 }

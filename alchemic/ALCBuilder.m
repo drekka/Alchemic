@@ -114,6 +114,10 @@ hideInitializerImpl(init)
     return _builderType.type;
 }
 
+-(BOOL)ready {
+    return super.ready && _builderStorage.ready;
+}
+
 -(id)value {
 
     if (!self.ready) {
@@ -133,15 +137,19 @@ hideInitializerImpl(init)
 // Allows us to inject dependencies on objects created outside of Alchemic.
 -(void)setValue:(id) value {
 
-    if (! _builderType.canInjectDependencies) {
+    // If this builder is external, it will be a class builder so we just check the super dependencies.
+    // Otherwise check with the builder type.
+    if (([_builderStorage isKindOfClass:[ALCBuilderStorageExternal class]] && super.ready)
+        || _builderType.canInjectDependencies) {
+        // Always store first in case circular dependencies trigger via the dependency injection loop back here before we have stored it.
+        _builderStorage.value = value;
+        [_builderType injectDependencies:value];
+    } else {
         @throw [NSException exceptionWithName:@"AlchemicDependenciesNotAvailable"
                                        reason:[NSString stringWithFormat:@"Dependencies not available for builder: %@", self]
                                      userInfo:nil];
     }
 
-    // Always store first in case circular dependencies trigger via the dependency injection and loop back here before we have stored it.
-    _builderStorage.value = value;
-    [_builderType injectDependencies:value];
 }
 
 -(void)injectDependencies:(id) object {

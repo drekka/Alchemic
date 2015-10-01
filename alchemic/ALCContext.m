@@ -246,7 +246,7 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
         [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicFinishedLoading object:self];
     });
 
-    STLog(ALCHEMIC_LOG, @"Started model (* - instantiated):...\n%@\n", _model);
+    STLog(ALCHEMIC_LOG, @"Registered model builders (* - instantiated):...\n%@\n", _model);
     
 }
 

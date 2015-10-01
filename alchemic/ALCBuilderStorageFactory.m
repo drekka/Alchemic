@@ -16,6 +16,10 @@
     return nil;
 }
 
+-(BOOL) ready {
+    return YES;
+}
+
 -(BOOL)hasValue {
     return NO;
 }

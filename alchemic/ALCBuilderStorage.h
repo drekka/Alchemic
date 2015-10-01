@@ -28,4 +28,7 @@
  */
 @property (nonatomic, assign, readonly) BOOL hasValue;
 
+@property (nonatomic, assign, readonly) BOOL ready;
+
+
 @end

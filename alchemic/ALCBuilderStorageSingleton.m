@@ -12,6 +12,10 @@
 
 @synthesize value = _value;
 
+-(BOOL) ready {
+    return YES;
+}
+
 -(BOOL)hasValue {
     return _value != nil;
 }
