@@ -36,28 +36,29 @@ AcInject(_objByName, AcName(@"abc"))
 AcInject(_objByEverthing, AcClass(OSObject), AcProtocol(OSable))
 
 -(void) setUp {
+    STStartLogging(@"LogAll");
 	[self setupRealContext];
 	[self startContextWithClasses:@[[OSObject class], [ObjectSearchIntegrationTests class]]];
 	AcInjectDependencies(self);
 }
 
--(void) testFindingByClass {
+-(void) testIntegrationFindingByClass {
 	XCTAssertNotNil(_objByClass);
 }
 
--(void) testFindingByProtocol {
+-(void) testIntegrationFindingByProtocol {
 	XCTAssertNotNil(_objByProtocol);
 }
 
--(void) testFindingByName {
+-(void) testIntegrationFindingByName {
 	XCTAssertNotNil(_objByName);
 }
 
--(void) testFindingByEverything {
+-(void) testIntegrationFindingByEverything {
 	XCTAssertNotNil(_objByEverthing);
 }
 
--(void) testCheckSameObjectInAllInjections {
+-(void) testIntegrationCheckSameObjectInAllInjections {
 	XCTAssertEqualObjects(_objByClass, _objByProtocol);
 	XCTAssertEqualObjects(_objByClass, _objByName);
 	XCTAssertEqualObjects(_objByClass, _objByEverthing);

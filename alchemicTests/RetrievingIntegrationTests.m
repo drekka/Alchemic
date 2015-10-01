@@ -7,6 +7,7 @@
 //
 
 #import "ALCTestCase.h"
+#import <Alchemic/Alchemic.h>
 
 @protocol REProtocol <NSObject>
 @end
@@ -24,33 +25,32 @@ AcRegister(AcWithName(@"abc"))
 @implementation RetrievingIntegrationTests
 
 -(void) setUp {
-	[super setUp];
 	[self setupRealContext];
 	[self startContextWithClasses:@[[REObject class]]];
 }
 
--(void) testGet {
+-(void) testIntegrationGet {
 	[self checkIsREObject:AcGet(REObject)];
 }
 
--(void) testGetbyClass {
+-(void) testIntegrationGetbyClass {
 	[self checkIsREObject:AcGet(REObject, AcClass(REObject))];
 }
 
--(void) testGetbyProtocol {
+-(void) testIntegrationGetbyProtocol {
 	[self checkIsREObject:AcGet(REObject, AcProtocol(REProtocol))];
 }
 
--(void) testGetbyName {
+-(void) testIntegrationGetbyName {
 	[self checkIsREObject:AcGet(REObject, AcName(@"abc"))];
 }
 
--(void) testGetbyEverything {
+-(void) testIntegrationGetbyEverything {
 	[self checkIsREObject:AcGet(REObject, AcClass(REObject), AcProtocol(REProtocol))];
 }
 
--(void) testGetThrowsWhenFactory {
-	XCTAssertThrowsSpecificNamed((AcGet(REObject, AcIsFactory)), NSException, @"AlchemicUnexpectedMacro");
+-(void) testIntegrationGetThrowsWhenFactory {
+	XCTAssertThrowsSpecificNamed((AcGet(REObject, AcFactory)), NSException, @"AlchemicUnexpectedMacro");
 }
 
 #pragma mark - Internal

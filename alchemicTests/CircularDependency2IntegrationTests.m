@@ -10,12 +10,15 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
+@class ObjA;
+@class ObjB;
+
 @interface ObjA : NSObject
-@property (nonatomic, strong) id objB;
+@property (nonatomic, strong) ObjB *objB;
 @end
 
 @interface ObjB : NSObject
-@property (nonatomic, strong) id objA;
+@property (nonatomic, strong) ObjA *objA;
 @end
 
 @implementation ObjA
@@ -35,15 +38,13 @@ AcInject(objA, AcClass(ObjA))
 
 AcInject(_objA)
 
--(void) testCircularDep {
+-(void) testIntegrationCircularDep {
 	[self setupRealContext];
-	//STStartLogging(ALCHEMIC_LOG);
-	STStartLogging(@"is [ObjA]");
-	STStartLogging(@"is [ObjB]");
-	STStartLogging(@"is [CircularDependency2IntegrationTests]");
 	[self startContextWithClasses:@[[ObjB class], [ObjA class], [CircularDependency2IntegrationTests class]]];
 	AcInjectDependencies(self);
 	XCTAssertNotNil(_objA);
+    XCTAssertNotNil(_objA.objB);
+    XCTAssertNotNil(_objA.objB.objA);
 }
 
 @end

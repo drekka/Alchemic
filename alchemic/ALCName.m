@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
     return _aName;
 }
 
--(BOOL) matches:(id<ALCBuilder>) builder {
+-(BOOL) matches:(ALCBuilder *) builder {
     return [builder.name isEqualToString:_aName];
 }
 

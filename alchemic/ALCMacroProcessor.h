@@ -21,12 +21,10 @@ typedef NS_OPTIONS(NSUInteger, ALCAllowedMacros){
 	ALCAllowedMacrosPrimary     = 1 << 1,
 	/// Allow the with name macro to be used.
 	ALCAllowedMacrosName        = 1 << 2,
-	/// Allow the search macros to be used.
-	ALCAllowedMacrosModelSearch = 1 << 3,
-    /// Allow the constant value macro
-    ALCAllowedMacrosValue       = 1 << 4,
 	/// Allow the Arg macro to be used.
-	ALCAllowedMacrosArg         = 1 << 5
+	ALCAllowedMacrosArg         = 1 << 3,
+    /// Alloc the primary macro to be used.
+    ALCAllowedMacrosExternal    = 1 << 4
 };
 
 NS_ASSUME_NONNULL_BEGIN
@@ -41,11 +39,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// If the AcWithName(...) macro is passed then this will be populated with the value.
 @property (nonatomic, strong) NSString *asName;
 
-/// If the AcIsFactory macro is passed then this will be set to YES.
+/// If the AcFactory macro is passed then this will be set to YES.
 @property (nonatomic, assign, readonly) BOOL isFactory;
 
-/// If the AcIsPrimary macro is passed then this will be set to YES.
+/// If the AcPrimary macro is passed then this will be set to YES.
 @property (nonatomic, assign, readonly) BOOL isPrimary;
+
+/// If the AcExternal macro is passed then this will be set to YES.
+@property (nonatomic, assign, readonly) BOOL isExternal;
 
 /// @name Tasks
 

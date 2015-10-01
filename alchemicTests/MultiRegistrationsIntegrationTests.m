@@ -7,6 +7,8 @@
 //
 
 #import "ALCTestCase.h"
+#import <StoryTeller/StoryTeller.h>
+#import <Alchemic/Alchemic.h>
 
 @interface MUObject : NSObject
 @property (nonatomic, strong, readonly) NSString *aString;
@@ -38,7 +40,8 @@ AcInject(_def, AcName(@"defObj"))
 AcMethod(MUObject, muObjectWithString:, AcWithName(@"abcObj"), AcArg(NSString, AcValue(@"abc")))
 AcMethod(MUObject, muObjectWithString:, AcWithName(@"defObj"), AcArg(NSString, AcValue(@"def")))
 
--(void) testMultiObjects {
+-(void) testIntegrationMultiObjects {
+    STStartLogging(@"LogAll");
     [super setupRealContext];
     [super startContextWithClasses:@[[MultiRegistrationsIntegrationTests class]]];
     AcInjectDependencies(self);

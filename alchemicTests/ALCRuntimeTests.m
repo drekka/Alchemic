@@ -11,6 +11,8 @@
 
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
+#import "ALCMacroProcessor.h"
+#import "SimpleObject.h"
 
 #import "ALCRuntime.h"
 
@@ -209,14 +211,6 @@
     XCTAssertThrowsSpecificNamed([ALCRuntime aClass:[self class] variableForInjectionPoint:@"xxxx"], NSException, @"AlchemicInjectionNotFound");
 }
 
-#pragma mark - General
-
--(void) testInjectVariableValue {
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aStringProperty"];
-    [ALCRuntime object:self injectVariable:var withValue:@"abc"];
-    XCTAssertEqualObjects(@"abc", self.aStringProperty);
-}
-
 #pragma mark - Qualifiers
 
 -(void) testQualifiersForVariable {
@@ -225,6 +219,18 @@
     NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForVariable:var];
     XCTAssertEqual(1u, [expressions count]);
     XCTAssertTrue([expressions containsObject:[ALCClass withClass:[NSString class]]]);
+}
+
+#pragma mark - Validations
+
+-(void) testValidateClassSelectorWhenNoArgs {
+    [ALCRuntime validateClass:[SimpleObject class] selector:@selector(description)];
+}
+
+-(void) testValidateClassSelectorWhenUnknownSelector {
+    ignoreSelectorWarnings(
+                           XCTAssertThrowsSpecificNamed([ALCRuntime validateClass:[SimpleObject class] selector:@selector(xxxx)], NSException, @"AlchemicSelectorNotFound");
+                           )
 }
 
 @end

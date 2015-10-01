@@ -15,4 +15,6 @@
 
 @interface ALCIsFactory : NSObject<ALCMacro>
 
++(ALCIsFactory *) factoryMacro;
+
 @end

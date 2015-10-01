@@ -14,7 +14,7 @@
 @end
 
 @implementation CISimpleFactory
-AcRegister(AcIsFactory)
+AcRegister(AcFactory)
 @end
 
 @interface FactoryIntegrationTests : ALCTestCase
@@ -28,7 +28,7 @@ AcRegister(AcIsFactory)
 AcInject(_simpleFactory1)
 AcInject(_simpleFactory2)
 
--(void) testCreatingASFactory {
+-(void) testIntegrationCreatingASFactory {
 	[self setupRealContext];
 	STStartLogging(@"[FactoryIntegrationTests]");
 	[self startContextWithClasses:@[[CISimpleFactory class], [FactoryIntegrationTests class]]];

@@ -7,6 +7,7 @@
 //
 
 #import "ALCTestCase.h"
+#import <Alchemic/Alchemic.h>
 
 @interface OnLoadIntegrationTests : ALCTestCase
 
@@ -14,7 +15,7 @@
 
 @implementation OnLoadIntegrationTests
 
--(void) testCallbackBlock {
+-(void) testIntegrationCallbackBlock {
 
     XCTestExpectation *blockExecuted = [self expectationWithDescription:@"callback-executed"];
 
@@ -34,7 +35,7 @@
 
 }
 
--(void) testCallbackBlockWhenAlreadyStarted {
+-(void) testIntegrationCallbackBlockWhenAlreadyStarted {
 
     XCTestExpectation *blockExecuted = [self expectationWithDescription:@"callback-executed"];
 

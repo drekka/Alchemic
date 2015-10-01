@@ -7,35 +7,66 @@
 //
 
 @import Foundation;
-@protocol ALCDependencyPostProcessor;
+@protocol ALCResolvable;
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Classes that are resolvable can resolve dependencies agaist the model.
+ Classes that are resolvable can resolve and return values.
  */
 @protocol ALCResolvable <NSObject>
 
-/**
- If the resolvable has already been resolved by the resolveWithPostProcessors: method.
- */
-@property (nonatomic, assign, readonly) BOOL resolved;
+#pragma mark - Dependencies
 
 /**
- Called during model setup to resolve dependencies into a list of candidate objects.
-
- @param postProcessors a set of post processors which can be used to resolve results further if needed.
+ NSSet of resolvables that the current one depends on for values.
  */
--(void) resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> *) postProcessors;
+@property(nonatomic, strong, readonly) NSSet<id<ALCResolvable>> *dependencies;
 
 /**
- Called during model setup to validate dependencies.
- 
- @discussion Normally this is about detecting circular dependencies. This is done by checking this ALCResolvable against the dependencyStack. If it is present then we have looped around and have a circular dependency.
+ Call to add anther resolvable as a dependency of this one.
 
- @param dependencyStack An NSArray containing the ALCBuilder instances and ALCDependency instances that have been validated so far.
+ @param resolvable The resolvable to be added as a dependency.
  */
--(void) validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
+-(void) addDependency:(id<ALCResolvable>) resolvable;
+
+#pragma mark - Resolving
+
+/**
+ When resolving and this is YES, will use a fresh stack for circular dependency
+ detection.
+
+ @discussion Circular dependency detection is about detecting circular
+ dependencies which alll need to resolve at the same time. For example,
+ arguments to methods. When resolving, each resolvable adds itself to the
+ dependencyStack before calling it's dependencies to resolve. So by checking the
+ stack we can establish if there is a loop. But some resolveables such as
+ injected variables are not required immediately because they are injected
+ later, so in effect they break the dependency stack.
+ */
+@property(nonatomic, assign) BOOL startsResolvingStack;
+
+/**
+ Initiates resolving using this resolvable as a starting point.
+ */
+- (void)resolve;
+
+/**
+ Override point called before resolving occurs.
+
+ @discussion This is the point there additional dependencies can be generated
+ and added if required.
+ */
+- (void)willResolve;
+
+#pragma mark - instantiating and injecting
+
+/**
+ Returns YES if the resolvable's dependencies are all ready to be injected.
+ */
+@property(nonatomic, assign, readonly) BOOL ready;
+
+- (void)instantiate;
 
 @end
 

@@ -8,9 +8,9 @@
 
 @import Foundation;
 
-@protocol ALCBuilder;
+@class ALCBuilder;
 @protocol ALCModelSearchExpression;
-@class ALCClassBuilder;
+@class ALCBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The total number of ALCBuilder instances in the model.
  
-@discussion This does not include any ALCClassBuilder instances which are only accessible through ALCInitializerBuilder intances.
+@discussion This does not include any ALCBuilder instances which are only accessible through ALCInitializerBuilder intances.
  */
 @property (nonatomic, assign, readonly) NSUInteger numberBuilders;
 
@@ -31,16 +31,16 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param builder	the builder to be added.
  */
--(void) addBuilder:(NSObject<ALCBuilder> *) builder;
+-(void) addBuilder:(ALCBuilder *) builder;
 
 /**
  Removes a builder form the model.
  
- @discussion This is usually done as part of putting an ALCInitializerBuilder in place as we don't want the ALCClassBuilder to be found when there is an initializer to be used.
+ @discussion This is usually done as part of putting an ALCInitializerBuilder in place as we don't want the ALCBuilder to be found when there is an initializer to be used.
 
  @param builder The builder to be removed.
  */
--(void) removeBuilder:(NSObject<ALCBuilder> *) builder;
+-(void) removeBuilder:(ALCBuilder *) builder;
 
 #pragma mark - Querying
 
@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return A NSSet containing all the current builders.
  */
--(NSSet<id<ALCBuilder>> *) allBuilders;
+-(NSSet<ALCBuilder *> *) allBuilders;
 
 /**
  Finds all builder which are matched by the passed NSSet of ALCModelSearchExpression
@@ -57,16 +57,16 @@ NS_ASSUME_NONNULL_BEGIN
  @param searchExpressions A NSSet of search expressions which will be used to locate the builders.
  @return a NSSet of builders that return objects of the class.
  */
--(NSSet<id<ALCBuilder>> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions;
+-(NSSet<ALCBuilder *> *) buildersForSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions;
 
 /**
- Filters a NSSet of ALCBuilder instances, return just the ALCClassBuilder instances.
+ Filters a NSSet of ALCBuilder instances, return just the ALCBuilder instances.
 
  @param builders The original NSSet to filter.
 
- @return A new NSSet containing just ALCClassBuilder instances.
+ @return A new NSSet containing just builders which are class builder.
  */
--(NSSet<ALCClassBuilder *> *) classBuildersFromBuilders:(NSSet<id<ALCBuilder>> *) builders;
+-(NSSet<ALCBuilder *> *) classBuildersFromBuilders:(NSSet<ALCBuilder *> *) builders;
 
 @end
 

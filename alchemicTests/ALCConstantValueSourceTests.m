@@ -20,15 +20,9 @@
 	XCTAssertEqualObjects(@5, [source.values anyObject]);
 }
 
--(void) testSetsResolved {
+-(void) testResolves {
     ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
-	[source resolveWithPostProcessors:[NSSet set]];
-	XCTAssertTrue(source.resolved);
-}
-
--(void) testValidateDoesNothing {
-    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
-	[source validateWithDependencyStack:[@[] mutableCopy]];
+	[source resolve];
 }
 
 @end

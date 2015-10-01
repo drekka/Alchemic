@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-@protocol ALCBuilder;
+@class ALCBuilder;
 
 /**
  Classes which can be used to search the model implement this protocol.
@@ -35,6 +35,6 @@
 
  @return YES if the builder is a match for the expression.
  */
--(BOOL) matches:(id<ALCBuilder>) builder;
+-(BOOL) matches:(ALCBuilder*) builder;
 
 @end

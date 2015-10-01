@@ -9,12 +9,11 @@
 @import Foundation;
 @import ObjectiveC;
 
-@protocol ALCDependencyPostProcessor;
 @protocol ALCValueResolver;
 @protocol ALCModelSearchExpression;
-@class ALCClassBuilder;
-@protocol ALCBuilder;
+@class ALCBuilder;
 @protocol ALCMacro;
+@class ALCBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,7 +30,7 @@ extern NSString * const AlchemicFinishedLoading;
 /**
  Block used when processing a set of ACLBuilders.
  */
-#define ProcessBuiderBlockArgs NSSet<id<ALCBuilder>> *builders
+#define ProcessBuiderBlockArgs NSSet<ALCBuilder *> *builders
 typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 /**
@@ -41,61 +40,55 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 @interface ALCContext : NSObject
 
-#pragma mark - Configuration
-
-/**
- Adds an dependency post processor.
-
- @discussion dependency post processors are executed after depedencies have been resolve and before their values are accessed for injection.
- @param postProcessor The ALCDependencyPostProcessor to be used.
- */
--(void) addDependencyPostProcessor:(id<ALCDependencyPostProcessor>) postProcessor;
-
 #pragma mark - Registration
 
 /**
- Sets properties on a ALCClassBuilder.
+ Sets properties on a ALCObjectBuilder.
 
  @param classBuilder The class builder whose properties are to be set.
  @param ... one or more macros which define the properties.
  */
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  Registers a variable dependency for the classbuilder.
 
  @discussion Each variable dependency will be injected when the class builder creates an object.
 
- @param classBuilder	The ALCClassBuilder instance which represents the class which needs the injected variable.
+ @param classBuilder	The ALCObjectBuilder instance which represents the class which needs the injected variable.
  @param variable		The name of the variable. Can be the external name in the the case of a property or the internal name. Alchemic will locate and used the internal name regardless of which is specified.
  @param ... One or more macros which define where to get the dependency from. If none are specified then the variable is examined and a set of default ALCModelSearchExpression objects generated which sources the value from the model based on the variable's class and protocols.
  */
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder variableDependency:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+          variableDependency:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  Registers an initializer for the current class builder.
- 
+
  @discussion By registering an initializer with this method, Alchemic will now use the initializer specified rather than the default `init` method.
- 
+
  When constructing, the number of arguments in the initializer selector must match the number of `AcArg(...)` macros supplied.
 
  @param classBuilder The parent class builder for the initializer.
  @param initializer  The initializer to use.
- @param ... Zero or more `AcArg(...)` macros which define the arguments of the initializer and where to source them from. Other macros can also be passed here such as `AcIsFactory`, `AcIsPrimary` and `AcWithName(...)`.
+ @param ... Zero or more `AcArg(...)` macros which define the arguments of the initializer and where to source them from. Other macros can also be passed here such as `AcFactory`, `AcPrimary` and `AcWithName(...)`.
  */
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                 initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
- Registers a method for a class that will create an object. 
- 
+ Registers a method for a class that will create an object.
+
  @discussion This differs from registerClassBuilder:initializer: in that this doesn't create an instance of the parent class builder. It calls the method on the parent builder object to create an instance of returnType.
 
  @param classBuilder The parent class builder. This ALCBuilder will be asked for a value, and then the method will be executed on that value.
  @param selector     The selector of the method.
  @param returnType   The type of the object that will be returned from the method.
- @param ... Zero or more `AcArg(...)` macros which define the arguments of the selector and where to source them from. Other macros can also be passed here such as `AcIsFactory`, `AcIsPrimary` and `AcWithName(...)`.
+ @param ... Zero or more `AcArg(...)` macros which define the arguments of the selector and where to source them from. Other macros can also be passed here such as `AcFactory`, `AcPrimary` and `AcWithName(...)`.
  */
--(void) registerClassBuilder:(ALCClassBuilder *) classBuilder selector:(SEL) selector returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                    selector:(SEL) selector
+                  returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Callbacks
 
@@ -103,7 +96,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  Adds a AcSimpleBlock which is called after Alchemic has finished loading.
 
  @discussion If Alchemic has not finished it's startup procedure, this block is stored and executed at the end of that procedure. This provides a way for object to know when it is safe to use Alchemic's DI functions.
- 
+
  If Alchemic has finished it's startup when this is called, the block is simple executed immediately.
 
  @param block The block to call.
@@ -130,7 +123,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) injectDependencies:(id) object;
 
-#pragma mark - Retrieving
+#pragma mark - Setting and retrieving
 
 /**
  Searches the model and returns a value matching the requested type.
@@ -143,6 +136,15 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @return A value that matches the returnType.
  */
 -(id) getValueWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+
+/**
+ Sets the value on a specific builder.
+
+ @param value       The value to be set.
+ @param searchMacro One or more search macros used to locate the builde whose value will be set.
+ */
+-(void) setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>) searchMacro, ... NS_REQUIRES_NIL_TERMINATION;
+//[[ALCAlchemic mainContext] setValue:object inBuilderWith:searchMacro, ## __VA_ARGS__, nil]
 
 /**
  Programmatically invokes a specific method.
@@ -165,11 +167,22 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
  @param builder The builder to add.
  */
--(void) addBuilderToModel:(id<ALCBuilder>) builder;
+-(void) addBuilderToModel:(ALCBuilder *) builder;
+
+/**
+ Finds the builder for a specific class and returns it. 
+ 
+ @discussion This is mainly an internal function.
+
+ @param aClass The class we want to use as a criteria for finding the builder.
+
+ @return The matching builder or nil if one is not found.
+ */
+-(ALCBuilder *) builderForClass:(Class) aClass;
 
 /**
  Uses a set of ALCModelSearchExpression objects to find a set of builders in the model, the executes a block on each one.
- 
+
  @discussion This is mainly used for processing builders to filter them for a final set.
 
  @param searchExpressions    A NSSet of ALCModelSearchExpression objects which define the search criteria for finding the builders.

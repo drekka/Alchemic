@@ -29,8 +29,14 @@
 -(void) testArgWithTypeMacros {
 	ALCArg *arg = [ALCArg argWithType:[NSString class] macros:[ALCConstantValue constantValue:@5], nil];
 	XCTAssertEqual([NSString class], arg.valueSource.valueClass);
-	ALCConstantValueSource *valueSource = [arg valueSource];
+	ALCConstantValueSource *valueSource = arg.valueSource;
 	XCTAssertEqualObjects(@5, [valueSource.values anyObject]);
+}
+
+-(void) testDescription {
+    ALCArg *arg = [[ALCArg alloc] initWithType:[NSString class]];
+    [arg addMacro:AcValue(@"abc")];
+    XCTAssertEqualObjects(@"AcArg(NSString, AcValue:abc)", [arg description]);
 }
 
 @end

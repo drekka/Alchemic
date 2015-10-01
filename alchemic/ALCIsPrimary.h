@@ -13,5 +13,5 @@
  A simple macro that represents objects which are primary objects.
  */
 @interface ALCIsPrimary : NSObject<ALCMacro>
-
++ (instancetype) primaryMacro;
 @end

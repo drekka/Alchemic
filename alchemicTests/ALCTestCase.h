@@ -8,8 +8,8 @@
 
 @import XCTest;
 
-#import <Alchemic/Alchemic.h>
-#import "ALCMacroProcessor.h"
+@class ALCContext;
+@class ALCBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,6 +22,13 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) setupRealContext;
 
 -(void) startContextWithClasses:(NSArray<Class> *) classes;
+
+-(ALCBuilder *) simpleBuilderForClass:(Class) aClass;
+-(ALCBuilder *) externalBuilderForClass:(Class) aClass;
+
+-(void) stubMockContextToReturnBuilders:(NSArray<ALCBuilder *> *) builders;
+
+-(void) configureAndResolveBuilder:(ALCBuilder *) builder;
 
 @end
 

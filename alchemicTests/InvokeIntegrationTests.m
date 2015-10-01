@@ -8,6 +8,7 @@
 
 #import <Alchemic/Alchemic.h>
 #import "ALCTestCase.h"
+#import <StoryTeller/StoryTeller.h>
 
 // Scenario: Using an initializer on a factory with a non-managed value. Resulting object should be injected.
 
@@ -19,20 +20,21 @@ AcRegister()
 @end
 
 @interface IVFactory : NSObject
-@property (nonatomic, strong, readonly) IVSingleton *singleton;
-@property (nonatomic, strong, readonly) NSString *aString;
+@property (nonatomic, strong, readonly) IVSingleton *injectedSingleton;
+@property (nonatomic, strong, readonly) NSString *initializerInjectedString;
 -(instancetype) initWithString:(NSString *) aString;
 @end
 
 @implementation IVFactory
 
-AcInject(singleton)
+AcInject(injectedSingleton)
 
-AcInitializer(initWithString:, AcIsFactory, AcArg(NSString, AcValue(@"abc")))
+// Note missing arg definitions
+AcInitializer(initWithString:, AcFactory)
 -(instancetype) initWithString:(NSString *) aString {
     self = [super init];
     if (self) {
-        _aString = aString;
+        _initializerInjectedString = aString;
     }
     return self;
 }
@@ -43,7 +45,8 @@ AcInitializer(initWithString:, AcIsFactory, AcArg(NSString, AcValue(@"abc")))
 
 @implementation InvokeIntegrationTests
 
--(void) testInvokingAFactoryInititializer {
+-(void) testIntegrationInvokingAFactoryInititializer {
+    STStartLogging(@"LogAll");
 
     [self setupRealContext];
     [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
@@ -51,9 +54,22 @@ AcInitializer(initWithString:, AcIsFactory, AcArg(NSString, AcValue(@"abc")))
     IVFactory *result = AcInvoke(AcName(@"IVFactory initWithString:"), @"def");
 
     XCTAssertNotNil(result);
-    XCTAssertNotNil(result.singleton);
-    XCTAssertEqualObjects(@"def", result.aString);
+    XCTAssertNotNil(result.injectedSingleton);
+    XCTAssertEqualObjects(@"def", result.initializerInjectedString);
 
+}
+
+-(void) testIntegrationInvokingAFactoryInititializerWithMissingArgsPassesNil {
+
+    [self setupRealContext];
+    [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
+
+    IVFactory *result = AcInvoke(AcName(@"IVFactory initWithString:"));
+
+    XCTAssertNotNil(result);
+    XCTAssertNotNil(result.injectedSingleton);
+    XCTAssertNil(result.initializerInjectedString);
+    
 }
 
 @end

@@ -11,6 +11,7 @@
 #import "ALCIsPrimary.h"
 #import "ALCIsFactory.h"
 #import "ALCWithName.h"
+#import "ALCIsExternal.h"
 
 #pragma mark - Defining objects
 
@@ -26,14 +27,21 @@
  
  @param _objectName the name to set on the registration.
  */
-#define AcIsFactory [[ALCIsFactory alloc] init]
+#define AcFactory [ALCIsFactory factoryMacro]
 
 /**
  When there is more than one candidate object for a dependency, Primary objects are used first. 
  
  @discussion This is mainly used for a couple of situations. Firstly where there are a number of candiates and you don't want to use names to define a default. Secondly during unit testing, this can be used to set registrations in unit test code as overrides to the app's instances.
  */
-#define AcIsPrimary [[ALCIsPrimary alloc] init]
+#define AcPrimary [ALCIsPrimary primaryMacro]
+
+/**
+ Indicates that the builder will have it's objects sourced externally. 
+ 
+ @discussion Can only be used on class builders as it makes no sense when set on method or initializers.
+ */
+#define AcExternal [ALCIsExternal externalMacro]
 
 #pragma mark - Dependency expressions
 
@@ -68,6 +76,8 @@
  */
 #define AcGet(returnType, ...) [[ALCAlchemic mainContext] getValueWithClass:[returnType class], ## __VA_ARGS__, nil]
 
+#define AcSet(object, searchMacro, ...) [[ALCAlchemic mainContext] setValue:object inBuilderWith:searchMacro, ## __VA_ARGS__, nil]
+
 /**
  Programmatically invokes a specific method. 
  
@@ -91,24 +101,24 @@
  @discussion This is the main macro for setting up objects within Alchemic. It take a number of other macros as 
  */
 #define AcRegister(...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassBuilder *) classBuilder { \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
 #define AcMethod(methodType, methodSel, ...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodInClassBuilder):(ALCClassBuilder *) classBuilder { \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerFactoryMethodInClassBuilder):(ALCBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder selector:@selector(methodSel) returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
 #define AcInject(variableName, ...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCClassBuilder *) classBuilder { \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerDependencyInClassBuilder):(ALCBuilder *) classBuilder { \
 [[ALCAlchemic mainContext] registerClassBuilder:classBuilder variableDependency:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
 // Registers an initializer for a class.
 #define AcInitializer(initializerSel, ...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerInitializerForClassBuilder):(ALCClassBuilder *) classBuilder { \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerInitializerForClassBuilder):(ALCBuilder *) classBuilder { \
 	[[ALCAlchemic mainContext] registerClassBuilder:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
 }
 

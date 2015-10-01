@@ -39,12 +39,9 @@ AcInitializer(initWithChicken:, AcArg(Chicken, AcClass(Chicken)))
 
 AcInject(_chicken, AcName(@"A chicken"))
 
--(void) testCircularDep {
+-(void) testIntegrationCircularDep {
 	[self setupRealContext];
-	STStartLogging(ALCHEMIC_LOG);
-	STStartLogging(@"is [Chicken]");
-	STStartLogging(@"is [Egg]");
-	STStartLogging(@"is [CircularDependency4IntegrationTests]");
+	STStartLogging(@"LogAll");
 	XCTAssertThrowsSpecificNamed(([self startContextWithClasses:@[[Chicken class], [Egg class], [CircularDependency4IntegrationTests class]]]), NSException, @"AlchemicCircularDependency");
 }
 

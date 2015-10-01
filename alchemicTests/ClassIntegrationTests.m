@@ -15,7 +15,9 @@
 @end
 
 @implementation CISimpleObject
+
 AcRegister()
+
 -(void) alchemicDidInjectDependencies {
 	_injected = YES;
 }
@@ -29,9 +31,8 @@ AcRegister()
 
 AcInject(simpleObject)
 
--(void) testCreatingASingleton {
+-(void) testIntegrationCreatingASingleton {
 	[self setupRealContext];
-	//STStartLogging(ALCHEMIC_LOG);
 	STStartLogging(@"[ClassIntegrationTests]");
 	[self startContextWithClasses:@[[CISimpleObject class], [ClassIntegrationTests class]]];
 	AcInjectDependencies(self);

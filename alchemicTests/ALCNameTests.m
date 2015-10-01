@@ -8,9 +8,13 @@
 
 @import XCTest;
 #import "ALCName.h"
-#import "ALCClassBuilder.h"
+#import "ALCTestCase.h"
+#import "ALCBuilder.h"
+#import "ALCMacroProcessor.h"
+#import <Alchemic/Alchemic.h>
+#import "ALCBuilder.h"
 
-@interface ALCNameTests : XCTestCase
+@interface ALCNameTests : ALCTestCase
 
 @end
 
@@ -48,21 +52,29 @@
 
 -(void) testMatchesBuilder {
 	ALCName *alcName = [ALCName withName:@"abc"];
-	ALCClassBuilder *builder = [[ALCClassBuilder alloc] initWithValueClass:[NSString class]];
-	builder.name = @"abc";
+	ALCBuilder *builder = [self simpleBuilderForClass:[NSString class]];
+    [builder.macroProcessor addMacro:AcWithName(@"abc")];
+    [builder configure];
 	XCTAssertTrue([alcName matches:builder]);
 }
 
 -(void) testNotMatchesBuilder {
 	ALCName *alcName = [ALCName withName:@"abc"];
-	ALCClassBuilder *builder = [[ALCClassBuilder alloc] initWithValueClass:[NSNumber class]];
-	builder.name = @"def";
+    ALCBuilder *builder = [self simpleBuilderForClass:[NSNumber class]];
+    [builder.macroProcessor addMacro:AcWithName(@"def")];
+    [builder configure];
 	XCTAssertFalse([alcName matches:builder]);
 }
 
 -(void) testDescription {
 	ALCName *alcName = [ALCName withName:@"abc"];
 	XCTAssertEqualObjects(@"'abc'", [alcName description]);
+}
+
+-(void) testSetChecking {
+    ALCName *name1 = AcName(@"abc");
+    NSSet *set = [NSSet setWithObject:name1];
+    XCTAssertTrue([set containsObject:AcName(@"abc")]);
 }
 
 @end

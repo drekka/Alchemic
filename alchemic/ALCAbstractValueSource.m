@@ -7,17 +7,15 @@
 //
 
 #import "ALCAbstractValueSource.h"
+#import "ALCInternalMacros.h"
 
 @implementation ALCAbstractValueSource
 
-@synthesize resolved = _resolved;
 @synthesize valueClass = _valueClass;
 
--(instancetype) init {
-    return nil;
-}
+hideInitializerImpl(init)
 
--(instancetype) initWithType:(Class)argumentType {
+-(instancetype) initWithType:(Class) argumentType {
     self = [super init];
     if (self) {
         _valueClass = argumentType;
@@ -25,9 +23,18 @@
     return self;
 }
 
+#pragma mark - Getting the value
+
 -(id) value {
 
-	NSSet<id> *values = [self values];
+    // Check the state
+    if (!self.ready) {
+        @throw [NSException exceptionWithName:@"AlchemicValueNotAvailable"
+                                       reason:[NSString stringWithFormat:@"Value not available - %@", self]
+                                     userInfo:nil];
+    }
+
+	NSSet<id> *values = self.values;
 
 	// If we can return an array then do so. Empty arrays are also valid.
     // NULL means we are dealing with an id type.
@@ -50,7 +57,7 @@
 	// Object type and no values.
 	if ([values count] == 0u) {
 		@throw [NSException exceptionWithName:@"AlchemicNoValuesFound"
-												 reason:[NSString stringWithFormat:@"Expecting 1 object, but none found"]
+												 reason:@"Expecting 1 value, but none found"
 											  userInfo:nil];
 	}
 
@@ -61,7 +68,7 @@
 
 	// finally error.
 	@throw [NSException exceptionWithName:@"AlchemicTooManyValues"
-											 reason:[NSString stringWithFormat:@"Expecting 1 object, but found %lu", (unsigned long)[values count]]
+											 reason:[NSString stringWithFormat:@"Expecting 1 value, but found %lu instead", (unsigned long)[values count]]
 										  userInfo:nil];
 }
 
@@ -72,19 +79,10 @@
 	return values.allObjects;
 }
 
--(void)resolveWithPostProcessors:(NSSet<id<ALCDependencyPostProcessor>> * _Nonnull)postProcessors {
-	_resolved = YES;
-}
-
 #pragma mark - Override points
 
--(void)validateWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *)dependencyStack {
-	[self doesNotRecognizeSelector:_cmd];
-}
-
 -(NSSet<id> *)values {
-	[self doesNotRecognizeSelector:_cmd];
-	return nil;
+	methodNotImplementedObject;
 }
 
 @end
