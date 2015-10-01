@@ -14,9 +14,9 @@
 
 #import "ALCBuilder.h"
 
-#import "ALCSingletonStorage.h"
-#import "ALCFactoryStorage.h"
-#import "ALCExternalStorage.h"
+#import "ALCBuilderStorageSingleton.h"
+#import "ALCBuilderStorageFactory.h"
+#import "ALCBuilderStorageExternal.h"
 
 #import "SimpleObject.h"
 #import "ALCMacroProcessor.h"
@@ -40,25 +40,25 @@
 
 -(void) testConfigureDefaultSingletonStorage {
     [_builder configure];
-    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_valueStorage");
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
     id storage = object_getIvar(_builder, storageVar);
-    XCTAssertTrue([storage isKindOfClass:[ALCSingletonStorage class]]);
+    XCTAssertTrue([storage isKindOfClass:[ALCBuilderStorageSingleton class]]);
 }
 
 -(void) testConfigureFactoryStorage {
     [_builder.macroProcessor addMacro:AcFactory];
     [_builder configure];
-    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_valueStorage");
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
     id storage = object_getIvar(_builder, storageVar);
-    XCTAssertTrue([storage isKindOfClass:[ALCFactoryStorage class]]);
+    XCTAssertTrue([storage isKindOfClass:[ALCBuilderStorageFactory class]]);
 }
 
 -(void) testConfigureExternalStorage {
     [_builder.macroProcessor addMacro:AcExternal];
     [_builder configure];
-    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_valueStorage");
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
     id storage = object_getIvar(_builder, storageVar);
-    XCTAssertTrue([storage isKindOfClass:[ALCExternalStorage class]]);
+    XCTAssertTrue([storage isKindOfClass:[ALCBuilderStorageExternal class]]);
 }
 
 -(void) testConfigureDefaultName {
@@ -72,12 +72,10 @@
     XCTAssertEqualObjects(@"abc", _builder.name);
 }
 
-
 #pragma mark - Resolving
 
 -(void) testResolveDefault {
-    [_builder configure];
-    [_builder resolve]; // Doesn't throw.
+    [self configureAndResolveBuilder:_builder]; // Doesn't throw.
 }
 
 -(void) testResolveWhenCircularDependency {
@@ -85,21 +83,44 @@
     XCTAssertThrowsSpecificNamed([_builder resolveWithDependencyStack:stack], NSException, @"AlchemicCircularDependency");
 }
 
+#pragma mark - Ready
+
+-(void) testBuilderReadyWhenSingletonStorage {
+    [_builder.macroProcessor addMacro:AcWithName(@"abc")];
+    [self configureAndResolveBuilder:_builder];
+    XCTAssertTrue(_builder.ready);
+}
+
+-(void) testBuilderReadyWhenFactoryStorage {
+    [_builder.macroProcessor addMacro:AcFactory];
+    [self configureAndResolveBuilder:_builder];
+    XCTAssertTrue(_builder.ready);
+}
+
+-(void) testBuilderReadyWhenExternalStorageWithValue {
+    [_builder.macroProcessor addMacro:AcExternal];
+    [self configureAndResolveBuilder:_builder];
+    _builder.value = [[SimpleObject alloc] init];
+    XCTAssertTrue(_builder.ready);
+}
+
+-(void) testBuilderNotReadyWhenExternalStorageWithoutValue {
+    [_builder.macroProcessor addMacro:AcExternal];
+    [self configureAndResolveBuilder:_builder];
+    XCTAssertFalse(_builder.ready);
+}
+
 #pragma mark - Value
 
 -(void) testValue {
-    [_builder configure];
-
-    [_builder resolve];
+    [self configureAndResolveBuilder:_builder];
 
     SimpleObject *so = _builder.value;
     XCTAssertNotNil(so);
 }
 
 -(void) testValueCachesValue {
-    [_builder configure];
-
-    [_builder resolve];
+    [self configureAndResolveBuilder:_builder];
 
     SimpleObject *so1 = _builder.value;
     SimpleObject *so2 = _builder.value;

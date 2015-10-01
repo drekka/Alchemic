@@ -7,11 +7,11 @@
 //
 
 @import Foundation;
-#import "ALCValueStorage.h"
+#import "ALCBuilderStorage.h"
 
 /**
  Used when the object is a managed singleton.
  */
-@interface ALCSingletonStorage : NSObject<ALCValueStorage>
+@interface ALCBuilderStorageSingleton : NSObject<ALCBuilderStorage>
 
 @end

@@ -1,5 +1,5 @@
 //
-//  ALCAbstractMethodBuilderPersonality.h
+//  ALCAbstractMethodBuilderType.h
 //  alchemic
 //
 //  Created by Derek Clarkson on 4/09/2015.
@@ -7,12 +7,12 @@
 //
 
 @import Foundation;
-#import "ALCAbstractBuilderPersonality.h"
+#import "ALCAbstractBuilderType.h"
 @class ALCDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCAbstractMethodBuilderPersonality : ALCAbstractBuilderPersonality
+@interface ALCAbstractMethodBuilderType : ALCAbstractBuilderType
 
 @property (nonatomic, strong, readonly) ALCBuilder *classBuilder;
 @property (nonatomic, strong, readonly) NSArray<id> *argumentValues;

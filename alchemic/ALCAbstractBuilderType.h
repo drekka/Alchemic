@@ -1,5 +1,5 @@
 //
-//  ALCAbstractPersonality.h
+//  ALCAbstractALCBuilderType.h
 //  alchemic
 //
 //  Created by Derek Clarkson on 4/09/2015.
@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-#import "ALCBuilderPersonality.h"
+#import "ALCBuilderType.h"
 @class ALCBuilder;
 #import "ALCInternalMacros.h"
 
@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Abstract super class of all builder personalities.
  */
-@interface ALCAbstractBuilderPersonality : NSObject<ALCBuilderPersonality>
+@interface ALCAbstractBuilderType : NSObject<ALCBuilderType>
 
 @end
 

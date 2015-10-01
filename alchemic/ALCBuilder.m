@@ -11,11 +11,11 @@
 
 #import "ALCBuilder.h"
 
-#import "ALCSingletonStorage.h"
-#import "ALCFactoryStorage.h"
-#import "ALCExternalStorage.h"
+#import "ALCBuilderStorageSingleton.h"
+#import "ALCBuilderStorageFactory.h"
+#import "ALCBuilderStorageExternal.h"
 
-#import "ALCBuilderPersonality.h"
+#import "ALCBuilderType.h"
 #import "ALCMacroProcessor.h"
 
 #import "NSObject+Builder.h"
@@ -29,9 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @implementation ALCBuilder {
-    id<ALCValueStorage> _valueStorage;
-    BOOL _autoStart;
-    id<ALCBuilderPersonality> _personality;
+    id<ALCBuilderStorage> _builderStorage;
+    id<ALCBuilderType> _builderType;
 }
 
 #pragma mark - Properties
@@ -44,21 +43,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 hideInitializerImpl(init)
 
--(instancetype)initWithPersonality:(id<ALCBuilderPersonality>)personality forClass:(Class)aClass {
+-(instancetype)initWithALCBuilderType:(id<ALCBuilderType>)builderType forClass:(Class)aClass {
 
     self = [super init];
     if (self) {
 
-        // Set the back ref in the personality.
-        personality.builder = self;
+        // Set the back ref in the builderType.
+        builderType.builder = self;
 
-        _autoStart = YES;
-        _personality = personality;
+        _builderType = builderType;
         _valueClass = aClass;
-        _name = _personality.builderName;
+        _name = _builderType.builderName;
 
         // Setup the macro processor with the appropriate flags.
-        _macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:_personality.macroProcessorFlags];
+        _macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:_builderType.macroProcessorFlags];
 
     }
     return self;
@@ -67,14 +65,11 @@ hideInitializerImpl(init)
 -(void) configure {
 
     if (self.macroProcessor.isFactory) {
-        _valueStorage = [[ALCFactoryStorage alloc] init];
-        _autoStart = NO;
+        _builderStorage = [[ALCBuilderStorageFactory alloc] init];
     } else if (self.macroProcessor.isExternal) {
-        _valueStorage = [[ALCExternalStorage alloc] init];
-        _autoStart = NO;
+        _builderStorage = [[ALCBuilderStorageExternal alloc] init];
     } else {
-        _valueStorage = [[ALCSingletonStorage alloc] init];
-        _autoStart = YES;
+        _builderStorage = [[ALCBuilderStorageSingleton alloc] init];
     }
 
     _primary = self.macroProcessor.isPrimary;
@@ -83,7 +78,7 @@ hideInitializerImpl(init)
         self.name = newName; // Triggers KVO so that the model updates the name.
     }
 
-    [_personality configureWithMacroProcessor:_macroProcessor];
+    [_builderType configureWithMacroProcessor:_macroProcessor];
     STLog(self.valueClass, @"Builder for %@ configured: %@", NSStringFromClass(self.valueClass), [self description]);
 
 }
@@ -93,30 +88,34 @@ hideInitializerImpl(init)
 
 -(void) addVariableInjection:(Ivar) variable
           valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory {
-    [_personality addVariableInjection:variable valueSourceFactory:valueSourceFactory];
+    [_builderType addVariableInjection:variable valueSourceFactory:valueSourceFactory];
 }
 
 -(void) instantiate {
-    if (_autoStart && !_valueStorage.hasValue) {
+    if ([_builderStorage isKindOfClass:[ALCBuilderStorageSingleton class]] && !_builderStorage.hasValue) {
         STLog(self.valueClass, @"All dependencies now available, auto-creating a %@ ...", NSStringFromClass(self.valueClass));
         [self value];
     }
 }
 
 -(void) willResolve {
-    [_personality willResolve];
+    [_builderType willResolve];
 }
 
 -(id) invokeWithArgs:(NSArray<id> *) arguments {
-    id value = [_personality invokeWithArgs:arguments];
-    [_personality injectDependencies:value];
+    id value = [_builderType invokeWithArgs:arguments];
+    [_builderType injectDependencies:value];
     return value;
 }
 
 #pragma mark - Getters and setters
 
--(ALCBuilderPersonalityType) type {
-    return _personality.type;
+-(ALCBuilderType) type {
+    return _builderType.type;
+}
+
+-(BOOL)ready {
+    return super.ready && _builderStorage.ready;
 }
 
 -(id)value {
@@ -126,9 +125,9 @@ hideInitializerImpl(init)
                                        reason:[NSString stringWithFormat:@"Builder %@ still has pending dependencies.", self]
                                      userInfo:nil];}
 
-    id value = _valueStorage.value;
+    id value = _builderStorage.value;
     if (value == nil) {
-        value = [_personality instantiateObject];
+        value = [_builderType instantiateObject];
         [self setValue:value];
     }
 
@@ -138,26 +137,30 @@ hideInitializerImpl(init)
 // Allows us to inject dependencies on objects created outside of Alchemic.
 -(void)setValue:(id) value {
 
-    if (! _personality.canInjectDependencies) {
+    // If this builder is external, it will be a class builder so we just check the super dependencies.
+    // Otherwise check with the builder type.
+    if (([_builderStorage isKindOfClass:[ALCBuilderStorageExternal class]] && super.ready)
+        || _builderType.canInjectDependencies) {
+        // Always store first in case circular dependencies trigger via the dependency injection loop back here before we have stored it.
+        _builderStorage.value = value;
+        [_builderType injectDependencies:value];
+    } else {
         @throw [NSException exceptionWithName:@"AlchemicDependenciesNotAvailable"
                                        reason:[NSString stringWithFormat:@"Dependencies not available for builder: %@", self]
                                      userInfo:nil];
     }
 
-    // Always store first in case circular dependencies trigger via the dependency injection and loop back here before we have stored it.
-    _valueStorage.value = value;
-    [_personality injectDependencies:value];
 }
 
 -(void)injectDependencies:(id) object {
-    [_personality injectDependencies:object];
+    [_builderType injectDependencies:object];
 }
 
 #pragma mark - Debug
 
 -(nonnull NSString *) description {
-    NSString *instantiated = _valueStorage.hasValue ? @"* " : @"  ";
-    return [NSString stringWithFormat:@"%@builder for type %@, name '%@'%@%@", instantiated, NSStringFromClass(self.valueClass), self.name, _valueStorage.attributeText, _personality.attributeText];
+    NSString *instantiated = _builderStorage.hasValue ? @"* " : @"  ";
+    return [NSString stringWithFormat:@"%@builder for type %@, name '%@'%@%@", instantiated, NSStringFromClass(self.valueClass), self.name, _builderStorage.attributeText, _builderType.attributeText];
 }
 
 @end

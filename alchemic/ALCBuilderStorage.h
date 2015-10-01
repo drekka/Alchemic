@@ -11,7 +11,7 @@
 /**
  Manages the storage of the objects that the builder supplies.
  */
-@protocol ALCValueStorage <NSObject>
+@protocol ALCBuilderStorage <NSObject>
 
 /**
  Used when builders are describing themselves.
@@ -27,5 +27,8 @@
  Return YES if a value is stored.
  */
 @property (nonatomic, assign, readonly) BOOL hasValue;
+
+@property (nonatomic, assign, readonly) BOOL ready;
+
 
 @end

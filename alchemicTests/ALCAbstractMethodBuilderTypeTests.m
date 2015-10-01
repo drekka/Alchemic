@@ -1,5 +1,5 @@
 //
-//  ALCAbstractMethodBuilderPersonalityTests.m
+//  ALCAbstractMethodBuilderTypeTests.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 5/09/2015.
@@ -9,7 +9,7 @@
 @import XCTest;
 #import <Alchemic/Alchemic.h>
 #import <OCMock/OCMock.h>
-#import "ALCAbstractMethodBuilderPersonality.h"
+#import "ALCAbstractMethodBuilderType.h"
 #import "ALCtestCase.h"
 #import "SimpleObject.h"
 #import "ALCMacroProcessor.h"
@@ -17,18 +17,18 @@
 #import "ALCValueSource.h"
 #import "ALCResolvable.h"
 
-@interface ALCAbstractMethodBuilderPersonalityTests : ALCTestCase
+@interface ALCAbstractMethodBuilderTypeTests : ALCTestCase
 
 @end
 
-@implementation ALCAbstractMethodBuilderPersonalityTests {
-    ALCAbstractMethodBuilderPersonality *_personality;
+@implementation ALCAbstractMethodBuilderTypeTests {
+    ALCAbstractMethodBuilderType *_builderType;
     ALCBuilder *_classBuilder;
 }
 
 -(void) setUp {
     _classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
-    _personality = [[ALCAbstractMethodBuilderPersonality alloc] initWithClassBuilder:_classBuilder];
+    _builderType = [[ALCAbstractMethodBuilderType alloc] initWithClassBuilder:_classBuilder];
 }
 
 -(void) testMacroProcessorFlags {
@@ -36,7 +36,7 @@
                    + ALCAllowedMacrosName
                    + ALCAllowedMacrosPrimary
                    + ALCAllowedMacrosArg,
-                   _personality.macroProcessorFlags);
+                   _builderType.macroProcessorFlags);
 }
 
 -(void) testConfigureWithMacroProcessorWithArg {
@@ -49,8 +49,8 @@
         return [obj conformsToProtocol:@protocol(ALCValueSource)];
     }]]);
 
-    _personality.builder = mockBuilder;
-    [_personality configureWithMacroProcessor:macroProcessor];
+    _builderType.builder = mockBuilder;
+    [_builderType configureWithMacroProcessor:macroProcessor];
 
     OCMVerifyAll(mockBuilder);
 }
@@ -62,8 +62,8 @@
         return obj == self->_classBuilder;
     }]]);
 
-    _personality.builder = mockBuilder;
-    [_personality willResolve];
+    _builderType.builder = mockBuilder;
+    [_builderType willResolve];
 
     OCMVerifyAll(mockBuilder);
 }
@@ -81,10 +81,10 @@
         return YES;
     }]]);
 
-    _personality.builder = mockBuilder;
-    [_personality configureWithMacroProcessor:macroProcessor];
+    _builderType.builder = mockBuilder;
+    [_builderType configureWithMacroProcessor:macroProcessor];
 
-    NSArray<id> *values = _personality.argumentValues;
+    NSArray<id> *values = _builderType.argumentValues;
 
     XCTAssertEqualObjects(@12, values[0]);
     XCTAssertEqualObjects(@"abc", values[1]);
@@ -93,8 +93,8 @@
 -(void) testInstantiateObjectCallsInvoke {
 
     // Mock out the invoke method.
-    id partialMockPersonality = OCMPartialMock(_personality);
-    OCMExpect([partialMockPersonality invokeWithArgs:[OCMArg checkWithBlock:^BOOL(NSArray *args) {
+    id partialMockALCBuilderType = OCMPartialMock(_builderType);
+    OCMExpect([partialMockALCBuilderType invokeWithArgs:[OCMArg checkWithBlock:^BOOL(NSArray *args) {
         return [args containsObject:@12];
     }]]).andReturn(@24);
 
@@ -109,10 +109,10 @@
         return YES;
     }]]);
 
-    _personality.builder = mockBuilder;
-    [_personality configureWithMacroProcessor:macroProcessor];
+    _builderType.builder = mockBuilder;
+    [_builderType configureWithMacroProcessor:macroProcessor];
 
-    id result = [_personality instantiateObject];
+    id result = [_builderType instantiateObject];
 
     XCTAssertEqualObjects(@24, result);
 }
@@ -120,7 +120,7 @@
 -(void) testAddVariableInjectThrows {
     Ivar classBuilderRef = class_getInstanceVariable([self class], "_classBuilder");
     id mockValueSourceFactory = OCMClassMock([ALCValueSourceFactory class]);
-    XCTAssertThrowsSpecificNamed([_personality addVariableInjection:classBuilderRef valueSourceFactory:mockValueSourceFactory], NSException, @"AlchemicUnexpectedInjection");
+    XCTAssertThrowsSpecificNamed([_builderType addVariableInjection:classBuilderRef valueSourceFactory:mockValueSourceFactory], NSException, @"AlchemicUnexpectedInjection");
 }
 
 @end

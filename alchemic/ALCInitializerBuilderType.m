@@ -1,5 +1,5 @@
 //
-//  ALCInitializerBuilderPersonality.m
+//  ALCInitializerBuilderType.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 4/09/2015.
@@ -7,7 +7,7 @@
 //
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCInitializerBuilderPersonality.h"
+#import "ALCInitializerBuilderType.h"
 #import "ALCBuilder.h"
 #import "ALCMacroProcessor.h"
 #import "NSObject+Builder.h"
@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCInitializerBuilderPersonality {
+@implementation ALCInitializerBuilderType {
     SEL _initializer;
 }
 
@@ -30,8 +30,8 @@ hideInitializerImpl(initWithClassBuilder:(ALCBuilder *) classBuilder)
     return self;
 }
 
--(ALCBuilderPersonalityType)type {
-    return ALCBuilderPersonalityTypeInitializer;
+-(ALCBuilderType)type {
+    return ALCBuilderTypeInitializer;
 }
 
 -(NSString *) builderName {

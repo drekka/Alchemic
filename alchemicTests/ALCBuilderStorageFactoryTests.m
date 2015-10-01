@@ -7,22 +7,22 @@
 //
 
 @import XCTest;
-#import "ALCFactoryStorage.h"
+#import "ALCBuilderStorageFactory.h"
 
-@interface ALCFactoryStorageTests : XCTestCase
+@interface ALCBuilderStorageFactoryTests : XCTestCase
 
 @end
 
-@implementation ALCFactoryStorageTests
+@implementation ALCBuilderStorageFactoryTests
 
 -(void) testNoValue {
-    ALCFactoryStorage *storage = [[ALCFactoryStorage alloc] init];
+    ALCBuilderStorageFactory *storage = [[ALCBuilderStorageFactory alloc] init];
     XCTAssertNil(storage.value);
     XCTAssertFalse(storage.hasValue);
 }
 
 -(void) testStoresValues {
-    ALCFactoryStorage *storage = [[ALCFactoryStorage alloc] init];
+    ALCBuilderStorageFactory *storage = [[ALCBuilderStorageFactory alloc] init];
     storage.value = @"abc";
     XCTAssertFalse(storage.hasValue);
 }

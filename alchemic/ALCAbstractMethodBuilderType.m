@@ -1,5 +1,5 @@
 //
-//  ALCAbstractMethodBuilderPersonality.m
+//  ALCAbstractMethodBuilderType.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 4/09/2015.
@@ -7,13 +7,13 @@
 //
 #import <StoryTeller/StoryTeller.h>
 @import ObjectiveC;
-#import "ALCAbstractMethodBuilderPersonality.h"
+#import "ALCAbstractMethodBuilderType.h"
 #import "ALCMacroProcessor.h"
 #import "ALCValueSource.h"
 #import "ALCDependency.h"
 #import "ALCBuilder.h"
 
-@implementation ALCAbstractMethodBuilderPersonality {
+@implementation ALCAbstractMethodBuilderType {
     NSMutableArray<ALCDependency *> *_arguments;
 }
 

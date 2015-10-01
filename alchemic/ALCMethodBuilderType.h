@@ -1,5 +1,5 @@
 //
-//  ALCInitializerBuilderPersonality.h
+//  ALCBuilderType.h
 //  alchemic
 //
 //  Created by Derek Clarkson on 4/09/2015.
@@ -7,18 +7,20 @@
 //
 
 @import Foundation;
-#import "ALCAbstractMethodBuilderPersonality.h"
+#import "ALCAbstractMethodBuilderType.h"
 #import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCInitializerBuilderPersonality : ALCAbstractMethodBuilderPersonality
+@interface ALCMethodBuilderType : ALCAbstractMethodBuilderType
 
 hideInitializer(initWithClassBuilder:(ALCBuilder *) classBuilder);
 
 -(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder
-                         initializer:(SEL) initializer;
+                            selector:(SEL) selector
+                          returnType:(Class) returnType;
 
 @end
 
 NS_ASSUME_NONNULL_END
+

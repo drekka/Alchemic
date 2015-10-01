@@ -16,12 +16,12 @@
 #import "ALCRuntimeScanner.h"
 #import "ALCMacroProcessor.h"
 #import "ALCInternalMacros.h"
-#import "ALCSingletonStorage.h"
-#import "ALCExternalStorage.h"
+#import "ALCBuilderStorageSingleton.h"
+#import "ALCBuilderStorageExternal.h"
 #import "ALCResolvable.h"
 #import "ALCBuilder.h"
-#import "ALCBuilderPersonality.h"
-#import "ALCClassBuilderPersonality.h"
+#import "ALCBuilderType.h"
+#import "ALCClassBuilderType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -83,8 +83,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ALCBuilder *) simpleBuilderForClass:(Class) aClass {
-    id <ALCBuilderPersonality> personality = [[ALCClassBuilderPersonality alloc] init];
-    return [[ALCBuilder alloc] initWithPersonality:personality forClass:aClass];
+    id <ALCBuilderType> builderType = [[ALCClassBuilderType alloc] init];
+    return [[ALCBuilder alloc] initWithALCBuilderType:builderType forClass:aClass];
 }
 
 -(ALCBuilder *) externalBuilderForClass:(Class) aClass {

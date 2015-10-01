@@ -14,9 +14,9 @@
 #import "ALCResourceLocator.h"
 #import "ALCContext.h"
 #import "ALCConfig.h"
-#import "ALCSingletonStorage.h"
-#import "ALCBuilderPersonality.h"
-#import "ALCClassBuilderPersonality.h"
+#import "ALCBuilderStorageSingleton.h"
+#import "ALCBuilderType.h"
+#import "ALCClassBuilderType.h"
 #import "ALCBuilder.h"
 
 @implementation ALCRuntimeScanner
@@ -56,8 +56,8 @@
                     // If we are here then we have an alchemic method to process, so create a class builder for for the class.
                     if (currentClassBuilder == nil) {
                         STLog(aClass, @"Class %@ has Alchemic methods ...", NSStringFromClass(aClass));
-                        id<ALCBuilderPersonality> personality = [[ALCClassBuilderPersonality alloc] init];
-                        currentClassBuilder = [[ALCBuilder alloc] initWithPersonality:personality forClass:aClass];
+                        id<ALCBuilderType> builderType = [[ALCClassBuilderType alloc] init];
+                        currentClassBuilder = [[ALCBuilder alloc] initWithALCBuilderType:builderType forClass:aClass];
                         [context addBuilderToModel:currentClassBuilder];
                     }
 

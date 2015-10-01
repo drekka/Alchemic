@@ -14,10 +14,10 @@
 #import "ALCBuilder.h"
 #import "ALCBuilder.h"
 #import "ALCBuilder.h"
-#import "ALCSingletonStorage.h"
+#import "ALCBuilderStorageSingleton.h"
 #import "ALCMacroProcessor.h"
-#import "ALCBuilderPersonality.h"
-#import "ALCMethodBuilderPersonality.h"
+#import "ALCBuilderType.h"
+#import "ALCMethodBuilderType.h"
 
 #import "ALCModel.h"
 
@@ -41,10 +41,10 @@
     [_classBuilder.macroProcessor addMacro:AcWithName(@"abc")];
     [_classBuilder configure];
 
-    id<ALCBuilderPersonality> personality = [[ALCMethodBuilderPersonality alloc] initWithClassBuilder:_classBuilder
+    id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithClassBuilder:_classBuilder
                                                                                              selector:@selector(someMethod)
                                                                                            returnType:[NSString class]];
-    _methodBuilder = [[ALCBuilder alloc] initWithPersonality:personality
+    _methodBuilder = [[ALCBuilder alloc] initWithALCBuilderType:builderType
                                                     forClass:[NSString class]];
     [_methodBuilder.macroProcessor addMacro:AcWithName(@"def")];
     [_methodBuilder configure];

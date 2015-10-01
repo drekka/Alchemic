@@ -1,5 +1,5 @@
 //
-//  ALCBuilderPersonality.m
+//  ALCBuilderType.m
 //  alchemic
 //
 //  Created by Derek Clarkson on 4/09/2015.
@@ -8,7 +8,7 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCClassBuilderPersonality.h"
+#import "ALCClassBuilderType.h"
 #import "ALCBuilder.h"
 #import "ALCMacroProcessor.h"
 #import "ALCVariableDependency.h"
@@ -18,7 +18,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCClassBuilderPersonality {
+@implementation ALCClassBuilderType {
     NSMutableSet<ALCVariableDependency *> *_dependencies;
 }
 
@@ -30,8 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(ALCBuilderPersonalityType)type {
-    return ALCBuilderPersonalityTypeClass;
+-(ALCBuilderType)type {
+    return ALCBuilderTypeClass;
 }
 
 -(NSString *) builderName {
