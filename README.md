@@ -561,6 +561,8 @@ If Alchemic has already started then the block is executed immediately on the cu
 
 Alchemic has some special processing for UIApplicationDelegates. After starting, Alchemic will automatically search for a UIApplicationDelegate and if it finds one, inject any dependencies it needs. So there is no need to add any `AcRegister(...)` macros to the app delegate class.
 
+*Note: You can still use `AcRegister(...)` to give the application delegate a name if you like. By default, Alchemic will automatically add the application to its model and set it with your app's instance.*
+
 ## Callbacks and notifications
 
 ### Dependencies injected

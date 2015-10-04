@@ -36,6 +36,13 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
+-(void) configureAsAppDelegate {
+    _valueSourceFactories = [[NSMutableArray alloc] init];
+    _isExternal = YES;
+    _isFactory = NO;
+    _isPrimary = NO;
+}
+
 -(void) addMacro:(id<ALCMacro>) macro {
 
     if (macro == [ALCIsFactory factoryMacro] && _allowedMacros & ALCAllowedMacrosFactory) {

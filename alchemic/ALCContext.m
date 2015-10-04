@@ -96,6 +96,13 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... {
     STLog(classBuilder.valueClass, @"Registering class %@", NSStringFromClass(classBuilder.valueClass));
     alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
+
+    // If the class builde is for the app delegate then ensure it is set as external, nonfactory.
+    if ([classBuilder.valueClass isSubclassOfClass:[[UIApplication sharedApplication].delegate class]]) {
+        STLog(self, @"Configuring application delegate builder: %@", [UIApplication sharedApplication].delegate);
+        [classBuilder.macroProcessor configureAsAppDelegate];
+    }
+
     // Don't configure here because the class scanner will do it after all alchemic methods have been executed and the builder config loaded.
 }
 
@@ -145,12 +152,6 @@ NSString * const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 }
 
 -(void) addBuilderToModel:(ALCBuilder*) builder {
-
-    // Look for the all delegate builder and set the delegate into it.
-    if ([builder.valueClass isSubclassOfClass:[[UIApplication sharedApplication].delegate class]]) {
-        STLog(self, @"App delegate builder: %@", [UIApplication sharedApplication].delegate);
-        builder.value = [UIApplication sharedApplication].delegate;
-    }
     [_model addBuilder:builder];
 }
 

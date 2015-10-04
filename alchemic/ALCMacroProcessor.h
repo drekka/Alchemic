@@ -80,6 +80,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(NSUInteger) valueSourceCount;
 
+-(void) configureAsAppDelegate;
+
 @end
 
 NS_ASSUME_NONNULL_END

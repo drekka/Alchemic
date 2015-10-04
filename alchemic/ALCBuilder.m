@@ -102,6 +102,10 @@ hideInitializerImpl(init)
     [_builderType willResolve];
 }
 
+-(void) didResolve {
+    
+}
+
 -(id) invokeWithArgs:(NSArray<id> *) arguments {
     id value = [_builderType invokeWithArgs:arguments];
     [_builderType injectDependencies:value];

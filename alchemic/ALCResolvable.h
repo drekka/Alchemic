@@ -59,6 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)willResolve;
 
+-(void) didResolve;
+
 #pragma mark - instantiating and injecting
 
 /**
