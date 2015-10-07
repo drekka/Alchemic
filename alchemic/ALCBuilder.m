@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCBuilder {
     id<ALCBuilderStorage> _builderStorage;
     id<ALCBuilderType> _builderType;
+    BOOL _isApplicationDelegate;
 }
 
 #pragma mark - Properties
@@ -43,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 hideInitializerImpl(init)
 
--(instancetype)initWithALCBuilderType:(id<ALCBuilderType>)builderType forClass:(Class)aClass {
+- (instancetype)initWithALCBuilderType : (id<ALCBuilderType>)builderType forClass : (Class)aClass {
 
     self = [super init];
     if (self) {
@@ -57,14 +58,19 @@ hideInitializerImpl(init)
 
         // Setup the macro processor with the appropriate flags.
         _macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:_builderType.macroProcessorFlags];
-
     }
     return self;
 }
 
--(void) configure {
+- (void)configure {
 
-    if (self.macroProcessor.isFactory) {
+    // If the class builder is for the app delegate then ensure it is set as external, nonfactory.
+    if ([self.valueClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
+        STLog(self, @"Configuring application delegate builder: %@", self);
+        _isApplicationDelegate = YES;
+    }
+
+    if (_macroProcessor.isFactory) {
         _builderStorage = [[ALCBuilderStorageFactory alloc] init];
     } else if (self.macroProcessor.isExternal) {
         _builderStorage = [[ALCBuilderStorageExternal alloc] init];
@@ -72,41 +78,42 @@ hideInitializerImpl(init)
         _builderStorage = [[ALCBuilderStorageSingleton alloc] init];
     }
 
-    _primary = self.macroProcessor.isPrimary;
-    NSString *newName = self.macroProcessor.asName;
+    _primary = _macroProcessor.isPrimary;
+    NSString *newName = _macroProcessor.asName;
     if (newName != nil) {
         self.name = newName; // Triggers KVO so that the model updates the name.
     }
 
     [_builderType configureWithMacroProcessor:_macroProcessor];
     STLog(self.valueClass, @"Builder for %@ configured: %@", NSStringFromClass(self.valueClass), [self description]);
-
 }
 
 #pragma mark - Tasks
 
-
--(void) addVariableInjection:(Ivar) variable
-          valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory {
+- (void)addVariableInjection:(Ivar)variable
+          valueSourceFactory:(ALCValueSourceFactory *)valueSourceFactory {
     [_builderType addVariableInjection:variable valueSourceFactory:valueSourceFactory];
 }
 
--(void) instantiate {
+- (void)instantiate {
     if ([_builderStorage isKindOfClass:[ALCBuilderStorageSingleton class]] && !_builderStorage.hasValue) {
         STLog(self.valueClass, @"All dependencies now available, auto-creating a %@ ...", NSStringFromClass(self.valueClass));
         [self value];
     }
 }
 
--(void) willResolve {
+- (void)willResolve {
     [_builderType willResolve];
 }
 
--(void) didResolve {
-    
+- (void)didResolve {
+    if (_isApplicationDelegate) {
+        STLog(self.valueClass, @"Setting application delegate ...");
+        self.value = [UIApplication sharedApplication].delegate;
+    }
 }
 
--(id) invokeWithArgs:(NSArray<id> *) arguments {
+- (id)invokeWithArgs:(NSArray<id> *)arguments {
     id value = [_builderType invokeWithArgs:arguments];
     [_builderType injectDependencies:value];
     return value;
@@ -114,15 +121,15 @@ hideInitializerImpl(init)
 
 #pragma mark - Getters and setters
 
--(ALCBuilderType) type {
+- (ALCBuilderType)type {
     return _builderType.type;
 }
 
--(BOOL)ready {
+- (BOOL)ready {
     return super.ready && _builderStorage.ready;
 }
 
--(id)value {
+- (id)value {
 
     if (!self.ready) {
         @throw [NSException exceptionWithName:@"AlchemicBuilderNotAvailable"
@@ -140,12 +147,11 @@ hideInitializerImpl(init)
 }
 
 // Allows us to inject dependencies on objects created outside of Alchemic.
--(void)setValue:(id) value {
+- (void)setValue:(id)value {
 
     // If this builder is external, it will be a class builder so we just check the super dependencies.
     // Otherwise check with the builder type.
-    if (([_builderStorage isKindOfClass:[ALCBuilderStorageExternal class]] && super.ready)
-        || _builderType.canInjectDependencies) {
+    if (([_builderStorage isKindOfClass:[ALCBuilderStorageExternal class]] && super.ready) || _builderType.canInjectDependencies) {
         // Always store first in case circular dependencies trigger via the dependency injection loop back here before we have stored it.
         _builderStorage.value = value;
         [_builderType injectDependencies:value];
@@ -154,18 +160,18 @@ hideInitializerImpl(init)
                                        reason:[NSString stringWithFormat:@"Dependencies not available for builder: %@", self]
                                      userInfo:nil];
     }
-
 }
 
--(void)injectDependencies:(id) object {
+- (void)injectDependencies:(id)object {
     [_builderType injectDependencies:object];
 }
 
 #pragma mark - Debug
 
--(nonnull NSString *) description {
+- (nonnull NSString *)description {
     NSString *instantiated = _builderStorage.hasValue ? @"* " : @"  ";
-    return [NSString stringWithFormat:@"%@builder for type %@, name '%@'%@%@", instantiated, NSStringFromClass(self.valueClass), self.name, _builderStorage.attributeText, _builderType.attributeText];
+    NSString *appDelegate = _isApplicationDelegate ? @" (Application delegate)" : @"";
+    return [NSString stringWithFormat:@"%@builder for type %@%@, name '%@'%@%@", instantiated, NSStringFromClass(self.valueClass), appDelegate, self.name, _builderStorage.attributeText, _builderType.attributeText];
 }
 
 @end

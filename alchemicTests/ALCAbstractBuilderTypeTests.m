@@ -15,12 +15,18 @@
 
 @end
 
-@implementation ALCAbstractBuilderTypeTests
+@implementation ALCAbstractBuilderTypeTests {
+    ALCAbstractBuilderType *_builderType;
+    id _mockMacroProcessor;
+}
+
+-(void)setUp {
+    _builderType = [[ALCAbstractBuilderType alloc] init];
+    _mockMacroProcessor = OCMClassMock([ALCMacroProcessor class]);
+}
 
 -(void) testConfigureThrowsIfNoBuilderSet {
-    ALCAbstractBuilderType *builderType = [[ALCAbstractBuilderType alloc] init];
-    id mockMacroProcessor = OCMClassMock([ALCMacroProcessor class]);
-    XCTAssertThrowsSpecificNamed([builderType configureWithMacroProcessor:mockMacroProcessor], NSException, @"AlchemicBuilderNotSet");
+    XCTAssertThrowsSpecificNamed([_builderType configureWithMacroProcessor:_mockMacroProcessor], NSException, @"AlchemicBuilderNotSet");
 }
 
 @end
