@@ -31,10 +31,6 @@
     _builderType.builder = _mockBuilder;
 }
 
--(void) testType {
-    XCTAssertEqual(ALCBuilderTypeClass, _builderType.type);
-}
-
 -(void) testBuilderName {
     OCMStub([_mockBuilder valueClass]).andReturn([SimpleObject class]);
     XCTAssertEqualObjects(@"SimpleObject", _builderType.builderName);

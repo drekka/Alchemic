@@ -15,9 +15,21 @@
 @class ALCBuilder;
 @class ALCValueSourceFactory;
 
-typedef NS_ENUM(NSUInteger, ALCBuilderType) {
+/**
+ Used to define what the type creates.
+ */
+typedef NS_ENUM(NSUInteger, ALCBuilderType){
+    /**
+     Builds classes.
+     */
     ALCBuilderTypeClass,
+    /**
+     Builds objects using methods.
+     */
     ALCBuilderTypeMethod,
+    /**
+     Builds objects using their class initializers.
+     */
     ALCBuilderTypeInitializer
 };
 
@@ -26,17 +38,27 @@ typedef NS_ENUM(NSUInteger, ALCBuilderType) {
  */
 @protocol ALCBuilderType <NSObject>
 
+/**
+ A weak reference back to the builder that owns this instance. 
+ 
+ @discussion This weak reference is to allow the builder type to further configure the builder.
+ In future this could probably be removed in future and replaced by further calls to the builder type.
+ */
 @property (nonatomic, weak) ALCBuilder *builder;
-
-@property (nonatomic, assign, readonly) ALCBuilderType type;
 
 /**
  Returns the name to use for the builder.
  */
 @property (nonatomic, strong, readonly) NSString *builderName;
 
+/**
+ USed by debug methods to get a description of the attributes of the builder type.
+ */
 @property (nonatomic, strong, readonly) NSString *attributeText;
 
+/**
+ Returns YES if the builder is ready to inject dependencies.
+ */
 @property (nonatomic, assign, readonly) BOOL canInjectDependencies;
 
 /**
@@ -44,6 +66,11 @@ typedef NS_ENUM(NSUInteger, ALCBuilderType) {
  */
 @property (nonatomic, assign, readonly) NSUInteger macroProcessorFlags;
 
+/**
+ Configures the builder type using instructions read into the passed macro processor.
+
+ @param macroProcessor An instance of ALCMacroProcessor that contains the configuration.
+ */
 -(void) configureWithMacroProcessor:(ALCMacroProcessor *) macroProcessor;
 
 /**
@@ -51,6 +78,12 @@ typedef NS_ENUM(NSUInteger, ALCBuilderType) {
  */
 -(void) willResolve;
 
+/**
+ Adds a variable injection to the builder type.
+
+ @param variable           The variable to be injected.
+ @param valueSourceFactory A ALCValueSourceFactory that defines where to get the value to inject.
+ */
 -(void) addVariableInjection:(Ivar) variable
           valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory;
 
@@ -63,6 +96,11 @@ typedef NS_ENUM(NSUInteger, ALCBuilderType) {
  */
 -(id) invokeWithArgs:(NSArray<id> *) arguments;
 
+/**
+ Called when the builder needs to instantiate an object.
+
+ @return The newly created object.
+ */
 -(id) instantiateObject;
 
 /**

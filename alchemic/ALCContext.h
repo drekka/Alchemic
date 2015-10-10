@@ -141,10 +141,10 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  Sets the value on a specific builder.
 
  @param value       The value to be set.
- @param searchMacro One or more search macros used to locate the builde whose value will be set.
+ @param searchMacro A search macro used to locate the builde whose value will be set.
+ @param ...         Additional search macros to refine the search for the builder.
  */
 -(void) setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>) searchMacro, ... NS_REQUIRES_NIL_TERMINATION;
-//[[ALCAlchemic mainContext] setValue:object inBuilderWith:searchMacro, ## __VA_ARGS__, nil]
 
 /**
  Programmatically invokes a specific method.

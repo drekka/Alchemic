@@ -78,10 +78,6 @@
 		6C469BAE1BB0200200CD2286 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 6C469BAD1BB0200200CD2286 /* Cartfile */; };
 		6C469BB01BB020D000CD2286 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C469BAF1BB020D000CD2286 /* PEGKit.framework */; };
 		6C469BB11BB020FB00CD2286 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C469BAF1BB020D000CD2286 /* PEGKit.framework */; };
-		6C469BB41BB020FB00CD2286 /* PEGKit.framework.dSYM in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C469BB21BB020FB00CD2286 /* PEGKit.framework.dSYM */; };
-		6C469BB51BB020FB00CD2286 /* StoryTeller.framework.dSYM in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C469BB31BB020FB00CD2286 /* StoryTeller.framework.dSYM */; };
-		6C469BB71BB021EE00CD2286 /* PEGKit.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C469BB21BB020FB00CD2286 /* PEGKit.framework.dSYM */; };
-		6C469BB81BB021EE00CD2286 /* StoryTeller.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C469BB31BB020FB00CD2286 /* StoryTeller.framework.dSYM */; };
 		6C469BB91BB021EE00CD2286 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C469BAF1BB020D000CD2286 /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C480EEB1BBC0C8600F5F21C /* ALCIsFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C480EEA1BBC0C8600F5F21C /* ALCIsFactoryTests.m */; };
 		6C480EED1BBC101000F5F21C /* ALCIsPrimaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C480EEC1BBC101000F5F21C /* ALCIsPrimaryTests.m */; };
@@ -179,8 +175,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6C469BB71BB021EE00CD2286 /* PEGKit.framework.dSYM in CopyFiles */,
-				6C469BB81BB021EE00CD2286 /* StoryTeller.framework.dSYM in CopyFiles */,
 				6C469BB91BB021EE00CD2286 /* PEGKit.framework in CopyFiles */,
 				6C7F24ED1B4B5A9F007A44C8 /* StoryTeller.framework in CopyFiles */,
 			);
@@ -234,8 +228,6 @@
 		6C4655F61B54D62400FD1D28 /* ALCModelValueSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelValueSource.m; sourceTree = "<group>"; };
 		6C469BAD1BB0200200CD2286 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		6C469BAF1BB020D000CD2286 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = ../../Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
-		6C469BB21BB020FB00CD2286 /* PEGKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = PEGKit.framework.dSYM; path = ../../Build/iOS/PEGKit.framework.dSYM; sourceTree = "<group>"; };
-		6C469BB31BB020FB00CD2286 /* StoryTeller.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = StoryTeller.framework.dSYM; path = ../../Build/iOS/StoryTeller.framework.dSYM; sourceTree = "<group>"; };
 		6C480EEA1BBC0C8600F5F21C /* ALCIsFactoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCIsFactoryTests.m; sourceTree = "<group>"; };
 		6C480EEC1BBC101000F5F21C /* ALCIsPrimaryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCIsPrimaryTests.m; sourceTree = "<group>"; };
 		6C480EEE1BBC107200F5F21C /* ALCIsExternalTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCIsExternalTests.m; sourceTree = "<group>"; };
@@ -357,8 +349,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C469BB41BB020FB00CD2286 /* PEGKit.framework.dSYM in Frameworks */,
-				6C469BB51BB020FB00CD2286 /* StoryTeller.framework.dSYM in Frameworks */,
 				6C469BB11BB020FB00CD2286 /* PEGKit.framework in Frameworks */,
 				6C4F34F11B4AB8CF005E19A0 /* Alchemic.framework in Frameworks */,
 				6C7F24EB1B4B565E007A44C8 /* StoryTeller.framework in Frameworks */,
@@ -440,8 +430,6 @@
 		6C469BB61BB0210A00CD2286 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6C469BB21BB020FB00CD2286 /* PEGKit.framework.dSYM */,
-				6C469BB31BB020FB00CD2286 /* StoryTeller.framework.dSYM */,
 				6C469BAF1BB020D000CD2286 /* PEGKit.framework */,
 				6C7F24E91B4B564B007A44C8 /* StoryTeller.framework */,
 			);

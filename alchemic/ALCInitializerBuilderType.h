@@ -12,10 +12,26 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ A builder strategy that helps create objects using class initializers.
+ */
 @interface ALCInitializerBuilderType : ALCAbstractMethodBuilderType
 
+/**
+ Don't use.
+
+ - parameter initWithClassBuilder: The class builder that define the class to be created.
+ */
 hideInitializer(initWithClassBuilder:(ALCBuilder *) classBuilder);
 
+/**
+ Default initializer.
+
+ @param classBuilder The class builder that defines the class to be created.
+ @param initializer  The initializer selector to call to create the class.
+
+ @return An instance of the builder strategy.
+ */
 -(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder
                          initializer:(SEL) initializer;
 

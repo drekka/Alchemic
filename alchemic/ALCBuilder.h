@@ -30,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Properties
 
+/**
+ The ALCBuilderType strategy that will be used to define what the builder will create.
+ */
 @property (nonatomic, assign, readonly) ALCBuilderType type;
 
 /**
@@ -58,9 +61,10 @@ hideInitializer(init);
  default initializer.
 
  @param builderType An instance of ALCBuilderType which provides the functility which defines what type of builder this is.
- @param forClass    The class of the object that the builder will create.
+ @param aClass      The class of the object that the builder will create.
 
  @return An instance of a ALCBuilder.
+
  */
 
 -(instancetype) initWithALCBuilderType:(id<ALCBuilderType>) builderType
@@ -68,6 +72,14 @@ hideInitializer(init);
 
 #pragma mark - Tasks
 
+/**
+ Adds a variable injection to the builder. 
+ 
+ @discussion This is used on class builders to add variables within the class that will be injected.
+
+ @param variable           The variable to be injected.
+ @param valueSourceFactory An ALCValueSourceFactory instance that defines where to get the value for the variable from.
+ */
 -(void) addVariableInjection:(Ivar) variable
           valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory;
 

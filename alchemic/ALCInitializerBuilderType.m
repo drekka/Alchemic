@@ -30,10 +30,6 @@ hideInitializerImpl(initWithClassBuilder:(ALCBuilder *) classBuilder)
     return self;
 }
 
--(ALCBuilderType)type {
-    return ALCBuilderTypeInitializer;
-}
-
 -(NSString *) builderName {
     return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.classBuilder.valueClass), NSStringFromSelector(_initializer)];
 }

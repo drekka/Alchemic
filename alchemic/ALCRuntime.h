@@ -89,7 +89,6 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param aClass The class to be used to check the selector again.
  @param selector The selector to check.
- @param macroProcessor An instance of ALCMacroProcessor containing the dependencies that will be required for the selector to be called.
  @exception NSException If there is a problem.
  */
 +(void) validateClass:(Class) aClass selector:(SEL)selector;

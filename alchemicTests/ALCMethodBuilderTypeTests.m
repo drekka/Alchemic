@@ -37,10 +37,6 @@
     _builderType.builder = _mockMethodBuilder;
 }
 
--(void) testBuilderType {
-    XCTAssertEqual(ALCBuilderTypeMethod, _builderType.type);
-}
-
 -(void) testBuilderName {
     XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _builderType.builderName);
 }

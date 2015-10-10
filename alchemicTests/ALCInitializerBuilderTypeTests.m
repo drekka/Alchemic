@@ -35,10 +35,6 @@
     _builderType.builder = _mockInitializerBuilder;
 }
 
--(void) testBuilderType {
-    XCTAssertEqual(ALCBuilderTypeInitializer, _builderType.type);
-}
-
 -(void) testBuilderName {
     XCTAssertEqualObjects(@"SimpleObject initWithString:", _builderType.builderName);
 }

@@ -38,10 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)willResolve {}
 
--(ALCBuilderType)type{
-    methodNotImplementedInt;
-}
-
 -(id) instantiateObject {
     methodNotImplementedObject;
 }

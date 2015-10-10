@@ -12,10 +12,27 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ A builder strategy that helps create objects using factory methods.
+ */
 @interface ALCMethodBuilderType : ALCAbstractMethodBuilderType
 
+/**
+ Don't use.
+
+ @parameter initWithClassBuilder: The class builder that references the class that contains the method to be executed.
+ */
 hideInitializer(initWithClassBuilder:(ALCBuilder *) classBuilder);
 
+/**
+ Default initializer.
+
+ @param classBuilder The class builder that references the class that contains the method to be executed.
+ @param selector     The selector to execute.
+ @param returnType   The expected type that the class will return. USed to locate a class builder which is used to do injections into the returned value.
+
+ @return An instance of this builder strategy.
+ */
 -(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder
                             selector:(SEL) selector
                           returnType:(Class) returnType;

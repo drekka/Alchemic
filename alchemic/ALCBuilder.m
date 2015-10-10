@@ -16,6 +16,9 @@
 #import "ALCBuilderStorageExternal.h"
 
 #import "ALCBuilderType.h"
+#import "ALCClassBuilderType.h"
+#import "ALCMethodBuilderType.h"
+
 #import "ALCMacroProcessor.h"
 
 #import "NSObject+Builder.h"
@@ -121,8 +124,13 @@ hideInitializerImpl(init)
 
 #pragma mark - Getters and setters
 
-- (ALCBuilderType)type {
-    return _builderType.type;
+- (ALCBuilderType) type {
+    if ([_builderType isKindOfClass:[ALCClassBuilderType class]]) {
+        return ALCBuilderTypeClass;
+    } else if ([_builderType isKindOfClass:[ALCMethodBuilderType class]]) {
+        return ALCBuilderTypeMethod;
+    }
+    return ALCBuilderTypeInitializer;
 }
 
 - (BOOL)ready {

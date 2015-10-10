@@ -12,13 +12,30 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ Abstract builder type for strategies that create objects using methods.
+ */
 @interface ALCAbstractMethodBuilderType : ALCAbstractBuilderType
 
+/**
+ The ALCBuilder that will be used to access the class information about the class that contains the method to be executed.
+ */
 @property (nonatomic, strong, readonly) ALCBuilder *classBuilder;
+
+/**
+ Used by derived classes to access a list of the values required for the method.
+ */
 @property (nonatomic, strong, readonly) NSArray<id> *argumentValues;
 
 hideInitializer(init);
 
+/**
+ Default initializer.
+
+ @param classBuilder The class builder for the class that contains the method to be executed.
+
+ @return An instance of this builder type.
+ */
 -(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder;
 
 @end

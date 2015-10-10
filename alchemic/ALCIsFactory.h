@@ -15,6 +15,11 @@
 
 @interface ALCIsFactory : NSObject<ALCMacro>
 
+/**
+ Returns a singleton instance of the macro.
+
+ @return A singleton instance.
+ */
 +(ALCIsFactory *) factoryMacro;
 
 @end

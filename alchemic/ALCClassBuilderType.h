@@ -13,8 +13,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ A builder strategy that is used to build classes.
+ */
 @interface ALCClassBuilderType : ALCAbstractBuilderType
 
+/**
+ Adds the definition of a variable in the class that is to be injected with a value.
+
+ @param variable           The variable to be injected.
+ @param valueSourceFactory A ALCValueSourceFactory that will be used to locate the value to inject.
+ */
 -(void) addVariableInjection:(Ivar) variable
           valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory;
 
