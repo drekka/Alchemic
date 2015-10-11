@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  - parameter initWithClassBuilder: The class builder that define the class to be created.
  */
-hideInitializer(initWithClassBuilder:(ALCBuilder *) classBuilder);
+hideInitializer(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder);
 
 /**
  Default initializer.

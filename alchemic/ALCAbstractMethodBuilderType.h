@@ -7,15 +7,16 @@
 //
 
 @import Foundation;
-#import "ALCAbstractBuilderType.h"
 @class ALCDependency;
+#import "ALCBuilderType.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Abstract builder type for strategies that create objects using methods.
  */
-@interface ALCAbstractMethodBuilderType : ALCAbstractBuilderType
+@interface ALCAbstractMethodBuilderType : NSObject<ALCBuilderType>
 
 /**
  The ALCBuilder that will be used to access the class information about the class that contains the method to be executed.
@@ -36,7 +37,7 @@ hideInitializer(init);
 
  @return An instance of this builder type.
  */
--(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder;
+-(instancetype) initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder;
 
 @end
 

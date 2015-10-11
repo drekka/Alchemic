@@ -20,25 +20,23 @@
 
 @implementation ALCMethodBuilderTypeTests{
     ALCMethodBuilderType *_builderType;
-    id _mockMethodBuilder;
     id _mockClassBuilder;
+    id _mockMethodBuilder;
 }
 
 -(void) setUp {
-    _mockMethodBuilder = OCMClassMock([ALCBuilder class]);
     _mockClassBuilder = OCMClassMock([ALCBuilder class]);
+    _mockMethodBuilder = OCMClassMock([ALCBuilder class]);
     OCMStub([_mockClassBuilder valueClass]).andReturn([SimpleObject class]);
-    OCMStub([_mockMethodBuilder valueClass]).andReturn([NSString class]);
     ignoreSelectorWarnings(
-                           _builderType = [[ALCMethodBuilderType alloc] initWithClassBuilder:_mockClassBuilder
-                                                                                           selector:@selector(stringFactoryMethodUsingAString:)
-                                                                                         returnType:[NSString class]];
+                           _builderType = [[ALCMethodBuilderType alloc] initWithType:[NSString class]
+                                                                        classBuilder:_mockClassBuilder
+                                                                            selector:@selector(stringFactoryMethodUsingAString:)];
                            )
-    _builderType.builder = _mockMethodBuilder;
 }
 
 -(void) testBuilderName {
-    XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _builderType.builderName);
+    XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _builderType.defaultName);
 }
 
 -(void) testWillResolve {
@@ -46,7 +44,7 @@
     // mock out getting a builder from the context.
     id mockStringBuilder = [self mockReturnTypeBuilder];
 
-    [_builderType willResolve]; // No errors.
+    [_builderType builderWillResolve:_mockMethodBuilder]; // No errors.
 
     // Verify that the method builder should now have the return type builder as a dependency.
     OCMVerify([(ALCBuilder *)_mockMethodBuilder addDependency:mockStringBuilder]);
@@ -59,7 +57,7 @@
         return obj == self->_mockClassBuilder;
     }]]);
 
-    [_builderType willResolve];
+    [_builderType builderWillResolve:_mockMethodBuilder];
 
     OCMVerifyAll(mockBuilder);
 }
@@ -69,7 +67,7 @@
     // mock not getting a builder from the context.
     [self mockFindingABuilderInContext:nil];
 
-    [_builderType willResolve]; // No errors.
+    [_builderType builderWillResolve:_mockMethodBuilder]; // No errors.
 
     // Verify that nothing was called.
     OCMVerifyAll(_mockMethodBuilder);
@@ -85,23 +83,8 @@
 -(void) testCanInjectDependencies {
     id mockStringBuilder = [self mockReturnTypeBuilder];
     OCMStub([mockStringBuilder ready]).andReturn(YES);
-    [_builderType willResolve];
+    [_builderType builderWillResolve:_mockMethodBuilder];
     XCTAssertTrue(_builderType.canInjectDependencies);
-}
-
--(void) testInjectDependenciesWhenBuilderForReturnType {
-    id mockStringBuilder = [self mockReturnTypeBuilder];
-    NSString *aString = @"abc";
-    [_builderType willResolve];
-    [_builderType injectDependencies:aString];
-    OCMVerify([mockStringBuilder injectDependencies:@"abc"]);
-}
-
--(void) testInjectDependenciesWhenNoBuilderForReturnType {
-    [self mockFindingABuilderInContext:nil];
-    NSString *aString = @"abc";
-    [_builderType willResolve];
-    [_builderType injectDependencies:aString]; // Nothing should happen.
 }
 
 -(void) testAttributeText {

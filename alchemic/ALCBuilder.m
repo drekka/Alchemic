@@ -24,12 +24,9 @@
 #import "NSObject+Builder.h"
 #import "ALCInternalMacros.h"
 
-NS_ASSUME_NONNULL_BEGIN
+#import "ALCValueSourceFactory.h"
 
-// These properties are being made writable.
-@interface ALCBuilder ()
-@property (nonatomic, strong) NSString *name;
-@end
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCBuilder {
     id<ALCBuilderStorage> _builderStorage;
@@ -37,27 +34,17 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL _isApplicationDelegate;
 }
 
-#pragma mark - Properties
-
-@synthesize valueClass = _valueClass;
-@synthesize primary = _primary;
-@synthesize macroProcessor = _macroProcessor;
-
 #pragma mark - Lifecycle
 
 hideInitializerImpl(init)
 
-- (instancetype)initWithALCBuilderType : (id<ALCBuilderType>)builderType forClass : (Class)aClass {
+- (instancetype)initWithBuilderType : (id<ALCBuilderType>)builderType {
 
     self = [super init];
     if (self) {
 
-        // Set the back ref in the builderType.
-        builderType.builder = self;
-
         _builderType = builderType;
-        _valueClass = aClass;
-        _name = _builderType.builderName;
+        _name = _builderType.defaultName;
 
         // Setup the macro processor with the appropriate flags.
         _macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:_builderType.macroProcessorFlags];
@@ -84,10 +71,10 @@ hideInitializerImpl(init)
     _primary = _macroProcessor.isPrimary;
     NSString *newName = _macroProcessor.asName;
     if (newName != nil) {
-        self.name = newName; // Triggers KVO so that the model updates the name.
+        _name = newName; // Triggers KVO so that the model updates the name.
     }
 
-    [_builderType configureWithMacroProcessor:_macroProcessor];
+    [_builderType builder:self isConfiguringWithMacroProcessor:_macroProcessor];
     STLog(self.valueClass, @"Builder for %@ configured: %@", NSStringFromClass(self.valueClass), [self description]);
 }
 
@@ -95,7 +82,17 @@ hideInitializerImpl(init)
 
 - (void)addVariableInjection:(Ivar)variable
           valueSourceFactory:(ALCValueSourceFactory *)valueSourceFactory {
-    [_builderType addVariableInjection:variable valueSourceFactory:valueSourceFactory];
+    id<ALCValueSource> valueSource = valueSourceFactory.valueSource;
+    ALCVariableDependency *dep = [[ALCVariableDependency alloc] initWithVariable:variable valueSource:valueSource];
+
+    STLog(self.valueClass, @"Adding variable dependency %@.%@", NSStringFromClass(self.valueClass), dep);
+    if (!_variableInjections) {
+        _variableInjections = [NSMutableSet set];
+    }
+    [(NSMutableSet *)_variableInjections addObject:dep];
+
+    // Add the value source as a resolvable dependency so it will be resolved.
+    [self addDependency:(id<ALCResolvable>)valueSource];
 }
 
 - (void)instantiate {
@@ -106,7 +103,7 @@ hideInitializerImpl(init)
 }
 
 - (void)willResolve {
-    [_builderType willResolve];
+    [_builderType builderWillResolve:self];
 }
 
 - (void)didResolve {
@@ -118,23 +115,26 @@ hideInitializerImpl(init)
 
 - (id)invokeWithArgs:(NSArray<id> *)arguments {
     id value = [_builderType invokeWithArgs:arguments];
-    [_builderType injectDependencies:value];
+    [self injectDependencies:value];
     return value;
 }
 
 #pragma mark - Getters and setters
 
-- (ALCBuilderType) type {
-    if ([_builderType isKindOfClass:[ALCClassBuilderType class]]) {
-        return ALCBuilderTypeClass;
-    } else if ([_builderType isKindOfClass:[ALCMethodBuilderType class]]) {
-        return ALCBuilderTypeMethod;
-    }
-    return ALCBuilderTypeInitializer;
+-(BOOL) isClassBuilder {
+    return [_builderType isKindOfClass:[ALCClassBuilderType class]];
+}
+
+-(Class) valueClass {
+    return _builderType.valueClass;
 }
 
 - (BOOL)ready {
     return super.ready && _builderStorage.ready;
+}
+
+-(NSMutableSet<ALCVariableDependency *> *)variableDependencies {
+    return (NSMutableSet<ALCVariableDependency *> *)self.dependencies;
 }
 
 - (id)value {
@@ -162,7 +162,7 @@ hideInitializerImpl(init)
     if (([_builderStorage isKindOfClass:[ALCBuilderStorageExternal class]] && super.ready) || _builderType.canInjectDependencies) {
         // Always store first in case circular dependencies trigger via the dependency injection loop back here before we have stored it.
         _builderStorage.value = value;
-        [_builderType injectDependencies:value];
+        [self injectDependencies:value];
     } else {
         @throw [NSException exceptionWithName:@"AlchemicDependenciesNotAvailable"
                                        reason:[NSString stringWithFormat:@"Dependencies not available for builder: %@", self]
@@ -171,7 +171,8 @@ hideInitializerImpl(init)
 }
 
 - (void)injectDependencies:(id)object {
-    [_builderType injectDependencies:object];
+    ALCBuilder *dependencySource = [_builderType classBuilderForInjectingDependencies:self];
+    [object injectWithDependencies:dependencySource.variableInjections];
 }
 
 #pragma mark - Debug

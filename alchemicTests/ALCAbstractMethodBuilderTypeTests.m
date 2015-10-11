@@ -28,7 +28,8 @@
 
 -(void) setUp {
     _classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
-    _builderType = [[ALCAbstractMethodBuilderType alloc] initWithClassBuilder:_classBuilder];
+    _builderType = [[ALCAbstractMethodBuilderType alloc] initWithType:[SimpleObject class]
+                                                         classBuilder:_classBuilder];
 }
 
 -(void) testMacroProcessorFlags {
@@ -49,8 +50,7 @@
         return [obj conformsToProtocol:@protocol(ALCValueSource)];
     }]]);
 
-    _builderType.builder = mockBuilder;
-    [_builderType configureWithMacroProcessor:macroProcessor];
+    [_builderType builder:_classBuilder isConfiguringWithMacroProcessor:macroProcessor];
 
     OCMVerifyAll(mockBuilder);
 }
@@ -62,8 +62,7 @@
         return obj == self->_classBuilder;
     }]]);
 
-    _builderType.builder = mockBuilder;
-    [_builderType willResolve];
+    [_builderType builderWillResolve:_classBuilder];
 
     OCMVerifyAll(mockBuilder);
 }
@@ -81,8 +80,7 @@
         return YES;
     }]]);
 
-    _builderType.builder = mockBuilder;
-    [_builderType configureWithMacroProcessor:macroProcessor];
+    [_builderType builder:_classBuilder isConfiguringWithMacroProcessor:macroProcessor];
 
     NSArray<id> *values = _builderType.argumentValues;
 
@@ -109,18 +107,11 @@
         return YES;
     }]]);
 
-    _builderType.builder = mockBuilder;
-    [_builderType configureWithMacroProcessor:macroProcessor];
+    [_builderType builder:_classBuilder isConfiguringWithMacroProcessor:macroProcessor];
 
     id result = [_builderType instantiateObject];
 
     XCTAssertEqualObjects(@24, result);
-}
-
--(void) testAddVariableInjectThrows {
-    Ivar classBuilderRef = class_getInstanceVariable([self class], "_classBuilder");
-    id mockValueSourceFactory = OCMClassMock([ALCValueSourceFactory class]);
-    XCTAssertThrowsSpecificNamed([_builderType addVariableInjection:classBuilderRef valueSourceFactory:mockValueSourceFactory], NSException, @"AlchemicUnexpectedInjection");
 }
 
 @end

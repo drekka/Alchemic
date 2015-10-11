@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @parameter initWithClassBuilder: The class builder that references the class that contains the method to be executed.
  */
-hideInitializer(initWithClassBuilder:(ALCBuilder *) classBuilder);
+hideInitializer(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder);
 
 /**
  Default initializer.
@@ -33,9 +33,9 @@ hideInitializer(initWithClassBuilder:(ALCBuilder *) classBuilder);
 
  @return An instance of this builder strategy.
  */
--(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder
-                            selector:(SEL) selector
-                          returnType:(Class) returnType;
+-(instancetype) initWithType:(Class) valueClass
+                classBuilder:(ALCBuilder *) classBuilder
+                    selector:(SEL) selector;
 
 @end
 

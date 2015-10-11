@@ -42,29 +42,20 @@
 
 #pragma mark - Builder types
 
--(void) testBuilderTypeClass {
-    ALCClassBuilderType *classType = [[ALCClassBuilderType alloc] init];
-    ALCBuilder *builder = [[ALCBuilder alloc] initWithALCBuilderType:classType forClass:[SimpleObject class]];
-    XCTAssertEqual(ALCBuilderTypeClass, builder.type);
+-(void) testIsClassBuilder {
+    ALCClassBuilderType *classType = [[ALCClassBuilderType alloc] initWithType:[SimpleObject class]];
+    ALCBuilder *builder = [[ALCBuilder alloc] initWithBuilderType:classType];
+    XCTAssertTrue(builder.isClassBuilder);
 }
 
 -(void) testBuilderTypeMethod {
     id mockClassBuilder = OCMClassMock([ALCBuilder class]);
-    ALCMethodBuilderType *methodType = [[ALCMethodBuilderType alloc] initWithClassBuilder:mockClassBuilder
-                                                                                 selector:@selector(init)
-                                                                               returnType:[SimpleObject class]];
-    ALCBuilder *builder = [[ALCBuilder alloc] initWithALCBuilderType:methodType forClass:[SimpleObject class]];
-    XCTAssertEqual(ALCBuilderTypeMethod, builder.type);
+    ALCMethodBuilderType *methodType = [[ALCMethodBuilderType alloc] initWithType:[SimpleObject class]
+                                                                     classBuilder:mockClassBuilder
+                                                                         selector:@selector(init)];
+    ALCBuilder *builder = [[ALCBuilder alloc] initWithBuilderType:methodType];
+    XCTAssertFalse(builder.isClassBuilder);
 }
-
--(void) testBuilderTypeInitializer {
-    id mockClassBuilder = OCMClassMock([ALCBuilder class]);
-    ALCInitializerBuilderType *initializerType = [[ALCInitializerBuilderType alloc] initWithClassBuilder:mockClassBuilder
-                                                                                             initializer:@selector(init)];
-    ALCBuilder *builder = [[ALCBuilder alloc] initWithALCBuilderType:initializerType forClass:[SimpleObject class]];
-    XCTAssertEqual(ALCBuilderTypeInitializer, builder.type);
-}
-
 
 #pragma mark - Configure
 

@@ -11,62 +11,53 @@
 #import "ALCClassBuilderType.h"
 #import "ALCBuilder.h"
 #import "ALCMacroProcessor.h"
-#import "ALCVariableDependency.h"
-#import "ALCValueSource.h"
-#import "NSObject+Builder.h"
-#import "ALCValueSourceFactory.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCClassBuilderType {
-    NSMutableSet<ALCVariableDependency *> *_dependencies;
+@implementation ALCClassBuilderType
+
+@synthesize valueClass = _valueClass;
+
+-(instancetype) init {
+    return nil;
 }
 
--(instancetype)init {
+-(instancetype) initWithType:(Class) valueClass {
     self = [super init];
     if (self) {
-        _dependencies = [NSMutableSet set];
+        _valueClass = valueClass;
     }
     return self;
 }
 
--(NSString *) builderName {
-    return NSStringFromClass(self.builder.valueClass);
+-(NSString *) defaultName {
+    return NSStringFromClass(_valueClass);
 }
 
 -(NSUInteger)macroProcessorFlags {
     return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosExternal;
 }
 
--(void) addVariableInjection:(Ivar) variable
-          valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory {
+-(void) builder:(ALCBuilder *) builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *) macroProcessor {}
 
-    id<ALCValueSource> valueSource = valueSourceFactory.valueSource;
-    ALCVariableDependency *dep = [[ALCVariableDependency alloc] initWithVariable:variable valueSource:valueSource];
-
-    ALCBuilder *builder = self.builder;
-    STLog(builder.valueClass, @"Adding variable dependency %@.%@", NSStringFromClass(builder.valueClass), dep);
-    [_dependencies addObject:dep];
-    [builder addDependency:valueSource];
-}
+-(void)builderWillResolve:(ALCBuilder *)builder {}
 
 -(id) instantiateObject {
-    ALCBuilder *builder = self.builder;
-    STLog(builder.valueClass, @"Creating a %@", NSStringFromClass(builder.valueClass));
-    id object = [[builder.valueClass alloc] init];
+    STLog(_valueClass, @"Creating a %@", NSStringFromClass(_valueClass));
+    id object = [[_valueClass alloc] init];
     return object;
 }
 
 -(BOOL)canInjectDependencies {
-    return self.builder.ready;
+    return YES;
 }
 
--(void)injectDependencies:(id)object {
-    [object injectWithDependencies:_dependencies];
+-(ALCBuilder *) classBuilderForInjectingDependencies:(ALCBuilder *) currentBuilder {
+    return currentBuilder;
 }
 
 -(id)invokeWithArgs:(NSArray<id> *)arguments {
-    @throw [NSException exceptionWithName:@"AlchemicUnexpectedInvokation"
+    @throw [NSException exceptionWithName:@"AlchemicUnexpectedInvocation"
                                    reason:[NSString stringWithFormat:@"Cannot perform an invoke on a class builder: %@", self]
                                  userInfo:nil];
 }
@@ -76,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"class builder for %@", NSStringFromClass(self.builder.valueClass)];
+    return [NSString stringWithFormat:@"class builder for %@", NSStringFromClass(_valueClass)];
 }
 
 @end

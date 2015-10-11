@@ -83,8 +83,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ALCBuilder *) simpleBuilderForClass:(Class) aClass {
-    id <ALCBuilderType> builderType = [[ALCClassBuilderType alloc] init];
-    return [[ALCBuilder alloc] initWithALCBuilderType:builderType forClass:aClass];
+    id <ALCBuilderType> builderType = [[ALCClassBuilderType alloc] initWithType:aClass];
+    return [[ALCBuilder alloc] initWithBuilderType:builderType];
 }
 
 -(ALCBuilder *) externalBuilderForClass:(Class) aClass {

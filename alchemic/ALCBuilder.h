@@ -17,6 +17,7 @@
 @protocol ALCBuilderStorage;
 @class ALCMacroProcessor;
 @class ALCValueSourceFactory;
+@class ALCVariableDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,11 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Properties
 
 /**
- The ALCBuilderType strategy that will be used to define what the builder will create.
- */
-@property (nonatomic, assign, readonly) ALCBuilderType type;
-
-/**
  Override of value so it can be writable in builders.
  */
 @property (nonatomic, strong) id value;
@@ -46,12 +42,19 @@ NS_ASSUME_NONNULL_BEGIN
 /// If the builder is to be regarded as a primary builder.
 @property (nonatomic, assign, readonly) BOOL primary;
 
+@property (nonatomic, assign, readonly, getter=isClassBuilder) BOOL classBuilder;
+
+@property (nonatomic, strong, readonly) NSSet<ALCVariableDependency *> *variableInjections;
+
 /**
  The macro processor which will be used by the builder to process macro arguments.
 
  @discussion The builder will create this object internally so that it is configured correctly for the builders requirements in terms of what macros it will accept.
  */
 @property (nonatomic, strong, readonly) ALCMacroProcessor *macroProcessor;
+
+@property (nonatomic, strong, readonly) NSMutableSet<ALCVariableDependency *> *variableDependencies;
+
 
 #pragma mark - Initializers
 
@@ -61,14 +64,12 @@ hideInitializer(init);
  default initializer.
 
  @param builderType An instance of ALCBuilderType which provides the functility which defines what type of builder this is.
- @param aClass      The class of the object that the builder will create.
 
  @return An instance of a ALCBuilder.
 
  */
 
--(instancetype) initWithALCBuilderType:(id<ALCBuilderType>) builderType
-                           forClass:(Class) aClass NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithBuilderType:(id<ALCBuilderType>) builderType NS_DESIGNATED_INITIALIZER;
 
 #pragma mark - Tasks
 

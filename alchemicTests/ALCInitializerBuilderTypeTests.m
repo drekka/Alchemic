@@ -30,17 +30,16 @@
     OCMStub([_mockClassBuilder valueClass]).andReturn([SimpleObject class]);
     ignoreSelectorWarnings(
                            _builderType = [[ALCInitializerBuilderType alloc] initWithClassBuilder:_mockClassBuilder
-                                                                                             initializer:@selector(initWithString:)];
+                                                                                      initializer:@selector(initWithString:)];
                            )
-    _builderType.builder = _mockInitializerBuilder;
 }
 
 -(void) testBuilderName {
-    XCTAssertEqualObjects(@"SimpleObject initWithString:", _builderType.builderName);
+    XCTAssertEqualObjects(@"SimpleObject initWithString:", _builderType.defaultName);
 }
 
 -(void) testWillResolve {
-    [_builderType willResolve]; // No errors.
+    [_builderType builderWillResolve:_mockInitializerBuilder]; // No errors.
 }
 
 -(void) testWillResolveAddsClassBuilderAsDependency {
@@ -50,7 +49,7 @@
         return obj == self->_mockClassBuilder;
     }]]);
 
-    [_builderType willResolve];
+    [_builderType builderWillResolve:_mockInitializerBuilder];
 
     OCMVerifyAll(mockBuilder);
 }
@@ -58,12 +57,11 @@
 -(void) testWillResolveThrows {
     ignoreSelectorWarnings(
                            ALCInitializerBuilderType *builderType = [[ALCInitializerBuilderType alloc] initWithClassBuilder:_mockClassBuilder
-                                                                                                                              initializer:@selector(xxx)];
+                                                                                                                initializer:@selector(xxx)];
                            )
-    builderType.builder = _mockInitializerBuilder;
     OCMStub([_mockClassBuilder valueClass]).andReturn([SimpleObject class]);
 
-    XCTAssertThrowsSpecificNamed([builderType willResolve], NSException, @"AlchemicSelectorNotFound");
+    XCTAssertThrowsSpecificNamed([builderType builderWillResolve:_mockInitializerBuilder], NSException, @"AlchemicSelectorNotFound");
 }
 
 -(void) testInvokeWithArgs {
@@ -75,12 +73,6 @@
     OCMStub([_mockClassBuilder ready]).andReturn(YES);
     XCTAssertTrue(_builderType.canInjectDependencies);
     OCMVerify([_mockClassBuilder ready]);
-}
-
--(void) testinjectDependencies {
-    SimpleObject *object = [[SimpleObject alloc] init];
-    [_builderType injectDependencies:object];
-    OCMVerify([_mockClassBuilder injectDependencies:object]);
 }
 
 -(void) testAttributeText {

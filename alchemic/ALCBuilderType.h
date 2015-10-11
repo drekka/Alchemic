@@ -16,40 +16,16 @@
 @class ALCValueSourceFactory;
 
 /**
- Used to define what the type creates.
- */
-typedef NS_ENUM(NSUInteger, ALCBuilderType){
-    /**
-     Builds classes.
-     */
-    ALCBuilderTypeClass,
-    /**
-     Builds objects using methods.
-     */
-    ALCBuilderTypeMethod,
-    /**
-     Builds objects using their class initializers.
-     */
-    ALCBuilderTypeInitializer
-};
-
-/**
  Defines class that can define the unique functionality that defines how a builder works.
  */
 @protocol ALCBuilderType <NSObject>
 
-/**
- A weak reference back to the builder that owns this instance. 
- 
- @discussion This weak reference is to allow the builder type to further configure the builder.
- In future this could probably be removed in future and replaced by further calls to the builder type.
- */
-@property (nonatomic, weak) ALCBuilder *builder;
+@property (nonatomic, strong, readonly) Class valueClass;
 
 /**
  Returns the name to use for the builder.
  */
-@property (nonatomic, strong, readonly) NSString *builderName;
+@property (nonatomic, strong, readonly) NSString *defaultName;
 
 /**
  USed by debug methods to get a description of the attributes of the builder type.
@@ -71,21 +47,12 @@ typedef NS_ENUM(NSUInteger, ALCBuilderType){
 
  @param macroProcessor An instance of ALCMacroProcessor that contains the configuration.
  */
--(void) configureWithMacroProcessor:(ALCMacroProcessor *) macroProcessor;
+-(void) builder:(ALCBuilder *) builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *) macroProcessor;
 
 /**
  Forwarded from the ALCResolvable willResolve method.
  */
--(void) willResolve;
-
-/**
- Adds a variable injection to the builder type.
-
- @param variable           The variable to be injected.
- @param valueSourceFactory A ALCValueSourceFactory that defines where to get the value to inject.
- */
--(void) addVariableInjection:(Ivar) variable
-          valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory;
+-(void) builderWillResolve:(ALCBuilder *) builder;
 
 /**
  Call to directory access the builder using a custom set of values.
@@ -96,6 +63,8 @@ typedef NS_ENUM(NSUInteger, ALCBuilderType){
  */
 -(id) invokeWithArgs:(NSArray<id> *) arguments;
 
+-(ALCBuilder *) classBuilderForInjectingDependencies:(ALCBuilder *) currentBuilder;
+
 /**
  Called when the builder needs to instantiate an object.
 
@@ -103,11 +72,5 @@ typedef NS_ENUM(NSUInteger, ALCBuilderType){
  */
 -(id) instantiateObject;
 
-/**
- Injects an object passed to the builder.
-
- @param object The object which needs dependencies injected.
- */
--(void)injectDependencies:(id) object;
 
 @end

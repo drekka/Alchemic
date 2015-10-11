@@ -8,7 +8,7 @@
 
 @import Foundation;
 @import ObjectiveC;
-#import "ALCAbstractBuilderType.h"
+#import "ALCBuilderType.h"
 @class ALCValueSourceFactory;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -16,16 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  A builder strategy that is used to build classes.
  */
-@interface ALCClassBuilderType : ALCAbstractBuilderType
+@interface ALCClassBuilderType : NSObject<ALCBuilderType>
 
-/**
- Adds the definition of a variable in the class that is to be injected with a value.
+-(instancetype) init NS_UNAVAILABLE;
 
- @param variable           The variable to be injected.
- @param valueSourceFactory A ALCValueSourceFactory that will be used to locate the value to inject.
- */
--(void) addVariableInjection:(Ivar) variable
-          valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory;
+-(instancetype) initWithType:(Class) valueClass;
 
 @end
 
