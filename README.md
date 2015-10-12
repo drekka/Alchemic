@@ -145,15 +145,15 @@ Alchemic has a central *'Context'* which manages all of the objects and classes 
 
 # Macros
 
-Alchemic is designed to be as unobtrusive as possible. But it still needs to know a fair amount of information about your code. So it uses a psuedo meta-data technique using pre-processor macros. These macros are generally pretty simple and easy to remember and it's likely that within a short time you will being using them without much thought. 
+Alchemic is designed to be as unobtrusive as possible. But it still needs to know a fair amount of information about your code. So it uses pre-processor macros as a form of meta-data, similar to Java's annotations. These macros are generally pretty simple and easy to remember and it's likely that within a short time you will being using them without much thought. 
 
-Most of these macros take one or more arguments. For example the `AcArg(...)` macro takes at least two arguments and possibly more. To help keep the macros sucsinct avoid you having to type needless boiler plate, there are some common conventions used:
+Most of these macros take one or more arguments. For example the `AcArg(...)` macro takes at least two arguments and possibly more. To help keep the macros susinct and avoid having to type needless boiler plate, there are some common conventions used:
 
  Convention | Description
  --- | ---
- Types | You only need to specify the relevant class or protocol when a type is needed.<br />For example `AcProtocol(NSCopying)` is the macro form of<br />`[ALCProtocol withProtocol:@protocol(NSCopying)]`.
+ Types (Classes & Protocols) | You only need to specify the relevant class or protocol when a type is needed.<br />For example `AcProtocol(NSCopying)` is the macro form of<br />`[ALCProtocol withProtocol:@protocol(NSCopying)]`.
  Selectors | You only need to specify the selector name. For example `AcInitializer(myInitMethod)` is the macro form of<br />```[[ALCAlchemic mainContext] registerClassInitializer:classBuilder initializer:@selector(initializerSel), nil];```
-Properties | Property names are also shortened. So that code completion can assist, they are **not** expressioned as strings. For example `AcInject(myVar)`. 
+Properties | Property names are also shortened. So that code completion can assist, they are **not** expressed as strings. For example `AcInject(myVar)`. 
 Varadic macros |  Many macros make use of varadic lists so you can add as many criteria as you like in a single line.
 
 # Creating objects
@@ -162,7 +162,7 @@ Before we look at resolving dependencies and injecting values, we first need to 
 
 ## Builders
 
-To manage objects, Alchamic uses what it calls '**Builders**'. These are used to build objects and inject dependencies. There are 3 main types of builders:
+Alchamic uses what it calls '**Builders**' to declare how objects are created. They can both build objects and inject dependencies. There are 3 main types of builders:
 
 * **Class builders** which define information about a class and can build instances of that class. Class builders also hold information about dependencies that the class may have and how they are located and injected.
 * **Initializer builders** which define information about a class's initializer and can build instances of the class by executing the initializer and passing it arguments. 
@@ -171,9 +171,9 @@ To manage objects, Alchamic uses what it calls '**Builders**'. These are used to
 
 ## Singletons 
 
-No matter what you are writing, you will probably need objects which are instantiated at the beginning of your app, are used by a variety of other objects, and only have a single instance. These are usually referred to as [Singletons](https://en.wikipedia.org/wiki/Singleton_pattern). There are a number of opinions amongst developers about singletons and how they should be declared and used in code. Alchemic's approach is to keep an instance of a singleton class in it's context and inject it where ever requested. It doesn't do anything to stop you creating other instances of that class outside of the context. However any request to Alchemic for an instance of a class that it views as a singleton will always return the same instance of that singleton.
+No matter what you are writing, you will probably need objects which are instantiated at the beginning of your app, are used by a variety of other objects, and only have a single instance. These are usually referred to as [Singletons](https://en.wikipedia.org/wiki/Singleton_pattern). There are a number of opinions amongst developers about singletons and how they should be declared and used in code. 
 
-To tell Alchemic that a particular class is to be treated as a singleton, use this macro in the class's implementation:
+Alchemic's approach is to assume that builders represent a singleton by default. It keeps one instance of the class in it's context and injects it where ever requested. However it doesn't do anything to stop you creating other instances of that class outside of the context. To tell Alchemic that a particular class is to be treated as a singleton, use this macro in the class's implementation:
   
 ```objectivec
 @implementation MyClass
@@ -181,13 +181,13 @@ AcRegister()
 @end
 ```
 
-The `AcRegister(...)` macro is how Alchemic recognises the class. It will auto-instantiate any classes with this macro as singletons on startup. This is the simplest form of registering a class with Alchemic.
+This is the simplest form of registering a class with Alchemic. The `AcRegister(...)` macro is how Alchemic recognises the class. It will auto-instantiate any classes with this macro as singletons on startup. 
 
 *Note: Mostly there should only be one `AcRegister(...)` for a class. If you add another, a second instance of the class will then be registered. This can be useful in some situations, but generally it's not something that is commonly done.*
 
 ## Initializers
 
-By default, Alchemic will use the standard `init` method when initializing an instance of a class. However this is not always the best option, so Alchemic provides a method for specifying a different initializer and how to locate any arguments it needs. Here's an example:
+By default, Alchemic will use the standard `init` method when initializing an instance of a class. However this is not always the best option, so Alchemic provides a method for specifying a different initializer and how to locate any arguments it needs:
 
 ```objectivec
 @implementation MyClass
@@ -198,9 +198,9 @@ AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
 @end
 ```
 
-The `AcInitiailizer(...)` macro tells Alchemic that when it needs to create an instance of MyClass, it should use the `initWithOtherObject:` initializer. The first argument to this macro is required and specifies the initializer selector. After that is a series of `zero or more AcArg(...)` macros which define where to get the value for each argument that the selector has. 
+The `AcInitiailizer(...)` macro tells Alchemic that when it needs to create an instance of MyClass, it should use the `initWithOtherObject:` initializer. The first argument to this macro is required and specifies the initializer selector. After that is a series of zero or more `AcArg(...)` macros which define where to get the value for each argument that the selector declares. 
 
-`AcInitializer(...)` takes all the same macros that can be used with `AcRegister(...)` to define various attributes of the instance that will be created. In fact, there is no need to use `AcRegister(...)` at all as the arguments for it will be ignored when there is an `AcInitializer(...)` macro present.
+`AcInitializer(...)` can also take all the same macros that can be used with `AcRegister(...)` to define various attributes of the instance that will be created. In fact, there is no need to use `AcRegister(...)` at all as the arguments for it will be ignored when there is an `AcInitializer(...)` macro present.
 
 ### AcArg(type, value, ...)
 
@@ -210,7 +210,7 @@ The `AcInitiailizer(...)` macro tells Alchemic that when it needs to create an i
 
 ## Factories
 
-Sometimes you want to declare a class to Alchemic, but have Alchemic create a new instance every time you need the object. This is what Alchemic regards as a ***Factory***. Factories are not as common as singletons in the DI world, but they can be useful in a variety of situations. For example, you could declare a SMS message class as a factory. Then every time you need one, Alchemic will create a new SMS message object and give it to you with all it's dependencies injected.
+Sometimes you want to declare a class to Alchemic, but have Alchemic create a new instance every time you need the object. In other words, a ***Factory***. Factories are not as common as singletons in the DI world, but they can be useful in a variety of situations. For example, you could declare a SMS message class as a factory. Then every time you need one, Alchemic will create a new SMS message object and give it to you with all it's dependencies injected.
 
 To tell Alchemic to treat a class registration as a factory, add the `AcIsFactory` macro to the `AcRegister(...)` macro like this:
 
@@ -220,7 +220,7 @@ AcRegister(AcIsFactory)
 
 Now every time your code requests an instance of the class, a new one will be created and returned. 
 
-*Note that `AcIsFactory` can also be added to the `AcInitializer(...)` and 'AcMethod(...)` macros as well.*
+*Note that `AcIsFactory` can also be added to the `AcInitializer(...)` and `AcMethod(...)` macros as well.*
 
 ## Object names
 
@@ -232,11 +232,11 @@ Here's how we assign a custom name during registration:
 AcRegister(AcWithName(@"JSON date formatter"))
 ```
 
-*Note: names __must__ be unique. This aids in searching.*
+*Note: names __must__ be unique. This aids in searching for objects to inject.*
 
 ## Generating objects using methods
 
-Sometimes we want to use methods to create objects for injecting into dependencies. For example, we might want to have a method that generates a `Transaction` object based on some passed arguments and we want a new transaction each time we inject one into a class.
+Sometimes we want to use methods to create objects for injecting into dependencies. For example, we might want to have a method that generates a `Transaction` object based on some passed arguments. 
 
 *Unfortunately the Objective-C runtime does not track any information about the argument and return types of methods they way it does for variables. So there is no way for Alchemic to automatically discover information about a method at runtime beyond some very basic information. So when using methods we have to tell Alchemic a lot more information that for classes.*
 
@@ -246,6 +246,8 @@ Lets take a look at two sample methods which Alchemic will use to create objects
 @implementation Factory {
     int x;
 }
+
+AcRegister()
 
 // First a singleton
 AcMethod(Database, generateDatabaseConnection)
@@ -266,8 +268,6 @@ AcMethod(NSString, makeATransaction, AcIsFactory))
 We use the `AcMethod(...)` macro to define ay method that can create objects. This macro is similar to `AcRegister(...)` in that it registers a source of objects which can be injected into other things. 
 
 The first example creates a singleton instance. Alchemic will only call the method once and reuse the returned object every time it needs it. This allows you to utilise more complex code to setup singletons when you need it. The second example which generates transactions needs to generate a new one each time it is needed. So this one has the `AcIsFactory` flag. 
-
-*Note: You will also notice that we didn't register the class using `AcRegister(...)`. Alchemic is smart enough to register the class automatically and create it automatically before accessing it's factory methods. If you want to tweak the class you can still use a `AcRegister(...) macro. Otherwise it's not needed.*
 
 Factory method registrations are stored in the Alchemic context along side the classes. For their names, Alchemic uses a combination of the class and method selector using the format "*ClassName method:signature:*". Like class registrations, you can make use of the `AcWithName(...)` macro to give a factory method a more meaningful and useful associated name. 
 
@@ -363,7 +363,7 @@ AcInject(_yetAnotherClass)
 @end
 ```
 
-*Note: Whilst Alchemic can inject values into properties as easily as variables, it does not trigger KVO when doing so. So don't depend on KVO to detect injections.*
+*Note: Whilst Alchemic can inject values into properties as easily as variables, it does not trigger KVO when doing so. __So don't depend on KVO to detect injections__.*
 
 ## Object search criteria 
 
@@ -439,15 +439,17 @@ AcInject(_dateFormatters, AcClass(NSDateFormatter))
 
 When processing the available objects to inject, Alchemic will automatically check if the target variable is an array and adjust it's injection accordingly, wrapping objects in NSArrays as required. 
 
-*Note: that if the target variable is not an `NSArray` type and multiple objects are found, them Alchemic will throw an error.*
+*Note: If the target variable is not an `NSArray` type and multiple objects are found, them Alchemic will throw an error.*
 
 # Getting objects
 
-Now that we know how to declare objects and inject them, lets look at how we retrieve objects in classes and code which is not managed by Alchemic. In other words, how to access objects in the rest of your app.
+Now that we know how to declare objects and inject them, lets look at how we retrieve objects in classes and code which is not managed by Alchemic. In other words, how to manage objects in the rest of your app.
 
 ## Unmanaged instances
 
-Not all objects can be created and injected by Alchemic. For example, UIViewControllers in storyboards are created by the storyboard. Whilst I looked at several options for automatically injecting these instances, I did not find any that worked reliably and didn't require a lot of effort to code. So for the moment Alchemic does not inject dependencies into them automatically.
+Not all objects can be created and injected by Alchemic. For example, UIViewControllers in storyboards are created by the storyboard. 
+
+*Whilst I looked at several options for automatically injecting these instances, I did not find any that worked reliably and didn't require a lot of effort to code. So for the moment Alchemic does not inject dependencies into them automatically.*
 
 ***However*** you can still declare dependencies in these classes and get them injected as if Alchemic had created them. You just have to make a call to trigger the injection process programmatically like this:
 
