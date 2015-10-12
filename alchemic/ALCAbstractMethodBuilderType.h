@@ -33,6 +33,7 @@ hideInitializer(init);
 /**
  Default initializer.
 
+ @param valueClass   The class that the builder will returned from the method.
  @param classBuilder The class builder for the class that contains the method to be executed.
 
  @return An instance of this builder type.

@@ -42,6 +42,15 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 #pragma mark - Registration
 
+/**
+ Creates an ALCBuilder instance for the passed class and returns it.
+
+@discussion Called from the runtime scanner whenever it detects a class with Alchemic methods present.
+
+ @param aClass The class that needs a ALCBuilder.
+
+ @return An instance of ALCBuilder setup for the passed class.
+ */
 -(ALCBuilder *) registerBuilderForClass:(Class) aClass;
 
 /**
@@ -52,6 +61,11 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) registerClassBuilderProperties:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ Finishes the registration of a class.
+
+ @param classBuilder The ALCBuilder instance representing the class.
+ */
 -(void) classBuilderDidFinishRegistering:(ALCBuilder *) classBuilder;
 
 /**

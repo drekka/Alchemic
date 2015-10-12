@@ -42,8 +42,17 @@ NS_ASSUME_NONNULL_BEGIN
 /// If the builder is to be regarded as a primary builder.
 @property (nonatomic, assign, readonly) BOOL primary;
 
+/**
+ Returns YES if the builder is using an instance of ALCClassBuilderType. 
+ @discussion In other words, if the builder is representing a class rather than a method or initializer.
+ */
 @property (nonatomic, assign, readonly, getter=isClassBuilder) BOOL classBuilder;
 
+/**
+ Returns a set of ALCVariableDependencies.
+ 
+ @discussion These variable dependencies can then be used to inject values into a class. Normally only a class builder can do this.
+ */
 @property (nonatomic, strong, readonly) NSSet<ALCVariableDependency *> *variableInjections;
 
 /**
@@ -52,9 +61,6 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion The builder will create this object internally so that it is configured correctly for the builders requirements in terms of what macros it will accept.
  */
 @property (nonatomic, strong, readonly) ALCMacroProcessor *macroProcessor;
-
-@property (nonatomic, strong, readonly) NSMutableSet<ALCVariableDependency *> *variableDependencies;
-
 
 #pragma mark - Initializers
 

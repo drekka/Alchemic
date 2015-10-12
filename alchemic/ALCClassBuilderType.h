@@ -18,8 +18,20 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCClassBuilderType : NSObject<ALCBuilderType>
 
+/**
+ Do not use.
+
+ @return An instance of ALCClassBuilderType.
+ */
 -(instancetype) init NS_UNAVAILABLE;
 
+/**
+ Default initializer.
+
+ @param valueClass The class that the builder is going to represent.
+
+ @return An instance of ALCClassBuilderType.
+ */
 -(instancetype) initWithType:(Class) valueClass;
 
 @end

@@ -20,6 +20,9 @@
  */
 @protocol ALCBuilderType <NSObject>
 
+/**
+ The class of the return value created by the builder.
+ */
 @property (nonatomic, strong, readonly) Class valueClass;
 
 /**
@@ -45,12 +48,15 @@
 /**
  Configures the builder type using instructions read into the passed macro processor.
 
+ @param builder The builder than is currently configuring. Normally this is the builder that owns this builder type.
  @param macroProcessor An instance of ALCMacroProcessor that contains the configuration.
  */
 -(void) builder:(ALCBuilder *) builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *) macroProcessor;
 
 /**
  Forwarded from the ALCResolvable willResolve method.
+ 
+ @param builder The builder that is resolving. Normally this is the builder that owns this builder type.
  */
 -(void) builderWillResolve:(ALCBuilder *) builder;
 
@@ -63,6 +69,19 @@
  */
 -(id) invokeWithArgs:(NSArray<id> *) arguments;
 
+/**
+ Called by the owning ALCBuilder when it needs a ALCBuilder to source variable dependencies from for injecting. 
+ 
+ @discussion Depending on what the builder type is, this can return several things.
+ 
+  * For class builders it returns the parent class builder.
+  * For method builders it returns the builder for the return type of the method.
+  * For initializer builders it returns the parent class builder.
+
+ @param currentBuilder The current builder which will be the owning builder.
+
+ @return The relevant ALCBuilder as per the above rules.
+ */
 -(ALCBuilder *) classBuilderForInjectingDependencies:(ALCBuilder *) currentBuilder;
 
 /**
