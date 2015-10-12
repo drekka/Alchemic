@@ -25,6 +25,8 @@
     ASObject *_obj2;
 }
 
+AcRegister()
+
 AcInject(_asObjects, AcClass(ASObject))
 AcInject(_obj1, AcName(@"o1"))
 AcInject(_obj2, AcName(@"o2"))

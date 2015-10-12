@@ -40,7 +40,7 @@
 
     STLog([self class], @"Injecting %lu dependencies into a %@ instance", [dependencies count], NSStringFromClass([self class]));
     for (ALCVariableDependency *dependency in dependencies) {
-        [(ALCVariableDependency *)dependency injectInto:self];
+        [dependency injectInto:self];
     }
 
     if ([self respondsToSelector:@selector(alchemicDidInjectDependencies)]) {

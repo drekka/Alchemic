@@ -27,9 +27,9 @@
 -(id) invokeSelector:(SEL) selector arguments:(NSArray *) arguments;
 
 /**
- Injects an object with dependencies.
+ Injects this object with it's dependencies.
 
- @param object The object to be injected.
+ @param dependencies A set of ALCVariableDependency objects which define the variables to inject.
  */
 -(void) injectWithDependencies:(NSSet<ALCVariableDependency *> *) dependencies;
 

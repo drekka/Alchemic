@@ -28,6 +28,9 @@
  */
 @property (nonatomic, assign, readonly) BOOL hasValue;
 
+/**
+ Returns YES if the storage is ready to be accessed. 
+ */
 @property (nonatomic, assign, readonly) BOOL ready;
 
 

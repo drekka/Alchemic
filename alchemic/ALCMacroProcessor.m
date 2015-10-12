@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableArray<ALCValueSourceFactory *> *_valueSourceFactories;
 }
 
--(instancetype) initWithAllowedMacros:(NSUInteger) allowedMacros {
+- (instancetype)initWithAllowedMacros:(NSUInteger)allowedMacros {
     self = [super init];
     if (self) {
         _allowedMacros = allowedMacros;
@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(void) addMacro:(id<ALCMacro>) macro {
+- (void)addMacro:(id<ALCMacro>)macro {
 
     if (macro == [ALCIsFactory factoryMacro] && _allowedMacros & ALCAllowedMacrosFactory) {
         _isFactory = YES;
@@ -60,15 +60,15 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(id<ALCValueSource>) valueSourceAtIndex:(NSUInteger) index {
+- (id<ALCValueSource>)valueSourceAtIndex:(NSUInteger)index {
     return _valueSourceFactories[index].valueSource;
 }
 
--(NSUInteger) valueSourceCount {
+- (NSUInteger)valueSourceCount {
     return [_valueSourceFactories count];
 }
 
--(NSString *)description {
+- (NSString *)description {
     NSMutableArray *flags = [[NSMutableArray alloc] init];
     if (self.isFactory) {
         [flags addObject:@"factory"];

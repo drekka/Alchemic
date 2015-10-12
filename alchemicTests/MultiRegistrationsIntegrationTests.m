@@ -10,49 +10,39 @@
 #import <StoryTeller/StoryTeller.h>
 #import <Alchemic/Alchemic.h>
 
-@interface MUObject : NSObject
-@property (nonatomic, strong, readonly) NSString *aString;
--(instancetype) initWithString:(NSString *) aString;
-@end
-
-@implementation MUObject
--(instancetype) initWithString:(NSString *) aString {
-    self = [super init];
-    if (self) {
-        _aString = aString;
-    }
-    return self;
-}
-
-@end
-
 @interface MultiRegistrationsIntegrationTests : ALCTestCase
 @end
 
 @implementation MultiRegistrationsIntegrationTests {
-    MUObject *_abc;
-    MUObject *_def;
+    NSNumber *_abc;
+    NSNumber *_def;
 }
+
+AcRegister(AcExternal, AcWithName(@"self"))
 
 AcInject(_abc, AcName(@"abcObj"))
 AcInject(_def, AcName(@"defObj"))
 
-AcMethod(MUObject, muObjectWithString:, AcWithName(@"abcObj"), AcArg(NSString, AcValue(@"abc")))
-AcMethod(MUObject, muObjectWithString:, AcWithName(@"defObj"), AcArg(NSString, AcValue(@"def")))
+AcMethod(NSNumber, muObjectWithNumber:, AcWithName(@"abcObj"), AcArg(NSNumber, AcValue(@1)))
+AcMethod(NSNumber, muObjectWithNumber:, AcWithName(@"defObj"), AcArg(NSNumber, AcValue(@2)))
 
 -(void) testIntegrationMultiObjects {
-    STStartLogging(@"LogAll");
+
     [super setupRealContext];
+
     [super startContextWithClasses:@[[MultiRegistrationsIntegrationTests class]]];
+
+    AcSet(self, AcName(@"self"));
     AcInjectDependencies(self);
+
     XCTAssertNotNil(_abc);
-    XCTAssertEqualObjects(@"abc", _abc.aString);
+    XCTAssertEqualObjects(@2, _abc);
     XCTAssertNotNil(_def);
-    XCTAssertEqualObjects(@"def", _def.aString);
+    XCTAssertEqualObjects(@4, _def);
 }
 
--(MUObject *) muObjectWithString:(NSString *) aString {
-    return [[MUObject alloc] initWithString:aString];
+-(NSNumber *) muObjectWithNumber:(NSNumber *) number {
+    return [NSNumber numberWithInt:[number intValue] * 2];
 }
 
 @end

@@ -36,7 +36,7 @@ hideInitializerImpl(init)
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"%@%@", _valueSource, self.valueSource.ready ? @" - instantiable" : @""];
+    return [NSString stringWithFormat:@"%@%@", _valueSource, self.valueSource.ready ? @" - ready" : @""];
 }
 
 @end

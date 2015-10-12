@@ -16,6 +16,7 @@
 
 @implementation ITSimpleObject1
 
+AcRegister()
 AcInitializer(initWithNoArgs)
 -(instancetype) initWithNoArgs {
 	self = [super init];
@@ -34,6 +35,7 @@ AcInitializer(initWithNoArgs)
 
 @implementation ITSimpleObject2
 
+AcRegister()
 AcInitializer(initWithSimpleObject1:, AcArg(ITSimpleObject1, AcClass(ITSimpleObject1)))
 -(instancetype) initWithSimpleObject1:(ITSimpleObject1 *) so1 {
 	self = [super init];

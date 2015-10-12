@@ -59,6 +59,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)willResolve;
 
+/**
+ Called after the builder has resolved.
+ */
+-(void) didResolve;
+
 #pragma mark - instantiating and injecting
 
 /**
@@ -66,6 +71,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, assign, readonly) BOOL ready;
 
+/**
+ Called when the builder is to create an object.
+ */
 - (void)instantiate;
 
 @end

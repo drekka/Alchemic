@@ -19,52 +19,44 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodBuilderType {
     SEL _selector;
-    Class _returnType;
     ALCBuilder *_returnTypeBuilder;
 }
 
-hideInitializerImpl(initClassBuilder:(ALCBuilder *) classBuilder)
+hideInitializerImpl(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder)
 
--(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder
-                            selector:(SEL) selector
-                          returnType:(Class) returnType {
-    self = [super initWithClassBuilder:classBuilder];
+-(instancetype) initWithType:(Class) valueClass
+                classBuilder:(ALCBuilder *) classBuilder
+                    selector:(SEL) selector {
+    self = [super initWithType:valueClass classBuilder:classBuilder];
     if (self) {
         _selector = selector;
-        _returnType = returnType;
     }
     return self;
 }
 
--(ALCBuilderType)type {
-    return ALCBuilderTypeMethod;
-}
-
--(NSString *) builderName {
+-(NSString *) defaultName {
     return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.classBuilder.valueClass), NSStringFromSelector(_selector)];
 }
 
--(void) willResolve {
+-(void) builderWillResolve:(ALCBuilder *)builder {
 
-    [super willResolve];
+    [super builderWillResolve:builder];
 
     [ALCRuntime validateClass:self.classBuilder.valueClass selector:_selector];
 
     // Go find the class builder for the return type and get it to tell us when it's available.
-    ALCBuilder *builder = self.builder;
-    Class valueClass = builder.valueClass;
-    STLog(builder.valueClass, @"Locating class builder for return type %@", NSStringFromClass(valueClass));
-    _returnTypeBuilder = [[ALCAlchemic mainContext] builderForClass:valueClass];
+    STLog(self.valueClass, @"Locating class builder for return type %@", NSStringFromClass(self.valueClass));
+    _returnTypeBuilder = [[ALCAlchemic mainContext] classBuilderForClass:self.valueClass];
     if (_returnTypeBuilder != nil) {
         STLog(builder.valueClass, @"Watching class builder for return type");
         [builder addDependency:_returnTypeBuilder];
     } else {
-        STLog(builder.valueClass, @"No class builder found for method returning a %@", NSStringFromClass(valueClass));
+        STLog(self.valueClass, @"No class builder found for method returning a %@", NSStringFromClass(self.valueClass));
     }
 }
 
 -(id) invokeWithArgs:(NSArray<id> *) arguments {
-    STLog(_returnType, @"Instantiating a %@ using %@", NSStringFromClass(_returnType), self);
+    STLog(self.valueClass, @"Instantiating a %@ using %@", NSStringFromClass(self.valueClass), self);
     id factoryObject = self.classBuilder.value;
     id object = [factoryObject invokeSelector:_selector arguments:arguments];
     return object;
@@ -74,18 +66,16 @@ hideInitializerImpl(initClassBuilder:(ALCBuilder *) classBuilder)
     return ! _returnTypeBuilder || _returnTypeBuilder.ready;
 }
 
--(void)injectDependencies:(id)object {
-    if (_returnTypeBuilder != nil) {
-        [_returnTypeBuilder injectDependencies:object];
-    }
+-(ALCBuilder *)classBuilderForInjectingDependencies:(ALCBuilder *)currentBuilder {
+    return _returnTypeBuilder;
 }
 
 -(NSString *)attributeText {
-    return [NSString stringWithFormat:@", using method [%@]", [self builderName]];
+    return [NSString stringWithFormat:@", using method [%@]", self.defaultName];
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"method [%@]", self.builderName];
+    return [NSString stringWithFormat:@"method [%@]", self.defaultName];
 }
 
 @end

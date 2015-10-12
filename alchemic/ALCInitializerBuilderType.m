@@ -19,27 +19,23 @@ NS_ASSUME_NONNULL_BEGIN
     SEL _initializer;
 }
 
-hideInitializerImpl(initWithClassBuilder:(ALCBuilder *) classBuilder)
+hideInitializerImpl(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder)
 
 -(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder
                          initializer:(SEL) initializer {
-    self = [super initWithClassBuilder:classBuilder];
+    self = [super initWithType:classBuilder.valueClass classBuilder:classBuilder];
     if (self) {
         _initializer = initializer;
     }
     return self;
 }
 
--(ALCBuilderType)type {
-    return ALCBuilderTypeInitializer;
-}
-
--(NSString *) builderName {
+-(NSString *) defaultName {
     return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.classBuilder.valueClass), NSStringFromSelector(_initializer)];
 }
 
--(void) willResolve {
-    [super willResolve];
+-(void) builderWillResolve:(ALCBuilder *) builder {
+    [super builderWillResolve:builder];
     [ALCRuntime validateClass:self.classBuilder.valueClass selector:_initializer];
 }
 
@@ -54,16 +50,16 @@ hideInitializerImpl(initWithClassBuilder:(ALCBuilder *) classBuilder)
     return self.classBuilder.ready;
 }
 
--(void)injectDependencies:(id)object {
-    [self.classBuilder injectDependencies:object];
+-(ALCBuilder *) classBuilderForInjectingDependencies:(ALCBuilder *)currentBuilder {
+    return self.classBuilder;
 }
 
 -(NSString *)attributeText {
-    return [NSString stringWithFormat:@", using initializer [%@]", [self builderName]];
+    return [NSString stringWithFormat:@", using initializer [%@]", self.defaultName];
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"initializer [%@]", self.builderName];
+    return [NSString stringWithFormat:@"initializer [%@]", self.defaultName];
 }
 
 @end

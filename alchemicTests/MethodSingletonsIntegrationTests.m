@@ -20,6 +20,8 @@
 	NSUInteger _createANumberFromANumberMutator;
 }
 
+AcRegister()
+
 -(instancetype) init {
 	self = [super init];
 	if (self) {
@@ -56,6 +58,8 @@ AcMethod(NSNumber, createANumberFromANumber:, AcArg(NSNumber, AcName(@"abc")), A
 	MSParentClass *_parentClass;
 }
 
+AcRegister(AcExternal)
+
 AcInject(_aNumber1, AcName(@"abc"))
 AcInject(_aNumber2, AcName(@"abc"))
 AcInject(_aNumber3, AcName(@"def"))
@@ -63,24 +67,29 @@ AcInject(_aNumber4, AcName(@"def"))
 AcInject(_parentClass)
 
 -(void) testSimpleFactory {
+
 	[self setupRealContext];
-	STStartLogging(ALCHEMIC_LOG);
-	STStartLogging(@"[MSParentClass]");
-	STStartLogging(@"[MethodFactoryIntegrationTests]");
+
 	[self startContextWithClasses:@[[MSParentClass class], [MethodSingletonsIntegrationTests class]]];
-	AcInjectDependencies(self);
-	XCTAssertEqual(1u, [_parentClass.createANumberResults count]);
+
+    AcInjectDependencies(self);
+
+    XCTAssertEqual(1u, [_parentClass.createANumberResults count]);
 	XCTAssertTrue([_parentClass.createANumberResults containsObject:_aNumber1]);
 	XCTAssertTrue([_parentClass.createANumberResults containsObject:_aNumber2]);
 	XCTAssertTrue([_parentClass.createANumberResults containsObject:@2]);
 }
 
 -(void) testIntegrationCreatingASingletonWithAnArg {
+
 	[self setupRealContext];
-	STStartLogging(@"[MethodFactoryIntegrationTests]");
+
+    STStartLogging(@"[MethodFactoryIntegrationTests]");
 	[self startContextWithClasses:@[[MSParentClass class], [MethodSingletonsIntegrationTests class]]];
-	AcInjectDependencies(self);
-	XCTAssertEqual(1u, [_parentClass.createANumberWithNumberResults count]);
+
+    AcInjectDependencies(self);
+
+    XCTAssertEqual(1u, [_parentClass.createANumberWithNumberResults count]);
 	XCTAssertTrue([_parentClass.createANumberWithNumberResults containsObject:_aNumber3]);
 	XCTAssertTrue([_parentClass.createANumberWithNumberResults containsObject:_aNumber4]);
 	XCTAssertEqual(_aNumber3, _aNumber4);

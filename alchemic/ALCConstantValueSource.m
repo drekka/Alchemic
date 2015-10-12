@@ -26,6 +26,12 @@ hideInitializerImpl(initWithType:(Class) argumentType)
     return self;
 }
 
+-(BOOL)ready {
+    return YES;
+}
+
+-(void)resolve {}
+
 -(NSSet<id> *) values {
     return [NSSet setWithObject:_value];
 }

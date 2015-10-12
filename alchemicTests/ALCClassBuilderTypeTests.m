@@ -22,22 +22,14 @@
 
 @implementation ALCClassBuilderTypeTests {
     ALCClassBuilderType *_builderType;
-    id _mockBuilder;
 }
 
 -(void)setUp {
-    _builderType = [[ALCClassBuilderType alloc] init];
-    _mockBuilder = OCMClassMock([ALCBuilder class]);
-    _builderType.builder = _mockBuilder;
-}
-
--(void) testType {
-    XCTAssertEqual(ALCBuilderTypeClass, _builderType.type);
+    _builderType = [[ALCClassBuilderType alloc] initWithType:[SimpleObject class]];
 }
 
 -(void) testBuilderName {
-    OCMStub([_mockBuilder valueClass]).andReturn([SimpleObject class]);
-    XCTAssertEqualObjects(@"SimpleObject", _builderType.builderName);
+    XCTAssertEqualObjects(@"SimpleObject", _builderType.defaultName);
 }
 
 -(void) testMacroProcessorFlags {
@@ -48,22 +40,8 @@
                    _builderType.macroProcessorFlags);
 }
 
--(void) testAddVariableInjection {
-
-    id mockValueSourceFactory = OCMClassMock([ALCValueSourceFactory class]);
-    id mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
-    OCMStub([mockValueSourceFactory valueSource]).andReturn(mockValueSource);
-
-    Ivar mockBuilderRef = class_getInstanceVariable([self class], "_mockBuilder");
-
-    [_builderType addVariableInjection:mockBuilderRef
-                    valueSourceFactory:mockValueSourceFactory];
-
-    OCMVerify([(ALCBuilder *)_mockBuilder addDependency:mockValueSource]);
-}
-
 -(void) testInvokeWithArgsThrows {
-    XCTAssertThrowsSpecificNamed([_builderType invokeWithArgs:@[]], NSException, @"AlchemicUnexpectedInvokation");
+    XCTAssertThrowsSpecificNamed([_builderType invokeWithArgs:@[]], NSException, @"AlchemicUnexpectedInvocation");
 }
 
 -(void) testAttibuteText {

@@ -26,6 +26,7 @@
 	return self;
 }
 
+AcRegister()
 AcMethod(NSNumber, createANumber, AcWithName(@"abc"), AcFactory)
 -(NSNumber *) createANumber {
 	NSNumber *number = @(2 * ++_createANumberMutator);
@@ -44,6 +45,7 @@ AcMethod(NSNumber, createANumber, AcWithName(@"abc"), AcFactory)
 	MFSimpleParentClass *_parentClass;
 }
 
+AcRegister(AcExternal)
 AcInject(_aNumber1, AcName(@"abc"))
 AcInject(_aNumber2, AcName(@"abc"))
 AcInject(_parentClass)
@@ -56,7 +58,7 @@ AcInject(_parentClass)
 
     AcInjectDependencies(self);
 
-    XCTAssertEqual(4u, [_parentClass.createANumberResults count]);
+    XCTAssertEqual(2u, [_parentClass.createANumberResults count]);
 	XCTAssertTrue([_parentClass.createANumberResults containsObject:_aNumber1]);
 	XCTAssertTrue([_parentClass.createANumberResults containsObject:_aNumber2]);
 	XCTAssertNotEqual(_aNumber1, _aNumber2);

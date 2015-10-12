@@ -56,9 +56,7 @@
                     // If we are here then we have an alchemic method to process, so create a class builder for for the class.
                     if (currentClassBuilder == nil) {
                         STLog(aClass, @"Class %@ has Alchemic methods ...", NSStringFromClass(aClass));
-                        id<ALCBuilderType> builderType = [[ALCClassBuilderType alloc] init];
-                        currentClassBuilder = [[ALCBuilder alloc] initWithALCBuilderType:builderType forClass:aClass];
-                        [context addBuilderToModel:currentClassBuilder];
+                        currentClassBuilder = [context registerBuilderForClass:aClass];
                     }
 
                     // Call the method, passing it the current class builder.
@@ -68,7 +66,7 @@
 
                 // If there is a class builder then configure it.
                 if (currentClassBuilder != nil) {
-                    [currentClassBuilder configure];
+                    [context classBuilderDidFinishRegistering:currentClassBuilder];
                 }
 
                 free(classMethods);

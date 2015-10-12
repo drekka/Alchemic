@@ -13,5 +13,11 @@
  A simple macro that represents objects which are primary objects.
  */
 @interface ALCIsPrimary : NSObject<ALCMacro>
+
+/**
+ Returns a singleton instance of the macro.
+
+ @return A singleton instance.
+ */
 + (instancetype) primaryMacro;
 @end

@@ -21,6 +21,10 @@
 #import "SimpleObject.h"
 #import "ALCMacroProcessor.h"
 
+#import "ALCClassBuilderType.h"
+#import "ALCMethodBuilderType.h"
+#import "ALCInitializerBuilderType.h"
+
 @interface ALCBuilder (_internal)
 -(void) resolveWithDependencyStack:(NSMutableArray<id<ALCResolvable>> *) dependencyStack;
 @end
@@ -34,6 +38,24 @@
 
 -(void)setUp {
     _builder = [self simpleBuilderForClass:[SimpleObject class]];
+    _builder.registered = YES;
+}
+
+#pragma mark - Builder types
+
+-(void) testIsClassBuilder {
+    ALCClassBuilderType *classType = [[ALCClassBuilderType alloc] initWithType:[SimpleObject class]];
+    ALCBuilder *builder = [[ALCBuilder alloc] initWithBuilderType:classType];
+    XCTAssertTrue(builder.isClassBuilder);
+}
+
+-(void) testBuilderTypeMethod {
+    id mockClassBuilder = OCMClassMock([ALCBuilder class]);
+    ALCMethodBuilderType *methodType = [[ALCMethodBuilderType alloc] initWithType:[SimpleObject class]
+                                                                     classBuilder:mockClassBuilder
+                                                                         selector:@selector(init)];
+    ALCBuilder *builder = [[ALCBuilder alloc] initWithBuilderType:methodType];
+    XCTAssertFalse(builder.isClassBuilder);
 }
 
 #pragma mark - Configure
@@ -55,6 +77,14 @@
 
 -(void) testConfigureExternalStorage {
     [_builder.macroProcessor addMacro:AcExternal];
+    [_builder configure];
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
+    id storage = object_getIvar(_builder, storageVar);
+    XCTAssertTrue([storage isKindOfClass:[ALCBuilderStorageExternal class]]);
+}
+
+-(void) testConfigureExternalStorageWhenNotRegistered {
+    _builder.registered = NO;
     [_builder configure];
     Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
     id storage = object_getIvar(_builder, storageVar);

@@ -50,10 +50,10 @@ hideInitializerImpl(initWithType:(Class)argumentType)
 -(void) willResolve {
 
     __block NSSet<ALCBuilder *> *candidates;
-    [[ALCAlchemic mainContext] executeOnBuildersWithSearchExpressions:_searchExpressions
-                                              processingBuildersBlock:^(ProcessBuiderBlockArgs) {
-                                                  candidates = builders;
-                                              }];
+    [[ALCAlchemic mainContext] findBuildersWithSearchExpressions:_searchExpressions
+                                         processingBuildersBlock:^(ProcessBuiderBlockArgs) {
+                                             candidates = builders;
+                                         }];
 
     // Find primary objects.
     NSMutableSet<ALCBuilder *> *primaries = [[NSMutableSet alloc] init];

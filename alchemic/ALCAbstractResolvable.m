@@ -109,8 +109,12 @@
         [stack removeObject:self];
     }
 
+    [self didResolve];
+
 }
 
 - (void)willResolve {}
+
+-(void) didResolve {}
 
 @end

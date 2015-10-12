@@ -90,7 +90,6 @@
     ALCName *nameLocator = AcName(@"abc");
 
     id mockBuilder = OCMClassMock([ALCBuilder class]);
-    OCMStub([(ALCBuilder *)mockBuilder type]).andReturn(ALCBuilderTypeMethod);
     OCMStub([mockBuilder invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
@@ -109,11 +108,9 @@
 
     id mockBuilder1 = OCMClassMock([ALCBuilder class]);
     OCMStub([mockBuilder1 invokeWithArgs:@[@"def"]]).andReturn(@"xyz");
-    OCMStub([(ALCBuilder *)mockBuilder1 type]).andReturn(ALCBuilderTypeMethod);
 
     id mockBuilder2 = OCMClassMock([ALCBuilder class]);
     OCMStub([mockBuilder2 invokeWithArgs:@[@"def"]]).andReturn(@12);
-    OCMStub([(ALCBuilder *)mockBuilder2 type]).andReturn(ALCBuilderTypeMethod);
 
     OCMStub([_mockModel buildersForSearchExpressions:[OCMArg checkWithBlock:^BOOL(id arg){
         return [(NSSet *)arg containsObject:classLocator];

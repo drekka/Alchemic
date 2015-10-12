@@ -7,19 +7,38 @@
 //
 
 @import Foundation;
-#import "ALCAbstractBuilderType.h"
 @class ALCDependency;
+#import "ALCBuilderType.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCAbstractMethodBuilderType : ALCAbstractBuilderType
+/**
+ Abstract builder type for strategies that create objects using methods.
+ */
+@interface ALCAbstractMethodBuilderType : NSObject<ALCBuilderType>
 
+/**
+ The ALCBuilder that will be used to access the class information about the class that contains the method to be executed.
+ */
 @property (nonatomic, strong, readonly) ALCBuilder *classBuilder;
+
+/**
+ Used by derived classes to access a list of the values required for the method.
+ */
 @property (nonatomic, strong, readonly) NSArray<id> *argumentValues;
 
 hideInitializer(init);
 
--(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder;
+/**
+ Default initializer.
+
+ @param valueClass   The class that the builder will returned from the method.
+ @param classBuilder The class builder for the class that contains the method to be executed.
+
+ @return An instance of this builder type.
+ */
+-(instancetype) initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder;
 
 @end
 

@@ -83,8 +83,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ALCBuilder *) simpleBuilderForClass:(Class) aClass {
-    id <ALCBuilderType> builderType = [[ALCClassBuilderType alloc] init];
-    return [[ALCBuilder alloc] initWithALCBuilderType:builderType forClass:aClass];
+    id <ALCBuilderType> builderType = [[ALCClassBuilderType alloc] initWithType:aClass];
+    return [[ALCBuilder alloc] initWithBuilderType:builderType];
 }
 
 -(ALCBuilder *) externalBuilderForClass:(Class) aClass {
@@ -94,8 +94,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) stubMockContextToReturnBuilders:(NSArray<ALCBuilder *> *) builders {
-    OCMStub([self.mockContext executeOnBuildersWithSearchExpressions:OCMOCK_ANY
-                                             processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
+    OCMStub([self.mockContext findBuildersWithSearchExpressions:OCMOCK_ANY
+                                        processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
         __unsafe_unretained ProcessBuilderBlock processBuilderBlock;
         [inv getArgument:&processBuilderBlock atIndex:3];
         processBuilderBlock([NSSet setWithArray:builders]);

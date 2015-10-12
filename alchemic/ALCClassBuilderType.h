@@ -8,15 +8,31 @@
 
 @import Foundation;
 @import ObjectiveC;
-#import "ALCAbstractBuilderType.h"
+#import "ALCBuilderType.h"
 @class ALCValueSourceFactory;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCClassBuilderType : ALCAbstractBuilderType
+/**
+ A builder strategy that is used to build classes.
+ */
+@interface ALCClassBuilderType : NSObject<ALCBuilderType>
 
--(void) addVariableInjection:(Ivar) variable
-          valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory;
+/**
+ Do not use.
+
+ @return An instance of ALCClassBuilderType.
+ */
+-(instancetype) init NS_UNAVAILABLE;
+
+/**
+ Default initializer.
+
+ @param valueClass The class that the builder is going to represent.
+
+ @return An instance of ALCClassBuilderType.
+ */
+-(instancetype) initWithType:(Class) valueClass;
 
 @end
 

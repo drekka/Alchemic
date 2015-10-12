@@ -19,22 +19,27 @@
 
 hideInitializerImpl(init)
 
--(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder {
+@synthesize valueClass = _valueClass;
+
+-(instancetype) initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder {
     self = [super init];
     if (self) {
+        _valueClass = valueClass;
         _classBuilder = classBuilder;
         _arguments = [NSMutableArray array];
     }
     return self;
 }
 
+-(NSString *)defaultName {
+    methodNotImplementedObject;
+}
+
 -(NSUInteger)macroProcessorFlags {
     return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosArg;
 }
 
--(void)configureWithMacroProcessor:(ALCMacroProcessor *)macroProcessor {
-
-    [super configureWithMacroProcessor:macroProcessor];
+-(void) builder:(ALCBuilder *) builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *) macroProcessor {
 
     // Any dependencies added to this builder macro processor will contain argument data for methods.
     NSUInteger nbrArgs = [macroProcessor valueSourceCount];
@@ -42,13 +47,25 @@ hideInitializerImpl(init)
         id<ALCValueSource> valueSource = [macroProcessor valueSourceAtIndex:i];
         ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSource];
         [(NSMutableArray *)_arguments addObject:dependency];
-        [self.builder addDependency:valueSource];
+        [builder addDependency:valueSource];
     }
 }
 
--(void)willResolve {
+-(void)builderWillResolve:(ALCBuilder *) builder {
     // Add the class builder as a dependency because we cannot execute a method if the class is still not available.
-    [self.builder addDependency:_classBuilder];
+    [builder addDependency:_classBuilder];
+}
+
+-(BOOL)canInjectDependencies {
+    methodNotImplementedBoolean;
+}
+
+-(ALCBuilder *)classBuilderForInjectingDependencies:(ALCBuilder *)currentBuilder {
+    methodNotImplementedObject;
+}
+
+-(id)invokeWithArgs:(NSArray<id> *)arguments {
+    methodNotImplementedObject;
 }
 
 -(NSArray<id> *)argumentValues {
@@ -70,4 +87,9 @@ hideInitializerImpl(init)
                                    reason:[NSString stringWithFormat:@"Cannot add a variable dependency for '%s' to a non-class builder: %@", ivar_getName(variable) , self]
                                  userInfo:nil];
 }
+
+-(NSString *)attributeText {
+    methodNotImplementedObject;
+}
+
 @end

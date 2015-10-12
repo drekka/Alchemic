@@ -22,10 +22,12 @@
 @end
 
 @implementation ObjA
+AcRegister()
 AcInject(objB, AcClass(ObjB))
 @end
 
 @implementation ObjB
+AcRegister()
 AcInject(objA, AcClass(ObjA))
 @end
 

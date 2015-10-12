@@ -17,6 +17,7 @@
 @protocol ALCBuilderStorage;
 @class ALCMacroProcessor;
 @class ALCValueSourceFactory;
+@class ALCVariableDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,7 +31,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Properties
 
-@property (nonatomic, assign, readonly) ALCBuilderType type;
+/**
+ Set to YES if an AcRegister(...) macro is used.
+
+ @discussion Allows the builder to configure based on whether an AcRegister(...) has been executed.
+ */
+@property (nonatomic, assign, getter=isRegistered) BOOL registered;
 
 /**
  Override of value so it can be writable in builders.
@@ -42,6 +48,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// If the builder is to be regarded as a primary builder.
 @property (nonatomic, assign, readonly) BOOL primary;
+
+/**
+ Returns YES if the builder is using an instance of ALCClassBuilderType. 
+ @discussion In other words, if the builder is representing a class rather than a method or initializer.
+ */
+@property (nonatomic, assign, readonly, getter=isClassBuilder) BOOL classBuilder;
+
+/**
+ Returns a set of ALCVariableDependencies.
+ 
+ @discussion These variable dependencies can then be used to inject values into a class. Normally only a class builder can do this.
+ */
+@property (nonatomic, strong, readonly) NSSet<ALCVariableDependency *> *variableInjections;
 
 /**
  The macro processor which will be used by the builder to process macro arguments.
@@ -58,16 +77,23 @@ hideInitializer(init);
  default initializer.
 
  @param builderType An instance of ALCBuilderType which provides the functility which defines what type of builder this is.
- @param forClass    The class of the object that the builder will create.
 
  @return An instance of a ALCBuilder.
+
  */
 
--(instancetype) initWithALCBuilderType:(id<ALCBuilderType>) builderType
-                           forClass:(Class) aClass NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithBuilderType:(id<ALCBuilderType>) builderType NS_DESIGNATED_INITIALIZER;
 
 #pragma mark - Tasks
 
+/**
+ Adds a variable injection to the builder. 
+ 
+ @discussion This is used on class builders to add variables within the class that will be injected.
+
+ @param variable           The variable to be injected.
+ @param valueSourceFactory An ALCValueSourceFactory instance that defines where to get the value for the variable from.
+ */
 -(void) addVariableInjection:(Ivar) variable
           valueSourceFactory:(ALCValueSourceFactory *) valueSourceFactory;
 
