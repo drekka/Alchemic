@@ -97,12 +97,21 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 -(ALCBuilder *) registerBuilderForClass:(Class) aClass {
     id<ALCBuilderType> builderType = [[ALCClassBuilderType alloc] initWithType:aClass];
     ALCBuilder *classBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
+
+    // Turn off the registered flag so that the class builder does not set it until a AcRegister(...) macro is executed.
+    // All other builders will be set to YES by default.
+    classBuilder.registered = NO;
+
     [_model addBuilder:classBuilder];
     return classBuilder;
 }
 
 -(void) registerClassBuilderProperties:(ALCBuilder *) classBuilder, ... {
     STLog(classBuilder.valueClass, @"Registering class %@", NSStringFromClass(classBuilder.valueClass));
+
+    // turn the registration flag back on so we can create instances.
+    classBuilder.registered = YES;
+
     alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
 }
 

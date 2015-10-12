@@ -49,6 +49,7 @@ hideInitializerImpl(init)
 
         _builderType = builderType;
         _name = _builderType.defaultName;
+        _registered = YES;
 
         // Setup the macro processor with the appropriate flags.
         _macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:_builderType.macroProcessorFlags];
@@ -66,7 +67,8 @@ hideInitializerImpl(init)
 
     if (_macroProcessor.isFactory) {
         _builderStorage = [[ALCBuilderStorageFactory alloc] init];
-    } else if (self.macroProcessor.isExternal) {
+    } else if (self.macroProcessor.isExternal || !self.isRegistered) {
+        // We also set as external if no AcRegister(...) macro is present.
         _builderStorage = [[ALCBuilderStorageExternal alloc] init];
     } else {
         _builderStorage = [[ALCBuilderStorageSingleton alloc] init];
@@ -80,6 +82,9 @@ hideInitializerImpl(init)
 
     [_builderType builder:self isConfiguringWithMacroProcessor:_macroProcessor];
     STLog(self.valueClass, @"Builder for %@ configured: %@", NSStringFromClass(self.valueClass), [self description]);
+
+    // We no longer need the macro processor so dump it.
+    _macroProcessor = nil;
 }
 
 #pragma mark - Tasks

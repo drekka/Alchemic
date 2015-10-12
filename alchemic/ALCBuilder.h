@@ -32,6 +32,13 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Properties
 
 /**
+ Set to YES if an AcRegister(...) macro is used.
+
+ @discussion Allows the builder to configure based on whether an AcRegister(...) has been executed.
+ */
+@property (nonatomic, assign, getter=isRegistered) BOOL registered;
+
+/**
  Override of value so it can be writable in builders.
  */
 @property (nonatomic, strong) id value;

@@ -38,6 +38,7 @@
 
 -(void)setUp {
     _builder = [self simpleBuilderForClass:[SimpleObject class]];
+    _builder.registered = YES;
 }
 
 #pragma mark - Builder types
@@ -76,6 +77,14 @@
 
 -(void) testConfigureExternalStorage {
     [_builder.macroProcessor addMacro:AcExternal];
+    [_builder configure];
+    Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
+    id storage = object_getIvar(_builder, storageVar);
+    XCTAssertTrue([storage isKindOfClass:[ALCBuilderStorageExternal class]]);
+}
+
+-(void) testConfigureExternalStorageWhenNotRegistered {
+    _builder.registered = NO;
     [_builder configure];
     Ivar storageVar = class_getInstanceVariable([ALCBuilder class], "_builderStorage");
     id storage = object_getIvar(_builder, storageVar);
