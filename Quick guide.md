@@ -25,6 +25,8 @@ AcRegister()
 ...
 ```
 
+MyClass will be created on application startup and managed as a singleton by Alchemic. 
+
 ### Register a singleton created by a method
 
 ```objectivec
@@ -46,6 +48,8 @@ AcMethod(SomeOtherClass , createSomeOtherClassWithMyClass:,
 AcRegister(AcIsFactory, AcWithName(@"Thing factory"))
 ...
 ```
+
+Every time a MyClass instance is requested, a new one will be created and returned.
 
 ### Register a factory class using a custom initializer which finds all objects with a protocol
 
