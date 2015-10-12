@@ -352,6 +352,7 @@
 		6C1A4F091B9949C500B3C25D /* Types */ = {
 			isa = PBXGroup;
 			children = (
+				6C1A4F0A1B9949F600B3C25D /* ALCBuilderType.h */,
 				6C1A4F1D1B995C3100B3C25D /* ALCAbstractMethodBuilderType.h */,
 				6C1A4F1E1B995C3200B3C25D /* ALCAbstractMethodBuilderType.m */,
 				6C1A4F0C1B994D9100B3C25D /* ALCClassBuilderType.h */,
@@ -517,7 +518,6 @@
 				6CAE806D1B424F8A00217F9D /* Alchemic.h */,
 				6C6D00A81AB70BB500984CF7 /* AlchemicAware.h */,
 				6C66DC5A1A8F662E009F9D94 /* ALCInternalMacros.h */,
-				6C91F9EE1B399009002DF241 /* ALCMacros.h */,
 				6C55E6361B6F3D3B004A6305 /* ALCResolvable.h */,
 				6CAED5111B8BF328008208DA /* ALCValue.h */,
 				6CC54B6C1AFA513000D5D634 /* Builders */,
@@ -555,6 +555,7 @@
 		6C88B8FC1B8AD3550040D996 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				6CD800E81B89E7AF00781E46 /* ALCBuilderStorage.h */,
 				6C88B8F21B8AA0E40040D996 /* ALCBuilderStorageExternal.h */,
 				6C88B8F31B8AA0E40040D996 /* ALCBuilderStorageExternal.m */,
 				6C88B8EF1B8A9EA50040D996 /* ALCBuilderStorageFactory.h */,
@@ -642,10 +643,8 @@
 			children = (
 				6CD800E51B89E24300781E46 /* ALCBuilder.h */,
 				6CD800E61B89E24300781E46 /* ALCBuilder.m */,
-				6C1A4F0A1B9949F600B3C25D /* ALCBuilderType.h */,
 				6CC9D7671B595A0100EFD517 /* ALCMacroProcessor.h */,
 				6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */,
-				6CD800E81B89E7AF00781E46 /* ALCBuilderStorage.h */,
 				6CFCD25F1B7E44BB00F67C18 /* NSObject+Builder.h */,
 				6CFCD2601B7E44BB00F67C18 /* NSObject+Builder.m */,
 				6C1A4F091B9949C500B3C25D /* Types */,
@@ -657,6 +656,7 @@
 		6CDF44921B00E2F20066D18B /* Macros */ = {
 			isa = PBXGroup;
 			children = (
+				6C91F9EE1B399009002DF241 /* ALCMacros.h */,
 				6C3CB9741B595706001F6EB6 /* ALCArg.h */,
 				6C3CB9751B595706001F6EB6 /* ALCArg.m */,
 				6C901DEB1B58D81B0046CF9E /* ALCClass.h */,

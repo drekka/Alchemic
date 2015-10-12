@@ -103,7 +103,7 @@
     id mockContext = OCMClassMock([ALCContext class]);
     id mockAlchemic = OCMClassMock([ALCAlchemic class]);
     OCMStub(ClassMethod([mockAlchemic mainContext])).andReturn(mockContext);
-    OCMStub([mockContext builderForClass:[NSString class]]).andReturn(builder);
+    OCMStub([mockContext classBuilderForClass:[NSString class]]).andReturn(builder);
 }
 
 @end

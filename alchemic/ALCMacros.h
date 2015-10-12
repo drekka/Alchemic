@@ -102,7 +102,7 @@
  */
 #define AcRegister(...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerClassBuilderProperties:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
 #define AcMethod(methodType, methodSel, ...) \

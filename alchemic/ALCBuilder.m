@@ -28,6 +28,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface ALCBuilder ()
+@property (nonatomic, strong) NSString *name; // Changed to read write so we can trigger KVO name change detection in ALCModel.
+@end
+
 @implementation ALCBuilder {
     id<ALCBuilderStorage> _builderStorage;
     id<ALCBuilderType> _builderType;
@@ -71,7 +75,7 @@ hideInitializerImpl(init)
     _primary = _macroProcessor.isPrimary;
     NSString *newName = _macroProcessor.asName;
     if (newName != nil) {
-        _name = newName; // Triggers KVO so that the model updates the name.
+        self.name = newName; // Besure to triggers KVO so that the model updates the name.
     }
 
     [_builderType builder:self isConfiguringWithMacroProcessor:_macroProcessor];

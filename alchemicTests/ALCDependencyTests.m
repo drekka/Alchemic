@@ -46,7 +46,7 @@
 -(void) testDescription {
     ALCConstantValueSource *valueSource = [[ALCConstantValueSource alloc] initWithType:[NSNumber class] value:@5];
     ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSource];
-    XCTAssertEqualObjects(@"Constant: 5", [dependency description]);
+    XCTAssertEqualObjects(@"Constant: 5 - ready", [dependency description]);
 }
 
 @end

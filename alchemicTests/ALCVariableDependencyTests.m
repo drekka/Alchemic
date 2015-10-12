@@ -36,7 +36,7 @@
 }
 
 -(void) testDescription {
-	XCTAssertEqualObjects(@"_aStringProperty = Constant: abc - instantiable", [_dependency description]);
+	XCTAssertEqualObjects(@"_aStringProperty = Constant: abc - ready", [_dependency description]);
 }
 
 @end

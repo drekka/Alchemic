@@ -23,6 +23,7 @@
 #import "ALCModelValueSource.h"
 
 #import "ALCBuilderType.h"
+#import "ALCClassBuilderType.h"
 #import "ALCInitializerBuilderType.h"
 #import "ALCMethodBuilderType.h"
 
@@ -93,11 +94,20 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 #pragma mark - Registration call backs
 
-- (void)registerClassBuilder:(ALCBuilder *)classBuilder, ... {
+-(ALCBuilder *) registerBuilderForClass:(Class) aClass {
+    id<ALCBuilderType> builderType = [[ALCClassBuilderType alloc] initWithType:aClass];
+    ALCBuilder *classBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
+    [_model addBuilder:classBuilder];
+    return classBuilder;
+}
+
+-(void) registerClassBuilderProperties:(ALCBuilder *) classBuilder, ... {
     STLog(classBuilder.valueClass, @"Registering class %@", NSStringFromClass(classBuilder.valueClass));
     alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
+}
 
-    // Don't configure here because the class scanner will do it after all alchemic methods have been executed and the builder config loaded.
+-(void) classBuilderDidFinishRegistering:(ALCBuilder *) classBuilder {
+    [classBuilder configure];
 }
 
 - (void)registerClassBuilder:(ALCBuilder *)classBuilder variableDependency:(NSString *)variable, ... {
@@ -145,18 +155,14 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     [_model addBuilder:methodBuilder];
 }
 
-- (void)addBuilderToModel:(ALCBuilder *)builder {
-    [_model addBuilder:builder];
-}
-
-- (ALCBuilder *)builderForClass:(Class)aClass {
+- (ALCBuilder *)classBuilderForClass:(Class)aClass {
     NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:[ALCClass withClass:aClass]]];
     NSSet<ALCBuilder *> *classBuilders = [_model classBuildersFromBuilders:builders];
     return [classBuilders anyObject];
 }
 
-- (void)executeOnBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *)searchExpressions
-                       processingBuildersBlock:(ProcessBuilderBlock)processBuildersBlock {
+- (void)findBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *)searchExpressions
+                  processingBuildersBlock:(ProcessBuilderBlock)processBuildersBlock {
     NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:searchExpressions];
     if ([builders count] > 0) {
         processBuildersBlock(builders);

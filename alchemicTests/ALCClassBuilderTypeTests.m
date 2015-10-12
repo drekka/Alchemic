@@ -41,7 +41,7 @@
 }
 
 -(void) testInvokeWithArgsThrows {
-    XCTAssertThrowsSpecificNamed([_builderType invokeWithArgs:@[]], NSException, @"AlchemicUnexpectedInvokation");
+    XCTAssertThrowsSpecificNamed([_builderType invokeWithArgs:@[]], NSException, @"AlchemicUnexpectedInvocation");
 }
 
 -(void) testAttibuteText {

@@ -42,13 +42,17 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 #pragma mark - Registration
 
+-(ALCBuilder *) registerBuilderForClass:(Class) aClass;
+
 /**
  Sets properties on a ALCObjectBuilder.
 
  @param classBuilder The class builder whose properties are to be set.
  @param ... one or more macros which define the properties.
  */
--(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilderProperties:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) classBuilderDidFinishRegistering:(ALCBuilder *) classBuilder;
 
 /**
  Registers a variable dependency for the classbuilder.
@@ -163,22 +167,15 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 #pragma mark - Working with builders
 
 /**
- Adds a ALCBuilder to the model.
+ Finds the builder for a specific class and returns it.
 
- @param builder The builder to add.
- */
--(void) addBuilderToModel:(ALCBuilder *) builder;
-
-/**
- Finds the builder for a specific class and returns it. 
- 
  @discussion This is mainly an internal function.
 
  @param aClass The class we want to use as a criteria for finding the builder.
 
  @return The matching builder or nil if one is not found.
  */
--(ALCBuilder *) builderForClass:(Class) aClass;
+-(ALCBuilder *) classBuilderForClass:(Class) aClass;
 
 /**
  Uses a set of ALCModelSearchExpression objects to find a set of builders in the model, the executes a block on each one.
@@ -188,8 +185,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param searchExpressions    A NSSet of ALCModelSearchExpression objects which define the search criteria for finding the builders.
  @param processBuildersBlock A block which is called, passing each builder in turn.
  */
--(void) executeOnBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
-                       processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
+-(void) findBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
+                  processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
 
 @end
 

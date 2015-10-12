@@ -18,18 +18,19 @@
 #import "ALCResolvable.h"
 
 @interface ALCAbstractMethodBuilderTypeTests : ALCTestCase
-
 @end
 
 @implementation ALCAbstractMethodBuilderTypeTests {
     ALCAbstractMethodBuilderType *_builderType;
-    ALCBuilder *_classBuilder;
+    id _mockMethodBuilder;
+    id _mockClassBuilder;
 }
 
 -(void) setUp {
-    _classBuilder = [self simpleBuilderForClass:[SimpleObject class]];
+    _mockMethodBuilder = OCMClassMock([ALCBuilder class]);
+    _mockClassBuilder = OCMClassMock([ALCBuilder class]);
     _builderType = [[ALCAbstractMethodBuilderType alloc] initWithType:[SimpleObject class]
-                                                         classBuilder:_classBuilder];
+                                                         classBuilder:_mockClassBuilder];
 }
 
 -(void) testMacroProcessorFlags {
@@ -45,26 +46,24 @@
     ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
     [macroProcessor addMacro:AcArg(NSNumber, AcValue(@12))];
 
-    id mockBuilder = OCMClassMock([ALCBuilder class]);
-    OCMExpect([(ALCBuilder *)mockBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id obj) {
+    OCMExpect([(ALCBuilder *)_mockMethodBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id obj) {
         return [obj conformsToProtocol:@protocol(ALCValueSource)];
     }]]);
 
-    [_builderType builder:_classBuilder isConfiguringWithMacroProcessor:macroProcessor];
+    [_builderType builder:_mockMethodBuilder isConfiguringWithMacroProcessor:macroProcessor];
 
-    OCMVerifyAll(mockBuilder);
+    OCMVerifyAll(_mockMethodBuilder);
 }
 
 -(void) testWillResolveAddsClassBuilderAsDependency {
 
-    id mockBuilder = OCMClassMock([ALCBuilder class]);
-    OCMExpect([(ALCBuilder *)mockBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id obj) {
-        return obj == self->_classBuilder;
+    OCMExpect([(ALCBuilder *)_mockMethodBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id obj) {
+        return obj == self->_mockClassBuilder;
     }]]);
 
-    [_builderType builderWillResolve:_classBuilder];
+    [_builderType builderWillResolve:_mockMethodBuilder];
 
-    OCMVerifyAll(mockBuilder);
+    OCMVerifyAll(_mockMethodBuilder);
 }
 
 -(void) testReturnsArrayOfargumentValuesFromArguments {
@@ -74,13 +73,12 @@
     [macroProcessor addMacro:AcArg(NSNumber, AcValue(@"abc"))];
 
     // Make sure values sources are resolved.
-    id mockBuilder = OCMClassMock([ALCBuilder class]);
-    OCMStub([(ALCBuilder *)mockBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id<ALCValueSource> valueSource) {
-        [valueSource resolve];
+    OCMStub([(ALCBuilder *)_mockMethodBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id<ALCValueSource> valueSource) {
+        [valueSource resolve]; // This must happen.
         return YES;
     }]]);
 
-    [_builderType builder:_classBuilder isConfiguringWithMacroProcessor:macroProcessor];
+    [_builderType builder:_mockMethodBuilder isConfiguringWithMacroProcessor:macroProcessor];
 
     NSArray<id> *values = _builderType.argumentValues;
 
@@ -101,13 +99,12 @@
     [macroProcessor addMacro:AcArg(NSNumber, AcValue(@12))];
 
     // Make sure values sources are resolved.
-    id mockBuilder = OCMClassMock([ALCBuilder class]);
-    OCMStub([(ALCBuilder *)mockBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id<ALCValueSource> valueSource) {
+    OCMStub([(ALCBuilder *)_mockMethodBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id<ALCValueSource> valueSource) {
         [valueSource resolve];
         return YES;
     }]]);
 
-    [_builderType builder:_classBuilder isConfiguringWithMacroProcessor:macroProcessor];
+    [_builderType builder:_mockMethodBuilder isConfiguringWithMacroProcessor:macroProcessor];
 
     id result = [_builderType instantiateObject];
 

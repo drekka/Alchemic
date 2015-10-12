@@ -46,7 +46,7 @@ hideInitializerImpl(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) 
 
     // Go find the class builder for the return type and get it to tell us when it's available.
     STLog(self.valueClass, @"Locating class builder for return type %@", NSStringFromClass(self.valueClass));
-    _returnTypeBuilder = [[ALCAlchemic mainContext] builderForClass:self.valueClass];
+    _returnTypeBuilder = [[ALCAlchemic mainContext] classBuilderForClass:self.valueClass];
     if (_returnTypeBuilder != nil) {
         STLog(builder.valueClass, @"Watching class builder for return type");
         [builder addDependency:_returnTypeBuilder];
