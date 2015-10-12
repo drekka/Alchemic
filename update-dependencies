@@ -1,0 +1,2 @@
+carthage update --use-ssh --use-submodules
+
