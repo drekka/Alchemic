@@ -221,15 +221,15 @@ The `AcInitiailizer(...)` macro tells Alchemic that when it needs to create an i
 
 Sometimes you want to declare a class to Alchemic, but have Alchemic create a new instance every time you need the object. In other words, a ***Factory***. Factories are not as common as singletons in the DI world, but they can be useful in a variety of situations. For example, you could declare a SMS message class as a factory. Then every time you need one, Alchemic will create a new SMS message object and give it to you with all it's dependencies injected.
 
-To tell Alchemic to treat a class registration as a factory, add the `AcIsFactory` macro to the `AcRegister(...)` macro like this:
+To tell Alchemic to treat a class registration as a factory, add the `AcFactory` macro to the `AcRegister(...)` macro like this:
 
 ```objectivec
-AcRegister(AcIsFactory)
+AcRegister(AcFactory)
 ```
 
 Now every time your code requests an instance of the class, a new one will be created and returned. 
 
-*Note that `AcIsFactory` can also be added to the `AcInitializer(...)` and `AcMethod(...)` macros as well.*
+*Note that `AcFactory` can also be added to the `AcInitializer(...)` and `AcMethod(...)` macros as well.*
 
 ## Giving builders custom names
 
@@ -266,7 +266,7 @@ AcMethod(Database, generateDatabaseConnection)
 }
 
 // And a factory
-AcMethod(NSString, makeATransaction, AcIsFactory))
+AcMethod(NSString, makeATransaction, AcFactory))
 -(NSString *) makeATransaction {
     return [[Transaction alloc] 
         initWithName:[NSString stringWithFormat:@"Transaction %i", ++x]];
@@ -276,7 +276,7 @@ AcMethod(NSString, makeATransaction, AcIsFactory))
 
 We use the `AcMethod(...)` macro to define ay method that can create objects. This macro is similar to `AcRegister(...)` in that it registers a source of objects which can be injected into other things. 
 
-The first example creates a singleton instance. Alchemic will only call the method once and reuse the returned object every time it needs it. This allows you to utilise more complex code to setup singletons when you need it. The second example which generates transactions needs to generate a new one each time it is needed. So this one has the `AcIsFactory` flag. 
+The first example creates a singleton instance. Alchemic will only call the method once and reuse the returned object every time it needs it. This allows you to utilise more complex code to setup singletons when you need it. The second example which generates transactions needs to generate a new one each time it is needed. So this one has the `AcFactory` flag. 
 
 Factory method registrations are stored in the Alchemic context along side the classes. For their names, Alchemic uses a combination of the class and method selector using the format "*ClassName method:signature:*". Like class registrations, you can make use of the `AcWithName(...)` macro to give a factory method a more meaningful and useful associated name. 
 
@@ -322,7 +322,7 @@ When we have several possible candidate objects for a dependency, we might not w
 The basic idea is that when registering multiple objects which can satisfy a dependency, you can flag one of them as the *'Primary'* object. Later when injecting, if Alchemic see's an objected tagged as a primary, it will use it in preference to other objects. Here's how to declare a Primary:
 
 ```objectivec
-AcRegister(AcIsPrimary)
+AcRegister(AcPrimary)
 ```
 
 Primary objects are only checked once a list of candidate objects for ain injection have been located. This ensure that they don't override more specific criteria.
@@ -520,7 +520,7 @@ Without any criteria, Alchemic will use the passed return type to determine the 
 `AcInvoke(...)` is for when you want to access a declared method or initializer and pass in the arguments manually. But you don't have access to the object it's declared on. For example, you might declare a factory initializer like this:
 
 ```objectivec
-AcInitializer(initWithText:, AcIsFactory, AcArg(NSString, AcValue(@"Default message")
+AcInitializer(initWithText:, AcFactory, AcArg(NSString, AcValue(@"Default message")
 -(instancetype) initWithText:(NSString *) message {
     // ...
 }

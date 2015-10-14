@@ -64,7 +64,7 @@ MyClass will be instantiated and managed as a singleton. SomeOtherClass will the
 
 ```objectivec
 @implementation MyClass
-AcRegister(AcIsFactory, AcWithName(@"Thing factory"))
+AcRegister(AcFactory, AcWithName(@"Thing factory"))
 ...
 ```
 
@@ -124,7 +124,7 @@ Locates all objects in Alchemic that conform to the MyProtocol protocol and inje
 
 ```objectivec 
 @implementation MySystemTests
-AcMethod(MyClass, createOverride, AcIsPrimary)
+AcMethod(MyClass, createOverride, AcPrimary)
 -(MyClass *) createOverride {
    // Create the override
    return override;
@@ -158,7 +158,7 @@ The instance to have dependencies injected is not being created by Alchemic so a
 ## Using a factory initializer with custom arguments
 
 ```objectivec
-AcInitializer(initWithText:, AcIsFactory, AcWithName(@"createSomething"), AcArg(NSString, AcValue(@"Default message")
+AcInitializer(initWithText:, AcFactory, AcWithName(@"createSomething"), AcArg(NSString, AcValue(@"Default message")
 -(instancetype) initWithText:(NSString *) message {
     // ...
 }
