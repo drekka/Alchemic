@@ -10,6 +10,8 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
+// ---------------------------
+
 @interface ITSimpleObject1 : NSObject
 @property (nonatomic, strong) NSString *prop;
 @end
@@ -19,14 +21,16 @@
 AcRegister()
 AcInitializer(initWithNoArgs)
 -(instancetype) initWithNoArgs {
-	self = [super init];
-	if (self) {
-		self.prop = @"abc";
-	}
-	return self;
+    self = [super init];
+    if (self) {
+        self.prop = @"abc";
+    }
+    return self;
 }
 
 @end
+
+// ---------------------------
 
 @interface ITSimpleObject2 : NSObject
 @property (nonatomic, strong) NSString *prop;
@@ -38,12 +42,27 @@ AcInitializer(initWithNoArgs)
 AcRegister()
 AcInitializer(initWithSimpleObject1:, AcArg(ITSimpleObject1, AcClass(ITSimpleObject1)))
 -(instancetype) initWithSimpleObject1:(ITSimpleObject1 *) so1 {
-	self = [super init];
-	if (self) {
-		_so1 = so1;
-		self.prop = @"def";
-	}
-	return self;
+    self = [super init];
+    if (self) {
+        _so1 = so1;
+        self.prop = @"def";
+    }
+    return self;
+}
+
+@end
+
+// ---------------------------
+
+@interface ITInitNoRegister : NSObject
+@end
+
+@implementation ITInitNoRegister
+//AcRegister()
+AcInitializer(initNoRegister)
+-(instancetype) initNoRegister {
+    self = [super init];
+    return self;
 }
 
 @end
@@ -54,30 +73,39 @@ AcInitializer(initWithSimpleObject1:, AcArg(ITSimpleObject1, AcClass(ITSimpleObj
 @end
 
 @implementation InitializerIntegrationTests {
-	ITSimpleObject1 *_so1;
-	ITSimpleObject2 *_so2;
+    ITSimpleObject1 *_so1;
+    ITSimpleObject2 *_so2;
 }
 
 AcInject(_so1)
 AcInject(_so2)
 
 -(void) testIntegrationNoArgInit {
-	STStartLogging(ALCHEMIC_LOG);
-	[self setupRealContext];
-	[self startContextWithClasses:@[[ITSimpleObject1 class], [ITSimpleObject2 class], [InitializerIntegrationTests class]]];
-	AcInjectDependencies(self);
-	XCTAssertNotNil(_so1);
-	XCTAssertEqualObjects(@"abc", _so1.prop);
+    STStartLogging(ALCHEMIC_LOG);
+    [self setupRealContext];
+    [self startContextWithClasses:@[[ITSimpleObject1 class], [ITSimpleObject2 class], [InitializerIntegrationTests class]]];
+    AcInjectDependencies(self);
+    XCTAssertNotNil(_so1);
+    XCTAssertEqualObjects(@"abc", _so1.prop);
 }
 
 -(void) testIntegrationSingleArgInit {
-	[self setupRealContext];
-	[self startContextWithClasses:@[[ITSimpleObject1 class], [ITSimpleObject2 class], [InitializerIntegrationTests class]]];
-	AcInjectDependencies(self);
-	XCTAssertNotNil(_so2);
-	XCTAssertEqualObjects(@"def", _so2.prop);
-	XCTAssertEqualObjects(@"abc", _so2.so1.prop);
+    [self setupRealContext];
+    [self startContextWithClasses:@[[ITSimpleObject1 class], [ITSimpleObject2 class], [InitializerIntegrationTests class]]];
+    AcInjectDependencies(self);
+    XCTAssertNotNil(_so2);
+    XCTAssertEqualObjects(@"def", _so2.prop);
+    XCTAssertEqualObjects(@"abc", _so2.so1.prop);
 }
+
+-(void) testInitNoRegister {
+    STStartLogging(@"LogAll");
+    [self setupRealContext];
+    [self startContextWithClasses:@[[ITInitNoRegister class]]];
+    id obj = AcGet(ITInitNoRegister, AcName(@"ITInitNoRegister initNoRegister"));
+    XCTAssertNotNil(obj);
+}
+
 
 
 @end

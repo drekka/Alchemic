@@ -13,14 +13,18 @@
 
 // Tests a circular dependency between a class and a class that is created with an initializer. The fact that the singleton class is refering to the initializer craeted class via a property should break the dependency cycle and allow this setup to buil successfully. The singleton should be created first, followed by the initializer driven class and finally the initializer class should be injected back into the singleton.
 
+// ------------
+
 @interface CDSISingleton: NSObject
 @property (nonatomic, strong, readonly) CDSIInitializer *initializer;
 @end
 
 @implementation CDSISingleton
-AcRegister(AcWithName(@"singleton"))
+AcRegister()
 AcInject(initializer)
 @end
+
+// ------------
 
 @interface CDSIInitializer: NSObject
 @property (nonatomic, strong, readonly) CDSISingleton *singleton;
@@ -28,7 +32,7 @@ AcInject(initializer)
 
 @implementation CDSIInitializer
 AcRegister()
-AcInitializer(initWithSingleton:, AcArg(CDSISingleton, AcName(@"singleton")))
+AcInitializer(initWithSingleton:, AcArg(CDSISingleton, AcName(@"CDSISingleton")))
 -(instancetype) initWithSingleton:(CDSISingleton *) singleton {
     self = [super init];
     if (self) {
@@ -38,8 +42,9 @@ AcInitializer(initWithSingleton:, AcArg(CDSISingleton, AcName(@"singleton")))
 }
 @end
 
-@interface CircularDependencySingletonInitializerIntegrationTests : ALCTestCase
+// ------------
 
+@interface CircularDependencySingletonInitializerIntegrationTests : ALCTestCase
 @end
 
 @implementation CircularDependencySingletonInitializerIntegrationTests {
