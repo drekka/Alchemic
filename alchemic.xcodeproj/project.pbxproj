@@ -108,6 +108,7 @@
 		6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C91F9EE1B399009002DF241 /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C95EDEC1B68A5D3004D8F74 /* ALCDependencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C95EDEB1B68A5D2004D8F74 /* ALCDependencyTests.m */; };
 		6C95EDEE1B68A977004D8F74 /* ALCVariableDependencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C95EDED1B68A977004D8F74 /* ALCVariableDependencyTests.m */; };
+		6CA5B71D1BCF508400DBB753 /* CircularDependencySingletonInitializerIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA5B71C1BCF508400DBB753 /* CircularDependencySingletonInitializerIntegrationTests.m */; };
 		6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CF46EC81B4610EE0009007A /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CAC887C1B4A5AA000AFB8E4 /* ALCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF46EC91B4610EE0009007A /* ALCModel.m */; };
 		6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAC88801B4A6C6000AFB8E4 /* ALCRuntimeTests.m */; };
@@ -285,6 +286,7 @@
 		6C9ADABE1ADFF59D00A240F2 /* ALCFileContentsResourceLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCFileContentsResourceLocator.m; path = alchemic/ALCFileContentsResourceLocator.m; sourceTree = "<group>"; };
 		6C9ADAC01ADFF9F700A240F2 /* ALCDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependency.h; sourceTree = "<group>"; };
 		6C9ADAC11ADFF9F700A240F2 /* ALCDependency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCDependency.m; sourceTree = "<group>"; };
+		6CA5B71C1BCF508400DBB753 /* CircularDependencySingletonInitializerIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularDependencySingletonInitializerIntegrationTests.m; sourceTree = "<group>"; };
 		6CAC88801B4A6C6000AFB8E4 /* ALCRuntimeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCRuntimeTests.m; sourceTree = "<group>"; };
 		6CAE806D1B424F8A00217F9D /* Alchemic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alchemic.h; sourceTree = "<group>"; };
 		6CAED5111B8BF328008208DA /* ALCValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCValue.h; sourceTree = "<group>"; };
@@ -463,11 +465,14 @@
 		6C60A02E1B8DD486002F265D /* Integration tests */ = {
 			isa = PBXGroup;
 			children = (
+				6C4387CB1BC299E2006069AE /* ApplicationDelegateIntegrationTests.m */,
 				6C8FF8A51B6BCBD300B2B90A /* CircularDependency1IntegrationTests.m */,
 				6C8FF8A71B6D12B500B2B90A /* CircularDependency2IntegrationTests.m */,
 				6C8FF8A91B6D17B100B2B90A /* CircularDependency3IntegrationTests.m */,
 				6C55E6341B6F38BF004A6305 /* CircularDependency4IntegrationTests.m */,
+				6CA5B71C1BCF508400DBB753 /* CircularDependencySingletonInitializerIntegrationTests.m */,
 				6C8FF8A11B68EB8400B2B90A /* ClassIntegrationTests.m */,
+				6C2B06AE1BBD055A001D161B /* ExternalObjectIntegrationTests.m */,
 				6CFE92031B69FCDD00BEAC0B /* FactoryIntegrationTests.m */,
 				6CF28C671B6B312800E3A36E /* InitializerIntegrationTests.m */,
 				6C235AD51B82D05F0015CA0B /* InvokeIntegrationTests.m */,
@@ -478,8 +483,6 @@
 				6CFE92061B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m */,
 				6C37497D1B7AD8B40012383D /* OnLoadIntegrationTests.m */,
 				6C716FFF1B7391AA00634112 /* RetrievingIntegrationTests.m */,
-				6C2B06AE1BBD055A001D161B /* ExternalObjectIntegrationTests.m */,
-				6C4387CB1BC299E2006069AE /* ApplicationDelegateIntegrationTests.m */,
 				6CED057B1BCB833800B6C55B /* UnregisteredClassIntegrationTests.m */,
 			);
 			name = "Integration tests";
@@ -923,6 +926,7 @@
 				6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */,
 				6C2421011B61FB5E00884A93 /* ALCValueSourceFactoryTests.m in Sources */,
 				6C5F142E1B64B54800E119FC /* SimpleObject.m in Sources */,
+				6CA5B71D1BCF508400DBB753 /* CircularDependencySingletonInitializerIntegrationTests.m in Sources */,
 				6C5F171C1B626FF900F60B1B /* ALCAbstractValueSourceTests.m in Sources */,
 				6C55E6391B70617E004A6305 /* ALCAlchemicTests.m in Sources */,
 				6CEE8EAF1B8D721C002EADC5 /* ALCBuilderTests.m in Sources */,
