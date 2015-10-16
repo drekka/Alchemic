@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C0792371BD0CA37005F0C12 /* ALCContextSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */; };
+		6C0792391BD0CB94005F0C12 /* Alchemic-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C0792381BD0CB94005F0C12 /* Alchemic-Bridging-Header.h */; };
 		6C1A4F0B1B9949F600B3C25D /* ALCBuilderType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F0A1B9949F600B3C25D /* ALCBuilderType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C1A4F0E1B994D9100B3C25D /* ALCClassBuilderType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F0C1B994D9100B3C25D /* ALCClassBuilderType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C1A4F0F1B994D9100B3C25D /* ALCClassBuilderType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F0D1B994D9100B3C25D /* ALCClassBuilderType.m */; };
@@ -180,6 +182,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ALCContextSTests.swift; sourceTree = "<group>"; };
+		6C0792381BD0CB94005F0C12 /* Alchemic-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Alchemic-Bridging-Header.h"; sourceTree = "<group>"; };
 		6C1A4F0A1B9949F600B3C25D /* ALCBuilderType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCBuilderType.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C1A4F0C1B994D9100B3C25D /* ALCClassBuilderType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassBuilderType.h; sourceTree = "<group>"; };
 		6C1A4F0D1B994D9100B3C25D /* ALCClassBuilderType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCClassBuilderType.m; sourceTree = "<group>"; };
@@ -353,6 +357,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6C0792341BD0C9FC005F0C12 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */,
+			);
+			name = Swift;
+			sourceTree = "<group>";
+		};
 		6C1A4F091B9949C500B3C25D /* Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -521,6 +533,7 @@
 				6CB0740B1B4D066200CA9002 /* ALCConfig.h */,
 				6C66DC5D1A903204009F9D94 /* ALCContext.h */,
 				6C66DC5E1A903204009F9D94 /* ALCContext.m */,
+				6C0792381BD0CB94005F0C12 /* Alchemic-Bridging-Header.h */,
 				6CAE806D1B424F8A00217F9D /* Alchemic.h */,
 				6C6D00A81AB70BB500984CF7 /* AlchemicAware.h */,
 				6C66DC5A1A8F662E009F9D94 /* ALCInternalMacros.h */,
@@ -540,6 +553,7 @@
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;
 			children = (
+				6C0792341BD0C9FC005F0C12 /* Swift */,
 				6C31B0701B9815B000F59A83 /* ALCAbtractResolvableTests.m */,
 				6C55E6381B70617D004A6305 /* ALCAlchemicTests.m */,
 				6CDE85D61B73121F006E24F2 /* ALCContextTests.m */,
@@ -742,6 +756,7 @@
 				6C36D7BE1B3853F10073C4FB /* ALCBundleResourceLocator.h in Headers */,
 				6C235ADA1B831D550015CA0B /* NSObject+Builder.h in Headers */,
 				6CAED5491B8C2FD0008208DA /* ALCValue.h in Headers */,
+				6C0792391BD0CB94005F0C12 /* Alchemic-Bridging-Header.h in Headers */,
 				6C36D7BF1B3853F20073C4FB /* ALCFileContentsResourceLocator.h in Headers */,
 				6C1A4F0B1B9949F600B3C25D /* ALCBuilderType.h in Headers */,
 				6CAED54F1B8C4FDE008208DA /* ALCIsExternal.h in Headers */,
@@ -799,6 +814,7 @@
 		6C66DC261A8B82C3009F9D94 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Derek Clarkson";
 				TargetAttributes = {
@@ -925,6 +941,7 @@
 				6C36F6281B9EA3EF0075967E /* ALCInitializerBuilderTypeTests.m in Sources */,
 				6CAC88811B4A6C6000AFB8E4 /* ALCRuntimeTests.m in Sources */,
 				6C2421011B61FB5E00884A93 /* ALCValueSourceFactoryTests.m in Sources */,
+				6C0792371BD0CA37005F0C12 /* ALCContextSTests.swift in Sources */,
 				6C5F142E1B64B54800E119FC /* SimpleObject.m in Sources */,
 				6CA5B71D1BCF508400DBB753 /* CircularDependencySingletonInitializerIntegrationTests.m in Sources */,
 				6C5F171C1B626FF900F60B1B /* ALCAbstractValueSourceTests.m in Sources */,
@@ -985,6 +1002,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -1012,6 +1030,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -1157,6 +1176,8 @@
 		6C66DC461A8B82C3009F9D94 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
@@ -1170,12 +1191,16 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		6C66DC471A8B82C3009F9D94 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
@@ -1189,6 +1214,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
