@@ -142,6 +142,10 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 - (void)registerClassBuilder:(ALCBuilder *)classBuilder initializer:(SEL)initializer, ... {
     STLog(classBuilder.valueClass, @"Registering initializer -[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(initializer));
+
+    // Tell the class builder that it is registered so that it will be ready to be instantiated.
+    classBuilder.registered = YES;
+
     id<ALCBuilderType> builderType = [[ALCInitializerBuilderType alloc] initWithClassBuilder:classBuilder initializer:initializer];
     ALCBuilder *initializerBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
     alc_loadMacrosAfter(initializerBuilder.macroProcessor, initializer);
