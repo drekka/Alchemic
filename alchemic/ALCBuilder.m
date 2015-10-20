@@ -117,8 +117,11 @@ hideInitializerImpl(init)
 
 - (void)didResolve {
     if (_isApplicationDelegate) {
-        STLog(self.valueClass, @"Setting application delegate ...");
-        self.value = [UIApplication sharedApplication].delegate;
+            STLog(self.valueClass, @"Setting application delegate ...");
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnullable-to-nonnull-conversion"
+            self.value = [UIApplication sharedApplication].delegate;
+#pragma GCC diagnostic pop
     }
 }
 

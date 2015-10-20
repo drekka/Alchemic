@@ -189,7 +189,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
  @return The matching builder or nil if one is not found.
  */
--(ALCBuilder *) classBuilderForClass:(Class) aClass;
+-(nullable ALCBuilder *) classBuilderForClass:(Class) aClass;
 
 /**
  Uses a set of ALCModelSearchExpression objects to find a set of builders in the model, the executes a block on each one.

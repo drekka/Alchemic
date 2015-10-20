@@ -251,7 +251,8 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
             [results addObject:[builder invokeWithArgs:args]];
         }
     }];
-    return [results count] == 1 ? [results anyObject] : results;
+    id finalResult = [results count] == 1 ? [results anyObject] : results;
+    return finalResult;
 }
 
 #pragma mark - Internal
@@ -279,7 +280,7 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicFinishedLoading object:self];
     });
-
+    
     STLog(ALCHEMIC_LOG, @"Registered model builders (* - instantiated):...\n%@\n", _model);
 }
 
