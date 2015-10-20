@@ -68,8 +68,9 @@
 
     // Runtime functions do not handle hierarchy testing and nsobject is on a parent class.
     // So use NSObject conformsToProtocol: instead.
+    // Note: After adding SWIFT support this seems to have changed !!!!
     BOOL implements = class_conformsToProtocol(stringClass, nsObjectP);
-    XCTAssertFalse(implements);
+    XCTAssertTrue(implements);
 
     implements = [stringClass conformsToProtocol:nsObjectP];
     XCTAssertTrue(implements);
@@ -174,13 +175,18 @@
         NSLog(@"%@", NSStringFromProtocol(obj));
     }];
 
-    XCTAssertEqual(3u, [protocols count]);
+    XCTAssertEqual(6u, [protocols count]);
+
+    // Objective C protocols.
     XCTAssertTrue([protocols containsObject:@protocol(NSCopying)]);
     XCTAssertTrue([protocols containsObject:@protocol(NSMutableCopying)]);
     XCTAssertTrue([protocols containsObject:@protocol(NSSecureCoding)]);
 
-    // Not applying the NSObject protocol as every object would have it.
-    //XCTAssertTrue([protocols containsObject:@protocol(NSObject)]);
+    // Swift protocols.
+    XCTAssertTrue([protocols containsObject:NSProtocolFromString(@"CSCoderEncoder")]);
+    XCTAssertTrue([protocols containsObject:NSProtocolFromString(@"CNKeyDescriptor_Private")]);
+    XCTAssertTrue([protocols containsObject:NSProtocolFromString(@"Swift._CocoaStringType")]);
+
 }
 
 -(void) testIVarClassNSString {
