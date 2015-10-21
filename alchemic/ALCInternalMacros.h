@@ -54,6 +54,12 @@ codeBlock(nextArg); \
 va_end(argList); \
 }
 
+#define alc_processVaList(lastRequiredArg, block) \
+va_list argList; \
+va_start(argList, lastRequiredArg); \
+block(argList); \
+va_end(argList)
+
 // Processes varadic args into a macro processor, excluding the arg that is used to guard them.
 #define alc_loadMacrosAfter(processorVar, afterArg) \
 alc_processVarArgsAfter(id<ALCMacro>, afterArg, ^(id<ALCMacro> macro){[processorVar addMacro:macro];});

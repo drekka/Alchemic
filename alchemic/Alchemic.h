@@ -39,3 +39,9 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 #import <Alchemic/ALCValueSourceFactory.h>
 #import <Alchemic/ALCModelSearchExpression.h>
 
+#import <Alchemic/ALCBuilder.h>
+#import <Alchemic/ALCAbstractResolvable.h>
+#import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCBuilderType.h>
+#import <Alchemic/ALCClassBuilderType.h>
+

@@ -1,0 +1,20 @@
+
+// This file is about making private headers available to swift.
+
+explicit module Alchemic.Private {
+
+    // Here is the list of private headers.
+    header "ALCBuilder.h"
+    header "ALCValue.h"
+    header "ALCAbstractResolvable.h"
+    header "ALCBuilderType.h"
+    header "ALCClassBuilderType.h"
+    header "ALCInternalMacros.h"
+    header "ALCBuilderStorage.h"
+    header "ALCMacroProcessor.h"
+    header "ALCVariableDependency.h"
+    header "ALCValueSourceFactory.h"
+    header "ALCDependency.h"
+
+    export *
+}

@@ -16,6 +16,10 @@ class ALCContextSTests: XCTestCase {
         XCTAssertNotNil(context);
     }
 
-    
+    func testAcValueMarcroFunction() {
+        let value = AcValue("hello")
+       XCTAssertEqual("hello", value.value as? String)
+    }
+
 
 }

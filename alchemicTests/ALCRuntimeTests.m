@@ -183,9 +183,9 @@
     XCTAssertTrue([protocols containsObject:@protocol(NSSecureCoding)]);
 
     // Swift protocols.
-    XCTAssertTrue([protocols containsObject:NSProtocolFromString(@"CSCoderEncoder")]);
-    XCTAssertTrue([protocols containsObject:NSProtocolFromString(@"CNKeyDescriptor_Private")]);
-    XCTAssertTrue([protocols containsObject:NSProtocolFromString(@"Swift._CocoaStringType")]);
+    XCTAssertTrue([protocols containsObject:(Protocol *)NSProtocolFromString(@"CSCoderEncoder")]);
+    XCTAssertTrue([protocols containsObject:(Protocol *)NSProtocolFromString(@"CNKeyDescriptor_Private")]);
+    XCTAssertTrue([protocols containsObject:(Protocol *)NSProtocolFromString(@"Swift._CocoaStringType")]);
 
 }
 

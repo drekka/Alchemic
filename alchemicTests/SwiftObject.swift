@@ -10,4 +10,9 @@ import Foundation
 
 class SwiftObject {
 
+    @objc static func alchemic() {
+        AcRegister(AcWithName("abc"))
+//        AcInject("hello")
+    }
+
 }

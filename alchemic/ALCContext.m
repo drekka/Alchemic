@@ -106,13 +106,22 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     return classBuilder;
 }
 
--(void) registerClassBuilderProperties:(ALCBuilder *) classBuilder, ... {
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... {
     STLog(classBuilder.valueClass, @"Registering class %@", NSStringFromClass(classBuilder.valueClass));
+    alc_processVaList(classBuilder, ^(va_list vaList){
+        [self registerClassBuilder:classBuilder withProperties:vaList];
+    });
+}
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder withProperties:(va_list) properties {
 
     // turn the registration flag back on so we can create instances.
     classBuilder.registered = YES;
 
-    alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
+    id macro;
+    while ((macro = va_arg(properties, id)) != nil) {
+        [classBuilder.macroProcessor addMacro:macro];
+    }
 }
 
 -(void) classBuilderDidFinishRegistering:(ALCBuilder *) classBuilder {

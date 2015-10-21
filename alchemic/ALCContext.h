@@ -59,7 +59,9 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param classBuilder The class builder whose properties are to be set.
  @param ... one or more macros which define the properties.
  */
--(void) registerClassBuilderProperties:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder withProperties:(va_list) properties;
 
 /**
  Finishes the registration of a class.
