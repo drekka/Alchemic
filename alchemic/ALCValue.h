@@ -8,6 +8,8 @@
 
 @import Foundation;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Classes that can provide values to other classes.
  */
@@ -24,3 +26,5 @@
 @property (nonatomic, strong, readonly) Class valueClass;
 
 @end
+
+NS_ASSUME_NONNULL_END
