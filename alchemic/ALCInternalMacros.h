@@ -33,32 +33,22 @@
 
 // Processes varadic args including the arg that delimits the var arg list.
 #define alc_processVarArgsIncluding(argType, firstArg, codeBlock) \
-{ \
 va_list argList; \
 va_start(argList, firstArg); \
 for (argType nextArg = firstArg; nextArg != nil; nextArg = va_arg(argList, argType)) { \
 codeBlock(nextArg); \
 } \
-va_end(argList); \
-}
+va_end(argList);
 
 // Processes varadic args excluding the arg that delimits the var arg list.
 #define alc_processVarArgsAfter(argType, afterArg, codeBlock) \
-{ \
 va_list argList; \
 va_start(argList, afterArg); \
 id nextArg; \
 while ((nextArg = va_arg(argList, id)) != nil) { \
 codeBlock(nextArg); \
 } \
-va_end(argList); \
-}
-
-#define alc_processVaList(lastRequiredArg, block) \
-va_list argList; \
-va_start(argList, lastRequiredArg); \
-block(argList); \
-va_end(argList)
+va_end(argList);
 
 // Processes varadic args into a macro processor, excluding the arg that is used to guard them.
 #define alc_loadMacrosAfter(processorVar, afterArg) \

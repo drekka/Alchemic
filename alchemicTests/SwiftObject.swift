@@ -7,12 +7,16 @@
 //
 
 import Foundation
+import Alchemic
+public class SwiftObject: NSObject {
 
-class SwiftObject {
-
-    @objc static func alchemic() {
-        AcRegister(AcWithName("abc"))
-//        AcInject("hello")
+    public static func alchemic(cb:ALCBuilder) {
+        AcRegister(cb, settings:AcWithName("abc"))
     }
 
 }
+
+
+
+
+//        AcInject(cb, variable:"hello")

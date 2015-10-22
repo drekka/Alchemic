@@ -63,8 +63,6 @@ typedef void (^ClassProcessor)(ALCContext *context, NSMutableSet *moreBundles, C
  */
 +(instancetype) resourceLocatorScanner;
 
-+(instancetype) swiftScanner;
-
 @end
 
 NS_ASSUME_NONNULL_END

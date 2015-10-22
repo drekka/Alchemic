@@ -32,11 +32,23 @@
 }
 
 +(nonnull instancetype) modelScanner {
+    ignoreSelectorWarnings(
+                           SEL alchemicFunctionSelector = @selector(alchemic:);
+                           )
     return [[ALCRuntimeScanner alloc]
             initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
                 return YES;
             }
             processor:^(ALCContext * context, NSMutableSet *moreBundlesClass, Class __unsafe_unretained aClass) {
+
+                // First check for a swift based call.
+                if ([aClass respondsToSelector:alchemicFunctionSelector]) {
+                    STLog(aClass, @"Swift class %@ has alchemic() method, executing it ...", NSStringFromClass(aClass));
+                    ALCBuilder *currentClassBuilder = [context registerBuilderForClass:aClass];
+                    ((void (*)(id, SEL, ALCBuilder *))objc_msgSend)(aClass, alchemicFunctionSelector, currentClassBuilder);
+                    [context classBuilderDidFinishRegistering:currentClassBuilder];
+                    return;
+                }
 
                 // Get the class methods. We need to get the class of the class for them.
                 unsigned int methodCount;
@@ -69,44 +81,6 @@
                     [context classBuilderDidFinishRegistering:currentClassBuilder];
                 }
 
-                free(classMethods);
-            }];
-}
-
-+(instancetype) swiftScanner {
-    return [[ALCRuntimeScanner alloc]
-            initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
-                return YES;
-            }
-            processor:^(ALCContext * context, NSMutableSet *moreBundlesClass, Class __unsafe_unretained aClass) {
-
-                // Get the class methods. We need to get the class of the class for them.
-                unsigned int methodCount;
-                Method *classMethods = class_copyMethodList(object_getClass(aClass), &methodCount);
-
-                // Search the methods for registration methods.
-                ALCBuilder *currentClassBuilder = nil;
-                for (size_t idx = 0; idx < methodCount; ++idx) {
-
-                    // If the method is not an alchemic one, then ignore it.
-                    SEL sel = method_getName(classMethods[idx]);
-                    if (sel == NSSelectorFromString(@"alchemic")) {
-                        continue;
-                    }
-
-                    // If we are here then we have an alchemic method to process, so create a class builder for for the class.
-                        STLog(aClass, @"Swift class %@ has Alchemic method ...", NSStringFromClass(aClass));
-
-                    // Call the method, passing it the current class builder.
-                    //((void (*)(id, SEL, ALCBuilder *))objc_msgSend)(aClass, sel, currentClassBuilder);
-
-                }
-
-                // If there is a class builder then configure it.
-                if (currentClassBuilder != nil) {
-                    [context classBuilderDidFinishRegistering:currentClassBuilder];
-                }
-                
                 free(classMethods);
             }];
 }

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		6C0792371BD0CA37005F0C12 /* ALCContextSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */; };
 		6C1A4F0B1B9949F600B3C25D /* ALCBuilderType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F0A1B9949F600B3C25D /* ALCBuilderType.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6C1A4F0E1B994D9100B3C25D /* ALCClassBuilderType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F0C1B994D9100B3C25D /* ALCClassBuilderType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C1A4F0E1B994D9100B3C25D /* ALCClassBuilderType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F0C1B994D9100B3C25D /* ALCClassBuilderType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C1A4F0F1B994D9100B3C25D /* ALCClassBuilderType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F0D1B994D9100B3C25D /* ALCClassBuilderType.m */; };
 		6C1A4F121B994DCB00B3C25D /* ALCMethodBuilderType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1A4F101B994DCB00B3C25D /* ALCMethodBuilderType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C1A4F131B994DCB00B3C25D /* ALCMethodBuilderType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F111B994DCB00B3C25D /* ALCMethodBuilderType.m */; };
@@ -138,6 +138,7 @@
 		6CC9D76A1B595A0100EFD517 /* ALCMacroProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */; };
 		6CCF58661B7C5530009655E9 /* NSSet+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CCF58631B7C500E009655E9 /* NSSet+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CCF58671B7C554D009655E9 /* NSSet+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF58641B7C500E009655E9 /* NSSet+Alchemic.m */; };
+		6CD75C131BD88CDE00317627 /* SwiftIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD75C121BD88CDE00317627 /* SwiftIntegrationTests.m */; };
 		6CDE85D71B73121F006E24F2 /* ALCContextTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDE85D61B73121F006E24F2 /* ALCContextTests.m */; };
 		6CDEBF9C1B5FCC32009E3BEF /* ALCValueSourceFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CDEBF9D1B5FCC32009E3BEF /* ALCValueSourceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */; };
@@ -213,7 +214,6 @@
 		6C3273A61B8362ED006A7581 /* NSObject+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+AlchemicTests.m"; sourceTree = "<group>"; };
 		6C3273A81B83671C006A7581 /* MacroTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MacroTests.m; sourceTree = "<group>"; };
 		6C34094A1BD60E0D004604DD /* ALCRuntimeScannerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCRuntimeScannerTests.m; sourceTree = "<group>"; };
-		6C34094C1BD73274004604DD /* module.private.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.private.modulemap; sourceTree = "<group>"; };
 		6C36D74F1B3851680073C4FB /* Alchemic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alchemic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C36F6251B9E9FD10075967E /* ALCClassBuilderTypeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCClassBuilderTypeTests.m; sourceTree = "<group>"; };
 		6C36F6271B9EA3EF0075967E /* ALCInitializerBuilderTypeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCInitializerBuilderTypeTests.m; sourceTree = "<group>"; };
@@ -312,6 +312,7 @@
 		6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMacroProcessor.m; sourceTree = "<group>"; };
 		6CCF58631B7C500E009655E9 /* NSSet+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSet+Alchemic.h"; sourceTree = "<group>"; };
 		6CCF58641B7C500E009655E9 /* NSSet+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+Alchemic.m"; sourceTree = "<group>"; };
+		6CD75C121BD88CDE00317627 /* SwiftIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftIntegrationTests.m; sourceTree = "<group>"; };
 		6CD800E51B89E24300781E46 /* ALCBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCBuilder.h; sourceTree = "<group>"; };
 		6CD800E61B89E24300781E46 /* ALCBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCBuilder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CD800E81B89E7AF00781E46 /* ALCBuilderStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCBuilderStorage.h; sourceTree = "<group>"; };
@@ -502,6 +503,7 @@
 				6C37497D1B7AD8B40012383D /* OnLoadIntegrationTests.m */,
 				6C716FFF1B7391AA00634112 /* RetrievingIntegrationTests.m */,
 				6CED057B1BCB833800B6C55B /* UnregisteredClassIntegrationTests.m */,
+				6CD75C121BD88CDE00317627 /* SwiftIntegrationTests.m */,
 			);
 			name = "Integration tests";
 			sourceTree = "<group>";
@@ -509,7 +511,6 @@
 		6C66DC251A8B82C3009F9D94 = {
 			isa = PBXGroup;
 			children = (
-				6C34094C1BD73274004604DD /* module.private.modulemap */,
 				6C469BB61BB0210A00CD2286 /* Frameworks */,
 				6C469BAD1BB0200200CD2286 /* Cartfile */,
 				6C7145601B44238900EBC055 /* StoryTellerConfig.json */,
@@ -724,36 +725,40 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C55E6371B6F3D3B004A6305 /* ALCResolvable.h in Headers */,
-				6CAE80701B42535A00217F9D /* Alchemic.h in Headers */,
-				6CB0740F1B4D078C00CA9002 /* ALCConfig.h in Headers */,
 				6C91F9EF1B399009002DF241 /* ALCMacros.h in Headers */,
-				6C36D7961B3853F10073C4FB /* ALCContext.h in Headers */,
 				6C36D7971B3853F10073C4FB /* ALCAlchemic.h in Headers */,
-				6CBB019C1B96D8D400863F09 /* ALCAbstractResolvable.h in Headers */,
-				6C1A4F0E1B994D9100B3C25D /* ALCClassBuilderType.h in Headers */,
-				6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */,
 				6C901DF51B58DCB40046CF9E /* ALCName.h in Headers */,
 				6C3CB9781B595713001F6EB6 /* ALCArg.h in Headers */,
 				6C901DED1B58D81B0046CF9E /* ALCClass.h in Headers */,
-				6C1A4F121B994DCB00B3C25D /* ALCMethodBuilderType.h in Headers */,
-				6CB0740A1B4D000F00CA9002 /* ALCRuntimeScanner.h in Headers */,
 				6C36D7A61B3853F10073C4FB /* AlchemicAware.h in Headers */,
-				6C4655F71B54D62400FD1D28 /* ALCModelValueSource.h in Headers */,
-				6CCF58661B7C5530009655E9 /* NSSet+Alchemic.h in Headers */,
 				6C62C9491B54F339009D57C7 /* ALCConstantValue.h in Headers */,
-				6CAED5451B8C2F6E008208DA /* ALCBuilderStorageExternal.h in Headers */,
-				6C1A4F161B994DDB00B3C25D /* ALCInitializerBuilderType.h in Headers */,
-				6C36D7AA1B3853F10073C4FB /* ALCWithName.h in Headers */,
+				6C36D7AD1B3853F10073C4FB /* ALCIsFactory.h in Headers */,
+				6C36D7AF1B3853F10073C4FB /* ALCIsPrimary.h in Headers */,
+				6CAED5491B8C2FD0008208DA /* ALCValue.h in Headers */,
+				6C901DF11B58DB570046CF9E /* ALCProtocol.h in Headers */,
 				6C36D7981B3853F10073C4FB /* ALCInternalMacros.h in Headers */,
 				6CDEBFA01B606EA0009E3BEF /* ALCMacro.h in Headers */,
-				6C36D7B01B3853F10073C4FB /* ALCDependency.h in Headers */,
-				6C36D7AD1B3853F10073C4FB /* ALCIsFactory.h in Headers */,
+				6CAED53E1B8C2F5B008208DA /* ALCBuilder.h in Headers */,
+				6CB0740F1B4D078C00CA9002 /* ALCConfig.h in Headers */,
+				6CAED54F1B8C4FDE008208DA /* ALCIsExternal.h in Headers */,
+				6C55E6371B6F3D3B004A6305 /* ALCResolvable.h in Headers */,
+				6C36D7AA1B3853F10073C4FB /* ALCWithName.h in Headers */,
+				6C36D7961B3853F10073C4FB /* ALCContext.h in Headers */,
+				6CBB019C1B96D8D400863F09 /* ALCAbstractResolvable.h in Headers */,
 				6C8CD9651B55FC9100C1BC7F /* ALCModelSearchExpression.h in Headers */,
+				6C1A4F0B1B9949F600B3C25D /* ALCBuilderType.h in Headers */,
 				6CDEBF9C1B5FCC32009E3BEF /* ALCValueSourceFactory.h in Headers */,
-				6C901DF11B58DB570046CF9E /* ALCProtocol.h in Headers */,
+				6CAE80701B42535A00217F9D /* Alchemic.h in Headers */,
+				6C1A4F0E1B994D9100B3C25D /* ALCClassBuilderType.h in Headers */,
+				6CAC887B1B4A5A9600AFB8E4 /* ALCModel.h in Headers */,
+				6C1A4F121B994DCB00B3C25D /* ALCMethodBuilderType.h in Headers */,
+				6CB0740A1B4D000F00CA9002 /* ALCRuntimeScanner.h in Headers */,
+				6C4655F71B54D62400FD1D28 /* ALCModelValueSource.h in Headers */,
+				6CCF58661B7C5530009655E9 /* NSSet+Alchemic.h in Headers */,
+				6CAED5451B8C2F6E008208DA /* ALCBuilderStorageExternal.h in Headers */,
+				6C1A4F161B994DDB00B3C25D /* ALCInitializerBuilderType.h in Headers */,
+				6C36D7B01B3853F10073C4FB /* ALCDependency.h in Headers */,
 				6CAED5471B8C2F6E008208DA /* ALCBuilderStorage.h in Headers */,
-				6C36D7AF1B3853F10073C4FB /* ALCIsPrimary.h in Headers */,
 				6C36D7B31B3853F10073C4FB /* ALCVariableDependency.h in Headers */,
 				6CC9D7691B595A0100EFD517 /* ALCMacroProcessor.h in Headers */,
 				6C36D7BC1B3853F10073C4FB /* ALCResourceLocator.h in Headers */,
@@ -763,15 +768,11 @@
 				6C1A4F1F1B995C3200B3C25D /* ALCAbstractMethodBuilderType.h in Headers */,
 				6C36D7BE1B3853F10073C4FB /* ALCBundleResourceLocator.h in Headers */,
 				6C235ADA1B831D550015CA0B /* NSObject+Builder.h in Headers */,
-				6CAED5491B8C2FD0008208DA /* ALCValue.h in Headers */,
 				6C36D7BF1B3853F20073C4FB /* ALCFileContentsResourceLocator.h in Headers */,
-				6C1A4F0B1B9949F600B3C25D /* ALCBuilderType.h in Headers */,
-				6CAED54F1B8C4FDE008208DA /* ALCIsExternal.h in Headers */,
 				6C4655F41B54D59F00FD1D28 /* ALCValueSource.h in Headers */,
 				6C5F17191B626A9A00F60B1B /* ALCAbstractValueSource.h in Headers */,
 				6C36D7C01B3853F20073C4FB /* ALCRuntime.h in Headers */,
 				6C2D4CC31B573D560024AE82 /* ALCConstantValueSource.h in Headers */,
-				6CAED53E1B8C2F5B008208DA /* ALCBuilder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -955,6 +956,7 @@
 				6C5F142E1B64B54800E119FC /* SimpleObject.m in Sources */,
 				6CA5B71D1BCF508400DBB753 /* CircularDependencySingletonInitializerIntegrationTests.m in Sources */,
 				6C5F171C1B626FF900F60B1B /* ALCAbstractValueSourceTests.m in Sources */,
+				6CD75C131BD88CDE00317627 /* SwiftIntegrationTests.m in Sources */,
 				6C55E6391B70617E004A6305 /* ALCAlchemicTests.m in Sources */,
 				6CEE8EAF1B8D721C002EADC5 /* ALCBuilderTests.m in Sources */,
 				6C8FF8AA1B6D17B100B2B90A /* CircularDependency3IntegrationTests.m in Sources */,
@@ -1021,7 +1023,7 @@
 				INSTALL_PATH = "@rpath";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_PRIVATE_FILE = "$(SRCROOT)/module.private.modulemap";
+				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1050,7 +1052,7 @@
 				INSTALL_PATH = "@rpath";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_PRIVATE_FILE = "$(SRCROOT)/module.private.modulemap";
+				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1195,6 +1197,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1217,6 +1220,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = (

@@ -61,7 +61,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) registerClassBuilder:(ALCBuilder *) classBuilder withProperties:(va_list) properties;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder withProperties:(NSArray<id<ALCMacro>> *) properties;
 
 /**
  Finishes the registration of a class.
