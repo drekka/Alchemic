@@ -1,4 +1,6 @@
-# Quick guide
+# Quick guide - Objective-C
+
+This guide is for using Alchemic with Objective-C sources.
 
 Table of Contents
 
@@ -39,7 +41,7 @@ This list is by no means complete. But it gives a good indicative summary of how
 ```objectivec
 @implementation MyClass
 AcRegister()
-...
+@end
 ```
 
 MyClass will be created on application startup and managed as a singleton by Alchemic. 
@@ -55,7 +57,7 @@ AcMethod(SomeOtherClass , createSomeOtherClassWithMyClass:,
 	// Create it
 	return otherClass;
 }
-...
+@end
 ```
 
 MyClass will be instantiated and managed as a singleton. SomeOtherClass will then be instantiated using the createSomeOtherClassWithMyClass: method and also managed as a singleton. 
@@ -65,7 +67,7 @@ MyClass will be instantiated and managed as a singleton. SomeOtherClass will the
 ```objectivec
 @implementation MyClass
 AcRegister(AcFactory, AcWithName(@"Thing factory"))
-...
+@end
 ```
 
 Every time a MyClass instance is required or requested, a new one will be created and returned.
@@ -79,7 +81,7 @@ AcInitializer(initWithObjects:, AcArg(NSArray, AcProtocol(MyProtocol)))
     self = ...
     return self;
 }
-...
+@end
 ```
 
 MyClass will be registered as a factory, using the initWithObjects: method to create each instance. The objects argument will be an array sourced from Alchemic managed objects which conform to the MyProtocol protocol.
@@ -91,7 +93,7 @@ MyClass will be registered as a factory, using the initWithObjects: method to cr
     MyOtherClass *_otherThing;
 }
  AcInject(_otherThing)
-...
+@end
 ```
 
 Simplest form of injecting a value. The injected value will be found by searching the model for MyOtherClass objects. It is assumed that only one will be found and Alchemic will throw an error if there is zero or more than one.  
@@ -103,7 +105,7 @@ Simplest form of injecting a value. The injected value will be found by searchin
     id<MyProtocol> _otherThing;
 }
  AcInject(_otherThing, AcClass(MyOtherClass))
-...
+@end
 ```
 
 This example shows how Alchemic can locate a specific object based on it's class (MyOtherClass) and inject into a more generic variable.
@@ -115,7 +117,7 @@ This example shows how Alchemic can locate a specific object based on it's class
     NSArray<id<MyProtocol>> *_things;
 }
  AcInject(_things, AcProtocol(MyProtocol))
-...
+@end
 ```
 
 Locates all objects in Alchemic that conform to the MyProtocol protocol and injects them as an array.
@@ -129,6 +131,7 @@ AcMethod(MyClass, createOverride, AcPrimary)
    // Create the override
    return override;
 }
+@end
 ```
  
 Shows how you can use ALchemic registered methods in a unit test to generate objects and use them as overrides for objects in the application code. Mainly useful for substituting in dummy or fake instances for testing purposes. Could even be used to inject [OCMock](http://ocmock.org) objects.

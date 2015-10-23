@@ -106,6 +106,10 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
                  initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                 initializer:(SEL) initializer
+              withProperties:(NSArray<id<ALCMacro>> *) properties;
+
 /**
  Registers a method for a class that will create an object.
 
@@ -204,15 +208,11 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(nullable ALCBuilder *) classBuilderForClass:(Class) aClass;
 
 /**
- Uses a set of ALCModelSearchExpression objects to find a set of builders in the model, the executes a block on each one.
-
- @discussion This is mainly used for processing builders to filter them for a final set.
+ Uses a set of ALCModelSearchExpression objects to find a set of builders in the model.
 
  @param searchExpressions    A NSSet of ALCModelSearchExpression objects which define the search criteria for finding the builders.
- @param processBuildersBlock A block which is called, passing each builder in turn.
  */
--(void) buildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
-              processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
+- (NSSet<ALCBuilder *> *)findBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *)searchExpressions;
 
 @end
 

@@ -2,87 +2,30 @@
 By Derek Clarkson
 
 Other documents: [What is Direct Injection (DI)?](./WhatIsDI.md), [Quick guide](./Quick guide.md), [Macro ref](./macros.md)
-
-  * [Intro](#intro)
-    * [Main features](#main-features)
-  * [Swift support](#swift-support)
-  * [Installation](#installation)
-    * [<a href="https://github\.com/Carthage/Carthage">Carthage</a>](#carthage)
-  * [Alchemic](#alchemic)
-    * [Auto\-start sequence](#auto-start-sequence)
-    * [Stopping Alchemic from auto\-starting](#stopping-alchemic-from-auto-starting)
-    * [Manually starting](#manually-starting)
-    * [Adding Alchemic to your code](#adding-alchemic-to-your-code)
-    * [The Alchemic context](#the-alchemic-context)
-  * [How Alchemic reads your code](#how-alchemic-reads-your-code)
-    * [Objective\-C macros](#objective-c-macros)
-    * [Swift functions](#swift-functions)
-  * [Creating objects](#creating-objects)
-    * [Builders](#builders)
-    * [Declaring singletons](#declaring-singletons)
-    * [Using initializers](#using-initializers)
-      * [Declaring method arguments using AcArg(type, value, \.\.\.)](#declaring-method-arguments-using-acargtype-value-)
-    * [Object factories](#object-factories)
-    * [Giving builders custom names](#giving-builders-custom-names)
-    * [Generating objects using methods](#generating-objects-using-methods)
-    * [Primary objects](#primary-objects)
-      * [Primary objects and testing](#primary-objects-and-testing)
-  * [Injecting dependencies](#injecting-dependencies)
-    * [Finding objects](#finding-objects)
-      * [Searching by Class and Protocols](#searching-by-class-and-protocols)
-      * [Searching by Name](#searching-by-name)
-      * [Using constant values](#using-constant-values)
-    * [Injecting into arrays](#injecting-into-arrays)
-  * [Interfacing with Alchemic](#interfacing-with-alchemic)
-    * [Non\-managed objects](#non-managed-objects)
-    * [Programmatically obtaining objects](#programmatically-obtaining-objects)
-      * [Getting objects using AcGet(\.\.\.)](#getting-objects-using-acget)
-      * [Getting objects with AcInvoke(\.\.\.)](#getting-objects-with-acinvoke)
-      * [Setting values with AcSet(\.\.\.)](#setting-values-with-acset)
-    * [Asynchronous startup](#asynchronous-startup)
-    * [Managing the UIApplicationDelegate instance](#managing-the-uiapplicationdelegate-instance)
-    * [Callbacks and notifications](#callbacks-and-notifications)
-      * [Dependencies injected](#dependencies-injected)
-      * [Finished loading](#finished-loading)
-  * [Additional configuration](#additional-configuration)
-    * [Adding bundles &amp; frameworks](#adding-bundles--frameworks)
-  * [Circular dependency detection](#circular-dependency-detection)
-  * [Credits](#credits)
   
 #Intro
 
 Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS.  It's based loosely on ideas from the [Spring](http://projects.spring.io/spring-framework/) Java framework and after trying out several other iOS DI frameworks. 
 
-The main ideas driving the Alchemic design are:
-
- * Keep it simple to use.
- * Keep it as unobtrusive as possible.
- * Minimal code, preferrable - ***None !***
- * Flexibility.
-
 ##Main features
-* Singletons by default
-* Factory classes
-* Method based object creation
-* Initializer argument injection
-* Method argument injection
-* Value resolution by class, protocol or name.
-* Constant value injection
-* Primary instances
-* Self starting
-* Automatic registration of classes and methods through bundle scanning
-* Automatic array population by class, protocol or name
-* Circular dependency detection
-* Macro driven
-* UIApplicationDelegate aware
-* Asynchronous loading
-* Supports both Objective-C and Swift
+* Supports both Objective-C and Swift.
+* Self starting on an asynchronous background thread.
+* Automatically scans app bundle for declaration.
+* Classes, initializers or methods as a source of objects.
+* Singletons, factories or externally sourced objects.
+* Support for injecting initializer and method arguments. 
+* Variable injection only declarations for injecting externally created objects.
+* Injection values can be located by class, protocol or name.
+* Injection values can be constant values.
+* Declarations can be tagged as primary sources to give them priority.
+* Automatic array injection by class, protocol or name.
+* Circular dependency detection.
+* Concise metalanguage using Objective-C macros or Swift function.
+* Automatic inejction of UIApplicationDelegate dependencies.
 
 # Swift support
 
-Alchemic now supports Swift 2.0+ code. You can write your Swift classes and have them managed by Alchemic the same way Objective-C based classes are managed. 
-
-However the way you declared classes to Alchemic is different because of the nature of the Swift/Objective-C boundaries and Swift's limited runtime support. Therefore most of the examples below include both an Objective-C example and a Swift example.
+Alchemic now supports classes written in Swift 2.0+ code. However the way you declare things to Alchemic is different because of various differences between the Objective-C and Swift languages. So the examples used in this document include an Objective-C and Swift example to illustrate the differences.
 
 # Installation
 
@@ -96,17 +39,7 @@ Add this to your **Cartfile**:
 
     github "drekka/alchemic" > 1.0
 
-Then if you have not already included other dependenies, use this:
-
-`carthage bootstrap`
-
-Or:
-
-`carthage update`
-
-This should download Alchemic from this repository and compile it and it's dependencies into the  **<project-dir>/Carthage/Build/iOS/** directory. You can then include these frameworks into your project the same way you would add any other framework. 
-
-*Note: You will need to ensure that all of these frameworks are added to your project and copied to the __Frameworks__ directory in your app.* 
+Then run either the **bootstrap** or **update** carthage commands to download Alchemic from and compile it and it's dependencies into the  **<project-dir>/Carthage/Build/iOS/** directory. You can then include the frameworks into your project the same way you would add any other framework. 
 
 Framework | Description
 --- | ---
@@ -114,44 +47,21 @@ Alchemic.framework | This API.
 Storyteller.framework | [Story Teller](https://github.com/drekka/StoryTeller) is a alternative logging framework. 
 PEGKit.framework | Used by StoryTeller.
 
-# Alchemic
+*Note: You will need to ensure that all of these frameworks are added to your project and copied to the __Frameworks__ directory in your app.* 
 
-## Auto-start sequence
+# Alchemic's boot sequence
 
-Alchemic will automatically start itself when the app loads. During this process it will follow this sequence of events:
+Alchemic will automatically start itself when your application loads. It follows this logic:
 
-1. Starts itself on a background thread.
+1. Starts itself on a background thread so that your application's startup is not slowed down.
 2. Scan all classes in your app for dependency injection commands. 
-3. Instantiate any classes it recognises as Singletons and wire up their dependencies.  
-4. Check for a UIApplicationDelegate and if found, checks it for injections.
+3. Resolve all references and configure an internal model based on the found declarations.
+3. Instantiate any classes declared as Singletons and wire up their dependencies.  
+4. Check for a UIApplicationDelegate and if found, injection any dependencies it has declared.
 5. Executes post-startup blocks.
-5. Posts the ["AlchemicFinishedLoading"](#finished-loading) notification.
+5. Post the ["AlchemicFinishedLoading"](#finished-loading) notification.
 
 *Look at [Asynchronous startup](#asynchronous-startup) for more details on Alchemic's starting and how to know when you can access objects.*
-
-## Stopping Alchemic from auto-starting
-
-If for some reason you do not want Alchemic to auto-start (unit testing perhaps), then you can do this by modifying XCode's scheme for the launch like this:
-
-![Stop Alchemic from loading](./images/screen-shot-stop-alchemic.png)
-
-***--alchemic-nostart*** - disables Alchemic's autostart function.
-
-## Manually starting
-
-Alchemic can programmatically started using:
-
-```objectivec
-// Objective-C
-[Alchemic start];
-```
-
-```swift
-// Swift
-Alchemic.start()
-```
-
-But generally speaking, just letting Alchemic autostart is the best way.
 
 ## Adding Alchemic to your code
 
@@ -169,42 +79,30 @@ import Alchemic
 
 *Alchemic works with implementations rather than the headers. This means it can access methods and initializers that are not public or visible to other classes.  The advantage of this is that you have the ability to create initializers and methods which only Alchemic can see. Thus simplifying your headers.*
 
-## The Alchemic context
-
-Alchemic has a central *'Context'* which manages all of the objects and classes that Alchemic needs. You generally don't need to do anything directly with the context as Alchemic provides a range of Objective-C *macros* and Swift functions which will take care of the dirty work for you. However should you need to access it directly, it can be accessed like this:
-
-```objectivec
-// Objective-C
-[Alchemic mainContext] ...;
-```
-
-```swift
-// Swift
-Alchemic.mainContext()...
-```
-    
 # How Alchemic reads your code
 
-Alchemic is designed to be as unobtrusive as possible. But it still needs to know a fair amount of information about your code. So we need a way to tell it about the classes, methods and variables you want it to work with. 
+Alchemic is designed to be as unobtrusive as possible. But it still needs to know what you want it to do. With Objective-C source code it makes use of pre-processor macros to tell it what to do. With Swift source code it uses a specific function with each class and a set of global functions to tell it the details.  
 
 ## Objective-C macros
 
 In Objective-C classes Alchemic uses pre-processor macros as a form of meta-data, similar to Java's annotations. These macros are generally pretty simple and easy to remember and it's likely that within a short time you will being using them without much thought. 
 
-Most of these macros take one or more arguments. For example the `AcArg(...)` macro takes at least two arguments and possibly more. To help keep the macros susinct and avoid having to type needless boiler plate, there are some common conventions used:
+Most of these macros take one or more arguments. For example the `AcArg(...)` macro takes at least two arguments and possibly more. To help keep the macros susinct and avoid having to type needless boiler plate, they only need the raw class and protocol names, variable names, selectors, etc. For example:
 
- Convention | Description
- --- | ---
- Types (Classes & Protocols) | You only need to specify the relevant class or protocol when a type is needed.<br />For example `AcProtocol(NSCopying)` is the macro form of<br />`[ALCProtocol withProtocol:@protocol(NSCopying)]`.
- Selectors | You only need to specify the selector name. For example `AcInitializer(myInitMethod)` is the macro form of<br />```[[ALCAlchemic mainContext] registerClassInitializer:classBuilder initializer:@selector(initializerSel), nil];```
-Properties | Property names are also shortened. So that code completion can assist, they are **not** expressed as strings. For example `AcInject(myVar)`. 
-Varadic macros |  Many macros make use of varadic lists so you can add as many criteria as you like in a single line.
+```objectivec
+// This macro
+AcProtocol(NSCopying)
+// generates this code
+[ALCProtocol withProtocol:@protocol(NSCopying)]
+```
 
-Many of Alchemic's Objective-C macros un-wrap into class methods. The presense of these methods is how Alchemic recognises the classes it has to manage.
+Some of Alchemic's macros like `AcProtocol(...)` are designed to be used as arguments to other macros. Others such as `AcGet(...)` are designed to be used on an Objective-C method. 
+
+Some such as `AcRegister(...)` are designed to be used at the class level and un-wrap themselves into additional class methods. The presense of these methods is how Alchemic recognises the classes it has to manage.
 
 ## Swift functions
 
-Because of the nature of Swift, getting Swift classes to be recognised by Alchemic has to be done differently to Objective-C. To tell Alchemic about a Swift class, you need to implement a function in it with this signature:
+Getting Swift classes to be recognised by Alchemic has to be done differently to Objective-C. For Alchemic to recognise a Swift class, you need to implement a function in it with this signature:
 
 ```swift
 class MyClass {
@@ -214,9 +112,9 @@ class MyClass {
 }
 ```
 
-Alchemic will automatically find and execute this function as it starts up. Inside it you place calls to Alchemic's Swift functions which are very simular to their Objective-C macro counterparts.
+Alchemic will automatically find and execute every occurance of this function as it starts up. Inside them you place calls to Alchemic's Swift functions to tell it about what you want it to do. These functions are very simular to their Objective-C macro counterparts.
 
-*Note: Generally you can use `public static alchemic(...`, but sometimes (when using inner classes for example), you might need to change it to `@objc static alchemic(...`.*
+*Note: It's required that the function is __public__ for Alchemic to be able to see it. However sometimes you cannot make the function public (when using inner classes for example). In these situations you can change it to __@objc__ instead.*
 
 # Creating objects
 
@@ -224,12 +122,11 @@ Before we look at resolving dependencies and injecting values, we first need to 
 
 ## Builders
 
-Alchamic uses what it calls '**Builders**' to declare how objects are created. They can both build objects and inject dependencies. There are 3 main types of builders:
+Alchamic uses what it calls '**Builders**' to declare how objects are created. They can both build objects and inject dependencies. There are 3 types of builders:
 
 * **Class builders** which define information about a class and can build instances of that class. Class builders also hold information about dependencies that the class may have and how they are located and injected.
 * **Initializer builders** which define information about a class's initializer and can build instances of the class by executing the initializer and passing it arguments. 
-* **Method builder** which define information about a method in a class and can build objects by calling the method and returning the result. Method builders are very similar to initializer builder, only differing in how the method is called.
-
+* **Method builder** which define information about a method in a class and can build objects by calling the method and returning the result. Method builders are very similar to initializer builder, only differing in how the method is called and that they can return anything the method generates as a return value.
 
 ## Declaring singletons 
 
@@ -255,11 +152,11 @@ class MyClass {
 
 This is the simplest form of registering a class with Alchemic. **AcRegister** tells Alchemic that this class need's it's instances managed. When starting, Alchemic will consider any such class for auto-instantiating on startup.
 
-*Note: There should only be one __AcRegister__ call for a class.*
+*Note: __AcRegister__ should only be used once in the class.*
 
 ## Using initializers
 
-By default, Alchemic will use the standard `init` method when initializing an instance of a class. However this is not always the best option, so Alchemic provides a method for specifying a different initializer and how to locate any arguments it needs:
+By default, Alchemic will use the standard `init` method when initializing an instance of a class. However this is not always what you want, so it also provides a way to specify an initializer to use and how to locate any arguments it needs:
 
 ```objectivec
 // Objective-C
@@ -274,14 +171,16 @@ AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
 ```swift
 // Swift
 public static func alchemic(cb: ALCBuilder) {
-    AcInitializer(cb, initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
+    AcInitializer(cb, initializer:initWithOtherObject:, 
+        AcArg(MyOtherClass, source:AcClass(MyOtherClass.self))
+    )
 }
 func initWithOtherObject(obj: AnyObject) {
     // ...
 }
 ```
 
-The `AcInitiailizer(...)` macro tells Alchemic that when it needs to create an instance of MyClass, it should use the `initWithOtherObject:` initializer. The first argument to this macro is required and specifies the initializer selector. After that is a series of zero or more `AcArg(...)` macros which define where to get the value for each argument that the selector declares. 
+**AcInitiailizer** tells Alchemic that when it needs to create an instance of MyClass, it should use the passed initializer selector. For each argument the initializer requires, a matching **AcArg** can be specified which define where to get the value for it. 
 
 `AcInitializer(...)` can also take all the same macros that can be used with `AcRegister(...)` to define various attributes of the instance that will be created. In fact, there is no need to use `AcRegister(...)` at all as the arguments for it will be ignored when there is an `AcInitializer(...)` macro present.
 
@@ -724,6 +623,48 @@ Alchemic attempts to detect these endless loops of dependencies when it starts u
 
 Generally speaking though, they are actually quite hard to create because Alchemic creates as many objects as possible before injecting dependencies. So they are not depending on objects that do not yet exist. 
 
+# Controlling Alchemic
+
+This section covers controlling Alchemic.
+
+## Stopping Alchemic from auto-starting
+
+If for some reason you do not want Alchemic to auto-start (unit testing perhaps), then you can do this by modifying XCode's scheme for the launch like this:
+
+![Stop Alchemic from loading](./images/screen-shot-stop-alchemic.png)
+
+***--alchemic-nostart*** - disables Alchemic's autostart function.
+
+## Manually starting
+
+Alchemic can programmatically started using:
+
+```objectivec
+// Objective-C
+[Alchemic start];
+```
+
+```swift
+// Swift
+Alchemic.start()
+```
+
+But generally speaking, just letting Alchemic autostart is the best way.
+
+## The Alchemic context
+
+Alchemic has a central *'Context'* which manages all of the objects and classes that Alchemic needs. You generally don't need to do anything directly with the context as Alchemic provides a range of Objective-C *macros* and Swift functions which will take care of the dirty work for you. However should you need to access it directly, it can be accessed like this:
+
+```objectivec
+// Objective-C
+[Alchemic mainContext] ...;
+```
+
+```swift
+// Swift
+Alchemic.mainContext()...
+```
+    
 # Credits
 
  * Big Thanks to the guys behind [Carthage](https://github.com/Carthage/Carthage) for writing a dependency tool that actual works well with XCode and Git.

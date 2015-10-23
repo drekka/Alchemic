@@ -93,12 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) stubMockContextToReturnBuilders:(NSArray<ALCBuilder *> *) builders {
-    OCMStub([self.mockContext buildersWithSearchExpressions:OCMOCK_ANY
-                                        processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
-        __unsafe_unretained ProcessBuilderBlock processBuilderBlock;
-        [inv getArgument:&processBuilderBlock atIndex:3];
-        processBuilderBlock([NSSet setWithArray:builders]);
-    });
+    OCMStub([self.mockContext findBuildersWithSearchExpressions:OCMOCK_ANY]).andReturn(builders);
 }
 
 -(void) configureAndResolveBuilder:(ALCBuilder *) builder {

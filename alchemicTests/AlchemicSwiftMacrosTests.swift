@@ -21,7 +21,7 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     func testAcClass() {
         // Note that in Swift, String is not a class.
         let value = AcClass(NSString.self) as! ALCClass
-        XCTAssertTrue(value.aClass == String.self)
+        XCTAssertTrue(value.aClass == NSString.self)
     }
 
     func testAcProtocol() {
@@ -32,12 +32,10 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     }
 
     func testAcArg() {
-        let value = AcArg(NSString.self, settings:AcValue(5)) as! ALCArg
-        XCTAssertNotNil(value)
-        XCTAssertTrue(value is ALCArg)
-        XCTAssertTrue(value.valueType == String.self)
-        let valueSource = value.valueSource()
-        XCTAssertEqual(5, valueSource.value)
+        let arg = AcArg(NSNumber.self, source:AcValue(5)) as! ALCArg
+        XCTAssertNotNil(arg)
+        XCTAssertTrue(arg.valueType == NSNumber.self)
+        XCTAssertEqual(5, arg.valueSource.value as? Int)
     }
 
     func testAcValue() {
@@ -94,6 +92,32 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
 
     func testAcInitializer() {
 
+        STStoryTeller().startLogging("LogAll")
+
+        class TestClass : NSObject {
+            var string: String
+            @objc init(string:String) {
+                self.string = string
+            }
+            @objc static func alchemic(cb: ALCBuilder) {
+                // Need to update code to copy values to initializer builder if this is used.
+                // AcRegister(cb, settings: AcWithName("testClass"))
+                AcInitializer(cb, initializer: "initWithString:",
+                    args:AcArg(NSString.self, source:AcValue("abc")), AcWithName("testClass")
+                )
+            }
+        }
+
+        super.setupRealContext()
+        super.startContextWithClasses([TestClass.self])
+
+        let context = ALCAlchemic.mainContext()
+        let searchExpressions: NSSet = [AcName("testClass")]
+        let builders = context.findBuildersWithSearchExpressions(searchExpressions as Set)
+
+        let builder = builders.first
+        XCTAssertEqual("abc", (builder?.value as! TestClass).string)
+
     }
 
     // MARK:- Properties
@@ -133,28 +157,28 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     // MARK:- Injections
 
     func testAcInjectDependencies() {
-
+        
     }
-
+    
     // MARK:- Object accessors
-
+    
     func testAcGet() {
-
+        
     }
-
+    
     func testAcSet() {
-
+        
     }
-
+    
     func testAcInvoke() {
-
+        
     }
-
+    
     // MARK:- Startup
-
+    
     func testAcExecuteWhenStarted() {
-
+        
     }
-
-
+    
+    
 }
