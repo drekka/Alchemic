@@ -19,8 +19,9 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     }
 
     func testAcClass() {
+        // Note that in Swift, String is not a class.
         let value = AcClass(NSString.self) as! ALCClass
-        XCTAssertTrue(value.aClass == NSString.self)
+        XCTAssertTrue(value.aClass == String.self)
     }
 
     func testAcProtocol() {
@@ -31,7 +32,12 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     }
 
     func testAcArg() {
-
+        let value = AcArg(NSString.self, settings:AcValue(5)) as! ALCArg
+        XCTAssertNotNil(value)
+        XCTAssertTrue(value is ALCArg)
+        XCTAssertTrue(value.valueType == String.self)
+        let valueSource = value.valueSource()
+        XCTAssertEqual(5, valueSource.value)
     }
 
     func testAcValue() {
@@ -82,6 +88,7 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     }
 
     func testAcMethod() {
+
 
     }
 

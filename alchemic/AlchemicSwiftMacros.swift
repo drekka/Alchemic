@@ -44,6 +44,10 @@ public func AcExternal() -> ALCMacro {
     return ALCIsExternal()
 }
 
+public func AcArg(argType:AnyObject.Type, settings: ALCMacro...) -> ALCMacro {
+    return ALCArg(type: argType, properties: settings)
+}
+
 // Functions which configure Alchemic
 
 public func AcRegister(classBuilder:ALCBuilder, settings: ALCMacro...) {

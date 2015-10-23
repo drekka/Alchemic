@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 +(instancetype) argWithType:(Class) argType macros:(id<ALCMacro>) firstMacro, ... NS_REQUIRES_NIL_TERMINATION;
 
++(instancetype) argWithType:(Class) argType properties:(NSArray<id<ALCMacro>> *) properties;
+
 @end
 
 NS_ASSUME_NONNULL_END
