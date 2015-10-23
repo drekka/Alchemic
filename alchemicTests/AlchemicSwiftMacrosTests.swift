@@ -23,6 +23,17 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
         XCTAssertTrue(value.aClass == NSString.self)
     }
 
+    func testAcProtocol() {
+        let value = AcProtocol(NSCopying.self) as! ALCProtocol
+        let nscopying = NSCopying.self as Protocol
+        let valueProtocol = value.aProtocol
+        XCTAssertTrue(nscopying === valueProtocol)
+    }
+
+    func testAcArg() {
+
+    }
+
     func testAcValue() {
         let value = AcValue("hello") as! ALCConstantValue
         XCTAssertEqual("hello", value.value as? String)
@@ -31,6 +42,24 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     func testAcWithName() {
         let value = AcWithName("hello") as! ALCWithName
         XCTAssertEqual("hello", value.asName)
+    }
+
+    func testAcFactory() {
+        let value = AcFactory()
+        XCTAssertNotNil(value)
+        XCTAssertTrue(value is ALCIsFactory)
+    }
+
+    func testAcPrimary() {
+        let value = AcPrimary()
+        XCTAssertNotNil(value)
+        XCTAssertTrue(value is ALCIsPrimary)
+    }
+
+    func testAcExternal() {
+        let value = AcExternal()
+        XCTAssertNotNil(value)
+        XCTAssertTrue(value is ALCIsExternal)
     }
 
     // MARK: - Top level macros
@@ -51,6 +80,16 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
 
         XCTAssertEqual("abc", cb?.name)
     }
+
+    func testAcMethod() {
+
+    }
+
+    func testAcInitializer() {
+
+    }
+
+    // MARK:- Properties
 
     func testAcInject() {
 
@@ -83,5 +122,32 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
 
         XCTAssertEqual(nestedObj, testObj.nestedObj as? NestedClass)
     }
-    
+
+    // MARK:- Injections
+
+    func testAcInjectDependencies() {
+
+    }
+
+    // MARK:- Object accessors
+
+    func testAcGet() {
+
+    }
+
+    func testAcSet() {
+
+    }
+
+    func testAcInvoke() {
+
+    }
+
+    // MARK:- Startup
+
+    func testAcExecuteWhenStarted() {
+
+    }
+
+
 }

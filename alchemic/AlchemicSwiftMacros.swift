@@ -20,12 +20,28 @@ public func AcClass(aClass: AnyObject.Type) -> ALCMacro {
     return ALCClass.withClass(aClass)
 }
 
+public func AcProtocol(aProtocol: Protocol) -> ALCMacro {
+    return ALCProtocol.withProtocol(aProtocol)
+}
+
 public func AcValue(value: AnyObject) -> ALCMacro {
     return ALCConstantValue(value)
 }
 
 public func AcWithName(name: String) -> ALCMacro {
     return ALCWithName(name)
+}
+
+public func AcFactory() -> ALCMacro {
+    return ALCIsFactory()
+}
+
+public func AcPrimary() -> ALCMacro {
+    return ALCIsPrimary()
+}
+
+public func AcExternal() -> ALCMacro {
+    return ALCIsExternal()
 }
 
 // Functions which configure Alchemic

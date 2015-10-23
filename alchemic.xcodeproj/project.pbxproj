@@ -368,15 +368,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6C0792341BD0C9FC005F0C12 /* Swift */ = {
-			isa = PBXGroup;
-			children = (
-				6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */,
-				6CD75C161BD9A7F400317627 /* AlchemicSwiftMacrosTests.swift */,
-			);
-			name = Swift;
-			sourceTree = "<group>";
-		};
 		6C1A4F091B9949C500B3C25D /* Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -569,7 +560,8 @@
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;
 			children = (
-				6C0792341BD0C9FC005F0C12 /* Swift */,
+				6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */,
+				6CD75C161BD9A7F400317627 /* AlchemicSwiftMacrosTests.swift */,
 				6C31B0701B9815B000F59A83 /* ALCAbtractResolvableTests.m */,
 				6C55E6381B70617D004A6305 /* ALCAlchemicTests.m */,
 				6CDE85D61B73121F006E24F2 /* ALCContextTests.m */,
