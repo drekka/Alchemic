@@ -10,8 +10,17 @@ import Foundation
 
 
 // Macro replacements
+// These are declared as global functions so that they are available where necessary.
 
-public func AcValue(value: AnyObject) -> ALCConstantValue  {
+public func AcName(name: String) -> ALCMacro {
+    return ALCName.withName(name)
+}
+
+public func AcClass(aClass: AnyObject.Type) -> ALCMacro {
+    return ALCClass.withClass(aClass)
+}
+
+public func AcValue(value: AnyObject) -> ALCMacro {
     return ALCConstantValue(value)
 }
 
@@ -26,12 +35,8 @@ public func AcRegister(classBuilder:ALCBuilder, settings: ALCMacro...) {
     context.registerClassBuilder(classBuilder, withProperties: settings)
 }
 
-
 public func AcInject(classBuilder:ALCBuilder, variableName: String, settings: ALCMacro...) {
-//    let classBuilderType = ALCClassBuilderType(type: String.self as! AnyObject.Type)
-//    let builder = ALCBuilder(builderType: classBuilderType);
-//    let context = ALCAlchemic.mainContext();
-//
-//    context.registerClassBuilder(builder, withProperties: getVaList([1,2,3,4]))
+    let context = ALCAlchemic.mainContext();
+    context.registerClassBuilder(classBuilder, variableDependency: variableName, withProperties: settings)
 }
 

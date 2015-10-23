@@ -15,8 +15,3 @@ public class SwiftObject: NSObject {
     }
 
 }
-
-
-
-
-//        AcInject(cb, variable:"hello")

@@ -50,7 +50,7 @@ hideInitializerImpl(initWithType:(Class)argumentType)
 -(void) willResolve {
 
     __block NSSet<ALCBuilder *> *candidates;
-    [[ALCAlchemic mainContext] findBuildersWithSearchExpressions:_searchExpressions
+    [[ALCAlchemic mainContext] buildersWithSearchExpressions:_searchExpressions
                                          processingBuildersBlock:^(ProcessBuiderBlockArgs) {
                                              candidates = builders;
                                          }];

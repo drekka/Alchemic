@@ -73,6 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
     ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
     NSMutableSet *moreBundles = [[NSMutableSet alloc] init];
     [classes enumerateObjectsUsingBlock:^(Class  _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
+        STLog(aClass, @"Adding class %@ to model", NSStringFromClass(aClass));
         modelScanner.processor(ctx, moreBundles, aClass);
     }];
 
@@ -92,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) stubMockContextToReturnBuilders:(NSArray<ALCBuilder *> *) builders {
-    OCMStub([self.mockContext findBuildersWithSearchExpressions:OCMOCK_ANY
+    OCMStub([self.mockContext buildersWithSearchExpressions:OCMOCK_ANY
                                         processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
         __unsafe_unretained ProcessBuilderBlock processBuilderBlock;
         [inv getArgument:&processBuilderBlock atIndex:3];

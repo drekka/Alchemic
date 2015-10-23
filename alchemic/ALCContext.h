@@ -45,7 +45,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 /**
  Creates an ALCBuilder instance for the passed class and returns it.
 
-@discussion Called from the runtime scanner whenever it detects a class with Alchemic methods present.
+ @discussion Called from the runtime scanner whenever it detects a class with Alchemic methods present.
 
  @param aClass The class that needs a ALCBuilder.
 
@@ -54,13 +54,19 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(ALCBuilder *) registerBuilderForClass:(Class) aClass;
 
 /**
- Sets properties on a ALCObjectBuilder.
+ Sets properties on a ALCBuilder.
 
  @param classBuilder The class builder whose properties are to be set.
  @param ... one or more macros which define the properties.
  */
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ Sets properties on an ALCBuilder
+
+ @param classBuilder The class builde to configure.
+ @param properties A NSArray of id<ALCMacro> instances defining the configuration.
+ */
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder withProperties:(NSArray<id<ALCMacro>> *) properties;
 
 /**
@@ -81,6 +87,10 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
           variableDependency:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+          variableDependency:(NSString *) variable
+              withProperties:(NSArray<id<ALCMacro>> *) properties;
 
 /**
  Registers an initializer for the current class builder.
@@ -201,8 +211,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param searchExpressions    A NSSet of ALCModelSearchExpression objects which define the search criteria for finding the builders.
  @param processBuildersBlock A block which is called, passing each builder in turn.
  */
--(void) findBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
-                  processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
+-(void) buildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
+              processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
 
 @end
 
