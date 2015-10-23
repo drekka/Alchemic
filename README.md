@@ -82,7 +82,7 @@ The main ideas driving the Alchemic design are:
 
 Alchemic now supports Swift 2.0+ code. You can write your Swift classes and have them managed by Alchemic the same way Objective-C based classes are managed. 
 
-However the way you declared classes to Alchemic is different because of the nature of the Swift/Objective-C boundaries and Swift's limited runtime support. Therefire most of the examples below include both an Objective-C example and a Swift example.
+However the way you declared classes to Alchemic is different because of the nature of the Swift/Objective-C boundaries and Swift's limited runtime support. Therefore most of the examples below include both an Objective-C example and a Swift example.
 
 # Installation
 
@@ -141,17 +141,15 @@ If for some reason you do not want Alchemic to auto-start (unit testing perhaps)
 
 Alchemic can programmatically started using:
 
-* *Objective-C*
+```objectivec
+// Objective-C
+[Alchemic start];
+```
 
-    ```objectivec
-    [Alchemic start];
-    ```
-
-* *Swift*
-
-    ```swift
-    Alchemic.start()
-    ```
+```swift
+// Swift
+Alchemic.start()
+```
 
 But generally speaking, just letting Alchemic autostart is the best way.
 
@@ -159,35 +157,31 @@ But generally speaking, just letting Alchemic autostart is the best way.
 
 To use Alchemic, import the Alchemic umbrella header at the top of your implementations (___*.m___ files). 
 
-* *Objective-C*
+```objectivec
+// Objective-C
+#import <Alchemic/Alchemic.h>
+```
 
-    ```objectivec
-    #import <Alchemic/Alchemic.h>
-    ```
-
-* *Swift*
-
-    ```swift
-    import Alchemic
-    ```
+```swift
+// Swift
+import Alchemic
+```
 
 *Alchemic works with implementations rather than the headers. This means it can access methods and initializers that are not public or visible to other classes.  The advantage of this is that you have the ability to create initializers and methods which only Alchemic can see. Thus simplifying your headers.*
 
 ## The Alchemic context
 
-Alchemic has a central *'Context'* which manages all of the objects and classes that Alchemic needs. You generally don't need to do anything directly with the context as Alchemic provides a range of *macros* which will take care of the dirty work for you. However should you need to access it directly, it can be accessed like this:
+Alchemic has a central *'Context'* which manages all of the objects and classes that Alchemic needs. You generally don't need to do anything directly with the context as Alchemic provides a range of Objective-C *macros* and Swift functions which will take care of the dirty work for you. However should you need to access it directly, it can be accessed like this:
 
-* *Objective-C*
+```objectivec
+// Objective-C
+[Alchemic mainContext] ...;
+```
 
-    ```objectivec
-    [Alchemic mainContext] ...;
-    ```
-
-* *Swift*
-
-    ```swift
-    Alchemic.mainContext()
-    ```
+```swift
+// Swift
+Alchemic.mainContext()...
+```
     
 # How Alchemic reads your code
 
@@ -222,6 +216,8 @@ class MyClass {
 
 Alchemic will automatically find and execute this function as it starts up. Inside it you place calls to Alchemic's Swift functions which are very simular to their Objective-C macro counterparts.
 
+*Note: Generally you can use `public static alchemic(...`, but sometimes (when using inner classes for example), you might need to change it to `@objc static alchemic(...`.*
+
 # Creating objects
 
 Before we look at resolving dependencies and injecting values, we first need to look at how we tell Alchemic about the objects we want to create.
@@ -241,53 +237,49 @@ No matter what kind of appplication you are writing, you will probably have some
 
 There are a number of opinions amongst developers about singletons and how they should be declared and used in code. Alchemic's approach is to assume that builders represent a singleton by default. It keeps one instance of the class in it's context and injects it where ever requested. However it doesn't do anything to stop you creating other instances of that class outside of the context. To tell Alchemic that a particular class is to be treated as a singleton, use this macro in the class's implementation:
 
-* *Objective-C*
- 
-    ```objectivec
-    @implementation MyClass
-    AcRegister()
-    @end
-    ```
+```objectivec
+// Objective-C
+@implementation MyClass
+AcRegister()
+@end
+```
 
-* *Swift*
-
-    ```swift
-    class MyClass {
-        public static func alchemic(cb: ALCBuilder) {
-            AcRegister(cb)
-        }
+```swift
+// Swift
+class MyClass {
+     public static func alchemic(cb: ALCBuilder) {
+        AcRegister(cb)
     }
-    ```
+}
+```
 
 This is the simplest form of registering a class with Alchemic. **AcRegister** tells Alchemic that this class need's it's instances managed. When starting, Alchemic will consider any such class for auto-instantiating on startup.
 
-*Note: Mostly there should only be one **AcRegister** call for a class. If you add another, a second instance of the class will then be registered. This can be useful in some situations, but generally it's not something that is commonly done.*
+*Note: There should only be one __AcRegister__ call for a class.*
 
 ## Using initializers
 
 By default, Alchemic will use the standard `init` method when initializing an instance of a class. However this is not always the best option, so Alchemic provides a method for specifying a different initializer and how to locate any arguments it needs:
 
-* *Objective-C*
-
-    ```objectivec
-    @implementation MyClass
-    AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
-    -(instancetype) initWithOtherObject:(id) obj {
-        // ...
-    }
-    @end
+```objectivec
+// Objective-C
+@implementation MyClass
+AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
+-(instancetype) initWithOtherObject:(id) obj {
+    // ...
+}
+@end
 ```
 
-* *Swift*
-
-    ```swift
-    public static func alchemic(cb: ALCBuilder) {
-        AcInitializer(cb, initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
-        func initWithOtherObject(obj: AnyObject) {
-            // ...
-        }
-    }
-    ```
+```swift
+// Swift
+public static func alchemic(cb: ALCBuilder) {
+    AcInitializer(cb, initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
+}
+func initWithOtherObject(obj: AnyObject) {
+    // ...
+}
+```
 
 The `AcInitiailizer(...)` macro tells Alchemic that when it needs to create an instance of MyClass, it should use the `initWithOtherObject:` initializer. The first argument to this macro is required and specifies the initializer selector. After that is a series of zero or more `AcArg(...)` macros which define where to get the value for each argument that the selector declares. 
 
