@@ -101,10 +101,8 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
             }
             @objc static func alchemic(cb: ALCBuilder) {
                 // Need to update code to copy values to initializer builder if this is used.
-                // AcRegister(cb, settings: AcWithName("testClass"))
-                AcInitializer(cb, initializer: "initWithString:",
-                    args:AcArg(NSString.self, source:AcValue("abc")), AcWithName("testClass")
-                )
+                AcRegister(cb, settings: AcWithName("testClass"))
+                AcInitializer(cb, initializer: "initWithString:", args:AcArg(NSString.self, source:AcValue("abc")))
             }
         }
 

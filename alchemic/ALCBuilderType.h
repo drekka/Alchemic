@@ -7,28 +7,26 @@
 //
 
 @import Foundation;
-@import ObjectiveC;
+
 @class ALCMacroProcessor;
-@protocol ALCBuilderStorage;
-@protocol ALCResolvable;
-@protocol ALCDependencyPostProcessor;
 @class ALCBuilder;
-@class ALCValueSourceFactory;
 
 /**
  Defines class that can define the unique functionality that defines how a builder works.
  */
 @protocol ALCBuilderType <NSObject>
 
+@property (nonatomic, assign, readonly, getter=hasCustomName) BOOL customName;
+
+/**
+ The name to use for the builder.
+ */
+@property (nonatomic, strong, readonly) NSString *name;
+
 /**
  The class of the return value created by the builder.
  */
 @property (nonatomic, strong, readonly) Class valueClass;
-
-/**
- Returns the name to use for the builder.
- */
-@property (nonatomic, strong, readonly) NSString *defaultName;
 
 /**
  USed by debug methods to get a description of the attributes of the builder type.

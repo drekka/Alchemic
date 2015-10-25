@@ -13,6 +13,7 @@
 #import "SimpleObject.h"
 #import "ALCContext.h"
 #import "ALCAlchemic.h"
+#import "ALCMacroProcessor.h"
 
 @interface ALCMethodBuilderTypeTests : XCTestCase
 
@@ -37,6 +38,14 @@
 
 -(void) testBuilderName {
     XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _builderType.defaultName);
+}
+
+-(void) testMacroProcessorFlags {
+    XCTAssertEqual(ALCAllowedMacrosFactory
+                   + ALCAllowedMacrosName
+                   + ALCAllowedMacrosPrimary
+                   + ALCAllowedMacrosArg,
+                   _builderType.macroProcessorFlags);
 }
 
 -(void) testWillResolve {

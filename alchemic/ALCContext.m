@@ -116,7 +116,7 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder withProperties:(NSArray<id<ALCMacro>> *) properties {
 
-    STLog(classBuilder.valueClass, @"Registering class %@", NSStringFromClass(classBuilder.valueClass));
+    STLog(classBuilder.valueClass, @"Setting properties on class builder for %@", NSStringFromClass(classBuilder.valueClass));
 
     // turn the registration flag back on so we can create instances.
     classBuilder.registered = YES;

@@ -28,10 +28,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCBuilder ()
-@property (nonatomic, strong) NSString *name; // Changed to read write so we can trigger KVO name change detection in ALCModel.
-@end
-
 @implementation ALCBuilder {
     id<ALCBuilderStorage> _builderStorage;
     id<ALCBuilderType> _builderType;
@@ -48,7 +44,6 @@ hideInitializerImpl(init)
     if (self) {
 
         _builderType = builderType;
-        _name = _builderType.defaultName;
         _registered = YES;
 
         // Setup the macro processor with the appropriate flags.
@@ -65,6 +60,8 @@ hideInitializerImpl(init)
         _isApplicationDelegate = YES;
     }
 
+    [_builderType builder:self isConfiguringWithMacroProcessor:_macroProcessor];
+
     if (_macroProcessor.isFactory) {
         _builderStorage = [[ALCBuilderStorageFactory alloc] init];
     } else if (self.macroProcessor.isExternal || !self.isRegistered) {
@@ -75,12 +72,13 @@ hideInitializerImpl(init)
     }
 
     _primary = _macroProcessor.isPrimary;
-    NSString *newName = _macroProcessor.asName;
-    if (newName != nil) {
-        self.name = newName; // Besure to triggers KVO so that the model updates the name.
+
+    // Triggers KVO so that the model updates the name.
+    if (_macroProcessor.asName != nil) {
+        [self willChangeValueForKey:@"name"];
+        [self didChangeValueForKey:@"name"];
     }
 
-    [_builderType builder:self isConfiguringWithMacroProcessor:_macroProcessor];
     STLog(self.valueClass, @"Builder for %@ configured: %@", NSStringFromClass(self.valueClass), [self description]);
 
     // We no longer need the macro processor so dump it.
@@ -132,6 +130,10 @@ hideInitializerImpl(init)
 }
 
 #pragma mark - Getters and setters
+
+-(NSString *)name {
+    return _builderType.name;
+}
 
 -(BOOL) isClassBuilder {
     return [_builderType isKindOfClass:[ALCClassBuilderType class]];

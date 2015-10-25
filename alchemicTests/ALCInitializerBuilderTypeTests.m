@@ -38,6 +38,10 @@
     XCTAssertEqualObjects(@"SimpleObject initWithString:", _builderType.defaultName);
 }
 
+-(void) testMacroProcessorFlags {
+    XCTAssertEqual(ALCAllowedMacrosArg, _builderType.macroProcessorFlags);
+}
+
 -(void) testWillResolve {
     [_builderType builderWillResolve:_mockInitializerBuilder]; // No errors.
 }

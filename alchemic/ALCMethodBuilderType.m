@@ -22,20 +22,31 @@ NS_ASSUME_NONNULL_BEGIN
     ALCBuilder *_returnTypeBuilder;
 }
 
+@synthesize name = _name;
+
 hideInitializerImpl(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder)
 
 -(instancetype) initWithType:(Class) valueClass
                 classBuilder:(ALCBuilder *) classBuilder
                     selector:(SEL) selector {
-    self = [super initWithType:valueClass classBuilder:classBuilder];
+    self = [super initWithClassBuilder:classBuilder];
     if (self) {
+        _name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.classBuilder.valueClass), NSStringFromSelector(_selector)];
         _selector = selector;
     }
     return self;
 }
 
--(NSString *) defaultName {
-    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.classBuilder.valueClass), NSStringFromSelector(_selector)];
+-(NSUInteger)macroProcessorFlags {
+    return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosArg;
+}
+
+-(void)builder:(ALCBuilder *)builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *)macroProcessor {
+    NSString *classBuilderCustomName = macroProcessor.asName;
+    if (classBuilderCustomName) {
+        _name = classBuilderCustomName;
+    }
+    [super builder:builder isConfiguringWithMacroProcessor:macroProcessor];
 }
 
 -(void) builderWillResolve:(ALCBuilder *)builder {
@@ -71,11 +82,11 @@ hideInitializerImpl(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) 
 }
 
 -(NSString *)attributeText {
-    return [NSString stringWithFormat:@", using method [%@]", self.defaultName];
+    return [NSString stringWithFormat:@", using method [%@]", self.name];
 }
 
 -(NSString *) description {
-    return [NSString stringWithFormat:@"method [%@]", self.defaultName];
+    return [NSString stringWithFormat:@"method [%@]", self.name];
 }
 
 @end

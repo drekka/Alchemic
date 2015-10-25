@@ -33,14 +33,6 @@
                                                          classBuilder:_mockClassBuilder];
 }
 
--(void) testMacroProcessorFlags {
-    XCTAssertEqual(ALCAllowedMacrosFactory
-                   + ALCAllowedMacrosName
-                   + ALCAllowedMacrosPrimary
-                   + ALCAllowedMacrosArg,
-                   _builderType.macroProcessorFlags);
-}
-
 -(void) testConfigureWithMacroProcessorWithArg {
 
     ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];

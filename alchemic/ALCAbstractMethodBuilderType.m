@@ -19,24 +19,13 @@
 
 hideInitializerImpl(init)
 
-@synthesize valueClass = _valueClass;
-
--(instancetype) initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder {
+-(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder {
     self = [super init];
     if (self) {
-        _valueClass = valueClass;
         _classBuilder = classBuilder;
         _arguments = [NSMutableArray array];
     }
     return self;
-}
-
--(NSString *)defaultName {
-    methodNotImplementedObject;
-}
-
--(NSUInteger)macroProcessorFlags {
-    return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosArg;
 }
 
 -(void) builder:(ALCBuilder *) builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *) macroProcessor {
@@ -54,18 +43,6 @@ hideInitializerImpl(init)
 -(void)builderWillResolve:(ALCBuilder *) builder {
     // Add the class builder as a dependency because we cannot execute a method if the class is still not available.
     [builder addDependency:_classBuilder];
-}
-
--(BOOL)canInjectDependencies {
-    methodNotImplementedBoolean;
-}
-
--(ALCBuilder *)classBuilderForInjectingDependencies:(ALCBuilder *)currentBuilder {
-    methodNotImplementedObject;
-}
-
--(id)invokeWithArgs:(NSArray<id> *)arguments {
-    methodNotImplementedObject;
 }
 
 -(NSArray<id> *)argumentValues {
@@ -86,6 +63,32 @@ hideInitializerImpl(init)
     @throw [NSException exceptionWithName:@"AlchemicUnexpectedInjection"
                                    reason:[NSString stringWithFormat:@"Cannot add a variable dependency for '%s' to a non-class builder: %@", ivar_getName(variable) , self]
                                  userInfo:nil];
+}
+
+#pragma mark - Methods to override
+
+-(Class)valueClass {
+    methodNotImplementedObject;
+}
+
+-(NSString *) name {
+    methodNotImplementedObject;
+}
+
+-(NSUInteger)macroProcessorFlags {
+    methodNotImplementedInt;
+}
+
+-(BOOL)canInjectDependencies {
+    methodNotImplementedBoolean;
+}
+
+-(ALCBuilder *)classBuilderForInjectingDependencies:(ALCBuilder *)currentBuilder {
+    methodNotImplementedObject;
+}
+
+-(id)invokeWithArgs:(NSArray<id> *)arguments {
+    methodNotImplementedObject;
 }
 
 -(NSString *)attributeText {
