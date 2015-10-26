@@ -111,11 +111,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSSet<ALCBuilder *> *) classBuildersFromBuilders:(NSSet<ALCBuilder *> *) builders {
-
-    if ([builders count] == 0) {
-        return builders;
-    }
-
     STLog(ALCHEMIC_LOG, @"Filtering for class builders ...");
     NSSet<ALCBuilder *> *newBuilders = [builders objectsPassingTest:^BOOL(ALCBuilder *builder, BOOL * stop) {
         return builder.isClassBuilder;
