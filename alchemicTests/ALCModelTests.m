@@ -41,8 +41,9 @@
     [_classBuilder.macroProcessor addMacro:AcWithName(@"abc")];
     [_classBuilder configure];
 
-    id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithType:[NSString class] classBuilder:_classBuilder
-                                                                                             selector:@selector(someMethod)];
+    id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithType:[NSString class]
+                                                             parentClassBuilder:_classBuilder
+                                                                       selector:@selector(someMethod)];
     _methodBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
     [_methodBuilder.macroProcessor addMacro:AcWithName(@"def")];
     [_methodBuilder configure];

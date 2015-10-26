@@ -27,13 +27,13 @@ hideInitializer(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) clas
 /**
  Default initializer.
 
- @param classBuilder The class builder that defines the class to be created.
+ @param parentClassBuilder The class builder that defines the class to be created.
  @param initializer  The initializer selector to call to create the class.
 
  @return An instance of the builder strategy.
  */
--(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder
-                         initializer:(SEL) initializer;
+-(instancetype) initWithParentClassBuilder:(ALCBuilder *) parentClassBuilder
+                               initializer:(SEL) initializer;
 
 @end
 

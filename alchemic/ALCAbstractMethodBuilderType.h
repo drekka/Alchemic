@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The ALCBuilder that will be used to access the class information about the class that contains the method to be executed.
  */
-@property (nonatomic, strong, readonly) ALCBuilder *classBuilder;
+@property (nonatomic, strong, readonly) ALCBuilder *parentClassBuilder;
 
 /**
  Used by derived classes to access a list of the values required for the method.
@@ -33,11 +33,11 @@ hideInitializer(init);
 /**
  Default initializer.
 
- @param classBuilder The class builder for the class that contains the method to be executed.
+ @param parentClassBuilder The class builder for the class that contains the method to be executed.
 
  @return An instance of this builder type.
  */
--(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder;
+-(instancetype) initWithParentClassBuilder:(ALCBuilder *) parentClassBuilder;
 
 @end
 

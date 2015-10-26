@@ -28,13 +28,13 @@ hideInitializer(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) clas
  Default initializer.
 
  @param valueClass   The expected type that the class will return. USed to locate a class builder which is used to do injections into the returned value.
- @param classBuilder The class builder that references the class that contains the method to be executed.
+ @param parentClassBuilder The class builder that references the class that contains the method to be executed.
  @param selector     The selector to execute.
 
  @return An instance of this builder strategy.
  */
 -(instancetype) initWithType:(Class) valueClass
-                classBuilder:(ALCBuilder *) classBuilder
+          parentClassBuilder:(ALCBuilder *) parentClassBuilder
                     selector:(SEL) selector;
 
 @end

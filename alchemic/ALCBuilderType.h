@@ -16,8 +16,6 @@
  */
 @protocol ALCBuilderType <NSObject>
 
-@property (nonatomic, assign, readonly, getter=hasCustomName) BOOL customName;
-
 /**
  The name to use for the builder.
  */
@@ -44,12 +42,11 @@
 @property (nonatomic, assign, readonly) NSUInteger macroProcessorFlags;
 
 /**
- Configures the builder type using instructions read into the passed macro processor.
+ Configures the builder type using instructions from the passed macro processor.
 
- @param builder The builder than is currently configuring. Normally this is the builder that owns this builder type.
  @param macroProcessor An instance of ALCMacroProcessor that contains the configuration.
  */
--(void) builder:(ALCBuilder *) builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *) macroProcessor;
+-(void) configureWithBuilder:(ALCBuilder *) builder;
 
 /**
  Forwarded from the ALCResolvable willResolve method.

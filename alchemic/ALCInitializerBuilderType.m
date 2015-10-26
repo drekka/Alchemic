@@ -23,50 +23,58 @@ NS_ASSUME_NONNULL_BEGIN
 
 hideInitializerImpl(init)
 
--(instancetype) initWithClassBuilder:(ALCBuilder *) classBuilder
-                         initializer:(SEL) initializer {
-    self = [super initWithClassBuilder:classBuilder];
+-(instancetype) initWithParentClassBuilder:(ALCBuilder *) parentClassBuilder
+                               initializer:(SEL) initializer {
+    self = [super initWithParentClassBuilder:parentClassBuilder];
     if (self) {
         _initializer = initializer;
-        _name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.classBuilder.valueClass), NSStringFromSelector(_initializer)];
+        _name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(_initializer)];
     }
     return self;
 }
 
 -(Class)valueClass {
-    return self.classBuilder.valueClass;
+    return self.parentClassBuilder.valueClass;
 }
 
 -(NSUInteger)macroProcessorFlags {
     return ALCAllowedMacrosArg;
 }
 
--(void)builder:(ALCBuilder *)builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *)macroProcessor {
-    NSString *classBuilderCustomName = self.classBuilder.macroProcessor.asName;
-    if (classBuilderCustomName) {
-        _name = classBuilderCustomName;
+-(void) configureWithBuilder:(ALCBuilder *) builder {
+
+    [super configureWithBuilder:builder];
+
+    // Grab details from the parent classes macro processor.
+    NSString *parentClassBuilderCustomName = self.parentClassBuilder.macroProcessor.asName;
+    if (parentClassBuilderCustomName) {
+        _name = parentClassBuilderCustomName;
     }
-    [super builder:builder isConfiguringWithMacroProcessor:macroProcessor];
+
+    // Initializers will need to ensure the parent is configured.
+    [self.parentClassBuilder configure];
+
 }
+
 
 -(void) builderWillResolve:(ALCBuilder *) builder {
     [super builderWillResolve:builder];
-    [ALCRuntime validateClass:self.classBuilder.valueClass selector:_initializer];
+    [ALCRuntime validateClass:self.parentClassBuilder.valueClass selector:_initializer];
 }
 
 -(id) invokeWithArgs:(NSArray<id> *) arguments {
-    ALCBuilder *builder = self.classBuilder;
+    ALCBuilder *builder = self.parentClassBuilder;
     STLog(builder.valueClass, @"Instantiating a %@ using %@", NSStringFromClass(builder.valueClass), self);
     id object = [[builder.valueClass alloc] invokeSelector:_initializer arguments:arguments];
     return object;
 }
 
 -(BOOL)canInjectDependencies {
-    return self.classBuilder.ready;
+    return self.parentClassBuilder.ready;
 }
 
 -(ALCBuilder *) classBuilderForInjectingDependencies:(ALCBuilder *)currentBuilder {
-    return self.classBuilder;
+    return self.parentClassBuilder;
 }
 
 -(NSString *)attributeText {

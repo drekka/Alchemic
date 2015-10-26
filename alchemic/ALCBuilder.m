@@ -60,7 +60,14 @@ hideInitializerImpl(init)
         _isApplicationDelegate = YES;
     }
 
-    [_builderType builder:self isConfiguringWithMacroProcessor:_macroProcessor];
+
+    NSString *originalName = _builderType.name;
+    [_builderType configureWithBuilder:self];
+
+    // Execute the block for name changes.
+    if (_onNameChanged && _macroProcessor.asName) {
+        _onNameChanged(originalName, _builderType.name);
+    }
 
     if (_macroProcessor.isFactory) {
         _builderStorage = [[ALCBuilderStorageFactory alloc] init];
@@ -73,16 +80,11 @@ hideInitializerImpl(init)
 
     _primary = _macroProcessor.isPrimary;
 
-    // Triggers KVO so that the model updates the name.
-    if (_macroProcessor.asName != nil) {
-        [self willChangeValueForKey:@"name"];
-        [self didChangeValueForKey:@"name"];
-    }
-
     STLog(self.valueClass, @"Builder for %@ configured: %@", NSStringFromClass(self.valueClass), [self description]);
 
-    // We no longer need the macro processor so dump it.
+    // Clear anything we no longer need.
     _macroProcessor = nil;
+    _onNameChanged = NULL;
 }
 
 #pragma mark - Tasks

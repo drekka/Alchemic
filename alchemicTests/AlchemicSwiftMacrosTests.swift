@@ -112,9 +112,12 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
         let context = ALCAlchemic.mainContext()
         let searchExpressions: NSSet = [AcName("testClass")]
         let builders = context.findBuildersWithSearchExpressions(searchExpressions as Set)
+        XCTAssertGreaterThan(builders.count, 0)
+        if (builders.count > 0) {
+            let builder = builders.first!
+            XCTAssertEqual("abc", (builder.value as! TestClass).string)
+        }
 
-        let builder = builders.first
-        XCTAssertEqual("abc", (builder?.value as! TestClass).string)
 
     }
 

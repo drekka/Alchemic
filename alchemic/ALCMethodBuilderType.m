@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCMethodBuilderType {
     SEL _selector;
     ALCBuilder *_returnTypeBuilder;
+    Class _valueClass;
 }
 
 @synthesize name = _name;
@@ -27,33 +28,40 @@ NS_ASSUME_NONNULL_BEGIN
 hideInitializerImpl(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) classBuilder)
 
 -(instancetype) initWithType:(Class) valueClass
-                classBuilder:(ALCBuilder *) classBuilder
+          parentClassBuilder:(ALCBuilder *) parentClassBuilder
                     selector:(SEL) selector {
-    self = [super initWithClassBuilder:classBuilder];
+    self = [super initWithParentClassBuilder:parentClassBuilder];
     if (self) {
-        _name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.classBuilder.valueClass), NSStringFromSelector(_selector)];
         _selector = selector;
+        _valueClass = valueClass;
+        _name = [NSString stringWithFormat:@"%@ %@", NSStringFromClass(self.parentClassBuilder.valueClass), NSStringFromSelector(_selector)];
     }
     return self;
+}
+
+-(Class)valueClass {
+    return _valueClass;
 }
 
 -(NSUInteger)macroProcessorFlags {
     return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosArg;
 }
 
--(void)builder:(ALCBuilder *)builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *)macroProcessor {
-    NSString *classBuilderCustomName = macroProcessor.asName;
-    if (classBuilderCustomName) {
-        _name = classBuilderCustomName;
+-(void) configureWithBuilder:(ALCBuilder *) builder {
+    [super configureWithBuilder:builder];
+
+    NSString *customName = builder.macroProcessor.asName;
+    if (customName) {
+        _name = customName;
     }
-    [super builder:builder isConfiguringWithMacroProcessor:macroProcessor];
+
 }
 
 -(void) builderWillResolve:(ALCBuilder *)builder {
 
     [super builderWillResolve:builder];
 
-    [ALCRuntime validateClass:self.classBuilder.valueClass selector:_selector];
+    [ALCRuntime validateClass:self.parentClassBuilder.valueClass selector:_selector];
 
     // Go find the class builder for the return type and get it to tell us when it's available.
     STLog(self.valueClass, @"Locating class builder for return type %@", NSStringFromClass(self.valueClass));
@@ -68,7 +76,7 @@ hideInitializerImpl(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) 
 
 -(id) invokeWithArgs:(NSArray<id> *) arguments {
     STLog(self.valueClass, @"Instantiating a %@ using %@", NSStringFromClass(self.valueClass), self);
-    id factoryObject = self.classBuilder.value;
+    id factoryObject = self.parentClassBuilder.value;
     id object = [factoryObject invokeSelector:_selector arguments:arguments];
     return object;
 }

@@ -31,13 +31,13 @@
     OCMStub([_mockClassBuilder valueClass]).andReturn([SimpleObject class]);
     ignoreSelectorWarnings(
                            _builderType = [[ALCMethodBuilderType alloc] initWithType:[NSString class]
-                                                                        classBuilder:_mockClassBuilder
+                                                                  parentClassBuilder:_mockClassBuilder
                                                                             selector:@selector(stringFactoryMethodUsingAString:)];
                            )
 }
 
 -(void) testBuilderName {
-    XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _builderType.defaultName);
+    XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _builderType.name);
 }
 
 -(void) testMacroProcessorFlags {

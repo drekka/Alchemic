@@ -102,6 +102,12 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     // All other builders will be set to YES by default.
     classBuilder.registered = NO;
 
+    // Ensure that if the class builder changes it's name, that we update the model indexes.
+    // This is a one shot thing for class builders only.
+    classBuilder.onNameChanged = ^(NSString *oldName, NSString *newName) {
+        [self->_model builderDidChangeName:oldName newName:newName];
+    };
+
     [_model addBuilder:classBuilder];
     return classBuilder;
 }
@@ -182,22 +188,22 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     // Tell the class builder that it is registered so that it will be ready to be instantiated.
     classBuilder.registered = YES;
 
-    id<ALCBuilderType> builderType = [[ALCInitializerBuilderType alloc] initWithClassBuilder:classBuilder initializer:initializer];
+    id<ALCBuilderType> builderType = [[ALCInitializerBuilderType alloc] initWithParentClassBuilder:classBuilder initializer:initializer];
     ALCBuilder *initializerBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
     [properties enumerateObjectsUsingBlock:^(id<ALCMacro> macro, NSUInteger idx, BOOL *stop) {
         [initializerBuilder.macroProcessor addMacro:macro];
     }];
     [initializerBuilder configure];
 
-    // replace the class builder in the model with the initializer builder because now we have an initializer we don't want the class to be found as the source of these objects.
-    [_model addBuilder:initializerBuilder];
+    // replace the class builder in the model with the initializer builder because now we have an initializer we don't want the class to be found as the source of these objects. remove the parent before adding the initializer as they are likely to have the same name and that will trigger an error.
     [_model removeBuilder:classBuilder];
+    [_model addBuilder:initializerBuilder];
     STLog(classBuilder.valueClass, @"Created initializer %@", initializerBuilder);
 }
 
 - (void)registerClassBuilder:(ALCBuilder *)classBuilder selector:(SEL)selector returnType:(Class)returnType, ... {
     id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithType:returnType
-                                                                   classBuilder:classBuilder
+                                                             parentClassBuilder:classBuilder
                                                                        selector:selector];
     STLog(classBuilder.valueClass, @"Registering method -(%@) [%@ %@]", NSStringFromClass(returnType), NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(selector));
     ALCBuilder *methodBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];

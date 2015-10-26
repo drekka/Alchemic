@@ -34,9 +34,9 @@ hideInitializerImpl(init)
     return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosExternal;
 }
 
--(void) builder:(ALCBuilder *) builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *) macroProcessor {
-    if (macroProcessor.asName != nil) {
-        _name = macroProcessor.asName;
+-(void) configureWithBuilder:(ALCBuilder *) builder {
+    if (builder.macroProcessor.asName != nil) {
+        _name = builder.macroProcessor.asName;
     }
 }
 
