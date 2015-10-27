@@ -13,6 +13,7 @@
 @protocol ALCModelSearchExpression;
 @class ALCBuilder;
 @protocol ALCMacro;
+@class ALCArg;
 @protocol ALCSourceMacro;
 @class ALCBuilder;
 
@@ -92,7 +93,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
           variableDependency:(NSString *) variable
                         type:(Class) variableType
-            withSourceMacros:(NSArray<id<ALCSourceMacro>> *) sourceMacros;
+                  withSource:(NSArray<id<ALCSourceMacro>> *) source;
 
 /**
  Registers an initializer for the current class builder.
@@ -110,7 +111,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
                  initializer:(SEL) initializer
-              withProperties:(NSArray<id<ALCMacro>> *) properties;
+               withArguments:(NSArray<ALCArg *> *) arguments;
 
 /**
  Registers a method for a class that will create an object.
@@ -125,6 +126,11 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
                     selector:(SEL) selector
                   returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                    selector:(SEL) selector
+                  returnType:(Class) returnType
+               withArguments:(NSArray<id<ALCMacro>> *) arguments;
 
 #pragma mark - Callbacks
 

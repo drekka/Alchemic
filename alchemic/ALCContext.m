@@ -15,6 +15,8 @@
 #import "ALCContext.h"
 #import "ALCRuntime.h"
 
+#import "ALCArg.h"
+
 #import "ALCModel.h"
 #import "ALCBuilder.h"
 #import "ALCDependency.h"
@@ -55,7 +57,23 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     return self;
 }
 
-#pragma mark - Initialisation
+- (void)addDependencyPostProcessor:(id<ALCDependencyPostProcessor>)postProcessor {
+    STLog(ALCHEMIC_LOG, @"Adding dependency post processor: %s", object_getClassName(postProcessor));
+    [(NSMutableSet *)_dependencyPostProcessors addObject:postProcessor];
+}
+
+- (void)executeWhenStarted:(AcSimpleBlock)block {
+
+    // if there is no on load set then Alchemic has started and the blocks have either been executed or are in the process of being executed.
+    if (_onLoadBlocks == nil) {
+        STLog(self, @"Alchemic already started. Executing block immediately");
+        block();
+        return;
+    }
+
+    // Otherwise add to the set.
+    [_onLoadBlocks addObject:[block copy]];
+}
 
 - (void)start {
 
@@ -65,6 +83,41 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     STLog(ALCHEMIC_LOG, @"Finishing startup ...");
     [self finishStartup];
     STLog(ALCHEMIC_LOG, @"Alchemic started.");
+}
+
+- (void)resolveBuilderDependencies {
+    STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
+    for (ALCBuilder *builder in [_model allBuilders]) {
+        STStartScope(builder.valueClass);
+        [builder resolve];
+    }
+}
+
+- (void)finishStartup {
+
+    STLog(ALCHEMIC_LOG, @"Executing finished loading blocks ...");
+    // Clear the blocks immediately so we don't risk any synchronization issues with other thread still registering blocks.
+    // This will trigger any incoming blocks to execute immediately.
+    NSMutableSet<AcSimpleBlock> *blocks;
+    @synchronized(_onLoadBlocks) {
+        blocks = _onLoadBlocks;
+        _onLoadBlocks = nil;
+    }
+
+    // This could take some time so we keep it out of the sync block.
+    for (AcSimpleBlock block in blocks) {
+        // Put back on main queue.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block();
+        });
+    }
+
+    // Send a final notification.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicFinishedLoading object:self];
+    });
+
+    STLog(ALCHEMIC_LOG, @"Registered model builders (* - instantiated):...\n%@\n", _model);
 }
 
 #pragma mark - Dependencies
@@ -77,22 +130,7 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     [[builders anyObject] injectDependencies:object];
 }
 
-- (void)resolveBuilderDependencies {
-    STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
-    for (ALCBuilder *builder in [_model allBuilders]) {
-        STStartScope(builder.valueClass);
-        [builder resolve];
-    }
-}
-
-#pragma mark - Configuration
-
-- (void)addDependencyPostProcessor:(id<ALCDependencyPostProcessor>)postProcessor {
-    STLog(ALCHEMIC_LOG, @"Adding dependency post processor: %s", object_getClassName(postProcessor));
-    [(NSMutableSet *)_dependencyPostProcessors addObject:postProcessor];
-}
-
-#pragma mark - Registration call backs
+#pragma mark - Class registration
 
 -(ALCBuilder *) registerBuilderForClass:(Class) aClass {
     id<ALCBuilderType> builderType = [[ALCClassBuilderType alloc] initWithType:aClass];
@@ -136,7 +174,8 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     [classBuilder configure];
 }
 
-// Objetive-C
+#pragma mark - Variable injection registration
+
 - (void)registerClassBuilder:(ALCBuilder *)classBuilder variableDependency:(NSString *)variable, ... {
 
     STStartScope(classBuilder.valueClass);
@@ -162,17 +201,17 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 }
 
-// Swift
+
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
           variableDependency:(NSString *) variable
                         type:(Class) variableType
-            withSourceMacros:(NSArray<id<ALCSourceMacro>> *) sourceMacros {
+                  withSource:(NSArray<id<ALCSourceMacro>> *) source {
 
     STStartScope(classBuilder.valueClass);
 
     ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:variableType];
 
-    [sourceMacros enumerateObjectsUsingBlock:^(id<ALCSourceMacro> macro, NSUInteger idx, BOOL *stop) {
+    [source enumerateObjectsUsingBlock:^(id<ALCSourceMacro> macro, NSUInteger idx, BOOL *stop) {
         [valueSourceFactory addMacro:macro];
     }];
 
@@ -190,17 +229,19 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 }
 
+#pragma mark - Initializer registration
+
 - (void)registerClassBuilder:(ALCBuilder *)classBuilder initializer:(SEL)initializer, ... {
-    NSMutableArray *properties = [NSMutableArray array];
-    alc_processVarArgsAfter(id<ALCMacro>, initializer, ^(id<ALCMacro> macro){
-        [properties addObject:macro];
+    NSMutableArray<ALCArg *> *arguments = [NSMutableArray array];
+    alc_processVarArgsAfter(ALCArg *, initializer, ^(ALCArg *arg){
+        [arguments addObject:arg];
     });
-    [self registerClassBuilder:classBuilder initializer:initializer withProperties:properties];
+    [self registerClassBuilder:classBuilder initializer:initializer withArguments:arguments];
 }
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
                  initializer:(SEL) initializer
-              withProperties:(NSArray<id<ALCMacro>> *) properties {
+               withArguments:(NSArray<ALCArg *> *) arguments {
 
     STLog(classBuilder.valueClass, @"Registering initializer -[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(initializer));
 
@@ -209,8 +250,8 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
     id<ALCBuilderType> builderType = [[ALCInitializerBuilderType alloc] initWithParentClassBuilder:classBuilder initializer:initializer];
     ALCBuilder *initializerBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
-    [properties enumerateObjectsUsingBlock:^(id<ALCMacro> macro, NSUInteger idx, BOOL *stop) {
-        [initializerBuilder.macroProcessor addMacro:macro];
+    [arguments enumerateObjectsUsingBlock:^(ALCArg *arg, NSUInteger idx, BOOL *stop) {
+        [initializerBuilder.macroProcessor addMacro:arg];
     }];
     [initializerBuilder configure];
 
@@ -220,16 +261,42 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     STLog(classBuilder.valueClass, @"Created initializer %@", initializerBuilder);
 }
 
-- (void)registerClassBuilder:(ALCBuilder *)classBuilder selector:(SEL)selector returnType:(Class)returnType, ... {
+#pragma mark - Method registration
+
+- (void)registerClassBuilder:(ALCBuilder *)classBuilder
+                    selector:(SEL)selector
+                  returnType:(Class)returnType, ... {
+
+    NSMutableArray<ALCArg *> *arguments = [NSMutableArray array];
+    alc_processVarArgsAfter(ALCArg *, returnType, ^(ALCArg *arg){
+        [arguments addObject:arg];
+    });
+    [self registerClassBuilder:classBuilder selector:selector returnType:returnType withArguments:arguments];
+}
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                    selector:(SEL) selector
+                  returnType:(Class) returnType
+               withArguments:(NSArray<id<ALCMacro>> *) arguments {
+
     id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithType:returnType
                                                              parentClassBuilder:classBuilder
                                                                        selector:selector];
-    STLog(classBuilder.valueClass, @"Registering method -(%@) [%@ %@]", NSStringFromClass(returnType), NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(selector));
+
+    STLog(classBuilder.valueClass, @"Registering method -(%@) [%@ %@]",
+          NSStringFromClass(returnType),
+          NSStringFromClass(classBuilder.valueClass),
+          NSStringFromSelector(selector));
+
     ALCBuilder *methodBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
-    alc_loadMacrosAfter(methodBuilder.macroProcessor, returnType);
+    [arguments enumerateObjectsUsingBlock:^(id<ALCMacro> arg, NSUInteger idx, BOOL *stop) {
+        [methodBuilder.macroProcessor addMacro:arg];
+    }];
     [methodBuilder configure];
     [_model addBuilder:methodBuilder];
 }
+
+#pragma mark - Finding builders
 
 - (ALCBuilder *)classBuilderForClass:(Class)aClass {
     NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:[ALCClass withClass:aClass]]];
@@ -241,22 +308,7 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     return [_model buildersForSearchExpressions:searchExpressions];
 }
 
-#pragma mark - finished loading
-
-- (void)executeWhenStarted:(AcSimpleBlock)block {
-
-    // if there is no on load set then Alchemic has started and the blocks have either been executed or are in the process of being executed.
-    if (_onLoadBlocks == nil) {
-        STLog(self, @"Alchemic already started. Executing block immediately");
-        block();
-        return;
-    }
-
-    // Otherwise add to the set.
-    [_onLoadBlocks addObject:[block copy]];
-}
-
-#pragma mark - Retrieveing objects
+#pragma mark - Interactions
 
 - (void)setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>)searchCriteria, ... {
     NSMutableArray *criteria = [NSMutableArray array];
@@ -326,35 +378,6 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     }];
     id finalResult = [results count] == 1 ? [results anyObject] : results;
     return finalResult;
-}
-
-#pragma mark - Internal
-
-- (void)finishStartup {
-
-    STLog(ALCHEMIC_LOG, @"Executing finished loading blocks ...");
-    // Clear the blocks immediately so we don't risk any synchronization issues with other thread still registering blocks.
-    // This will trigger any incoming blocks to execute immediately.
-    NSMutableSet<AcSimpleBlock> *blocks;
-    @synchronized(_onLoadBlocks) {
-        blocks = _onLoadBlocks;
-        _onLoadBlocks = nil;
-    }
-
-    // This could take some time so we keep it out of the sync block.
-    for (AcSimpleBlock block in blocks) {
-        // Put back on main queue.
-        dispatch_async(dispatch_get_main_queue(), ^{
-            block();
-        });
-    }
-
-    // Send a final notification.
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicFinishedLoading object:self];
-    });
-    
-    STLog(ALCHEMIC_LOG, @"Registered model builders (* - instantiated):...\n%@\n", _model);
 }
 
 @end

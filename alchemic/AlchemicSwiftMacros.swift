@@ -44,7 +44,7 @@ public func AcExternal() -> ALCMacro {
     return ALCIsExternal()
 }
 
-public func AcArg(argType:AnyObject.Type!, source: ALCSourceMacro...) -> ALCMacro {
+public func AcArg(argType:AnyObject.Type!, source: ALCSourceMacro...) -> ALCArg {
     return ALCArg(type: argType, properties: source)
 }
 
@@ -55,14 +55,19 @@ public func AcRegister(classBuilder:ALCBuilder!, settings: ALCMacro...) {
     context.registerClassBuilder(classBuilder, withProperties: settings)
 }
 
-public func AcInitializer(classBuilder:ALCBuilder!, initializer:Selector!, args:ALCMacro...) {
+public func AcInitializer(classBuilder:ALCBuilder!, initializer:Selector!, args:ALCArg...) {
     let context = ALCAlchemic.mainContext();
-    context.registerClassBuilder(classBuilder, initializer:initializer, withProperties:args)
+    context.registerClassBuilder(classBuilder, initializer:initializer, withArguments:args)
+}
+
+public func AcMethod(classBuilder:ALCBuilder!, method:Selector!, type:AnyObject.Type!, args:ALCMacro...) {
+    let context = ALCAlchemic.mainContext();
+    context.registerClassBuilder(classBuilder, selector: method, returnType: type, withArguments: args)
 }
 
 public func AcInject(classBuilder:ALCBuilder!, variableName: String!, type:AnyObject.Type!, source: ALCSourceMacro...) {
     let context = ALCAlchemic.mainContext();
-    context.registerClassBuilder(classBuilder, variableDependency: variableName, type:type, withSourceMacros: source)
+    context.registerClassBuilder(classBuilder, variableDependency: variableName, type:type, withSource: source)
 }
 
 public func AcInjectDependencies(object: AnyObject!) {
@@ -81,3 +86,4 @@ public func AcSet(object:AnyObject!, inBuilderWith:ALCModelSearchExpression...) 
     let context = ALCAlchemic.mainContext()
     context.setValue(object, inBuilderSearchCriteria:inBuilderWith)
 }
+

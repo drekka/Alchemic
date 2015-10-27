@@ -87,6 +87,29 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
 
     func testAcMethod() {
 
+        STStoryTeller().startLogging("LogAll")
+
+        class TestClass: NSObject {
+            var name: String?
+            @objc func objectFactory(arg:String) -> TestClass {
+                let x = TestClass()
+                x.name = arg
+                return x
+            }
+            @objc static func alchemic(cb:ALCBuilder) {
+                AcMethod(cb, method: "objectFactory:",
+                    type: NSString.self,
+                    args: AcArg(NSString.self, source: AcValue("abc")), AcWithName("def"), AcFactory())
+            }
+        }
+
+        super.setupRealContext()
+        super.startContextWithClasses([TestClass.self])
+
+        let obj = AcGet(NSObject.self, source: AcName("def"))
+        XCTAssertNotNil(obj)
+        XCTAssertTrue(obj is TestClass)
+        XCTAssertEqual("abc", obj.name)
 
     }
 
