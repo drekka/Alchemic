@@ -114,10 +114,11 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
         let builders = context.findBuildersWithSearchExpressions(searchExpressions as Set)
         XCTAssertGreaterThan(builders.count, 0)
         if (builders.count > 0) {
-            let builder = builders.first!
+            let builder:ALCBuilder = builders.first!
+
+            // This should return a TestClass with the constant string.
             XCTAssertEqual("abc", (builder.value as! TestClass).string)
         }
-
 
     }
 
@@ -132,10 +133,10 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
         }
 
         class TestClass : NSObject {
-            var nestedObj:AnyObject?
+            var nestedObj: AnyObject?
             @objc static func alchemic(cb: ALCBuilder) {
                 AcRegister(cb, settings:AcWithName("abc"))
-                AcInject(cb, variableName: "nestedObj", settings:AcName("nestedObj"))
+                AcInject(cb, variableName: "nestedObj", type:NSObject.self, source:AcName("nestedObj"))
             }
         }
 
@@ -158,17 +159,61 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     // MARK:- Injections
 
     func testAcInjectDependencies() {
-        
+
+        STStoryTeller().startLogging("LogAll")
+
+        class TestClass : NSObject {
+            var name:NSString?
+            @objc static func alchemic(cb: ALCBuilder) {
+                AcInject(cb, variableName: "name", type:NSString.self, source:AcValue("abc"))
+            }
+        }
+
+        super.setupRealContext()
+        super.startContextWithClasses([TestClass.self])
+
+        let obj = TestClass()
+        AcInjectDependencies(obj)
+        XCTAssertEqual("abc", obj.name)
+
     }
     
     // MARK:- Object accessors
     
     func testAcGet() {
-        
+
+        class TestClass : NSObject {
+            @objc static func alchemic(cb: ALCBuilder) {
+                AcRegister(cb)
+            }
+        }
+
+        super.setupRealContext()
+        super.startContextWithClasses([TestClass.self])
+
+        let obj = AcGet(TestClass.self, source:AcClass(TestClass.self))
+        XCTAssertTrue(obj is TestClass)
     }
     
     func testAcSet() {
-        
+
+        STStoryTeller().startLogging("LogAll")
+        class TestClass : NSObject {
+            @objc static func alchemic(cb: ALCBuilder) {
+                AcRegister(cb, settings:AcWithName("abc"), AcExternal())
+            }
+        }
+
+        super.setupRealContext()
+        super.startContextWithClasses([TestClass.self])
+
+        let obj = TestClass()
+
+        AcSet(obj, inBuilderWith:AcName("abc"))
+
+        let returnedObj = AcGet(NSObject.self, source:AcName("abc"))
+        XCTAssertEqual(obj, returnedObj as? TestClass)
+
     }
     
     func testAcInvoke() {

@@ -8,7 +8,7 @@
 
 @import Foundation;
 #import "ALCModelSearchExpression.h"
-#import "ALCMacro.h"
+#import "ALCSourceMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @discussion ALCName macros represent expressions for searching the model using the object names to locate candidate objects.
  */
-@interface ALCName : NSObject<ALCModelSearchExpression, ALCMacro>
+@interface ALCName : NSObject<ALCModelSearchExpression, ALCSourceMacro>
 
 /// The name to search for.
 @property (nonatomic, strong, readonly) NSString *aName;

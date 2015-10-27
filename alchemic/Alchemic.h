@@ -37,13 +37,13 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 // #Internal
 
 #import <Alchemic/ALCMacro.h>
+#import <Alchemic/ALCSourceMacro.h>
+#import <Alchemic/ALCModelSearchExpression.h>
 #import <Alchemic/ALCInternalMacros.h>
 
 #import <Alchemic/ALCValue.h>
 #import <Alchemic/ALCValueSourceFactory.h>
 #import <Alchemic/ALCValueSource.h>
-
-#import <Alchemic/ALCModelSearchExpression.h>
 
 #import <Alchemic/ALCResolvable.h>
 #import <Alchemic/ALCAbstractResolvable.h>

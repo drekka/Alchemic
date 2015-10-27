@@ -13,6 +13,7 @@
 @protocol ALCModelSearchExpression;
 @class ALCBuilder;
 @protocol ALCMacro;
+@protocol ALCSourceMacro;
 @class ALCBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -90,7 +91,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
           variableDependency:(NSString *) variable
-              withProperties:(NSArray<id<ALCMacro>> *) properties;
+                        type:(Class) variableType
+            withSourceMacros:(NSArray<id<ALCSourceMacro>> *) sourceMacros;
 
 /**
  Registers an initializer for the current class builder.
@@ -171,6 +173,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(id) getValueWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
+- (id)getValueWithClass:(Class)returnType withSourceMacros:(NSArray<id<ALCSourceMacro>> *) sourceMacros;
+
 /**
  Sets the value on a specific builder.
 
@@ -179,6 +183,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param ...         Additional search macros to refine the search for the builder.
  */
 -(void) setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>) searchMacro, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) setValue:(id)value inBuilderSearchCriteria:(NSArray<id<ALCModelSearchExpression>> *) criteria;
 
 /**
  Programmatically invokes a specific method.

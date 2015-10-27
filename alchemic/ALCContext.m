@@ -136,27 +136,18 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     [classBuilder configure];
 }
 
+// Objetive-C
 - (void)registerClassBuilder:(ALCBuilder *)classBuilder variableDependency:(NSString *)variable, ... {
-    NSMutableArray *properties = [NSMutableArray array];
-    alc_processVarArgsAfter(id<ALCMacro>, variable, ^(id<ALCMacro> macro){
-        [properties addObject:macro];
-    });
-    [self registerClassBuilder:classBuilder variableDependency:variable withProperties:properties];
-}
-
--(void) registerClassBuilder:(ALCBuilder *) classBuilder
-          variableDependency:(NSString *) variable
-              withProperties:(NSArray<id<ALCMacro>> *) properties {
 
     STStartScope(classBuilder.valueClass);
 
     Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
     Class varClass = [ALCRuntime iVarClass:var];
-    ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:varClass];
 
-    [properties enumerateObjectsUsingBlock:^(id<ALCMacro> macro, NSUInteger idx, BOOL *stop) {
+    ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:varClass];
+    alc_processVarArgsAfter(id<ALCMacro>, variable, ^(id<ALCMacro> macro){
         [valueSourceFactory addMacro:macro];
-    }];
+    });
 
     // Add a default value source for the ivar if no macros where loaded to define it.
     if ([valueSourceFactory.macros count] == 0) {
@@ -167,6 +158,34 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
         }
     }
 
+    [classBuilder addVariableInjection:var valueSourceFactory:valueSourceFactory];
+
+}
+
+// Swift
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+          variableDependency:(NSString *) variable
+                        type:(Class) variableType
+            withSourceMacros:(NSArray<id<ALCSourceMacro>> *) sourceMacros {
+
+    STStartScope(classBuilder.valueClass);
+
+    ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:variableType];
+
+    [sourceMacros enumerateObjectsUsingBlock:^(id<ALCSourceMacro> macro, NSUInteger idx, BOOL *stop) {
+        [valueSourceFactory addMacro:macro];
+    }];
+
+    // Add a default value source for the ivar if no macros where loaded to define it.
+    if ([valueSourceFactory.macros count] == 0) {
+        STLog(classBuilder.valueClass, @"Generating search criteria from class %@", NSStringFromClass(variableType));
+        NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForClass:variableType];
+        for (id<ALCModelSearchExpression> macro in macros) {
+            [valueSourceFactory addMacro:(id<ALCMacro>)macro];
+        }
+    }
+
+    Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
     [classBuilder addVariableInjection:var valueSourceFactory:valueSourceFactory];
 
 }
@@ -239,13 +258,17 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 
 #pragma mark - Retrieveing objects
 
-- (void)setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>)searchMacro, ... {
-
-    NSMutableSet<id<ALCModelSearchExpression>> *searchExpressions = [[NSMutableSet alloc] init];
-    alc_processVarArgsIncluding(id<ALCModelSearchExpression>, searchMacro, ^(id macro) {
-        [searchExpressions addObject:macro];
+- (void)setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>)searchCriteria, ... {
+    NSMutableArray *criteria = [NSMutableArray array];
+    alc_processVarArgsIncluding(id<ALCModelSearchExpression>, searchCriteria, ^(id<ALCModelSearchExpression> macro){
+        [criteria addObject:macro];
     });
+    [self setValue:value inBuilderSearchCriteria:criteria];
+}
 
+-(void) setValue:(id)value inBuilderSearchCriteria:(NSArray<id<ALCModelSearchExpression>> *) criteria {
+
+    NSSet<id<ALCModelSearchExpression>> *searchExpressions = [NSSet setWithArray:criteria];
     NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:searchExpressions];
 
     if ([builders count] != 1) {
@@ -258,9 +281,19 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 }
 
 - (id)getValueWithClass:(Class)returnType, ... {
+    NSMutableArray *properties = [NSMutableArray array];
+    alc_processVarArgsAfter(id<ALCSourceMacro>, returnType, ^(id<ALCMacro> macro){
+        [properties addObject:macro];
+    });
+    return [self getValueWithClass:returnType withSourceMacros:properties];
+}
+
+- (id)getValueWithClass:(Class)returnType withSourceMacros:(NSArray<id<ALCSourceMacro>> *) sourceMacros  {
 
     ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:returnType];
-    alc_loadMacrosAfter(valueSourceFactory, returnType);
+    [sourceMacros enumerateObjectsUsingBlock:^(id<ALCSourceMacro> macro, NSUInteger idx, BOOL *stop) {
+        [valueSourceFactory addMacro:macro];
+    }];
 
     // Analyse the return type if no macros where loaded to define it.
     if ([valueSourceFactory.macros count] == 0) {

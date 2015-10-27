@@ -8,11 +8,12 @@
 
 @import Foundation;
 @class ALCBuilder;
+#import "ALCSourceMacro.h"
 
 /**
  Classes which can be used to search the model implement this protocol.
  */
-@protocol ALCModelSearchExpression <NSObject>
+@protocol ALCModelSearchExpression <ALCSourceMacro>
 
 /**
  Priorty is used to sort a group of search expressions.

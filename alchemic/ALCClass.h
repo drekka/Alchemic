@@ -8,14 +8,13 @@
 
 @import Foundation;
 #import "ALCModelSearchExpression.h"
-#import "ALCMacro.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Defines a search expression for model objects based on a specific class.
  */
-@interface ALCClass : NSObject<ALCModelSearchExpression, ALCMacro>
+@interface ALCClass : NSObject<ALCModelSearchExpression>
 
 /// The class to look for on model objects.
 @property (nonatomic, assign, readonly) Class aClass;

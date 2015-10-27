@@ -21,11 +21,19 @@ Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_in
 * Automatic array injection by class, protocol or name.
 * Circular dependency detection.
 * Concise metalanguage using Objective-C macros or Swift function.
-* Automatic inejction of UIApplicationDelegate dependencies.
+* Automatic injection of UIApplicationDelegate dependencies.
 
 # Swift support
 
 Alchemic now supports classes written in Swift 2.0+ code. However the way you declare things to Alchemic is different because of various differences between the Objective-C and Swift languages. So the examples used in this document include an Objective-C and Swift example to illustrate the differences.
+
+## Known issues with Swift
+
+A major problem for any code attempting to interact with the Swift runtime is the translation from it to the Objective-C equivalents. A number of things in Swift simply don't work. For example, in Objective-C we can ask the runtime for the type of a class variable which we can use to determine how we are going to inject a value. But if the class is written in Swift, all we just get back an empty value.
+
+The result of this is that a number of Swift Alchemic functions need extra data to detail what they cannot get from the Swift runtime. 
+
+In addition, wherever there is a type needed, in most cases you will need to use the Objective-C type rather than the Swift type. 
 
 # Installation
 
@@ -161,6 +169,7 @@ By default, Alchemic will use the standard `init` method when initializing an in
 ```objectivec
 // Objective-C
 @implementation MyClass
+AcRegister()
 AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
 -(instancetype) initWithOtherObject:(id) obj {
     // ...
@@ -171,38 +180,47 @@ AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
 ```swift
 // Swift
 public static func alchemic(cb: ALCBuilder) {
-    AcInitializer(cb, initializer:initWithOtherObject:, 
-        AcArg(MyOtherClass, source:AcClass(MyOtherClass.self))
+    AcRegister(cb)
+    AcInitializer(cb, initializer:"initWithOtherObject:", 
+        args:AcArg(MyOtherClass.self, source:AcClass(MyOtherClass.self))
     )
 }
-func initWithOtherObject(obj: AnyObject) {
+func init(otherObject: AnyObject) {
     // ...
 }
 ```
 
 **AcInitiailizer** tells Alchemic that when it needs to create an instance of MyClass, it should use the passed initializer selector. For each argument the initializer requires, a matching **AcArg** can be specified which define where to get the value for it. 
 
-`AcInitializer(...)` can also take all the same macros that can be used with `AcRegister(...)` to define various attributes of the instance that will be created. In fact, there is no need to use `AcRegister(...)` at all as the arguments for it will be ignored when there is an `AcInitializer(...)` macro present.
+### Declaring method arguments using AcArg
 
-### Declaring method arguments using AcArg(type, value, ...)
+**AcArg** helps both **AcInitializer** and **AcMethod** locate argument values to be passed to the methods they are going to execute. The first argument to **AcArg** defines the argument type. This is used when processing candidate values. After that is a list of one or more [Object search criteria](#object-search-criteria) that define where to source the value from. 
 
-`AcArg(...)` is a macro that helps both `AcInitializer(...)` and `AcMethod(...)` locate argument values to be passed to the methods they are going to be calling. The first argument to `AcArg(...)` is the type of the argument. After that is a list of one or more [Object search criteria](#object-search-criteria) or macros that define values. These tell Alchemic where and how to obtain the value for that argument. The value can also be **nil** if you want to pass a nil. 
+Value for an argument can come from other model objects, or can be defined as constant values. They can also be **nil** if you want to pass a nil. 
 
-*Note: `AcArg(...)` arguments must be in the same order as the selector's arguments. This is how Alchemic matches them up when passing values.*
+*Note: When there is more than one __AcArg__ arguments, they must be in the same order as the selector's arguments. This is how Alchemic matches them when passing values.*
 
 ## Object factories
 
 Sometimes you want to declare a class to Alchemic, but have Alchemic create a new instance every time you need the object. In other words, a ***Factory***. Factories are not as common as singletons in the DI world, but they can be useful in a variety of situations. For example, you could declare a SMS message class as a factory. Then every time you need one, Alchemic will create a new SMS message object and give it to you with all it's dependencies injected.
 
-To tell Alchemic to treat a class registration as a factory, add the `AcFactory` macro to the `AcRegister(...)` macro like this:
+To tell Alchemic to treat a class registration as a factory, add **AcFactory** to the **AcRegister** like this:
 
 ```objectivec
+// Objective-C
 AcRegister(AcFactory)
+```
+
+```swift
+// Swift
+public static func alchemic(cb: ALCBuilder) {
+    AcRegister(cb, AcFactory())
+}
 ```
 
 Now every time your code requests an instance of the class, a new one will be created and returned. 
 
-*Note that `AcFactory` can also be added to the `AcInitializer(...)` and `AcMethod(...)` macros as well.*
+*Note that __AcFactory__ can also be added to __AcMethod__ as well.*
 
 ## Giving builders custom names
 
@@ -308,13 +326,20 @@ Primary objects are most useful in testing. You can register mock or dummy objec
 
 # Injecting dependencies
 
-The main point of a DI framework is to locate an objects dependencies and inject them without the developer having to write code to manage the objects. In other words, to save the developer from having to write a lot of [boiler plate](https://en.wikipedia.org/wiki/Boilerplate_code) code. 
+The main point of a DI framework is to locate an objects dependencies and inject them without you having to write code to do it. In other words, to save the developer from having to write a lot of [boiler plate](https://en.wikipedia.org/wiki/Boilerplate_code) code. 
 
-Alchemic specifies variable dependencies in a very similar fashion to how it registers classes. Here's a basic variable dependency registration:
+Alchemic specifies variable dependencies in a very similar fashion to how it registers classes using **AcInject**. However the arguments to it are a bit different depending on the language you are using.
+
+*Note: Whilst Alchemic can inject values into properties as easily as variables, it does not trigger KVO when doing so. __So don't depend on KVO to detect injections__.*
+
+## Objective-C 
+
+Here's a basic Objective-C example:
 
 ```objectivec
+// Objective-C
 @interface MyClass
-@property(nonatomic, assign, readonly) MyOtherClass *otherClass;
+@property(nonatomic, strong, readonly) MyOtherClass *otherClass;
 @end
 
 @implementation
@@ -323,15 +348,12 @@ AcInject(otherClass)
 @end
 ```
 
-The `Acinject(...)` macro does all the work of telling Alchemic that there is a dependency that needs to be injected into instances of the class. If there are no other arguments on the injection, Alchemic will lookup the variable based on the passed name, work out what class and protocols it implements, and use that information to locates potential candidates within the context. 
-
-*Note: Variables are where the Objective-C runtime does actually provide quite detailed information so it's possible for Alchemic to work out exactly what type of object to look for.* 
-
-Alchemic can inject public properties like the above example, but also private properties and variables. You can also use the internal name of properties if you want. So all of the following will work:
+When being used in Objective-C source code, Alchemic can inject public properties like the above example, but also private properties and variables. You can also use the internal name of properties if you want. So all of the following will work:
 
 ```objectivec
+// Objective-C
 @interface MyClass
-@property(nonatomic, assign, readonly) MyOtherClass *otherClass;
+@property(nonatomic, strong, readonly) MyOtherClass *otherClass;
 @end
 
 @implementation {
@@ -345,7 +367,26 @@ AcInject(_yetAnotherClass)
 @end
 ```
 
-*Note: Whilst Alchemic can inject values into properties as easily as variables, it does not trigger KVO when doing so. __So don't depend on KVO to detect injections__.*
+When there is no arguments after the variable name, Alchemic will it up based on the name, work out what class and protocols the variable's type implements, and use that information to locates potential candidates within the context. 
+
+## Swift
+
+Here's a simple Swift example of specifying an injection:
+
+```swift
+// Swift
+class MyClass
+    var otherClass:MyOtherClass?
+    public static func alchemic(cb: ALCBuilder) {
+        AcInject(cb, variableName: "otherClass", type:MyOtherClass.self))
+    }
+}
+```
+
+There are a couple of rules when specifying injections in Swift: 
+
+* You have to add required to specify the type of the variable. This is required because the Objective-C runtime that Alchemic uses is not able to get the type from Swift's runtime.
+* Secondly, you have to use Objective-C types. Especially when 
 
 ## Finding objects
 

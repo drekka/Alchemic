@@ -15,7 +15,7 @@ public class SwiftObjectWithDep: NSObject {
 
     public static func alchemic(cb:ALCBuilder) {
         AcRegister(cb)
-        AcInject(cb, variableName:"property", settings:AcClass(SwiftObject.self))
+        AcInject(cb, variableName:"property", type:AnyObject.self, source:AcClass(SwiftObject.self))
     }
     
 }

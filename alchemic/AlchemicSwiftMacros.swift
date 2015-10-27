@@ -12,23 +12,23 @@ import Foundation
 // Macro replacements
 // These are declared as global functions so that they are available where necessary.
 
-public func AcName(name: String) -> ALCMacro {
+public func AcName(name: String!) -> ALCModelSearchExpression {
     return ALCName.withName(name)
 }
 
-public func AcClass(aClass: AnyObject.Type) -> ALCMacro {
+public func AcClass(aClass: AnyObject.Type!) -> ALCModelSearchExpression {
     return ALCClass.withClass(aClass)
 }
 
-public func AcProtocol(aProtocol: Protocol) -> ALCMacro {
+public func AcProtocol(aProtocol: Protocol!) -> ALCModelSearchExpression {
     return ALCProtocol.withProtocol(aProtocol)
 }
 
-public func AcValue(value: AnyObject) -> ALCMacro {
+public func AcValue(value: AnyObject!) -> ALCSourceMacro {
     return ALCConstantValue(value)
 }
 
-public func AcWithName(name: String) -> ALCMacro {
+public func AcWithName(name: String!) -> ALCMacro {
     return ALCWithName(name)
 }
 
@@ -44,24 +44,40 @@ public func AcExternal() -> ALCMacro {
     return ALCIsExternal()
 }
 
-public func AcArg(argType:AnyObject.Type, source: ALCMacro...) -> ALCMacro {
+public func AcArg(argType:AnyObject.Type!, source: ALCSourceMacro...) -> ALCMacro {
     return ALCArg(type: argType, properties: source)
 }
 
 // Functions which configure Alchemic
 
-public func AcRegister(classBuilder:ALCBuilder, settings: ALCMacro...) {
+public func AcRegister(classBuilder:ALCBuilder!, settings: ALCMacro...) {
     let context = ALCAlchemic.mainContext();
     context.registerClassBuilder(classBuilder, withProperties: settings)
 }
 
-public func AcInitializer(classBuilder:ALCBuilder, initializer:Selector, args:ALCMacro...) {
+public func AcInitializer(classBuilder:ALCBuilder!, initializer:Selector!, args:ALCMacro...) {
     let context = ALCAlchemic.mainContext();
     context.registerClassBuilder(classBuilder, initializer:initializer, withProperties:args)
 }
 
-public func AcInject(classBuilder:ALCBuilder, variableName: String, settings: ALCMacro...) {
+public func AcInject(classBuilder:ALCBuilder!, variableName: String!, type:AnyObject.Type!, source: ALCSourceMacro...) {
     let context = ALCAlchemic.mainContext();
-    context.registerClassBuilder(classBuilder, variableDependency: variableName, withProperties: settings)
+    context.registerClassBuilder(classBuilder, variableDependency: variableName, type:type, withSourceMacros: source)
 }
 
+public func AcInjectDependencies(object: AnyObject!) {
+    let context = ALCAlchemic.mainContext()
+    context.injectDependencies(object)
+}
+
+// Accessing objects
+
+public func AcGet(type:AnyObject.Type!, source:ALCSourceMacro...) -> AnyObject {
+    let context = ALCAlchemic.mainContext()
+    return context.getValueWithClass(type, withSourceMacros: source)
+}
+
+public func AcSet(object:AnyObject!, inBuilderWith:ALCModelSearchExpression...) {
+    let context = ALCAlchemic.mainContext()
+    context.setValue(object, inBuilderSearchCriteria:inBuilderWith)
+}
