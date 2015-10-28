@@ -157,7 +157,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-    return [_model description];
+    NSMutableString *desc = [NSMutableString stringWithString:@"Model:"];
+    [_model.allValues enumerateObjectsUsingBlock:^(ALCBuilder *obj, NSUInteger idx, BOOL *stop) {
+        [desc appendFormat:@"\n\t%@", [obj description]];
+    }];
+    return desc;
 }
 
 @end

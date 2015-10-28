@@ -6,6 +6,7 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
+import Foundation
 import Alchemic
 import StoryTeller
 
@@ -90,13 +91,14 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
         STStoryTeller().startLogging("LogAll")
 
         class TestClass: NSObject {
-            var name: String?
+            var name: NSString?
             @objc func objectFactory(arg:String) -> TestClass {
                 let x = TestClass()
                 x.name = arg
                 return x
             }
             @objc static func alchemic(cb:ALCBuilder) {
+                AcRegister(cb)
                 AcMethod(cb, method: "objectFactory:",
                     type: NSString.self,
                     args: AcArg(NSString.self, source: AcValue("abc")), AcWithName("def"), AcFactory())
@@ -106,10 +108,11 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
         super.setupRealContext()
         super.startContextWithClasses([TestClass.self])
 
-        let obj = AcGet(NSObject.self, source: AcName("def"))
+        let obj = AcGet(NSObject.self, source: AcName("def")) //as! TestClass
         XCTAssertNotNil(obj)
-        XCTAssertTrue(obj is TestClass)
-        XCTAssertEqual("abc", obj.name)
+
+        let name = obj.name
+        XCTAssertEqual("abc", name)
 
     }
 
@@ -147,7 +150,25 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
 
     // MARK:- Properties
 
-    func testAcInject() {
+    func testAcInjectAString() {
+
+        class TestClass : NSObject {
+            var stringProperty: NSString?
+            @objc static func alchemic(cb: ALCBuilder) {
+                AcRegister(cb, settings:AcWithName("abc"))
+                AcInject(cb, variableName: "stringProperty", type:NSObject.self, source:AcValue("the string"))
+            }
+        }
+
+        super.setupRealContext()
+        super.startContextWithClasses([TestClass.self])
+
+        let obj = AcGet(TestClass.self, source: AcName("abc")) as! TestClass
+        let injectedString = obj.stringProperty
+        XCTAssertEqual("the string", injectedString)
+    }
+
+    func testAcInjectObject() {
 
         class NestedClass: NSObject {
             @objc static func alchemic(cb: ALCBuilder) {
