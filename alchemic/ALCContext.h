@@ -42,7 +42,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 @interface ALCContext : NSObject
 
-#pragma mark - Registration
+#pragma mark - Class registration
 
 /**
  Creates an ALCBuilder instance for the passed class and returns it.
@@ -78,6 +78,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) classBuilderDidFinishRegistering:(ALCBuilder *) classBuilder;
 
+#pragma mark - Variable injection registration
 /**
  Registers a variable dependency for the classbuilder.
 
@@ -94,6 +95,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
           variableDependency:(NSString *) variable
                         type:(Class) variableType
                   withSource:(NSArray<id<ALCSourceMacro>> *) source;
+
+#pragma mark - Initializer registration
 
 /**
  Registers an initializer for the current class builder.
@@ -112,6 +115,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
                  initializer:(SEL) initializer
                withArguments:(NSArray<ALCArg *> *) arguments;
+
+#pragma mark - Method registration
 
 /**
  Registers a method for a class that will create an object.
@@ -192,6 +197,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
 -(void) setValue:(id)value inBuilderSearchCriteria:(NSArray<id<ALCModelSearchExpression>> *) criteria;
 
+#pragma mark - Calling methods
+
 /**
  Programmatically invokes a specific method.
 
@@ -205,6 +212,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @return either an object or an array of objects if multiple builders are found.
  */
 -(id) invokeMethodBuilders:(id<ALCModelSearchExpression>) methodLocator, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(id) invokeMethodBuilders:(id<ALCModelSearchExpression>) methodLocator withArguments:(NSArray *) arguments;
 
 #pragma mark - Working with builders
 

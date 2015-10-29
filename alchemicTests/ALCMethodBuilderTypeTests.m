@@ -97,7 +97,7 @@
 }
 
 -(void) testAttributeText {
-    XCTAssertEqualObjects(@", using method [SimpleObject stringFactoryMethodUsingAString:]", _builderType.attributeText);
+    XCTAssertEqualObjects(@", using method stringFactoryMethodUsingAString:", _builderType.attributeText);
 }
 
 #pragma mark - Internal

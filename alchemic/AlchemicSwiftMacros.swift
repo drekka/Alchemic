@@ -9,7 +9,7 @@
 import Foundation
 
 
-// Macro replacements
+// MARK:- Macro replacements
 // These are declared as global functions so that they are available where necessary.
 
 public func AcName(name: String!) -> ALCModelSearchExpression {
@@ -48,7 +48,7 @@ public func AcArg(argType:AnyClass!, source: ALCSourceMacro...) -> ALCArg {
     return ALCArg(type: argType, properties: source)
 }
 
-// Functions which configure Alchemic
+// MARK:- Functions which configure Alchemic
 
 public func AcRegister(classBuilder:ALCBuilder!, settings: ALCMacro...) {
     let context = ALCAlchemic.mainContext();
@@ -75,7 +75,7 @@ public func AcInjectDependencies(object: AnyObject!) {
     context.injectDependencies(object)
 }
 
-// Accessing objects
+// MARK:- Getters and setters
 
 public func AcGet<T>(source:ALCSourceMacro...) -> T {
     let context = ALCAlchemic.mainContext()
@@ -85,5 +85,12 @@ public func AcGet<T>(source:ALCSourceMacro...) -> T {
 public func AcSet(object:AnyObject!, inBuilderWith:ALCModelSearchExpression...) {
     let context = ALCAlchemic.mainContext()
     context.setValue(object, inBuilderSearchCriteria:inBuilderWith)
+}
+
+// MARK:- Calling methods
+
+public func AcInvoke(methodLocator:ALCModelSearchExpression!, args:AnyObject...) -> Array<AnyObject> {
+    let context = ALCAlchemic.mainContext()
+    return context.invokeMethodBuilders(methodLocator, withArguments: args) as! Array<AnyObject>
 }
 

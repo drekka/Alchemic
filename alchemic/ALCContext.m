@@ -308,7 +308,7 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     return [_model buildersForSearchExpressions:searchExpressions];
 }
 
-#pragma mark - Interactions
+#pragma mark - Getting and setting
 
 - (void)setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>)searchCriteria, ... {
     NSMutableArray *criteria = [NSMutableArray array];
@@ -333,8 +333,8 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
 }
 
 - (id)getValueWithClass:(Class)returnType, ... {
-    NSMutableArray *properties = [NSMutableArray array];
-    alc_processVarArgsAfter(id<ALCSourceMacro>, returnType, ^(id<ALCMacro> macro){
+    NSMutableArray<id<ALCSourceMacro>> *properties = [NSMutableArray array];
+    alc_processVarArgsAfter(id<ALCSourceMacro>, returnType, ^(id<ALCSourceMacro> macro){
         [properties addObject:macro];
     });
     return [self getValueWithClass:returnType withSourceMacros:properties];
@@ -360,24 +360,30 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     return dependency.value;
 }
 
-- (id)invokeMethodBuilders:(id<ALCModelSearchExpression>)methodLocator, ... {
+#pragma mark - Invoking methods
 
-    NSMutableArray *args = [[NSMutableArray alloc] init];
-    alc_processVarArgsAfter(id, methodLocator, ^(id value) {
-        [args addObject:value];
+- (id)invokeMethodBuilders:(id<ALCModelSearchExpression>)methodLocator, ... {
+    NSMutableArray *arguments = [NSMutableArray array];
+    alc_processVarArgsAfter(id<ALCSourceMacro>, methodLocator, ^(id arg){
+        [arguments addObject:arg];
     });
+    return [self invokeMethodBuilders:methodLocator withArguments:arguments];
+}
+
+-(id) invokeMethodBuilders:(id<ALCModelSearchExpression>) methodLocator withArguments:(NSArray *) arguments {
 
     NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:methodLocator]];
 
-    NSMutableSet<id> *results = [[NSMutableSet alloc] init];
+    // Only invoke on method builders.
+    NSMutableArray<id> *results = [[NSMutableArray alloc] init];
     [builders enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL *stop) {
+        // We only execute on method or initializer builders.
         if (!builder.isClassBuilder) {
-            // We only execute on method or initializer builders.
-            [results addObject:[builder invokeWithArgs:args]];
+            [results addObject:[builder invokeWithArgs:arguments]];
         }
     }];
-    id finalResult = [results count] == 1 ? [results anyObject] : results;
-    return finalResult;
+
+    return results;
 }
 
 @end

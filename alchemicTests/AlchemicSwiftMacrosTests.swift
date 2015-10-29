@@ -262,7 +262,31 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     }
     
     func testAcInvoke() {
-        
+
+        class TestClass:NSObject {
+            @objc func aFunc(aString:String, aNumber:NSNumber) -> String {
+                XCTAssertEqual("abc", aString)
+                XCTAssertEqual(12, aNumber)
+                return "def"
+            }
+            @objc static func alchemic(cb:ALCBuilder) {
+                AcRegister(cb)
+                AcMethod(cb, method: "aFunc:aNumber:",
+                    type: NSString.self,
+                    args: AcWithName("xyz"), AcFactory(),
+                AcArg(NSString.self, source: AcValue("")),
+                AcArg(NSString.self, source: AcValue(""))
+                )
+            }
+        }
+
+        super.setupRealContext()
+        super.startContextWithClasses([TestClass.self])
+
+        let results:Array<AnyObject> = AcInvoke(AcName("xyz"), args:"abc", 12)
+        XCTAssertEqual(1, results.count)
+        let obj = results[0]
+        XCTAssertEqual("def", obj as? String)
     }
     
     // MARK:- Startup

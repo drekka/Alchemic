@@ -97,7 +97,7 @@
     }]]).andReturn([NSSet setWithObject:mockBuilder]);
 
     id results = [_context invokeMethodBuilders:nameLocator, @"def", nil];
-    XCTAssertEqualObjects(@"xyz", results);
+    XCTAssertEqualObjects(@"xyz", results[0]);
 
     OCMVerify([mockBuilder invokeWithArgs:OCMOCK_ANY]);
 }
@@ -118,7 +118,7 @@
 
 
     id results = [_context invokeMethodBuilders:classLocator, @"def", nil];
-    XCTAssertTrue([results isKindOfClass:[NSSet class]]);
+    XCTAssertTrue([results isKindOfClass:[NSArray class]]);
     XCTAssertEqual(2u, [results count]);
     XCTAssertTrue([results containsObject:@"xyz"]);
     XCTAssertTrue([results containsObject:@12]);

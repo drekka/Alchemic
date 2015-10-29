@@ -90,7 +90,7 @@ hideInitializerImpl(initWithType:(Class) valueClass classBuilder:(ALCBuilder *) 
 }
 
 -(NSString *)attributeText {
-    return [NSString stringWithFormat:@", using method [%@]", NSStringFromSelector(_selector)];
+    return [NSString stringWithFormat:@", using method %@", NSStringFromSelector(_selector)];
 }
 
 -(NSString *) description {

@@ -52,11 +52,10 @@ AcInitializer(initWithString:)
     [self setupRealContext];
     [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
 
-    IVFactory *result = AcInvoke(AcName(@"IVFactory initWithString:"), @"def");
+    NSArray<IVFactory *> *result = AcInvoke(AcName(@"IVFactory initWithString:"), @"def");
 
-    XCTAssertNotNil(result);
-    XCTAssertNotNil(result.injectedSingleton);
-    XCTAssertEqualObjects(@"def", result.initializerInjectedString);
+    XCTAssertNotNil(result[0].injectedSingleton);
+    XCTAssertEqualObjects(@"def", result[0].initializerInjectedString);
 
 }
 
@@ -65,11 +64,10 @@ AcInitializer(initWithString:)
     [self setupRealContext];
     [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
 
-    IVFactory *result = AcInvoke(AcName(@"IVFactory initWithString:"));
+    NSArray<IVFactory *> *result = AcInvoke(AcName(@"IVFactory initWithString:"));
 
-    XCTAssertNotNil(result);
-    XCTAssertNotNil(result.injectedSingleton);
-    XCTAssertNil(result.initializerInjectedString);
+    XCTAssertNotNil(result[0].injectedSingleton);
+    XCTAssertNil(result[0].initializerInjectedString);
     
 }
 

@@ -58,7 +58,7 @@
 
 -(void) testDescription {
     NSString *description = [_model description];
-    XCTAssertEqualObjects(@"{\n    abc = \"  builder for type ALCModelTests, name 'abc', singleton, class builder\";\n    def = \"  builder for type NSString, name 'def', singleton, using method [def]\";\n}", description);
+    XCTAssertEqualObjects(@"Model:\n\t  builder for type ALCModelTests, name 'abc', singleton, class builder\n\t  builder for type NSString, name 'def', singleton, using method someMethod", description);
 }
 
 #pragma mark - Querying
