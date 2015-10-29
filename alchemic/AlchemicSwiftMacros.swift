@@ -16,7 +16,7 @@ public func AcName(name: String!) -> ALCModelSearchExpression {
     return ALCName.withName(name)
 }
 
-public func AcClass(aClass: AnyObject.Type!) -> ALCModelSearchExpression {
+public func AcClass(aClass: AnyClass!) -> ALCModelSearchExpression {
     return ALCClass.withClass(aClass)
 }
 
@@ -44,7 +44,7 @@ public func AcExternal() -> ALCMacro {
     return ALCIsExternal()
 }
 
-public func AcArg(argType:AnyObject.Type!, source: ALCSourceMacro...) -> ALCArg {
+public func AcArg(argType:AnyClass!, source: ALCSourceMacro...) -> ALCArg {
     return ALCArg(type: argType, properties: source)
 }
 
@@ -60,12 +60,12 @@ public func AcInitializer(classBuilder:ALCBuilder!, initializer:Selector!, args:
     context.registerClassBuilder(classBuilder, initializer:initializer, withArguments:args)
 }
 
-public func AcMethod(classBuilder:ALCBuilder!, method:Selector!, type:AnyObject.Type!, args:ALCMacro...) {
+public func AcMethod(classBuilder:ALCBuilder!, method:Selector!, type:AnyClass!, args:ALCMacro...) {
     let context = ALCAlchemic.mainContext();
     context.registerClassBuilder(classBuilder, selector: method, returnType: type, withArguments: args)
 }
 
-public func AcInject(classBuilder:ALCBuilder!, variableName: String!, type:AnyObject.Type!, source: ALCSourceMacro...) {
+public func AcInject(classBuilder:ALCBuilder!, variableName: String!, type:AnyClass!, source: ALCSourceMacro...) {
     let context = ALCAlchemic.mainContext();
     context.registerClassBuilder(classBuilder, variableDependency: variableName, type:type, withSource: source)
 }
@@ -77,9 +77,9 @@ public func AcInjectDependencies(object: AnyObject!) {
 
 // Accessing objects
 
-public func AcGet(type:AnyObject.Type!, source:ALCSourceMacro...) -> AnyObject {
+public func AcGet<T>(source:ALCSourceMacro...) -> T {
     let context = ALCAlchemic.mainContext()
-    return context.getValueWithClass(type, withSourceMacros: source)
+    return context.getValueWithClass(T.self as! AnyClass, withSourceMacros: source) as! T
 }
 
 public func AcSet(object:AnyObject!, inBuilderWith:ALCModelSearchExpression...) {
