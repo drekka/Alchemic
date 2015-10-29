@@ -564,11 +564,11 @@
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;
 			children = (
-				6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */,
-				6CD75C161BD9A7F400317627 /* AlchemicSwiftMacrosTests.swift */,
 				6C31B0701B9815B000F59A83 /* ALCAbtractResolvableTests.m */,
 				6C55E6381B70617D004A6305 /* ALCAlchemicTests.m */,
+				6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */,
 				6CDE85D61B73121F006E24F2 /* ALCContextTests.m */,
+				6CD75C161BD9A7F400317627 /* AlchemicSwiftMacrosTests.swift */,
 				6C5F170C1B611ADA00F60B1B /* ALCInternalMacroTests.m */,
 				6C55E6321B6B531D004A6305 /* ArraysIntegrationTests.m */,
 				6C5F14271B63DB6400E119FC /* Builders */,
@@ -578,6 +578,7 @@
 				6C3273A81B83671C006A7581 /* MacroTests.m */,
 				6CFFAED71B44F2E50084A368 /* Model */,
 				6CAC887F1B4A6C4B00AFB8E4 /* Runtime */,
+				6C7C94BB1BE07C02002E91FC /* SwiftLanguageTests.swift */,
 				6C5F170A1B61195500F60B1B /* Test support */,
 				6C7C94BB1BE07C02002E91FC /* SwiftLanguageTests.swift */,
 			);
