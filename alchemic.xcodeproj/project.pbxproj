@@ -135,7 +135,7 @@
 		6CBB019C1B96D8D400863F09 /* ALCAbstractResolvable.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBB019A1B96D8D400863F09 /* ALCAbstractResolvable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CBB019D1B96D8D400863F09 /* ALCAbstractResolvable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB019B1B96D8D400863F09 /* ALCAbstractResolvable.m */; };
 		6CBF8C6E1BD5BBC500E2CFF8 /* SwiftObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBF8C6D1BD5BBC500E2CFF8 /* SwiftObject.swift */; };
-		6CBF8C711BD5BD9100E2CFF8 /* AlchemicSwiftMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBF8C6F1BD5BBF500E2CFF8 /* AlchemicSwiftMacros.swift */; };
+		6CBF8C711BD5BD9100E2CFF8 /* AlchemicMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBF8C6F1BD5BBF500E2CFF8 /* AlchemicMacros.swift */; };
 		6CC9D7691B595A0100EFD517 /* ALCMacroProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC9D7671B595A0100EFD517 /* ALCMacroProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CC9D76A1B595A0100EFD517 /* ALCMacroProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */; };
 		6CCF58661B7C5530009655E9 /* NSSet+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CCF58631B7C500E009655E9 /* NSSet+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -313,7 +313,7 @@
 		6CBB019A1B96D8D400863F09 /* ALCAbstractResolvable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractResolvable.h; sourceTree = "<group>"; };
 		6CBB019B1B96D8D400863F09 /* ALCAbstractResolvable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractResolvable.m; sourceTree = "<group>"; };
 		6CBF8C6D1BD5BBC500E2CFF8 /* SwiftObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftObject.swift; sourceTree = "<group>"; };
-		6CBF8C6F1BD5BBF500E2CFF8 /* AlchemicSwiftMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicSwiftMacros.swift; sourceTree = "<group>"; };
+		6CBF8C6F1BD5BBF500E2CFF8 /* AlchemicMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicMacros.swift; sourceTree = "<group>"; };
 		6CC9D7671B595A0100EFD517 /* ALCMacroProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMacroProcessor.h; sourceTree = "<group>"; };
 		6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMacroProcessor.m; sourceTree = "<group>"; };
 		6CCF58631B7C500E009655E9 /* NSSet+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSet+Alchemic.h"; sourceTree = "<group>"; };
@@ -545,7 +545,7 @@
 				6C66DC5E1A903204009F9D94 /* ALCContext.m */,
 				6CAE806D1B424F8A00217F9D /* Alchemic.h */,
 				6C6D00A81AB70BB500984CF7 /* AlchemicAware.h */,
-				6CBF8C6F1BD5BBF500E2CFF8 /* AlchemicSwiftMacros.swift */,
+				6CBF8C6F1BD5BBF500E2CFF8 /* AlchemicMacros.swift */,
 				6C66DC5A1A8F662E009F9D94 /* ALCInternalMacros.h */,
 				6C91F9EE1B399009002DF241 /* ALCMacros.h */,
 				6C55E6361B6F3D3B004A6305 /* ALCResolvable.h */,
@@ -578,7 +578,6 @@
 				6C3273A81B83671C006A7581 /* MacroTests.m */,
 				6CFFAED71B44F2E50084A368 /* Model */,
 				6CAC887F1B4A6C4B00AFB8E4 /* Runtime */,
-				6C7C94BB1BE07C02002E91FC /* SwiftLanguageTests.swift */,
 				6C5F170A1B61195500F60B1B /* Test support */,
 				6C7C94BB1BE07C02002E91FC /* SwiftLanguageTests.swift */,
 			);
@@ -907,7 +906,7 @@
 				6CAED5501B8C4FE4008208DA /* ALCIsExternal.m in Sources */,
 				6C5EDC9C1B554D9E00EE88EF /* ALCConstantValue.m in Sources */,
 				6C36D7841B38531E0073C4FB /* ALCPlistResourceLocator.m in Sources */,
-				6CBF8C711BD5BD9100E2CFF8 /* AlchemicSwiftMacros.swift in Sources */,
+				6CBF8C711BD5BD9100E2CFF8 /* AlchemicMacros.swift in Sources */,
 				6C36D7691B38531E0073C4FB /* ALCAlchemic.m in Sources */,
 				6CB074091B4D000A00CA9002 /* ALCRuntimeScanner.m in Sources */,
 				6C4655F81B54D62400FD1D28 /* ALCModelValueSource.m in Sources */,
