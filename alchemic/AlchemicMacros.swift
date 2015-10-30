@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 // MARK:- Macro replacements
 // These are declared as global functions so that they are available where necessary.
 
@@ -94,3 +93,18 @@ public func AcInvoke(methodLocator:ALCModelSearchExpression!, args:AnyObject...)
     return context.invokeMethodBuilders(methodLocator, withArguments: args) as! Array<AnyObject>
 }
 
+
+// MARK:- Internal
+
+public func objcBox(value:Any!) -> NSObject {
+    if value is NSObject {
+        return value as! NSObject
+    } else if value is String {
+        return value as! NSString
+    } else if value is Int {
+        return value as! NSNumber
+    } else {
+        return value as! NSObject
+    }
+    
+}

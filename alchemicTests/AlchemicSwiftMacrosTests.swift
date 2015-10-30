@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Alchemic
+@testable import Alchemic
 import StoryTeller
 
 class AlchemicSwiftMacrosTests: ALCTestCase {
@@ -293,6 +293,13 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     
     func testAcExecuteWhenStarted() {
         
+    }
+    
+    // MARK:- Boxing
+    
+    func testObjcBoxString() {
+        let s = objcBox("abc")
+        XCTAssertTrue(s is NSString)
     }
     
     
