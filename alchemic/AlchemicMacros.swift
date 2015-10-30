@@ -93,6 +93,9 @@ public func AcInvoke(methodLocator:ALCModelSearchExpression!, args:AnyObject...)
     return context.invokeMethodBuilders(methodLocator, withArguments: args) as! Array<AnyObject>
 }
 
+// MARK:- Lifecycle
+
+public func 
 
 // MARK:- Internal
 

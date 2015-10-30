@@ -19,7 +19,7 @@
 		6C1A4F201B995C3200B3C25D /* ALCAbstractMethodBuilderType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1A4F1E1B995C3200B3C25D /* ALCAbstractMethodBuilderType.m */; };
 		6C215CB71B8CA2D9002EFF58 /* ALCBuilderStorageSingletonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CB61B8CA2D9002EFF58 /* ALCBuilderStorageSingletonTests.m */; };
 		6C215CB91B8CA41F002EFF58 /* ALCBuilderStorageFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CB81B8CA41F002EFF58 /* ALCBuilderStorageFactoryTests.m */; };
-		6C215CBB1B8CA54F002EFF58 /* ALCBUilderStorageExternalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CBA1B8CA54F002EFF58 /* ALCBUilderStorageExternalTests.m */; };
+		6C215CBB1B8CA54F002EFF58 /* ALCBuilderStorageExternalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C215CBA1B8CA54F002EFF58 /* ALCBuilderStorageExternalTests.m */; };
 		6C235AD61B82D05F0015CA0B /* InvokeIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C235AD51B82D05F0015CA0B /* InvokeIntegrationTests.m */; };
 		6C235AD81B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C235AD71B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m */; };
 		6C235AD91B831D520015CA0B /* NSObject+Builder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFCD2601B7E44BB00F67C18 /* NSObject+Builder.m */; };
@@ -201,7 +201,7 @@
 		6C1A4F1E1B995C3200B3C25D /* ALCAbstractMethodBuilderType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractMethodBuilderType.m; sourceTree = "<group>"; };
 		6C215CB61B8CA2D9002EFF58 /* ALCBuilderStorageSingletonTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCBuilderStorageSingletonTests.m; sourceTree = "<group>"; };
 		6C215CB81B8CA41F002EFF58 /* ALCBuilderStorageFactoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCBuilderStorageFactoryTests.m; sourceTree = "<group>"; };
-		6C215CBA1B8CA54F002EFF58 /* ALCBUilderStorageExternalTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCBUilderStorageExternalTests.m; sourceTree = "<group>"; };
+		6C215CBA1B8CA54F002EFF58 /* ALCBuilderStorageExternalTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCBuilderStorageExternalTests.m; sourceTree = "<group>"; };
 		6C235AD51B82D05F0015CA0B /* InvokeIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InvokeIntegrationTests.m; sourceTree = "<group>"; };
 		6C235AD71B830AE50015CA0B /* MultiRegistrationsIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiRegistrationsIntegrationTests.m; sourceTree = "<group>"; };
 		6C2420F61B61BFFB00884A93 /* ALCConstantValueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConstantValueTests.m; sourceTree = "<group>"; };
@@ -405,7 +405,7 @@
 			children = (
 				6C215CB61B8CA2D9002EFF58 /* ALCBuilderStorageSingletonTests.m */,
 				6C215CB81B8CA41F002EFF58 /* ALCBuilderStorageFactoryTests.m */,
-				6C215CBA1B8CA54F002EFF58 /* ALCBUilderStorageExternalTests.m */,
+				6C215CBA1B8CA54F002EFF58 /* ALCBuilderStorageExternalTests.m */,
 			);
 			name = Storage;
 			sourceTree = "<group>";
@@ -941,7 +941,7 @@
 				6C36D78D1B38533C0073C4FB /* ALCTestCase.m in Sources */,
 				6CEE8EB11B8DA6C6002EADC5 /* MethodFactoryWithArgIntegrationTests.m in Sources */,
 				6C36F6261B9E9FD20075967E /* ALCClassBuilderTypeTests.m in Sources */,
-				6C215CBB1B8CA54F002EFF58 /* ALCBUilderStorageExternalTests.m in Sources */,
+				6C215CBB1B8CA54F002EFF58 /* ALCBuilderStorageExternalTests.m in Sources */,
 				6C7170001B7391AA00634112 /* RetrievingIntegrationTests.m in Sources */,
 				6CEE8EA91B8D414F002EADC5 /* NSObject+BuilderTests.m in Sources */,
 				6CFE92071B69FDBA00BEAC0B /* ObjectSearchIntegrationTests.m in Sources */,
