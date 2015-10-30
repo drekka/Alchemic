@@ -95,7 +95,10 @@ public func AcInvoke(methodLocator:ALCModelSearchExpression!, args:AnyObject...)
 
 // MARK:- Lifecycle
 
-public func 
+public func AcExecuteWhenStarted(block:() -> Void) {
+    let context = ALCAlchemic.mainContext()
+    context.executeWhenStarted(block)
+}
 
 // MARK:- Internal
 

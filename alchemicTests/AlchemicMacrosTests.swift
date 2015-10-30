@@ -10,7 +10,7 @@ import Foundation
 @testable import Alchemic
 import StoryTeller
 
-class AlchemicSwiftMacrosTests: ALCTestCase {
+class AlchemicMacrosTests: ALCTestCase {
 
     // MARK: - Argument macros
 
@@ -292,7 +292,18 @@ class AlchemicSwiftMacrosTests: ALCTestCase {
     // MARK:- Startup
     
     func testAcExecuteWhenStarted() {
-        
+
+        let callback = self.expectationWithDescription("startUpBlockCalled")
+
+        super.setupRealContext()
+
+        AcExecuteWhenStarted {() -> Void in
+            callback.fulfill()
+        }
+
+        super.startContextWithClasses([])
+
+        self.waitForExpectationsWithTimeout(1.0 as NSTimeInterval, handler: nil)
     }
     
     // MARK:- Boxing

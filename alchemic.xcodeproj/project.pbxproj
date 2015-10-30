@@ -142,7 +142,7 @@
 		6CCF58671B7C554D009655E9 /* NSSet+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF58641B7C500E009655E9 /* NSSet+Alchemic.m */; };
 		6CD75C131BD88CDE00317627 /* SwiftIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD75C121BD88CDE00317627 /* SwiftIntegrationTests.m */; };
 		6CD75C151BD8C26000317627 /* SwiftObjectWithDep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD75C141BD8C26000317627 /* SwiftObjectWithDep.swift */; };
-		6CD75C171BD9A7F400317627 /* AlchemicSwiftMacrosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD75C161BD9A7F400317627 /* AlchemicSwiftMacrosTests.swift */; };
+		6CD75C171BD9A7F400317627 /* AlchemicMacrosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD75C161BD9A7F400317627 /* AlchemicMacrosTests.swift */; };
 		6CDE85D71B73121F006E24F2 /* ALCContextTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDE85D61B73121F006E24F2 /* ALCContextTests.m */; };
 		6CDEBF9C1B5FCC32009E3BEF /* ALCValueSourceFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CDEBF9D1B5FCC32009E3BEF /* ALCValueSourceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */; };
@@ -320,7 +320,7 @@
 		6CCF58641B7C500E009655E9 /* NSSet+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+Alchemic.m"; sourceTree = "<group>"; };
 		6CD75C121BD88CDE00317627 /* SwiftIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftIntegrationTests.m; sourceTree = "<group>"; };
 		6CD75C141BD8C26000317627 /* SwiftObjectWithDep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftObjectWithDep.swift; sourceTree = "<group>"; };
-		6CD75C161BD9A7F400317627 /* AlchemicSwiftMacrosTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicSwiftMacrosTests.swift; sourceTree = "<group>"; };
+		6CD75C161BD9A7F400317627 /* AlchemicMacrosTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicMacrosTests.swift; sourceTree = "<group>"; };
 		6CD800E51B89E24300781E46 /* ALCBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCBuilder.h; sourceTree = "<group>"; };
 		6CD800E61B89E24300781E46 /* ALCBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCBuilder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CD800E81B89E7AF00781E46 /* ALCBuilderStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCBuilderStorage.h; sourceTree = "<group>"; };
@@ -568,7 +568,7 @@
 				6C55E6381B70617D004A6305 /* ALCAlchemicTests.m */,
 				6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */,
 				6CDE85D61B73121F006E24F2 /* ALCContextTests.m */,
-				6CD75C161BD9A7F400317627 /* AlchemicSwiftMacrosTests.swift */,
+				6CD75C161BD9A7F400317627 /* AlchemicMacrosTests.swift */,
 				6C5F170C1B611ADA00F60B1B /* ALCInternalMacroTests.m */,
 				6C55E6321B6B531D004A6305 /* ArraysIntegrationTests.m */,
 				6C5F14271B63DB6400E119FC /* Builders */,
@@ -966,7 +966,7 @@
 				6C5F171C1B626FF900F60B1B /* ALCAbstractValueSourceTests.m in Sources */,
 				6CD75C131BD88CDE00317627 /* SwiftIntegrationTests.m in Sources */,
 				6C55E6391B70617E004A6305 /* ALCAlchemicTests.m in Sources */,
-				6CD75C171BD9A7F400317627 /* AlchemicSwiftMacrosTests.swift in Sources */,
+				6CD75C171BD9A7F400317627 /* AlchemicMacrosTests.swift in Sources */,
 				6CEE8EAF1B8D721C002EADC5 /* ALCBuilderTests.m in Sources */,
 				6C8FF8AA1B6D17B100B2B90A /* CircularDependency3IntegrationTests.m in Sources */,
 				6CF28C661B6B14EB00E3A36E /* MethodFactorySimpleIntegrationTests.m in Sources */,
