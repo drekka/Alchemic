@@ -41,8 +41,9 @@
     [_classBuilder.macroProcessor addMacro:AcWithName(@"abc")];
     [_classBuilder configure];
 
-    id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithType:[NSString class] classBuilder:_classBuilder
-                                                                                             selector:@selector(someMethod)];
+    id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithType:[NSString class]
+                                                             parentClassBuilder:_classBuilder
+                                                                       selector:@selector(someMethod)];
     _methodBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
     [_methodBuilder.macroProcessor addMacro:AcWithName(@"def")];
     [_methodBuilder configure];
@@ -55,10 +56,20 @@
     XCTAssertEqual(2u, [_model numberBuilders]);
 }
 
+-(void) testDescription {
+    NSString *description = [_model description];
+    XCTAssertEqualObjects(@"Model:\n\t  builder for type ALCModelTests, name 'abc', singleton, class builder\n\t  builder for type NSString, name 'def', singleton, using method someMethod", description);
+}
+
 #pragma mark - Querying
 
 -(void) testBuildersForSearchExpressionWhenNoResults {
     NSSet<ALCBuilder *> *results = [_model buildersForSearchExpressions:[NSSet setWithObject:AcName(@"fred")]];
+    XCTAssertEqual(0u, [results count]);
+}
+
+-(void) testBuildersForSearchExpressionMultipleQueriesNoResults {
+    NSSet<ALCBuilder *> *results = [_model buildersForSearchExpressions:[NSSet setWithObjects:AcProtocol(NSCopying), AcProtocol(NSFastEnumeration), nil]];
     XCTAssertEqual(0u, [results count]);
 }
 
@@ -117,6 +128,21 @@
     [dupClassBuilder.macroProcessor addMacro:AcWithName(@"abc")];
     [dupClassBuilder configure];
     XCTAssertThrowsSpecificNamed([_model addBuilder:dupClassBuilder], NSException, @"AlchemicDuplicateName");
+}
+
+-(void) testChangingName {
+    [_model builderDidChangeName:@"abc" newName:@"xyz"];
+    ALCBuilder *foundBuilder = [[_model buildersForSearchExpressions:[NSSet setWithObject:AcName(@"xyz")]] anyObject];
+    XCTAssertEqual(_classBuilder, foundBuilder);
+}
+
+#pragma mark - Removing builders
+
+-(void) testRemove {
+    [_model removeBuilder:_classBuilder];
+    NSSet<ALCBuilder *> *results = [_model allBuilders];
+    XCTAssertEqual(1u, [results count]);
+    XCTAssertTrue([results containsObject:_methodBuilder]);
 }
 
 #pragma mark - Internal

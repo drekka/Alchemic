@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (void)addMacro:(id<ALCMacro>)macro {
+- (void)addMacro:(id<ALCMacro>) macro {
 
     if (macro == [ALCIsFactory factoryMacro] && _allowedMacros & ALCAllowedMacrosFactory) {
         _isFactory = YES;

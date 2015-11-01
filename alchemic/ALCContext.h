@@ -13,6 +13,8 @@
 @protocol ALCModelSearchExpression;
 @class ALCBuilder;
 @protocol ALCMacro;
+@class ALCArg;
+@protocol ALCSourceMacro;
 @class ALCBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -40,12 +42,12 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 @interface ALCContext : NSObject
 
-#pragma mark - Registration
+#pragma mark - Class registration
 
 /**
  Creates an ALCBuilder instance for the passed class and returns it.
 
-@discussion Called from the runtime scanner whenever it detects a class with Alchemic methods present.
+ @discussion Called from the runtime scanner whenever it detects a class with Alchemic methods present.
 
  @param aClass The class that needs a ALCBuilder.
 
@@ -54,12 +56,20 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(ALCBuilder *) registerBuilderForClass:(Class) aClass;
 
 /**
- Sets properties on a ALCObjectBuilder.
+ Sets properties on a ALCBuilder.
 
  @param classBuilder The class builder whose properties are to be set.
  @param ... one or more macros which define the properties.
  */
--(void) registerClassBuilderProperties:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... NS_REQUIRES_NIL_TERMINATION;
+
+/**
+ Sets properties on an ALCBuilder
+
+ @param classBuilder The class builde to configure.
+ @param properties A NSArray of id<ALCMacro> instances defining the configuration.
+ */
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder withProperties:(NSArray<id<ALCMacro>> *) properties;
 
 /**
  Finishes the registration of a class.
@@ -68,6 +78,7 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) classBuilderDidFinishRegistering:(ALCBuilder *) classBuilder;
 
+#pragma mark - Variable injection registration
 /**
  Registers a variable dependency for the classbuilder.
 
@@ -79,6 +90,13 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
           variableDependency:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+          variableDependency:(NSString *) variable
+                        type:(Class) variableType
+                  withSource:(NSArray<id<ALCSourceMacro>> *) source;
+
+#pragma mark - Initializer registration
 
 /**
  Registers an initializer for the current class builder.
@@ -94,6 +112,12 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
                  initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                 initializer:(SEL) initializer
+               withArguments:(NSArray<ALCArg *> *) arguments;
+
+#pragma mark - Method registration
+
 /**
  Registers a method for a class that will create an object.
 
@@ -107,6 +131,11 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 -(void) registerClassBuilder:(ALCBuilder *) classBuilder
                     selector:(SEL) selector
                   returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                    selector:(SEL) selector
+                  returnType:(Class) returnType
+               withArguments:(NSArray<id<ALCMacro>> *) arguments;
 
 #pragma mark - Callbacks
 
@@ -155,6 +184,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(id) getValueWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
+- (id)getValueWithClass:(Class)returnType withSourceMacros:(NSArray<id<ALCSourceMacro>> *) sourceMacros;
+
 /**
  Sets the value on a specific builder.
 
@@ -163,6 +194,10 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  @param ...         Additional search macros to refine the search for the builder.
  */
 -(void) setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>) searchMacro, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) setValue:(id)value inBuilderSearchCriteria:(NSArray<id<ALCModelSearchExpression>> *) criteria;
+
+#pragma mark - Calling methods
 
 /**
  Programmatically invokes a specific method.
@@ -178,6 +213,8 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
  */
 -(id) invokeMethodBuilders:(id<ALCModelSearchExpression>) methodLocator, ... NS_REQUIRES_NIL_TERMINATION;
 
+-(id) invokeMethodBuilders:(id<ALCModelSearchExpression>) methodLocator withArguments:(NSArray *) arguments;
+
 #pragma mark - Working with builders
 
 /**
@@ -189,18 +226,14 @@ typedef void (^ProcessBuilderBlock)(ProcessBuiderBlockArgs);
 
  @return The matching builder or nil if one is not found.
  */
--(ALCBuilder *) classBuilderForClass:(Class) aClass;
+-(nullable ALCBuilder *) classBuilderForClass:(Class) aClass;
 
 /**
- Uses a set of ALCModelSearchExpression objects to find a set of builders in the model, the executes a block on each one.
-
- @discussion This is mainly used for processing builders to filter them for a final set.
+ Uses a set of ALCModelSearchExpression objects to find a set of builders in the model.
 
  @param searchExpressions    A NSSet of ALCModelSearchExpression objects which define the search criteria for finding the builders.
- @param processBuildersBlock A block which is called, passing each builder in turn.
  */
--(void) findBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *) searchExpressions
-                  processingBuildersBlock:(ProcessBuilderBlock) processBuildersBlock;
+- (NSSet<ALCBuilder *> *)findBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *)searchExpressions;
 
 @end
 

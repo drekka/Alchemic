@@ -15,6 +15,8 @@
 #import "ALCContext.h"
 #import "ALCRuntime.h"
 
+#import "ALCArg.h"
+
 #import "ALCModel.h"
 #import "ALCBuilder.h"
 #import "ALCDependency.h"
@@ -55,134 +57,10 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     return self;
 }
 
-#pragma mark - Initialisation
-
-- (void)start {
-
-    STStartScope(ALCHEMIC_LOG);
-    STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
-    [self resolveBuilderDependencies];
-    STLog(ALCHEMIC_LOG, @"Finishing startup ...");
-    [self finishStartup];
-    STLog(ALCHEMIC_LOG, @"Alchemic started.");
-}
-
-#pragma mark - Dependencies
-
-- (void)injectDependencies:(id)object {
-    STStartScope(object);
-    STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
-    NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForClass:[object class]];
-    NSSet<ALCBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:expressions]];
-    [[builders anyObject] injectDependencies:object];
-}
-
-- (void)resolveBuilderDependencies {
-    STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
-    for (ALCBuilder *builder in [_model allBuilders]) {
-        STStartScope(builder.valueClass);
-        [builder resolve];
-    }
-}
-
-#pragma mark - Configuration
-
 - (void)addDependencyPostProcessor:(id<ALCDependencyPostProcessor>)postProcessor {
     STLog(ALCHEMIC_LOG, @"Adding dependency post processor: %s", object_getClassName(postProcessor));
     [(NSMutableSet *)_dependencyPostProcessors addObject:postProcessor];
 }
-
-#pragma mark - Registration call backs
-
--(ALCBuilder *) registerBuilderForClass:(Class) aClass {
-    id<ALCBuilderType> builderType = [[ALCClassBuilderType alloc] initWithType:aClass];
-    ALCBuilder *classBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
-
-    // Turn off the registered flag so that the class builder does not set it until a AcRegister(...) macro is executed.
-    // All other builders will be set to YES by default.
-    classBuilder.registered = NO;
-
-    [_model addBuilder:classBuilder];
-    return classBuilder;
-}
-
--(void) registerClassBuilderProperties:(ALCBuilder *) classBuilder, ... {
-    STLog(classBuilder.valueClass, @"Registering class %@", NSStringFromClass(classBuilder.valueClass));
-
-    // turn the registration flag back on so we can create instances.
-    classBuilder.registered = YES;
-
-    alc_loadMacrosAfter(classBuilder.macroProcessor, classBuilder);
-}
-
--(void) classBuilderDidFinishRegistering:(ALCBuilder *) classBuilder {
-    [classBuilder configure];
-}
-
-- (void)registerClassBuilder:(ALCBuilder *)classBuilder variableDependency:(NSString *)variable, ... {
-
-    STStartScope(classBuilder.valueClass);
-
-    Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
-    Class varClass = [ALCRuntime iVarClass:var];
-    ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:varClass];
-    alc_loadMacrosAfter(valueSourceFactory, variable);
-
-    // Add a default value source for the ivar if no macros where loaded to define it.
-    if ([valueSourceFactory.macros count] == 0) {
-        STLog(classBuilder.valueClass, @"Generating search criteria from variable %s", ivar_getName(var));
-        NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForVariable:var];
-        for (id<ALCModelSearchExpression> macro in macros) {
-            [valueSourceFactory addMacro:(id<ALCMacro>)macro];
-        }
-    }
-
-    [classBuilder addVariableInjection:var valueSourceFactory:valueSourceFactory];
-}
-
-- (void)registerClassBuilder:(ALCBuilder *)classBuilder initializer:(SEL)initializer, ... {
-    STLog(classBuilder.valueClass, @"Registering initializer -[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(initializer));
-
-    // Tell the class builder that it is registered so that it will be ready to be instantiated.
-    classBuilder.registered = YES;
-
-    id<ALCBuilderType> builderType = [[ALCInitializerBuilderType alloc] initWithClassBuilder:classBuilder initializer:initializer];
-    ALCBuilder *initializerBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
-    alc_loadMacrosAfter(initializerBuilder.macroProcessor, initializer);
-    [initializerBuilder configure];
-
-    // replace the class builder in the model with the initializer builder because now we have an initializer we don't want the class to be found as the source of these objects.
-    [_model addBuilder:initializerBuilder];
-    [_model removeBuilder:classBuilder];
-    STLog(classBuilder.valueClass, @"Created initializer %@", initializerBuilder);
-}
-
-- (void)registerClassBuilder:(ALCBuilder *)classBuilder selector:(SEL)selector returnType:(Class)returnType, ... {
-    id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithType:returnType
-                                                                   classBuilder:classBuilder
-                                                                       selector:selector];
-    STLog(classBuilder.valueClass, @"Registering method -(%@) [%@ %@]", NSStringFromClass(returnType), NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(selector));
-    ALCBuilder *methodBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
-    alc_loadMacrosAfter(methodBuilder.macroProcessor, returnType);
-    [methodBuilder configure];
-    [_model addBuilder:methodBuilder];
-}
-
-- (ALCBuilder *)classBuilderForClass:(Class)aClass {
-    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:[ALCClass withClass:aClass]]];
-    NSSet<ALCBuilder *> *classBuilders = [_model classBuildersFromBuilders:builders];
-    return [classBuilders anyObject];
-}
-
-- (void)findBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *)searchExpressions
-                  processingBuildersBlock:(ProcessBuilderBlock)processBuildersBlock {
-    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:searchExpressions];
-    if ([builders count] > 0) {
-        processBuildersBlock(builders);
-    }
-}
-
-#pragma mark - finished loading
 
 - (void)executeWhenStarted:(AcSimpleBlock)block {
 
@@ -197,64 +75,23 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     [_onLoadBlocks addObject:[block copy]];
 }
 
-#pragma mark - Retrieveing objects
+- (void)start {
 
-- (void)setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>)searchMacro, ... {
+    STStartScope(ALCHEMIC_LOG);
+    STLog(ALCHEMIC_LOG, @"Starting Alchemic ...");
+    [self resolveBuilderDependencies];
+    STLog(ALCHEMIC_LOG, @"Finishing startup ...");
+    [self finishStartup];
+    STLog(ALCHEMIC_LOG, @"Alchemic started.");
+}
 
-    NSMutableSet<id<ALCModelSearchExpression>> *searchExpressions = [[NSMutableSet alloc] init];
-    alc_processVarArgsIncluding(id<ALCModelSearchExpression>, searchMacro, ^(id macro) {
-        [searchExpressions addObject:macro];
-    });
-
-    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:searchExpressions];
-
-    if ([builders count] != 1) {
-        @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberOfBuilders"
-                                       reason:[NSString stringWithFormat:@"Expected 1, but got %lu builders trying to set a value on %@", (unsigned long)[builders count], self]
-                                     userInfo:nil];
+- (void)resolveBuilderDependencies {
+    STLog(ALCHEMIC_LOG, @"Resolving dependencies in %lu builders ...", _model.numberBuilders);
+    for (ALCBuilder *builder in [_model allBuilders]) {
+        STStartScope(builder.valueClass);
+        [builder resolve];
     }
-
-    [builders anyObject].value = value;
 }
-
-- (id)getValueWithClass:(Class)returnType, ... {
-
-    ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:returnType];
-    alc_loadMacrosAfter(valueSourceFactory, returnType);
-
-    // Analyse the return type if no macros where loaded to define it.
-    if ([valueSourceFactory.macros count] == 0) {
-        NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForClass:returnType];
-        for (id<ALCMacro> macro in macros) {
-            [valueSourceFactory addMacro:macro];
-        }
-    }
-
-    ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSourceFactory.valueSource];
-    [dependency.valueSource resolve];
-    return dependency.value;
-}
-
-- (id)invokeMethodBuilders:(id<ALCModelSearchExpression>)methodLocator, ... {
-
-    NSMutableArray *args = [[NSMutableArray alloc] init];
-    alc_processVarArgsAfter(id, methodLocator, ^(id value) {
-        [args addObject:value];
-    });
-
-    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:methodLocator]];
-
-    NSMutableSet<id> *results = [[NSMutableSet alloc] init];
-    [builders enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL *stop) {
-        if (!builder.isClassBuilder) {
-            // We only execute on method or initializer builders.
-            [results addObject:[builder invokeWithArgs:args]];
-        }
-    }];
-    return [results count] == 1 ? [results anyObject] : results;
-}
-
-#pragma mark - Internal
 
 - (void)finishStartup {
 
@@ -281,6 +118,272 @@ NSString *const AlchemicFinishedLoading = @"AlchemicFinishedLoading";
     });
 
     STLog(ALCHEMIC_LOG, @"Registered model builders (* - instantiated):...\n%@\n", _model);
+}
+
+#pragma mark - Dependencies
+
+- (void)injectDependencies:(id)object {
+    STStartScope(object);
+    STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
+    NSSet<id<ALCModelSearchExpression>> *expressions = [ALCRuntime searchExpressionsForClass:[object class]];
+    NSSet<ALCBuilder *> *builders = [_model classBuildersFromBuilders:[_model buildersForSearchExpressions:expressions]];
+    [[builders anyObject] injectDependencies:object];
+}
+
+#pragma mark - Class registration
+
+-(ALCBuilder *) registerBuilderForClass:(Class) aClass {
+    id<ALCBuilderType> builderType = [[ALCClassBuilderType alloc] initWithType:aClass];
+    ALCBuilder *classBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
+
+    // Turn off the registered flag so that the class builder does not set it until a AcRegister(...) macro is executed.
+    // All other builders will be set to YES by default.
+    classBuilder.registered = NO;
+
+    // Ensure that if the class builder changes it's name, that we update the model indexes.
+    // This is a one shot thing for class builders only.
+    classBuilder.onNameChanged = ^(NSString *oldName, NSString *newName) {
+        [self->_model builderDidChangeName:oldName newName:newName];
+    };
+
+    [_model addBuilder:classBuilder];
+    return classBuilder;
+}
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder, ... {
+    NSMutableArray *properties = [NSMutableArray array];
+    alc_processVarArgsAfter(id<ALCMacro>, classBuilder, ^(id<ALCMacro> macro){
+        [properties addObject:macro];
+    });
+    [self registerClassBuilder:classBuilder withProperties:properties];
+}
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder withProperties:(NSArray<id<ALCMacro>> *) properties {
+
+    STLog(classBuilder.valueClass, @"Setting properties on class builder for %@", NSStringFromClass(classBuilder.valueClass));
+
+    // turn the registration flag back on so we can create instances.
+    classBuilder.registered = YES;
+
+    [properties enumerateObjectsUsingBlock:^(id<ALCMacro> macro, NSUInteger idx, BOOL *stop) {
+        [classBuilder.macroProcessor addMacro:macro];
+    }];
+}
+
+-(void) classBuilderDidFinishRegistering:(ALCBuilder *) classBuilder {
+    [classBuilder configure];
+}
+
+#pragma mark - Variable injection registration
+
+- (void)registerClassBuilder:(ALCBuilder *)classBuilder variableDependency:(NSString *)variable, ... {
+
+    STStartScope(classBuilder.valueClass);
+
+    Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
+    Class varClass = [ALCRuntime iVarClass:var];
+
+    ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:varClass];
+    alc_processVarArgsAfter(id<ALCMacro>, variable, ^(id<ALCMacro> macro){
+        [valueSourceFactory addMacro:macro];
+    });
+
+    // Add a default value source for the ivar if no macros where loaded to define it.
+    if ([valueSourceFactory.macros count] == 0) {
+        STLog(classBuilder.valueClass, @"Generating search criteria from variable %s", ivar_getName(var));
+        NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForVariable:var];
+        for (id<ALCModelSearchExpression> macro in macros) {
+            [valueSourceFactory addMacro:(id<ALCMacro>)macro];
+        }
+    }
+
+    [classBuilder addVariableInjection:var valueSourceFactory:valueSourceFactory];
+
+}
+
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+          variableDependency:(NSString *) variable
+                        type:(Class) variableType
+                  withSource:(NSArray<id<ALCSourceMacro>> *) source {
+
+    STStartScope(classBuilder.valueClass);
+
+    ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:variableType];
+
+    [source enumerateObjectsUsingBlock:^(id<ALCSourceMacro> macro, NSUInteger idx, BOOL *stop) {
+        [valueSourceFactory addMacro:macro];
+    }];
+
+    // Add a default value source for the ivar if no macros where loaded to define it.
+    if ([valueSourceFactory.macros count] == 0) {
+        STLog(classBuilder.valueClass, @"Generating search criteria from class %@", NSStringFromClass(variableType));
+        NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForClass:variableType];
+        for (id<ALCModelSearchExpression> macro in macros) {
+            [valueSourceFactory addMacro:(id<ALCMacro>)macro];
+        }
+    }
+
+    Ivar var = [ALCRuntime aClass:classBuilder.valueClass variableForInjectionPoint:variable];
+    [classBuilder addVariableInjection:var valueSourceFactory:valueSourceFactory];
+
+}
+
+#pragma mark - Initializer registration
+
+- (void)registerClassBuilder:(ALCBuilder *)classBuilder initializer:(SEL)initializer, ... {
+    NSMutableArray<ALCArg *> *arguments = [NSMutableArray array];
+    alc_processVarArgsAfter(ALCArg *, initializer, ^(ALCArg *arg){
+        [arguments addObject:arg];
+    });
+    [self registerClassBuilder:classBuilder initializer:initializer withArguments:arguments];
+}
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                 initializer:(SEL) initializer
+               withArguments:(NSArray<ALCArg *> *) arguments {
+
+    STLog(classBuilder.valueClass, @"Registering initializer -[%@ %@]", NSStringFromClass(classBuilder.valueClass), NSStringFromSelector(initializer));
+
+    // Tell the class builder that it is registered so that it will be ready to be instantiated.
+    classBuilder.registered = YES;
+
+    id<ALCBuilderType> builderType = [[ALCInitializerBuilderType alloc] initWithParentClassBuilder:classBuilder initializer:initializer];
+    ALCBuilder *initializerBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
+    [arguments enumerateObjectsUsingBlock:^(ALCArg *arg, NSUInteger idx, BOOL *stop) {
+        [initializerBuilder.macroProcessor addMacro:arg];
+    }];
+    [initializerBuilder configure];
+
+    // replace the class builder in the model with the initializer builder because now we have an initializer we don't want the class to be found as the source of these objects. remove the parent before adding the initializer as they are likely to have the same name and that will trigger an error.
+    [_model removeBuilder:classBuilder];
+    [_model addBuilder:initializerBuilder];
+    STLog(classBuilder.valueClass, @"Created initializer %@", initializerBuilder);
+}
+
+#pragma mark - Method registration
+
+- (void)registerClassBuilder:(ALCBuilder *)classBuilder
+                    selector:(SEL)selector
+                  returnType:(Class)returnType, ... {
+
+    NSMutableArray<ALCArg *> *arguments = [NSMutableArray array];
+    alc_processVarArgsAfter(ALCArg *, returnType, ^(ALCArg *arg){
+        [arguments addObject:arg];
+    });
+    [self registerClassBuilder:classBuilder selector:selector returnType:returnType withArguments:arguments];
+}
+
+-(void) registerClassBuilder:(ALCBuilder *) classBuilder
+                    selector:(SEL) selector
+                  returnType:(Class) returnType
+               withArguments:(NSArray<id<ALCMacro>> *) arguments {
+
+    id<ALCBuilderType> builderType = [[ALCMethodBuilderType alloc] initWithType:returnType
+                                                             parentClassBuilder:classBuilder
+                                                                       selector:selector];
+
+    STLog(classBuilder.valueClass, @"Registering method -(%@) [%@ %@]",
+          NSStringFromClass(returnType),
+          NSStringFromClass(classBuilder.valueClass),
+          NSStringFromSelector(selector));
+
+    ALCBuilder *methodBuilder = [[ALCBuilder alloc] initWithBuilderType:builderType];
+    [arguments enumerateObjectsUsingBlock:^(id<ALCMacro> arg, NSUInteger idx, BOOL *stop) {
+        [methodBuilder.macroProcessor addMacro:arg];
+    }];
+    [methodBuilder configure];
+    [_model addBuilder:methodBuilder];
+}
+
+#pragma mark - Finding builders
+
+- (ALCBuilder *)classBuilderForClass:(Class)aClass {
+    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:[ALCClass withClass:aClass]]];
+    NSSet<ALCBuilder *> *classBuilders = [_model classBuildersFromBuilders:builders];
+    return [classBuilders anyObject];
+}
+
+-(NSSet<ALCBuilder *> *) findBuildersWithSearchExpressions:(NSSet<id<ALCModelSearchExpression>> *)searchExpressions {
+    return [_model buildersForSearchExpressions:searchExpressions];
+}
+
+#pragma mark - Getting and setting
+
+- (void)setValue:(id)value inBuilderWith:(id<ALCModelSearchExpression>)searchCriteria, ... {
+    NSMutableArray *criteria = [NSMutableArray array];
+    alc_processVarArgsIncluding(id<ALCModelSearchExpression>, searchCriteria, ^(id<ALCModelSearchExpression> macro){
+        [criteria addObject:macro];
+    });
+    [self setValue:value inBuilderSearchCriteria:criteria];
+}
+
+-(void) setValue:(id)value inBuilderSearchCriteria:(NSArray<id<ALCModelSearchExpression>> *) criteria {
+
+    NSSet<id<ALCModelSearchExpression>> *searchExpressions = [NSSet setWithArray:criteria];
+    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:searchExpressions];
+
+    if ([builders count] != 1) {
+        @throw [NSException exceptionWithName:@"AlchemicIncorrectNumberOfBuilders"
+                                       reason:[NSString stringWithFormat:@"Expected 1, but got %lu builders trying to set a value on %@", (unsigned long)[builders count], self]
+                                     userInfo:nil];
+    }
+
+    [builders anyObject].value = value;
+}
+
+- (id)getValueWithClass:(Class)returnType, ... {
+    NSMutableArray<id<ALCSourceMacro>> *properties = [NSMutableArray array];
+    alc_processVarArgsAfter(id<ALCSourceMacro>, returnType, ^(id<ALCSourceMacro> macro){
+        [properties addObject:macro];
+    });
+    return [self getValueWithClass:returnType withSourceMacros:properties];
+}
+
+- (id)getValueWithClass:(Class)returnType withSourceMacros:(NSArray<id<ALCSourceMacro>> *) sourceMacros  {
+
+    ALCValueSourceFactory *valueSourceFactory = [[ALCValueSourceFactory alloc] initWithType:returnType];
+    [sourceMacros enumerateObjectsUsingBlock:^(id<ALCSourceMacro> macro, NSUInteger idx, BOOL *stop) {
+        [valueSourceFactory addMacro:macro];
+    }];
+
+    // Analyse the return type if no macros where loaded to define it.
+    if ([valueSourceFactory.macros count] == 0) {
+        NSSet<id<ALCModelSearchExpression>> *macros = [ALCRuntime searchExpressionsForClass:returnType];
+        for (id<ALCMacro> macro in macros) {
+            [valueSourceFactory addMacro:macro];
+        }
+    }
+
+    ALCDependency *dependency = [[ALCDependency alloc] initWithValueSource:valueSourceFactory.valueSource];
+    [dependency.valueSource resolve];
+    return dependency.value;
+}
+
+#pragma mark - Invoking methods
+
+- (id)invokeMethodBuilders:(id<ALCModelSearchExpression>)methodLocator, ... {
+    NSMutableArray *arguments = [NSMutableArray array];
+    alc_processVarArgsAfter(id<ALCSourceMacro>, methodLocator, ^(id arg){
+        [arguments addObject:arg];
+    });
+    return [self invokeMethodBuilders:methodLocator withArguments:arguments];
+}
+
+-(id) invokeMethodBuilders:(id<ALCModelSearchExpression>) methodLocator withArguments:(NSArray *) arguments {
+
+    NSSet<ALCBuilder *> *builders = [_model buildersForSearchExpressions:[NSSet setWithObject:methodLocator]];
+
+    // Only invoke on method builders.
+    NSMutableArray<id> *results = [[NSMutableArray alloc] init];
+    [builders enumerateObjectsUsingBlock:^(ALCBuilder *builder, BOOL *stop) {
+        // We only execute on method or initializer builders.
+        if (!builder.isClassBuilder) {
+            [results addObject:[builder invokeWithArgs:arguments]];
+        }
+    }];
+
+    return results;
 }
 
 @end

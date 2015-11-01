@@ -32,11 +32,23 @@
 }
 
 +(nonnull instancetype) modelScanner {
+    ignoreSelectorWarnings(
+                           SEL alchemicFunctionSelector = @selector(alchemic:);
+                           )
     return [[ALCRuntimeScanner alloc]
             initWithSelector:^BOOL(Class  _Nonnull __unsafe_unretained aClass) {
                 return YES;
             }
             processor:^(ALCContext * context, NSMutableSet *moreBundlesClass, Class __unsafe_unretained aClass) {
+
+                // First check for a swift based call.
+                if ([aClass respondsToSelector:alchemicFunctionSelector]) {
+                    STLog(aClass, @"Swift class %@ has alchemic() method, executing it ...", NSStringFromClass(aClass));
+                    ALCBuilder *currentClassBuilder = [context registerBuilderForClass:aClass];
+                    ((void (*)(id, SEL, ALCBuilder *))objc_msgSend)(aClass, alchemicFunctionSelector, currentClassBuilder);
+                    [context classBuilderDidFinishRegistering:currentClassBuilder];
+                    return;
+                }
 
                 // Get the class methods. We need to get the class of the class for them.
                 unsigned int methodCount;

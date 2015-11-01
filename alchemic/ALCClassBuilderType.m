@@ -17,28 +17,28 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCClassBuilderType
 
 @synthesize valueClass = _valueClass;
+@synthesize name = _name;
 
--(instancetype) init {
-    return nil;
-}
+hideInitializerImpl(init)
 
 -(instancetype) initWithType:(Class) valueClass {
     self = [super init];
     if (self) {
         _valueClass = valueClass;
+        _name = NSStringFromClass(_valueClass);
     }
     return self;
-}
-
--(NSString *) defaultName {
-    return NSStringFromClass(_valueClass);
 }
 
 -(NSUInteger)macroProcessorFlags {
     return ALCAllowedMacrosFactory + ALCAllowedMacrosName + ALCAllowedMacrosPrimary + ALCAllowedMacrosExternal;
 }
 
--(void) builder:(ALCBuilder *) builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *) macroProcessor {}
+-(void) configureWithBuilder:(ALCBuilder *) builder {
+    if (builder.macroProcessor.asName != nil) {
+        _name = builder.macroProcessor.asName;
+    }
+}
 
 -(void)builderWillResolve:(ALCBuilder *)builder {}
 

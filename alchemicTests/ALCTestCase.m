@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(void)initialize {
     [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%4$@ %1$@ %2$@:%3$@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFunction, STLoggerTemplateKeyLine, STLoggerTemplateKeyKey];
-    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%@ ... %@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFile];
+    //[STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%@ ... %@", STLoggerTemplateKeyMessage, STLoggerTemplateKeyFile];
     [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%@", STLoggerTemplateKeyMessage];
 }
 
@@ -65,17 +65,16 @@ NS_ASSUME_NONNULL_BEGIN
     OCMStub(ClassMethod([_mockAlchemic mainContext])).andReturn(_context);
 }
 
--(void) startContextWithClasses:(NSArray<Class> *) classes {
+-(void) startContextWithClasses:(nonnull NSArray<Class> *) classes {
     NSAssert(_context != nil, @"[ALCTestCase setupRealContext must be called first.");
-    NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
-                                                                 [ALCRuntimeScanner resourceLocatorScanner]
-                                                                 ]];
-    [ALCRuntime scanRuntimeWithContext:_context runtimeScanners:scanners];
+    ALCContext *ctx = _context;
+    [ALCRuntime scanRuntimeWithContext:ctx runtimeScanners:[NSSet set]];
 
     ALCRuntimeScanner *modelScanner = [ALCRuntimeScanner modelScanner];
     NSMutableSet *moreBundles = [[NSMutableSet alloc] init];
     [classes enumerateObjectsUsingBlock:^(Class  _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
-        modelScanner.processor(self.context, moreBundles, aClass);
+        STLog(aClass, @"Adding class %@ to model", NSStringFromClass(aClass));
+        modelScanner.processor(ctx, moreBundles, aClass);
     }];
 
     [_context start];
@@ -94,12 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) stubMockContextToReturnBuilders:(NSArray<ALCBuilder *> *) builders {
-    OCMStub([self.mockContext findBuildersWithSearchExpressions:OCMOCK_ANY
-                                        processingBuildersBlock:OCMOCK_ANY]).andDo(^(NSInvocation *inv){
-        __unsafe_unretained ProcessBuilderBlock processBuilderBlock;
-        [inv getArgument:&processBuilderBlock atIndex:3];
-        processBuilderBlock([NSSet setWithArray:builders]);
-    });
+    OCMStub([self.mockContext findBuildersWithSearchExpressions:OCMOCK_ANY]).andReturn(builders);
 }
 
 -(void) configureAndResolveBuilder:(ALCBuilder *) builder {

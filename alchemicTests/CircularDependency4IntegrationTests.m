@@ -17,7 +17,8 @@
 @end
 
 @implementation Chicken
-AcInitializer(initWithEgg:, AcWithName(@"A chicken"), AcArg(Egg, AcClass(Egg)))
+AcRegister(AcWithName(@"A chicken"))
+AcInitializer(initWithEgg:, AcArg(Egg, AcClass(Egg)))
 -(instancetype) initWithEgg:(Egg *) egg {
 	return [[Chicken alloc] init];
 }

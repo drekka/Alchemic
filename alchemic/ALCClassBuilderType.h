@@ -10,6 +10,7 @@
 @import ObjectiveC;
 #import "ALCBuilderType.h"
 @class ALCValueSourceFactory;
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return An instance of ALCClassBuilderType.
  */
--(instancetype) init NS_UNAVAILABLE;
+hideInitializer(init);
 
 /**
  Default initializer.

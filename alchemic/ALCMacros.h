@@ -22,23 +22,23 @@
 
 /**
  Defines the class or factory method as a factory.
- 
+
  @discussion Factories create a new instance of an object every time they are accessed.
- 
+
  @param _objectName the name to set on the registration.
  */
 #define AcFactory [ALCIsFactory factoryMacro]
 
 /**
- When there is more than one candidate object for a dependency, Primary objects are used first. 
- 
+ When there is more than one candidate object for a dependency, Primary objects are used first.
+
  @discussion This is mainly used for a couple of situations. Firstly where there are a number of candiates and you don't want to use names to define a default. Secondly during unit testing, this can be used to set registrations in unit test code as overrides to the app's instances.
  */
 #define AcPrimary [ALCIsPrimary primaryMacro]
 
 /**
- Indicates that the builder will have it's objects sourced externally. 
- 
+ Indicates that the builder will have it's objects sourced externally.
+
  @discussion Can only be used on class builders as it makes no sense when set on method or initializers.
  */
 #define AcExternal [ALCIsExternal externalMacro]
@@ -59,7 +59,7 @@
 
 /**
  If you need to manually resolve and inject values into an object, then call this macro passing it the object to be injected.
- 
+
  @param object the object whose dependencies need to be resolved and injected.
  */
 #define AcInjectDependencies(object) [[ALCAlchemic mainContext] injectDependencies:object]
@@ -79,10 +79,10 @@
 #define AcSet(object, searchMacro, ...) [[ALCAlchemic mainContext] setValue:object inBuilderWith:searchMacro, ## __VA_ARGS__, nil]
 
 /**
- Programmatically invokes a specific method. 
- 
+ Programmatically invokes a specific method.
+
  @discussion The method can be a normal instance method registered with AcMethod(...) or an initializer registered with AcInitializer(...). Usually you would use this method rather than an injected value when you need to pass values to the method or initializer which are not available from Alchemic's model or a constant value. In other words, values which are computed just prior to requesting the object from Alchemic. The returned object is checked and injected with dependencies as necessary.
- 
+
  Note that this method can be used to invoke multiple methods or initializers. In this case it is assumed that each one takes the same arguments in the same order and an array of result objects will be returned.
 
  @param methodLocator A model search macro which is used to locate the method or initializer to call.
@@ -97,12 +97,12 @@
 
 /**
  Register a class as a source of objects.
- 
- @discussion This is the main macro for setting up objects within Alchemic. It take a number of other macros as 
+
+ @discussion This is the main macro for setting up objects within Alchemic. It take a number of other macros as
  */
 #define AcRegister(...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCBuilder *) classBuilder { \
-[[ALCAlchemic mainContext] registerClassBuilderProperties:classBuilder, ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerClassBuilder:classBuilder, ## __VA_ARGS__, nil]; \
 }
 
 #define AcMethod(methodType, methodSel, ...) \
@@ -119,7 +119,7 @@
 // Registers an initializer for a class.
 #define AcInitializer(initializerSel, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerInitializerForClassBuilder):(ALCBuilder *) classBuilder { \
-	[[ALCAlchemic mainContext] registerClassBuilder:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
+[[ALCAlchemic mainContext] registerClassBuilder:classBuilder initializer:@selector(initializerSel), ## __VA_ARGS__, nil]; \
 }
 
 #pragma mark - Callbacks

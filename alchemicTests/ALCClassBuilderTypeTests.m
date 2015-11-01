@@ -29,7 +29,7 @@
 }
 
 -(void) testBuilderName {
-    XCTAssertEqualObjects(@"SimpleObject", _builderType.defaultName);
+    XCTAssertEqualObjects(@"SimpleObject", _builderType.name);
 }
 
 -(void) testMacroProcessorFlags {
