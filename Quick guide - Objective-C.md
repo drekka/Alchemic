@@ -25,8 +25,11 @@ Table of Contents
  `github "drekka/Alchemic" "master"`
 2. Build dependencies:  
  `carthage update`
-3. Drag and drop **<project-root>/Carthage/Build/iOS/Alchemic.framework** into your workspace's dependencies.
-4. Ensure  **Alchemic.framework**, **StoryTeller.framework** and **PEGKit.framework** are added to a build phase that copies them to the **Framworks** Destination. Check out the [carthage documentation](https://github.com/Carthage/Carthage) for the details of doing this. 
+3. Drag and drop the following frameworks into your project:
+ * **<project-root>/Carthage/Build/iOS/Alchemic.framework**
+ * **<project-root>/Carthage/Build/iOS/StoryTeller.framework**
+ * **<project-root>/Carthage/Build/iOS/PEGKit.framework**
+4. Ensure  the above frameworks are added to a build phase that copies them to the **Framworks** Destination. Check out the [carthage documentation](https://github.com/Carthage/Carthage) for the details of doing this. 
 
 # Starting Alchemic
  

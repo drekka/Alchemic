@@ -64,9 +64,9 @@ public func AcMethod(classBuilder:ALCBuilder!, method:Selector!, type:AnyClass!,
     context.registerClassBuilder(classBuilder, selector: method, returnType: type, withArguments: args)
 }
 
-public func AcInject(classBuilder:ALCBuilder!, variableName: String!, type:AnyClass!, source: ALCSourceMacro...) {
+public func AcInject(classBuilder:ALCBuilder!, variable: String!, type:AnyClass!, source: ALCSourceMacro...) {
     let context = ALCAlchemic.mainContext();
-    context.registerClassBuilder(classBuilder, variableDependency: variableName, type:type, withSource: source)
+    context.registerClassBuilder(classBuilder, variableDependency: variable, type:type, withSource: source)
 }
 
 public func AcInjectDependencies(object: AnyObject!) {

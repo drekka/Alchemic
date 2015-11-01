@@ -156,7 +156,7 @@ class AlchemicMacrosTests: ALCTestCase {
             var stringProperty: NSString?
             @objc static func alchemic(cb: ALCBuilder) {
                 AcRegister(cb, settings:AcWithName("abc"))
-                AcInject(cb, variableName: "stringProperty", type:NSObject.self, source:AcValue("the string"))
+                AcInject(cb, variable: "stringProperty", type:NSObject.self, source:AcValue("the string"))
             }
         }
 
@@ -180,7 +180,7 @@ class AlchemicMacrosTests: ALCTestCase {
             var nestedObj: AnyObject?
             @objc static func alchemic(cb: ALCBuilder) {
                 AcRegister(cb, settings:AcWithName("abc"))
-                AcInject(cb, variableName: "nestedObj", type:NSObject.self, source:AcName("nestedObj"))
+                AcInject(cb, variable: "nestedObj", type:NSObject.self, source:AcName("nestedObj"))
             }
         }
 
@@ -209,7 +209,7 @@ class AlchemicMacrosTests: ALCTestCase {
         class TestClass : NSObject {
             var name:NSString?
             @objc static func alchemic(cb: ALCBuilder) {
-                AcInject(cb, variableName: "name", type:NSString.self, source:AcValue("abc"))
+                AcInject(cb, variable: "name", type:NSString.self, source:AcValue("abc"))
             }
         }
 
