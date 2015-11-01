@@ -29,13 +29,17 @@
     _mockClassBuilder = OCMClassMock([ALCBuilder class]);
     OCMStub([_mockClassBuilder valueClass]).andReturn([SimpleObject class]);
     ignoreSelectorWarnings(
-                           _builderType = [[ALCInitializerBuilderType alloc] initWithClassBuilder:_mockClassBuilder
-                                                                                      initializer:@selector(initWithString:)];
+                           _builderType = [[ALCInitializerBuilderType alloc] initWithParentClassBuilder:_mockClassBuilder
+                                                                                            initializer:@selector(initWithString:)];
                            )
 }
 
 -(void) testBuilderName {
-    XCTAssertEqualObjects(@"SimpleObject initWithString:", _builderType.defaultName);
+    XCTAssertEqualObjects(@"SimpleObject initWithString:", _builderType.name);
+}
+
+-(void) testMacroProcessorFlags {
+    XCTAssertEqual(ALCAllowedMacrosArg, _builderType.macroProcessorFlags);
 }
 
 -(void) testWillResolve {
@@ -56,8 +60,8 @@
 
 -(void) testWillResolveThrows {
     ignoreSelectorWarnings(
-                           ALCInitializerBuilderType *builderType = [[ALCInitializerBuilderType alloc] initWithClassBuilder:_mockClassBuilder
-                                                                                                                initializer:@selector(xxx)];
+                           ALCInitializerBuilderType *builderType = [[ALCInitializerBuilderType alloc] initWithParentClassBuilder:_mockClassBuilder
+                                                                                                                      initializer:@selector(xxx)];
                            )
     OCMStub([_mockClassBuilder valueClass]).andReturn([SimpleObject class]);
 

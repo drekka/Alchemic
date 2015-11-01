@@ -30,7 +30,8 @@ AcRegister()
 AcInject(injectedSingleton)
 
 // Note missing arg definitions
-AcInitializer(initWithString:, AcFactory)
+AcRegister(AcFactory)
+AcInitializer(initWithString:)
 -(instancetype) initWithString:(NSString *) aString {
     self = [super init];
     if (self) {
@@ -51,11 +52,10 @@ AcInitializer(initWithString:, AcFactory)
     [self setupRealContext];
     [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
 
-    IVFactory *result = AcInvoke(AcName(@"IVFactory initWithString:"), @"def");
+    NSArray<IVFactory *> *result = AcInvoke(AcName(@"IVFactory initWithString:"), @"def");
 
-    XCTAssertNotNil(result);
-    XCTAssertNotNil(result.injectedSingleton);
-    XCTAssertEqualObjects(@"def", result.initializerInjectedString);
+    XCTAssertNotNil(result[0].injectedSingleton);
+    XCTAssertEqualObjects(@"def", result[0].initializerInjectedString);
 
 }
 
@@ -64,11 +64,10 @@ AcInitializer(initWithString:, AcFactory)
     [self setupRealContext];
     [self startContextWithClasses:@[[IVSingleton class], [IVFactory class]]];
 
-    IVFactory *result = AcInvoke(AcName(@"IVFactory initWithString:"));
+    NSArray<IVFactory *> *result = AcInvoke(AcName(@"IVFactory initWithString:"));
 
-    XCTAssertNotNil(result);
-    XCTAssertNotNil(result.injectedSingleton);
-    XCTAssertNil(result.initializerInjectedString);
+    XCTAssertNotNil(result[0].injectedSingleton);
+    XCTAssertNil(result[0].initializerInjectedString);
     
 }
 

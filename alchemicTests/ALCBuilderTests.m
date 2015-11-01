@@ -52,7 +52,7 @@
 -(void) testBuilderTypeMethod {
     id mockClassBuilder = OCMClassMock([ALCBuilder class]);
     ALCMethodBuilderType *methodType = [[ALCMethodBuilderType alloc] initWithType:[SimpleObject class]
-                                                                     classBuilder:mockClassBuilder
+                                                               parentClassBuilder:mockClassBuilder
                                                                          selector:@selector(init)];
     ALCBuilder *builder = [[ALCBuilder alloc] initWithBuilderType:methodType];
     XCTAssertFalse(builder.isClassBuilder);

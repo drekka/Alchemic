@@ -13,6 +13,7 @@
 #import "SimpleObject.h"
 #import "ALCContext.h"
 #import "ALCAlchemic.h"
+#import "ALCMacroProcessor.h"
 
 @interface ALCMethodBuilderTypeTests : XCTestCase
 
@@ -30,13 +31,21 @@
     OCMStub([_mockClassBuilder valueClass]).andReturn([SimpleObject class]);
     ignoreSelectorWarnings(
                            _builderType = [[ALCMethodBuilderType alloc] initWithType:[NSString class]
-                                                                        classBuilder:_mockClassBuilder
+                                                                  parentClassBuilder:_mockClassBuilder
                                                                             selector:@selector(stringFactoryMethodUsingAString:)];
                            )
 }
 
 -(void) testBuilderName {
-    XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _builderType.defaultName);
+    XCTAssertEqualObjects(@"SimpleObject stringFactoryMethodUsingAString:", _builderType.name);
+}
+
+-(void) testMacroProcessorFlags {
+    XCTAssertEqual(ALCAllowedMacrosFactory
+                   + ALCAllowedMacrosName
+                   + ALCAllowedMacrosPrimary
+                   + ALCAllowedMacrosArg,
+                   _builderType.macroProcessorFlags);
 }
 
 -(void) testWillResolve {
@@ -88,7 +97,7 @@
 }
 
 -(void) testAttributeText {
-    XCTAssertEqualObjects(@", using method [SimpleObject stringFactoryMethodUsingAString:]", _builderType.attributeText);
+    XCTAssertEqualObjects(@", using method stringFactoryMethodUsingAString:", _builderType.attributeText);
 }
 
 #pragma mark - Internal

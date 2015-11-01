@@ -9,11 +9,11 @@
 @import XCTest;
 #import "ALCBuilderStorageExternal.h"
 
-@interface ALCBUilderStorageExternalTests : XCTestCase
+@interface ALCBuilderStorageExternalTests : XCTestCase
 
 @end
 
-@implementation ALCBUilderStorageExternalTests
+@implementation ALCBuilderStorageExternalTests
 
 -(void) testNoValue {
     ALCBuilderStorageExternal *storage = [[ALCBuilderStorageExternal alloc] init];

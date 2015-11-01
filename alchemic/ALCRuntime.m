@@ -205,6 +205,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
     // Get the type.
     NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(iVar)];
+    STLog(ALCHEMIC_LOG, @"Type ending for %s: %s", ivar_getName(iVar), ivar_getTypeEncoding(iVar));
     if ([variableTypeEncoding hasPrefix:@"@"]) {
 
         // Start with a result that indicates an Id. We map Ids as NSObjects.

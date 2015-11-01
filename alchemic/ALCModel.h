@@ -42,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) removeBuilder:(ALCBuilder *) builder;
 
+-(void) builderDidChangeName:(NSString *) oldName newName:(NSString  *) newName;
+
 #pragma mark - Querying
 
 /**

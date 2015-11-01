@@ -37,9 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// @name Properties
 
-/// If the AcWithName(...) macro is passed then this will be populated with the
-/// value.
-@property (nonatomic, strong) NSString *asName;
+/// If the AcWithName(...) macro is passed then this will be populated with the value.
+@property (nonatomic, strong, readonly) NSString *asName;
 
 /// If the AcFactory macro is passed then this will be set to YES.
 @property (nonatomic, assign, readonly) BOOL isFactory;

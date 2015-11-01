@@ -7,14 +7,14 @@
 //
 
 @import Foundation;
-#import "ALCMacro.h"
+#import "ALCSourceMacro.h"
 
 /**
  ALCConstantValue objects store objects which are to be injected into a dependency.
  
  @discussion Instances of this class will always return the same value and do not search the model or any other source. Effectively providing constant values to the dependencies that reference them.
  */
-@interface ALCConstantValue : NSObject<ALCMacro>
+@interface ALCConstantValue : NSObject<ALCSourceMacro>
 
 /**
  The constant value.

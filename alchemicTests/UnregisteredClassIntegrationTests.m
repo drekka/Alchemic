@@ -17,38 +17,60 @@
 AcRegister()
 @end
 
-@interface UCObject : NSObject
+@interface UCNonRegistered : NSObject
 @property (nonatomic, assign) UCSingleton *ucs;
 @end
 
-@implementation UCObject
+@implementation UCNonRegistered
+// Note - No AcRegister() means it's external.
 AcInject(ucs)
+@end
+
+@interface UCExternal : NSObject
+@property (nonatomic, assign) UCNonRegistered *obj;
+@end
+
+@implementation UCExternal
+// Note - No AcRegister() means it's external.
+AcInject(obj)
+@end
+
+@interface UCHasConstant : NSObject
+@property (nonatomic, assign) NSNumber *number;
+@end
+
+@implementation UCHasConstant
+// Note - No AcRegister() means it's external.
+AcInject(number, AcValue(@12))
 @end
 
 @interface UnregisteredClassIntegrationTests : ALCTestCase
 @end
 
-@implementation UnregisteredClassIntegrationTests {
-    UCObject *_obj;
-}
-
-AcRegister(AcExternal)
-AcInject(_obj);
+@implementation UnregisteredClassIntegrationTests
 
 -(void) setUp {
     [self setupRealContext];
 }
 
--(void) testAccessingUnregistredObjectThrows {
-    [self startContextWithClasses:@[[UCObject class], [UCSingleton class], [UnregisteredClassIntegrationTests class]]];
-    XCTAssertThrowsSpecificNamed(AcInjectDependencies(self), NSException, @"AlchemicValueNotAvailable");
+-(void) testInjectingDepedenciesWithUnregistredObjectThrows {
+    [self startContextWithClasses:@[[UCNonRegistered class], [UCSingleton class], [UCExternal class]]];
+    UCExternal *externel = [[UCExternal alloc] init];
+    XCTAssertThrowsSpecificNamed(AcInjectDependencies(externel), NSException, @"AlchemicValueNotAvailable");
 }
 
--(void) testInjectingUnregisteredObject {
-    [self startContextWithClasses:@[[UCObject class], [UCSingleton class], [UnregisteredClassIntegrationTests class]]];
-    UCObject *lObj = [[UCObject alloc] init];
+-(void) testInjectingDependenciesWithRegisteredObject {
+    [self startContextWithClasses:@[[UCNonRegistered class], [UCSingleton class]]];
+    UCNonRegistered *nonRegistered = [[UCNonRegistered alloc] init];
+    AcInjectDependencies(nonRegistered);
+    XCTAssertNotNil(nonRegistered.ucs);
+}
+
+-(void) testInjectingDepenciesWithConstant {
+    [self startContextWithClasses:@[[UCHasConstant class], [UCSingleton class]]];
+    UCHasConstant *lObj = [[UCHasConstant alloc] init];
     AcInjectDependencies(lObj);
-    XCTAssertNotNil(lObj.ucs);
+    XCTAssertEqualObjects(@12, lObj.number);
 }
 
 @end

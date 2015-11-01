@@ -28,10 +28,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCBuilder ()
-@property (nonatomic, strong) NSString *name; // Changed to read write so we can trigger KVO name change detection in ALCModel.
-@end
-
 @implementation ALCBuilder {
     id<ALCBuilderStorage> _builderStorage;
     id<ALCBuilderType> _builderType;
@@ -48,7 +44,6 @@ hideInitializerImpl(init)
     if (self) {
 
         _builderType = builderType;
-        _name = _builderType.defaultName;
         _registered = YES;
 
         // Setup the macro processor with the appropriate flags.
@@ -65,6 +60,15 @@ hideInitializerImpl(init)
         _isApplicationDelegate = YES;
     }
 
+
+    NSString *originalName = _builderType.name;
+    [_builderType configureWithBuilder:self];
+
+    // Execute the block for name changes.
+    if (_onNameChanged && _macroProcessor.asName) {
+        _onNameChanged(originalName, _builderType.name);
+    }
+
     if (_macroProcessor.isFactory) {
         _builderStorage = [[ALCBuilderStorageFactory alloc] init];
     } else if (self.macroProcessor.isExternal || !self.isRegistered) {
@@ -75,16 +79,12 @@ hideInitializerImpl(init)
     }
 
     _primary = _macroProcessor.isPrimary;
-    NSString *newName = _macroProcessor.asName;
-    if (newName != nil) {
-        self.name = newName; // Besure to triggers KVO so that the model updates the name.
-    }
 
-    [_builderType builder:self isConfiguringWithMacroProcessor:_macroProcessor];
     STLog(self.valueClass, @"Builder for %@ configured: %@", NSStringFromClass(self.valueClass), [self description]);
 
-    // We no longer need the macro processor so dump it.
+    // Clear anything we no longer need.
     _macroProcessor = nil;
+    _onNameChanged = NULL;
 }
 
 #pragma mark - Tasks
@@ -117,8 +117,11 @@ hideInitializerImpl(init)
 
 - (void)didResolve {
     if (_isApplicationDelegate) {
-        STLog(self.valueClass, @"Setting application delegate ...");
-        self.value = [UIApplication sharedApplication].delegate;
+            STLog(self.valueClass, @"Setting application delegate ...");
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnullable-to-nonnull-conversion"
+            self.value = [UIApplication sharedApplication].delegate;
+#pragma GCC diagnostic pop
     }
 }
 
@@ -129,6 +132,10 @@ hideInitializerImpl(init)
 }
 
 #pragma mark - Getters and setters
+
+-(NSString *)name {
+    return _builderType.name;
+}
 
 -(BOOL) isClassBuilder {
     return [_builderType isKindOfClass:[ALCClassBuilderType class]];

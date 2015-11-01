@@ -7,13 +7,9 @@
 //
 
 @import Foundation;
-@import ObjectiveC;
+
 @class ALCMacroProcessor;
-@protocol ALCBuilderStorage;
-@protocol ALCResolvable;
-@protocol ALCDependencyPostProcessor;
 @class ALCBuilder;
-@class ALCValueSourceFactory;
 
 /**
  Defines class that can define the unique functionality that defines how a builder works.
@@ -21,14 +17,14 @@
 @protocol ALCBuilderType <NSObject>
 
 /**
+ The name to use for the builder.
+ */
+@property (nonatomic, strong, readonly) NSString *name;
+
+/**
  The class of the return value created by the builder.
  */
 @property (nonatomic, strong, readonly) Class valueClass;
-
-/**
- Returns the name to use for the builder.
- */
-@property (nonatomic, strong, readonly) NSString *defaultName;
 
 /**
  USed by debug methods to get a description of the attributes of the builder type.
@@ -46,12 +42,11 @@
 @property (nonatomic, assign, readonly) NSUInteger macroProcessorFlags;
 
 /**
- Configures the builder type using instructions read into the passed macro processor.
+ Configures the builder type using instructions from the passed macro processor.
 
- @param builder The builder than is currently configuring. Normally this is the builder that owns this builder type.
  @param macroProcessor An instance of ALCMacroProcessor that contains the configuration.
  */
--(void) builder:(ALCBuilder *) builder isConfiguringWithMacroProcessor:(ALCMacroProcessor *) macroProcessor;
+-(void) configureWithBuilder:(ALCBuilder *) builder;
 
 /**
  Forwarded from the ALCResolvable willResolve method.

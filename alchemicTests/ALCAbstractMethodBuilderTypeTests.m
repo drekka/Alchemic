@@ -29,16 +29,8 @@
 -(void) setUp {
     _mockMethodBuilder = OCMClassMock([ALCBuilder class]);
     _mockClassBuilder = OCMClassMock([ALCBuilder class]);
-    _builderType = [[ALCAbstractMethodBuilderType alloc] initWithType:[SimpleObject class]
-                                                         classBuilder:_mockClassBuilder];
-}
-
--(void) testMacroProcessorFlags {
-    XCTAssertEqual(ALCAllowedMacrosFactory
-                   + ALCAllowedMacrosName
-                   + ALCAllowedMacrosPrimary
-                   + ALCAllowedMacrosArg,
-                   _builderType.macroProcessorFlags);
+    OCMStub([_mockClassBuilder valueClass]).andReturn([NSString class]);
+    _builderType = [[ALCAbstractMethodBuilderType alloc] initWithParentClassBuilder:_mockClassBuilder];
 }
 
 -(void) testConfigureWithMacroProcessorWithArg {
@@ -46,11 +38,12 @@
     ALCMacroProcessor *macroProcessor = [[ALCMacroProcessor alloc] initWithAllowedMacros:ALCAllowedMacrosArg];
     [macroProcessor addMacro:AcArg(NSNumber, AcValue(@12))];
 
+    OCMStub([_mockMethodBuilder macroProcessor]).andReturn(macroProcessor);
     OCMExpect([(ALCBuilder *)_mockMethodBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id obj) {
         return [obj conformsToProtocol:@protocol(ALCValueSource)];
     }]]);
 
-    [_builderType builder:_mockMethodBuilder isConfiguringWithMacroProcessor:macroProcessor];
+    [_builderType configureWithBuilder:_mockMethodBuilder];
 
     OCMVerifyAll(_mockMethodBuilder);
 }
@@ -73,12 +66,13 @@
     [macroProcessor addMacro:AcArg(NSNumber, AcValue(@"abc"))];
 
     // Make sure values sources are resolved.
+    OCMStub([_mockMethodBuilder macroProcessor]).andReturn(macroProcessor);
     OCMStub([(ALCBuilder *)_mockMethodBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id<ALCValueSource> valueSource) {
         [valueSource resolve]; // This must happen.
         return YES;
     }]]);
 
-    [_builderType builder:_mockMethodBuilder isConfiguringWithMacroProcessor:macroProcessor];
+    [_builderType configureWithBuilder:_mockMethodBuilder];
 
     NSArray<id> *values = _builderType.argumentValues;
 
@@ -99,12 +93,13 @@
     [macroProcessor addMacro:AcArg(NSNumber, AcValue(@12))];
 
     // Make sure values sources are resolved.
+    OCMStub([_mockMethodBuilder macroProcessor]).andReturn(macroProcessor);
     OCMStub([(ALCBuilder *)_mockMethodBuilder addDependency:[OCMArg checkWithBlock:^BOOL(id<ALCValueSource> valueSource) {
         [valueSource resolve];
         return YES;
     }]]);
 
-    [_builderType builder:_mockMethodBuilder isConfiguringWithMacroProcessor:macroProcessor];
+    [_builderType configureWithBuilder:_mockMethodBuilder];
 
     id result = [_builderType instantiateObject];
 

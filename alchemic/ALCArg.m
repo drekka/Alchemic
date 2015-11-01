@@ -17,10 +17,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCArg
 
-+(instancetype) argWithType:(Class) argType macros:(id<ALCMacro>) firstMacro, ... {
-	ALCArg *newArg = [[ALCArg alloc] initWithType:argType];
-	alc_processVarArgsIncluding(id<ALCMacro>, firstMacro, ^(id<ALCMacro> arg){[newArg addMacro:arg];});
-	return newArg;
++(instancetype) argWithType:(Class) argType macros:(id<ALCSourceMacro>) firstMacro, ... {
+
+    NSMutableArray<id<ALCSourceMacro>> *properties = [NSMutableArray array];
+    alc_processVarArgsIncluding(id<ALCSourceMacro>, firstMacro, ^(id<ALCSourceMacro> arg) {
+        [properties addObject:arg];
+    });
+
+    return [self argWithType:argType properties:properties];
+}
+
++(instancetype) argWithType:(Class) argType properties:(NSArray<id<ALCSourceMacro>> *) properties {
+    ALCArg *newArg = [[ALCArg alloc] initWithType:argType];
+    [properties enumerateObjectsUsingBlock:^(id<ALCSourceMacro> macro, NSUInteger idx, BOOL *stop) {
+        [newArg addMacro:macro];
+    }];
+    return newArg;
 }
 
 -(NSString *)description {
