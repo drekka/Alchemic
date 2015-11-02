@@ -6,7 +6,7 @@ This question comes up quite often when I'm talking about DI frameworks to devel
 
 [Object Orientated Programming (OOP)](https://en.wikipedia.org/wiki/Object-oriented_programming) is based on the idea of a collection of objects all working together to create an application. For example, if a *RemoteControl* class needs to change the channel on a TV, it requires a *TV* object to change the channel on. In programming this is what we call a *"dependency"*. The *RemoteControl* class has a dependency on a *TV* object which it can then control.
 
-An class's dependencies are usually located in one of two ways: Either the the code has to ***"reach out"*** to find them, or the dependencies are ***"injected"*** into the object from the code that is controlling it. Using our remote control example, either the *RemoteControl* class has to find a *TV* object for itself, or the *Human* object using the *RemoteControl* object gives it a *TV* object to control.
+An class's dependencies are usually located in one of two ways: Either the the code has to ***"reach out"*** to find them, or the dependencies are ***"injected"*** into the object from the code that is controlling it. Using our remote control example, either the *RemoteControl* class has to find a *TV* object for itself, or the *Human* object using the *RemoteControl* object gives it a *TV* object to control by pointing it at the set.
 
 ### Reaching out - Singletons
 
@@ -39,20 +39,20 @@ RemoteControl *rc = [[RemoteControl alloc] init];
 [rc changeChannelTo:5];
 ```
 
-Singletons sounds like a good solution but there are issues with them:
+Singletons are simple and sound like a good solution but there are issues with them:
  
- * They are often over used in iOS apps because they are so easy to access from anywhere.
+ * They are often over used in iOS apps because they are so easy to code.
  * It's not unusual to see objects that should not be global in scope, being made global because the developer decided to treat them as a singleton. 
  * They are almost impossible to swap out because the variable storing them in the class is usually completely inacccessible. This makes testing very difficult.
- * If you discover later that you need more than one instance, it can be lot more work to refactor a singleton into a non-singleton pattern. 
+ * If you discover later that you need more than one instance, it can be lot more work to refactor a code base to remove the singleton pattern. 
 
 My general opinion is - *Use [singletons](https://en.wikipedia.org/wiki/Singleton_pattern) sparingly and only  where you really __need__ them.* 
 
 ### Dependency Injection
 
-The [Dependency Injection (DI)](https://en.wikipedia.org/wiki/Dependency_injection) pattern dictates that the dependencies of a class should be injected into it from elsewhere. DI is a core part of [Inversion of Control (IoC)](https://en.wikipedia.org/wiki/Inversion_of_control). There are a number of significant advantages to using DI:
+The [Dependency Injection (DI)](https://en.wikipedia.org/wiki/Dependency_injection) pattern dictates that the dependencies of a class should be injected into it from elsewhere. DI is a core part of [Inversion of Control (IoC)](https://en.wikipedia.org/wiki/Inversion_of_control) and  there are a number of significant advantages to using DI:
 
-* The code no longer has to how to obtain it's dependencies from.
+* The code no longer has to work out where to obtain it's dependencies from.
 * The code will work regardless of whether a dependency is a singleton or one of many objects.
 * Testing is easier because dependencies can be [mocked out](https://en.wikipedia.org/wiki/Mock_object) to provide controlled test scenarios prior to injecting.
 * Refactoring becomes simpler because there are fewer places in the code that need change.
@@ -61,7 +61,7 @@ In Objective-C terms, dependencies can be injected via 3 methods: **method argum
 
 #### Method arguments
 
-In this form of DI dependencies are passed as arguments to each method.
+In this form of DI dependencies are passed as arguments to each method. This is quite simple to do, so sticking with our TV remote example:
 
 *RemoteControl.m*
 
@@ -83,7 +83,12 @@ RemoteControl *rc = [[RemoteControl alloc] init];
 
 By adding dependencies as arguments, we can pass any *TV* to the remote and it will change it's channels. Using method arguments can also make your interface clearer because the selector clearly shows what the method needs. 
 
-But using arguments to pass dependencies can also be a problem as well. As the code grows and more dependencies are needed, the interfaces start to become quite large with lots of arguments. It can quickly get to the point where both classes and methods are passing objects they don't use themselves, just to get the dependencies to where they are needed.
+But using arguments to pass dependencies has two main problems:
+
+ * As the code grows and more dependencies are needed, the interfaces start to become quite large with lots of arguments. 
+ * Quite often you end up passing objects to classes that don't actually use them. Instead they pass them along to other instances where they are actually used. This *pollutes* classes with stuff they don't need.
+
+ Here's an example:
 
 *Couch.m*
 
@@ -97,7 +102,9 @@ But using arguments to pass dependencies can also be a problem as well. As the c
 @end
 ```
 
-Here, the `familySitsDownWithDad:remote:tv:` method has to pass *TV* and *RemoteControl* object through to the *Human* class. *Couch* doesn't use these objects itself, but it still has to import the types and pass them to methods. This breaks [The Law of Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter) which basically states that classes should only have knowledge of the things they use directly. Whereas here we have classes and methods becoming *"polluted"* with things they don't use. 
+Here, the `familySitsDownWithDad:remote:tv:` method has to pass *TV* and *RemoteControl* object through to the *Human* class. *Couch* doesn't use these objects itself or understand them, but it has to import the types and pass them through. 
+
+This breaks [The Law of Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter) which basically states that classes should only have knowledge of the things they use directly. 
 
 So my recommendation is - *Use method arguments when the method works with the object directly.*
 
@@ -142,6 +149,8 @@ RemoteControl *rc = [[RemoteControl alloc] initWithTV:tv];
 
 Now the *TV* is injected into the *RemoteControl* class when initialising it. The advantage of initializer injection is that It is clear what the class needs up front. It's also more suited to dependencies that are long lived. For example, where a *RemoteControl* will always be using the same *TV*. Finally, initializer injection alleviates the need to pass dependencies via method arguments because the object already has everything it needs up front.
 
+But initializer inject is no good when the dependencies are changing or short lived. So my recommendation is - *Use initializer injection when the lifecycle of the dependency is equal to or longer than the object that uses it.
+
 #### Via Properties
 
 *RemoteControl.h*
@@ -181,7 +190,7 @@ RemoteControl *rc = [[RemoteControl alloc] init];
 [rc changeChannelTo:5]; // Oops, TV not set !
 ```
 
-However there are times when property injection can be better. For example, when a dependency periodically changes.  
+However there are times when property injection can be better. For example, when a dependency periodically changes during the lifecycle of the object that uses it.
 
 My recommendation - *The reality of programming is that the best code is usually a combination of all of these things: Singletons, method argument, initializer and property based DI. It's really about knowing what to use where!* 
 
@@ -220,8 +229,8 @@ RemoteControl *rc = AcGet(RemoteControl, AcClass(RemoteControl));
 [rc changeChannelTo:5];
 ```
 
-This is a simple example using the ***[Alchemic DI framework](README.md)***. Notice how the only thing you need to do it tell Alchemic what you want. When your app starts, It will automatically create an instance of *TV* and an instance of *RemoteControl* as a singletons. It will also automatically inject the *TV* object into the *RemoteControl* object and store the objects so they can be injected anywhere anytime. because Alchemic bootstraps itself when your app starts, you only need the above code to make everything work.
+This is a simple example using the ***[Alchemic](README.md)***. Notice how the only thing you need to do it tell Alchemic what you want. When your app starts, It will automatically create an instance of *TV* and an instance of *RemoteControl* as a singletons. It will also automatically inject the *TV* object into the *RemoteControl* object and store the objects so they can be injected anywhere anytime. because Alchemic bootstraps itself when your app starts, you only need the above code to make everything work.
 
-Most DI frameworks private a range of useful functions, but creating, managing and injecting objects is the core functionality they all should provide, and provide it with a minimum of fuss.
+Most DI frameworks provide a range of useful functions, but creating, managing and injecting objects is the core functionality they all should provide, and provide it with a minimum of fuss.
 
 My final recommendation - *DI frameworks can really help simplify things, especially with large code bases. But if the framework is not making your code simpler and easier to understand, shop elsewhere!*
