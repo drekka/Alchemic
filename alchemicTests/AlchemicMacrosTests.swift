@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@testable import Alchemic
+@testable import AlchemicSwift
 import StoryTeller
 
 class AlchemicMacrosTests: ALCTestCase {

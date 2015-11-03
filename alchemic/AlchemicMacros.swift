@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Alchemic
 
 // MARK:- Macro replacements
 // These are declared as global functions so that they are available where necessary.

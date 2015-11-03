@@ -8,6 +8,8 @@
 
 import Foundation
 import Alchemic
+import AlchemicSwift
+
 public class SwiftObject: NSObject {
 
     public static func alchemic(cb:ALCBuilder) {

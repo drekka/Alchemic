@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Alchemic
+import AlchemicSwift
 
 public class SwiftObjectWithDep: NSObject {
 
