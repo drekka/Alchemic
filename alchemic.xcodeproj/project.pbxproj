@@ -899,6 +899,7 @@
 				TargetAttributes = {
 					6C0747C21BE8DAFC0096BF85 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 3MHZ7974Y8;
 					};
 					6C36D74E1B3851680073C4FB = {
 						CreatedOnToolsVersion = 7.0;
@@ -1106,6 +1107,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1135,6 +1137,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1405,6 +1408,7 @@
 				6C0747CA1BE8DAFC0096BF85 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6C36D7601B3851690073C4FB /* Build configuration list for PBXNativeTarget "Alchemic" */ = {
 			isa = XCConfigurationList;
