@@ -28,9 +28,9 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-               BuildableName = "Alchemic tests.xctest"
-               BlueprintName = "Alchemic tests"
+               BlueprintIdentifier = "6CB95C021BEA25A100D0B194"
+               BuildableName = "AlchemicSwift Tests.xctest"
+               BlueprintName = "AlchemicSwift Tests"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,6 +42,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6CB95C021BEA25A100D0B194"
+               BuildableName = "AlchemicSwift Tests.xctest"
+               BlueprintName = "AlchemicSwift Tests"
+               ReferencedContainer = "container:alchemic.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
