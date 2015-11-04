@@ -10,6 +10,7 @@
 		6C0747B31BE791D90096BF85 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0747B01BE791D90096BF85 /* Alchemic.framework */; };
 		6C0747B41BE791D90096BF85 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0747B11BE791D90096BF85 /* PEGKit.framework */; };
 		6C0747B51BE791D90096BF85 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0747B21BE791D90096BF85 /* StoryTeller.framework */; };
+		6CB95BFE1BEA12FA00D0B194 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95BFD1BEA12FA00D0B194 /* Cartfile */; };
 		6CFFF2A51BE77F2F0038CB30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2A41BE77F2F0038CB30 /* main.m */; };
 		6CFFF2A81BE77F2F0038CB30 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2A71BE77F2F0038CB30 /* AppDelegate.m */; };
 		6CFFF2AB1BE77F2F0038CB30 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2AA1BE77F2F0038CB30 /* ViewController.m */; };
@@ -22,6 +23,7 @@
 		6C0747B01BE791D90096BF85 /* Alchemic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alchemic.framework; path = Carthage/Build/iOS/Alchemic.framework; sourceTree = "<group>"; };
 		6C0747B11BE791D90096BF85 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
 		6C0747B21BE791D90096BF85 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
+		6CB95BFD1BEA12FA00D0B194 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		6CFFF2A01BE77F2F0038CB30 /* ObjectiveCDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjectiveCDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CFFF2A41BE77F2F0038CB30 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6CFFF2A61BE77F2F0038CB30 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -51,6 +53,7 @@
 		6CFFF2971BE77F2F0038CB30 = {
 			isa = PBXGroup;
 			children = (
+				6CB95BFD1BEA12FA00D0B194 /* Cartfile */,
 				6C0747B01BE791D90096BF85 /* Alchemic.framework */,
 				6C0747B11BE791D90096BF85 /* PEGKit.framework */,
 				6C0747B21BE791D90096BF85 /* StoryTeller.framework */,
@@ -151,6 +154,7 @@
 			files = (
 				6CFFF2B31BE77F2F0038CB30 /* LaunchScreen.storyboard in Resources */,
 				6CFFF2B01BE77F2F0038CB30 /* Assets.xcassets in Resources */,
+				6CB95BFE1BEA12FA00D0B194 /* Cartfile in Resources */,
 				6CFFF2AE1BE77F2F0038CB30 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
