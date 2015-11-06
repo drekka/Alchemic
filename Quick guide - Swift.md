@@ -27,6 +27,7 @@ Table of Contents
  `carthage update`
 3. Drag and drop the following frameworks into your project:
  * **<project-root>/Carthage/Build/iOS/Alchemic.framework**
+ * **<project-root>/Carthage/Build/iOS/AlchemicSwift.framework**
  * **<project-root>/Carthage/Build/iOS/StoryTeller.framework**
  * **<project-root>/Carthage/Build/iOS/PEGKit.framework**
 4. Ensure  the above frameworks are added to a build phase that copies them to the **Framworks** Destination. Check out the [carthage documentation](https://github.com/Carthage/Carthage) for the details of doing this. 
@@ -42,7 +43,7 @@ This list is by no means complete. But it gives a good indicative summary of how
 ## Register a singleton instance
 
 ```swift
-import Alchemic
+import AlchemicSwift
 
 class MyClass {
     public static func alchemic(cb:ALCBuilder) {
@@ -56,7 +57,7 @@ MyClass will be created on application startup and managed as a singleton by Alc
 ## Register a singleton created by a method
 
 ```swift
-import Alchemic
+import AlchemicSwift
 
 class MyClass
 

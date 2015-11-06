@@ -8,7 +8,6 @@
 
 import Foundation
 import AlchemicSwift
-import Alchemic
 import StoryTeller
 
 class AlchemicMacrosTests: ALCTestCase {

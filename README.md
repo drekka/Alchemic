@@ -104,8 +104,9 @@ Then run either the **bootstrap** or **update** carthage commands to download Al
 
 Framework | Description
 --- | ---
-Alchemic.framework | This API.
-Storyteller.framework | [Story Teller](https://github.com/drekka/StoryTeller) is a alternative logging framework. 
+Alchemic.framework | This is the Objective-C core of Alchemic. It's required for both Swift and Objective-C projects.
+AlchemicSwift.framework | *ONLY* required for Swift projects. This framework provides the bridging functions that enable Swift calls to Alchemic to look as similar as possible to their Objective-C macro equivalents. 
+Storyteller.framework | [Story Teller](https://github.com/drekka/StoryTeller) is a alternative logging framework I designed along side Alchemic.
 PEGKit.framework | Used by StoryTeller.
 
 *Note: You will need to ensure that all of these frameworks are added to your project and copied to the __Frameworks__ directory in your app.* 
@@ -135,7 +136,7 @@ To use Alchemic, import the Alchemic umbrella header at the top of your implemen
 
 ```swift
 // Swift
-import Alchemic
+import AlchemicSwift
 ```
 
 *Alchemic works with implementations rather than the headers. This means it can access methods and initializers that are not public or visible to other classes.  The advantage of this is that you have the ability to create initializers and methods which only Alchemic can see. Thus simplifying your headers.*
@@ -157,7 +158,7 @@ AcProtocol(NSCopying)
 [ALCProtocol withProtocol:@protocol(NSCopying)]
 ```
 
-Some of Alchemic's macros like `AcProtocol(...)` are designed to be used as arguments to other macros. Others such as `AcGet(...)` are designed to be used on an Objective-C method. 
+Some of Alchemic's macros like `AcProtocol(...)` are designed to be used as arguments to other macros. Others such as `AcGet(...)` are designed to be used in an Objective-C method. 
 
 Some such as `AcRegister(...)` are designed to be used at the class level and un-wrap themselves into additional class methods. The presense of these methods is how Alchemic recognises the classes it has to manage.
 
