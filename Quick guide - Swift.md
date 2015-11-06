@@ -27,6 +27,7 @@ Table of Contents
  `carthage update`
 3. Drag and drop the following frameworks into your project:
  * **<project-root>/Carthage/Build/iOS/Alchemic.framework**
+ * **<project-root>/Carthage/Build/iOS/AlchemicSwift.framework**
  * **<project-root>/Carthage/Build/iOS/StoryTeller.framework**
  * **<project-root>/Carthage/Build/iOS/PEGKit.framework**
 4. Ensure  the above frameworks are added to a build phase that copies them to the **Framworks** Destination. Check out the [carthage documentation](https://github.com/Carthage/Carthage) for the details of doing this. 

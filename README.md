@@ -104,8 +104,9 @@ Then run either the **bootstrap** or **update** carthage commands to download Al
 
 Framework | Description
 --- | ---
-Alchemic.framework | This API.
-Storyteller.framework | [Story Teller](https://github.com/drekka/StoryTeller) is a alternative logging framework. 
+Alchemic.framework | This is the Objective-C core of Alchemic. It's required for both Swift and Objective-C projects.
+AlchemicSwift.framework | *ONLY* required for Swift projects. This framework provides the bridging functions that enable Swift calls to Alchemic to look as similar as possible to their Objective-C macro equivalents. 
+Storyteller.framework | [Story Teller](https://github.com/drekka/StoryTeller) is a alternative logging framework I designed along side Alchemic.
 PEGKit.framework | Used by StoryTeller.
 
 *Note: You will need to ensure that all of these frameworks are added to your project and copied to the __Frameworks__ directory in your app.* 
@@ -135,7 +136,7 @@ To use Alchemic, import the Alchemic umbrella header at the top of your implemen
 
 ```swift
 // Swift
-import Alchemic
+import AlchemicSwift
 ```
 
 *Alchemic works with implementations rather than the headers. This means it can access methods and initializers that are not public or visible to other classes.  The advantage of this is that you have the ability to create initializers and methods which only Alchemic can see. Thus simplifying your headers.*

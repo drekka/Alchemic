@@ -7,9 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6C0747BA1BE793330096BF85 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0747B71BE793330096BF85 /* Alchemic.framework */; };
-		6C0747BB1BE793330096BF85 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0747B81BE793330096BF85 /* PEGKit.framework */; };
-		6C0747BC1BE793330096BF85 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0747B91BE793330096BF85 /* StoryTeller.framework */; };
+		6CB95C321BECDCFE00D0B194 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C311BECDCFE00D0B194 /* Cartfile */; };
+		6CB95C371BECDFA400D0B194 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C331BECDFA400D0B194 /* Alchemic.framework */; };
+		6CB95C381BECDFA400D0B194 /* AlchemicSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C341BECDFA400D0B194 /* AlchemicSwift.framework */; };
+		6CB95C391BECDFA400D0B194 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C351BECDFA400D0B194 /* PEGKit.framework */; };
+		6CB95C3A1BECDFA400D0B194 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C361BECDFA400D0B194 /* StoryTeller.framework */; };
+		6CB95C3F1BECDFC800D0B194 /* Alchemic.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C3B1BECDFC800D0B194 /* Alchemic.framework.dSYM */; };
+		6CB95C401BECDFC800D0B194 /* AlchemicSwift.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C3C1BECDFC800D0B194 /* AlchemicSwift.framework.dSYM */; };
+		6CB95C411BECDFC800D0B194 /* PEGKit.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C3D1BECDFC800D0B194 /* PEGKit.framework.dSYM */; };
+		6CB95C421BECDFC800D0B194 /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C3E1BECDFC800D0B194 /* StoryTeller.framework.dSYM */; };
 		6CFFF2C71BE77FA00038CB30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2C61BE77FA00038CB30 /* AppDelegate.swift */; };
 		6CFFF2C91BE77FA00038CB30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2C81BE77FA00038CB30 /* ViewController.swift */; };
 		6CFFF2CC1BE77FA00038CB30 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CFFF2CA1BE77FA00038CB30 /* Main.storyboard */; };
@@ -18,9 +24,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6C0747B71BE793330096BF85 /* Alchemic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alchemic.framework; path = Carthage/Build/iOS/Alchemic.framework; sourceTree = "<group>"; };
-		6C0747B81BE793330096BF85 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
-		6C0747B91BE793330096BF85 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
+		6CB95C311BECDCFE00D0B194 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		6CB95C331BECDFA400D0B194 /* Alchemic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alchemic.framework; path = Carthage/Build/iOS/Alchemic.framework; sourceTree = "<group>"; };
+		6CB95C341BECDFA400D0B194 /* AlchemicSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlchemicSwift.framework; path = Carthage/Build/iOS/AlchemicSwift.framework; sourceTree = "<group>"; };
+		6CB95C351BECDFA400D0B194 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
+		6CB95C361BECDFA400D0B194 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
+		6CB95C3B1BECDFC800D0B194 /* Alchemic.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Alchemic.framework.dSYM; path = Carthage/Build/iOS/Alchemic.framework.dSYM; sourceTree = "<group>"; };
+		6CB95C3C1BECDFC800D0B194 /* AlchemicSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = AlchemicSwift.framework.dSYM; path = Carthage/Build/iOS/AlchemicSwift.framework.dSYM; sourceTree = "<group>"; };
+		6CB95C3D1BECDFC800D0B194 /* PEGKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = PEGKit.framework.dSYM; path = Carthage/Build/iOS/PEGKit.framework.dSYM; sourceTree = "<group>"; };
+		6CB95C3E1BECDFC800D0B194 /* StoryTeller.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = StoryTeller.framework.dSYM; path = Carthage/Build/iOS/StoryTeller.framework.dSYM; sourceTree = "<group>"; };
 		6CFFF2C31BE77FA00038CB30 /* SwiftDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CFFF2C61BE77FA00038CB30 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6CFFF2C81BE77FA00038CB30 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -35,21 +47,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C0747BB1BE793330096BF85 /* PEGKit.framework in Frameworks */,
-				6C0747BC1BE793330096BF85 /* StoryTeller.framework in Frameworks */,
-				6C0747BA1BE793330096BF85 /* Alchemic.framework in Frameworks */,
+				6CB95C371BECDFA400D0B194 /* Alchemic.framework in Frameworks */,
+				6CB95C381BECDFA400D0B194 /* AlchemicSwift.framework in Frameworks */,
+				6CB95C391BECDFA400D0B194 /* PEGKit.framework in Frameworks */,
+				6CB95C3A1BECDFA400D0B194 /* StoryTeller.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6CB95C431BECDFD100D0B194 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6CB95C3B1BECDFC800D0B194 /* Alchemic.framework.dSYM */,
+				6CB95C3C1BECDFC800D0B194 /* AlchemicSwift.framework.dSYM */,
+				6CB95C3D1BECDFC800D0B194 /* PEGKit.framework.dSYM */,
+				6CB95C3E1BECDFC800D0B194 /* StoryTeller.framework.dSYM */,
+				6CB95C331BECDFA400D0B194 /* Alchemic.framework */,
+				6CB95C341BECDFA400D0B194 /* AlchemicSwift.framework */,
+				6CB95C351BECDFA400D0B194 /* PEGKit.framework */,
+				6CB95C361BECDFA400D0B194 /* StoryTeller.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6CFFF2BA1BE77FA00038CB30 = {
 			isa = PBXGroup;
 			children = (
-				6C0747B71BE793330096BF85 /* Alchemic.framework */,
-				6C0747B81BE793330096BF85 /* PEGKit.framework */,
-				6C0747B91BE793330096BF85 /* StoryTeller.framework */,
+				6CB95C431BECDFD100D0B194 /* Frameworks */,
+				6CB95C311BECDCFE00D0B194 /* Cartfile */,
 				6CFFF2C51BE77FA00038CB30 /* SwiftDemo */,
 				6CFFF2C41BE77FA00038CB30 /* Products */,
 			);
@@ -135,8 +162,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CB95C3F1BECDFC800D0B194 /* Alchemic.framework.dSYM in Resources */,
+				6CB95C401BECDFC800D0B194 /* AlchemicSwift.framework.dSYM in Resources */,
+				6CB95C411BECDFC800D0B194 /* PEGKit.framework.dSYM in Resources */,
+				6CB95C421BECDFC800D0B194 /* StoryTeller.framework.dSYM in Resources */,
 				6CFFF2D11BE77FA00038CB30 /* LaunchScreen.storyboard in Resources */,
 				6CFFF2CE1BE77FA00038CB30 /* Assets.xcassets in Resources */,
+				6CB95C321BECDCFE00D0B194 /* Cartfile in Resources */,
 				6CFFF2CC1BE77FA00038CB30 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,6 +185,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Alchemic.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/StoryTeller.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/pegkit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/AlchemicSwift.framework",
 			);
 			outputPaths = (
 			);
