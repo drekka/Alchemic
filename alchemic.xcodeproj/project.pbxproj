@@ -144,8 +144,8 @@
 		6CB95C181BEA28C200D0B194 /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CB95C191BEA28C200D0B194 /* AlchemicSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C0747C31BE8DAFC0096BF85 /* AlchemicSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CB95C1E1BEA2AC400D0B194 /* BridgeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB95C1D1BEA2AC400D0B194 /* BridgeTests.m */; };
-		6CB95C1F1BEA2D5A00D0B194 /* libOCMock.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
 		6CB95C201BEA2F6100D0B194 /* ALCTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37A6F01A9B339500ACD0F8 /* ALCTestCase.m */; };
+		6CB95C211BEB8BBF00D0B194 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
 		6CBB019C1B96D8D400863F09 /* ALCAbstractResolvable.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBB019A1B96D8D400863F09 /* ALCAbstractResolvable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CBB019D1B96D8D400863F09 /* ALCAbstractResolvable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB019B1B96D8D400863F09 /* ALCAbstractResolvable.m */; };
 		6CC9D7691B595A0100EFD517 /* ALCMacroProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC9D7671B595A0100EFD517 /* ALCMacroProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -216,7 +216,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6CB95C1F1BEA2D5A00D0B194 /* libOCMock.a in CopyFiles */,
 				6CB95C181BEA28C200D0B194 /* Alchemic.framework in CopyFiles */,
 				6CB95C191BEA28C200D0B194 /* AlchemicSwift.framework in CopyFiles */,
 				6CB95C161BEA28A500D0B194 /* PEGKit.framework in CopyFiles */,
@@ -426,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CB95C081BEA25A100D0B194 /* AlchemicSwift.framework in Frameworks */,
+				6CB95C211BEB8BBF00D0B194 /* libOCMock.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1519,6 +1519,10 @@
 				INFOPLIST_FILE = "Alchemic Swift Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/External/OCMock-3.1.2/iOS",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.Alchemic-Swift-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "alchemicTests/AlchemicSwift Tests-Bridging-Header.h";
@@ -1543,6 +1547,10 @@
 				INFOPLIST_FILE = "Alchemic Swift Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/External/OCMock-3.1.2/iOS",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.Alchemic-Swift-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "alchemicTests/AlchemicSwift Tests-Bridging-Header.h";

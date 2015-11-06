@@ -11,10 +11,12 @@
 #import <OCMock/OCMock.h>
 #import <StoryTeller/StoryTeller.h>
 
+#import "ALCRuntimeScanner.h"
+
+#import "AlchemicSwift_Tests-Swift.h"
 #import "ALCTestCase.h"
 
 @interface BridgeTests : ALCTestCase
-
 @end
 
 @implementation BridgeTests
