@@ -57,20 +57,4 @@ AcRegister()
     OCMVerifyAll(self.mockContext);
 }
 
--(void) testModelScannerProcessesSwiftClass {
-
-    [self setupMockContext];
-
-    id mockBuilder = OCMClassMock([ALCBuilder class]);
-    OCMExpect([self.mockContext registerBuilderForClass:[SwiftObject class]]).andReturn(mockBuilder);
-    OCMExpect([self.mockContext registerClassBuilder:mockBuilder withProperties:[OCMArg isKindOfClass:[NSArray class]]]);
-    OCMExpect([self.mockContext classBuilderDidFinishRegistering:mockBuilder]);
-
-    ALCRuntimeScanner *scanner = [ALCRuntimeScanner modelScanner];
-    scanner.processor((id)self.mockContext, [NSMutableSet set], [SwiftObject class]);
-
-    OCMVerifyAll(self.mockContext);
-}
-
-
 @end

@@ -54,15 +54,6 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-            BuildableName = "Alchemic tests.xctest"
-            BlueprintName = "Alchemic tests"
-            ReferencedContainer = "container:alchemic.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <CommandLineArguments>
          <CommandLineArgument
             argument = "--alchemic-nostart"
