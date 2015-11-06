@@ -158,7 +158,7 @@ AcProtocol(NSCopying)
 [ALCProtocol withProtocol:@protocol(NSCopying)]
 ```
 
-Some of Alchemic's macros like `AcProtocol(...)` are designed to be used as arguments to other macros. Others such as `AcGet(...)` are designed to be used on an Objective-C method. 
+Some of Alchemic's macros like `AcProtocol(...)` are designed to be used as arguments to other macros. Others such as `AcGet(...)` are designed to be used in an Objective-C method. 
 
 Some such as `AcRegister(...)` are designed to be used at the class level and un-wrap themselves into additional class methods. The presense of these methods is how Alchemic recognises the classes it has to manage.
 

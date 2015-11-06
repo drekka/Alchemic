@@ -43,7 +43,7 @@ This list is by no means complete. But it gives a good indicative summary of how
 ## Register a singleton instance
 
 ```swift
-import Alchemic
+import AlchemicSwift
 
 class MyClass {
     public static func alchemic(cb:ALCBuilder) {
@@ -57,7 +57,7 @@ MyClass will be created on application startup and managed as a singleton by Alc
 ## Register a singleton created by a method
 
 ```swift
-import Alchemic
+import AlchemicSwift
 
 class MyClass
 
