@@ -92,6 +92,9 @@ Every time a MyClass instance is required or requested, a new one will be create
 ## Register a factory class using a custom initializer which finds all objects with a protocol
 
 ```swift
+@objc protocol MyProtocol {
+}
+
 class MyClass {
     public static func alchemic(cb:ALCBuilder) {
         AcRegister(cb)
@@ -105,7 +108,7 @@ class MyClass {
 }
 ```
 
-MyClass will be registered as a factory, using the initializer to create each instance. Note that we must use the Objective-C equivalent initializer name. The objects argument will be an array sourced from Alchemic managed objects which conform to the MyProtocol protocol.
+MyClass will be registered as a factory, using the initializer to create each instance. Note that we must use the Objective-C equivalent initializer name. The objects argument will be an array sourced from Alchemic managed objects which conform to the MyProtocol protocol. Note that when using protocols, they must be tagged with `@objc`.
  
 ## Inject an object
 
@@ -140,6 +143,9 @@ This example shows how Alchemic can locate a specific object based on it's class
 ## Inject an array of all objects with a protocol
 
 ```swift
+@objc protocol MyProtocol {
+}
+
 class MyClass {
     var things:NSArray<MyProtocol>
     public static func(cb:ALCBuilder) {

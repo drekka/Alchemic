@@ -3,12 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		6C0747C61BE8DAFC0096BF85 /* AlchemicSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C0747C51BE8DAFC0096BF85 /* AlchemicSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6C0747CB1BE8DB380096BF85 /* AlchemicMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBF8C6F1BD5BBF500E2CFF8 /* AlchemicMacros.swift */; };
 		6C0747D01BE8DB670096BF85 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C0747D21BE8DBB60096BF85 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C0747D31BE8DDE20096BF85 /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -98,6 +97,7 @@
 		6C5F171C1B626FF900F60B1B /* ALCAbstractValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F171B1B626FF900F60B1B /* ALCAbstractValueSourceTests.m */; };
 		6C62C9491B54F339009D57C7 /* ALCConstantValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C62C9461B54F204009D57C7 /* ALCConstantValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7170001B7391AA00634112 /* RetrievingIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C716FFF1B7391AA00634112 /* RetrievingIntegrationTests.m */; };
+		6C7833281C50E9D9005A6F66 /* AlchemicMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7833271C50E9D9005A6F66 /* AlchemicMacros.swift */; };
 		6C7C94BA1BDE4EE4002E91FC /* ALCSourceMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7C94B91BDE4EE4002E91FC /* ALCSourceMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7DAF211B7DA3A8003A492A /* NSSet+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7DAF201B7DA3A8003A492A /* NSSet+AlchemicTests.m */; };
 		6C8CD9651B55FC9100C1BC7F /* ALCModelSearchExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C8CD9641B55FC9100C1BC7F /* ALCModelSearchExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -137,7 +137,7 @@
 		6CB95C081BEA25A100D0B194 /* AlchemicSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0747C31BE8DAFC0096BF85 /* AlchemicSwift.framework */; };
 		6CB95C111BEA270300D0B194 /* SwiftLanguageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7C94BB1BE07C02002E91FC /* SwiftLanguageTests.swift */; };
 		6CB95C121BEA270A00D0B194 /* AlchemicMacrosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD75C161BD9A7F400317627 /* AlchemicMacrosTests.swift */; };
-		6CB95C131BEA271500D0B194 /* SwiftObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBF8C6D1BD5BBC500E2CFF8 /* SwiftObject.swift */; };
+		6CB95C131BEA271500D0B194 /* SwiftNSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBF8C6D1BD5BBC500E2CFF8 /* SwiftNSObject.swift */; };
 		6CB95C141BEA271500D0B194 /* SwiftObjectWithDep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD75C141BD8C26000317627 /* SwiftObjectWithDep.swift */; };
 		6CB95C161BEA28A500D0B194 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CB95C171BEA28A500D0B194 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -152,6 +152,8 @@
 		6CC9D76A1B595A0100EFD517 /* ALCMacroProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */; };
 		6CCF58661B7C5530009655E9 /* NSSet+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CCF58631B7C500E009655E9 /* NSSet+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CCF58671B7C554D009655E9 /* NSSet+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF58641B7C500E009655E9 /* NSSet+Alchemic.m */; };
+		6CD00F381BF0B10B007663B0 /* SwiftClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD00F371BF0B10B007663B0 /* SwiftClass.swift */; };
+		6CD00F3B1BF0B66C007663B0 /* ObjectiveCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD00F3A1BF0B66C007663B0 /* ObjectiveCObject.m */; };
 		6CDE85D71B73121F006E24F2 /* ALCContextTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDE85D61B73121F006E24F2 /* ALCContextTests.m */; };
 		6CDEBF9C1B5FCC32009E3BEF /* ALCValueSourceFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDEBF9A1B5FCC32009E3BEF /* ALCValueSourceFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CDEBF9D1B5FCC32009E3BEF /* ALCValueSourceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEBF9B1B5FCC32009E3BEF /* ALCValueSourceFactory.m */; };
@@ -309,6 +311,7 @@
 		6C781EAD1B2595B8001D86CB /* ALCWithName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCWithName.m; sourceTree = "<group>"; };
 		6C781EAF1B25968F001D86CB /* ALCIsPrimary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCIsPrimary.h; sourceTree = "<group>"; };
 		6C781EB01B25968F001D86CB /* ALCIsPrimary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCIsPrimary.m; sourceTree = "<group>"; };
+		6C7833271C50E9D9005A6F66 /* AlchemicMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicMacros.swift; sourceTree = "<group>"; };
 		6C7C94B91BDE4EE4002E91FC /* ALCSourceMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCSourceMacro.h; sourceTree = "<group>"; };
 		6C7C94BB1BE07C02002E91FC /* SwiftLanguageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLanguageTests.swift; sourceTree = "<group>"; };
 		6C7DAF201B7DA3A8003A492A /* NSSet+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+AlchemicTests.m"; sourceTree = "<group>"; };
@@ -353,16 +356,18 @@
 		6CB95C031BEA25A100D0B194 /* AlchemicSwift Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AlchemicSwift Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CB95C071BEA25A100D0B194 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6CB95C1C1BEA2AC400D0B194 /* AlchemicSwift Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AlchemicSwift Tests-Bridging-Header.h"; sourceTree = "<group>"; };
-		6CB95C1D1BEA2AC400D0B194 /* BridgeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BridgeTests.m; sourceTree = "<group>"; };
+		6CB95C1D1BEA2AC400D0B194 /* BridgeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BridgeTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CBB019A1B96D8D400863F09 /* ALCAbstractResolvable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractResolvable.h; sourceTree = "<group>"; };
 		6CBB019B1B96D8D400863F09 /* ALCAbstractResolvable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractResolvable.m; sourceTree = "<group>"; };
-		6CBF8C6D1BD5BBC500E2CFF8 /* SwiftObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftObject.swift; sourceTree = "<group>"; };
-		6CBF8C6F1BD5BBF500E2CFF8 /* AlchemicMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicMacros.swift; sourceTree = "<group>"; };
+		6CBF8C6D1BD5BBC500E2CFF8 /* SwiftNSObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SwiftNSObject.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6CC9D7671B595A0100EFD517 /* ALCMacroProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMacroProcessor.h; sourceTree = "<group>"; };
 		6CC9D7681B595A0100EFD517 /* ALCMacroProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMacroProcessor.m; sourceTree = "<group>"; };
 		6CCF58631B7C500E009655E9 /* NSSet+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSet+Alchemic.h"; sourceTree = "<group>"; };
 		6CCF58641B7C500E009655E9 /* NSSet+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+Alchemic.m"; sourceTree = "<group>"; };
-		6CD75C141BD8C26000317627 /* SwiftObjectWithDep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftObjectWithDep.swift; sourceTree = "<group>"; };
+		6CD00F371BF0B10B007663B0 /* SwiftClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftClass.swift; sourceTree = "<group>"; };
+		6CD00F391BF0B66C007663B0 /* ObjectiveCObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCObject.h; sourceTree = "<group>"; };
+		6CD00F3A1BF0B66C007663B0 /* ObjectiveCObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectiveCObject.m; sourceTree = "<group>"; };
+		6CD75C141BD8C26000317627 /* SwiftObjectWithDep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SwiftObjectWithDep.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6CD75C161BD9A7F400317627 /* AlchemicMacrosTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicMacrosTests.swift; sourceTree = "<group>"; };
 		6CD800E51B89E24300781E46 /* ALCBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCBuilder.h; sourceTree = "<group>"; };
 		6CD800E61B89E24300781E46 /* ALCBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCBuilder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -435,6 +440,7 @@
 		6C0747C41BE8DAFC0096BF85 /* AlchemicSwift */ = {
 			isa = PBXGroup;
 			children = (
+				6C7833271C50E9D9005A6F66 /* AlchemicMacros.swift */,
 				6C0747C51BE8DAFC0096BF85 /* AlchemicSwift.h */,
 				6C0747C71BE8DAFC0096BF85 /* Info.plist */,
 			);
@@ -615,7 +621,6 @@
 				6C66DC5E1A903204009F9D94 /* ALCContext.m */,
 				6CAE806D1B424F8A00217F9D /* Alchemic.h */,
 				6C6D00A81AB70BB500984CF7 /* AlchemicAware.h */,
-				6CBF8C6F1BD5BBF500E2CFF8 /* AlchemicMacros.swift */,
 				6C66DC5A1A8F662E009F9D94 /* ALCInternalMacros.h */,
 				6C91F9EE1B399009002DF241 /* ALCMacros.h */,
 				6C55E6361B6F3D3B004A6305 /* ALCResolvable.h */,
@@ -635,7 +640,6 @@
 			isa = PBXGroup;
 			children = (
 				6CB95C0F1BEA25FE00D0B194 /* Swift */,
-				6CB95C0E1BEA25ED00D0B194 /* Objective-C */,
 				6C31B0701B9815B000F59A83 /* ALCAbtractResolvableTests.m */,
 				6C55E6381B70617D004A6305 /* ALCAlchemicTests.m */,
 				6C0792361BD0CA37005F0C12 /* ALCContextSTests.swift */,
@@ -750,13 +754,6 @@
 			path = "Alchemic Swift Tests";
 			sourceTree = "<group>";
 		};
-		6CB95C0E1BEA25ED00D0B194 /* Objective-C */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Objective-C";
-			sourceTree = "<group>";
-		};
 		6CB95C0F1BEA25FE00D0B194 /* Swift */ = {
 			isa = PBXGroup;
 			children = (
@@ -772,8 +769,11 @@
 		6CB95C101BEA262200D0B194 /* Test support */ = {
 			isa = PBXGroup;
 			children = (
-				6CBF8C6D1BD5BBC500E2CFF8 /* SwiftObject.swift */,
+				6CBF8C6D1BD5BBC500E2CFF8 /* SwiftNSObject.swift */,
 				6CD75C141BD8C26000317627 /* SwiftObjectWithDep.swift */,
+				6CD00F371BF0B10B007663B0 /* SwiftClass.swift */,
+				6CD00F391BF0B66C007663B0 /* ObjectiveCObject.h */,
+				6CD00F3A1BF0B66C007663B0 /* ObjectiveCObject.m */,
 			);
 			name = "Test support";
 			sourceTree = "<group>";
@@ -980,7 +980,7 @@
 		6C66DC261A8B82C3009F9D94 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0710;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Derek Clarkson";
 				TargetAttributes = {
@@ -1001,7 +1001,7 @@
 				};
 			};
 			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1060,7 +1060,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C0747CB1BE8DB380096BF85 /* AlchemicMacros.swift in Sources */,
+				6C7833281C50E9D9005A6F66 /* AlchemicMacros.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1175,7 +1175,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CB95C131BEA271500D0B194 /* SwiftObject.swift in Sources */,
+				6CD00F381BF0B10B007663B0 /* SwiftClass.swift in Sources */,
+				6CB95C131BEA271500D0B194 /* SwiftNSObject.swift in Sources */,
+				6CD00F3B1BF0B66C007663B0 /* ObjectiveCObject.m in Sources */,
 				6CB95C111BEA270300D0B194 /* SwiftLanguageTests.swift in Sources */,
 				6CB95C121BEA270A00D0B194 /* AlchemicMacrosTests.swift in Sources */,
 				6CB95C1E1BEA2AC400D0B194 /* BridgeTests.m in Sources */,
@@ -1210,6 +1212,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -1240,6 +1243,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -1509,6 +1513,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1538,6 +1543,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1603,6 +1609,7 @@
 				6CB95C0C1BEA25A100D0B194 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -22,13 +22,13 @@ class AlchemicMacrosTests: ALCTestCase {
     func testAcClass() {
         // Note that in Swift, String is not a class.
         let value = AcClass(NSString.self) as! ALCClass
-        XCTAssertTrue(value.aClass == NSString.self)
+        XCTAssertTrue(value.aClass === NSString.self)
     }
 
     func testAcProtocol() {
-        let value = AcProtocol(NSCopying.self) as! ALCProtocol
+        let value = AcProtocol(NSCopying.self)
         let nscopying = NSCopying.self as Protocol
-        let valueProtocol = value.aProtocol
+        let valueProtocol = (value as! ALCProtocol).aProtocol
         XCTAssertTrue(nscopying === valueProtocol)
     }
 
