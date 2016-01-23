@@ -21,32 +21,32 @@
 
 @implementation BridgeTests
 
--(void) testLoadsSwiftObject {
+-(void) testLoadsSwiftNSObject {
 
     STStartLogging(@"LogAll");
-    STStartLogging(@"is [Alchemic_tests.SwiftObject]");
+    STStartLogging(@"is [Alchemic_tests.SwiftNSObject]");
 
    	[self setupRealContext];
-    [self startContextWithClasses:@[[SwiftObject class]]];
+    [self startContextWithClasses:@[[SwiftNSObject class]]];
 
-    id obj = AcGet(NSObject, AcClass(SwiftObject));
+    id obj = AcGet(NSObject, AcClass(SwiftNSObject));
     XCTAssertNotNil(obj);
 
     obj = AcGet(NSObject, AcName(@"abc"));
     XCTAssertNotNil(obj);
 }
 
--(void) testModelScannerProcessesSwiftClass {
+-(void) testModelScannerProcessesSwiftNSObjectClass {
 
     [self setupMockContext];
 
     id mockBuilder = OCMClassMock([ALCBuilder class]);
-    OCMExpect([self.mockContext registerBuilderForClass:[SwiftObject class]]).andReturn(mockBuilder);
+    OCMExpect([self.mockContext registerBuilderForClass:[SwiftNSObject class]]).andReturn(mockBuilder);
     OCMExpect([self.mockContext registerClassBuilder:mockBuilder withProperties:[OCMArg isKindOfClass:[NSArray class]]]);
     OCMExpect([self.mockContext classBuilderDidFinishRegistering:mockBuilder]);
 
     ALCRuntimeScanner *scanner = [ALCRuntimeScanner modelScanner];
-    scanner.processor((id)self.mockContext, [NSMutableSet set], [SwiftObject class]);
+    scanner.processor((id)self.mockContext, [NSMutableSet set], [SwiftNSObject class]);
 
     OCMVerifyAll(self.mockContext);
 }

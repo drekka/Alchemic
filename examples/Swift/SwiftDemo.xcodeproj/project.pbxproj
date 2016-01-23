@@ -16,6 +16,8 @@
 		6CB95C401BECDFC800D0B194 /* AlchemicSwift.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C3C1BECDFC800D0B194 /* AlchemicSwift.framework.dSYM */; };
 		6CB95C411BECDFC800D0B194 /* PEGKit.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C3D1BECDFC800D0B194 /* PEGKit.framework.dSYM */; };
 		6CB95C421BECDFC800D0B194 /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C3E1BECDFC800D0B194 /* StoryTeller.framework.dSYM */; };
+		6CD00F341BECE99A007663B0 /* ActualDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD00F331BECE99A007663B0 /* ActualDatabase.swift */; };
+		6CD00F361BECE9D9007663B0 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD00F351BECE9D9007663B0 /* DataSource.swift */; };
 		6CFFF2C71BE77FA00038CB30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2C61BE77FA00038CB30 /* AppDelegate.swift */; };
 		6CFFF2C91BE77FA00038CB30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2C81BE77FA00038CB30 /* ViewController.swift */; };
 		6CFFF2CC1BE77FA00038CB30 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CFFF2CA1BE77FA00038CB30 /* Main.storyboard */; };
@@ -33,6 +35,8 @@
 		6CB95C3C1BECDFC800D0B194 /* AlchemicSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = AlchemicSwift.framework.dSYM; path = Carthage/Build/iOS/AlchemicSwift.framework.dSYM; sourceTree = "<group>"; };
 		6CB95C3D1BECDFC800D0B194 /* PEGKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = PEGKit.framework.dSYM; path = Carthage/Build/iOS/PEGKit.framework.dSYM; sourceTree = "<group>"; };
 		6CB95C3E1BECDFC800D0B194 /* StoryTeller.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = StoryTeller.framework.dSYM; path = Carthage/Build/iOS/StoryTeller.framework.dSYM; sourceTree = "<group>"; };
+		6CD00F331BECE99A007663B0 /* ActualDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActualDatabase.swift; sourceTree = "<group>"; };
+		6CD00F351BECE9D9007663B0 /* DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
 		6CFFF2C31BE77FA00038CB30 /* SwiftDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CFFF2C61BE77FA00038CB30 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6CFFF2C81BE77FA00038CB30 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -99,6 +103,8 @@
 				6CFFF2CD1BE77FA00038CB30 /* Assets.xcassets */,
 				6CFFF2CF1BE77FA00038CB30 /* LaunchScreen.storyboard */,
 				6CFFF2D21BE77FA00038CB30 /* Info.plist */,
+				6CD00F331BECE99A007663B0 /* ActualDatabase.swift */,
+				6CD00F351BECE9D9007663B0 /* DataSource.swift */,
 			);
 			path = SwiftDemo;
 			sourceTree = "<group>";
@@ -201,6 +207,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CFFF2C91BE77FA00038CB30 /* ViewController.swift in Sources */,
+				6CD00F341BECE99A007663B0 /* ActualDatabase.swift in Sources */,
+				6CD00F361BECE9D9007663B0 /* DataSource.swift in Sources */,
 				6CFFF2C71BE77FA00038CB30 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,6 +9,7 @@
 // Tests related to understanding the Swift language.
 
 import XCTest
+import Foundation
 
 class SwiftLanguageTests: XCTestCase {
 
@@ -52,6 +53,10 @@ class SwiftLanguageTests: XCTestCase {
         XCTAssertEqual("abc", theName)
     }
 
-
+    func testObjectClasses() {
+        let x:AnyClass = NSString.self
+        let finalClass:AnyClass = x == String.self ? NSString.self : x
+        ObjectiveCObject.setSwiftClass(finalClass)
+    }
 
 }

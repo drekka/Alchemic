@@ -1,5 +1,5 @@
 //
-//  SwiftObject.swift
+//  SwiftNSObject.swift
 //  alchemic
 //
 //  Created by Derek Clarkson on 20/10/2015.
@@ -7,10 +7,9 @@
 //
 
 import Foundation
-import Alchemic
 import AlchemicSwift
 
-public class SwiftObject: NSObject {
+public class SwiftNSObject: NSObject {
 
     public static func alchemic(cb:ALCBuilder) {
         AcRegister(cb, settings:AcWithName("abc"))
