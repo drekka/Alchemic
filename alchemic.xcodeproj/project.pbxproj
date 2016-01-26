@@ -11,6 +11,13 @@
 		6C0747D01BE8DB670096BF85 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C0747D21BE8DBB60096BF85 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C0747D31BE8DDE20096BF85 /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6C25D2751C566E2D00D982DC /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2741C566E2D00D982DC /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6C25D2771C566E6A00D982DC /* ALCObjectFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6C25D2791C566F7900D982DC /* Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2781C566F2E00D982DC /* Alchemic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C25D27C1C57563200D982DC /* ALCAppModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D27A1C57563200D982DC /* ALCAppModel.h */; };
+		6C25D27D1C57563200D982DC /* ALCAppModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C25D27B1C57563200D982DC /* ALCAppModel.m */; };
+		6C25D2801C5760FF00D982DC /* ALCAbstractObjectFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D27E1C5760FF00D982DC /* ALCAbstractObjectFactory.h */; };
+		6C25D2811C5760FF00D982DC /* ALCAbstractObjectFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C25D27F1C5760FF00D982DC /* ALCAbstractObjectFactory.m */; };
 		6C7833281C50E9D9005A6F66 /* AlchemicMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7833271C50E9D9005A6F66 /* AlchemicMacros.swift */; };
 		6CB95C081BEA25A100D0B194 /* AlchemicSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0747C31BE8DAFC0096BF85 /* AlchemicSwift.framework */; };
 		6CB95C161BEA28A500D0B194 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -81,6 +88,13 @@
 		6C0747C31BE8DAFC0096BF85 /* AlchemicSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AlchemicSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C0747C51BE8DAFC0096BF85 /* AlchemicSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlchemicSwift.h; sourceTree = "<group>"; };
 		6C0747C71BE8DAFC0096BF85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6C25D2741C566E2D00D982DC /* ALCModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCModel.h; sourceTree = "<group>"; };
+		6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCObjectFactory.h; sourceTree = "<group>"; };
+		6C25D2781C566F2E00D982DC /* Alchemic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alchemic.h; sourceTree = "<group>"; };
+		6C25D27A1C57563200D982DC /* ALCAppModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAppModel.h; sourceTree = "<group>"; };
+		6C25D27B1C57563200D982DC /* ALCAppModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAppModel.m; sourceTree = "<group>"; };
+		6C25D27E1C5760FF00D982DC /* ALCAbstractObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractObjectFactory.h; sourceTree = "<group>"; };
+		6C25D27F1C5760FF00D982DC /* ALCAbstractObjectFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractObjectFactory.m; sourceTree = "<group>"; };
 		6C36D74F1B3851680073C4FB /* Alchemic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alchemic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C469BAD1BB0200200CD2286 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		6C66DC391A8B82C3009F9D94 /* Alchemic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Alchemic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +158,16 @@
 			path = AlchemicSwift;
 			sourceTree = "<group>";
 		};
+		6C25D2731C566E0A00D982DC /* model */ = {
+			isa = PBXGroup;
+			children = (
+				6C25D2741C566E2D00D982DC /* ALCModel.h */,
+				6C25D27A1C57563200D982DC /* ALCAppModel.h */,
+				6C25D27B1C57563200D982DC /* ALCAppModel.m */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
 		6C469BB61BB0210A00CD2286 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -191,6 +215,11 @@
 		6C66DC301A8B82C3009F9D94 /* Alchemic */ = {
 			isa = PBXGroup;
 			children = (
+				6C25D2731C566E0A00D982DC /* model */,
+				6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */,
+				6C25D2781C566F2E00D982DC /* Alchemic.h */,
+				6C25D27E1C5760FF00D982DC /* ALCAbstractObjectFactory.h */,
+				6C25D27F1C5760FF00D982DC /* ALCAbstractObjectFactory.m */,
 			);
 			name = Alchemic;
 			path = alchemic;
@@ -228,6 +257,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C25D2801C5760FF00D982DC /* ALCAbstractObjectFactory.h in Headers */,
+				6C25D2791C566F7900D982DC /* Alchemic.h in Headers */,
+				6C25D27C1C57563200D982DC /* ALCAppModel.h in Headers */,
+				6C25D2751C566E2D00D982DC /* ALCModel.h in Headers */,
+				6C25D2771C566E6A00D982DC /* ALCObjectFactory.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +436,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C25D2811C5760FF00D982DC /* ALCAbstractObjectFactory.m in Sources */,
+				6C25D27D1C57563200D982DC /* ALCAppModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
