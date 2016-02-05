@@ -9,6 +9,6 @@
 @import Foundation;
 #import "ALCModel.h"
 
-@interface ALCAppModel : NSObject<ALCModel>
+@interface ALCModelImpl : NSObject<ALCModel>
 
 @end

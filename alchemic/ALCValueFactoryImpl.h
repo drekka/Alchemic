@@ -7,10 +7,14 @@
 //
 
 @import Foundation;
-#import "ALCObjectFactory.h"
+#import "ALCValueFactory.h"
 
-@interface ALCAbstractObjectFactory : NSObject<ALCObjectFactory>
+NS_ASSUME_NONNULL_BEGIN
 
-+(id<ALCObjectFactory>) NoFactoryInstance;
+@interface ALCValueFactoryImpl : NSObject<ALCValueFactory>
+
++(id<ALCValueFactory>) NoFactoryInstance;
 
 @end
+
+NS_ASSUME_NONNULL_END

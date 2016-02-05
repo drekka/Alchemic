@@ -8,21 +8,20 @@
 
 @import Foundation;
 
-@protocol ALCObjectFactory;
+@class ALCModelSearchCriteria;
+@protocol ALCValueFactory;
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef bool (^ALCObjectFactoryTest) (id<ALCObjectFactory> objectFactory);
-
 @protocol ALCModel <NSObject>
 
-@property (nonatomic, readonly, strong) NSSet<id<ALCObjectFactory>> *objectFactories;
+@property (nonatomic, readonly, strong) NSSet<id<ALCValueFactory>> *valueFactories;
 
--(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory;
+-(void) addValueFactory:(id<ALCValueFactory>) valueFactory withName:(NSString *) name;
 
--(NSArray<id<ALCObjectFactory>> *) objectFactoriesPassingTest:(ALCObjectFactoryTest) test;
+-(NSArray<id<ALCValueFactory>> *) valueFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
 
--(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName;
+-(void) valueFactory:(id<ALCValueFactory>) valueFactory changedName:(NSString *) oldName newName:(NSString *) newName;
 
 @end
 
