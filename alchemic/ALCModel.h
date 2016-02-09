@@ -9,19 +9,23 @@
 @import Foundation;
 
 @class ALCModelSearchCriteria;
-@protocol ALCValueFactory;
+@protocol ALCObjectFactory;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCModel <NSObject>
 
-@property (nonatomic, readonly, strong) NSSet<id<ALCValueFactory>> *valueFactories;
+@property (nonatomic, readonly, strong) NSSet<id<ALCObjectFactory>> *objectFactories;
 
--(void) addValueFactory:(id<ALCValueFactory>) valueFactory withName:(NSString *) name;
+-(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name;
 
--(NSArray<id<ALCValueFactory>> *) valueFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
+-(NSArray<id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
 
--(void) valueFactory:(id<ALCValueFactory>) valueFactory changedName:(NSString *) oldName newName:(NSString *) newName;
+-(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName;
+
+-(void) resolveDependencies;
+
+-(void) startSingletons;
 
 @end
 

@@ -6,49 +6,77 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCModelImpl.h"
-#import "ALCValueFactory.h"
-#import "ALCValueFactoryImpl.h"
+#import "ALCObjectFactory.h"
+#import "ALCObjectFactoryImpl.h"
 #import "ALCModelSearchCriteria.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCModelImpl {
-    NSMutableDictionary<NSString *, id<ALCValueFactory>> *_valueFactories;
+    NSMutableDictionary<NSString *, id<ALCObjectFactory>> *_objectFactories;
 }
 
 -(instancetype) init {
     self = [super init];
     if (self) {
-        _valueFactories = [@{} mutableCopy];
+        _objectFactories = [@{} mutableCopy];
     }
     return self;
 }
 
--(NSArray<id<ALCValueFactory>> *) valueFactories {
-    return _valueFactories.allValues;
+-(NSArray<id<ALCObjectFactory>> *) objectFactories {
+    return _objectFactories.allValues;
 }
 
--(void) addValueFactory:(id<ALCValueFactory>) valueFactory withName:(NSString *) name {
-    if (_valueFactories[name]) {
+-(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name {
+    if (_objectFactories[name]) {
         @throw [NSException exceptionWithName:@"AlchemicDuplicateName"
-                                       reason:[NSString stringWithFormat:@"Value factory names must be unique. Duplicate name: %@ used for %@ and %@", name, valueFactory, _valueFactories[name]]
+                                       reason:[NSString stringWithFormat:@"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name]]
                                      userInfo:nil];
     }
-    _valueFactories[name] = valueFactory;
+    _objectFactories[name] = objectFactory;
 }
 
--(NSArray<id<ALCValueFactory>> *) valueFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
-    NSSet<NSString *> *keys = [_valueFactories keysOfEntriesPassingTest:^BOOL(NSString *name, id<ALCValueFactory> valueFactory, BOOL *stop) {
-        return [criteria acceptsValueFactory:valueFactory name:name];
+-(void) resolveDependencies {
+    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
+        STLog(self, @"Resolving '%@'...", key);
+        if (!objectFactory.resolved) {
+            [objectFactory resolveWithStack:[NSMutableArray array] model:self];
+        }
+    }];
+}
+
+-(void) startSingletons {
+    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
+        if (objectFactory.resolved) {
+            STLog(self, @"Starting '%@'...", key);
+            [objectFactory object];
+        }
+    }];
+}
+
+-(NSArray<id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
+    NSSet<NSString *> *keys = [_objectFactories keysOfEntriesPassingTest:^BOOL(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
+        return [criteria acceptsObjectFactory:objectFactory name:name];
     }];
     NSArray<NSString *> *keyArray = keys.allObjects;
-    return [_valueFactories objectsForKeys:keyArray notFoundMarker:[ALCValueFactoryImpl NoFactoryInstance]];
+    return [_objectFactories objectsForKeys:keyArray notFoundMarker:[ALCObjectFactoryImpl NoFactoryInstance]];
 }
 
--(void) valueFactory:(id<ALCValueFactory>) valueFactory changedName:(NSString *) oldName newName:(NSString *) newName {
-    [_valueFactories removeObjectForKey:oldName];
-    [self addValueFactory:valueFactory withName:newName];
+-(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName {
+    [_objectFactories removeObjectForKey:oldName];
+    [self addObjectFactory:objectFactory withName:newName];
+}
+
+-(NSString *) description {
+    NSMutableString *desc = [NSMutableString stringWithString:@"Model:"];
+    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
+        [desc appendFormat:@"\n\t%@, name:'%@'", [objectFactory description], key];
+    }];
+    return desc;
 }
 
 @end

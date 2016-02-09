@@ -7,10 +7,10 @@
 //
 
 @import Foundation;
-@protocol ALCValueFactory;
+@protocol ALCObjectFactory;
 
 @protocol ALCInstantiator <NSObject>
 
--(id) instantiateForFactory:(id<ALCValueFactory>) valueFactory;
+-(id) instantiateForFactory:(id<ALCObjectFactory>) objectFactory;
 
 @end

@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCDependency : NSObject<ALCResolvable>
+@interface ALCModelDependency : NSObject<ALCResolvable>
 
 -(instancetype) initWithCriteria:(ALCModelSearchCriteria *) criteria;
 

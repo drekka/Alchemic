@@ -7,14 +7,14 @@
 //
 
 #import "ALCClassInstantiator.h"
-#import "ALCValueFactory.h"
+#import "ALCObjectFactory.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCClassInstantiator
 
--(id)instantiateForFactory:(id<ALCValueFactory>)valueFactory {
-    return [[valueFactory.valueClass alloc] init];
+-(id)instantiateForFactory:(id<ALCObjectFactory>) objectFactory {
+    return [[objectFactory.objectClass alloc] init];
 }
 
 @end

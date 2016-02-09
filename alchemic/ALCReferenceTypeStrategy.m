@@ -12,19 +12,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCReferenceTypeStrategy
 
-@synthesize value = _value;
+@synthesize object = _object;
 
 -(id)value {
-    if (_value == nil) {
-        @throw [NSException exceptionWithName:@"AlchemicReferenceValueNotSet"
+    if (_object == nil) {
+        @throw [NSException exceptionWithName:@"AlchemicReferenceObjectNotSet"
                                        reason:[NSString stringWithFormat:@"%@ Builder is marked as a Reference to an external value, but value has not been set.", self]
                                      userInfo:nil];
     }
-    return _value;
+    return _object;
 }
 
 -(bool) resolved {
-    return _value != nil;
+    return _object != nil;
 }
 
 @end

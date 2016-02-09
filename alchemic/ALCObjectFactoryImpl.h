@@ -7,13 +7,13 @@
 //
 
 @import Foundation;
-#import "ALCValueFactory.h"
+#import "ALCObjectFactory.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCValueFactoryImpl : NSObject<ALCValueFactory>
+@interface ALCObjectFactoryImpl : NSObject<ALCObjectFactory>
 
-+(id<ALCValueFactory>) NoFactoryInstance;
++(id<ALCObjectFactory>) NoFactoryInstance;
 
 @end
 

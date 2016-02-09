@@ -8,16 +8,15 @@
 
 @import Foundation;
 @protocol ALCModel;
-@protocol ALCValueFactory;
 
 @protocol ALCResolvable <NSObject>
 
-@property (nonatomic, strong, readonly) id value;
+@property (nonatomic, strong, readonly) id object;
 
-@property (nonatomic, assign, readonly) Class valueClass;
+@property (nonatomic, assign, readonly) Class objectClass;
 
 @property (nonatomic, assign, readonly) bool resolved;
 
--(void) resolveWithStack:(NSMutableArray<id<ALCValueFactory>> *) resolvingStack model:(id<ALCModel>) model;
+-(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model;
 
 @end

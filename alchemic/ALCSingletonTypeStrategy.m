@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCSingletonTypeStrategy
 
-@synthesize value = _value;
+@synthesize object = _object;
 
 -(bool) resolved {
     return YES;

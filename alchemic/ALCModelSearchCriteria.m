@@ -1,5 +1,5 @@
 //
-//  ALCValueFactorySelector.m
+//  ALCObjectFactorySelector.m
 //  Alchemic
 //
 //  Created by Derek Clarkson on 2/02/2016.
@@ -7,33 +7,33 @@
 //
 
 #import "ALCModelSearchCriteria.h"
-#import "ALCValueFactory.h"
+#import "ALCObjectFactory.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef bool (^Criteria) (NSString *name, id<ALCValueFactory> objectFactory);
+typedef bool (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 
 @implementation ALCModelSearchCriteria {
     Criteria _acceptCriteria;
 }
 
 +(ALCModelSearchCriteria *) searchCriteriaForClass:(Class) clazz {
-    return [[ALCModelSearchCriteria alloc] initWithAcceptorBlock:^(NSString *valueFactoryName,
-                                                                id<ALCValueFactory> valueFactory) {
-        return [valueFactory.valueClass isSubclassOfClass:clazz];
+    return [[ALCModelSearchCriteria alloc] initWithAcceptorBlock:^(NSString *objectFactoryName,
+                                                                id<ALCObjectFactory> objectFactory) {
+        return [objectFactory.objectClass isSubclassOfClass:clazz];
     }];
 }
 
 +(ALCModelSearchCriteria *) searchCriteriaForProtocol:(Protocol *) protocol {
-    return [[ALCModelSearchCriteria alloc] initWithAcceptorBlock:^(NSString *valueFactoryName,
-                                                                  id<ALCValueFactory> valueFactory) {
-        return [valueFactory.valueClass conformsToProtocol:protocol];
+    return [[ALCModelSearchCriteria alloc] initWithAcceptorBlock:^(NSString *objectFactoryName,
+                                                                  id<ALCObjectFactory> objectFactory) {
+        return [objectFactory.objectClass conformsToProtocol:protocol];
     }];
 }
 
 +(ALCModelSearchCriteria *) searchCriteriaForName:(NSString *) name {
     return [[ALCModelSearchCriteria alloc] initWithAcceptorBlock:^(NSString *valueFactoryName,
-                                                                id<ALCValueFactory> valueFactory) {
+                                                                id<ALCObjectFactory> valueFactory) {
         return [valueFactoryName isEqualToString:name];
     }];
 }
@@ -46,10 +46,10 @@ typedef bool (^Criteria) (NSString *name, id<ALCValueFactory> objectFactory);
     return self;
 }
 
--(bool) acceptsValueFactory:(id<ALCValueFactory>) valueFactory name:(NSString *) name {
+-(bool) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name {
     return _acceptCriteria(name, valueFactory)
     && (
-        _nextSearchCriteria == nil || [_nextSearchCriteria acceptsValueFactory:valueFactory name:name]
+        _nextSearchCriteria == nil || [_nextSearchCriteria acceptsObjectFactory:valueFactory name:name]
         );
 }
 

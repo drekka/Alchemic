@@ -6,50 +6,51 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import UIKit;
 @import ObjectiveC;
 
-#import "ALCValueFactoryImpl.h"
+#import "ALCObjectFactoryImpl.h"
 #import "ALCInstantiator.h"
 #import "ALCTypeStrategy.h"
 #import "ALCSingletonTypeStrategy.h"
 #import "ALCFactoryTypeStrategy.h"
 #import "ALCReferenceTypeStrategy.h"
 #import "ALCRuntime.h"
-#import "ALCDependency.h"
 #import "ALCClassInstantiator.h"
+#import "NSObject+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCDependencyRef : NSObject
 @property (nonatomic, assign) Ivar ivar;
-@property (nonatomic, strong) ALCDependency *dependency;
+@property (nonatomic, strong) id<ALCResolvable> dependency;
 @end
 
 @implementation ALCDependencyRef
 @end
 
-@implementation ALCValueFactoryImpl {
+@implementation ALCObjectFactoryImpl {
     id<ALCInstantiator> _instantiator;
     id<ALCTypeStrategy> _typeStrategy;
     NSMutableArray<ALCDependencyRef *> *_dependencies;
 }
 
 @synthesize factoryType = _factoryType;
-@synthesize valueClass = _valueClass;
+@synthesize objectClass = _objectClass;
 @dynamic resolved;
 
-+(id<ALCValueFactory>) NoFactoryInstance {
-    static id<ALCValueFactory> _NoFactoryInstance;
++(id<ALCObjectFactory>) NoFactoryInstance {
+    static id<ALCObjectFactory> _NoFactoryInstance;
     if (!_NoFactoryInstance) {
-        _NoFactoryInstance = [[ALCValueFactoryImpl alloc] init];
+        _NoFactoryInstance = [[ALCObjectFactoryImpl alloc] init];
     }
     return _NoFactoryInstance;
 }
 
--(instancetype) initWithClass:(Class) valueClass {
+-(instancetype) initWithClass:(Class) objectClass {
     self = [super init];
     if (self) {
-        _valueClass = valueClass;
+        _objectClass = objectClass;
         [self setFactoryType:_factoryType];
         _dependencies = [[NSMutableArray alloc] init];
         _instantiator = [[ALCClassInstantiator alloc] init];
@@ -75,7 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)defaultName {
-    return NSStringFromClass([self class]);
+    return NSStringFromClass(self.objectClass);
 }
 
 -(bool) resolved {
@@ -90,27 +91,28 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
--(void) addVariable:(NSString *) variableName dependency:(ALCDependency *) dependency {
+-(void) registerDependency:(id<ALCResolvable>) dependency forVariable:(NSString *) variableName {
     ALCDependencyRef *ref = [[ALCDependencyRef alloc] init];
-    ref.ivar = [ALCRuntime aClass:self.valueClass variableForInjectionPoint:variableName];
+    ref.ivar = [ALCRuntime aClass:self.objectClass variableForInjectionPoint:variableName];
     ref.dependency = dependency;
     [_dependencies addObject:ref];
 }
 
--(id) value {
-    id value = _typeStrategy.value;
-    if (!value) {
-        value = [_instantiator instantiateForFactory:self];
-        self.value = value;
+-(id) object {
+    id object = _typeStrategy.object;
+    if (!object) {
+        object = [_instantiator instantiateForFactory:self];
+        self.object = object;
     }
-    return value;
+    return object;
 }
 
--(void) setValue:(id) value {
-    _typeStrategy.value = value;
+-(void) setObject:(id) object {
+    _typeStrategy.object = object;
+    [self injectDependenciesIntoObject:object];
 }
 
--(void) resolveWithStack:(NSMutableArray<id<ALCValueFactory>> *) resolvingStack model:(id<ALCModel>) model {
+-(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
 
     // Check for circular dependencies first.
     if ([resolvingStack containsObject:self]) {
@@ -133,6 +135,26 @@ NS_ASSUME_NONNULL_BEGIN
         [ref.dependency resolveWithStack:resolvingStack model:model];
     }
     [resolvingStack removeLastObject];
+}
+
+-(void) injectDependenciesIntoObject:(id) value {
+    for (ALCDependencyRef *depRef in _dependencies) {
+        [value injectVariable:depRef.ivar withResolvable:depRef.dependency];
+    }
+}
+
+- (nonnull NSString *)description {
+    NSString *instantiated = [_typeStrategy isKindOfClass:[ALCSingletonTypeStrategy class]] && _typeStrategy.object ? @"* " : @"  ";
+    NSString *objectType;
+    if ([_typeStrategy isKindOfClass:[ALCSingletonTypeStrategy class]]) {
+        objectType = @"Singleton";
+    } else if ([_typeStrategy isKindOfClass:[ALCReferenceTypeStrategy class]]) {
+        objectType = @"Reference";
+    } else {
+        objectType = @"Factory";
+    }
+    NSString *appDelegate = [self.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)] ? @" (App delegate)" : @"";
+    return [NSString stringWithFormat:@"%@%@ %@%@", instantiated, objectType, NSStringFromClass(self.objectClass), appDelegate];
 }
 
 @end

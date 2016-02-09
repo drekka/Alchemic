@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCFactoryTypeStrategy
 
-@synthesize value = _value;
+@synthesize object = _object;
 
--(void) setValue:(id) value {}
+-(void) setObject:(id) value {}
 
 -(bool) resolved {
     return YES;

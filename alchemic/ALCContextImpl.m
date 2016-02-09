@@ -6,11 +6,13 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCContextImpl.h"
 #import "ALCModel.h"
 #import "ALCModelImpl.h"
-#import "ALCValueFactory.h"
-#import "ALCValueFactoryImpl.h"
+#import "ALCObjectFactory.h"
+#import "ALCObjectFactoryImpl.h"
 
 @implementation ALCContextImpl {
     id<ALCModel> _model;
@@ -25,21 +27,19 @@
 }
 
 -(void) start {
-    [self resolveDependencies];
+    [_model resolveDependencies];
+    [_model startSingletons];
+    STLog(self, @"\nRegistered model builders (* - instantiated):...\n%@\n", _model);
 }
 
-- (void)resolveDependencies {
-    for (id<ALCValueFactory> valueFactory in _model.valueFactories) {
-        if (!valueFactory.resolved) {
-            [valueFactory resolveWithStack:[NSMutableArray array] model:_model];
-        }
-    }
-}
-
--(id<ALCValueFactory>) registerClass:(Class) clazz {
-    id<ALCValueFactory> valueFactory = [[ALCValueFactoryImpl alloc] initWithClass:clazz];
-    [_model addValueFactory:valueFactory withName:valueFactory.defaultName];
+-(id<ALCObjectFactory>) registerClass:(Class) clazz {
+    id<ALCObjectFactory> valueFactory = [[ALCObjectFactoryImpl alloc] initWithClass:clazz];
+    [_model addObjectFactory:valueFactory withName:valueFactory.defaultName];
     return valueFactory;
+}
+
+-(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName {
+    [_model objectFactory:objectFactory changedName:oldName newName:newName];
 }
 
 @end

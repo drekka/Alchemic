@@ -1,5 +1,5 @@
 //
-//  ALCValueStorage.h
+//  ALCObjectStorage.h
 //  Alchemic
 //
 //  Created by Derek Clarkson on 30/01/2016.
@@ -10,7 +10,7 @@
 
 @protocol ALCTypeStrategy<NSObject>
 
-@property (nonatomic, strong) id value;
+@property (nonatomic, strong) id object;
 
 @property (nonatomic, assign, readonly) bool resolved;
 

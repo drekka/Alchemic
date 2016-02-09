@@ -1,5 +1,5 @@
 //
-//  ALCValueFactorySelector.h
+//  ALCObjectFactorySelector.h
 //  Alchemic
 //
 //  Created by Derek Clarkson on 2/02/2016.
@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-@protocol ALCValueFactory;
+@protocol ALCObjectFactory;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) ALCModelSearchCriteria *nextSearchCriteria;
 
--(bool) acceptsValueFactory:(id<ALCValueFactory>) valueFactory name:(NSString *) name;
+-(bool) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name;
 
 @end
 

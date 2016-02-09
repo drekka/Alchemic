@@ -11,7 +11,7 @@
 #import "ALCResolvable.h"
 
 @protocol ALCModel;
-@class ALCDependency;
+@class ALCModelDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
     ALCFactoryTypeReference
 };
 
-@protocol ALCValueFactory <ALCResolvable>
+@protocol ALCObjectFactory <ALCResolvable>
 
 @property (nonatomic, strong, readonly) NSString *defaultName;
 
@@ -29,7 +29,9 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 
 -(instancetype) initWithClass:(Class) valueClass;
 
--(void) addVariable:(NSString *) variableName dependency:(ALCDependency *) dependency;
+-(void) registerDependency:(id<ALCResolvable>) dependency forVariable:(NSString *) variableName;
+
+-(void) injectDependenciesIntoObject:(id) value;
 
 @end
 
