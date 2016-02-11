@@ -33,8 +33,12 @@
 		6C3AFBD21C638C7800B4FCAA /* ALCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C3AFBD01C638C7800B4FCAA /* ALCRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C3AFBD31C638C7800B4FCAA /* ALCRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBD11C638C7800B4FCAA /* ALCRuntime.m */; };
 		6C3AFBD51C64CDEC00B4FCAA /* SingletonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBD41C64CDEC00B4FCAA /* SingletonTests.m */; };
+		6C4B560F1C6CC3800040AEC2 /* ALCInternalMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */; };
 		6C67FF291C6772A400ABEDDD /* ALCRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C67FF281C6772A400ABEDDD /* ALCRuntimeTests.m */; };
 		6C67FF2A1C68BF2200ABEDDD /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C7145601B44238900EBC055 /* StoryTellerConfig.json */; };
+		6C67FF2C1C6A13C700ABEDDD /* SingletonCircularReferenceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C67FF2B1C6A13C700ABEDDD /* SingletonCircularReferenceTest.m */; };
+		6C67FF2F1C6A1F8400ABEDDD /* ALCDependencyStackItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C67FF2D1C6A1F8400ABEDDD /* ALCDependencyStackItem.h */; };
+		6C67FF301C6A1F8400ABEDDD /* ALCDependencyStackItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C67FF2E1C6A1F8400ABEDDD /* ALCDependencyStackItem.m */; };
 		6C68CF7E1C64DB06003A7A54 /* ALCContextImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C68CF7F1C64DB06003A7A54 /* ALCContextImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */; };
 		6C68CF811C64E1F8003A7A54 /* SingletonWithPropertiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68CF801C64E1F8003A7A54 /* SingletonWithPropertiesTests.m */; };
@@ -104,9 +108,13 @@
 		6C3AFBD11C638C7800B4FCAA /* ALCRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCRuntime.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C3AFBD41C64CDEC00B4FCAA /* SingletonTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SingletonTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C469BAD1BB0200200CD2286 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInternalMacros.h; sourceTree = "<group>"; };
 		6C66DC391A8B82C3009F9D94 /* Alchemic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Alchemic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C66DC3F1A8B82C3009F9D94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C67FF281C6772A400ABEDDD /* ALCRuntimeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCRuntimeTests.m; sourceTree = "<group>"; };
+		6C67FF2B1C6A13C700ABEDDD /* SingletonCircularReferenceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonCircularReferenceTest.m; sourceTree = "<group>"; };
+		6C67FF2D1C6A1F8400ABEDDD /* ALCDependencyStackItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependencyStackItem.h; sourceTree = "<group>"; };
+		6C67FF2E1C6A1F8400ABEDDD /* ALCDependencyStackItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCDependencyStackItem.m; sourceTree = "<group>"; };
 		6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCContextImpl.h; sourceTree = "<group>"; };
 		6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCContextImpl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C68CF801C64E1F8003A7A54 /* SingletonWithPropertiesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SingletonWithPropertiesTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -174,6 +182,8 @@
 				6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */,
 				6C25D27E1C5760FF00D982DC /* ALCObjectFactoryImpl.h */,
 				6C25D27F1C5760FF00D982DC /* ALCObjectFactoryImpl.m */,
+				6C67FF2D1C6A1F8400ABEDDD /* ALCDependencyStackItem.h */,
+				6C67FF2E1C6A1F8400ABEDDD /* ALCDependencyStackItem.m */,
 			);
 			name = "Value factories";
 			sourceTree = "<group>";
@@ -232,6 +242,7 @@
 				6C7837231C5BAD8A004BE670 /* ALCContext.h */,
 				6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */,
 				6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */,
+				6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */,
 			);
 			name = Alchemic;
 			path = alchemic;
@@ -244,6 +255,7 @@
 				6C7837251C5BB116004BE670 /* SingletonToSingletonTests.m */,
 				6C3AFBD41C64CDEC00B4FCAA /* SingletonTests.m */,
 				6C68CF801C64E1F8003A7A54 /* SingletonWithPropertiesTests.m */,
+				6C67FF2B1C6A13C700ABEDDD /* SingletonCircularReferenceTest.m */,
 			);
 			name = "Unit tests";
 			path = alchemicTests;
@@ -281,6 +293,8 @@
 				6C68CF891C6636D6003A7A54 /* NSObject+Alchemic.h in Headers */,
 				6C3AFBA91C5CE89500B4FCAA /* ALCTypeStrategy.h in Headers */,
 				6C25D2801C5760FF00D982DC /* ALCObjectFactoryImpl.h in Headers */,
+				6C4B560F1C6CC3800040AEC2 /* ALCInternalMacros.h in Headers */,
+				6C67FF2F1C6A1F8400ABEDDD /* ALCDependencyStackItem.h in Headers */,
 				6C3AFBB01C5E0CB800B4FCAA /* ALCFactoryTypeStrategy.h in Headers */,
 				6C3AFBCB1C63794C00B4FCAA /* ALCResolvable.h in Headers */,
 				6C3AFBD21C638C7800B4FCAA /* ALCRuntime.h in Headers */,
@@ -409,6 +423,7 @@
 			files = (
 				6C3AFBB51C5E0D5800B4FCAA /* ALCReferenceTypeStrategy.m in Sources */,
 				6C3AFBD31C638C7800B4FCAA /* ALCRuntime.m in Sources */,
+				6C67FF301C6A1F8400ABEDDD /* ALCDependencyStackItem.m in Sources */,
 				6C68CF7F1C64DB06003A7A54 /* ALCContextImpl.m in Sources */,
 				6C68CF8A1C6636D6003A7A54 /* NSObject+Alchemic.m in Sources */,
 				6C3AFBC91C636DC500B4FCAA /* ALCModelDependency.m in Sources */,
@@ -427,6 +442,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C7837261C5BB116004BE670 /* SingletonToSingletonTests.m in Sources */,
+				6C67FF2C1C6A13C700ABEDDD /* SingletonCircularReferenceTest.m in Sources */,
 				6C3AFBD51C64CDEC00B4FCAA /* SingletonTests.m in Sources */,
 				6C68CF811C64E1F8003A7A54 /* SingletonWithPropertiesTests.m in Sources */,
 				6C67FF291C6772A400ABEDDD /* ALCRuntimeTests.m in Sources */,

@@ -18,11 +18,14 @@
 #import "ALCRuntime.h"
 #import "ALCClassInstantiator.h"
 #import "NSObject+Alchemic.h"
+#import "ALCDependencyStackItem.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCDependencyRef : NSObject
 @property (nonatomic, assign) Ivar ivar;
+@property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) id<ALCResolvable> dependency;
 @end
 
@@ -94,6 +97,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) registerDependency:(id<ALCResolvable>) dependency forVariable:(NSString *) variableName {
     ALCDependencyRef *ref = [[ALCDependencyRef alloc] init];
     ref.ivar = [ALCRuntime aClass:self.objectClass variableForInjectionPoint:variableName];
+    ref.name = variableName;
     ref.dependency = dependency;
     [_dependencies addObject:ref];
 }
@@ -112,12 +116,13 @@ NS_ASSUME_NONNULL_BEGIN
     [self injectDependenciesIntoObject:object];
 }
 
--(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
+-(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {
 
     // Check for circular dependencies first.
-    if ([resolvingStack containsObject:self]) {
+    ALCDependencyStackItem *stackItem = [[ALCDependencyStackItem alloc] initWithObjectFactory:self description:NSStringFromClass(self.objectClass)];
+    if ([resolvingStack containsObject:stackItem]) {
+        [resolvingStack addObject:stackItem];
 
-        [resolvingStack addObject:self];
         @throw [NSException
                 exceptionWithName:@"AlchemicCircularDependency"
                 reason:[NSString stringWithFormat:@"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]]
@@ -130,11 +135,12 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     // Pass through to dependencies.
-    [resolvingStack addObject:self];
     for (ALCDependencyRef *ref in _dependencies) {
+        NSString *depDesc = str(@"%@.%@", NSStringFromClass(self.objectClass), ref.name);
+        [resolvingStack addObject:[[ALCDependencyStackItem alloc] initWithObjectFactory:self description:depDesc]];
         [ref.dependency resolveWithStack:resolvingStack model:model];
+        [resolvingStack removeLastObject];
     }
-    [resolvingStack removeLastObject];
 }
 
 -(void) injectDependenciesIntoObject:(id) value {

@@ -8,6 +8,7 @@
 
 @import Foundation;
 @protocol ALCModel;
+@class ALCDependencyStackItem;
 
 @protocol ALCResolvable <NSObject>
 
@@ -17,6 +18,6 @@
 
 @property (nonatomic, assign, readonly) bool resolved;
 
--(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model;
+-(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model;
 
 @end

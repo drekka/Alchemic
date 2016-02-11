@@ -35,7 +35,7 @@
     return YES;
 }
 
--(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>)model {
+-(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *)resolvingStack model:(id<ALCModel>)model {
 
     // Find dependencies
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];
