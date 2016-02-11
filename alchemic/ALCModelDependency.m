@@ -9,6 +9,7 @@
 #import "ALCModelDependency.h"
 #import "ALCModel.h"
 #import "ALCObjectFactory.h"
+#import "ALCInternalMacros.h"
 
 @implementation ALCModelDependency {
     ALCModelSearchCriteria *_criteria;
@@ -41,7 +42,7 @@
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];
     if ([_resolvedFactories count] == 0) {
         @throw [NSException exceptionWithName:@"AlchemicNoDependenciesFound"
-                                       reason:[NSString stringWithFormat:@"No object factories found for criteria %@", _criteria]
+                                       reason:str(@"No object factories found for criteria %@", _criteria)
                                      userInfo:nil];
     }
 

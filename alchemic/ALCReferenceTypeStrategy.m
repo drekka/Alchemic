@@ -7,6 +7,7 @@
 //
 
 #import "ALCReferenceTypeStrategy.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(id)value {
     if (_object == nil) {
         @throw [NSException exceptionWithName:@"AlchemicReferenceObjectNotSet"
-                                       reason:[NSString stringWithFormat:@"%@ Builder is marked as a Reference to an external value, but value has not been set.", self]
+                                       reason:str(@"%@ Builder is marked as a Reference to an external value, but value has not been set.", self)
                                      userInfo:nil];
     }
     return _object;

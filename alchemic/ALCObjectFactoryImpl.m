@@ -125,7 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
 
         @throw [NSException
                 exceptionWithName:@"AlchemicCircularDependency"
-                reason:[NSString stringWithFormat:@"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]]
+                reason:str(@"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "])
                 userInfo:nil];
     }
 
@@ -160,7 +160,7 @@ NS_ASSUME_NONNULL_BEGIN
         objectType = @"Factory";
     }
     NSString *appDelegate = [self.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)] ? @" (App delegate)" : @"";
-    return [NSString stringWithFormat:@"%@%@ %@%@", instantiated, objectType, NSStringFromClass(self.objectClass), appDelegate];
+    return str(@"%@%@ %@%@", instantiated, objectType, NSStringFromClass(self.objectClass), appDelegate);
 }
 
 @end

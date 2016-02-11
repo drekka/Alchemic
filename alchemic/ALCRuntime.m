@@ -7,6 +7,7 @@
 //
 
 #import "ALCRuntime.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -49,7 +50,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
     if (var == NULL) {
         @throw [NSException exceptionWithName:@"AlchemicInjectionNotFound"
-                                       reason:[NSString stringWithFormat:@"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass)]
+                                       reason:str(@"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass))
                                      userInfo:nil];
     }
 

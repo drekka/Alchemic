@@ -9,6 +9,7 @@
 #import "NSObject+Alchemic.h"
 #import "ALCResolvable.h"
 #import "ALCRuntime.h"
+#import "ALCInternalMacros.h"
 
 @implementation NSObject (Alchemic)
 
@@ -23,7 +24,7 @@
 
     if (![value isKindOfClass:iVarClass]) {
         @throw [NSException exceptionWithName:@"AlchemicIncorrectType"
-                                       reason:[NSString stringWithFormat:@"Resolved value of type %2$@ cannot be cast to variable '%1$s' (%3$s)", ivar_getName(variable), NSStringFromClass([value class]), class_getName(iVarClass)]
+                                       reason:str(@"Resolved value of type %2$@ cannot be cast to variable '%1$s' (%3$s)", ivar_getName(variable), NSStringFromClass([value class]), class_getName(iVarClass))
                                      userInfo:nil];
     }
 

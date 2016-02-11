@@ -12,6 +12,7 @@
 #import "ALCObjectFactory.h"
 #import "ALCObjectFactoryImpl.h"
 #import "ALCModelSearchCriteria.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name {
     if (_objectFactories[name]) {
         @throw [NSException exceptionWithName:@"AlchemicDuplicateName"
-                                       reason:[NSString stringWithFormat:@"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name]]
+                                       reason:str(@"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name])
                                      userInfo:nil];
     }
     _objectFactories[name] = objectFactory;
