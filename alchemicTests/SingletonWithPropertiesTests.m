@@ -8,7 +8,11 @@
 
 @import XCTest;
 
-#import <Alchemic/Alchemic.h>
+#import "ALCContext.h"
+#import "ALCContextImpl.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCResolvable.h"
+#import "ALCConstantValue.h"
 
 @interface SingletonWithProperty : NSObject
 @property (nonatomic, strong) NSString *prop;
@@ -25,7 +29,7 @@
 -(void) testInstantiationWithProperty {
 
     id<ALCContext> context = [[ALCContextImpl alloc] init];
-    id<ALCObjectFactory> valueFactory = [context registerClass:[SingletonWithProperty class]];
+    ALCClassObjectFactory *valueFactory = [context registerClass:[SingletonWithProperty class]];
     id<ALCResolvable> propertyValue = [[ALCConstantValue alloc] initWithValue:@"abc"];
     [valueFactory registerDependency:propertyValue forVariable:@"prop"];
 
@@ -43,7 +47,7 @@
 -(void) testInstantiationWithIncorrectPropertyType {
 
     id<ALCContext> context = [[ALCContextImpl alloc] init];
-    id<ALCObjectFactory> valueFactory = [context registerClass:[SingletonWithProperty class]];
+    ALCClassObjectFactory *valueFactory = [context registerClass:[SingletonWithProperty class]];
     id<ALCResolvable> propertyValue = [[ALCConstantValue alloc] initWithValue:@12];
     [valueFactory registerDependency:propertyValue forVariable:@"prop"];
 

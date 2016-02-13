@@ -11,9 +11,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCObjectFactoryImpl : NSObject<ALCObjectFactory>
+@interface ALCAbstractObjectFactory : NSObject<ALCObjectFactory>
 
-+(id<ALCObjectFactory>) NoFactoryInstance;
+// Override to allow setting
+@property (nonatomic, strong) id object;
 
 @end
 

@@ -8,7 +8,9 @@
 
 @import XCTest;
 
-#import <Alchemic/Alchemic.h>
+#import "ALCContext.h"
+#import "ALCContextImpl.h"
+#import "ALCObjectFactory.h"
 
 @interface Singleton : NSObject
 @end

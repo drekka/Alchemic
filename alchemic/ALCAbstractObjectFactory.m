@@ -9,7 +9,7 @@
 @import UIKit;
 @import ObjectiveC;
 
-#import "ALCObjectFactoryImpl.h"
+#import "ALCAbstractObjectFactory.h"
 #import "ALCInstantiator.h"
 #import "ALCTypeStrategy.h"
 #import "ALCSingletonTypeStrategy.h"
@@ -23,39 +23,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCDependencyRef : NSObject
-@property (nonatomic, assign) Ivar ivar;
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) id<ALCResolvable> dependency;
-@end
 
-@implementation ALCDependencyRef
-@end
-
-@implementation ALCObjectFactoryImpl {
+@implementation ALCAbstractObjectFactory {
     id<ALCInstantiator> _instantiator;
     id<ALCTypeStrategy> _typeStrategy;
-    NSMutableArray<ALCDependencyRef *> *_dependencies;
 }
 
 @synthesize factoryType = _factoryType;
 @synthesize objectClass = _objectClass;
 @dynamic resolved;
 
-+(id<ALCObjectFactory>) NoFactoryInstance {
-    static id<ALCObjectFactory> _NoFactoryInstance;
-    if (!_NoFactoryInstance) {
-        _NoFactoryInstance = [[ALCObjectFactoryImpl alloc] init];
-    }
-    return _NoFactoryInstance;
-}
-
 -(instancetype) initWithClass:(Class) objectClass {
     self = [super init];
     if (self) {
         _objectClass = objectClass;
         [self setFactoryType:_factoryType];
-        _dependencies = [[NSMutableArray alloc] init];
         _instantiator = [[ALCClassInstantiator alloc] init];
     }
     return self;
@@ -83,23 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(bool) resolved {
-    if (!_typeStrategy.resolved) {
-        return NO;
-    }
-    for (ALCDependencyRef *ref in _dependencies) {
-        if (!ref.dependency.resolved) {
-            return NO;
-        }
-    }
-    return YES;
-}
-
--(void) registerDependency:(id<ALCResolvable>) dependency forVariable:(NSString *) variableName {
-    ALCDependencyRef *ref = [[ALCDependencyRef alloc] init];
-    ref.ivar = [ALCRuntime aClass:self.objectClass variableForInjectionPoint:variableName];
-    ref.name = variableName;
-    ref.dependency = dependency;
-    [_dependencies addObject:ref];
+    return _typeStrategy.resolved;
 }
 
 -(id) object {
@@ -113,7 +79,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setObject:(id) object {
     _typeStrategy.object = object;
-    [self injectDependenciesIntoObject:object];
 }
 
 -(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {
@@ -127,25 +92,6 @@ NS_ASSUME_NONNULL_BEGIN
                 exceptionWithName:@"AlchemicCircularDependency"
                 reason:str(@"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "])
                 userInfo:nil];
-    }
-
-    // Exit if already resolved.
-    if (self.resolved) {
-        return;
-    }
-
-    // Pass through to dependencies.
-    for (ALCDependencyRef *ref in _dependencies) {
-        NSString *depDesc = str(@"%@.%@", NSStringFromClass(self.objectClass), ref.name);
-        [resolvingStack addObject:[[ALCDependencyStackItem alloc] initWithObjectFactory:self description:depDesc]];
-        [ref.dependency resolveWithStack:resolvingStack model:model];
-        [resolvingStack removeLastObject];
-    }
-}
-
--(void) injectDependenciesIntoObject:(id) value {
-    for (ALCDependencyRef *depRef in _dependencies) {
-        [value injectVariable:depRef.ivar withResolvable:depRef.dependency];
     }
 }
 

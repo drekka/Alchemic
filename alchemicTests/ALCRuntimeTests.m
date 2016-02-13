@@ -8,7 +8,8 @@
 
 @import XCTest;
 @import ObjectiveC;
-#import <Alchemic/Alchemic.h>
+
+#import "ALCRuntime.h"
 
 @interface ALCRuntimeTests : XCTestCase
 @property(nonatomic, strong) NSString *aStringProperty;

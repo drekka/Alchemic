@@ -7,7 +7,14 @@
 //
 
 @import XCTest;
-#import <Alchemic/Alchemic.h>
+
+#import "ALCContext.h"
+#import "ALCContextImpl.h"
+#import "ALCObjectFactory.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCModelSearchCriteria.h"
+#import "ALCResolvable.h"
+#import "ALCModelDependency.h"
 
 @interface TestDepClass:NSObject
 @end
@@ -42,7 +49,7 @@
 
 -(void) testSimpleDependency {
 
-    id<ALCObjectFactory> valueFactory = [context registerClass:[TestClass1 class]];
+    ALCClassObjectFactory *valueFactory = [context registerClass:[TestClass1 class]];
     [context registerClass:[TestDepClass class]];
 
     ALCModelSearchCriteria *criteria = [ALCModelSearchCriteria searchCriteriaForClass:[TestDepClass class]];
@@ -59,7 +66,7 @@
 
 -(void) testSimpleArrayDependency {
 
-    id<ALCObjectFactory> valueFactory = [context registerClass:[TestClass2 class]];
+    ALCClassObjectFactory *valueFactory = [context registerClass:[TestClass2 class]];
     id<ALCObjectFactory> depFactory = [context registerClass:[TestDepClass class]];
     [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep1"];
     depFactory = [context registerClass:[TestDepClass class]];
@@ -81,7 +88,7 @@
 
 -(void) testSimpleDependencyUsingName {
 
-    id<ALCObjectFactory> valueFactory = [context registerClass:[TestClass2 class]];
+    ALCClassObjectFactory *valueFactory = [context registerClass:[TestClass2 class]];
     id<ALCObjectFactory> depFactory = [context registerClass:[TestDepClass class]];
     [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep1"];
     depFactory = [context registerClass:[TestDepClass class]];
@@ -102,7 +109,7 @@
 
 -(void) testSimpleDependencyUsingClassAndName {
 
-    id<ALCObjectFactory> valueFactory = [context registerClass:[TestClass1 class]];
+    ALCClassObjectFactory *valueFactory = [context registerClass:[TestClass1 class]];
     id<ALCObjectFactory> depFactory = [context registerClass:[TestDepClass class]];
     [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep1"];
     depFactory = [context registerClass:[TestDepClass class]];

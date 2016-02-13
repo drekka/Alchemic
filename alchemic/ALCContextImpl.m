@@ -12,7 +12,8 @@
 #import "ALCModel.h"
 #import "ALCModelImpl.h"
 #import "ALCObjectFactory.h"
-#import "ALCObjectFactoryImpl.h"
+#import "ALCAbstractObjectFactory.h"
+#import "ALCClassObjectFactory.h"
 
 @implementation ALCContextImpl {
     id<ALCModel> _model;
@@ -33,7 +34,7 @@
 }
 
 -(id<ALCObjectFactory>) registerClass:(Class) clazz {
-    id<ALCObjectFactory> valueFactory = [[ALCObjectFactoryImpl alloc] initWithClass:clazz];
+    id<ALCObjectFactory> valueFactory = [[ALCClassObjectFactory alloc] initWithClass:clazz];
     [_model addObjectFactory:valueFactory withName:valueFactory.defaultName];
     return valueFactory;
 }

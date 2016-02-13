@@ -10,7 +10,7 @@
 
 #import "ALCModelImpl.h"
 #import "ALCObjectFactory.h"
-#import "ALCObjectFactoryImpl.h"
+#import "ALCAbstractObjectFactory.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCInternalMacros.h"
 
@@ -59,12 +59,14 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
--(NSArray<id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
-    NSSet<NSString *> *keys = [_objectFactories keysOfEntriesPassingTest:^BOOL(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        return [criteria acceptsObjectFactory:objectFactory name:name];
+-(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
+    NSMutableDictionary<NSString *, id<ALCObjectFactory>> *results = [[NSMutableDictionary alloc] init];
+    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
+        if ([criteria acceptsObjectFactory:objectFactory name:name]) {
+            results[name] = objectFactory;
+        }
     }];
-    NSArray<NSString *> *keyArray = keys.allObjects;
-    return [_objectFactories objectsForKeys:keyArray notFoundMarker:[ALCObjectFactoryImpl NoFactoryInstance]];
+    return results;
 }
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName {

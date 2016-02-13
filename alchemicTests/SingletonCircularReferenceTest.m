@@ -6,8 +6,14 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
-#import <Alchemic/Alchemic.h>
+@import XCTest;
+
+#import "ALCContext.h"
+#import "ALCContextImpl.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCResolvable.h"
+#import "ALCModelSearchCriteria.h"
+#import "ALCModelDependency.h"
 
 @interface Singleton1 : NSObject
 @property (nonatomic, strong) id singleton2;
@@ -33,12 +39,12 @@
 
     id<ALCContext> context = [[ALCContextImpl alloc] init];
 
-    id<ALCObjectFactory> singleton1 = [context registerClass:[Singleton1 class]];
+    ALCClassObjectFactory *singleton1 = [context registerClass:[Singleton1 class]];
     ALCModelSearchCriteria *criteria1 = [ALCModelSearchCriteria searchCriteriaForClass:[Singleton2 class]];
     id<ALCResolvable> modelDependency1 = [[ALCModelDependency alloc] initWithCriteria:criteria1];
     [singleton1 registerDependency:modelDependency1 forVariable:@"singleton2"];
 
-    id<ALCObjectFactory> singleton2 = [context registerClass:[Singleton2 class]];
+    ALCClassObjectFactory *singleton2 = [context registerClass:[Singleton2 class]];
     ALCModelSearchCriteria *criteria2 = [ALCModelSearchCriteria searchCriteriaForClass:[Singleton1 class]];
     id<ALCResolvable> modelDependency2 = [[ALCModelDependency alloc] initWithCriteria:criteria2];
     [singleton2 registerDependency:modelDependency2 forVariable:@"singleton1"];

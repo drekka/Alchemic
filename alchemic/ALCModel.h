@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name;
 
--(NSArray<id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
+-(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName;
 

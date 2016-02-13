@@ -29,10 +29,6 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 
 -(instancetype) initWithClass:(Class) valueClass;
 
--(void) registerDependency:(id<ALCResolvable>) dependency forVariable:(NSString *) variableName;
-
--(void) injectDependenciesIntoObject:(id) value;
-
 @end
 
 NS_ASSUME_NONNULL_END
