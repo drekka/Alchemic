@@ -33,7 +33,7 @@
     STLog(self, @"\nRegistered model builders (* - instantiated):...\n%@\n", _model);
 }
 
--(id<ALCObjectFactory>) registerClass:(Class) clazz {
+-(ALCClassObjectFactory *) registerClass:(Class) clazz {
     id<ALCObjectFactory> valueFactory = [[ALCClassObjectFactory alloc] initWithClass:clazz];
     [_model addObjectFactory:valueFactory withName:valueFactory.defaultName];
     return valueFactory;

@@ -6,12 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCReferenceTypeStrategy.h"
+#import "ALCObjectFactoryTypeReference.h"
 #import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCReferenceTypeStrategy
+@implementation ALCObjectFactoryTypeReference
 
 @synthesize object = _object;
 

@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@protocol ALCTypeStrategy<NSObject>
+@protocol ALCObjectFactoryType<NSObject>
 
 @property (nonatomic, strong) id object;
 

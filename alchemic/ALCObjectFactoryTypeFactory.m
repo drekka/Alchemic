@@ -6,11 +6,11 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCFactoryTypeStrategy.h"
+#import "ALCObjectFactoryTypeFactory.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCFactoryTypeStrategy
+@implementation ALCObjectFactoryTypeFactory
 
 @synthesize object = _object;
 

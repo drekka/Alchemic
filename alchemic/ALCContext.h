@@ -9,12 +9,13 @@
 @import Foundation;
 
 @protocol ALCObjectFactory;
+@class ALCClassObjectFactory;
 
 @protocol ALCContext <NSObject>
 
 -(void) start;
 
--(id<ALCObjectFactory>) registerClass:(Class) clazz;
+-(ALCClassObjectFactory *) registerClass:(Class) clazz;
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName;
 

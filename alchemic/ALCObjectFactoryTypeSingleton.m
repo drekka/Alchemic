@@ -6,11 +6,11 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCSingletonTypeStrategy.h"
+#import "ALCObjectFactoryTypeSingleton.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCSingletonTypeStrategy
+@implementation ALCObjectFactoryTypeSingleton
 
 @synthesize object = _object;
 

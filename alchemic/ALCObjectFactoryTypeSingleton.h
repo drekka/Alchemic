@@ -7,11 +7,11 @@
 //
 
 @import Foundation;
-#import "ALCTypeStrategy.h"
+#import "ALCObjectFactoryType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCSingletonTypeStrategy : NSObject<ALCTypeStrategy>
+@interface ALCObjectFactoryTypeSingleton : NSObject<ALCObjectFactoryType>
 
 @end
 

@@ -11,10 +11,10 @@
 
 #import "ALCAbstractObjectFactory.h"
 #import "ALCInstantiator.h"
-#import "ALCTypeStrategy.h"
-#import "ALCSingletonTypeStrategy.h"
-#import "ALCFactoryTypeStrategy.h"
-#import "ALCReferenceTypeStrategy.h"
+#import "ALCObjectFactoryType.h"
+#import "ALCObjectFactoryTypeSingleton.h"
+#import "ALCObjectFactoryTypeFactory.h"
+#import "ALCObjectFactoryTypeReference.h"
 #import "ALCRuntime.h"
 #import "ALCClassInstantiator.h"
 #import "NSObject+Alchemic.h"
@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractObjectFactory {
     id<ALCInstantiator> _instantiator;
-    id<ALCTypeStrategy> _typeStrategy;
+    id<ALCObjectFactoryType> _typeStrategy;
 }
 
 @synthesize factoryType = _factoryType;
@@ -47,15 +47,15 @@ NS_ASSUME_NONNULL_BEGIN
     _factoryType = factoryType;
     switch (_factoryType) {
         case ALCFactoryTypeFactory:
-            _typeStrategy = [[ALCFactoryTypeStrategy alloc] init];
+            _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
             break;
 
         case ALCFactoryTypeReference:
-            _typeStrategy = [[ALCReferenceTypeStrategy alloc] init];
+            _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
             break;
 
         default:
-            _typeStrategy = [[ALCSingletonTypeStrategy alloc] init];
+            _typeStrategy = [[ALCObjectFactoryTypeSingleton alloc] init];
             break;
     }
 }
@@ -98,9 +98,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (nonnull NSString *)description {
     NSString *instantiated = [_typeStrategy isKindOfClass:[ALCSingletonTypeStrategy class]] && _typeStrategy.object ? @"* " : @"  ";
     NSString *objectType;
-    if ([_typeStrategy isKindOfClass:[ALCSingletonTypeStrategy class]]) {
+    if ([_typeStrategy isKindOfClass:[ALCObjectFactoryTypeSingleton class]]) {
         objectType = @"Singleton";
-    } else if ([_typeStrategy isKindOfClass:[ALCReferenceTypeStrategy class]]) {
+    } else if ([_typeStrategy isKindOfClass:[ALCObjectFactoryTypeReference class]]) {
         objectType = @"Reference";
     } else {
         objectType = @"Factory";
