@@ -24,12 +24,9 @@
     return self;
 }
 
--(bool)resolved {
-    if (!_resolvedFactories) {
-        return NO;
-    }
-    for (id<ALCObjectFactory>objectFactory in _resolvedFactories.allValues) {
-        if (!objectFactory.resolved) {
+-(bool)ready {
+    for (id<ALCObjectFactory> objectFactory in _resolvedFactories.allValues) {
+        if (!objectFactory.ready) {
             return NO;
         }
     }
@@ -37,6 +34,11 @@
 }
 
 -(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *)resolvingStack model:(id<ALCModel>)model {
+
+    // IF we have already resolved then exit.
+    if (_resolvedFactories) {
+        return;
+    }
 
     // Find dependencies
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];

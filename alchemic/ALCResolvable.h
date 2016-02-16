@@ -16,7 +16,7 @@
 
 @property (nonatomic, assign, readonly) Class objectClass;
 
-@property (nonatomic, assign, readonly) bool resolved;
+@property (nonatomic, assign, readonly) bool ready;
 
 -(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model;
 

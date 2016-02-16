@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize object = _object;
 
--(bool) resolved {
+-(bool) ready {
     return YES;
 }
 

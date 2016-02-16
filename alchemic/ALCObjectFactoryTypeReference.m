@@ -15,16 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize object = _object;
 
--(id)value {
-    if (_object == nil) {
-        @throw [NSException exceptionWithName:@"AlchemicReferenceObjectNotSet"
-                                       reason:str(@"%@ Builder is marked as a Reference to an external value, but value has not been set.", self)
-                                     userInfo:nil];
+-(id) object {
+    if (!self.ready) {
+        throwException(@"AlchemicDependencyIsReferenceObject", @"%@ is a reference factory which has not had a value set.", self);
     }
     return _object;
 }
 
--(bool) resolved {
+-(bool) ready {
     return _object != nil;
 }
 

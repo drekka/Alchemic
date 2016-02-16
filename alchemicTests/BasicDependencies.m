@@ -36,10 +36,10 @@
 @implementation TestClass2
 @end
 
-@interface SingletonToSingletonTests : XCTestCase
+@interface BasicDependencies : XCTestCase
 @end
 
-@implementation SingletonToSingletonTests {
+@implementation BasicDependencies {
     id<ALCContext> context;
 }
 

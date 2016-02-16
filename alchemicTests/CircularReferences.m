@@ -29,11 +29,11 @@
 @implementation Singleton2
 @end
 
-@interface SingletonCircularReferenceTests : XCTestCase
+@interface CircularReferences : XCTestCase
 
 @end
 
-@implementation SingletonCircularReferenceTests
+@implementation CircularReferences
 
 -(void) testDependencyCircularReferences {
 

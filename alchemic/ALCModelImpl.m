@@ -44,15 +44,18 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveDependencies {
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         STLog(self, @"Resolving '%@'...", key);
-        if (!objectFactory.resolved) {
-            [objectFactory resolveWithStack:[NSMutableArray array] model:self];
-        }
+        [objectFactory resolveWithStack:[NSMutableArray array] model:self];
     }];
+}
+
+-(void) objectFactoryReady:(id<ALCResolvable>) objectFactory {
+    [self startSingletons];
 }
 
 -(void) startSingletons {
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        if (objectFactory.resolved) {
+        if (objectFactory.factoryType == ALCFactoryTypeSingleton
+            && objectFactory.ready) {
             STLog(self, @"Starting '%@'...", key);
             [objectFactory object];
         }

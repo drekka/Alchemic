@@ -10,38 +10,29 @@
 @import ObjectiveC;
 
 #import "ALCAbstractObjectFactory.h"
-#import "ALCInstantiator.h"
 #import "ALCObjectFactoryType.h"
 #import "ALCObjectFactoryTypeSingleton.h"
 #import "ALCObjectFactoryTypeFactory.h"
 #import "ALCObjectFactoryTypeReference.h"
 #import "ALCRuntime.h"
-#import "ALCClassInstantiator.h"
 #import "NSObject+Alchemic.h"
 #import "ALCDependencyStackItem.h"
 #import "ALCInternalMacros.h"
+#import "ALCModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 @implementation ALCAbstractObjectFactory {
-    id<ALCInstantiator> _instantiator;
     id<ALCObjectFactoryType> _typeStrategy;
+    bool _resolved;
+    SimpleBlock _readyBlock;
 }
 
 @synthesize factoryType = _factoryType;
 @synthesize objectClass = _objectClass;
-@dynamic resolved;
 
--(instancetype) initWithClass:(Class) objectClass {
-    self = [super init];
-    if (self) {
-        _objectClass = objectClass;
-        [self setFactoryType:_factoryType];
-        _instantiator = [[ALCClassInstantiator alloc] init];
-    }
-    return self;
-}
+#pragma mark - Property overrides
 
 -(void)setFactoryType:(ALCFactoryType)factoryType {
     _factoryType = factoryType;
@@ -60,43 +51,39 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(NSString *)defaultName {
-    return NSStringFromClass(self.objectClass);
-}
-
--(bool) resolved {
-    return _typeStrategy.resolved;
-}
-
 -(id) object {
     id object = _typeStrategy.object;
     if (!object) {
-        object = [_instantiator instantiateForFactory:self];
+        object = [self instantiateObject];
         self.object = object;
     }
     return object;
 }
 
 -(void) setObject:(id) object {
+
+    // If dependencies are not resolved then the value cannot be set.
+    if (!_resolved) {
+        throwException(@"AlchemicDependenciesNotResolved", @"Cannot set object, dependencies not resolved");
+    }
+
     _typeStrategy.object = object;
-}
-
--(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {
-
-    // Check for circular dependencies first.
-    ALCDependencyStackItem *stackItem = [[ALCDependencyStackItem alloc] initWithObjectFactory:self description:NSStringFromClass(self.objectClass)];
-    if ([resolvingStack containsObject:stackItem]) {
-        [resolvingStack addObject:stackItem];
-
-        @throw [NSException
-                exceptionWithName:@"AlchemicCircularDependency"
-                reason:str(@"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "])
-                userInfo:nil];
+    if (_readyBlock != NULL) {
+        _readyBlock();
+        _readyBlock = NULL;
     }
 }
 
-- (nonnull NSString *)description {
-    NSString *instantiated = [_typeStrategy isKindOfClass:[ALCSingletonTypeStrategy class]] && _typeStrategy.object ? @"* " : @"  ";
+-(bool) ready {
+    return _typeStrategy.ready;
+}
+
+-(NSString *) defaultName {
+    return NSStringFromClass(self.objectClass);
+}
+
+-(NSString *) description {
+    NSString *instantiated = [_typeStrategy isKindOfClass:[ALCObjectFactoryTypeSingleton class]] && _typeStrategy.object ? @"* " : @"  ";
     NSString *objectType;
     if ([_typeStrategy isKindOfClass:[ALCObjectFactoryTypeSingleton class]]) {
         objectType = @"Singleton";
@@ -108,6 +95,48 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *appDelegate = [self.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)] ? @" (App delegate)" : @"";
     return str(@"%@%@ %@%@", instantiated, objectType, NSStringFromClass(self.objectClass), appDelegate);
 }
+
+#pragma mark - Lifecycle
+
+-(instancetype) initWithClass:(Class) objectClass {
+    self = [super init];
+    if (self) {
+        _objectClass = objectClass;
+        [self setFactoryType:_factoryType];
+    }
+    return self;
+}
+
+
+-(id) instantiateObject {
+    return nil;
+}
+
+-(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {
+
+    if (_resolved) {
+        return;
+    }
+
+    // Check for circular dependencies first.
+    ALCDependencyStackItem *stackItem = [[ALCDependencyStackItem alloc] initWithObjectFactory:self description:NSStringFromClass(self.objectClass)];
+    if ([resolvingStack containsObject:stackItem]) {
+        [resolvingStack addObject:stackItem];
+        throwException(@"AlchemicCircularDependency", @"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]);
+    }
+
+    [self resolveDependenciesWithStack:resolvingStack model:model];
+    if (!self.ready) {
+        blockSelf;
+        _readyBlock = ^{
+            [model objectFactoryReady:strongSelf];
+        };
+    }
+
+    _resolved = YES;
+}
+
+-(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {}
 
 @end
 

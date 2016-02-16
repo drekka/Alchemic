@@ -11,6 +11,7 @@
 #import "ALCContext.h"
 #import "ALCContextImpl.h"
 #import "ALCObjectFactory.h"
+#import "ALCClassObjectFactory.h"
 
 @interface Singleton : NSObject
 @end
@@ -18,18 +19,18 @@
 @implementation Singleton
 @end
 
-@interface SingletonTests : XCTestCase
+@interface Instantiations : XCTestCase
 @end
 
-@implementation SingletonTests
+@implementation Instantiations
 
 -(void) testInstantiation {
 
     id<ALCContext> context = [[ALCContextImpl alloc] init];
-    id<ALCObjectFactory> valueFactory = [context registerClass:[Singleton class]];
+    ALCClassObjectFactory *valueFactory = [context registerClass:[Singleton class]];
     [context start];
 
-    XCTAssertTrue(valueFactory.resolved);
+    XCTAssertTrue(valueFactory.ready);
 
     id value = valueFactory.object;
     XCTAssertTrue([value isKindOfClass:[Singleton class]]);

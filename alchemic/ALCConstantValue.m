@@ -16,12 +16,12 @@
     return _value;
 }
 
--(Class) objectClass {
-    return [_value class];
+-(bool) ready {
+    return YES;
 }
 
--(bool) resolved {
-    return YES;
+-(Class) objectClass {
+    return [_value class];
 }
 
 -(instancetype) initWithValue:(id) value {

@@ -33,30 +33,29 @@
     [_dependencies addObject:ref];
 }
 
--(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {
-
-    [super resolveWithStack:resolvingStack model:model];
-
-    if (!self.resolved) {
-        for (ALCDependencyRef *ref in _dependencies) {
-            NSString *depDesc = str(@"%@.%@", NSStringFromClass(self.objectClass), ref.name);
-            [resolvingStack addObject:[[ALCDependencyStackItem alloc] initWithObjectFactory:self description:depDesc]];
-            [ref.dependency resolveWithStack:resolvingStack model:model];
-            [resolvingStack removeLastObject];
-        }
+-(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {
+    for (ALCDependencyRef *ref in _dependencies) {
+        NSString *depDesc = str(@"%@.%@", NSStringFromClass(self.objectClass), ref.name);
+        [resolvingStack addObject:[[ALCDependencyStackItem alloc] initWithObjectFactory:self description:depDesc]];
+        [ref.dependency resolveWithStack:resolvingStack model:model];
+        [resolvingStack removeLastObject];
     }
 }
 
--(bool) resolved {
-    if (super.resolved) {
+-(bool) ready {
+    if (super.ready) {
         for (ALCDependencyRef *ref in _dependencies) {
-            if (!ref.dependency.resolved) {
+            if (!ref.dependency.ready) {
                 return NO;
             }
         }
         return YES;
     }
     return NO;
+}
+
+-(id) instantiateObject {
+    return [[self.objectClass alloc] init];
 }
 
 -(void) setObject:(id) object {

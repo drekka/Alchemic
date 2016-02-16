@@ -13,8 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractObjectFactory : NSObject<ALCObjectFactory>
 
-// Override to allow setting
+// Object factories must be settable.
 @property (nonatomic, strong) id object;
+
+-(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model;
+
+-(id) instantiateObject;
 
 @end
 

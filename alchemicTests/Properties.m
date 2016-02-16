@@ -21,10 +21,10 @@
 @implementation SingletonWithProperty
 @end
 
-@interface SingletonWithPropertiesTests : XCTestCase
+@interface Properties : XCTestCase
 @end
 
-@implementation SingletonWithPropertiesTests
+@implementation Properties
 
 -(void) testInstantiationWithProperty {
 
@@ -35,7 +35,7 @@
 
     [context start];
 
-    XCTAssertTrue(valueFactory.resolved);
+    XCTAssertTrue(valueFactory.ready);
 
     SingletonWithProperty *singleton = valueFactory.object;
 

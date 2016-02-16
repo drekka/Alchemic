@@ -14,11 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize object = _object;
 
--(void) setObject:(id) value {}
-
--(bool) resolved {
+-(bool) ready {
     return YES;
 }
+
+-(void) setObject:(id) value {}
 
 @end
 
