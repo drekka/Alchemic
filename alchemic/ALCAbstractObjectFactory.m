@@ -82,18 +82,35 @@ NS_ASSUME_NONNULL_BEGIN
     return NSStringFromClass(self.objectClass);
 }
 
+-(NSString *) descriptionAttributes {
+    return self.defaultName;
+}
+
 -(NSString *) description {
-    NSString *instantiated = [_typeStrategy isKindOfClass:[ALCObjectFactoryTypeSingleton class]] && _typeStrategy.object ? @"* " : @"  ";
-    NSString *objectType;
-    if ([_typeStrategy isKindOfClass:[ALCObjectFactoryTypeSingleton class]]) {
-        objectType = @"Singleton";
-    } else if ([_typeStrategy isKindOfClass:[ALCObjectFactoryTypeReference class]]) {
-        objectType = @"Reference";
-    } else {
-        objectType = @"Factory";
+
+    NSMutableString *description = [[NSMutableString alloc] init];
+
+    switch (_factoryType) {
+        case ALCFactoryTypeFactory:
+            [description appendString:_typeStrategy.object ? @"* " : @"  "];
+            [description appendString:@"Factory "];
+            break;
+
+        case ALCFactoryTypeReference:
+            [description appendString:@"  Reference "];
+            break;
+
+        default:
+            [description appendString:@"  Singleton "];
     }
-    NSString *appDelegate = [self.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)] ? @" (App delegate)" : @"";
-    return str(@"%@%@ %@%@", instantiated, objectType, NSStringFromClass(self.objectClass), appDelegate);
+
+    [description appendString:self.descriptionAttributes];
+
+    if ([self.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
+        [description appendString:@" (App delegate)"];
+    }
+
+    return description;
 }
 
 #pragma mark - Lifecycle
@@ -136,7 +153,17 @@ NS_ASSUME_NONNULL_BEGIN
     _resolved = YES;
 }
 
--(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {}
+-(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack
+                               model:(id<ALCModel>) model {}
+
+-(void) resolve:(id<ALCResolvable>) resolvable
+      withStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack
+    description:(NSString *) description
+          model:(id<ALCModel>) model {
+    [resolvingStack addObject:[[ALCDependencyStackItem alloc] initWithObjectFactory:self description:description]];
+    [resolvable resolveWithStack:resolvingStack model:model];
+    [resolvingStack removeLastObject];
+}
 
 @end
 

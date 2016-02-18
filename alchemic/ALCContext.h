@@ -7,9 +7,14 @@
 //
 
 @import Foundation;
+@import ObjectiveC;
 
+@protocol ALCResolvable;
 @protocol ALCObjectFactory;
 @class ALCClassObjectFactory;
+@class ALCMethodObjectFactory;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCContext <NSObject>
 
@@ -19,4 +24,11 @@
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName;
 
+-(ALCMethodObjectFactory *) registerMethod:(SEL) selector
+                       parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
+                                      args:(nullable NSArray<id<ALCResolvable>> *) arguments
+                                returnType:(Class) returnType;
+
 @end
+
+NS_ASSUME_NONNULL_END

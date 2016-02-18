@@ -31,4 +31,28 @@
     object_setIvar(self, variable, value);
 }
 
+-(id) invokeSelector:(SEL) selector arguments:(NSArray *) arguments {
+
+    // Get an invocation ready.
+    NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:selector];
+    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+    inv.selector = selector;
+
+    // Load the arguments.
+    [arguments enumerateObjectsUsingBlock:^(id value, NSUInteger idx, BOOL *stop) {
+        id finalValue = [value isKindOfClass:[NSNull class]] ? nil : value;
+        [inv setArgument:&finalValue atIndex:(NSInteger) idx + 2];
+    }];
+
+    [inv invokeWithTarget:self];
+
+    id __unsafe_unretained returnObj;
+    [inv getReturnValue:&returnObj];
+    return returnObj;
+}
+
++(id) invokeSelector:(SEL) selector arguments:(NSArray *) arguments {
+    return [self invokeSelector:selector arguments:arguments];
+}
+
 @end

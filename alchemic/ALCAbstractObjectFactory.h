@@ -16,7 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 // Object factories must be settable.
 @property (nonatomic, strong) id object;
 
--(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model;
+-(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack
+                               model:(id<ALCModel>) model;
+
+-(void) resolve:(id<ALCResolvable>) resolvable
+      withStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack
+    description:(NSString *) description
+          model:(id<ALCModel>) model;
 
 -(id) instantiateObject;
 

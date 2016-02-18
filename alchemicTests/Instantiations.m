@@ -14,9 +14,17 @@
 #import "ALCClassObjectFactory.h"
 
 @interface Singleton : NSObject
+@property (nonatomic, strong) NSString *aString;
 @end
 
 @implementation Singleton
+-(instancetype) initWithString:(NSString *) aString {
+    self = [super init];
+    if (self) {
+        _aString = aString;
+    }
+    return self;
+}
 @end
 
 @interface Instantiations : XCTestCase

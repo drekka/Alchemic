@@ -25,9 +25,11 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 
 @property (nonatomic, strong, readonly) NSString *defaultName;
 
+@property (nonatomic, strong, readonly) NSString *descriptionAttributes;
+
 @property (nonatomic, assign) ALCFactoryType factoryType;
 
--(instancetype) initWithClass:(Class) valueClass;
+-(instancetype) initWithClass:(Class) objectClass;
 
 @end
 

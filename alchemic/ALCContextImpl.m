@@ -14,6 +14,9 @@
 #import "ALCObjectFactory.h"
 #import "ALCAbstractObjectFactory.h"
 #import "ALCClassObjectFactory.h"
+#import "ALCMethodObjectFactory.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCContextImpl {
     id<ALCModel> _model;
@@ -30,7 +33,7 @@
 -(void) start {
     [_model resolveDependencies];
     [_model startSingletons];
-    STLog(self, @"\nRegistered model builders (* - instantiated):...\n%@\n", _model);
+    STLog(self, @"\n%@", _model);
 }
 
 -(ALCClassObjectFactory *) registerClass:(Class) clazz {
@@ -39,8 +42,22 @@
     return valueFactory;
 }
 
+-(ALCMethodObjectFactory *) registerMethod:(SEL) selector
+                       parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
+                                      args:(nullable NSArray<id<ALCResolvable>> *) arguments
+                                returnType:(Class) returnType {
+    ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:(Class) returnType
+                                                                      parentObjectFactory:parentObjectFactory
+                                                                                 selector:selector
+                                                                                     args:arguments];
+    [_model addObjectFactory:methodFactory withName:methodFactory.defaultName];
+    return methodFactory;
+}
+
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName {
     [_model objectFactory:objectFactory changedName:oldName newName:newName];
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -51,7 +51,6 @@
     id<ALCResolvable> propertyValue = [[ALCConstantValue alloc] initWithValue:@12];
     [valueFactory registerDependency:propertyValue forVariable:@"prop"];
 
-
     @try {
         [context start];
         XCTFail(@"Exception not thrown");

@@ -31,6 +31,7 @@
 		6C3AFBD21C638C7800B4FCAA /* ALCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C3AFBD01C638C7800B4FCAA /* ALCRuntime.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C3AFBD31C638C7800B4FCAA /* ALCRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBD11C638C7800B4FCAA /* ALCRuntime.m */; };
 		6C3AFBD51C64CDEC00B4FCAA /* Instantiations.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBD41C64CDEC00B4FCAA /* Instantiations.m */; };
+		6C3DE2931C74A85D0021BE0E /* MethodFactories.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3DE2921C74A85D0021BE0E /* MethodFactories.m */; };
 		6C4B560F1C6CC3800040AEC2 /* ALCInternalMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C4B56121C6E0A390040AEC2 /* ALCClassObjectFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4B56101C6E0A390040AEC2 /* ALCClassObjectFactory.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C4B56131C6E0A390040AEC2 /* ALCClassObjectFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4B56111C6E0A390040AEC2 /* ALCClassObjectFactory.m */; };
@@ -109,6 +110,7 @@
 		6C3AFBD01C638C7800B4FCAA /* ALCRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCRuntime.h; sourceTree = "<group>"; };
 		6C3AFBD11C638C7800B4FCAA /* ALCRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCRuntime.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C3AFBD41C64CDEC00B4FCAA /* Instantiations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Instantiations.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6C3DE2921C74A85D0021BE0E /* MethodFactories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodFactories.m; sourceTree = "<group>"; };
 		6C469BAD1BB0200200CD2286 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInternalMacros.h; sourceTree = "<group>"; };
 		6C4B56101C6E0A390040AEC2 /* ALCClassObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassObjectFactory.h; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				6C68CF801C64E1F8003A7A54 /* Properties.m */,
 				6C67FF2B1C6A13C700ABEDDD /* CircularReferences.m */,
 				6C4B56231C7065580040AEC2 /* ExternalReferences.m */,
+				6C3DE2921C74A85D0021BE0E /* MethodFactories.m */,
 			);
 			name = integration;
 			sourceTree = "<group>";
@@ -474,6 +477,7 @@
 			files = (
 				6C7837261C5BB116004BE670 /* BasicDependencies.m in Sources */,
 				6C67FF2C1C6A13C700ABEDDD /* CircularReferences.m in Sources */,
+				6C3DE2931C74A85D0021BE0E /* MethodFactories.m in Sources */,
 				6C3AFBD51C64CDEC00B4FCAA /* Instantiations.m in Sources */,
 				6C68CF811C64E1F8003A7A54 /* Properties.m in Sources */,
 				6C67FF291C6772A400ABEDDD /* ALCRuntimeTests.m in Sources */,

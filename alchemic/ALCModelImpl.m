@@ -78,9 +78,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-    NSMutableString *desc = [NSMutableString stringWithString:@"Model:"];
+    NSMutableString *desc = [NSMutableString stringWithString:@"Model (* - Instantiated):"];
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        [desc appendFormat:@"\n\t%@, name:'%@'", [objectFactory description], key];
+        [desc appendFormat:@"\n\t%@, under name:'%@'", [objectFactory description], key];
     }];
     return desc;
 }

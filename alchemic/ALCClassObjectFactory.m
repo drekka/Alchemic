@@ -36,10 +36,8 @@
 -(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {
     for (ALCDependencyRef *ref in _dependencies) {
         NSString *depDesc = str(@"%@.%@", NSStringFromClass(self.objectClass), ref.name);
-        [resolvingStack addObject:[[ALCDependencyStackItem alloc] initWithObjectFactory:self description:depDesc]];
-        [ref.dependency resolveWithStack:resolvingStack model:model];
-        [resolvingStack removeLastObject];
-    }
+        [self resolve:ref.dependency withStack:resolvingStack description:depDesc model:model];
+     }
 }
 
 -(bool) ready {
