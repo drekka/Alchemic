@@ -9,11 +9,11 @@
 @import Foundation;
 @class ALCModelSearchCriteria;
 
-#import "ALCResolvable.h"
+#import "ALCDependency.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCModelDependency : NSObject<ALCResolvable>
+@interface ALCModelDependency : NSObject<ALCDependency>
 
 -(instancetype) initWithCriteria:(ALCModelSearchCriteria *) criteria;
 

@@ -23,6 +23,10 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 
 @protocol ALCObjectFactory <ALCResolvable>
 
+@property (nonatomic, strong, readonly) id object;
+
+@property (nonatomic, assign, readonly) Class objectClass;
+
 @property (nonatomic, strong, readonly) NSString *defaultName;
 
 @property (nonatomic, strong, readonly) NSString *descriptionAttributes;

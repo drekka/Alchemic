@@ -8,11 +8,11 @@
 
 #import "ALCAbstractObjectFactory.h"
 
-@protocol ALCResolvable;
+@protocol ALCDependency;
 
 @interface ALCClassObjectFactory : ALCAbstractObjectFactory
 
--(void) registerDependency:(id<ALCResolvable>) dependency forVariable:(NSString *) variableName;
+-(void) registerDependency:(id<ALCDependency>) dependency forVariable:(NSString *) variableName;
 
 -(void) injectDependenciesIntoObject:(id) value;
 

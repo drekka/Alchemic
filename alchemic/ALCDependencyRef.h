@@ -9,10 +9,10 @@
 @import Foundation;
 @import ObjectiveC;
 
-@protocol ALCResolvable;
+@protocol ALCDependency;
 
 @interface ALCDependencyRef : NSObject
 @property (nonatomic, assign) Ivar ivar;
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) id<ALCResolvable> dependency;
+@property (nonatomic, strong) id<ALCDependency> dependency;
 @end

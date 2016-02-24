@@ -9,7 +9,7 @@
 @import Foundation;
 @import ObjectiveC;
 
-@protocol ALCResolvable;
+@protocol ALCDependency;
 @protocol ALCObjectFactory;
 @class ALCClassObjectFactory;
 @class ALCMethodObjectFactory;
@@ -22,11 +22,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCClassObjectFactory *) registerClass:(Class) clazz;
 
--(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName;
+-(void) objectFactory:(id<ALCObjectFactory>) objectFactory
+          changedName:(NSString *) oldName
+              newName:(NSString *) newName;
 
 -(ALCMethodObjectFactory *) registerMethod:(SEL) selector
                        parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                                      args:(nullable NSArray<id<ALCResolvable>> *) arguments
+                                      args:(nullable NSArray<id<ALCDependency>> *) arguments
                                 returnType:(Class) returnType;
 
 @end

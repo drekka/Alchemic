@@ -10,6 +10,8 @@
 #import "ALCModel.h"
 #import "ALCObjectFactory.h"
 #import "ALCInternalMacros.h"
+#import "NSObject+Alchemic.h"
+#import "ALCRuntime.h"
 
 @implementation ALCModelDependency {
     ALCModelSearchCriteria *_criteria;
@@ -54,7 +56,18 @@
     }
 }
 
--(id) object {
+-(void)setObject:(id) object variable:(Ivar) variable {
+    [ALCRuntime setObject:object variable:variable withValue:[self getValue]];
+}
+
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
+    id arg = [self getValue];
+    [inv setArgument:&arg atIndex:idx];
+}
+
+#pragma mark - Internal
+
+-(id) getValue {
     if ([_resolvedFactories count] > 1) {
         NSMutableArray *results = [[NSMutableArray alloc] init];
         [_resolvedFactories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
@@ -64,10 +77,6 @@
     } else {
         return _resolvedFactories.allValues.firstObject.object;
     }
-}
-
--(Class) objectClass {
-    return [_resolvedFactories count] > 1 ? [NSArray class] : _resolvedFactories.allValues.firstObject.objectClass;
 }
 
 @end

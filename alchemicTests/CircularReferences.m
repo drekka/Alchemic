@@ -11,7 +11,7 @@
 #import "ALCContext.h"
 #import "ALCContextImpl.h"
 #import "ALCClassObjectFactory.h"
-#import "ALCResolvable.h"
+#import "ALCDependency.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCModelDependency.h"
 
@@ -41,12 +41,12 @@
 
     ALCClassObjectFactory *singleton1 = [context registerClass:[Singleton1 class]];
     ALCModelSearchCriteria *criteria1 = [ALCModelSearchCriteria searchCriteriaForClass:[Singleton2 class]];
-    id<ALCResolvable> modelDependency1 = [[ALCModelDependency alloc] initWithCriteria:criteria1];
+    id<ALCDependency> modelDependency1 = [[ALCModelDependency alloc] initWithCriteria:criteria1];
     [singleton1 registerDependency:modelDependency1 forVariable:@"singleton2"];
 
     ALCClassObjectFactory *singleton2 = [context registerClass:[Singleton2 class]];
     ALCModelSearchCriteria *criteria2 = [ALCModelSearchCriteria searchCriteriaForClass:[Singleton1 class]];
-    id<ALCResolvable> modelDependency2 = [[ALCModelDependency alloc] initWithCriteria:criteria2];
+    id<ALCDependency> modelDependency2 = [[ALCModelDependency alloc] initWithCriteria:criteria2];
     [singleton2 registerDependency:modelDependency2 forVariable:@"singleton1"];
 
     @try {

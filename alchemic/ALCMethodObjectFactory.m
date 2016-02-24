@@ -11,17 +11,21 @@
 #import "ALCInternalMacros.h"
 #import "NSObject+Alchemic.h"
 #import "ALCClassObjectFactory.h"
+#import "ALCResolvable.h"
+#import "ALCDependency.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodObjectFactory {
     ALCClassObjectFactory *_parentObjectFactory;
-    NSArray<id<ALCResolvable>> *_arguments;
+    NSArray<id<ALCDependency>> *_arguments;
     SEL _selector;
 }
 
 -(instancetype) initWithClass:(Class) objectClass
           parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
                      selector:(SEL) selector
-                         args:(nullable NSArray<id<ALCResolvable>> *) arguments {
+                         args:(nullable NSArray<id<ALCDependency>> *) arguments {
     self = [super initWithClass:objectClass];
     if (self) {
         _parentObjectFactory = parentObjectFactory;
@@ -46,7 +50,7 @@
     [self resolve:_parentObjectFactory withStack:resolvingStack description:depDesc model:model];
 
     // Now the arguments.
-    [_arguments enumerateObjectsUsingBlock:^(id<ALCResolvable> argument, NSUInteger idx, BOOL *stop) {
+    [_arguments enumerateObjectsUsingBlock:^(id<ALCDependency> argument, NSUInteger idx, BOOL *stop) {
         NSString *desc = str(@"Selector %@, Arg %lu", NSStringFromSelector(self->_selector), idx);
         [self resolve:argument withStack:resolvingStack description:desc model:model];
     }];
@@ -74,3 +78,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

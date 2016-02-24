@@ -9,13 +9,21 @@
 @import Foundation;
 @import ObjectiveC;
 
+@interface ALCTypeData : NSObject
+@property (nonatomic, strong, nullable) NSString *scalarType;
+@property (nonatomic, assign, nullable) Class objcClass;
+@property (nonatomic, strong, nullable) NSArray<Protocol *> *objcProtocols;
+@end
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCRuntime : NSObject
 
 +(Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
-+(nullable Class) classForIVar:(Ivar) ivar;
++(ALCTypeData *) typeDataForIVar:(Ivar) iVar;
+
++(void)setObject:(id) object variable:(Ivar) variable withValue:(id) value;
 
 @end
 

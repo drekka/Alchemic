@@ -13,8 +13,8 @@
 #import "ALCObjectFactory.h"
 #import "ALCClassObjectFactory.h"
 #import "ALCModelSearchCriteria.h"
-#import "ALCResolvable.h"
 #import "ALCModelDependency.h"
+#import "ALCDependency.h"
 
 @interface TestDepClass:NSObject
 @end
@@ -53,7 +53,7 @@
     [context registerClass:[TestDepClass class]];
 
     ALCModelSearchCriteria *criteria = [ALCModelSearchCriteria searchCriteriaForClass:[TestDepClass class]];
-    id<ALCResolvable> modelDependency = [[ALCModelDependency alloc] initWithCriteria:criteria];
+    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:criteria];
     [valueFactory registerDependency:modelDependency forVariable:@"dep"];
 
     [context start];
@@ -73,7 +73,7 @@
     [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep2"];
 
     ALCModelSearchCriteria *criteria = [ALCModelSearchCriteria searchCriteriaForClass:[TestDepClass class]];
-    id<ALCResolvable> modelDependency = [[ALCModelDependency alloc] initWithCriteria:criteria];
+    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:criteria];
     [valueFactory registerDependency:modelDependency forVariable:@"deps"];
 
     [context start];
@@ -95,7 +95,7 @@
     [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep2"];
 
     ALCModelSearchCriteria *criteria = [ALCModelSearchCriteria searchCriteriaForName:@"dep2"];
-    id<ALCResolvable> modelDependency = [[ALCModelDependency alloc] initWithCriteria:criteria];
+    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:criteria];
     [valueFactory registerDependency:modelDependency forVariable:@"deps"];
 
     [context start];
@@ -119,7 +119,7 @@
     ALCModelSearchCriteria *nameCriteria = [ALCModelSearchCriteria searchCriteriaForName:@"dep2"];
     classCriteria.nextSearchCriteria = nameCriteria;
 
-    id<ALCResolvable> modelDependency = [[ALCModelDependency alloc] initWithCriteria:classCriteria];
+    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:classCriteria];
     [valueFactory registerDependency:modelDependency forVariable:@"dep"];
 
     [context start];

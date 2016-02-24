@@ -8,7 +8,7 @@
 
 #import "ALCAbstractObjectFactory.h"
 @class ALCClassObjectFactory;
-@protocol ALCResolvable;
+@protocol ALCDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) initWithClass:(Class) objectClass
           parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
                      selector:(SEL) selector
-                         args:(nullable NSArray<id<ALCResolvable>> *) arguments;
+                         args:(nullable NSArray<id<ALCDependency>> *) arguments;
 
 @end
 

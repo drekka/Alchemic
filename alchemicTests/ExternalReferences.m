@@ -13,6 +13,7 @@
 #import "ALCObjectFactory.h"
 #import "ALCClassObjectFactory.h"
 #import "ALCModelSearchCriteria.h"
+#import "ALCDependency.h"
 #import "ALCModelDependency.h"
 
 @interface TestRefClass1:NSObject
@@ -63,7 +64,7 @@
     valueFactory1.factoryType = ALCFactoryTypeReference;
 
     ALCModelSearchCriteria *classCriteria = [ALCModelSearchCriteria searchCriteriaForClass:[TestRefClass1 class]];
-    id<ALCResolvable> modelDependency = [[ALCModelDependency alloc] initWithCriteria:classCriteria];
+    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:classCriteria];
     [valueFactory2 registerDependency:modelDependency forVariable:@"ref1"];
 
     [context start];

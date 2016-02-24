@@ -9,6 +9,8 @@
 @import Foundation;
 #import "ALCObjectFactory.h"
 
+@protocol ALCResolvable;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractObjectFactory : NSObject<ALCObjectFactory>

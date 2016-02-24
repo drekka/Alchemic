@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCMethodObjectFactory *) registerMethod:(SEL) selector
                        parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                                      args:(nullable NSArray<id<ALCResolvable>> *) arguments
+                                      args:(nullable NSArray<id<ALCDependency>> *) arguments
                                 returnType:(Class) returnType {
     ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:(Class) returnType
                                                                       parentObjectFactory:parentObjectFactory
@@ -54,8 +54,12 @@ NS_ASSUME_NONNULL_BEGIN
     return methodFactory;
 }
 
--(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName {
-    [_model objectFactory:objectFactory changedName:oldName newName:newName];
+-(void) objectFactory:(id<ALCObjectFactory>) objectFactory
+          changedName:(NSString *) oldName
+              newName:(NSString *) newName {
+    [_model objectFactory:objectFactory
+              changedName:oldName
+                  newName:newName];
 }
 
 @end

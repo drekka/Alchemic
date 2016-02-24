@@ -23,32 +23,32 @@
 
 -(void) testIVarClassNSString {
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringProperty"];
-    Class iVarClass = [ALCRuntime classForIVar:var];
-    XCTAssertEqual([NSString class], iVarClass);
+    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    XCTAssertEqual([NSString class], ivarData.objcClass);
 }
 
 -(void) testIVarClassId {
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aIdProperty"];
-    Class iVarClass = [ALCRuntime classForIVar:var];
-    XCTAssertEqual([NSObject class], iVarClass);
+    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    XCTAssertEqual([NSObject class], ivarData.objcClass);
 }
 
 -(void) testIVarClassProtocol {
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aProtocolProperty"];
-    Class iVarClass = [ALCRuntime classForIVar:var];
-    XCTAssertEqual([NSObject class], iVarClass);
+    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    XCTAssertEqual([NSObject class], ivarData.objcClass);
 }
 
 -(void) testIVarClassNSStringProtocol {
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
-    Class iVarClass = [ALCRuntime classForIVar:var];
-    XCTAssertEqual([NSString class], iVarClass);
+    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    XCTAssertEqual([NSString class], ivarData.objcClass);
 }
 
 -(void) testIVarClassInt {
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aIntProperty"];
-    Class iVarClass = [ALCRuntime classForIVar:var];
-    XCTAssertNil(iVarClass);
+    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    XCTAssertNil(ivarData.objcClass);
 }
 
 @end

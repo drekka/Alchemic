@@ -19,6 +19,7 @@
 #import "ALCDependencyStackItem.h"
 #import "ALCInternalMacros.h"
 #import "ALCModel.h"
+#import "ALCDependency.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

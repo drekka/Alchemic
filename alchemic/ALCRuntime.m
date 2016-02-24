@@ -11,6 +11,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@implementation ALCTypeData
+@end
+
 @implementation ALCRuntime
 
 static Class __protocolClass;
@@ -57,48 +60,62 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return var;
 }
 
-+(nullable Class) classForIVar:(Ivar) ivar {
-
-    // Get the type.
-    NSArray *iVarTypes = [self typesForIVar:ivar];
-    if (iVarTypes == nil) {
-        return nil;
-    }
-
-    // Must have some type information returned.
-    return iVarTypes[0];
++(ALCTypeData *) typeDataForIVar:(Ivar) iVar {
+    NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(iVar)];
+    return [self typeDataForEncoding:variableTypeEncoding];
 }
 
-#pragma mark - Internal
-
-+(nullable NSArray *) typesForIVar:(Ivar) iVar {
++(ALCTypeData *) typeDataForEncoding:(NSString *) encoding {
 
     // Get the type.
-    NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(iVar)];
-    if (![variableTypeEncoding hasPrefix:@"@"]) {
-        return nil;
-    }
+    ALCTypeData *typeData = [[ALCTypeData alloc] init];
+    if ([encoding hasPrefix:@"@"]) {
 
-    // Start with a result that indicates an Id. We map Ids as NSObjects.
-    NSMutableArray *results = [NSMutableArray arrayWithObject:[NSObject class]];
+        // Start with a result that indicates an Id. We map Ids as NSObjects.
+        typeData.objcClass = [NSObject class];
 
-    // Object type.
-    NSArray<NSString *> *defs = [variableTypeEncoding componentsSeparatedByCharactersInSet:__typeEncodingDelimiters];
+        // Object type.
+        NSArray<NSString *> *defs = [encoding componentsSeparatedByCharactersInSet:__typeEncodingDelimiters];
 
-    // If there is no more than 2 in the array then the dependency is an id.
-    // Position 3 will be a class name, positions beyond that will be protocols.
-    for (NSUInteger i = 2; i < [defs count]; i ++) {
-        if ([defs[i] length] > 0) {
-            if (i == 2) {
-                // Update the class.
-                results[0] = objc_lookUpClass(defs[2].UTF8String);
-            } else {
-                [results addObject:objc_getProtocol(defs[i].UTF8String)];
+        // If there is no more than 2 in the array then the dependency is an id.
+        // Position 3 will be a class name, positions beyond that will be protocols.
+        for (NSUInteger i = 2; i < [defs count]; i ++) {
+            if ([defs[i] length] > 0) {
+                if (i == 2) {
+                    // Update the class.
+                    typeData.objcClass = objc_lookUpClass(defs[2].UTF8String);
+                } else {
+                    if (!typeData.objcProtocols) {
+                        typeData.objcProtocols = [[NSMutableArray alloc] init];
+                    }
+                    [(NSMutableArray *)typeData.objcProtocols addObject:objc_getProtocol(defs[i].UTF8String)];
+                }
             }
         }
+        return typeData;
     }
-    return results;
 
+    // Not an object type.
+    typeData.scalarType = encoding;
+    return typeData;
+}
+
++(void)setObject:(id) object variable:(Ivar) variable withValue:(id) value {
+
+    ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
+
+    // Wrap the value in an array if it's not an array and ivar is.
+    if ([ivarTypeData.objcClass isSubclassOfClass:[NSArray class]] && ![value isKindOfClass:[NSArray class]]) {
+        value = @[value];
+    }
+
+    if ([value isKindOfClass:ivarTypeData.objcClass]) {
+        object_setIvar(self, variable, value);
+    } else {
+        @throw [NSException exceptionWithName:@"AlchemicIncorrectType"
+                                       reason:str(@"Resolved value of type %2$@ cannot be cast to variable '%1$s' (%3$s)", ivar_getName(variable), NSStringFromClass([value class]), class_getName(ivarTypeData.objcClass))
+                                     userInfo:nil];
+    }
 }
 
 

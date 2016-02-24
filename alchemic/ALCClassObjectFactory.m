@@ -12,6 +12,7 @@
 #import "NSObject+Alchemic.h"
 #import "ALCInternalMacros.h"
 #import "ALCDependencyStackItem.h"
+#import "ALCDependency.h"
 
 @implementation ALCClassObjectFactory {
     NSMutableArray<ALCDependencyRef *> *_dependencies;
@@ -25,7 +26,7 @@
     return self;
 }
 
--(void) registerDependency:(id<ALCResolvable>) dependency forVariable:(NSString *) variableName {
+-(void) registerDependency:(id<ALCDependency>) dependency forVariable:(NSString *) variableName {
     ALCDependencyRef *ref = [[ALCDependencyRef alloc] init];
     ref.ivar = [ALCRuntime aClass:self.objectClass variableForInjectionPoint:variableName];
     ref.name = variableName;
@@ -63,7 +64,7 @@
 
 -(void) injectDependenciesIntoObject:(id) value {
     for (ALCDependencyRef *depRef in _dependencies) {
-        [value injectVariable:depRef.ivar withResolvable:depRef.dependency];
+        [depRef.dependency setObject:value variable:depRef.ivar];
     }
 }
 
