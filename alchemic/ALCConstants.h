@@ -13,21 +13,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCConstant : NSObject<ALCDependency>
-@end
-
 #define ALCConstantHeader(name, type) \
 id<ALCDependency> ALC ## name(type value); \
-@interface ALCConstant ## name : ALCConstant \
+@interface ALCConstant ## name : NSObject<ALCDependency> \
 -(instancetype) initWithValue:(type) value; \
 @end
 
+// Scalar types
 ALCConstantHeader(Int, int)
+
+// Object types.
+ALCConstantHeader(String, NSString *)
 
 //ALCConstantHeader(Long, long)
 //ALCConstantHeader(Float, float)
 //ALCConstantHeader(CGRect, CGRect)
 //ALCConstantHeader(Double, double)
-//ALCConstantHeader(String, NSString *)
 
 NS_ASSUME_NONNULL_END

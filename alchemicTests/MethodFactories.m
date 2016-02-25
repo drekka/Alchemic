@@ -43,32 +43,6 @@
     context = [[ALCContextImpl alloc] init];
 }
 
--(void) testTypes {
-    typeof(5) x = 5;
-    NSLog(@"type %s", @encode(typeof(x)));
-    NSLog(@"type %s", @encode(typeof(@12)));
-    NSLog(@"type %s", @encode(typeof(@"abc")));
-    NSLog(@"type %s", @encode(typeof(CGSizeMake(1.0, 1.0))));
-}
-
--(void) testNSInvocation {
-    TestMFClass *testObj = [[TestMFClass alloc] init];
-    NSMethodSignature *sig = [[TestMFClass class] instanceMethodSignatureForSelector:@selector(createWithString:andInt:)];
-    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
-    inv.selector = @selector(createWithString:andInt:);
-
-    NSString *str = @"abc";
-    [inv setArgument:&str atIndex:2];
-    NSNumber *x = @12;
-    [inv setArgument:&x atIndex:3];
-
-    [inv invokeWithTarget:testObj];
-
-    id __unsafe_unretained returnObj;
-    [inv getReturnValue:&returnObj];
-
-}
-
 -(void) testSimpleFactoryMethod {
 
     ALCClassObjectFactory *valueFactory = [context registerClass:[TestMFClass class]];
@@ -81,7 +55,7 @@
 
     XCTAssertEqual(@"abc", methodFactory.object);
 }
-/*
+
 -(void) testFactoryMethodWithArgs {
 
     ALCClassObjectFactory *valueFactory = [context registerClass:[TestMFClass class]];
@@ -97,5 +71,5 @@
     NSString *result = methodFactory.object;
     XCTAssertEqualObjects(@"def ghi 12", result);
 }
-*/
+
 @end

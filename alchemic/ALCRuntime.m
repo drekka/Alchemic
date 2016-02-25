@@ -110,7 +110,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 
     if ([value isKindOfClass:ivarTypeData.objcClass]) {
-        object_setIvar(self, variable, value);
+        object_setIvar(object, variable, value);
     } else {
         @throw [NSException exceptionWithName:@"AlchemicIncorrectType"
                                        reason:str(@"Resolved value of type %2$@ cannot be cast to variable '%1$s' (%3$s)", ivar_getName(variable), NSStringFromClass([value class]), class_getName(ivarTypeData.objcClass))

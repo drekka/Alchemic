@@ -13,55 +13,77 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCConstant
-
--(bool) ready {
-    return YES;
+#define ALCConstantFunctionImplementation(name, type) \
+id<ALCDependency> ALC ## name(type value) { \
+    return [[ALCConstant ## name alloc] initWithValue:value]; \
 }
 
--(void)resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *)resolvingStack model:(id<ALCModel>)model{}
-
--(void)setObject:(id) object variable:(Ivar) variable {
-
-    ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
-
-    if (ivarTypeData.objcClass) {
-        // Target is an id.
-        [ALCRuntime setObject:object variable:variable withValue:[self objValue]];
-    } else {
-        // Set the value directly into the variable.
-        CFTypeRef objRef = CFBridgingRetain(object);
-        [self setMemoryLocation:(uint8_t *) objRef + ivar_getOffset(variable)];
-        CFBridgingRelease(objRef);
-    }
-}
-
--(void) setMemoryLocation:(uint8_t *) memoryLocation {}
-
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {}
-
--(id) objValue {
-    return nil;
-}
-
+#define ALCConstantScalarImplementation(name, type) \
+@implementation ALCConstant ## name { \
+    type _value; \
+} \
+-(bool) ready { \
+    return YES; \
+} \
+-(instancetype) initWithValue:(type) value { \
+    self = [super init]; \
+    if (self) { \
+        _value = value; \
+    } \
+    return self; \
+} \
+-(void)resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *)resolvingStack model:(id<ALCModel>)model{} \
+-(void)setObject:(id) object variable:(Ivar) variable { \
+    ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
+    if (ivarTypeData.objcClass) { \
+        [ALCRuntime setObject:object variable:variable withValue:@(_value)]; \
+    } else { \
+        CFTypeRef objRef = CFBridgingRetain(object); \
+        type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(variable)); \
+        *ivarPtr = _value; \
+        CFBridgingRelease(objRef); \
+    } \
+} \
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
+    [inv setArgument:&_value atIndex:idx]; \
+} \
 @end
 
-#define ALCConstantImplementation(name, type, toObject) \
-id<ALCDependency> ALC ## name(type value) {return [[ALCConstant ## name alloc] initWithValue:value];} \
-@implementation ALCConstant ## name {type _value;} \
--(instancetype) initWithValue:(type) value {self = [super init];if (self) {_value = value;}return self;} \
--(void) setMemoryLocation:(uint8_t *) memoryLocation {type *ivarPtr = (type *) memoryLocation;*ivarPtr = _value;} \
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {[inv setArgument:&_value atIndex:idx];} \
--(id) objValue {return toObject;} \
+#define ALCConstantObjectImplementation(name, type) \
+@implementation ALCConstant ## name { \
+type _value; \
+} \
+-(bool) ready { \
+return YES; \
+} \
+-(instancetype) initWithValue:(type) value { \
+self = [super init]; \
+if (self) { \
+_value = value; \
+} \
+return self; \
+} \
+-(void)resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *)resolvingStack model:(id<ALCModel>)model{} \
+-(void)setObject:(id) object variable:(Ivar) variable { \
+[ALCRuntime setObject:object variable:variable withValue:_value]; \
+} \
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
+[inv setArgument:&_value atIndex:idx]; \
+} \
 @end
 
-ALCConstantImplementation(Int, int, @(_value))
+// Scalar types
+ALCConstantFunctionImplementation(Int, int)
+ALCConstantScalarImplementation(Int, int)
+
+// Object types.
+ALCConstantFunctionImplementation(String, NSString *)
+ALCConstantObjectImplementation(String, NSString *)
 
 //ALCConstantImplementation(Long, long, @(_value))
 //ALCConstantImplementation(Float, float, @(_value))
 //ALCConstantImplementation(CGRect, CGRect, [NSValue valueWithCGRect:_value])
 //ALCConstantImplementation(Double, double, @(_value))
-//ALCConstantImplementation(String, NSString *, _value)
 
 NS_ASSUME_NONNULL_END
 
