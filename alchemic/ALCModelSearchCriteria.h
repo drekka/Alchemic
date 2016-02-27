@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) ALCModelSearchCriteria *nextSearchCriteria;
 
--(bool) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name;
+-(BOOL) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name;
 
 @end
 

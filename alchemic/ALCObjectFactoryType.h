@@ -12,6 +12,6 @@
 
 @property (nonatomic, strong) id object;
 
-@property (nonatomic, assign, readonly) bool ready;
+@property (nonatomic, assign, readonly) BOOL ready;
 
 @end

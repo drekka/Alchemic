@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCMethodObjectFactory : ALCAbstractObjectFactory
 
+-(instancetype) initWithClass:(Class) objectClass NS_UNAVAILABLE;
+
 -(instancetype) initWithClass:(Class) objectClass
           parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
                      selector:(SEL) selector

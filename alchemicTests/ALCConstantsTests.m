@@ -16,11 +16,13 @@
 @interface ALCConstantsTests : XCTestCase
 @property (nonatomic, assign) int anInt;
 @property (nonatomic, strong) NSString *aString;
+@property (nonatomic, assign) CGRect aCGRect;
 @end
 
 @implementation ALCConstantsTests {
     int _anInternalInt;
     NSString *_anInternalString;
+    CGRect _anInternalCGRect;
 }
 
 #pragma mark - ACInt
@@ -46,7 +48,7 @@
     XCTAssertEqual(5, self.anInt);
 }
 
-#pragma mark - ACString
+#pragma mark - ALCString
 
 -(void) testInjectionInternalUsingALCString {
     [self injectVariable:@"_anInternalString" usingDependency:ALCString(@"abc")];
@@ -67,6 +69,29 @@
     id<ALCDependency> arg = ALCString(@"abc");
     [self invokeSelector:@selector(setAString:) arguments:@[arg]];
     XCTAssertEqual(@"abc", self.aString);
+}
+
+#pragma mark - ALCCGRect
+
+-(void) testInjectionInternalUsingALCCGRect {
+    [self injectVariable:@"_anInternalCGRect" usingDependency:ALCCGRect(CGRectMake(0.0, 0.0, 100.0, 100.0))];
+    XCTAssertTrue(CGRectEqualToRect(CGRectMake(0.0, 0.0, 100.0, 100.0), _anInternalCGRect));
+}
+
+-(void) testInjectionPropertyUsingALCCGRect {
+    [self injectVariable:@"aCGRect" usingDependency:ALCCGRect(CGRectMake(0.0, 0.0, 100.0, 100.0))];
+    XCTAssertTrue(CGRectEqualToRect(CGRectMake(0.0, 0.0, 100.0, 100.0), self.aCGRect));
+}
+
+-(void) testInjectionPropertyInternalUsingALCCGRect {
+    [self injectVariable:@"_aCGRect" usingDependency:ALCCGRect(CGRectMake(0.0, 0.0, 100.0, 100.0))];
+    XCTAssertTrue(CGRectEqualToRect(CGRectMake(0.0, 0.0, 100.0, 100.0), self.aCGRect));
+}
+
+-(void) testMethodArgUsingALCCGRect {
+    id<ALCDependency> arg = ALCCGRect(CGRectMake(0.0, 0.0, 100.0, 100.0));
+    [self invokeSelector:@selector(setACGRect:) arguments:@[arg]];
+    XCTAssertTrue(CGRectEqualToRect(CGRectMake(0.0, 0.0, 100.0, 100.0), self.aCGRect));
 }
 
 #pragma mark - Internal

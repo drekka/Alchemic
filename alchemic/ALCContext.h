@@ -28,8 +28,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCMethodObjectFactory *) registerMethod:(SEL) selector
                        parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                                      args:(nullable NSArray<id<ALCDependency>> *) arguments
+                                      args:(NSArray<id<ALCDependency>> *) arguments
                                 returnType:(Class) returnType;
+
+-(void) registerInitializer:(SEL) initializer
+        parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
+                       args:(NSArray<id<ALCDependency>> *) arguments;
 
 @end
 

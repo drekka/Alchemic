@@ -21,13 +21,13 @@ id<ALCDependency> ALC ## name(type value); \
 
 // Scalar types
 ALCConstantHeader(Int, int)
+ALCConstantHeader(CGRect, CGRect)
 
 // Object types.
 ALCConstantHeader(String, NSString *)
 
 //ALCConstantHeader(Long, long)
 //ALCConstantHeader(Float, float)
-//ALCConstantHeader(CGRect, CGRect)
 //ALCConstantHeader(Double, double)
 
 NS_ASSUME_NONNULL_END

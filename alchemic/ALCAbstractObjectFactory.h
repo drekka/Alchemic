@@ -7,26 +7,18 @@
 //
 
 @import Foundation;
-#import "ALCObjectFactory.h"
 
-@protocol ALCResolvable;
+#import "ALCObjectFactory.h"
+#import "ALCAbstractObjectGenerator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCAbstractObjectFactory : NSObject<ALCObjectFactory>
+@interface ALCAbstractObjectFactory : ALCAbstractObjectGenerator<ALCObjectFactory>
+
+-(id) instantiateObject;
 
 // Object factories must be settable.
 @property (nonatomic, strong) id object;
-
--(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack
-                               model:(id<ALCModel>) model;
-
--(void) resolve:(id<ALCResolvable>) resolvable
-      withStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack
-    description:(NSString *) description
-          model:(id<ALCModel>) model;
-
--(id) instantiateObject;
 
 @end
 

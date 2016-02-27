@@ -10,13 +10,17 @@
 #import "ALCDependencyRef.h"
 #import "ALCRuntime.h"
 #import "NSObject+Alchemic.h"
+#import "NSMutableArray+Alchemic.h"
 #import "ALCInternalMacros.h"
-#import "ALCDependencyStackItem.h"
 #import "ALCDependency.h"
+#import "ALCClassObjectFactoryInitializer.h"
 
 @implementation ALCClassObjectFactory {
     NSMutableArray<ALCDependencyRef *> *_dependencies;
+    BOOL _checkingReadyStatus;
 }
+
+@synthesize initializer = _initializer;
 
 -(instancetype) initWithClass:(Class) objectClass {
     self = [super initWithClass:objectClass];
@@ -34,23 +38,37 @@
     [_dependencies addObject:ref];
 }
 
--(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {
+-(void) resolveDependenciesWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {
+
+    // Resolve the initializer.
+    if (_initializer) {
+        [resolvingStack resolve:_initializer model:model];
+    }
+
     for (ALCDependencyRef *ref in _dependencies) {
         NSString *depDesc = str(@"%@.%@", NSStringFromClass(self.objectClass), ref.name);
-        [self resolve:ref.dependency withStack:resolvingStack description:depDesc model:model];
+        [resolvingStack resolve:ref.dependency resolvableName:depDesc model:model];
      }
 }
 
--(bool) ready {
-    if (super.ready) {
-        for (ALCDependencyRef *ref in _dependencies) {
-            if (!ref.dependency.ready) {
-                return NO;
-            }
-        }
+-(BOOL) ready {
+
+    if (_checkingReadyStatus) {
         return YES;
     }
-    return NO;
+    _checkingReadyStatus = YES;
+
+    BOOL ready = super.ready;
+    if (ready) {
+        for (ALCDependencyRef *ref in _dependencies) {
+            if (!ref.dependency.ready) {
+                ready = NO;
+                break;
+            }
+        }
+    }
+    _checkingReadyStatus = NO;
+    return ready;
 }
 
 -(id) instantiateObject {
@@ -58,8 +76,8 @@
 }
 
 -(void) setObject:(id) object {
-    [self injectDependenciesIntoObject:object];
     super.object = object;
+    [self injectDependenciesIntoObject:object];
 }
 
 -(void) injectDependenciesIntoObject:(id) value {

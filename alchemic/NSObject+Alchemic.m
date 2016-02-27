@@ -12,6 +12,8 @@
 #import "ALCInternalMacros.h"
 #import "ALCDependency.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation NSObject (Alchemic)
 
 -(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
@@ -41,4 +43,21 @@
     return [self invokeSelector:selector arguments:arguments];
 }
 
+-(void) enumerateDependencies:(NSArray<id<ALCResolvable>> *) dependencies
+              enumeratingFlag:(BOOL *) enumeratingFlag
+                    withBlock:(DependencyTraverseBlock) block {
+
+    if (!*enumeratingFlag) {
+        return;
+    }
+
+    *enumeratingFlag = YES;
+    [dependencies enumerateObjectsUsingBlock:^(id<ALCResolvable> resolvable, NSUInteger idx, BOOL *stop) {
+        block(resolvable, stop);
+    }];
+    *enumeratingFlag = NO;
+}
+
 @end
+
+NS_ASSUME_NONNULL_END

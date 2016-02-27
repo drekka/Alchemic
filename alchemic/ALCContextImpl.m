@@ -12,9 +12,10 @@
 #import "ALCModel.h"
 #import "ALCModelImpl.h"
 #import "ALCObjectFactory.h"
-#import "ALCAbstractObjectFactory.h"
 #import "ALCClassObjectFactory.h"
 #import "ALCMethodObjectFactory.h"
+#import "ALCClassObjectFactoryInitializer.h"
+#import "ALCDependency.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,14 +38,14 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ALCClassObjectFactory *) registerClass:(Class) clazz {
-    id<ALCObjectFactory> valueFactory = [[ALCClassObjectFactory alloc] initWithClass:clazz];
-    [_model addObjectFactory:valueFactory withName:valueFactory.defaultName];
-    return valueFactory;
+    ALCClassObjectFactory *objectFactory = [[ALCClassObjectFactory alloc] initWithClass:clazz];
+    [_model addObjectFactory:objectFactory withName:objectFactory.defaultName];
+    return objectFactory;
 }
 
 -(ALCMethodObjectFactory *) registerMethod:(SEL) selector
                        parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                                      args:(nullable NSArray<id<ALCDependency>> *) arguments
+                                      args:(NSArray<id<ALCDependency>> *) arguments
                                 returnType:(Class) returnType {
     ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:(Class) returnType
                                                                       parentObjectFactory:parentObjectFactory
@@ -52,6 +53,15 @@ NS_ASSUME_NONNULL_BEGIN
                                                                                      args:arguments];
     [_model addObjectFactory:methodFactory withName:methodFactory.defaultName];
     return methodFactory;
+}
+
+-(void) registerInitializer:(SEL) initializer
+        parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
+                       args:(NSArray<id<ALCDependency>> *) arguments {
+    ALCClassObjectFactoryInitializer *objectInitializer = [[ALCClassObjectFactoryInitializer alloc] initWithClass:parentObjectFactory.objectClass
+                                                                                                      initializer:initializer
+                                                                                                             args:arguments];
+    parentObjectFactory.initializer = objectInitializer;
 }
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory

@@ -18,12 +18,15 @@ id<ALCDependency> ALC ## name(type value) { \
     return [[ALCConstant ## name alloc] initWithValue:value]; \
 }
 
-#define ALCConstantScalarImplementation(name, type) \
+#define ALCConstantScalarImplementation(name, type, toObject) \
 @implementation ALCConstant ## name { \
     type _value; \
 } \
--(bool) ready { \
+-(BOOL) ready { \
     return YES; \
+} \
+-(NSArray<ALCResolvable> *)dependencies { \
+    return @[]; \
 } \
 -(instancetype) initWithValue:(type) value { \
     self = [super init]; \
@@ -32,11 +35,11 @@ id<ALCDependency> ALC ## name(type value) { \
     } \
     return self; \
 } \
--(void)resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *)resolvingStack model:(id<ALCModel>)model{} \
+-(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model{} \
 -(void)setObject:(id) object variable:(Ivar) variable { \
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
     if (ivarTypeData.objcClass) { \
-        [ALCRuntime setObject:object variable:variable withValue:@(_value)]; \
+        [ALCRuntime setObject:object variable:variable withValue:toObject]; \
     } else { \
         CFTypeRef objRef = CFBridgingRetain(object); \
         type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(variable)); \
@@ -53,8 +56,11 @@ id<ALCDependency> ALC ## name(type value) { \
 @implementation ALCConstant ## name { \
 type _value; \
 } \
--(bool) ready { \
+-(BOOL) ready { \
 return YES; \
+} \
+-(NSArray<ALCResolvable> *)dependencies { \
+return @[]; \
 } \
 -(instancetype) initWithValue:(type) value { \
 self = [super init]; \
@@ -63,7 +69,7 @@ _value = value; \
 } \
 return self; \
 } \
--(void)resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *)resolvingStack model:(id<ALCModel>)model{} \
+-(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model{} \
 -(void)setObject:(id) object variable:(Ivar) variable { \
 [ALCRuntime setObject:object variable:variable withValue:_value]; \
 } \
@@ -74,7 +80,9 @@ return self; \
 
 // Scalar types
 ALCConstantFunctionImplementation(Int, int)
-ALCConstantScalarImplementation(Int, int)
+ALCConstantScalarImplementation(Int, int, @(_value))
+ALCConstantFunctionImplementation(CGRect, CGRect)
+ALCConstantScalarImplementation(CGRect, CGRect, [NSValue valueWithCGRect:_value])
 
 // Object types.
 ALCConstantFunctionImplementation(String, NSString *)

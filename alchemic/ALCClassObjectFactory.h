@@ -9,8 +9,11 @@
 #import "ALCAbstractObjectFactory.h"
 
 @protocol ALCDependency;
+@class ALCClassObjectFactoryInitializer;
 
 @interface ALCClassObjectFactory : ALCAbstractObjectFactory
+
+@property (nonatomic, strong) ALCClassObjectFactoryInitializer *initializer;
 
 -(void) registerDependency:(id<ALCDependency>) dependency forVariable:(NSString *) variableName;
 

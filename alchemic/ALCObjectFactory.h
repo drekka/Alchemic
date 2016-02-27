@@ -8,10 +8,7 @@
 
 @import Foundation;
 
-#import "ALCResolvable.h"
-
-@protocol ALCModel;
-@class ALCModelDependency;
+#import "ALCObjectGenerator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,19 +18,9 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
     ALCFactoryTypeReference
 };
 
-@protocol ALCObjectFactory <ALCResolvable>
-
-@property (nonatomic, strong, readonly) id object;
-
-@property (nonatomic, assign, readonly) Class objectClass;
-
-@property (nonatomic, strong, readonly) NSString *defaultName;
-
-@property (nonatomic, strong, readonly) NSString *descriptionAttributes;
+@protocol ALCObjectFactory <ALCObjectGenerator>
 
 @property (nonatomic, assign) ALCFactoryType factoryType;
-
--(instancetype) initWithClass:(Class) objectClass;
 
 @end
 

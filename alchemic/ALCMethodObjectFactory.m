@@ -7,11 +7,11 @@
 //
 
 #import "ALCMethodObjectFactory.h"
-#import "ALCDependencyStackItem.h"
+
 #import "ALCInternalMacros.h"
 #import "NSObject+Alchemic.h"
+#import "NSMutableArray+Alchemic.h"
 #import "ALCClassObjectFactory.h"
-#import "ALCResolvable.h"
 #import "ALCDependency.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -36,27 +36,26 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) defaultName {
-    return str(@"%@::%@", NSStringFromClass(_parentObjectFactory.objectClass), NSStringFromClass(self.objectClass));
+    return str(@"%@::%@", NSStringFromClass(_parentObjectFactory.objectClass), NSStringFromSelector(_selector));
 }
 
 -(NSString *) descriptionAttributes {
     return [NSString stringWithFormat:@"method %@", self.defaultName];
 }
 
--(void) resolveDependenciesWithStack:(NSMutableArray<ALCDependencyStackItem *> *) resolvingStack model:(id<ALCModel>) model {
+-(void) resolveDependenciesWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {
 
     // First resolve the parent factory.
-    NSString *depDesc = str(@"Method factory %@.%@", NSStringFromClass(_parentObjectFactory.objectClass), NSStringFromSelector(self->_selector));
-    [self resolve:_parentObjectFactory withStack:resolvingStack description:depDesc model:model];
+    [resolvingStack resolve:_parentObjectFactory model:model];
 
     // Now the arguments.
     [_arguments enumerateObjectsUsingBlock:^(id<ALCDependency> argument, NSUInteger idx, BOOL *stop) {
         NSString *desc = str(@"Selector %@, Arg %lu", NSStringFromSelector(self->_selector), idx);
-        [self resolve:argument withStack:resolvingStack description:desc model:model];
+        [resolvingStack resolve:argument resolvableName:desc model:model];
     }];
 }
 
--(bool) ready {
+-(BOOL) ready {
     if (super.ready && _parentObjectFactory.ready) {
         for (id<ALCResolvable> argument in _arguments) {
             if (!argument.ready) {

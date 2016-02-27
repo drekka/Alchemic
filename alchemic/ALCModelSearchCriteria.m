@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef bool (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
+typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 
 @implementation ALCModelSearchCriteria {
     Criteria _acceptCriteria;
@@ -46,7 +46,7 @@ typedef bool (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
     return self;
 }
 
--(bool) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name {
+-(BOOL) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name {
     return _acceptCriteria(name, valueFactory)
     && (
         _nextSearchCriteria == nil || [_nextSearchCriteria acceptsObjectFactory:valueFactory name:name]

@@ -18,12 +18,23 @@
 #import "ALCConstants.h"
 
 @interface TestMFClass : NSObject
+@property (nonatomic, assign) int aInt;
+@property (nonatomic, strong) NSString *aString;
 @end
 
 @implementation TestMFClass
 
 -(NSString *) simpleCreate {
     return @"abc";
+}
+
+-(instancetype) initWithString:(NSString *) aString andInt:(int) aInt {
+    self = [super init];
+    if (self) {
+        _aInt = aInt;
+        _aString = aString;
+    }
+    return self;
 }
 
 -(NSString *) createWithString:(NSString *) aString andInt:(int) aInt {
@@ -48,7 +59,7 @@
     ALCClassObjectFactory *valueFactory = [context registerClass:[TestMFClass class]];
     ALCMethodObjectFactory *methodFactory = [context registerMethod:@selector(simpleCreate)
                                                 parentObjectFactory:valueFactory
-                                                               args:nil
+                                                               args:@[]
                                                          returnType:[NSString class]];
 
     [context start];

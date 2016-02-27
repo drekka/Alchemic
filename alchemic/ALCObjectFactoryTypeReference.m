@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
     return _object;
 }
 
--(bool) ready {
+-(BOOL) ready {
     return _object != nil;
 }
 

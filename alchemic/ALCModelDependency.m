@@ -18,6 +18,8 @@
     NSDictionary<NSString *, id<ALCObjectFactory>> *_resolvedFactories;
 }
 
+@synthesize enumerating = _enumerating;
+
 -(instancetype) initWithCriteria:(ALCModelSearchCriteria *) criteria {
     self = [super init];
     if (self) {
@@ -26,8 +28,12 @@
     return self;
 }
 
--(bool)ready {
-    for (id<ALCObjectFactory> objectFactory in _resolvedFactories.allValues) {
+-(NSArray<id<ALCResolvable>> *)dependencies {
+    return _resolvedFactories.allValues;
+}
+
+-(BOOL)ready {
+    for (id<ALCResolvable> objectFactory in _resolvedFactories.allValues) {
         if (!objectFactory.ready) {
             return NO;
         }
@@ -35,7 +41,7 @@
     return YES;
 }
 
--(void) resolveWithStack:(NSMutableArray<ALCDependencyStackItem *> *)resolvingStack model:(id<ALCModel>)model {
+-(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model {
 
     // IF we have already resolved then exit.
     if (_resolvedFactories) {
@@ -51,7 +57,7 @@
     }
 
     // Resolve dependencies.
-    for (id<ALCObjectFactory>objectFactory in _resolvedFactories.allValues) {
+    for (id<ALCResolvable> objectFactory in _resolvedFactories.allValues) {
         [objectFactory resolveWithStack:resolvingStack model:model];
     }
 }
