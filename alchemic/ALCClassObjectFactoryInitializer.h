@@ -9,6 +9,7 @@
 #import "ALCAbstractObjectGenerator.h"
 
 @protocol ALCDependency;
+@class ALCClassObjectFactory;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,9 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(instancetype) initWithClass:(Class) objectClass NS_UNAVAILABLE;
 
--(instancetype) initWithClass:(Class) objectClass
-                  initializer:(SEL) initializer
-                         args:(NSArray<id<ALCDependency>> *) arguments NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithObjectFactory:(ALCClassObjectFactory *) objectFactory
+                          initializer:(SEL) initializer
+                                 args:(NSArray<id<ALCDependency>> *) arguments NS_DESIGNATED_INITIALIZER;
 
 @end
 

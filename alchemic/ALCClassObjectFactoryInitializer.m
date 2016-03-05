@@ -6,19 +6,24 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCClassObjectFactoryInitializer.h"
 
+#import "ALCClassObjectFactory.h"
 #import "ALCInternalMacros.h"
 #import "ALCDependency.h"
 #import "NSObject+Alchemic.h"
-#import "NSMutableArray+Alchemic.h"
 
 @implementation ALCClassObjectFactoryInitializer {
     NSArray<id<ALCDependency>> *_arguments;
     SEL _initializer;
+    BOOL _enumeratingDependencies;
 }
 
 -(id) object {
+    STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), NSStringFromSelector(_initializer));
+    STStartScope(self.objectClass);
     return [self.objectClass invokeSelector:_initializer arguments:_arguments];
 }
 
@@ -38,31 +43,33 @@
     return nil;
 }
 
--(instancetype) initWithClass:(Class) objectClass
-                  initializer:(SEL) initializer
-                         args:(NSArray<id<ALCDependency>> *) arguments {
-    self = [super initWithClass:objectClass];
+-(instancetype) initWithObjectFactory:(ALCClassObjectFactory *) objectFactory
+                          initializer:(SEL) initializer
+                                 args:(NSArray<id<ALCDependency>> *) arguments {
+    self = [super initWithClass:objectFactory.objectClass];
     if (self) {
+        objectFactory.initializer = self;
         _initializer = initializer;
         _arguments = arguments;
     }
     return self;
 }
 
--(void) resolveDependenciesWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {
-    [_arguments enumerateObjectsUsingBlock:^(id<ALCDependency> argument, NSUInteger idx, BOOL *stop) {
-        NSString *desc = str(@"Selector %@, Arg %lu", NSStringFromSelector(self->_initializer), idx);
-        [resolvingStack resolve:argument resolvableName:desc model:model];
-    }];
+-(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model {
+    [self resolveFactoryWithResolvingStack:resolvingStack
+                        resolvingFlag:&_enumeratingDependencies
+                                block:^{
+                                    [self->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
+                                        [argument resolveDependencyWithResolvingStack:resolvingStack withName:str(@"arg: %lu", idx) model:model];
+                                    }];
+                                }];
 }
 
 -(BOOL) ready {
-    for (id<ALCResolvable> argument in _arguments) {
-        if (!argument.ready) {
-            return NO;
-        }
+    if (!super.ready) {
+        return NO;
     }
-    return YES;
+    return [self dependenciesReady:_arguments resolvingFlag:&_enumeratingDependencies];
 }
 
 @end

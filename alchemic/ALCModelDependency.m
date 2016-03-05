@@ -18,8 +18,6 @@
     NSDictionary<NSString *, id<ALCObjectFactory>> *_resolvedFactories;
 }
 
-@synthesize enumerating = _enumerating;
-
 -(instancetype) initWithCriteria:(ALCModelSearchCriteria *) criteria {
     self = [super init];
     if (self) {
@@ -42,11 +40,6 @@
 }
 
 -(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model {
-
-    // IF we have already resolved then exit.
-    if (_resolvedFactories) {
-        return;
-    }
 
     // Find dependencies
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];

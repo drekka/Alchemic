@@ -14,14 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractObjectGenerator : NSObject<ALCObjectGenerator>
 
-@property (nonatomic, assign, readonly) BOOL resolved;
-
 -(instancetype) init NS_UNAVAILABLE;
 
 -(instancetype) initWithClass:(Class) objectClass NS_DESIGNATED_INITIALIZER;
-
--(void) resolveDependenciesWithStack:(NSMutableArray<NSString *> *) resolvingStack
-                               model:(id<ALCModel>) model;
 
 @end
 

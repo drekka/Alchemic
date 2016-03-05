@@ -6,11 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCMethodObjectFactory.h"
 
 #import "ALCInternalMacros.h"
 #import "NSObject+Alchemic.h"
-#import "NSMutableArray+Alchemic.h"
 #import "ALCClassObjectFactory.h"
 #import "ALCDependency.h"
 
@@ -20,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
     ALCClassObjectFactory *_parentObjectFactory;
     NSArray<id<ALCDependency>> *_arguments;
     SEL _selector;
+    BOOL _enumeratingDependencies;
 }
 
 -(instancetype) initWithClass:(Class) objectClass
@@ -44,30 +46,26 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) resolveDependenciesWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {
-
-    // First resolve the parent factory.
-    [resolvingStack resolve:_parentObjectFactory model:model];
-
-    // Now the arguments.
-    [_arguments enumerateObjectsUsingBlock:^(id<ALCDependency> argument, NSUInteger idx, BOOL *stop) {
-        NSString *desc = str(@"Selector %@, Arg %lu", NSStringFromSelector(self->_selector), idx);
-        [resolvingStack resolve:argument resolvableName:desc model:model];
-    }];
+    [self resolveFactoryWithResolvingStack:resolvingStack
+                             resolvingFlag:&_enumeratingDependencies
+                                     block:^{
+                                         [self->_parentObjectFactory resolveWithStack:resolvingStack model:model];
+                                         [self->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
+                                             [argument resolveDependencyWithResolvingStack:resolvingStack withName:str(@"arg: %lu", idx) model:model];
+                                         }];
+                                     }];
 }
 
 -(BOOL) ready {
     if (super.ready && _parentObjectFactory.ready) {
-        for (id<ALCResolvable> argument in _arguments) {
-            if (!argument.ready) {
-                return NO;
-            }
-        }
-        return YES;
+        return [self dependenciesReady:_arguments resolvingFlag:&_enumeratingDependencies];
     }
     return NO;
 }
 
 -(id) instantiateObject {
+    STLog(self.objectClass, @"Executing %@::%@", NSStringFromClass(self.objectClass), NSStringFromSelector(_selector));
+    STStartScope(self.objectClass);
     return [_parentObjectFactory.object invokeSelector:_selector arguments:_arguments];
 }
 

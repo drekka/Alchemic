@@ -6,18 +6,19 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCClassObjectFactory.h"
 #import "ALCDependencyRef.h"
 #import "ALCRuntime.h"
 #import "NSObject+Alchemic.h"
-#import "NSMutableArray+Alchemic.h"
 #import "ALCInternalMacros.h"
 #import "ALCDependency.h"
 #import "ALCClassObjectFactoryInitializer.h"
 
 @implementation ALCClassObjectFactory {
     NSMutableArray<ALCDependencyRef *> *_dependencies;
-    BOOL _checkingReadyStatus;
+    BOOL _enumeratingDependencies;
 }
 
 @synthesize initializer = _initializer;
@@ -38,40 +39,35 @@
     [_dependencies addObject:ref];
 }
 
--(void) resolveDependenciesWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {
+-(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model {
 
-    // Resolve the initializer.
-    if (_initializer) {
-        [resolvingStack resolve:_initializer model:model];
-    }
-
-    for (ALCDependencyRef *ref in _dependencies) {
-        NSString *depDesc = str(@"%@.%@", NSStringFromClass(self.objectClass), ref.name);
-        [resolvingStack resolve:ref.dependency resolvableName:depDesc model:model];
-     }
+    [self resolveFactoryWithResolvingStack:resolvingStack
+                             resolvingFlag:&_enumeratingDependencies
+                                     block:^{
+                                         if (self->_initializer) {
+                                             [self->_initializer resolveWithStack:resolvingStack model:model];
+                                         }
+                                         for (ALCDependencyRef *ref in self->_dependencies) {
+                                             NSString *name = str(@"%@.%@", self.defaultName, ref.name);
+                                             // Class dependencies start a new stack.
+                                             NSMutableArray *newStack = [[NSMutableArray alloc] init];
+                                             [(NSObject *)ref.dependency resolveDependencyWithResolvingStack:newStack withName:name model:model];
+                                         }
+                                     }];
 }
 
 -(BOOL) ready {
-
-    if (_checkingReadyStatus) {
-        return YES;
+    if (super.ready && (!_initializer || _initializer.ready)) {
+        return [self dependenciesReady:[self referencedDependencies] resolvingFlag:&_enumeratingDependencies];
     }
-    _checkingReadyStatus = YES;
-
-    BOOL ready = super.ready;
-    if (ready) {
-        for (ALCDependencyRef *ref in _dependencies) {
-            if (!ref.dependency.ready) {
-                ready = NO;
-                break;
-            }
-        }
-    }
-    _checkingReadyStatus = NO;
-    return ready;
+    return NO;
 }
 
 -(id) instantiateObject {
+    if (_initializer) {
+        return _initializer.object;
+    }
+    STLog(self.objectClass, @"Instantiating a %@ using init", NSStringFromClass(self.objectClass));
     return [[self.objectClass alloc] init];
 }
 
@@ -82,8 +78,18 @@
 
 -(void) injectDependenciesIntoObject:(id) value {
     for (ALCDependencyRef *depRef in _dependencies) {
+        STLog(self.objectClass, @"Injecting %@.%@", NSStringFromClass(self.objectClass), depRef.name);
         [depRef.dependency setObject:value variable:depRef.ivar];
     }
 }
+
+-(NSArray<id<ALCDependency>> *) referencedDependencies {
+    NSMutableArray *deps = [NSMutableArray arrayWithCapacity:_dependencies.count];
+    for (ALCDependencyRef *ref in _dependencies) {
+        [deps addObject:ref.dependency];
+    }
+    return deps;
+}
+
 
 @end

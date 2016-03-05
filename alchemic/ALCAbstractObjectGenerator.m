@@ -10,14 +10,13 @@
 
 #import "ALCAbstractObjectGenerator.h"
 #import "ALCInternalMacros.h"
+#import "NSObject+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractObjectGenerator {
     Class _objectClass;
 }
-
-@synthesize resolved = _resolved;
 
 -(id) object {
     return nil;
@@ -47,7 +46,6 @@ NS_ASSUME_NONNULL_BEGIN
     return description;
 }
 
-
 -(BOOL) ready {
     return YES;
 }
@@ -64,26 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {
+-(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {}
 
-    if (self.resolved) {
-        return;
-    }
-
-    // Check for circular dependencies first.
-    if ([resolvingStack containsObject:self.defaultName]) {
-        [resolvingStack addObject:self.defaultName];
-        throwException(@"AlchemicCircularDependency", @"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]);
-    }
-
-    [self resolveDependenciesWithStack:resolvingStack model:model];
-
-    _resolved = YES;
-
-}
-
--(void) resolveDependenciesWithStack:(NSMutableArray<NSString *> *) resolvingStack
-                               model:(id<ALCModel>) model {}
 
 @end
 

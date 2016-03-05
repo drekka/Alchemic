@@ -58,10 +58,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) registerInitializer:(SEL) initializer
         parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
                        args:(NSArray<id<ALCDependency>> *) arguments {
-    ALCClassObjectFactoryInitializer *objectInitializer = [[ALCClassObjectFactoryInitializer alloc] initWithClass:parentObjectFactory.objectClass
-                                                                                                      initializer:initializer
-                                                                                                             args:arguments];
-    parentObjectFactory.initializer = objectInitializer;
+    __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:parentObjectFactory
+                                                                        initializer:initializer
+                                                                               args:arguments];
 }
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory

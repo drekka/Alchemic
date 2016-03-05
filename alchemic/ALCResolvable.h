@@ -8,20 +8,17 @@
 
 @import Foundation;
 
-@protocol ALCModel;
-@protocol ALCResolvable;
-
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^DependencyTraverseBlock)(id<ALCResolvable> resolvable, BOOL *stop);
+@protocol ALCModel;
+@class ALCDependencyStackItem;
 
 @protocol ALCResolvable <NSObject>
 
-@property (nonatomic, assign) BOOL enumeratingDependencies;
+@property (nonatomic, assign, readonly) bool ready;
 
-@property (nonatomic, assign, readonly) NSArray<id<ALCResolvable>> *dependencies;
-
--(void) enumerateDependenciesWithBlock:(DependencyTraverseBlock) block;
+-(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack
+                   model:(id<ALCModel>) model;
 
 @end
 

@@ -57,12 +57,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) setObject:(id) object {
-
-    // If dependencies are not resolved then the value cannot be set.
-    if (!self.resolved) {
-        throwException(@"AlchemicDependenciesNotResolved", @"Cannot set object, dependencies not resolved");
-    }
-
     _typeStrategy.object = object;
     if (_readyBlock != NULL) {
         _readyBlock();
@@ -76,11 +70,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSString *) description {
 
-    NSMutableString *description = [[NSMutableString alloc] init];
-
+    BOOL instantiated = (_factoryType == ALCFactoryTypeSingleton && _typeStrategy.object)
+    || (_factoryType == ALCFactoryTypeReference && _typeStrategy.ready);
+    NSMutableString *description = [[NSMutableString alloc] initWithString:instantiated ? @"* " : @"  "];
     switch (_factoryType) {
         case ALCFactoryTypeFactory:
-            [description appendString:_typeStrategy.object ? @"* " : @"  "];
             [description appendString:@"Factory "];
             break;
 
@@ -108,19 +102,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id) instantiateObject {
     return nil;
-}
-
--(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack
-                   model:(id<ALCModel>) model {
-
-    [super resolveWithStack:resolvingStack model:model];
-
-    if (!self.ready) {
-        blockSelf;
-        _readyBlock = ^{
-            [model objectFactoryReady:strongSelf];
-        };
-    }
 }
 
 @end

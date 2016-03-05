@@ -25,9 +25,6 @@ id<ALCDependency> ALC ## name(type value) { \
 -(BOOL) ready { \
     return YES; \
 } \
--(NSArray<ALCResolvable> *)dependencies { \
-    return @[]; \
-} \
 -(instancetype) initWithValue:(type) value { \
     self = [super init]; \
     if (self) { \
@@ -35,8 +32,8 @@ id<ALCDependency> ALC ## name(type value) { \
     } \
     return self; \
 } \
--(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model{} \
--(void)setObject:(id) object variable:(Ivar) variable { \
+-(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {} \
+-(void) setObject:(id) object variable:(Ivar) variable { \
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
     if (ivarTypeData.objcClass) { \
         [ALCRuntime setObject:object variable:variable withValue:toObject]; \
@@ -59,9 +56,6 @@ type _value; \
 -(BOOL) ready { \
 return YES; \
 } \
--(NSArray<ALCResolvable> *)dependencies { \
-return @[]; \
-} \
 -(instancetype) initWithValue:(type) value { \
 self = [super init]; \
 if (self) { \
@@ -69,8 +63,8 @@ _value = value; \
 } \
 return self; \
 } \
--(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model{} \
--(void)setObject:(id) object variable:(Ivar) variable { \
+-(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {} \
+-(void) setObject:(id) object variable:(Ivar) variable { \
 [ALCRuntime setObject:object variable:variable withValue:_value]; \
 } \
 -(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \

@@ -12,6 +12,7 @@
 #import "ALCResolvable.h"
 
 @protocol ALCDependency;
+@protocol ALCModel;
 
 @interface NSObject (Alchemic)
 
@@ -35,8 +36,15 @@
  */
 +(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments;
 
--(void) enumerateDependencies:(NSArray<id<ALCResolvable>> *) dependencies
-              enumeratingFlag:(BOOL *) enumeratingFlag
-                    withBlock:(DependencyTraverseBlock) block;
+-(void) resolveFactoryWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
+                           resolvingFlag:(BOOL *) resolvingFlag
+                                   block:(void (^) (void)) block;
+
+-(void) resolveDependencyWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
+                                   withName:(NSString *) name
+                                      model:(id<ALCModel>) model;
+
+-(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies
+            resolvingFlag:(BOOL *) resolvingFlag;
 
 @end
