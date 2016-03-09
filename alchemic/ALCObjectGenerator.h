@@ -9,6 +9,7 @@
 @import Foundation;
 
 #import "ALCResolvable.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

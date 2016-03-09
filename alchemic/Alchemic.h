@@ -14,6 +14,10 @@ FOUNDATION_EXPORT double alchemicVersionNumber;
 //! Project version string for alchemic.
 FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 
+FOUNDATION_EXPORT NSString *AlchemicDidCreateObject;
+FOUNDATION_EXPORT NSString *AlchemicDidCreateObjectUserInfoObject;
+FOUNDATION_EXPORT NSString *AlchemicDidFinishStarting;
+
 //#import <Alchemic/ALCModel.h>
 //#import <Alchemic/ALCModelImpl.h>
 //#import <Alchemic/ALCResolvable.h>
@@ -25,3 +29,7 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 //#import <Alchemic/ALCModelDependency.h>
 //#import <Alchemic/ALCRuntime.h>
 //#import <Alchemic/ALCModelSearchCriteria.h>
+
+@interface Alchemic : NSObject
+
+@end

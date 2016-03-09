@@ -15,6 +15,8 @@
 #import "ALCInternalMacros.h"
 #import "ALCDependency.h"
 #import "ALCClassObjectFactoryInitializer.h"
+#import "AlchemicAware.h"
+#import "Alchemic.h"
 
 @implementation ALCClassObjectFactory {
     NSMutableArray<ALCDependencyRef *> *_dependencies;
@@ -72,8 +74,24 @@
 }
 
 -(void) setObject:(id) object {
+
     super.object = object;
-    [self injectDependenciesIntoObject:object];
+
+    // We need to somehow allow other code to execute here or some circular references will not work.
+    // Mainly, obj1.init(arg) --> obj2.prop --> obj1
+    // Because obj2.prop is needed before obj1 is created.
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        [self injectDependenciesIntoObject:object];
+
+        if ([object respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
+            [object alchemicDidInjectDependencies];
+        }
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
+                                                            object:self
+                                                          userInfo:@{AlchemicDidCreateObjectUserInfoObject: object}];
+    });
 }
 
 -(void) injectDependenciesIntoObject:(id) value {
