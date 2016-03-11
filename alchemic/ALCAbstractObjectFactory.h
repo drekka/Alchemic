@@ -11,14 +11,15 @@
 #import "ALCObjectFactory.h"
 #import "ALCAbstractObjectGenerator.h"
 
+@class ALCFactoryResult;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractObjectFactory : ALCAbstractObjectGenerator<ALCObjectFactory>
 
--(id) instantiateObject;
+-(void) setObject:(id) object;
 
-// Object factories must be settable.
-@property (nonatomic, strong) id object;
+-(ALCFactoryResult *) generateResult;
 
 @end
 

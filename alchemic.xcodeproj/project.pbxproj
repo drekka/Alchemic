@@ -11,6 +11,8 @@
 		6C0747D31BE8DDE20096BF85 /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C1ADAFF1C8DB28400267E77 /* AlchemicAware.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */; };
 		6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB001C8DB88C00267E77 /* Alchemic.m */; };
+		6C1ADB041C9050FB00267E77 /* ALCFactoryResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADB021C9050FB00267E77 /* ALCFactoryResult.h */; };
+		6C1ADB051C9050FB00267E77 /* ALCFactoryResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB031C9050FB00267E77 /* ALCFactoryResult.m */; };
 		6C25D2751C566E2D00D982DC /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2741C566E2D00D982DC /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C25D2771C566E6A00D982DC /* ALCObjectFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C25D2791C566F7900D982DC /* Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2781C566F2E00D982DC /* Alchemic.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -97,6 +99,8 @@
 /* Begin PBXFileReference section */
 		6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlchemicAware.h; sourceTree = "<group>"; };
 		6C1ADB001C8DB88C00267E77 /* Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alchemic.m; sourceTree = "<group>"; };
+		6C1ADB021C9050FB00267E77 /* ALCFactoryResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCFactoryResult.h; sourceTree = "<group>"; };
+		6C1ADB031C9050FB00267E77 /* ALCFactoryResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCFactoryResult.m; sourceTree = "<group>"; };
 		6C25D2741C566E2D00D982DC /* ALCModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCModel.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCObjectFactory.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C25D2781C566F2E00D982DC /* Alchemic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Alchemic.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -208,6 +212,8 @@
 				6C4B56151C6E0AD10040AEC2 /* ALCMethodObjectFactory.m */,
 				6C3AFBA81C5CE89500B4FCAA /* ALCObjectFactoryType.h */,
 				6C4B56201C6F6DF60040AEC2 /* types */,
+				6C1ADB021C9050FB00267E77 /* ALCFactoryResult.h */,
+				6C1ADB031C9050FB00267E77 /* ALCFactoryResult.m */,
 			);
 			name = "Value factories";
 			sourceTree = "<group>";
@@ -364,6 +370,7 @@
 				6C3AFBAC1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.h in Headers */,
 				6C4B56161C6E0AD10040AEC2 /* ALCMethodObjectFactory.h in Headers */,
 				6C4B56121C6E0A390040AEC2 /* ALCClassObjectFactory.h in Headers */,
+				6C1ADB041C9050FB00267E77 /* ALCFactoryResult.h in Headers */,
 				6C68CF891C6636D6003A7A54 /* NSObject+Alchemic.h in Headers */,
 				6C3AFBA91C5CE89500B4FCAA /* ALCObjectFactoryType.h in Headers */,
 				6C4B560F1C6CC3800040AEC2 /* ALCInternalMacros.h in Headers */,
@@ -504,6 +511,7 @@
 				6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */,
 				6C3AFBC91C636DC500B4FCAA /* ALCModelDependency.m in Sources */,
 				6C68CF851C64E430003A7A54 /* ALCConstants.m in Sources */,
+				6C1ADB051C9050FB00267E77 /* ALCFactoryResult.m in Sources */,
 				6C3AFBB11C5E0CB800B4FCAA /* ALCObjectFactoryTypeFactory.m in Sources */,
 				6C4B561B1C6E0BF10040AEC2 /* ALCDependencyRef.m in Sources */,
 				6C3AFBAD1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.m in Sources */,

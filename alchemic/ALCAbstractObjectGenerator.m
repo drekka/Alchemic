@@ -11,6 +11,7 @@
 #import "ALCAbstractObjectGenerator.h"
 #import "ALCInternalMacros.h"
 #import "NSObject+Alchemic.h"
+#import "ALCFactoryResult.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,12 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
     Class _objectClass;
 }
 
--(id) object {
-    return nil;
-}
-
 -(Class) objectClass {
     return _objectClass;
+}
+
+-(ALCFactoryResult *) factoryResult {
+    return nil;
 }
 
 -(NSString *) defaultName {

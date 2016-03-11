@@ -11,11 +11,13 @@
 #import "ALCResolvable.h"
 #import "ALCInternalMacros.h"
 
+@class ALCFactoryResult;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCObjectGenerator <ALCResolvable>
 
-@property (nonatomic, strong, readonly) id object;
+@property (nonatomic, strong, readonly) ALCFactoryResult *factoryResult;
 
 @property (nonatomic, assign, readonly) Class objectClass;
 

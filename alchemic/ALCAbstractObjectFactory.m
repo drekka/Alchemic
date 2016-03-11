@@ -15,6 +15,7 @@
 #import "ALCObjectFactoryTypeSingleton.h"
 #import "ALCObjectFactoryTypeFactory.h"
 #import "ALCObjectFactoryTypeReference.h"
+#import "ALCFactoryResult.h"
 
 #import "ALCInternalMacros.h"
 #import "ALCModel.h"
@@ -23,7 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractObjectFactory {
     id<ALCObjectFactoryType> _typeStrategy;
-    SimpleBlock _readyBlock;
 }
 
 @synthesize factoryType = _factoryType;
@@ -47,21 +47,20 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(id) object {
+-(ALCFactoryResult *) factoryResult {
+
     id object = _typeStrategy.object;
-    if (!object) {
-        object = [self instantiateObject];
-        self.object = object;
+    if (object) {
+        return [ALCFactoryResult resultWithObject:object completion:NULL];
     }
-    return object;
+
+    ALCFactoryResult *result = [self generateResult];
+    [self setObject:result.object];
+    return result;
 }
 
 -(void) setObject:(id) object {
     _typeStrategy.object = object;
-    if (_readyBlock != NULL) {
-        _readyBlock();
-        _readyBlock = NULL;
-    }
 }
 
 -(BOOL) ready {
@@ -100,7 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(id) instantiateObject {
+-(ALCFactoryResult *) generateResult {
     return nil;
 }
 

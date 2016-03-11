@@ -17,6 +17,4 @@
 
 -(void) registerDependency:(id<ALCDependency>) dependency forVariable:(NSString *) variableName;
 
--(void) injectDependenciesIntoObject:(id) value;
-
 @end

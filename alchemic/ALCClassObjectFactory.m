@@ -17,6 +17,7 @@
 #import "ALCClassObjectFactoryInitializer.h"
 #import "AlchemicAware.h"
 #import "Alchemic.h"
+#import "ALCFactoryResult.h"
 
 @implementation ALCClassObjectFactory {
     NSMutableArray<ALCDependencyRef *> *_dependencies;
@@ -65,40 +66,36 @@
     return NO;
 }
 
--(id) instantiateObject {
+-(ALCFactoryResult *) generateResult {
+
+    id obj;
+    ALCSimpleBlock initializerCompletion = NULL;
     if (_initializer) {
-        return _initializer.object;
+        ALCFactoryResult *initializerResult = _initializer.factoryResult;
+        obj = initializerResult.object;
+        initializerCompletion = initializerResult.completion;
+    } else {
+        STLog(self.objectClass, @"Instantiating a %@ using init", NSStringFromClass(self.objectClass));
+        obj = [[self.objectClass alloc] init];
     }
-    STLog(self.objectClass, @"Instantiating a %@ using init", NSStringFromClass(self.objectClass));
-    return [[self.objectClass alloc] init];
-}
 
--(void) setObject:(id) object {
+    return [ALCFactoryResult resultWithObject:obj
+                                   completion:^{
 
-    super.object = object;
+                                       if (initializerCompletion) {
+                                           initializerCompletion();
+                                       }
 
-    // We need to somehow allow other code to execute here or some circular references will not work.
-    // Mainly, obj1.init(arg) --> obj2.prop --> obj1
-    // Because obj2.prop is needed before obj1 is created.
-    dispatch_async(dispatch_get_main_queue(), ^{
+                                       [self injectDependenciesIntoObject:obj];
 
-        [self injectDependenciesIntoObject:object];
+                                       if ([obj respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
+                                           [obj alchemicDidInjectDependencies];
+                                       }
 
-        if ([object respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
-            [object alchemicDidInjectDependencies];
-        }
-
-        [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
-                                                            object:self
-                                                          userInfo:@{AlchemicDidCreateObjectUserInfoObject: object}];
-    });
-}
-
--(void) injectDependenciesIntoObject:(id) value {
-    for (ALCDependencyRef *depRef in _dependencies) {
-        STLog(self.objectClass, @"Injecting %@.%@", NSStringFromClass(self.objectClass), depRef.name);
-        [depRef.dependency setObject:value variable:depRef.ivar];
-    }
+                                       [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
+                                                                                           object:self
+                                                                                         userInfo:@{AlchemicDidCreateObjectUserInfoObject: obj}];
+                                   }];
 }
 
 -(NSArray<id<ALCDependency>> *) referencedDependencies {
@@ -109,5 +106,11 @@
     return deps;
 }
 
+-(void) injectDependenciesIntoObject:(id) value {
+    for (ALCDependencyRef *depRef in _dependencies) {
+        STLog(self.objectClass, @"Injecting %@.%@", NSStringFromClass(self.objectClass), depRef.name);
+        [depRef.dependency setObject:value variable:depRef.ivar];
+    }
+}
 
 @end

@@ -14,6 +14,7 @@
 #import "ALCInternalMacros.h"
 #import "ALCDependency.h"
 #import "NSObject+Alchemic.h"
+#import "ALCFactoryResult.h"
 
 @implementation ALCClassObjectFactoryInitializer {
     NSArray<id<ALCDependency>> *_arguments;
@@ -21,10 +22,14 @@
     BOOL _enumeratingDependencies;
 }
 
--(id) object {
+-(ALCFactoryResult *) factoryResult {
     STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), NSStringFromSelector(_initializer));
     STStartScope(self.objectClass);
-    return [self.objectClass invokeSelector:_initializer arguments:_arguments];
+    id obj = [self.objectClass invokeSelector:_initializer arguments:_arguments];
+    return [ALCFactoryResult resultWithObject:obj
+                                   completion:^{
+
+                                   }];
 }
 
 -(NSString *) defaultName {

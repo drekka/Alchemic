@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
 
+-(void) executeCompletionBlocks;
+
 @end
 
 NS_ASSUME_NONNULL_END
