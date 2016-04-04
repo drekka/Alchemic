@@ -9,17 +9,22 @@
 @import Foundation;
 
 #import "ALCObjectFactory.h"
-#import "ALCAbstractObjectGenerator.h"
 
-@class ALCFactoryResult;
+@class ALCInstantiation;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCAbstractObjectFactory : ALCAbstractObjectGenerator<ALCObjectFactory>
+@interface ALCAbstractObjectFactory : NSObject<ALCObjectFactory>
+
+-(instancetype) init NS_UNAVAILABLE;
+
+-(instancetype) initWithClass:(Class) objectClass NS_DESIGNATED_INITIALIZER;
 
 -(void) setObject:(id) object;
 
--(ALCFactoryResult *) generateResult;
+-(ALCInstantiation *) createObject;
+
+-(void) objectFinished:(id) object;
 
 @end
 

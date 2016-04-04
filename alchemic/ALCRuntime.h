@@ -9,11 +9,7 @@
 @import Foundation;
 @import ObjectiveC;
 
-@interface ALCTypeData : NSObject
-@property (nonatomic, strong, nullable) NSString *scalarType;
-@property (nonatomic, assign, nullable) Class objcClass;
-@property (nonatomic, strong, nullable) NSArray<Protocol *> *objcProtocols;
-@end
+@class ALCTypeData;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,6 +20,19 @@ NS_ASSUME_NONNULL_BEGIN
 +(ALCTypeData *) typeDataForIVar:(Ivar) iVar;
 
 +(void)setObject:(id) object variable:(Ivar) variable withValue:(id) value;
+
+/**
+ Validates that the passed selector occurs on the passed class and has a correct set of arguments stored in the macro processor.
+
+ @param aClass The class to be used to check the selector again.
+ @param selector The selector to check.
+ @exception ALCException If there is a problem.
+ */
++(void) validateClass:(Class) aClass selector:(SEL)selector;
+
++(NSString *) selectorDescription:(Class) aClass selector:(SEL)selector;
+
++(NSString *) propertyDescription:(Class) aClass property:(NSString *)property;
 
 @end
 

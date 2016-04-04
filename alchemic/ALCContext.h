@@ -18,22 +18,30 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCContext <NSObject>
 
+#pragma mark - Lifecycle
+
 -(void) start;
 
--(ALCClassObjectFactory *) registerClass:(Class) clazz;
+#pragma mark - Registering
+
+-(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz;
+
+-(ALCMethodObjectFactory *) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
+                                    factoryMethod:(SEL) selector
+                                       returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) registerObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
+                  initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
+             vaiableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+
+#pragma mark - Registration management
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory
           changedName:(NSString *) oldName
               newName:(NSString *) newName;
 
--(ALCMethodObjectFactory *) registerMethod:(SEL) selector
-                       parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                                      args:(NSArray<id<ALCDependency>> *) arguments
-                                returnType:(Class) returnType;
-
--(void) registerInitializer:(SEL) initializer
-        parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                       args:(NSArray<id<ALCDependency>> *) arguments;
 
 @end
 

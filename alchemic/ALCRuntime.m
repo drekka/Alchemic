@@ -8,11 +8,9 @@
 
 #import "ALCRuntime.h"
 #import "ALCInternalMacros.h"
+#import "ALCTypeData.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@implementation ALCTypeData
-@end
 
 @implementation ALCRuntime
 
@@ -52,9 +50,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     var = class_getInstanceVariable(aClass, [[@"_" stringByAppendingString:inj] UTF8String]);
 
     if (var == NULL) {
-        @throw [NSException exceptionWithName:@"AlchemicInjectionNotFound"
-                                       reason:str(@"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass))
-                                     userInfo:nil];
+        throwException(@"AlchemicInjectionNotFound", @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
     }
 
     return var;
@@ -112,10 +108,22 @@ static NSCharacterSet *__typeEncodingDelimiters;
     if ([value isKindOfClass:ivarTypeData.objcClass]) {
         object_setIvar(object, variable, value);
     } else {
-        @throw [NSException exceptionWithName:@"AlchemicIncorrectType"
-                                       reason:str(@"Resolved value of type %2$@ cannot be cast to variable '%1$s' (%3$s)", ivar_getName(variable), NSStringFromClass([value class]), class_getName(ivarTypeData.objcClass))
-                                     userInfo:nil];
+        throwException(@"AlchemicIncorrectType", @"Resolved value of type %2$@ cannot be cast to variable '%1$s' (%3$s)", ivar_getName(variable), NSStringFromClass([value class]), class_getName(ivarTypeData.objcClass));
     }
+}
+
++(void) validateClass:(Class) aClass selector:(SEL)selector {
+    if (! [aClass instancesRespondToSelector:selector]) {
+        throwException(@"AlchemicSelectorNotFound", @"Failed to find selector %@", [self selectorDescription:aClass selector:selector]);
+    }
+}
+
++(NSString *) selectorDescription:(Class) aClass selector:(SEL)selector {
+    return str(@"%@[%@ %@]", [aClass respondsToSelector:selector] ? @"+" : @":", NSStringFromClass(aClass), NSStringFromSelector(selector));
+}
+
++(NSString *) propertyDescription:(Class) aClass property:(NSString *)property {
+    return str(@"%@.%@", NSStringFromClass(aClass), property);
 }
 
 

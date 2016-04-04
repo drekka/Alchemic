@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCObjectGenerator.h"
+#import "ALCInstantiator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +18,7 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
     ALCFactoryTypeReference
 };
 
-@protocol ALCObjectFactory <ALCObjectGenerator>
+@protocol ALCObjectFactory <ALCInstantiator>
 
 @property (nonatomic, assign) ALCFactoryType factoryType;
 

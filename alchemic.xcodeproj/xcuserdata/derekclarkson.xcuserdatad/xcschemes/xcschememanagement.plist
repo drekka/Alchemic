@@ -19,10 +19,20 @@
 			<key>orderHint</key>
 			<integer>4</integer>
 		</dict>
+		<key>Integration.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>6C0747C21BE8DAFC0096BF85</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6C24CCE11CA42BA80026D18C</key>
 		<dict>
 			<key>primary</key>
 			<true/>

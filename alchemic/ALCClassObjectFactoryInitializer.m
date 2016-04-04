@@ -14,67 +14,64 @@
 #import "ALCInternalMacros.h"
 #import "ALCDependency.h"
 #import "NSObject+Alchemic.h"
-#import "ALCFactoryResult.h"
+#import "ALCInstantiation.h"
+#import "ALCRuntime.h"
 
 @implementation ALCClassObjectFactoryInitializer {
     NSArray<id<ALCDependency>> *_arguments;
     SEL _initializer;
-    BOOL _enumeratingDependencies;
+    BOOL _resolved;
+    BOOL _checkingReadyStatus;
 }
 
--(ALCFactoryResult *) factoryResult {
-    STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), NSStringFromSelector(_initializer));
-    STStartScope(self.objectClass);
-    id obj = [self.objectClass invokeSelector:_initializer arguments:_arguments];
-    return [ALCFactoryResult resultWithObject:obj
-                                   completion:^{
-
-                                   }];
-}
-
--(NSString *) defaultName {
-    return str(@"%@::%@", NSStringFromClass(self.objectClass), NSStringFromSelector(_initializer));
-}
-
--(NSString *) descriptionAttributes {
-    return [NSString stringWithFormat:@"initializer %@", self.defaultName];
-}
+@synthesize objectClass = _objectClass;
 
 -(instancetype) init {
-    return nil;
-}
-
--(instancetype) initWithClass:(Class) objectClass {
     return nil;
 }
 
 -(instancetype) initWithObjectFactory:(ALCClassObjectFactory *) objectFactory
                           initializer:(SEL) initializer
                                  args:(NSArray<id<ALCDependency>> *) arguments {
-    self = [super initWithClass:objectFactory.objectClass];
+    self = [super init];
     if (self) {
         objectFactory.initializer = self;
+        _objectClass = objectFactory.objectClass;
         _initializer = initializer;
         _arguments = arguments;
     }
     return self;
 }
 
--(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model {
+-(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
     [self resolveFactoryWithResolvingStack:resolvingStack
-                        resolvingFlag:&_enumeratingDependencies
-                                block:^{
-                                    [self->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
-                                        [argument resolveDependencyWithResolvingStack:resolvingStack withName:str(@"arg: %lu", idx) model:model];
-                                    }];
-                                }];
+                              resolvedFlag:&_resolved
+                                     block:^{
+                                         [self->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
+                                             [argument resolveDependencyWithResolvingStack:resolvingStack
+                                                                                  withName:str(@"arg: %lu", idx)
+                                                                                     model:model];
+                                         }];
+                                     }];
+}
+
+-(ALCInstantiation *) objectInstantiation {
+    STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), NSStringFromSelector(_initializer));
+    STStartScope(self.objectClass);
+    id obj = [self.objectClass invokeSelector:_initializer arguments:_arguments];
+    return [ALCInstantiation instantiationWithObject:obj completion:NULL];
+}
+
+-(NSString *) defaultName {
+    return [ALCRuntime selectorDescription: self.objectClass selector:_initializer];
+}
+
+-(NSString *) descriptionAttributes {
+    return str(@"initializer %@", self.defaultName);
 }
 
 -(BOOL) ready {
-    if (!super.ready) {
-        return NO;
-    }
-    return [self dependenciesReady:_arguments resolvingFlag:&_enumeratingDependencies];
+    return [self dependenciesReady:_arguments checkingStatusFlag:&_checkingReadyStatus];
 }
 
 @end

@@ -17,11 +17,12 @@
 #import "ALCClassObjectFactoryInitializer.h"
 #import "AlchemicAware.h"
 #import "Alchemic.h"
-#import "ALCFactoryResult.h"
+#import "ALCInstantiation.h"
 
 @implementation ALCClassObjectFactory {
     NSMutableArray<ALCDependencyRef *> *_dependencies;
-    BOOL _enumeratingDependencies;
+    BOOL _resolved;
+    BOOL _checkingReadyStatus;
 }
 
 @synthesize initializer = _initializer;
@@ -34,44 +35,45 @@
     return self;
 }
 
--(void) registerDependency:(id<ALCDependency>) dependency forVariable:(NSString *) variableName {
+-(void) registerDependency:(id<ALCDependency>) dependency forVariable:(Ivar) variable withName:(NSString *) variableName {
     ALCDependencyRef *ref = [[ALCDependencyRef alloc] init];
-    ref.ivar = [ALCRuntime aClass:self.objectClass variableForInjectionPoint:variableName];
+    ref.ivar = variable;
     ref.name = variableName;
     ref.dependency = dependency;
     [_dependencies addObject:ref];
 }
 
--(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model {
-
+-(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
+    blockSelf;
     [self resolveFactoryWithResolvingStack:resolvingStack
-                             resolvingFlag:&_enumeratingDependencies
+                              resolvedFlag:&_resolved
                                      block:^{
-                                         if (self->_initializer) {
-                                             [self->_initializer resolveWithStack:resolvingStack model:model];
+                                         if (strongSelf->_initializer) {
+                                             [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
                                          }
-                                         for (ALCDependencyRef *ref in self->_dependencies) {
-                                             NSString *name = str(@"%@.%@", self.defaultName, ref.name);
+                                         for (ALCDependencyRef *ref in strongSelf->_dependencies) {
                                              // Class dependencies start a new stack.
                                              NSMutableArray *newStack = [[NSMutableArray alloc] init];
-                                             [(NSObject *)ref.dependency resolveDependencyWithResolvingStack:newStack withName:name model:model];
+                                             [ref.dependency resolveDependencyWithResolvingStack:newStack
+                                                                                        withName:str(@"%@.%@", strongSelf.defaultName, ref.name)
+                                                                                           model:model];
                                          }
                                      }];
 }
 
 -(BOOL) ready {
     if (super.ready && (!_initializer || _initializer.ready)) {
-        return [self dependenciesReady:[self referencedDependencies] resolvingFlag:&_enumeratingDependencies];
+        return [self dependenciesReady:[self referencedDependencies] checkingStatusFlag:&_checkingReadyStatus];
     }
     return NO;
 }
 
--(ALCFactoryResult *) generateResult {
+-(ALCInstantiation *) createObject {
 
     id obj;
     ALCSimpleBlock initializerCompletion = NULL;
     if (_initializer) {
-        ALCFactoryResult *initializerResult = _initializer.factoryResult;
+        ALCInstantiation *initializerResult = _initializer.objectInstantiation;
         obj = initializerResult.object;
         initializerCompletion = initializerResult.completion;
     } else {
@@ -79,23 +81,18 @@
         obj = [[self.objectClass alloc] init];
     }
 
-    return [ALCFactoryResult resultWithObject:obj
-                                   completion:^{
+    blockSelf;
+    return [ALCInstantiation instantiationWithObject:obj
+                                          completion:^{
 
-                                       if (initializerCompletion) {
-                                           initializerCompletion();
-                                       }
+                                              STLog(strongSelf.objectClass, @"Executing completion for a %@", NSStringFromClass(strongSelf.objectClass));
+                                              if (initializerCompletion) {
+                                                  initializerCompletion();
+                                              }
 
-                                       [self injectDependenciesIntoObject:obj];
-
-                                       if ([obj respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
-                                           [obj alchemicDidInjectDependencies];
-                                       }
-
-                                       [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
-                                                                                           object:self
-                                                                                         userInfo:@{AlchemicDidCreateObjectUserInfoObject: obj}];
-                                   }];
+                                              [strongSelf injectDependenciesIntoObject:obj];
+                                              [strongSelf objectFinished:obj];
+                                          }];
 }
 
 -(NSArray<id<ALCDependency>> *) referencedDependencies {
@@ -107,9 +104,13 @@
 }
 
 -(void) injectDependenciesIntoObject:(id) value {
+    STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
     for (ALCDependencyRef *depRef in _dependencies) {
-        STLog(self.objectClass, @"Injecting %@.%@", NSStringFromClass(self.objectClass), depRef.name);
-        [depRef.dependency setObject:value variable:depRef.ivar];
+        STLog(self.objectClass, @"Injecting %@", [ALCRuntime propertyDescription:self.objectClass property:depRef.name]);
+        ALCSimpleBlock completion = [depRef.dependency setObject:value variable:depRef.ivar];
+        if (completion) {
+            completion();
+        }
     }
 }
 

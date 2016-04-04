@@ -15,7 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCModelDependency : NSObject<ALCDependency>
 
--(instancetype) initWithCriteria:(ALCModelSearchCriteria *) criteria;
+-(instancetype) init NS_UNAVAILABLE;
+
+-(instancetype) initWithObjectClass:(Class) objectClass
+                           criteria:(ALCModelSearchCriteria *) criteria NS_DESIGNATED_INITIALIZER;
 
 @end
 

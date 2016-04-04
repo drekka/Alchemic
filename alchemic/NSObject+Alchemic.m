@@ -13,7 +13,7 @@
 #import "ALCRuntime.h"
 #import "ALCInternalMacros.h"
 #import "ALCDependency.h"
-#import "ALCObjectGenerator.h"
+#import "ALCInstantiator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,8 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
 
+    STLog(self, @"Executing %@", [ALCRuntime selectorDescription:[self class] selector:selector]);
+
     // Get an invocation ready.
     NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:selector];
+
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
     inv.selector = selector;
 
@@ -32,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
         [dependency setInvocation:inv argumentIndex:(int) idx + 2];
     }];
 
-    [inv invokeWithTarget:self];
+    [inv invokeWithTarget:[[self class] respondsToSelector:selector] ? [self class] : self];
 
     const char *returnType = sig.methodReturnType;
     if (strcmp(returnType, "v") != 0) {
@@ -49,56 +52,50 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) resolveFactoryWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
-                           resolvingFlag:(BOOL *) resolvingFlag
+                            resolvedFlag:(BOOL *) resolvedFlag
                                    block:(void (^) (void)) block {
 
-    id<ALCObjectGenerator> generator = (id<ALCObjectGenerator>) self;
+    id<ALCInstantiator> generator = (id<ALCInstantiator>) self;
     NSString *name = generator.defaultName;
 
-    if (*resolvingFlag) {
+    if (*resolvedFlag) {
         // If the object factory is in the same resolving chain, then we have a loop.
         if ([resolvingStack containsObject:name]) {
             [resolvingStack addObject:name];
             throwException(@"AlchemicCircularDependency", @"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]);
         }
+
+        // We are enumerating dependencies then we have looped back through a property injection so return.
+        STLog(generator.objectClass, @"Factory %@ already resolved", NSStringFromClass(generator.objectClass));
         return;
     }
 
-    *resolvingFlag = YES;
+    STLog(generator.objectClass, @"Resolving factory %@", name);
+    *resolvedFlag = YES;
     [resolvingStack addObject:name];
     block();
-    [resolvingStack removeLastObject];
-    *resolvingFlag = NO;
-}
-
--(void) resolveDependencyWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
-                                   withName:(NSString *) name
-                                      model:(id<ALCModel>) model {
-    id<ALCDependency> dependency = (id<ALCDependency>) self;
-    [resolvingStack addObject:name];
-    [dependency resolveWithStack:resolvingStack model:model];
     [resolvingStack removeLastObject];
 }
 
 -(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies
-            resolvingFlag:(BOOL *) resolvingFlag {
-
+       checkingStatusFlag:(BOOL *) checkingFlag {
 
     // IF we have looped back here, consider us ready.
-    if (*resolvingFlag) {
+    if (*checkingFlag) {
         return YES;
     }
 
-    *resolvingFlag = YES;
+    *checkingFlag = YES;
 
     for (id<ALCResolvable> resolvable in dependencies) {
+        // If a dependency is not ready then we stop checking and return a failure.
         if (!resolvable.ready) {
-            *resolvingFlag = NO;
+            *checkingFlag = NO;
             return NO;
         }
     }
 
-    *resolvingFlag = NO;
+    *checkingFlag = NO;
     return YES;
 }
 

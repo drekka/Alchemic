@@ -8,49 +8,93 @@
 
 #import "ALCModelSearchCriteria.h"
 #import "ALCObjectFactory.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 
-@implementation ALCModelSearchCriteria {
-    Criteria _acceptCriteria;
+#pragma mark - C wrappers for Swift
+
+ALCModelSearchCriteria * AcWithClass(Class aClass) {
+    return [ALCModelSearchCriteria searchCriteriaForClass:aClass];
 }
 
+ALCModelSearchCriteria * AcWithProtocol(Protocol *aProtocol) {
+    return [ALCModelSearchCriteria searchCriteriaForProtocol:aProtocol];
+}
+
+ALCModelSearchCriteria * AcWithName(NSString *name) {
+    return [ALCModelSearchCriteria searchCriteriaForName:name];
+}
+
+#pragma mark - Core
+
+@implementation ALCModelSearchCriteria {
+    Criteria _acceptCriteria;
+    BOOL _unique;
+    NSString *_desc;
+}
+
+#pragma mark - Factory methods
+
 +(ALCModelSearchCriteria *) searchCriteriaForClass:(Class) clazz {
-    return [[ALCModelSearchCriteria alloc] initWithAcceptorBlock:^(NSString *objectFactoryName,
-                                                                id<ALCObjectFactory> objectFactory) {
-        return [objectFactory.objectClass isSubclassOfClass:clazz];
-    }];
+    return [[ALCModelSearchCriteria alloc] initWithDesc:str(@"class %@", NSStringFromClass(clazz))
+                                          acceptorBlock:^(NSString *objectFactoryName,
+                                                          id<ALCObjectFactory> objectFactory) {
+                                              return [objectFactory.objectClass isSubclassOfClass:clazz];
+                                          }];
 }
 
 +(ALCModelSearchCriteria *) searchCriteriaForProtocol:(Protocol *) protocol {
-    return [[ALCModelSearchCriteria alloc] initWithAcceptorBlock:^(NSString *objectFactoryName,
-                                                                  id<ALCObjectFactory> objectFactory) {
-        return [objectFactory.objectClass conformsToProtocol:protocol];
-    }];
+    return [[ALCModelSearchCriteria alloc] initWithDesc:str(@"protocol %@", NSStringFromProtocol(protocol))
+                                          acceptorBlock:^(NSString *objectFactoryName,
+                                                          id<ALCObjectFactory> objectFactory) {
+                                              return [objectFactory.objectClass conformsToProtocol:protocol];
+                                          }];
 }
 
 +(ALCModelSearchCriteria *) searchCriteriaForName:(NSString *) name {
-    return [[ALCModelSearchCriteria alloc] initWithAcceptorBlock:^(NSString *valueFactoryName,
-                                                                id<ALCObjectFactory> valueFactory) {
-        return [valueFactoryName isEqualToString:name];
-    }];
+    ALCModelSearchCriteria *criteria = [[ALCModelSearchCriteria alloc] initWithDesc:str(@"name '%@'", name)
+                                                                      acceptorBlock:^(NSString *valueFactoryName,
+                                                                                      id<ALCObjectFactory> valueFactory) {
+                                                                          return [valueFactoryName isEqualToString:name];
+                                                                      }];
+    criteria->_unique = YES;
+    return criteria;
 }
 
--(instancetype) initWithAcceptorBlock:(Criteria) criteriaBlock {
+#pragma mark - Tasks
+
+-(void) setNextSearchCriteria:(ALCModelSearchCriteria *) nextSearchCriteria {
+    if (_unique || nextSearchCriteria->_unique) {
+        throwException(@"AlchemicIllegalArgument", @"You cannot combine model search criteria and constants in the one injection.");
+    }
+    _nextSearchCriteria = nextSearchCriteria;
+}
+
+-(instancetype) initWithDesc:(NSString *) desc acceptorBlock:(Criteria) criteriaBlock {
     self = [super init];
     if (self) {
+        _desc = desc;
         _acceptCriteria = criteriaBlock;
     }
     return self;
 }
 
+-(ALCModelSearchCriteria *) combineWithCriteria:(ALCModelSearchCriteria *) otherCriteria {
+    self.nextSearchCriteria = otherCriteria;
+    return self;
+}
+
 -(BOOL) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name {
     return _acceptCriteria(name, valueFactory)
-    && (
-        _nextSearchCriteria == nil || [_nextSearchCriteria acceptsObjectFactory:valueFactory name:name]
-        );
+    && (_nextSearchCriteria == nil || [_nextSearchCriteria acceptsObjectFactory:valueFactory name:name]);
+}
+
+-(NSString *)description {
+    NSString *nextDesc = self.nextSearchCriteria.description;
+    return nextDesc ? str(@"%@ and %@", _desc, nextDesc) : _desc;
 }
 
 @end

@@ -9,17 +9,22 @@
 @import Foundation;
 @import ObjectiveC;
 
+#import "ALCDefs.h"
 #import "ALCResolvable.h"
+
+@protocol ALCModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCDependency <ALCResolvable>
 
--(void) setObject:(id) object variable:(Ivar) variable;
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable;
 
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
+-(ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
 
--(void) executeCompletionBlocks;
+-(void) resolveDependencyWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
+                                   withName:(NSString *) name
+                                      model:(id<ALCModel>) model;
 
 @end
 

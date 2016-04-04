@@ -7,80 +7,70 @@
 //
 
 @import XCTest;
+
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCContext.h"
 #import "ALCContextImpl.h"
-#import "ALCObjectFactory.h"
 #import "ALCClassObjectFactory.h"
 #import "ALCMethodObjectFactory.h"
-#import "ALCModelSearchCriteria.h"
-#import "ALCResolvable.h"
 #import "ALCInternalMacros.h"
 #import "ALCConstants.h"
+#import "ALCInstantiation.h"
 
-@interface TestMFClass : NSObject
-@property (nonatomic, assign) int aInt;
-@property (nonatomic, strong) NSString *aString;
-@end
-
-@implementation TestMFClass
-
--(NSString *) simpleCreate {
-    return @"abc";
-}
-
--(instancetype) initWithString:(NSString *) aString andInt:(int) aInt {
-    self = [super init];
-    if (self) {
-        _aInt = aInt;
-        _aString = aString;
-    }
-    return self;
-}
-
--(NSString *) createWithString:(NSString *) aString andInt:(int) aInt {
-    return str(@"def %@ %i",aString, aInt);
-}
-
-@end
+#import "TopThing.h"
+#import "NestedThing.h"
 
 @interface MethodFactories : XCTestCase
 @end
 
 @implementation MethodFactories{
-    id<ALCContext> context;
+    id<ALCContext> _context;
+    ALCClassObjectFactory *_topThingFactory;
 }
 
 -(void) setUp {
-    context = [[ALCContextImpl alloc] init];
+    STStartLogging(@"[Alchemic]");
+    STStartLogging(@"[TopThing]");
+    _context = [[ALCContextImpl alloc] init];
+    _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
 }
 
--(void) testSimpleFactoryMethod {
+-(void) testInstanceFactoryMethod {
 
-    ALCClassObjectFactory *valueFactory = [context registerClass:[TestMFClass class]];
-    ALCMethodObjectFactory *methodFactory = [context registerMethod:@selector(simpleCreate)
-                                                parentObjectFactory:valueFactory
-                                                               args:@[]
-                                                         returnType:[NSString class]];
+    ignoreSelectorWarnings(
+                           SEL selector = @selector(factoryMethodWithString:);
+                           )
+    ALCMethodObjectFactory *methodFactory = [_context registerObjectFactory:_topThingFactory
+                                                              factoryMethod:selector
+                                                                 returnType:[TopThing class], AcString(@"abc"), nil];
+    [_context start];
 
-    [context start];
+    XCTAssertTrue(_topThingFactory.ready);
+    XCTAssertTrue(methodFactory.ready);
 
-    XCTAssertEqual(@"abc", methodFactory.object);
+    id value = methodFactory.objectInstantiation.object;
+    XCTAssertTrue([value isKindOfClass:[TopThing class]]);
+    XCTAssertEqual(@"abc", ((TopThing *)value).aString);
 }
 
--(void) testFactoryMethodWithArgs {
+-(void) testInstanceFactoryMethodWithScalar {
 
-    ALCClassObjectFactory *valueFactory = [context registerClass:[TestMFClass class]];
-    id<ALCDependency> arg1 = ALCString(@"ghi");
-    id<ALCDependency> arg2 = ALCInt(12);
-    ALCMethodObjectFactory *methodFactory = [context registerMethod:@selector(createWithString:andInt:)
-                                                parentObjectFactory:valueFactory
-                                                               args:@[arg1, arg2]
-                                                         returnType:[NSString class]];
+    ignoreSelectorWarnings(
+                           SEL selector = @selector(factoryMethodWithString:andInt:);
+                           )
+    ALCMethodObjectFactory *methodFactory = [_context registerObjectFactory:_topThingFactory
+                                                              factoryMethod:selector
+                                                                 returnType:[TopThing class], AcString(@"abc"), AcInt(5), nil];
+    [_context start];
 
-    [context start];
+    XCTAssertTrue(_topThingFactory.ready);
+    XCTAssertTrue(methodFactory.ready);
 
-    NSString *result = methodFactory.object;
-    XCTAssertEqualObjects(@"def ghi 12", result);
+    id value = methodFactory.objectInstantiation.object;
+    XCTAssertTrue([value isKindOfClass:[TopThing class]]);
+    XCTAssertEqualObjects(@"abc", ((TopThing *) value).aString);
+    XCTAssertEqual(5, ((TopThing *) value).aInt);
 }
 
 @end

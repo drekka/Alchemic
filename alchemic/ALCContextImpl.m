@@ -16,6 +16,13 @@
 #import "ALCMethodObjectFactory.h"
 #import "ALCClassObjectFactoryInitializer.h"
 #import "ALCDependency.h"
+#import "ALCModelDependency.h"
+#import "ALCConstant.h"
+#import "Alchemic.h"
+#import "NSArray+Alchemic.h"
+#import "ALCRuntime.h"
+#import "ALCTypeData.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
     id<ALCModel> _model;
 }
 
-- (instancetype)init {
+-(instancetype)init {
     self = [super init];
     if (self) {
         _model = [[ALCModelImpl alloc] init];
@@ -32,36 +39,70 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) start {
+    STStartScope(self);
+    STLog(self, @"Starting Alchemic ...");
     [_model resolveDependencies];
     [_model startSingletons];
     STLog(self, @"\n%@", _model);
+    STLog(self, @"Alchemic started.");
 }
 
--(ALCClassObjectFactory *) registerClass:(Class) clazz {
+#pragma mark - Registration
+
+-(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz {
+    STLog(clazz, @"Register object factory for %@", NSStringFromClass(clazz));
     ALCClassObjectFactory *objectFactory = [[ALCClassObjectFactory alloc] initWithClass:clazz];
     [_model addObjectFactory:objectFactory withName:objectFactory.defaultName];
     return objectFactory;
 }
 
--(ALCMethodObjectFactory *) registerMethod:(SEL) selector
-                       parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                                      args:(NSArray<id<ALCDependency>> *) arguments
-                                returnType:(Class) returnType {
+-(ALCMethodObjectFactory *) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
+                                    factoryMethod:(SEL) selector
+                                       returnType:(Class) returnType, ... {
+
+    [ALCRuntime validateClass:objectFactory.objectClass selector:selector];
+
+    NSMutableArray *unknownArguments = [[NSMutableArray alloc] init];
+    alc_loadVarArgsAfterVariableIntoArray(returnType, unknownArguments);
+    NSArray<id<ALCDependency>> *arguments = [unknownArguments methodArgumentsWithUnexpectedTypeHandler:^(id argument) {
+
+    }];
+
     ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:(Class) returnType
-                                                                      parentObjectFactory:parentObjectFactory
+                                                                      parentObjectFactory:objectFactory
                                                                                  selector:selector
                                                                                      args:arguments];
     [_model addObjectFactory:methodFactory withName:methodFactory.defaultName];
     return methodFactory;
 }
 
--(void) registerInitializer:(SEL) initializer
-        parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                       args:(NSArray<id<ALCDependency>> *) arguments {
-    __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:parentObjectFactory
+-(void) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
+                  initializer:(SEL) initializer, ... {
+
+    [ALCRuntime validateClass:objectFactory.objectClass selector:initializer];
+
+    NSMutableArray *unknownArguments = [[NSMutableArray alloc] init];
+    alc_loadVarArgsAfterVariableIntoArray(initializer, unknownArguments);
+    NSArray<id<ALCDependency>> *arguments = [unknownArguments methodArgumentsWithUnexpectedTypeHandler:NULL];
+
+    __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:objectFactory
                                                                         initializer:initializer
                                                                                args:arguments];
 }
+
+-(void) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
+             vaiableInjection:(NSString *) variable, ... {
+
+    STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), variable);
+    NSMutableArray *valueArguments = [[NSMutableArray alloc] init];
+    alc_loadVarArgsAfterVariableIntoArray(variable, valueArguments);
+
+    Ivar ivar = [ALCRuntime aClass:objectFactory.objectClass variableForInjectionPoint:variable];
+    Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
+    [objectFactory registerDependency:[valueArguments dependencyWithClass:varClass] forVariable:ivar withName:variable];
+}
+
+#pragma mark - Object management
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory
           changedName:(NSString *) oldName

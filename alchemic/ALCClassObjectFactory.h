@@ -6,6 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import ObjectiveC;
+
 #import "ALCAbstractObjectFactory.h"
 
 @protocol ALCDependency;
@@ -15,6 +17,8 @@
 
 @property (nonatomic, strong) ALCClassObjectFactoryInitializer *initializer;
 
--(void) registerDependency:(id<ALCDependency>) dependency forVariable:(NSString *) variableName;
+-(void) registerDependency:(id<ALCDependency>) dependency forVariable:(Ivar) variable withName:(NSString *) variableName;
+
+-(void) injectDependenciesIntoObject:(id) value;
 
 @end

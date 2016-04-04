@@ -9,17 +9,14 @@
 @import Foundation;
 
 #import "ALCResolvable.h"
-#import "ALCInternalMacros.h"
 
-@class ALCFactoryResult;
+@class ALCInstantiation;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ALCObjectGenerator <ALCResolvable>
+@protocol ALCInstantiator <ALCResolvable>
 
-@property (nonatomic, strong, readonly) ALCFactoryResult *factoryResult;
-
-@property (nonatomic, assign, readonly) Class objectClass;
+@property (nonatomic, strong, readonly) ALCInstantiation *objectInstantiation;
 
 @property (nonatomic, strong, readonly) NSString *defaultName;
 

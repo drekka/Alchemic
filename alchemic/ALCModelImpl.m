@@ -13,6 +13,7 @@
 #import "ALCAbstractObjectFactory.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCInternalMacros.h"
+#import "ALCInstantiation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,16 +35,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name {
     if (_objectFactories[name]) {
-        @throw [NSException exceptionWithName:@"AlchemicDuplicateName"
-                                       reason:str(@"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name])
-                                     userInfo:nil];
+        throwException(@"AlchemicDuplicateName", @"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name]);
     }
     _objectFactories[name] = objectFactory;
 }
 
 -(void) resolveDependencies {
+    STLog(self, @"Resolving ...");
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        STLog(self, @"Resolving '%@'...", key);
         [objectFactory resolveWithStack:[NSMutableArray array] model:self];
     }];
 }
@@ -53,11 +52,17 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) startSingletons {
+    STLog(self, @"Instantiating ...");
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         if (objectFactory.factoryType == ALCFactoryTypeSingleton
             && objectFactory.ready) {
-            STLog(self, @"Starting '%@'...", key);
-            [objectFactory object];
+            STLog(objectFactory.objectClass, @"Starting '%@'", key);
+            ALCInstantiation *instantiation = objectFactory.objectInstantiation;
+            __unused id obj = instantiation.object;
+            if (instantiation.completion) {
+                STLog(objectFactory.objectClass, @"Executing completion for a new %@", NSStringFromClass(objectFactory.objectClass));
+                instantiation.completion();
+            }
         }
     }];
 }

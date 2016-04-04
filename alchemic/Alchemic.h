@@ -18,18 +18,28 @@ FOUNDATION_EXPORT NSString *AlchemicDidCreateObject;
 FOUNDATION_EXPORT NSString *AlchemicDidCreateObjectUserInfoObject;
 FOUNDATION_EXPORT NSString *AlchemicDidFinishStarting;
 
-//#import <Alchemic/ALCModel.h>
-//#import <Alchemic/ALCModelImpl.h>
-//#import <Alchemic/ALCResolvable.h>
-//#import <Alchemic/ALCContext.h>
-//#import <Alchemic/ALCContextImpl.h>
-//#import <Alchemic/ALCObjectFactory.h>
-//#import <Alchemic/ALCAbstractObjectFactory.h>
-//#import <Alchemic/ALCConstantValue.h>
-//#import <Alchemic/ALCModelDependency.h>
-//#import <Alchemic/ALCRuntime.h>
-//#import <Alchemic/ALCModelSearchCriteria.h>
+#import <Alchemic/ALCDefs.h>
+#import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCMacros.h>
+
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCAbstractObjectFactory.h>
+#import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCInstantiator.h>
+#import <Alchemic/ALCResolvable.h>
+#import <Alchemic/ALCConstants.h>
+#import <Alchemic/ALCConstant.h>
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/ALCModelSearchCriteria.h>
+#import <Alchemic/ALCInstantiation.h>
 
 @interface Alchemic : NSObject
+
+/**
+ Returns the main context.
+
+ @return The current instance of ALCContext.
+ */
++(id<ALCContext>) mainContext;
 
 @end

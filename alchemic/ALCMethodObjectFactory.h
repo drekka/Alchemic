@@ -14,12 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCMethodObjectFactory : ALCAbstractObjectFactory
 
--(instancetype) initWithClass:(Class) objectClass NS_UNAVAILABLE;
+-(instancetype) initWithClass:(Class)objectClass NS_UNAVAILABLE;
 
--(instancetype) initWithClass:(Class) objectClass
+-(instancetype) initWithClass:(Class)objectClass
           parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
                      selector:(SEL) selector
-                         args:(nullable NSArray<id<ALCDependency>> *) arguments;
+                         args:(nullable NSArray<id<ALCDependency>> *) arguments NS_DESIGNATED_INITIALIZER;
 
 @end
 

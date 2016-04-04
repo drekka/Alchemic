@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id) object {
     if (!self.ready) {
-        throwException(@"AlchemicDependencyIsReferenceObject", @"%@ is a reference factory which has not had a value set.", self);
+        throwException(@"AlchemicReferencedObjectNotSet", @"%@ is a reference factory which has not had a value set.", self);
     }
     return _object;
 }

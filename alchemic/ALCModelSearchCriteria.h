@@ -7,9 +7,12 @@
 //
 
 @import Foundation;
+
 @protocol ALCObjectFactory;
 
 NS_ASSUME_NONNULL_BEGIN
+
+#pragma mark - Core
 
 @interface ALCModelSearchCriteria : NSObject
 
@@ -19,10 +22,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(ALCModelSearchCriteria *) searchCriteriaForName:(NSString *) name;
 
-@property (nonatomic, strong, nullable) ALCModelSearchCriteria *nextSearchCriteria;
+@property (nonatomic, strong) ALCModelSearchCriteria *nextSearchCriteria;
+
+-(ALCModelSearchCriteria *) combineWithCriteria:(ALCModelSearchCriteria *) otherCriteria;
 
 -(BOOL) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name;
 
 @end
+
+#pragma mark - C wrappers for Swift
+
+ALCModelSearchCriteria * AcWithClass(Class aClass);
+
+ALCModelSearchCriteria * AcWithProtocol(Protocol *aProtocol);
+
+ALCModelSearchCriteria * AcWithName(NSString *name);
 
 NS_ASSUME_NONNULL_END

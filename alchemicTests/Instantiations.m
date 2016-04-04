@@ -8,40 +8,70 @@
 
 @import XCTest;
 
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCContext.h"
 #import "ALCContextImpl.h"
 #import "ALCObjectFactory.h"
 #import "ALCClassObjectFactory.h"
-
-@interface Singleton : NSObject
-@property (nonatomic, strong) NSString *aString;
-@end
-
-@implementation Singleton
--(instancetype) initWithString:(NSString *) aString {
-    self = [super init];
-    if (self) {
-        _aString = aString;
-    }
-    return self;
-}
-@end
+#import "ALCInstantiation.h"
+#import "TopThing.h"
+#import "ALCConstants.h"
+#import "ALCInternalMacros.h"
 
 @interface Instantiations : XCTestCase
 @end
 
-@implementation Instantiations
+@implementation Instantiations {
+    id<ALCContext> _context;
+    ALCClassObjectFactory *_topThingFactory;
+}
 
--(void) testInstantiation {
+-(void) setUp {
+    STStartLogging(@"[TopThing]");
+    STStartLogging(@"[Alchemic]");
+    _context = [[ALCContextImpl alloc] init];
+    _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
+}
 
-    id<ALCContext> context = [[ALCContextImpl alloc] init];
-    ALCClassObjectFactory *valueFactory = [context registerClass:[Singleton class]];
-    [context start];
+-(void) testSimpleInstantiation {
 
-    XCTAssertTrue(valueFactory.ready);
+    [_context start];
 
-    id value = valueFactory.object;
-    XCTAssertTrue([value isKindOfClass:[Singleton class]]);
+    XCTAssertTrue(_topThingFactory.ready);
+
+    id value = _topThingFactory.objectInstantiation.object;
+    XCTAssertTrue([value isKindOfClass:[TopThing class]]);
+}
+
+-(void) testInitializerInstantiationObject {
+
+    [_context registerObjectFactory:_topThingFactory
+                        initializer:@selector(initWithString:), AcString(@"abc"), nil];
+    [_context start];
+
+    XCTAssertTrue(_topThingFactory.ready);
+
+    id value = _topThingFactory.objectInstantiation.object;
+    XCTAssertTrue([value isKindOfClass:[TopThing class]]);
+    XCTAssertEqual(@"abc", ((TopThing *)value).aString);
+}
+
+-(void) testInitializerInstantiationObjectAndScalar {
+
+    ignoreSelectorWarnings(
+                           SEL selector = @selector(initWithString:andInt:);
+    )
+    [_context registerObjectFactory:_topThingFactory
+                        initializer:selector, AcString(@"abc"), AcInt(5), nil];
+    [_context start];
+
+    XCTAssertTrue(_topThingFactory.ready);
+
+    id value = _topThingFactory.objectInstantiation.object;
+    XCTAssertTrue([value isKindOfClass:[TopThing class]]);
+    XCTAssertEqual(@"abc", ((TopThing *)value).aString);
+    XCTAssertEqual(5, ((TopThing *)value).aInt);
 }
 
 @end

@@ -6,32 +6,41 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCModelDependency.h"
 #import "ALCModel.h"
 #import "ALCObjectFactory.h"
 #import "ALCInternalMacros.h"
 #import "NSObject+Alchemic.h"
 #import "ALCRuntime.h"
+#import "ALCInstantiation.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCModelDependency {
     ALCModelSearchCriteria *_criteria;
-    NSDictionary<NSString *, id<ALCObjectFactory>> *_resolvedFactories;
+    NSArray<id<ALCObjectFactory>> *_resolvedFactories;
 }
 
--(instancetype) initWithCriteria:(ALCModelSearchCriteria *) criteria {
+@synthesize objectClass = _objectClass;
+
+-(instancetype) init {
+    return nil;
+}
+
+-(instancetype) initWithObjectClass:(Class) objectClass
+                           criteria:(ALCModelSearchCriteria *) criteria {
     self = [super init];
     if (self) {
+        _objectClass = objectClass;
         _criteria = criteria;
     }
     return self;
 }
 
--(NSArray<id<ALCResolvable>> *)dependencies {
-    return _resolvedFactories.allValues;
-}
-
 -(BOOL)ready {
-    for (id<ALCResolvable> objectFactory in _resolvedFactories.allValues) {
+    for (id<ALCResolvable> objectFactory in _resolvedFactories) {
         if (!objectFactory.ready) {
             return NO;
         }
@@ -39,43 +48,92 @@
     return YES;
 }
 
--(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>)model {
+-(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
+
+    STLog(_objectClass, @"Searching model using %@", _criteria);
 
     // Find dependencies
-    _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];
+    _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria].allValues;
     if ([_resolvedFactories count] == 0) {
-        @throw [NSException exceptionWithName:@"AlchemicNoDependenciesFound"
-                                       reason:str(@"No object factories found for criteria %@", _criteria)
-                                     userInfo:nil];
+        throwException(@"AlchemicNoDependenciesFound", @"No object factories found for criteria %@", _criteria);
     }
 
     // Resolve dependencies.
-    for (id<ALCResolvable> objectFactory in _resolvedFactories.allValues) {
+    STLog(_objectClass, @"Found %i object factories", _resolvedFactories.count);
+    for (id<ALCResolvable> objectFactory in _resolvedFactories) {
+        STLog(_objectClass, @"Resolving dependency %@", objectFactory);
         [objectFactory resolveWithStack:resolvingStack model:model];
     }
 }
 
--(void)setObject:(id) object variable:(Ivar) variable {
-    [ALCRuntime setObject:object variable:variable withValue:[self getValue]];
+-(void) resolveDependencyWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
+                                   withName:(NSString *) name
+                                      model:(id<ALCModel>) model {
+    id<ALCDependency> dependency = (id<ALCDependency>) self;
+    STLog(_objectClass, @"Resolving %@", name);
+    [resolvingStack addObject:name];
+    [dependency resolveWithStack:resolvingStack model:model];
+    [resolvingStack removeLastObject];
 }
 
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
-    id arg = [self getValue];
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
+    NSArray<ALCInstantiation *> *instantiations = [self instantiations];
+    [ALCRuntime setObject:object variable:variable withValue:[self getValue:instantiations]];
+    return [self completionBlock:instantiations];
+}
+
+-(ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
+    NSArray<ALCInstantiation *> *instantiations = [self instantiations];
+    id arg = [self getValue:instantiations];
     [inv setArgument:&arg atIndex:idx];
+    return [self completionBlock:instantiations];
 }
 
 #pragma mark - Internal
 
--(id) getValue {
-    if ([_resolvedFactories count] > 1) {
-        NSMutableArray *results = [[NSMutableArray alloc] init];
-        [_resolvedFactories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-            [results addObject:objectFactory.object];
-        }];
-        return results;
-    } else {
-        return _resolvedFactories.allValues.firstObject.object;
+-(NSArray<ALCInstantiation *> *) instantiations {
+    NSMutableArray<ALCInstantiation *> *instantiations = [[NSMutableArray alloc] init];
+    for (id<ALCInstantiator> factory in _resolvedFactories) {
+        [instantiations addObject:factory.objectInstantiation];
     }
+    return instantiations;
+}
+
+-(ALCSimpleBlock) completionBlock:(NSArray<ALCInstantiation *> *) instantiations {
+
+    NSMutableArray<ALCSimpleBlock> *blocks = [[NSMutableArray alloc] init];
+    for (ALCInstantiation *instantiation in instantiations) {
+        ALCSimpleBlock completion = instantiation.completion;
+        if (completion) {
+            [blocks addObject:completion];
+        }
+    }
+
+    if (blocks.count == 0) {
+        return NULL;
+    }
+
+    return ^{
+        for (ALCSimpleBlock block in blocks) {
+            block();
+        }
+    };
+}
+
+-(id) getValue:(NSArray<ALCInstantiation *> *) instantiations {
+
+    if ([instantiations count] == 1 && ![_objectClass isSubclassOfClass:[NSArray class]]) {
+        return instantiations[0].object;
+    }
+
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    for (ALCInstantiation *instantiation in instantiations) {
+        [results addObject:instantiation.object];
+    }
+    return results;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END
+
