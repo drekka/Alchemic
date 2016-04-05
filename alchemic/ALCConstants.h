@@ -9,14 +9,13 @@
 @import Foundation;
 @import UIKit;
 
-#import "ALCDependency.h"
-#import "ALCConstant.h"
+#import "ALCAbstractConstantValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 #define ALCConstantHeader(name, type) \
 id<ALCDependency> Ac ## name(type value); \
-@interface ALCConstant ## name : NSObject<ALCDependency, ALCConstant> \
+@interface ALCConstant ## name : ALCAbstractConstantValue \
 -(instancetype) initWithValue:(type) value; \
 @end
 

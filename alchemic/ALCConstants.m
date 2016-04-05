@@ -24,12 +24,6 @@ id<ALCDependency> Ac ## name(type value) { \
 @implementation ALCConstant ## name { \
     type _value; \
 } \
--(BOOL) ready { \
-return YES; \
-} \
--(Class) objectClass { \
-return NULL; \
-} \
 -(instancetype) initWithValue:(type) value { \
     self = [super init]; \
     if (self) { \
@@ -37,9 +31,7 @@ return NULL; \
     } \
     return self; \
 } \
--(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {} \
--(void) resolveDependencyWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack withName:(NSString *) name model:(id<ALCModel>) model {} \
--(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
+-(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
     if (ivarTypeData.objcClass) { \
         [ALCRuntime setObject:object variable:variable withValue:toObject]; \
@@ -51,7 +43,7 @@ return NULL; \
     } \
     return NULL; \
 } \
--(ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
+-(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
     [inv setArgument:&_value atIndex:idx]; \
     return NULL; \
 } \
@@ -61,12 +53,6 @@ return NULL; \
 @implementation ALCConstant ## name { \
     type _value; \
 } \
--(Class) objectClass { \
-    return [_value class]; \
-} \
--(BOOL) ready { \
-    return YES; \
-} \
 -(instancetype) initWithValue:(type) value { \
     self = [super init]; \
     if (self) { \
@@ -74,13 +60,11 @@ return NULL; \
     } \
     return self; \
 } \
--(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {} \
--(void) resolveDependencyWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack withName:(NSString *) name model:(id<ALCModel>) model {} \
--(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
+-(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
     [ALCRuntime setObject:object variable:variable withValue:_value]; \
     return NULL; \
 } \
--(ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
+-(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
     [inv setArgument:&_value atIndex:idx]; \
     return NULL; \
 } \

@@ -58,8 +58,8 @@
 -(ALCInstantiation *) objectInstantiation {
     STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), NSStringFromSelector(_initializer));
     STStartScope(self.objectClass);
-    id obj = [self.objectClass invokeSelector:_initializer arguments:_arguments];
-    return [ALCInstantiation instantiationWithObject:obj completion:NULL];
+    id obj = [self.objectClass alloc];
+    return [obj invokeSelector:_initializer arguments:_arguments];
 }
 
 -(NSString *) defaultName {

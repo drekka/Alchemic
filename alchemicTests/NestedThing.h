@@ -12,4 +12,6 @@
 
 @interface NestedThing : NSObject<NestedProtocol>
 
+@property (nonatomic, assign) int aInt;
+
 @end

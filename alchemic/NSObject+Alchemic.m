@@ -14,12 +14,14 @@
 #import "ALCInternalMacros.h"
 #import "ALCDependency.h"
 #import "ALCInstantiator.h"
+#import "ALCInstantiation.h"
+#import "NSArray+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation NSObject (Alchemic)
 
--(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
++(ALCInstantiation *) object:(id) object invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
 
     STLog(self, @"Executing %@", [ALCRuntime selectorDescription:[self class] selector:selector]);
 
@@ -27,28 +29,36 @@ NS_ASSUME_NONNULL_BEGIN
     NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:selector];
 
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+    [inv retainArguments];
     inv.selector = selector;
 
     // Load the arguments.
+    NSMutableArray *completionBlocks = [[NSMutableArray alloc] init];
     [arguments enumerateObjectsUsingBlock:^(id<ALCDependency> dependency, NSUInteger idx, BOOL *stop) {
         STLog(self.class, @"Injecting argument at index %i", idx);
-        [dependency setInvocation:inv argumentIndex:(int) idx + 2];
+        ALCSimpleBlock argCompletion = [dependency setInvocation:inv argumentIndex:(int) idx + 2];
+        if (argCompletion) {
+            [completionBlocks addObject:argCompletion];
+        }
     }];
 
-    [inv invokeWithTarget:[[self class] respondsToSelector:selector] ? [self class] : self];
+    [inv invokeWithTarget:object];
 
     const char *returnType = sig.methodReturnType;
     if (strcmp(returnType, "v") != 0) {
         id __unsafe_unretained returnObj;
         [inv getReturnValue:&returnObj];
-        return returnObj;
+        return [ALCInstantiation instantiationWithObject:returnObj completion:[completionBlocks combineBlocks]];
     }
     return nil;
 }
 
-+(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
-    id allocedObj = [self alloc];
-    return [allocedObj invokeSelector:selector arguments:arguments];
+-(ALCInstantiation *) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
+    return [[self class] object:self invokeSelector:selector arguments:arguments];
+}
+
++(ALCInstantiation *) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
+    return [self object:self invokeSelector:selector arguments:arguments];
 }
 
 -(void) resolveFactoryWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack

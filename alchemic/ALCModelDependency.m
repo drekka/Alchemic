@@ -15,6 +15,7 @@
 #import "NSObject+Alchemic.h"
 #import "ALCRuntime.h"
 #import "ALCInstantiation.h"
+#import "NSArray+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -76,17 +77,17 @@ NS_ASSUME_NONNULL_BEGIN
     [resolvingStack removeLastObject];
 }
 
--(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
+-(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
     NSArray<ALCInstantiation *> *instantiations = [self instantiations];
     [ALCRuntime setObject:object variable:variable withValue:[self getValue:instantiations]];
-    return [self completionBlock:instantiations];
+    return [self combineCompletionBlocks:instantiations];
 }
 
--(ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
+-(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
     NSArray<ALCInstantiation *> *instantiations = [self instantiations];
     id arg = [self getValue:instantiations];
     [inv setArgument:&arg atIndex:idx];
-    return [self completionBlock:instantiations];
+    return [self combineCompletionBlocks:instantiations];
 }
 
 #pragma mark - Internal
@@ -99,7 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
     return instantiations;
 }
 
--(ALCSimpleBlock) completionBlock:(NSArray<ALCInstantiation *> *) instantiations {
+-(nullable ALCSimpleBlock) combineCompletionBlocks:(NSArray<ALCInstantiation *> *) instantiations {
 
     NSMutableArray<ALCSimpleBlock> *blocks = [[NSMutableArray alloc] init];
     for (ALCInstantiation *instantiation in instantiations) {
@@ -109,15 +110,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
 
-    if (blocks.count == 0) {
-        return NULL;
-    }
-
-    return ^{
-        for (ALCSimpleBlock block in blocks) {
-            block();
-        }
-    };
+    return [blocks combineBlocks];
 }
 
 -(id) getValue:(NSArray<ALCInstantiation *> *) instantiations {

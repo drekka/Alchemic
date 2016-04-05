@@ -80,6 +80,8 @@
 		6CC284791CABBD1F006B613F /* AnotherThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC284781CABBD1F006B613F /* AnotherThing.m */; };
 		6CC2847C1CB29A7C006B613F /* ALCException.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC2847A1CB29A7C006B613F /* ALCException.h */; };
 		6CC2847D1CB29A7C006B613F /* ALCException.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC2847B1CB29A7C006B613F /* ALCException.m */; };
+		6CC284801CB2AF1A006B613F /* ALCAbstractConstantValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC2847E1CB2AF1A006B613F /* ALCAbstractConstantValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6CC284811CB2AF1A006B613F /* ALCAbstractConstantValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC2847F1CB2AF1A006B613F /* ALCAbstractConstantValue.m */; };
 		6CC464221C7986D500B20A95 /* ALCDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC464211C7986D500B20A95 /* ALCDependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CED05761BCB545800B6C55B /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
 		6CED05781BCB548700B6C55B /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
@@ -209,6 +211,8 @@
 		6CC284781CABBD1F006B613F /* AnotherThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnotherThing.m; sourceTree = "<group>"; };
 		6CC2847A1CB29A7C006B613F /* ALCException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCException.h; sourceTree = "<group>"; };
 		6CC2847B1CB29A7C006B613F /* ALCException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCException.m; sourceTree = "<group>"; };
+		6CC2847E1CB2AF1A006B613F /* ALCAbstractConstantValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractConstantValue.h; sourceTree = "<group>"; };
+		6CC2847F1CB2AF1A006B613F /* ALCAbstractConstantValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractConstantValue.m; sourceTree = "<group>"; };
 		6CC464211C7986D500B20A95 /* ALCDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependency.h; sourceTree = "<group>"; };
 		6CED05751BCB545800B6C55B /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6CED05771BCB548700B6C55B /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
@@ -434,6 +438,8 @@
 				6C71D5421CA161A200D25AC0 /* ALCArgument.m */,
 				6C71D5451CA16BE600D25AC0 /* NSArray+Alchemic.h */,
 				6C71D5461CA16BE600D25AC0 /* NSArray+Alchemic.m */,
+				6CC2847E1CB2AF1A006B613F /* ALCAbstractConstantValue.h */,
+				6CC2847F1CB2AF1A006B613F /* ALCAbstractConstantValue.m */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -464,6 +470,7 @@
 				6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */,
 				6C1ADAFF1C8DB28400267E77 /* AlchemicAware.h in Headers */,
 				6C24CD061CA588190026D18C /* ALCDefs.h in Headers */,
+				6CC284801CB2AF1A006B613F /* ALCAbstractConstantValue.h in Headers */,
 				6C71D5471CA16BE600D25AC0 /* NSArray+Alchemic.h in Headers */,
 				6C4D85AD1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h in Headers */,
 				6C71D5431CA161A200D25AC0 /* ALCArgument.h in Headers */,
@@ -637,6 +644,7 @@
 				6C3AFBD31C638C7800B4FCAA /* ALCRuntime.m in Sources */,
 				6C68CF7F1C64DB06003A7A54 /* ALCContextImpl.m in Sources */,
 				6C68CF8A1C6636D6003A7A54 /* NSObject+Alchemic.m in Sources */,
+				6CC284811CB2AF1A006B613F /* ALCAbstractConstantValue.m in Sources */,
 				6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */,
 				6C3AFBC91C636DC500B4FCAA /* ALCModelDependency.m in Sources */,
 				6C68CF851C64E430003A7A54 /* ALCConstants.m in Sources */,

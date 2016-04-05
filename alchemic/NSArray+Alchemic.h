@@ -8,6 +8,8 @@
 
 @import Foundation;
 
+#import "ALCDefs.h"
+
 @protocol ALCDependency;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSArray<id<ALCDependency>> *) methodArgumentsWithUnexpectedTypeHandler:(nullable void (^)(id argument)) unexpectedTypeHandler;
 
 -(id<ALCDependency>) dependencyWithClass:(Class) dependencyClass;
+
+-(nullable ALCSimpleBlock) combineBlocks;
 
 @end
 

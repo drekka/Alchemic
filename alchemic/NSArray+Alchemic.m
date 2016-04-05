@@ -84,6 +84,17 @@ NS_ASSUME_NONNULL_BEGIN
                                                                         criteria:searchCriteria];
 }
 
+-(nullable ALCSimpleBlock) combineBlocks {
+    if (self.count == 0) {
+        return NULL;
+    }
+    return ^{
+        for (ALCSimpleBlock block in self) {
+            block();
+        }
+    };
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -96,5 +96,14 @@
     XCTAssertNotNil(topThing.aNestedThing);
 }
 
+-(void) testDependentObjectDependenciesInjected {
+    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
+    [[Alchemic mainContext] registerObjectFactory:_nestedThingFactory vaiableInjection:@"aInt", AcInt(5), nil];
+    [[Alchemic mainContext] start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertEqual(5, topThing.aNestedThing.aInt);
+}
+
+
 @end
 

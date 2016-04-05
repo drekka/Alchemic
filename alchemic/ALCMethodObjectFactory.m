@@ -75,9 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (parentGeneration.completion) {
         parentGeneration.completion();
     }
-    return [ALCInstantiation instantiationWithObject:[parentGeneration.object invokeSelector:_selector arguments:_arguments]
-                                          completion:^{
-                                          }];
+    return [parentGeneration.object invokeSelector:_selector arguments:_arguments];
 }
 
 #pragma mark - Descriptions

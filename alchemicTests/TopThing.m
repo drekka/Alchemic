@@ -34,6 +34,13 @@
     return self;
 }
 
+-(instancetype) initWithNestedThings:(NSArray<NestedThing *> *) nestedThings {
+    self = [super init];
+    if (self) {
+        _arrayOfNestedThings = nestedThings;
+    }
+    return self;
+}
 
 +(instancetype) classCreateWithString:(NSString *) aString {
     return [[TopThing alloc] initWithString:aString];

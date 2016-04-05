@@ -32,6 +32,7 @@ FOUNDATION_EXPORT NSString *AlchemicDidFinishStarting;
 #import <Alchemic/ALCDependency.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCAbstractConstantValue.h>
 
 @interface Alchemic : NSObject
 

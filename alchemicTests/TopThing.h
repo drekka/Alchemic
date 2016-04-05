@@ -33,6 +33,7 @@
 -(instancetype) initWithString:(NSString *) aString;
 -(instancetype) initWithString:(NSString *) aString andInt:(int) aInt;
 -(instancetype) initWithAnotherThing:(AnotherThing *) anotherThing;
+-(instancetype) initWithNestedThings:(NSArray<NestedThing *> *) nestedThings;
 
 +(instancetype) classCreateWithString:(NSString *) aString;
 

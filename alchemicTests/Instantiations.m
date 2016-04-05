@@ -16,8 +16,12 @@
 #import "ALCClassObjectFactory.h"
 #import "ALCInstantiation.h"
 #import "TopThing.h"
+#import "NestedThing.h"
 #import "ALCConstants.h"
 #import "ALCInternalMacros.h"
+#import "ALCArgument.h"
+#import "ALCMAcros.h"
+#import "ALCModelSearchCriteria.h"
 
 @interface Instantiations : XCTestCase
 @end
@@ -25,6 +29,7 @@
 @implementation Instantiations {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
+    ALCClassObjectFactory *_nestedThingFactory;
 }
 
 -(void) setUp {
@@ -32,6 +37,7 @@
     STStartLogging(@"[Alchemic]");
     _context = [[ALCContextImpl alloc] init];
     _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
+    _nestedThingFactory = [_context registerObjectFactoryForClass:[NestedThing class]];
 }
 
 -(void) testSimpleInstantiation {
@@ -72,6 +78,16 @@
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
     XCTAssertEqual(@"abc", ((TopThing *)value).aString);
     XCTAssertEqual(5, ((TopThing *)value).aInt);
+}
+
+-(void) testInitializerInstantiationArray {
+    ignoreSelectorWarnings(
+                           SEL selector = @selector(initWithNestedThings:);
+                           )
+    [_context registerObjectFactory:_topThingFactory
+                        initializer:selector, AcArgument([NSArray class], AcClass(NestedThing), nil), nil];
+    [_context start];
+
 }
 
 @end
