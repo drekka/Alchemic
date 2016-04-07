@@ -21,7 +21,7 @@ FOUNDATION_EXPORT NSString *AlchemicDidFinishStarting;
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCContext.h>
 #import <Alchemic/ALCMacros.h>
-
+#import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCObjectFactory.h>
 #import <Alchemic/ALCAbstractObjectFactory.h>
 #import <Alchemic/ALCClassObjectFactory.h>

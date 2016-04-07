@@ -17,6 +17,10 @@
 #define alc_concat(prefix, suffix) _alc_concat(prefix, suffix)
 #define _alc_concat(prefix, suffix) prefix ## suffix
 
+// Convert raw macro text to a NSString *
+#define alc_toNSString(chars) _alc_toNSString(chars)
+#define _alc_toNSString(chars) @#chars
+
 #pragma mark - Useful code defines
 
 #define str(template, ...) [NSString stringWithFormat:template, ## __VA_ARGS__ ]

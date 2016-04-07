@@ -87,8 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
     [resolvingStack removeLastObject];
 }
 
--(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies
-       checkingStatusFlag:(BOOL *) checkingFlag {
+-(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies checkingStatusFlag:(BOOL *) checkingFlag {
 
     // IF we have looped back here, consider us ready.
     if (*checkingFlag) {

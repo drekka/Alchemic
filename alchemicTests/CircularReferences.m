@@ -35,8 +35,8 @@
 }
 
 -(void) testPropertyToProperty {
-    [[Alchemic mainContext] registerObjectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
-    [[Alchemic mainContext] registerObjectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
+    [[Alchemic mainContext] objectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
+    [[Alchemic mainContext] objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
 
     [[Alchemic mainContext] start];
 
@@ -55,9 +55,9 @@
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
-    [[Alchemic mainContext] registerObjectFactory:_topFactory
+    [[Alchemic mainContext] objectFactory:_topFactory
                                       initializer:topThingInit, AcClass(AnotherThing), nil];
-    [[Alchemic mainContext] registerObjectFactory:_anotherFactory
+    [[Alchemic mainContext] objectFactory:_anotherFactory
                                       initializer:anotherThingInit, AcClass(TopThing), nil];
     @try {
         [[Alchemic mainContext] start];
@@ -66,7 +66,46 @@
     } @catch (NSException *exception) {
         XCTFail(@"Un-expected exception %@", exception);
     }
+}
 
+-(void) testPropertyToInitializer {
+    [[Alchemic mainContext] objectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
+    ignoreSelectorWarnings(
+                           SEL anotherThingInit =@selector(initWithTopThing:);
+                           )
+    [[Alchemic mainContext] objectFactory:_anotherFactory
+                                      initializer:anotherThingInit, AcClass(TopThing), nil];
+
+    [[Alchemic mainContext] start];
+
+    TopThing *topThing = _topFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+
+    AnotherThing *anotherThing = _anotherFactory.objectInstantiation.object;
+    XCTAssertNotNil(anotherThing);
+
+    XCTAssertEqual(topThing.anotherThing, anotherThing);
+    XCTAssertEqual(anotherThing.topThing, topThing);
+}
+
+-(void) testInitializerToProperty {
+    ignoreSelectorWarnings(
+                           SEL topThingInit =@selector(initWithAnotherThing:);
+                           )
+    [[Alchemic mainContext] objectFactory:_topFactory
+                                      initializer:topThingInit, AcClass(AnotherThing), nil];
+    [[Alchemic mainContext] objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
+
+    [[Alchemic mainContext] start];
+
+    TopThing *topThing = _topFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+
+    AnotherThing *anotherThing = _anotherFactory.objectInstantiation.object;
+    XCTAssertNotNil(anotherThing);
+
+    XCTAssertEqual(topThing.anotherThing, anotherThing);
+    XCTAssertEqual(anotherThing.topThing, topThing);
 }
 
 @end

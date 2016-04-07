@@ -27,15 +27,16 @@
     //((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
     //((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor whiteColor];
     //((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor lightGrayColor];
-    STStartLogging(@"[Alchemic]");
+    STStartLogging(@"<ALCContext>");
     STStartLogging(@"is [TopThing]");
+    STStartLogging(@"is [NestedThing]");
     [Alchemic initContext];
     _topThingFactory = [[Alchemic mainContext] registerObjectFactoryForClass:[TopThing class]];
     _nestedThingFactory = [[Alchemic mainContext] registerObjectFactoryForClass:[NestedThing class]];
 }
 
 -(void) testSimpleDependencyPublicVariable {
-    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:@"aNestedThing", nil];
+    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", nil];
     [[Alchemic mainContext] start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
@@ -43,7 +44,7 @@
 }
 
 -(void) testSimpleDependencyInternalVariable {
-    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
+    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
     [[Alchemic mainContext] start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
@@ -51,7 +52,7 @@
 }
 
 -(void) testSimpleDependencyArrayByClass {
-    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcClass(NestedThing), nil];
+    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcClass(NestedThing), nil];
     [[Alchemic mainContext] start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
@@ -61,7 +62,7 @@
 }
 
 -(void) testSimpleDependencyArrayByProtocol {
-    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcProtocol(NestedProtocol), nil];
+    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcProtocol(NestedProtocol), nil];
     [[Alchemic mainContext] start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
@@ -73,7 +74,7 @@
 #pragma mark - Search criteria
 
 -(void) testSimpleDependencyPublicVariableNameSearch {
-    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcName(@"NestedThing"), nil];
+    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcName(@"NestedThing"), nil];
     [[Alchemic mainContext] start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
@@ -81,7 +82,7 @@
 }
 
 -(void) testSimpleDependencyPublicVariableProtocolSearch {
-    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcProtocol(NestedProtocol), nil];
+    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcProtocol(NestedProtocol), nil];
     [[Alchemic mainContext] start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
@@ -89,7 +90,7 @@
 }
 
 -(void) testSimpleDependencyPublicVariableClassSearch {
-    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcClass(NestedThing), nil];
+    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcClass(NestedThing), nil];
     [[Alchemic mainContext] start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
@@ -97,8 +98,8 @@
 }
 
 -(void) testDependentObjectDependenciesInjected {
-    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
-    [[Alchemic mainContext] registerObjectFactory:_nestedThingFactory vaiableInjection:@"aInt", AcInt(5), nil];
+    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
+    [[Alchemic mainContext] objectFactory:_nestedThingFactory vaiableInjection:@"aInt", AcInt(5), nil];
     [[Alchemic mainContext] start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertEqual(5, topThing.aNestedThing.aInt);

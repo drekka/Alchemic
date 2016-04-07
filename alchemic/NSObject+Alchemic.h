@@ -39,8 +39,6 @@
                             resolvedFlag:(BOOL *) resolvedFlag
                                    block:(void (^) (void)) block;
 
-
--(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies
-       checkingStatusFlag:(BOOL *) checkingFlag;
+-(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies checkingStatusFlag:(BOOL *) checkingFlag;
 
 @end

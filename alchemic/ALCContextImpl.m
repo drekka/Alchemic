@@ -56,9 +56,13 @@ NS_ASSUME_NONNULL_BEGIN
     return objectFactory;
 }
 
--(ALCMethodObjectFactory *) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
-                                    factoryMethod:(SEL) selector
-                                       returnType:(Class) returnType, ... {
+-(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... {
+
+}
+
+-(ALCMethodObjectFactory *) objectFactory:(ALCClassObjectFactory *) objectFactory
+                            factoryMethod:(SEL) selector
+                               returnType:(Class) returnType, ... {
 
     [ALCRuntime validateClass:objectFactory.objectClass selector:selector];
 
@@ -76,8 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
     return methodFactory;
 }
 
--(void) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
-                  initializer:(SEL) initializer, ... {
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory initializer:(SEL) initializer, ... {
 
     [ALCRuntime validateClass:objectFactory.objectClass selector:initializer];
 
@@ -90,8 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                                                args:arguments];
 }
 
--(void) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
-             vaiableInjection:(NSString *) variable, ... {
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory vaiableInjection:(NSString *) variable, ... {
 
     STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), variable);
     NSMutableArray *valueArguments = [[NSMutableArray alloc] init];

@@ -10,6 +10,7 @@
 @import ObjectiveC;
 
 @class ALCTypeData;
+@protocol ALCContext;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -33,6 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
 +(NSString *) selectorDescription:(Class) aClass selector:(SEL)selector;
 
 +(NSString *) propertyDescription:(Class) aClass property:(NSString *)property;
+
+#pragma mark - Scanning
+
++(void) scanRuntimeWithContext:(id<ALCContext>) context;
 
 @end
 

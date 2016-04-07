@@ -41,7 +41,7 @@
     ignoreSelectorWarnings(
                            SEL selector = @selector(factoryMethodWithString:);
                            )
-    ALCMethodObjectFactory *methodFactory = [_context registerObjectFactory:_topThingFactory
+    ALCMethodObjectFactory *methodFactory = [_context objectFactory:_topThingFactory
                                                               factoryMethod:selector
                                                                  returnType:[TopThing class], AcString(@"abc"), nil];
     [_context start];
@@ -59,7 +59,7 @@
     ignoreSelectorWarnings(
                            SEL selector = @selector(factoryMethodWithString:andInt:);
                            )
-    ALCMethodObjectFactory *methodFactory = [_context registerObjectFactory:_topThingFactory
+    ALCMethodObjectFactory *methodFactory = [_context objectFactory:_topThingFactory
                                                               factoryMethod:selector
                                                                  returnType:[TopThing class], AcString(@"abc"), AcInt(5), nil];
     [_context start];

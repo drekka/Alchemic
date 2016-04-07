@@ -9,6 +9,9 @@
 #import "ALCRuntime.h"
 #import "ALCInternalMacros.h"
 #import "ALCTypeData.h"
+#import "ALCContext.h"
+#import "ALCRuntimeScanner.h"
+#import "NSSet+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -126,6 +129,29 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return str(@"%@.%@", NSStringFromClass(aClass), property);
 }
 
+#pragma mark - Scanning
+
++(void) scanRuntimeWithContext:(id<ALCContext>) context {
+
+    // Use the app bundles and Alchemic framework as the base bundles to search configs classes.
+    NSMutableSet<NSBundle *> *appBundles = [[NSSet setWithArray:[NSBundle allBundles]] mutableCopy];
+    [appBundles addObject:[NSBundle bundleForClass:[self class]]];
+
+    // Scan the bundles, checking each class.
+    NSMutableSet<NSBundle *> *moreBundles = appBundles;
+    NSMutableSet<NSBundle *> *scannedBundles;
+    while (moreBundles.count > 0) {
+
+        // Add the bundles into the scanned list.
+        [NSSet unionSet:moreBundles intoMutableSet:&scannedBundles];
+
+        // San and return a list of new bundles.
+        moreBundles = [[ALCRuntimeScanner scanBundles:moreBundles context:context] mutableCopy];
+
+        // Make sure we have not already scanned the new bundles.
+        [moreBundles minusSet:scannedBundles];
+    }
+}
 
 @end
 

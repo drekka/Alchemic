@@ -76,7 +76,7 @@
 
 -(id) setUpTestForProperty:(NSString *) property
                   constant:(id<ALCDependency>) constant {
-    [[Alchemic mainContext] registerObjectFactory:_topThingFactory vaiableInjection:property, constant, nil];
+    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:property, constant, nil];
     [[Alchemic mainContext] start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     return topThing;

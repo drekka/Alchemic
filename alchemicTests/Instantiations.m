@@ -52,7 +52,7 @@
 
 -(void) testInitializerInstantiationObject {
 
-    [_context registerObjectFactory:_topThingFactory
+    [_context objectFactory:_topThingFactory
                         initializer:@selector(initWithString:), AcString(@"abc"), nil];
     [_context start];
 
@@ -68,7 +68,7 @@
     ignoreSelectorWarnings(
                            SEL selector = @selector(initWithString:andInt:);
     )
-    [_context registerObjectFactory:_topThingFactory
+    [_context objectFactory:_topThingFactory
                         initializer:selector, AcString(@"abc"), AcInt(5), nil];
     [_context start];
 
@@ -84,7 +84,7 @@
     ignoreSelectorWarnings(
                            SEL selector = @selector(initWithNestedThings:);
                            )
-    [_context registerObjectFactory:_topThingFactory
+    [_context objectFactory:_topThingFactory
                         initializer:selector, AcArgument([NSArray class], AcClass(NestedThing), nil), nil];
     [_context start];
 

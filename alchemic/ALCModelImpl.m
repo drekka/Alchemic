@@ -60,7 +60,6 @@ NS_ASSUME_NONNULL_BEGIN
             ALCInstantiation *instantiation = objectFactory.objectInstantiation;
             __unused id obj = instantiation.object;
             if (instantiation.completion) {
-                STLog(objectFactory.objectClass, @"Executing completion for a new %@", NSStringFromClass(objectFactory.objectClass));
                 instantiation.completion();
             }
         }
@@ -83,9 +82,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-    NSMutableString *desc = [NSMutableString stringWithString:@"Model (* - Instantiated):"];
+    NSMutableString *desc = [NSMutableString stringWithString:@"Finished model (* - instantiated):"];
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        [desc appendFormat:@"\n\t%@, under name:'%@'", [objectFactory description], key];
+        [desc appendFormat:@"\n\t%@, as '%@'", [objectFactory description], key];
     }];
     return desc;
 }

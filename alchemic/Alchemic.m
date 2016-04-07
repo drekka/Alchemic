@@ -4,6 +4,9 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCContextImpl.h"
+#import "ALCRuntime.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 NSString *AlchemicDidCreateObject = @"AlchemicDidCreateObject";
 NSString *AlchemicDidCreateObjectUserInfoObject = @"object";
@@ -21,8 +24,12 @@ static __strong id<ALCContext> __mainContext;
     dispatch_async(dispatch_queue_create("Alchemic", NULL), ^{
         @autoreleasepool {
             NSProcessInfo *processInfo = [NSProcessInfo processInfo];
+            if ([processInfo.arguments containsObject:@"--alchemic-logAll"]) {
+                STStartLogging(@"");
+            }
             if (! [processInfo.arguments containsObject:@"--alchemic-nostart"]) {
                 [self initContext];
+                [ALCRuntime scanRuntimeWithContext:__mainContext];
                 [__mainContext start];
             }
         }
@@ -31,15 +38,10 @@ static __strong id<ALCContext> __mainContext;
 
 +(void) initContext {
     __mainContext = [[ALCContextImpl alloc] init];
-    /*
-     NSSet<ALCRuntimeScanner *> *scanners = [NSSet setWithArray:@[
-     [ALCRuntimeScanner modelScanner],
-     [ALCRuntimeScanner configScanner],
-     [ALCRuntimeScanner resourceLocatorScanner]
-     ]];
-     [ALCRuntime scanRuntimeWithContext:__mainContext runtimeScanners:scanners];
-     */
 }
 
 @end
+
+NS_ASSUME_NONNULL_END
+
 

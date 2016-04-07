@@ -13,6 +13,7 @@
 @protocol ALCObjectFactory;
 @class ALCClassObjectFactory;
 @class ALCMethodObjectFactory;
+@protocol ALCContext;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,15 +27,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz;
 
--(ALCMethodObjectFactory *) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
-                                    factoryMethod:(SEL) selector
-                                       returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) registerObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                  initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
+-(ALCMethodObjectFactory *) objectFactory:(ALCClassObjectFactory *) objectFactory
+                            factoryMethod:(SEL) selector
+                               returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) registerObjectFactory:(ALCClassObjectFactory *) objectFactory
-             vaiableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) objectFactory:(ALCClassObjectFactory *) parentObjectFactory initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory vaiableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Registration management
 
