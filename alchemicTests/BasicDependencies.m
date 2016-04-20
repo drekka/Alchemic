@@ -11,9 +11,12 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
+#import "Alchemic+Internal.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCInstantiation.h"
+
 #import "TopThing.h"
 #import "NestedThing.h"
-#import "Alchemic+Internal.h"
 
 @interface BasicDependencies : XCTestCase
 @end

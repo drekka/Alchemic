@@ -11,11 +11,12 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import <Alchemic/Alchemic.h>
+
 //#import "Alchemic.h"
 //#import "ALCContext.h"
-//#import "ALCContextImpl.h"
+#import "ALCContextImpl.h"
 //#import "ALCObjectFactory.h"
-//#import "ALCClassObjectFactory.h"
+#import "ALCClassObjectFactory.h"
 //#import "ALCInstantiation.h"
 //#import "ALCConstants.h"
 //#import "ALCInternalMacros.h"

@@ -9,13 +9,14 @@
 #import <XCTest/XCTest.h>
 #import <StoryTeller/StoryTeller.h>
 
-#import "Alchemic.h"
+#import "ALCContextImpl.h"
+#import "ALCInstantiation.h"
+
+#import "Alchemic+Internal.h"
 
 #import "TopThing.h"
 #import "NestedThing.h"
-#import "Alchemic+Internal.h"
 
-#import "ALCContextImpl.h"
 
 @interface AccessingObjects : XCTestCase
 @end

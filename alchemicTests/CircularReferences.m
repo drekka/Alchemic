@@ -12,9 +12,12 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "Alchemic+Internal.h"
+#import "ALCInternalMacros.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCInstantiation.h"
+
 #import "TopThing.h"
 #import "AnotherThing.h"
-#import "ALCInternalMacros.h"
 
 @interface CircularReferences : XCTestCase
 

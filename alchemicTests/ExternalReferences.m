@@ -12,7 +12,7 @@
 //#import "ALCContext.h"
 #import "ALCContextImpl.h"
 //#import "ALCObjectFactory.h"
-//#import "ALCClassObjectFactory.h"
+#import "ALCClassObjectFactory.h"
 //#import "ALCModelSearchCriteria.h"
 //#import "ALCDependency.h"
 //#import "ALCModelDependency.h"

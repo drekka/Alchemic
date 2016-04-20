@@ -9,9 +9,10 @@
 @import XCTest;
 @import UIKit;
 
-#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
+#import <Alchemic/Alchemic.h>
 
+#import "ALCClassObjectFactory.h"
 #import "Alchemic+Internal.h"
 #import "TopThing.h"
 

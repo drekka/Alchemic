@@ -20,13 +20,8 @@ FOUNDATION_EXPORT NSString *AlchemicDidFinishStarting;
 
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCContextImpl.h>
 #import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCAbstractObjectFactory.h>
-#import <Alchemic/ALCClassObjectFactory.h>
-#import <Alchemic/ALCMethodObjectFactory.h>
 #import <Alchemic/ALCInstantiator.h>
 #import <Alchemic/ALCResolvable.h>
 #import <Alchemic/ALCConstants.h>
@@ -35,10 +30,7 @@ FOUNDATION_EXPORT NSString *AlchemicDidFinishStarting;
 #import <Alchemic/ALCResolvable.h>
 #import <Alchemic/ALCArgument.h>
 #import <Alchemic/ALCException.h>
-#import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
-#import <Alchemic/ALCInstantiation.h>
-#import <Alchemic/ALCAbstractConstantValue.h>
 
 @interface Alchemic : NSObject
 

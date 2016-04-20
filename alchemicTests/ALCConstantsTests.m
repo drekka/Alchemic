@@ -12,6 +12,7 @@
 #import "ALCConstants.h"
 #import "ALCRuntime.h"
 #import "NSObject+Alchemic.h"
+#import "ALCInstantiation.h"
 
 @interface ALCConstantsTests : XCTestCase
 @property (nonatomic, assign) int anInt;

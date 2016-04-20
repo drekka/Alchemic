@@ -8,6 +8,8 @@
 
 #pragma mark - Registering
 
+#import "ALCInternalMacros.h"
+
 #define AcRegister(...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassObjectFactory *) classObjectFactory { \
     [[Alchemic mainContext] objectFactoryConfig:classObjectFactory, ## __VA_ARGS__, nil]; \
