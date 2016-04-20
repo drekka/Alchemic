@@ -10,18 +10,21 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCContext.h"
-#import "ALCContextImpl.h"
-#import "ALCObjectFactory.h"
-#import "ALCClassObjectFactory.h"
-#import "ALCInstantiation.h"
+#import <Alchemic/Alchemic.h>
+//#import "Alchemic.h"
+//#import "ALCContext.h"
+//#import "ALCContextImpl.h"
+//#import "ALCObjectFactory.h"
+//#import "ALCClassObjectFactory.h"
+//#import "ALCInstantiation.h"
+//#import "ALCConstants.h"
+//#import "ALCInternalMacros.h"
+//#import "ALCArgument.h"
+//#import "ALCMAcros.h"
+//#import "ALCModelSearchCriteria.h"
+
 #import "TopThing.h"
 #import "NestedThing.h"
-#import "ALCConstants.h"
-#import "ALCInternalMacros.h"
-#import "ALCArgument.h"
-#import "ALCMAcros.h"
-#import "ALCModelSearchCriteria.h"
 
 @interface Instantiations : XCTestCase
 @end

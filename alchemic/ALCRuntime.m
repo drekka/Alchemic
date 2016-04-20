@@ -6,6 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCRuntime.h"
 #import "ALCInternalMacros.h"
 #import "ALCTypeData.h"
@@ -24,6 +26,8 @@ static NSCharacterSet *__typeEncodingDelimiters;
     __protocolClass = objc_getClass("Protocol");
     __typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
 }
+
+#pragma mark - Querying things
 
 +(Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
 
@@ -99,21 +103,38 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return typeData;
 }
 
+#pragma mark - Setting variables
+
 +(void)setObject:(id) object variable:(Ivar) variable withValue:(id) value {
-
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
-
-    // Wrap the value in an array if it's not an array and ivar is.
-    if ([ivarTypeData.objcClass isSubclassOfClass:[NSArray class]] && ![value isKindOfClass:[NSArray class]]) {
-        value = @[value];
-    }
-
-    if ([value isKindOfClass:ivarTypeData.objcClass]) {
-        object_setIvar(object, variable, value);
-    } else {
-        throwException(@"AlchemicIncorrectType", @"Resolved value of type %2$@ cannot be cast to variable '%1$s' (%3$s)", ivar_getName(variable), NSStringFromClass([value class]), class_getName(ivarTypeData.objcClass));
-    }
+    id finalValue = [self autoboxValueForType:(Class _Nonnull) ivarTypeData.objcClass value:value];
+    STLog([object class], @"Injecting %@ with a %@", [ALCRuntime propertyDescription:[object class] variable:variable], [finalValue class]);
+    object_setIvar(object, variable, finalValue);
 }
+
++(void) setInvocation:(NSInvocation *) inv argIndex:(int) idx withValue:(id) value ofClass:(Class) valueClass {
+    id finalValue = [self autoboxValueForType:valueClass value:value];
+    [inv setArgument:&finalValue atIndex:idx];
+}
+
++(id) autoboxValueForType:(Class) type value:(id) value {
+
+    // Wrap the value in an array if it's not alrady in an array.
+    if ([type isSubclassOfClass:[NSArray class]]) {
+        return [value isKindOfClass:[NSArray class]] ? value : @[value];
+    }
+
+    // Not targetting an array so extract the first value.
+    id finalValue = [value isKindOfClass:[NSArray class]] ? ((NSArray *) value)[0] : value;
+
+    if ([finalValue isKindOfClass:type]) {
+        return finalValue;
+    }
+
+    throwException(@"AlchemicTypeMissMatch", @"Value of type %@ cannot be cast to a %@", NSStringFromClass([value class]), NSStringFromClass(type));
+}
+
+#pragma mark - Validating
 
 +(void) validateClass:(Class) aClass selector:(SEL)selector {
     if (! [aClass instancesRespondToSelector:selector]) {
@@ -121,12 +142,18 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 }
 
+#pragma mark - Describing things
+
 +(NSString *) selectorDescription:(Class) aClass selector:(SEL)selector {
     return str(@"%@[%@ %@]", [aClass respondsToSelector:selector] ? @"+" : @":", NSStringFromClass(aClass), NSStringFromSelector(selector));
 }
 
 +(NSString *) propertyDescription:(Class) aClass property:(NSString *)property {
     return str(@"%@.%@", NSStringFromClass(aClass), property);
+}
+
++(NSString *) propertyDescription:(Class) aClass variable:(Ivar) variable {
+    return str(@"%@.%s", NSStringFromClass(aClass), ivar_getName(variable));
 }
 
 #pragma mark - Scanning

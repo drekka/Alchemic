@@ -13,6 +13,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface ALCArgument ()
+-(instancetype) initWithDependency:(id<ALCDependency>) dependency;
+@end
+
 ALCArgument * AcArgument(Class argumentClass, id firstCriteria, ...) {
     NSMutableArray *criteriaDefs = [[NSMutableArray alloc] init];
     alc_loadVarArgsIntoArray(firstCriteria, criteriaDefs);
@@ -21,14 +25,10 @@ ALCArgument * AcArgument(Class argumentClass, id firstCriteria, ...) {
 
 @implementation ALCArgument
 
-+(instancetype) argumentWithClass:(Class) argumentClass model:(id<ALCModel>) model criteria:(id) firstCriteria, ... {
++(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... {
     NSMutableArray *criteriaDefs = [[NSMutableArray alloc] init];
     alc_loadVarArgsIntoArray(firstCriteria, criteriaDefs);
     return [[ALCArgument alloc] initWithDependency:[criteriaDefs dependencyWithClass:argumentClass]];
-}
-
--(instancetype) init {
-    return nil;
 }
 
 -(instancetype) initWithDependency:(id<ALCDependency>) dependency {

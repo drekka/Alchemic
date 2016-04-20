@@ -16,8 +16,12 @@
 // Registers an injection point in the current class.
 #define AcInject(variableName, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryDependency):(ALCClassObjectFactory *) classObjectFactory { \
-    [[Alchemic mainContext] objectFactory:classObjectFactory variableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] objectFactory:classObjectFactory vaiableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
+
+#pragma mark - Accessing the model
+
+#define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
 
 #pragma mark - Arguments
 

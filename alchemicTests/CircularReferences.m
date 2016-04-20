@@ -56,9 +56,9 @@
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
     [[Alchemic mainContext] objectFactory:_topFactory
-                                      initializer:topThingInit, AcClass(AnotherThing), nil];
+                              initializer:topThingInit, AcClass(AnotherThing), nil];
     [[Alchemic mainContext] objectFactory:_anotherFactory
-                                      initializer:anotherThingInit, AcClass(TopThing), nil];
+                              initializer:anotherThingInit, AcClass(TopThing), nil];
     @try {
         [[Alchemic mainContext] start];
     } @catch (ALCException *exception) {
@@ -74,7 +74,7 @@
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
     [[Alchemic mainContext] objectFactory:_anotherFactory
-                                      initializer:anotherThingInit, AcClass(TopThing), nil];
+                              initializer:anotherThingInit, AcClass(TopThing), nil];
 
     [[Alchemic mainContext] start];
 
@@ -93,7 +93,7 @@
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            )
     [[Alchemic mainContext] objectFactory:_topFactory
-                                      initializer:topThingInit, AcClass(AnotherThing), nil];
+                              initializer:topThingInit, AcClass(AnotherThing), nil];
     [[Alchemic mainContext] objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
 
     [[Alchemic mainContext] start];
@@ -104,7 +104,8 @@
     AnotherThing *anotherThing = _anotherFactory.objectInstantiation.object;
     XCTAssertNotNil(anotherThing);
 
-    XCTAssertEqual(topThing.anotherThing, anotherThing);
+    AnotherThing *nestedAnotherThing = topThing.anotherThing;
+    XCTAssertEqual(nestedAnotherThing, anotherThing);
     XCTAssertEqual(anotherThing.topThing, topThing);
 }
 

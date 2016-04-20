@@ -7,13 +7,17 @@
 //
 
 @import Foundation;
-@class ALCModelSearchCriteria;
 
 #import "ALCDependency.h"
+
+@class ALCModelSearchCriteria;
+@class ALCInstantiation;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCModelDependency : NSObject<ALCDependency>
+
+@property (nonatomic, strong, readonly) id searchResult;
 
 -(instancetype) init NS_UNAVAILABLE;
 

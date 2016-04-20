@@ -48,6 +48,25 @@ NS_ASSUME_NONNULL_BEGIN
     return arguments;
 }
 
+-(id<ALCDependency>) modelSearchWithClass:(Class) dependencyClass {
+
+    __block ALCModelSearchCriteria *searchCriteria;
+    for (id criteria in self) {
+        if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
+            searchCriteria = searchCriteria ? [searchCriteria combineWithCriteria:criteria] : criteria;
+        } else {
+            throwException(@"AlchemicIllegalArgument", @"Expected a search criteria or constant. Got: %@", criteria);
+        }
+    }
+
+    // Default to the dependency class if no constant or criteria provided.
+    if (!searchCriteria) {
+        searchCriteria = [ALCModelSearchCriteria searchCriteriaForClass:dependencyClass];
+    }
+
+    return [[ALCModelDependency alloc] initWithObjectClass:dependencyClass criteria:searchCriteria];
+}
+
 -(id<ALCDependency>) dependencyWithClass:(Class) dependencyClass {
 
     __block ALCModelSearchCriteria *searchCriteria;

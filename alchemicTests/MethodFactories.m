@@ -9,14 +9,16 @@
 @import XCTest;
 
 #import <StoryTeller/StoryTeller.h>
+#import <Alchemic/Alchemic.h>
 
-#import "ALCContext.h"
+//#import "Alchemic.h"
+//#import "ALCContext.h"
 #import "ALCContextImpl.h"
-#import "ALCClassObjectFactory.h"
-#import "ALCMethodObjectFactory.h"
-#import "ALCInternalMacros.h"
-#import "ALCConstants.h"
-#import "ALCInstantiation.h"
+//#import "ALCClassObjectFactory.h"
+//#import "ALCMethodObjectFactory.h"
+//#import "ALCInternalMacros.h"
+//#import "ALCConstants.h"
+//#import "ALCInstantiation.h"
 
 #import "TopThing.h"
 #import "NestedThing.h"
@@ -24,7 +26,7 @@
 @interface MethodFactories : XCTestCase
 @end
 
-@implementation MethodFactories{
+@implementation MethodFactories {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
 }

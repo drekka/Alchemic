@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize objectClass = _objectClass;
 
 -(instancetype) init {
+    [self doesNotRecognizeSelector:@selector(init)];
     return nil;
 }
 
@@ -85,9 +86,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
     NSArray<ALCInstantiation *> *instantiations = [self instantiations];
-    id arg = [self getValue:instantiations];
-    [inv setArgument:&arg atIndex:idx];
+    [ALCRuntime setInvocation:inv argIndex:idx withValue:[self getValue:instantiations] ofClass:self.objectClass];
     return [self combineCompletionBlocks:instantiations];
+}
+
+-(id) searchResult {
+    NSArray<ALCInstantiation *> *instantiations = [self instantiations];
+    id values = [self getValue:instantiations];
+    id finalValue = [ALCRuntime autoboxValueForType:self.objectClass value:values];
+    ALCSimpleBlock completion = [self combineCompletionBlocks:instantiations];
+    if (completion) {
+        completion();
+    }
+    return finalValue;
 }
 
 #pragma mark - Internal
@@ -113,12 +124,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [blocks combineBlocks];
 }
 
--(id) getValue:(NSArray<ALCInstantiation *> *) instantiations {
-
-    if ([instantiations count] == 1 && ![_objectClass isSubclassOfClass:[NSArray class]]) {
-        return instantiations[0].object;
-    }
-
+-(NSArray<ALCInstantiation *> *) getValue:(NSArray<ALCInstantiation *> *) instantiations {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     for (ALCInstantiation *instantiation in instantiations) {
         [results addObject:instantiation.object];

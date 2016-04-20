@@ -20,9 +20,13 @@ id<ALCDependency> Ac ## name(type value) { \
     return [[ALCConstant ## name alloc] initWithValue:value]; \
 }
 
-#define ALCConstantScalarImplementation(name, type, toObject) \
+#define ALCConstantImplementation(name, type, injectVariableCode) \
 @implementation ALCConstant ## name { \
     type _value; \
+} \
+-(instancetype) init { \
+    [self doesNotRecognizeSelector:@selector(init)]; \
+    return nil; \
 } \
 -(instancetype) initWithValue:(type) value { \
     self = [super init]; \
@@ -32,6 +36,17 @@ id<ALCDependency> Ac ## name(type value) { \
     return self; \
 } \
 -(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
+    injectVariableCode \
+    return NULL; \
+} \
+-(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
+    [inv setArgument:&_value atIndex:idx]; \
+    return NULL; \
+} \
+@end
+
+#define ALCConstantScalarImplementation(name, type, toObject) \
+ALCConstantImplementation(name, type, \
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
     if (ivarTypeData.objcClass) { \
         [ALCRuntime setObject:object variable:variable withValue:toObject]; \
@@ -41,34 +56,12 @@ id<ALCDependency> Ac ## name(type value) { \
         *ivarPtr = _value; \
         CFBridgingRelease(objRef); \
     } \
-    return NULL; \
-} \
--(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
-    [inv setArgument:&_value atIndex:idx]; \
-    return NULL; \
-} \
-@end
+)
 
 #define ALCConstantObjectImplementation(name, type) \
-@implementation ALCConstant ## name { \
-    type _value; \
-} \
--(instancetype) initWithValue:(type) value { \
-    self = [super init]; \
-    if (self) { \
-        _value = value; \
-    } \
-    return self; \
-} \
--(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
+ALCConstantImplementation(name, type, \
     [ALCRuntime setObject:object variable:variable withValue:_value]; \
-    return NULL; \
-} \
--(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
-    [inv setArgument:&_value atIndex:idx]; \
-    return NULL; \
-} \
-@end
+)
 
 #pragma mark - Scalar types
 

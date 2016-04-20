@@ -11,9 +11,9 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
-#import "Alchemic+Internal.h"
 #import "TopThing.h"
 #import "NestedThing.h"
+#import "Alchemic+Internal.h"
 
 @interface BasicDependencies : XCTestCase
 @end
@@ -41,6 +41,7 @@
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNotNil(topThing.aNestedThing);
+    XCTAssertTrue([topThing.aNestedThing isKindOfClass:[NestedThing class]]);
 }
 
 -(void) testSimpleDependencyInternalVariable {
@@ -49,6 +50,7 @@
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNotNil(topThing.aNestedThing);
+    XCTAssertTrue([topThing.aNestedThing isKindOfClass:[NestedThing class]]);
 }
 
 -(void) testSimpleDependencyArrayByClass {

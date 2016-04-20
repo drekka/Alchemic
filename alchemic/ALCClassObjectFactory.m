@@ -106,7 +106,6 @@
 -(void) injectDependenciesIntoObject:(id) value {
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
     for (ALCDependencyRef *depRef in _dependencies) {
-        STLog(self.objectClass, @"Injecting %@", [ALCRuntime propertyDescription:self.objectClass property:depRef.name]);
         ALCSimpleBlock completion = [depRef.dependency setObject:value variable:depRef.ivar];
         if (completion) {
             completion();

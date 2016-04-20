@@ -12,11 +12,14 @@
 
 @protocol ALCDependency;
 
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSArray (Alchemic)
 
 -(NSArray<id<ALCDependency>> *) methodArgumentsWithUnexpectedTypeHandler:(nullable void (^)(id argument)) unexpectedTypeHandler;
+
+-(id<ALCDependency>) modelSearchWithClass:(Class) dependencyClass;
 
 -(id<ALCDependency>) dependencyWithClass:(Class) dependencyClass;
 

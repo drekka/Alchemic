@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
     STLog(self, @"Starting Alchemic ...");
     [_model resolveDependencies];
     [_model startSingletons];
-    STLog(self, @"\n%@", _model);
+    STLog(self, @"\n\n%@\n", _model);
     STLog(self, @"Alchemic started.");
 }
 
@@ -102,6 +102,20 @@ NS_ASSUME_NONNULL_BEGIN
     Ivar ivar = [ALCRuntime aClass:objectFactory.objectClass variableForInjectionPoint:variable];
     Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
     [objectFactory registerDependency:[valueArguments dependencyWithClass:varClass] forVariable:ivar withName:variable];
+}
+
+#pragma mark - Accessing objects
+
+-(id) objectWithClass:(Class)returnType, ... {
+    STLog(returnType, @"Manual retrieving an instance of %@", NSStringFromClass([returnType class]));
+    NSMutableArray *criteria = [[NSMutableArray alloc] init];
+    alc_loadVarArgsAfterVariableIntoArray(returnType, criteria);
+    if (criteria.count == 0) {
+        [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[returnType class]]];
+    }
+    ALCModelDependency *dependency = [criteria modelSearchWithClass:returnType];
+    [dependency resolveWithStack:[[NSMutableArray alloc] init] model:_model];
+    return dependency.searchResult;
 }
 
 #pragma mark - Object management

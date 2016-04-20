@@ -7,7 +7,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <StoryTeller/StoryTeller.h>
+
+#import <Alchemic/Alchemic.h>
+
+#import "SingletonA.h"
+#import "SingletonB.h"
 
 @interface AlchemicTests : XCTestCase
 
@@ -16,6 +20,15 @@
 @implementation AlchemicTests
 
 -(void) testStartUp {
+
+    SingletonA *a = AcGet(SingletonA);
+    XCTAssertNotNil(a);
+
+    SingletonB *b = AcGet(SingletonB);
+    XCTAssertNotNil(b);
+
+    XCTAssertEqual(a.singletonB, b);
+    XCTAssertEqual(b.singletonA, a);
 }
 
 @end

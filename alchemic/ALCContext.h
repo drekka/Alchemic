@@ -37,6 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory vaiableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
+#pragma mark - Accessing objects
+
+-(id) objectWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+
 #pragma mark - Registration management
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory

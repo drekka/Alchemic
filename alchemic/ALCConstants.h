@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 #define ALCConstantHeader(name, type) \
 id<ALCDependency> Ac ## name(type value); \
 @interface ALCConstant ## name : ALCAbstractConstantValue \
--(instancetype) initWithValue:(type) value; \
+-(instancetype) init NS_UNAVAILABLE; \
+-(instancetype) initWithValue:(type) value NS_DESIGNATED_INITIALIZER; \
 @end
 
 // Scalar types

@@ -8,17 +8,19 @@
 
 @import XCTest;
 
-#import "ALCContext.h"
+#import "Alchemic.h"
+//#import "ALCContext.h"
 #import "ALCContextImpl.h"
-#import "ALCObjectFactory.h"
-#import "ALCClassObjectFactory.h"
-#import "ALCModelSearchCriteria.h"
-#import "ALCDependency.h"
-#import "ALCModelDependency.h"
-#import "ALCInstantiation.h"
+//#import "ALCObjectFactory.h"
+//#import "ALCClassObjectFactory.h"
+//#import "ALCModelSearchCriteria.h"
+//#import "ALCDependency.h"
+//#import "ALCModelDependency.h"
+//#import "ALCInstantiation.h"
+//#import "ALCException.h"
+
 #import "TopThing.h"
 #import "NestedThing.h"
-#import "ALCException.h"
 
 @interface ExternalReferences : XCTestCase
 @end

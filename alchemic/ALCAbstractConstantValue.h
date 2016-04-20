@@ -12,5 +12,4 @@
 #import "ALCConstant.h"
 
 @interface ALCAbstractConstantValue : NSObject<ALCDependency, ALCConstant>
-
 @end

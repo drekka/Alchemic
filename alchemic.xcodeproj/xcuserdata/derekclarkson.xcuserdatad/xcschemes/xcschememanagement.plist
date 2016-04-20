@@ -19,7 +19,7 @@
 			<key>orderHint</key>
 			<integer>4</integer>
 		</dict>
-		<key>Integration.xcscheme</key>
+		<key>Integration Tests.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>2</integer>
