@@ -9,15 +9,9 @@
 @import XCTest;
 
 #import "Alchemic.h"
-//#import "ALCContext.h"
 #import "ALCContextImpl.h"
-//#import "ALCObjectFactory.h"
 #import "ALCClassObjectFactory.h"
-//#import "ALCModelSearchCriteria.h"
-//#import "ALCDependency.h"
-//#import "ALCModelDependency.h"
-//#import "ALCInstantiation.h"
-//#import "ALCException.h"
+#import "ALCIsReference.h"
 
 #import "TopThing.h"
 #import "NestedThing.h"
@@ -28,18 +22,15 @@
 @implementation ExternalReferences {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThing;
-    ALCClassObjectFactory *_nestedThing;
 }
 
 -(void)setUp {
     _context = [[ALCContextImpl alloc] init];
     _topThing = [_context registerObjectFactoryForClass:[TopThing class]];
-    _nestedThing = [_context registerObjectFactoryForClass:[NestedThing class]];
-    _nestedThing.factoryType = ALCFactoryTypeReference;
+    [_topThing configureWithOptions:@[[ALCIsReference referenceMacro]]];
 }
 
 -(void) testTopReferenceTypeInitiation {
-    _topThing.factoryType = ALCFactoryTypeReference;
 
     [_context start];
 
@@ -58,7 +49,6 @@
 }
 
 -(void) testTopReferenceTypeSet {
-    _topThing.factoryType = ALCFactoryTypeReference;
 
     [_context start];
 

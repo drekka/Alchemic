@@ -57,7 +57,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... {
-
+    NSMutableArray *configArguments = [[NSMutableArray alloc] init];
+    alc_loadVarArgsAfterVariableIntoArray(objectFactory, configArguments);
+    [objectFactory configureWithOptions:configArguments];
 }
 
 -(ALCMethodObjectFactory *) objectFactory:(ALCClassObjectFactory *) objectFactory
@@ -66,16 +68,19 @@ NS_ASSUME_NONNULL_BEGIN
 
     [ALCRuntime validateClass:objectFactory.objectClass selector:selector];
 
-    NSMutableArray *unknownArguments = [[NSMutableArray alloc] init];
-    alc_loadVarArgsAfterVariableIntoArray(returnType, unknownArguments);
-    NSArray<id<ALCDependency>> *arguments = [unknownArguments methodArgumentsWithUnexpectedTypeHandler:^(id argument) {
+    NSMutableArray *factoryArguments = [[NSMutableArray alloc] init];
+    alc_loadVarArgsAfterVariableIntoArray(returnType, factoryArguments);
 
+    NSMutableArray *factoryOptions = [[NSMutableArray alloc] init];
+    NSArray<id<ALCDependency>> *arguments = [factoryArguments methodArgumentsWithUnexpectedTypeHandler:^(id argument) {
+        [factoryOptions addObject:argument];
     }];
 
     ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:(Class) returnType
                                                                       parentObjectFactory:objectFactory
                                                                                  selector:selector
                                                                                      args:arguments];
+    [methodFactory configureWithOptions:factoryOptions];
     [_model addObjectFactory:methodFactory withName:methodFactory.defaultName];
     return methodFactory;
 }

@@ -11,10 +11,10 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
-#import "Alchemic+Internal.h"
 #import "ALCInternalMacros.h"
 #import "ALCClassObjectFactory.h"
 #import "ALCInstantiation.h"
+#import "ALCContextImpl.h"
 
 #import "TopThing.h"
 #import "AnotherThing.h"
@@ -24,6 +24,7 @@
 @end
 
 @implementation CircularReferences {
+    id<ALCContext> _context;
     id<ALCObjectFactory> _topFactory;
     id<ALCObjectFactory> _anotherFactory;
 }
@@ -32,16 +33,16 @@
     STStartLogging(@"<ALCContext>");
     STStartLogging(@"is [TopThing]");
     STStartLogging(@"is [AnotherThing]");
-    [Alchemic initContext];
-    _topFactory = [[Alchemic mainContext] registerObjectFactoryForClass:[TopThing class]];
-    _anotherFactory = [[Alchemic mainContext] registerObjectFactoryForClass:[AnotherThing class]];
+    _context = [[ALCContextImpl alloc] init];
+    _topFactory = [_context registerObjectFactoryForClass:[TopThing class]];
+    _anotherFactory = [_context registerObjectFactoryForClass:[AnotherThing class]];
 }
 
 -(void) testPropertyToProperty {
-    [[Alchemic mainContext] objectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
-    [[Alchemic mainContext] objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
+    [_context objectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
+    [_context objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
 
-    [[Alchemic mainContext] start];
+    [_context start];
 
     TopThing *topThing = _topFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
@@ -58,12 +59,12 @@
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
-    [[Alchemic mainContext] objectFactory:_topFactory
-                              initializer:topThingInit, AcClass(AnotherThing), nil];
-    [[Alchemic mainContext] objectFactory:_anotherFactory
-                              initializer:anotherThingInit, AcClass(TopThing), nil];
+    [_context objectFactory:_topFactory
+                initializer:topThingInit, AcClass(AnotherThing), nil];
+    [_context objectFactory:_anotherFactory
+                initializer:anotherThingInit, AcClass(TopThing), nil];
     @try {
-        [[Alchemic mainContext] start];
+        [_context start];
     } @catch (ALCException *exception) {
         XCTAssertEqualObjects(@"AlchemicCircularDependency", exception.name);
     } @catch (NSException *exception) {
@@ -72,14 +73,14 @@
 }
 
 -(void) testPropertyToInitializer {
-    [[Alchemic mainContext] objectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
+    [_context objectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
     ignoreSelectorWarnings(
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
-    [[Alchemic mainContext] objectFactory:_anotherFactory
-                              initializer:anotherThingInit, AcClass(TopThing), nil];
+    [_context objectFactory:_anotherFactory
+                initializer:anotherThingInit, AcClass(TopThing), nil];
 
-    [[Alchemic mainContext] start];
+    [_context start];
 
     TopThing *topThing = _topFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
@@ -95,11 +96,11 @@
     ignoreSelectorWarnings(
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            )
-    [[Alchemic mainContext] objectFactory:_topFactory
-                              initializer:topThingInit, AcClass(AnotherThing), nil];
-    [[Alchemic mainContext] objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
+    [_context objectFactory:_topFactory
+                initializer:topThingInit, AcClass(AnotherThing), nil];
+    [_context objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
 
-    [[Alchemic mainContext] start];
+    [_context start];
 
     TopThing *topThing = _topFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);

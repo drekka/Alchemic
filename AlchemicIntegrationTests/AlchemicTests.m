@@ -12,6 +12,7 @@
 
 #import "SingletonA.h"
 #import "SingletonB.h"
+#import "FactoryA.h"
 
 @interface AlchemicTests : XCTestCase
 
@@ -29,6 +30,12 @@
 
     XCTAssertEqual(a.singletonB, b);
     XCTAssertEqual(b.singletonA, a);
+}
+
+-(void) testFactoryClass {
+    FactoryA *a = AcGet(FactoryA);
+    FactoryA *b = AcGet(FactoryA);
+    XCTAssertNotEqual(a, b);
 }
 
 @end

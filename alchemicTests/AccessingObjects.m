@@ -12,8 +12,6 @@
 #import "ALCContextImpl.h"
 #import "ALCInstantiation.h"
 
-#import "Alchemic+Internal.h"
-
 #import "TopThing.h"
 #import "NestedThing.h"
 

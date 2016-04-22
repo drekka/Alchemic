@@ -24,6 +24,10 @@
 #import "ALCInternalMacros.h"
 #import "ALCModel.h"
 
+#import "ALCIsFactory.h"
+#import "ALCIsReference.h"
+#import "ALCIsPrimary.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractObjectFactory {
@@ -31,25 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @synthesize objectClass = _objectClass;
-@synthesize factoryType = _factoryType;
 
 #pragma mark - Property overrides
 
--(void)setFactoryType:(ALCFactoryType)factoryType {
-    _factoryType = factoryType;
-    switch (_factoryType) {
-        case ALCFactoryTypeFactory:
-            _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
-            break;
-
-        case ALCFactoryTypeReference:
-            _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
-            break;
-
-        default:
-            _typeStrategy = [[ALCObjectFactoryTypeSingleton alloc] init];
-            break;
-    }
+-(ALCFactoryType) factoryType {
+    return _typeStrategy.factoryType;
 }
 
 -(BOOL) ready {
@@ -70,9 +60,21 @@ NS_ASSUME_NONNULL_BEGIN
     self = [super init];
     if (self) {
         _objectClass = objectClass;
-        [self setFactoryType:_factoryType];
+        _typeStrategy = [[ALCObjectFactoryTypeSingleton alloc] init];
     }
     return self;
+}
+
+-(void) configureWithOptions:(NSArray *) options {
+    for (id option in options) {
+        if ([option isKindOfClass:[ALCIsFactory class]]) {
+            _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
+        } else if ([option isKindOfClass:[ALCIsFactory class]]) {
+            _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
+        } else {
+            throwException(@"AlchemicIllegalArgument", @"Expected a factory config macro");
+        }
+    }
 }
 
 -(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {}
@@ -113,21 +115,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSString *) description {
 
-    BOOL instantiated = (_factoryType == ALCFactoryTypeSingleton && _typeStrategy.object)
-    || (_factoryType == ALCFactoryTypeReference && _typeStrategy.ready);
+    ALCFactoryType factoryType = _typeStrategy.factoryType;
+    BOOL instantiated = (factoryType == ALCFactoryTypeSingleton && _typeStrategy.object)
+    || (factoryType == ALCFactoryTypeReference && _typeStrategy.ready);
     NSMutableString *description = [[NSMutableString alloc] initWithString:instantiated ? @"* " : @"  "];
-    switch (_factoryType) {
-        case ALCFactoryTypeFactory:
-            [description appendString:@"Factory "];
-            break;
 
-        case ALCFactoryTypeReference:
-            [description appendString:@"Reference "];
-            break;
-
-        default:
-            [description appendString:@"Singleton "];
-    }
+    [description appendString:_typeStrategy.description];
 
     if ([_objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
         [description appendString:@" (App delegate)"];
@@ -138,7 +131,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) descriptionAttributes {
-    return self.defaultName;
+    return str(@" %@", self.defaultName);
 }
 
 @end

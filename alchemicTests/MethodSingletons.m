@@ -19,10 +19,10 @@
 #import "TopThing.h"
 #import "NestedThing.h"
 
-@interface MethodFactories : XCTestCase
+@interface MethodSingletons : XCTestCase
 @end
 
-@implementation MethodFactories {
+@implementation MethodSingletons {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
 }
@@ -40,8 +40,8 @@
                            SEL selector = @selector(factoryMethodWithString:);
                            )
     ALCMethodObjectFactory *methodFactory = [_context objectFactory:_topThingFactory
-                                                              factoryMethod:selector
-                                                                 returnType:[TopThing class], AcString(@"abc"), nil];
+                                                      factoryMethod:selector
+                                                         returnType:[TopThing class], AcString(@"abc"), nil];
     [_context start];
 
     XCTAssertTrue(_topThingFactory.ready);
@@ -58,8 +58,8 @@
                            SEL selector = @selector(factoryMethodWithString:andInt:);
                            )
     ALCMethodObjectFactory *methodFactory = [_context objectFactory:_topThingFactory
-                                                              factoryMethod:selector
-                                                                 returnType:[TopThing class], AcString(@"abc"), AcInt(5), nil];
+                                                      factoryMethod:selector
+                                                         returnType:[TopThing class], AcString(@"abc"), AcInt(5), nil];
     [_context start];
 
     XCTAssertTrue(_topThingFactory.ready);

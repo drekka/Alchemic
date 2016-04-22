@@ -23,24 +23,24 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSMutableArray<id<ALCDependency>> *arguments = [[NSMutableArray alloc] initWithCapacity:self.count];
 
-    for (id argumentDef in self) {
+    for (id nextArgument in self) {
 
-        if ([argumentDef isKindOfClass:[ALCArgument class]]) {
-            [arguments addObject:((ALCArgument *) argumentDef).dependency];
+        if ([nextArgument isKindOfClass:[ALCArgument class]]) {
+            [arguments addObject:((ALCArgument *) nextArgument).dependency];
 
-        } else if ([argumentDef isKindOfClass:[ALCModelSearchCriteria class]]) {
-            ALCModelSearchCriteria *criteria = argumentDef;
+        } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]) {
+            ALCModelSearchCriteria *criteria = nextArgument;
             id<ALCDependency> modelSearch = [[ALCModelDependency alloc] initWithObjectClass:[NSObject class] criteria:criteria];
             [arguments addObject:modelSearch];
 
-        } else if ([argumentDef conformsToProtocol:@protocol(ALCDependency)]) {
-            [arguments addObject:argumentDef];
+        } else if ([nextArgument conformsToProtocol:@protocol(ALCDependency)]) {
+            [arguments addObject:nextArgument];
 
         } else {
             if (unexpectedTypeHandler) {
-                unexpectedTypeHandler(argumentDef);
+                unexpectedTypeHandler(nextArgument);
             } else {
-                throwException(@"AlchemicIllegalArgument", @"Expected a argument definition, search criteria or constant. Got: %@", argumentDef);
+                throwException(@"AlchemicIllegalArgument", @"Expected a argument definition, search criteria or constant. Got: %@", nextArgument);
             }
         }
     }

@@ -9,6 +9,9 @@
 #pragma mark - Registering
 
 #import "ALCInternalMacros.h"
+#import "ALCIsFactory.h"
+#import "ALCIsPrimary.h"
+#import "ALCIsReference.h"
 
 #define AcRegister(...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassObjectFactory *) classObjectFactory { \
@@ -36,4 +39,29 @@
 #define AcProtocol(protocolName) [ALCModelSearchCriteria searchCriteriaForProtocol:@protocol(protocolName)]
 
 #define AcName(objectName) [ALCModelSearchCriteria searchCriteriaForName:objectName]
+
+#pragma mark - Configuring factories
+
+/**
+ When passed to a factory registration, sets the factory to be a factory.
+
+ @discussion Factories create a new instance of an object every time they are accessed.
+
+ @param _objectName the name to set on the registration.
+ */
+#define AcFactory [ALCIsFactory factoryMacro]
+
+/**
+ When passed to a factory registration, sets the factory as a primary factory.
+
+ @discussion This is mainly used for a couple of situations. Firstly where there are a number of candiates and you don't want to use names to define a default. Secondly during unit testing, this can be used to set registrations in unit test code as overrides to the app's instances.
+ */
+#define AcPrimary [ALCIsPrimary primaryMacro]
+
+/**
+ When passed to a factory registration, sets the factory as storing and inject external objects.
+
+ @discussion Can only be used on class factories as it makes no sense when set on method or initializers.
+ */
+#define AcExternal [ALCIsReference referenceMacro]
 

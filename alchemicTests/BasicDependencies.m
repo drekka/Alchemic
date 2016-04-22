@@ -11,9 +11,9 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
-#import "Alchemic+Internal.h"
 #import "ALCClassObjectFactory.h"
 #import "ALCInstantiation.h"
+#import "ALCContextImpl.h"
 
 #import "TopThing.h"
 #import "NestedThing.h"
@@ -22,6 +22,7 @@
 @end
 
 @implementation BasicDependencies {
+    id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
     ALCClassObjectFactory *_nestedThingFactory;
 }
@@ -33,14 +34,14 @@
     STStartLogging(@"<ALCContext>");
     STStartLogging(@"is [TopThing]");
     STStartLogging(@"is [NestedThing]");
-    [Alchemic initContext];
-    _topThingFactory = [[Alchemic mainContext] registerObjectFactoryForClass:[TopThing class]];
-    _nestedThingFactory = [[Alchemic mainContext] registerObjectFactoryForClass:[NestedThing class]];
+    _context = [[ALCContextImpl alloc] init];
+    _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
+    _nestedThingFactory = [_context registerObjectFactoryForClass:[NestedThing class]];
 }
 
 -(void) testSimpleDependencyPublicVariable {
-    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", nil];
-    [[Alchemic mainContext] start];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", nil];
+    [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNotNil(topThing.aNestedThing);
@@ -48,8 +49,8 @@
 }
 
 -(void) testSimpleDependencyInternalVariable {
-    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
-    [[Alchemic mainContext] start];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
+    [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNotNil(topThing.aNestedThing);
@@ -57,8 +58,8 @@
 }
 
 -(void) testSimpleDependencyArrayByClass {
-    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcClass(NestedThing), nil];
-    [[Alchemic mainContext] start];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcClass(NestedThing), nil];
+    [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNotNil(topThing.arrayOfNestedThings);
@@ -67,8 +68,8 @@
 }
 
 -(void) testSimpleDependencyArrayByProtocol {
-    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcProtocol(NestedProtocol), nil];
-    [[Alchemic mainContext] start];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcProtocol(NestedProtocol), nil];
+    [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNotNil(topThing.arrayOfNestedThings);
@@ -79,33 +80,33 @@
 #pragma mark - Search criteria
 
 -(void) testSimpleDependencyPublicVariableNameSearch {
-    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcName(@"NestedThing"), nil];
-    [[Alchemic mainContext] start];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcName(@"NestedThing"), nil];
+    [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNotNil(topThing.aNestedThing);
 }
 
 -(void) testSimpleDependencyPublicVariableProtocolSearch {
-    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcProtocol(NestedProtocol), nil];
-    [[Alchemic mainContext] start];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcProtocol(NestedProtocol), nil];
+    [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNotNil(topThing.aNestedThing);
 }
 
 -(void) testSimpleDependencyPublicVariableClassSearch {
-    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcClass(NestedThing), nil];
-    [[Alchemic mainContext] start];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcClass(NestedThing), nil];
+    [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNotNil(topThing.aNestedThing);
 }
 
 -(void) testDependentObjectDependenciesInjected {
-    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
-    [[Alchemic mainContext] objectFactory:_nestedThingFactory vaiableInjection:@"aInt", AcInt(5), nil];
-    [[Alchemic mainContext] start];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
+    [_context objectFactory:_nestedThingFactory vaiableInjection:@"aInt", AcInt(5), nil];
+    [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertEqual(5, topThing.aNestedThing.aInt);
 }

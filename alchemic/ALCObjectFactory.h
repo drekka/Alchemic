@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 
 @protocol ALCObjectFactory <ALCInstantiator>
 
-@property (nonatomic, assign) ALCFactoryType factoryType;
+@property (nonatomic, assign, readonly) ALCFactoryType factoryType;
 
 @end
 

@@ -12,25 +12,16 @@
 
 #import <Alchemic/Alchemic.h>
 
-//#import "Alchemic.h"
-//#import "ALCContext.h"
 #import "ALCContextImpl.h"
-//#import "ALCObjectFactory.h"
 #import "ALCClassObjectFactory.h"
-//#import "ALCInstantiation.h"
-//#import "ALCConstants.h"
-//#import "ALCInternalMacros.h"
-//#import "ALCArgument.h"
-//#import "ALCMAcros.h"
-//#import "ALCModelSearchCriteria.h"
 
 #import "TopThing.h"
 #import "NestedThing.h"
 
-@interface Instantiations : XCTestCase
+@interface ClassSingleton : XCTestCase
 @end
 
-@implementation Instantiations {
+@implementation ClassSingleton {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
     ALCClassObjectFactory *_nestedThingFactory;
@@ -57,7 +48,7 @@
 -(void) testInitializerInstantiationObject {
 
     [_context objectFactory:_topThingFactory
-                        initializer:@selector(initWithString:), AcString(@"abc"), nil];
+                initializer:@selector(initWithString:), AcString(@"abc"), nil];
     [_context start];
 
     XCTAssertTrue(_topThingFactory.ready);
@@ -71,9 +62,9 @@
 
     ignoreSelectorWarnings(
                            SEL selector = @selector(initWithString:andInt:);
-    )
+                           )
     [_context objectFactory:_topThingFactory
-                        initializer:selector, AcString(@"abc"), AcInt(5), nil];
+                initializer:selector, AcString(@"abc"), AcInt(5), nil];
     [_context start];
 
     XCTAssertTrue(_topThingFactory.ready);
@@ -89,9 +80,9 @@
                            SEL selector = @selector(initWithNestedThings:);
                            )
     [_context objectFactory:_topThingFactory
-                        initializer:selector, AcArgument([NSArray class], AcClass(NestedThing), nil), nil];
+                initializer:selector, AcArgument([NSArray class], AcClass(NestedThing), nil), nil];
     [_context start];
-
+    
 }
 
 @end

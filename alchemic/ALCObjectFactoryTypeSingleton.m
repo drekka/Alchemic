@@ -14,8 +14,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize object = _object;
 
+-(ALCFactoryType) factoryType {
+    return ALCFactoryTypeSingleton;
+}
+
 -(BOOL) ready {
     return YES;
+}
+
+-(NSString *)description {
+    return @"Singleton";
 }
 
 @end

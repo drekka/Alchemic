@@ -13,21 +13,23 @@
 #import <Alchemic/Alchemic.h>
 
 #import "ALCClassObjectFactory.h"
-#import "Alchemic+Internal.h"
+#import "ALCContextImpl.h"
+
 #import "TopThing.h"
 
 @interface BuiltConstants : XCTestCase
 @end
 
 @implementation BuiltConstants {
+    id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
 }
 
 -(void)setUp {
     STStartLogging(@"[Alchemic]");
     STStartLogging(@"is [TopThing]");
-    [Alchemic initContext];
-    _topThingFactory = [[Alchemic mainContext] registerObjectFactoryForClass:[TopThing class]];
+    _context = [[ALCContextImpl alloc] init];
+    _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
 }
 
 -(void) testConstantBool {
@@ -77,8 +79,8 @@
 
 -(id) setUpTestForProperty:(NSString *) property
                   constant:(id<ALCDependency>) constant {
-    [[Alchemic mainContext] objectFactory:_topThingFactory vaiableInjection:property, constant, nil];
-    [[Alchemic mainContext] start];
+    [_context objectFactory:_topThingFactory vaiableInjection:property, constant, nil];
+    [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     return topThing;
 }

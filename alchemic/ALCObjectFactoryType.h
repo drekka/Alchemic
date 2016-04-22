@@ -8,7 +8,11 @@
 
 @import Foundation;
 
+#import "ALCObjectFactory.h"
+
 @protocol ALCObjectFactoryType<NSObject>
+
+@property (nonatomic, assign, readonly) ALCFactoryType factoryType;
 
 @property (nonatomic, strong) id object;
 
