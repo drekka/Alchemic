@@ -41,13 +41,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id) objectWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
-#pragma mark - Registration management
-
--(void) objectFactory:(id<ALCObjectFactory>) objectFactory
-          changedName:(NSString *) oldName
-              newName:(NSString *) newName;
-
-
 @end
 
 NS_ASSUME_NONNULL_END

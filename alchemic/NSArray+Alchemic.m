@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation NSArray (Alchemic)
 
--(NSArray<id<ALCDependency>> *) methodArgumentsWithUnexpectedTypeHandler:(nullable void (^)(id argument)) unexpectedTypeHandler {
+-(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
 
     NSMutableArray<id<ALCDependency>> *arguments = [[NSMutableArray alloc] initWithCapacity:self.count];
 
@@ -37,11 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
             [arguments addObject:nextArgument];
 
         } else {
-            if (unexpectedTypeHandler) {
-                unexpectedTypeHandler(nextArgument);
-            } else {
-                throwException(@"AlchemicIllegalArgument", @"Expected a argument definition, search criteria or constant. Got: %@", nextArgument);
-            }
+            unknownArgumentHandler(nextArgument);
         }
     }
 

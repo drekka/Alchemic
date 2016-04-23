@@ -32,6 +32,11 @@
     XCTAssertEqual(b.singletonA, a);
 }
 
+-(void) testSingletonViaName {
+    SingletonA *a = AcGet(SingletonA, AcName(@"SingletonAName"));
+    XCTAssertNotNil(a);
+}
+
 -(void) testFactoryClass {
     FactoryA *a = AcGet(FactoryA);
     FactoryA *b = AcGet(FactoryA);

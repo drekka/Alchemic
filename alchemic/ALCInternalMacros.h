@@ -67,6 +67,7 @@ _Pragma ("clang diagnostic pop")
 
 // Processes varadic args including the arg that delimits the var arg list.
 #define alc_loadVarArgsIntoArray(firstArg, arrayVar) \
+NSMutableArray *arrayVar = [[NSMutableArray alloc] init]; \
 va_list argList; \
 va_start(argList, firstArg); \
 for (id nextArg = firstArg; nextArg != nil; nextArg = va_arg(argList, id)) { \
@@ -76,6 +77,7 @@ va_end(argList)
 
 // Processes varadic args excluding the arg that delimits the var arg list.
 #define alc_loadVarArgsAfterVariableIntoArray(afterArg, arrayVar) \
+NSMutableArray *arrayVar = [[NSMutableArray alloc] init]; \
 va_list argList; \
 va_start(argList, afterArg); \
 id nextArg; \

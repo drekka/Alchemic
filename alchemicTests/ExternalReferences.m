@@ -27,7 +27,9 @@
 -(void)setUp {
     _context = [[ALCContextImpl alloc] init];
     _topThing = [_context registerObjectFactoryForClass:[TopThing class]];
-    [_topThing configureWithOptions:@[[ALCIsReference referenceMacro]]];
+    [_topThing configureWithOptions:@[[ALCIsReference referenceMacro]] unknownOptionHandler:^(id option) {
+        XCTFail();
+    }];
 }
 
 -(void) testTopReferenceTypeInitiation {

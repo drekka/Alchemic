@@ -12,7 +12,7 @@
 
 @implementation SingletonA
 
-AcRegister()
+AcRegister(AcSetName(@"SingletonAName"))
 AcInject(singletonB)
 
 @end

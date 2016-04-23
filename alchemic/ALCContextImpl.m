@@ -23,6 +23,7 @@
 #import "ALCRuntime.h"
 #import "ALCTypeData.h"
 #import "ALCInternalMacros.h"
+#import "ALCWithName.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -57,9 +58,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... {
-    NSMutableArray *configArguments = [[NSMutableArray alloc] init];
     alc_loadVarArgsAfterVariableIntoArray(objectFactory, configArguments);
-    [objectFactory configureWithOptions:configArguments];
+    [objectFactory configureWithOptions:configArguments unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
 }
 
 -(ALCMethodObjectFactory *) objectFactory:(ALCClassObjectFactory *) objectFactory
@@ -68,11 +68,10 @@ NS_ASSUME_NONNULL_BEGIN
 
     [ALCRuntime validateClass:objectFactory.objectClass selector:selector];
 
-    NSMutableArray *factoryArguments = [[NSMutableArray alloc] init];
     alc_loadVarArgsAfterVariableIntoArray(returnType, factoryArguments);
 
     NSMutableArray *factoryOptions = [[NSMutableArray alloc] init];
-    NSArray<id<ALCDependency>> *arguments = [factoryArguments methodArgumentsWithUnexpectedTypeHandler:^(id argument) {
+    NSArray<id<ALCDependency>> *arguments = [factoryArguments methodArgumentsWithUnknownArgumentHandler:^(id argument) {
         [factoryOptions addObject:argument];
     }];
 
@@ -80,8 +79,10 @@ NS_ASSUME_NONNULL_BEGIN
                                                                       parentObjectFactory:objectFactory
                                                                                  selector:selector
                                                                                      args:arguments];
-    [methodFactory configureWithOptions:factoryOptions];
+
     [_model addObjectFactory:methodFactory withName:methodFactory.defaultName];
+    [methodFactory configureWithOptions:factoryOptions unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:methodFactory]];
+
     return methodFactory;
 }
 
@@ -89,9 +90,11 @@ NS_ASSUME_NONNULL_BEGIN
 
     [ALCRuntime validateClass:objectFactory.objectClass selector:initializer];
 
-    NSMutableArray *unknownArguments = [[NSMutableArray alloc] init];
     alc_loadVarArgsAfterVariableIntoArray(initializer, unknownArguments);
-    NSArray<id<ALCDependency>> *arguments = [unknownArguments methodArgumentsWithUnexpectedTypeHandler:NULL];
+
+    NSArray<id<ALCDependency>> *arguments = [unknownArguments methodArgumentsWithUnknownArgumentHandler:^(id argument) {
+        throwException(@"AlchemicIllegalArgument", @"Expected a argument definition, search criteria or constant. Got: %@", argument);
+    }];
 
     __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:objectFactory
                                                                         initializer:initializer
@@ -101,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory vaiableInjection:(NSString *) variable, ... {
 
     STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), variable);
-    NSMutableArray *valueArguments = [[NSMutableArray alloc] init];
+
     alc_loadVarArgsAfterVariableIntoArray(variable, valueArguments);
 
     Ivar ivar = [ALCRuntime aClass:objectFactory.objectClass variableForInjectionPoint:variable];
@@ -113,7 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id) objectWithClass:(Class)returnType, ... {
     STLog(returnType, @"Manual retrieving an instance of %@", NSStringFromClass([returnType class]));
-    NSMutableArray *criteria = [[NSMutableArray alloc] init];
+
     alc_loadVarArgsAfterVariableIntoArray(returnType, criteria);
     if (criteria.count == 0) {
         [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[returnType class]]];
@@ -123,14 +126,18 @@ NS_ASSUME_NONNULL_BEGIN
     return dependency.searchResult;
 }
 
-#pragma mark - Object management
+#pragma mark - Internal
 
--(void) objectFactory:(id<ALCObjectFactory>) objectFactory
-          changedName:(NSString *) oldName
-              newName:(NSString *) newName {
-    [_model objectFactory:objectFactory
-              changedName:oldName
-                  newName:newName];
+-(void (^)(id option)) unknownOptionHandlerForObjectFactory:(id<ALCObjectFactory>) objectFactory {
+    return ^(id option) {
+        if ([(NSObject *) option isKindOfClass:[ALCWithName class]]) {
+            [self->_model objectFactory:objectFactory
+                            changedName:objectFactory.defaultName
+                                newName:((ALCWithName *) option).asName];
+        } else {
+            throwException(@"AlchemicIllegalArgument", @"Expected a factory config macro");
+        }
+    };
 }
 
 @end

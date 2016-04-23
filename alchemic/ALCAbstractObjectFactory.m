@@ -65,14 +65,14 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(void) configureWithOptions:(NSArray *) options {
+-(void) configureWithOptions:(NSArray *) options unknownOptionHandler:(void (^)(id option)) unknownOptionHandler {
     for (id option in options) {
         if ([option isKindOfClass:[ALCIsFactory class]]) {
             _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
-        } else if ([option isKindOfClass:[ALCIsFactory class]]) {
-            _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
+        } else if ([option isKindOfClass:[ALCIsReference class]]) {
+            _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
         } else {
-            throwException(@"AlchemicIllegalArgument", @"Expected a factory config macro");
+            unknownOptionHandler(option);
         }
     }
 }

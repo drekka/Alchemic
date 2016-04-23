@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(instancetype) initWithClass:(Class) objectClass NS_DESIGNATED_INITIALIZER;
 
--(void) configureWithOptions:(NSArray *) options;
+-(void) configureWithOptions:(NSArray *) options unknownOptionHandler:(void (^)(id option)) unknownOptionHandler;
 
 -(void) setObject:(id) object;
 

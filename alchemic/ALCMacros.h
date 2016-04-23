@@ -12,6 +12,7 @@
 #import "ALCIsFactory.h"
 #import "ALCIsPrimary.h"
 #import "ALCIsReference.h"
+#import "ALCWithName.h"
 
 #define AcRegister(...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassObjectFactory *) classObjectFactory { \
@@ -41,6 +42,11 @@
 #define AcName(objectName) [ALCModelSearchCriteria searchCriteriaForName:objectName]
 
 #pragma mark - Configuring factories
+
+/**
+ Tells Alchemic to set a custom name on a registration of a class factory or method factory.
+ */
+#define AcSetName(_objectName) [ALCWithName withName:_objectName]
 
 /**
  When passed to a factory registration, sets the factory to be a factory.

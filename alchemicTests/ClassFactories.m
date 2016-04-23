@@ -36,7 +36,9 @@
 }
 
 -(void) testCreatingNewInstances {
-    [_topThingFactory configureWithOptions:@[[ALCIsFactory factoryMacro]]];
+    [_topThingFactory configureWithOptions:@[[ALCIsFactory factoryMacro]] unknownOptionHandler:^(id option) {
+        XCTFail();
+    }];
 
     [_context start];
 
@@ -49,8 +51,12 @@
 }
 
 -(void) testCreatingNestedNewInstances {
-    [_topThingFactory configureWithOptions:@[[ALCIsFactory factoryMacro]]];
-    [_nestedThingFactory configureWithOptions:@[[ALCIsFactory factoryMacro]]];
+    [_topThingFactory configureWithOptions:@[[ALCIsFactory factoryMacro]] unknownOptionHandler:^(id option) {
+        XCTFail();
+    }];
+    [_nestedThingFactory configureWithOptions:@[[ALCIsFactory factoryMacro]] unknownOptionHandler:^(id option) {
+        XCTFail();
+    }];
 
     [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", nil];
 

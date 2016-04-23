@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 ALCArgument * AcArgument(Class argumentClass, id firstCriteria, ...) {
-    NSMutableArray *criteriaDefs = [[NSMutableArray alloc] init];
     alc_loadVarArgsIntoArray(firstCriteria, criteriaDefs);
     return [[ALCArgument alloc] initWithDependency:[criteriaDefs dependencyWithClass:argumentClass]];
 }
@@ -26,7 +25,6 @@ ALCArgument * AcArgument(Class argumentClass, id firstCriteria, ...) {
 @implementation ALCArgument
 
 +(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... {
-    NSMutableArray *criteriaDefs = [[NSMutableArray alloc] init];
     alc_loadVarArgsIntoArray(firstCriteria, criteriaDefs);
     return [[ALCArgument alloc] initWithDependency:[criteriaDefs dependencyWithClass:argumentClass]];
 }

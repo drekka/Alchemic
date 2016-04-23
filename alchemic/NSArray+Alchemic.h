@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSArray (Alchemic)
 
--(NSArray<id<ALCDependency>> *) methodArgumentsWithUnexpectedTypeHandler:(nullable void (^)(id argument)) unexpectedTypeHandler;
+-(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
 
 -(id<ALCDependency>) modelSearchWithClass:(Class) dependencyClass;
 
