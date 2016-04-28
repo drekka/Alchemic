@@ -37,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
                          args:(nullable NSArray<id<ALCDependency>> *) arguments {
     self = [super initWithClass:objectClass];
     if (self) {
+        [ALCRuntime validateClass:parentObjectFactory.objectClass selector:selector arguments:arguments];
         _parentObjectFactory = parentObjectFactory;
         _selector = selector;
         _arguments = arguments;
@@ -81,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Descriptions
 
 -(NSString *) descriptionAttributes {
-    return str(@"method %@", self.defaultName);
+    return str(@" method %@", self.defaultName);
 }
 
 @end

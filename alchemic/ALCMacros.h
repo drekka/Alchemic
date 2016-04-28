@@ -12,11 +12,18 @@
 #import "ALCIsFactory.h"
 #import "ALCIsPrimary.h"
 #import "ALCIsReference.h"
-#import "ALCWithName.h"
+#import "ALCFactoryName.h"
 
 #define AcRegister(...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerClassBuilder):(ALCClassObjectFactory *) classObjectFactory { \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _configureClassObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
     [[Alchemic mainContext] objectFactoryConfig:classObjectFactory, ## __VA_ARGS__, nil]; \
+}
+
+#define AcMethod(methodType, methodSelector, ...) \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerMethodObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
+    [[Alchemic mainContext] objectFactory:classObjectFactory \
+                            factoryMethod:@selector(methodSelector) \
+                               returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
@@ -44,9 +51,9 @@
 #pragma mark - Configuring factories
 
 /**
- Tells Alchemic to set a custom name on a registration of a class factory or method factory.
+ Tells Alchemic to set a custom name on an object factory.
  */
-#define AcSetName(_objectName) [ALCWithName withName:_objectName]
+#define AcFactoryName(factoryName) [ALCFactoryName withName:factoryName]
 
 /**
  When passed to a factory registration, sets the factory to be a factory.

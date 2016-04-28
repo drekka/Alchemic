@@ -37,17 +37,44 @@
 -(void) testInstanceFactoryMethod {
 
     ignoreSelectorWarnings(
-                           SEL selector = @selector(factoryMethodWithString:);
+                           SEL selector = @selector(factoryMethod);
                            )
-    ALCMethodObjectFactory *methodFactory = [_context objectFactory:_topThingFactory
-                                                      factoryMethod:selector
-                                                         returnType:[TopThing class], AcString(@"abc"), nil];
+    [_context objectFactory:_topThingFactory
+              factoryMethod:selector
+                 returnType:[TopThing class], nil];
     [_context start];
 
-    XCTAssertTrue(_topThingFactory.ready);
-    XCTAssertTrue(methodFactory.ready);
+    id value = [_context objectWithClass:[TopThing class], nil];
+    XCTAssertTrue([value isKindOfClass:[TopThing class]]);
+    XCTAssertEqual(@"abc", ((TopThing *)value).aString);
+}
 
-    id value = methodFactory.objectInstantiation.object;
+-(void) testInstanceFactoryMethodWithName {
+
+    ignoreSelectorWarnings(
+                           SEL selector = @selector(factoryMethod);
+                           )
+    [_context objectFactory:_topThingFactory
+              factoryMethod:selector
+                 returnType:[TopThing class], [ALCFactoryName withName:@"aName"], nil];
+    [_context start];
+
+    id value = [_context objectWithClass:[TopThing class], [ALCModelSearchCriteria searchCriteriaForName:@"aName"], nil];
+    XCTAssertTrue([value isKindOfClass:[TopThing class]]);
+    XCTAssertEqual(@"abc", ((TopThing *) value).aString);
+}
+
+-(void) testInstanceFactoryMethodWithObject {
+
+    ignoreSelectorWarnings(
+                           SEL selector = @selector(factoryMethodWithString:);
+                           )
+    [_context objectFactory:_topThingFactory
+              factoryMethod:selector
+                 returnType:[TopThing class], AcString(@"abc"), nil];
+    [_context start];
+
+    id value = [_context objectWithClass:[TopThing class], nil];
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
     XCTAssertEqual(@"abc", ((TopThing *)value).aString);
 }
@@ -57,15 +84,12 @@
     ignoreSelectorWarnings(
                            SEL selector = @selector(factoryMethodWithString:andInt:);
                            )
-    ALCMethodObjectFactory *methodFactory = [_context objectFactory:_topThingFactory
-                                                      factoryMethod:selector
-                                                         returnType:[TopThing class], AcString(@"abc"), AcInt(5), nil];
+    [_context objectFactory:_topThingFactory
+              factoryMethod:selector
+                 returnType:[TopThing class], AcString(@"abc"), AcInt(5), nil];
     [_context start];
 
-    XCTAssertTrue(_topThingFactory.ready);
-    XCTAssertTrue(methodFactory.ready);
-
-    id value = methodFactory.objectInstantiation.object;
+    id value = [_context objectWithClass:[TopThing class], nil];
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
     XCTAssertEqualObjects(@"abc", ((TopThing *) value).aString);
     XCTAssertEqual(5, ((TopThing *) value).aInt);

@@ -13,6 +13,7 @@
 #import "SingletonA.h"
 #import "SingletonB.h"
 #import "FactoryA.h"
+#import "NonManagedObject.h"
 
 @interface AlchemicTests : XCTestCase
 
@@ -41,6 +42,11 @@
     FactoryA *a = AcGet(FactoryA);
     FactoryA *b = AcGet(FactoryA);
     XCTAssertNotEqual(a, b);
+}
+
+-(void) testAccessingSimpleFactoryMethod {
+    //NonManagedObject *nmo = AcGet(NonManagedObject);
+    //XCTAssertNotNil(nmo);
 }
 
 @end

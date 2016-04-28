@@ -79,8 +79,17 @@
 
 #pragma mark - Search criteria
 
--(void) testSimpleDependencyPublicVariableNameSearch {
+-(void) testSimpleDependencyPublicVariableNameSearchUsingDefaultName {
     [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcName(@"NestedThing"), nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNotNil(topThing.aNestedThing);
+}
+
+-(void) testSimpleDependencyPublicVariableNameSearchUsingCustomName {
+    [_context objectFactoryConfig:_nestedThingFactory, [ALCFactoryName withName:@"abc"], nil];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcName(@"abc"), nil];
     [_context start];
     TopThing *topThing = _topThingFactory.objectInstantiation.object;
     XCTAssertNotNil(topThing);

@@ -113,4 +113,8 @@
     }
 }
 
+-(NSString *) descriptionAttributes {
+    return str(@" class %@", self.defaultName);
+}
+
 @end

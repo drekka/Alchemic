@@ -7,12 +7,18 @@
 //
 
 #import "SingletonA.h"
+#import "NonManagedObject.h"
 
 #import <Alchemic/Alchemic.h>
 
 @implementation SingletonA
 
-AcRegister(AcSetName(@"SingletonAName"))
+AcRegister(AcFactoryName(@"SingletonAName"))
 AcInject(singletonB)
+
+AcMethod(NonManagedObject, methodToGetNonManagedClass, AcFactoryName(@"NonManagedInstance"))
+-(NonManagedObject *) methodToGetNonManagedClass {
+    return [[NonManagedObject alloc] init];
+}
 
 @end

@@ -6,12 +6,12 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCWithName.h"
+#import "ALCFactoryName.h"
 
-@implementation ALCWithName
+@implementation ALCFactoryName
 
 +(instancetype) withName:(NSString *) name {
-    ALCWithName *asNameQualifier = [[ALCWithName alloc] init];
+    ALCFactoryName *asNameQualifier = [[ALCFactoryName alloc] init];
     asNameQualifier->_asName = name;
     return asNameQualifier;
 }

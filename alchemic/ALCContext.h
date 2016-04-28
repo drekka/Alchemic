@@ -29,13 +29,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... NS_REQUIRES_NIL_TERMINATION;
 
--(ALCMethodObjectFactory *) objectFactory:(ALCClassObjectFactory *) objectFactory
-                            factoryMethod:(SEL) selector
-                               returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory
+        factoryMethod:(SEL) selector
+           returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) objectFactory:(ALCClassObjectFactory *) parentObjectFactory initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) objectFactory:(ALCClassObjectFactory *) parentObjectFactory
+          initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory vaiableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory
+     vaiableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Accessing objects
 

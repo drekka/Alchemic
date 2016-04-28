@@ -136,16 +136,21 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - Validating
 
-+(void) validateClass:(Class) aClass selector:(SEL)selector {
++(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
     if (! [aClass instancesRespondToSelector:selector]) {
         throwException(@"AlchemicSelectorNotFound", @"Failed to find selector %@", [self selectorDescription:aClass selector:selector]);
+    }
+
+    NSMethodSignature *sig = [NSMethodSignature methodSignatureForSelector:selector];
+    if (sig.numberOfArguments != (arguments ? arguments.count : 0)) {
+        throwException(@"AlchemicIncorrectNumberOfArguments", @"%@ expected %lu arguments, got %lu", [self selectorDescription:aClass selector:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
     }
 }
 
 #pragma mark - Describing things
 
 +(NSString *) selectorDescription:(Class) aClass selector:(SEL)selector {
-    return str(@"%@[%@ %@]", [aClass respondsToSelector:selector] ? @"+" : @":", NSStringFromClass(aClass), NSStringFromSelector(selector));
+    return str(@"%@[%@ %@]", [aClass respondsToSelector:selector] ? @"+" : @"-", NSStringFromClass(aClass), NSStringFromSelector(selector));
 }
 
 +(NSString *) propertyDescription:(Class) aClass property:(NSString *)property {

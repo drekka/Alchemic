@@ -37,6 +37,7 @@
 
 +(instancetype) classCreateWithString:(NSString *) aString;
 
+-(instancetype) factoryMethod;
 -(instancetype) factoryMethodWithString:(NSString *) aString;
 -(instancetype) factoryMethodWithString:(NSString *) aString andInt:(int) aInt;
 

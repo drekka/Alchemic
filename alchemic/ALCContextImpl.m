@@ -23,7 +23,7 @@
 #import "ALCRuntime.h"
 #import "ALCTypeData.h"
 #import "ALCInternalMacros.h"
-#import "ALCWithName.h"
+#import "ALCFactoryName.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -62,33 +62,30 @@ NS_ASSUME_NONNULL_BEGIN
     [objectFactory configureWithOptions:configArguments unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
 }
 
--(ALCMethodObjectFactory *) objectFactory:(ALCClassObjectFactory *) objectFactory
-                            factoryMethod:(SEL) selector
-                               returnType:(Class) returnType, ... {
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory
+        factoryMethod:(SEL) selector
+           returnType:(Class) returnType, ... {
 
-    [ALCRuntime validateClass:objectFactory.objectClass selector:selector];
-
+    // Read in the arguments and sort them into factory config and method arguments.
     alc_loadVarArgsAfterVariableIntoArray(returnType, factoryArguments);
 
     NSMutableArray *factoryOptions = [[NSMutableArray alloc] init];
-    NSArray<id<ALCDependency>> *arguments = [factoryArguments methodArgumentsWithUnknownArgumentHandler:^(id argument) {
+    NSArray<id<ALCDependency>> *methodArguments = [factoryArguments methodArgumentsWithUnknownArgumentHandler:^(id argument) {
         [factoryOptions addObject:argument];
     }];
 
+    // Build the factory.
     ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:(Class) returnType
                                                                       parentObjectFactory:objectFactory
                                                                                  selector:selector
-                                                                                     args:arguments];
+                                                                                     args:methodArguments];
 
     [_model addObjectFactory:methodFactory withName:methodFactory.defaultName];
     [methodFactory configureWithOptions:factoryOptions unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:methodFactory]];
-
-    return methodFactory;
 }
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory initializer:(SEL) initializer, ... {
-
-    [ALCRuntime validateClass:objectFactory.objectClass selector:initializer];
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory
+          initializer:(SEL) initializer, ... {
 
     alc_loadVarArgsAfterVariableIntoArray(initializer, unknownArguments);
 
@@ -101,7 +98,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                                                args:arguments];
 }
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory vaiableInjection:(NSString *) variable, ... {
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory
+     vaiableInjection:(NSString *) variable, ... {
 
     STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), variable);
 
@@ -130,10 +128,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void (^)(id option)) unknownOptionHandlerForObjectFactory:(id<ALCObjectFactory>) objectFactory {
     return ^(id option) {
-        if ([(NSObject *) option isKindOfClass:[ALCWithName class]]) {
+        if ([(NSObject *) option isKindOfClass:[ALCFactoryName class]]) {
             [self->_model objectFactory:objectFactory
                             changedName:objectFactory.defaultName
-                                newName:((ALCWithName *) option).asName];
+                                newName:((ALCFactoryName *) option).asName];
         } else {
             throwException(@"AlchemicIllegalArgument", @"Expected a factory config macro");
         }

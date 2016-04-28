@@ -59,10 +59,8 @@
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
-    [_context objectFactory:_topFactory
-                initializer:topThingInit, AcClass(AnotherThing), nil];
-    [_context objectFactory:_anotherFactory
-                initializer:anotherThingInit, AcClass(TopThing), nil];
+    [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
+    [_context objectFactory:_anotherFactory initializer:anotherThingInit, AcClass(TopThing), nil];
     @try {
         [_context start];
     } @catch (ALCException *exception) {
@@ -96,8 +94,7 @@
     ignoreSelectorWarnings(
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            )
-    [_context objectFactory:_topFactory
-                initializer:topThingInit, AcClass(AnotherThing), nil];
+    [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
 
     [_context start];

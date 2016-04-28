@@ -46,6 +46,10 @@
     return [[TopThing alloc] initWithString:aString];
 }
 
+-(instancetype) factoryMethod {
+    return [[TopThing alloc] initWithString:@"abc"];
+}
+
 -(instancetype) factoryMethodWithString:(NSString *) aString {
     return [[TopThing alloc] initWithString:aString];
 }

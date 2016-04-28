@@ -35,6 +35,7 @@
                                  args:(NSArray<id<ALCDependency>> *) arguments {
     self = [super init];
     if (self) {
+        [ALCRuntime validateClass:objectFactory.objectClass selector:initializer arguments:arguments];
         objectFactory.initializer = self;
         _objectClass = objectFactory.objectClass;
         _initializer = initializer;

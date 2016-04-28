@@ -11,6 +11,7 @@
 
 @class ALCTypeData;
 @protocol ALCContext;
+@protocol ALCDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(void) setObject:(id) object variable:(Ivar) variable withValue:(id) value;
 
 +(void) setInvocation:(NSInvocation *) inv argIndex:(int) idx withValue:(id) value ofClass:(Class) valueClass;
+
 +(id) autoboxValueForType:(Class) type value:(id) value;
 
 #pragma mark - Validating
@@ -38,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param selector The selector to check.
  @exception ALCException If there is a problem.
  */
-+(void) validateClass:(Class) aClass selector:(SEL)selector;
++(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments;
 
 #pragma mark - Describing things
 

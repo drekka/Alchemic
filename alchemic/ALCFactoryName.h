@@ -10,7 +10,7 @@
 /**
  ALCWithName macros define a custom name for a object builder.
  */
-@interface ALCWithName : NSObject
+@interface ALCFactoryName : NSObject
 
 /**
  The name to be used for the factory.
