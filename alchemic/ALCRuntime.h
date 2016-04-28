@@ -9,21 +9,50 @@
 @import Foundation;
 @import ObjectiveC;
 
-@interface ALCTypeData : NSObject
-@property (nonatomic, strong, nullable) NSString *scalarType;
-@property (nonatomic, assign, nullable) Class objcClass;
-@property (nonatomic, strong, nullable) NSArray<Protocol *> *objcProtocols;
-@end
+@class ALCTypeData;
+@protocol ALCContext;
+@protocol ALCDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCRuntime : NSObject
 
+#pragma mark - Querying the runtime
+
 +(Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
 +(ALCTypeData *) typeDataForIVar:(Ivar) iVar;
 
-+(void)setObject:(id) object variable:(Ivar) variable withValue:(id) value;
+#pragma mark - Seting variables
+
++(void) setObject:(id) object variable:(Ivar) variable withValue:(id) value;
+
++(void) setInvocation:(NSInvocation *) inv argIndex:(int) idx withValue:(id) value ofClass:(Class) valueClass;
+
++(id) autoboxValueForType:(Class) type value:(id) value;
+
+#pragma mark - Validating
+
+/**
+ Validates that the passed selector occurs on the passed class and has a correct set of arguments stored in the macro processor.
+
+ @param aClass The class to be used to check the selector again.
+ @param selector The selector to check.
+ @exception ALCException If there is a problem.
+ */
++(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments;
+
+#pragma mark - Describing things
+
++(NSString *) selectorDescription:(Class) aClass selector:(SEL)selector;
+
++(NSString *) propertyDescription:(Class) aClass property:(NSString *)property;
+
++(NSString *) propertyDescription:(Class) aClass variable:(Ivar) variable;
+
+#pragma mark - Scanning
+
++(void) scanRuntimeWithContext:(id<ALCContext>) context;
 
 @end
 

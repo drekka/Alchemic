@@ -10,6 +10,7 @@
 @import ObjectiveC;
 
 #import "ALCRuntime.h"
+#import "ALCTypeData.h"
 
 @interface ALCRuntimeTests : XCTestCase
 @property(nonatomic, strong) NSString *aStringProperty;
@@ -17,6 +18,11 @@
 @property(nonatomic, assign) int aIntProperty;
 @property(nonatomic, strong) id<NSCopying> aProtocolProperty;
 @property(nonatomic, strong) NSString<NSFastEnumeration> *aClassProtocolProperty;
+
++(void) classMethod;
+-(void) instanceMethod;
+-(void) methodWithString:(NSString *) aString andInt:(int) aInt;
+
 @end
 
 @implementation ALCRuntimeTests
@@ -50,5 +56,31 @@
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
     XCTAssertNil(ivarData.objcClass);
 }
+
+-(void) testAccessingMethods {
+
+    XCTAssertFalse([[self class] instancesRespondToSelector:@selector(classMethod)]);
+    XCTAssertTrue([[self class] instancesRespondToSelector:@selector(instanceMethod)]);
+
+    XCTAssertTrue([[self class] respondsToSelector:@selector(classMethod)]);
+    XCTAssertFalse([self respondsToSelector:@selector(classMethod)]);
+
+    XCTAssertTrue([self respondsToSelector:@selector(instanceMethod)]);
+    XCTAssertFalse([[self class] respondsToSelector:@selector(instanceMethod)]);
+}
+
+-(void) testMethodSignature {
+
+    NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:@selector(methodWithString:andInt:)];
+
+    const char *arg2 = [sig getArgumentTypeAtIndex:2];
+    const char *arg3 = [sig getArgumentTypeAtIndex:3];
+    XCTAssertTrue(strcmp("@", arg2) == 0);
+    XCTAssertTrue(strcmp("i", arg3) == 0);
+}
+
++(void) classMethod {}
+-(void) instanceMethod {}
+-(void) methodWithString:(NSString *) aString andInt:(int) aInt {}
 
 @end

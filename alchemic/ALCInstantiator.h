@@ -9,15 +9,16 @@
 @import Foundation;
 
 #import "ALCResolvable.h"
-#import "ALCInternalMacros.h"
+
+// Import so the umbrella header sees it, but it's semi hidden from users. Instead of @class ALCInstantiation;
+#import "ALCInstantiation.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ALCObjectGenerator <ALCResolvable>
+@protocol ALCInstantiator <ALCResolvable>
 
-@property (nonatomic, strong, readonly) id object;
-
-@property (nonatomic, assign, readonly) Class objectClass;
+@property (nonatomic, strong, readonly) ALCInstantiation *objectInstantiation;
 
 @property (nonatomic, strong, readonly) NSString *defaultName;
 

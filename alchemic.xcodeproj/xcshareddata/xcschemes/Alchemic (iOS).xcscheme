@@ -17,7 +17,7 @@
                BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
                BuildableName = "Alchemic.framework"
                BlueprintName = "Alchemic"
-               ReferencedContainer = "container:alchemic.xcodeproj">
+               ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-               BuildableName = "Alchemic tests.xctest"
-               BlueprintName = "Alchemic tests"
-               ReferencedContainer = "container:alchemic.xcodeproj">
+               BuildableName = "Unit tests.xctest"
+               BlueprintName = "Unit tests"
+               ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -48,9 +48,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
-               BuildableName = "Alchemic tests.xctest"
-               BlueprintName = "Alchemic tests"
-               ReferencedContainer = "container:alchemic.xcodeproj">
+               BuildableName = "Unit tests.xctest"
+               BlueprintName = "Unit tests"
+               ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -87,7 +87,7 @@
             BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
             BuildableName = "Alchemic.framework"
             BlueprintName = "Alchemic"
-            ReferencedContainer = "container:alchemic.xcodeproj">
+            ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -105,7 +105,7 @@
             BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
             BuildableName = "Alchemic.framework"
             BlueprintName = "Alchemic"
-            ReferencedContainer = "container:alchemic.xcodeproj">
+            ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -9,25 +9,30 @@
 @import Foundation;
 @import UIKit;
 
-#import "ALCDependency.h"
+#import "ALCAbstractConstantValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 #define ALCConstantHeader(name, type) \
-id<ALCDependency> ALC ## name(type value); \
-@interface ALCConstant ## name : NSObject<ALCDependency> \
--(instancetype) initWithValue:(type) value; \
+id<ALCDependency> Ac ## name(type value); \
+@interface ALCConstant ## name : ALCAbstractConstantValue \
+-(instancetype) init NS_UNAVAILABLE; \
+-(instancetype) initWithValue:(type) value NS_DESIGNATED_INITIALIZER; \
 @end
 
 // Scalar types
+ALCConstantHeader(Bool, BOOL)
 ALCConstantHeader(Int, int)
+ALCConstantHeader(Long, long)
+ALCConstantHeader(Float, float)
+ALCConstantHeader(Double, double)
+
+// Structs
+ALCConstantHeader(CGFloat, CGFloat)
+ALCConstantHeader(CGSize, CGSize)
 ALCConstantHeader(CGRect, CGRect)
 
 // Object types.
 ALCConstantHeader(String, NSString *)
-
-//ALCConstantHeader(Long, long)
-//ALCConstantHeader(Float, float)
-//ALCConstantHeader(Double, double)
 
 NS_ASSUME_NONNULL_END

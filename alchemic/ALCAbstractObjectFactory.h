@@ -9,16 +9,24 @@
 @import Foundation;
 
 #import "ALCObjectFactory.h"
-#import "ALCAbstractObjectGenerator.h"
+
+@class ALCInstantiation;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCAbstractObjectFactory : ALCAbstractObjectGenerator<ALCObjectFactory>
+@interface ALCAbstractObjectFactory : NSObject<ALCObjectFactory>
 
--(id) instantiateObject;
+-(instancetype) init NS_UNAVAILABLE;
 
-// Object factories must be settable.
-@property (nonatomic, strong) id object;
+-(instancetype) initWithClass:(Class) objectClass NS_DESIGNATED_INITIALIZER;
+
+-(void) configureWithOptions:(NSArray *) options unknownOptionHandler:(void (^)(id option)) unknownOptionHandler;
+
+-(void) setObject:(id) object;
+
+-(ALCInstantiation *) createObject;
+
+-(void) objectFinished:(id) object;
 
 @end
 

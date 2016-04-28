@@ -10,20 +10,23 @@
 #import "NSObject+Alchemic.h"
 #import "ALCRuntime.h"
 #import "ALCInternalMacros.h"
+#import "ALCTypeData.h"
+#import "ALCModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 #define ALCConstantFunctionImplementation(name, type) \
-id<ALCDependency> ALC ## name(type value) { \
+id<ALCDependency> Ac ## name(type value) { \
     return [[ALCConstant ## name alloc] initWithValue:value]; \
 }
 
-#define ALCConstantScalarImplementation(name, type, toObject) \
+#define ALCConstantImplementation(name, type, injectVariableCode) \
 @implementation ALCConstant ## name { \
     type _value; \
 } \
--(BOOL) ready { \
-    return YES; \
+-(instancetype) init { \
+    [self doesNotRecognizeSelector:@selector(init)]; \
+    return nil; \
 } \
 -(instancetype) initWithValue:(type) value { \
     self = [super init]; \
@@ -32,8 +35,18 @@ id<ALCDependency> ALC ## name(type value) { \
     } \
     return self; \
 } \
--(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {} \
--(void) setObject:(id) object variable:(Ivar) variable { \
+-(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
+    injectVariableCode \
+    return NULL; \
+} \
+-(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
+    [inv setArgument:&_value atIndex:idx]; \
+    return NULL; \
+} \
+@end
+
+#define ALCConstantScalarImplementation(name, type, toObject) \
+ALCConstantImplementation(name, type, \
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
     if (ivarTypeData.objcClass) { \
         [ALCRuntime setObject:object variable:variable withValue:toObject]; \
@@ -43,49 +56,37 @@ id<ALCDependency> ALC ## name(type value) { \
         *ivarPtr = _value; \
         CFBridgingRelease(objRef); \
     } \
-} \
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
-    [inv setArgument:&_value atIndex:idx]; \
-} \
-@end
+)
 
 #define ALCConstantObjectImplementation(name, type) \
-@implementation ALCConstant ## name { \
-type _value; \
-} \
--(BOOL) ready { \
-return YES; \
-} \
--(instancetype) initWithValue:(type) value { \
-self = [super init]; \
-if (self) { \
-_value = value; \
-} \
-return self; \
-} \
--(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {} \
--(void) setObject:(id) object variable:(Ivar) variable { \
-[ALCRuntime setObject:object variable:variable withValue:_value]; \
-} \
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
-[inv setArgument:&_value atIndex:idx]; \
-} \
-@end
+ALCConstantImplementation(name, type, \
+    [ALCRuntime setObject:object variable:variable withValue:_value]; \
+)
 
-// Scalar types
+#pragma mark - Scalar types
+
+ALCConstantFunctionImplementation(Bool, BOOL)
+ALCConstantScalarImplementation(Bool, BOOL, @(_value))
 ALCConstantFunctionImplementation(Int, int)
 ALCConstantScalarImplementation(Int, int, @(_value))
+ALCConstantFunctionImplementation(Long, long)
+ALCConstantScalarImplementation(Long, long, @(_value))
+ALCConstantFunctionImplementation(Float, float)
+ALCConstantScalarImplementation(Float, float, @(_value))
+ALCConstantFunctionImplementation(Double, double)
+ALCConstantScalarImplementation(Double, double, @(_value))
+
+ALCConstantFunctionImplementation(CGFloat, CGFloat)
+ALCConstantScalarImplementation(CGFloat, CGFloat, @(_value))
+ALCConstantFunctionImplementation(CGSize, CGSize)
+ALCConstantScalarImplementation(CGSize, CGSize, [NSValue valueWithCGSize:_value])
 ALCConstantFunctionImplementation(CGRect, CGRect)
 ALCConstantScalarImplementation(CGRect, CGRect, [NSValue valueWithCGRect:_value])
 
-// Object types.
+#pragma mark - Object types
+
 ALCConstantFunctionImplementation(String, NSString *)
 ALCConstantObjectImplementation(String, NSString *)
-
-//ALCConstantImplementation(Long, long, @(_value))
-//ALCConstantImplementation(Float, float, @(_value))
-//ALCConstantImplementation(CGRect, CGRect, [NSValue valueWithCGRect:_value])
-//ALCConstantImplementation(Double, double, @(_value))
 
 NS_ASSUME_NONNULL_END
 

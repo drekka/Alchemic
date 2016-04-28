@@ -13,27 +13,35 @@
 @protocol ALCObjectFactory;
 @class ALCClassObjectFactory;
 @class ALCMethodObjectFactory;
+@protocol ALCContext;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCContext <NSObject>
 
+#pragma mark - Lifecycle
+
 -(void) start;
 
--(ALCClassObjectFactory *) registerClass:(Class) clazz;
+#pragma mark - Registering
 
--(void) objectFactory:(id<ALCObjectFactory>) objectFactory
-          changedName:(NSString *) oldName
-              newName:(NSString *) newName;
+-(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz;
 
--(ALCMethodObjectFactory *) registerMethod:(SEL) selector
-                       parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                                      args:(NSArray<id<ALCDependency>> *) arguments
-                                returnType:(Class) returnType;
+-(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) registerInitializer:(SEL) initializer
-        parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                       args:(NSArray<id<ALCDependency>> *) arguments;
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory
+        factoryMethod:(SEL) selector
+           returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) objectFactory:(ALCClassObjectFactory *) parentObjectFactory
+          initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory
+     vaiableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+
+#pragma mark - Accessing objects
+
+-(id) objectWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end
 

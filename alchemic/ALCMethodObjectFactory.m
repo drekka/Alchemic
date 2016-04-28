@@ -14,6 +14,8 @@
 #import "NSObject+Alchemic.h"
 #import "ALCClassObjectFactory.h"
 #import "ALCDependency.h"
+#import "ALCInstantiation.h"
+#import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,15 +23,21 @@ NS_ASSUME_NONNULL_BEGIN
     ALCClassObjectFactory *_parentObjectFactory;
     NSArray<id<ALCDependency>> *_arguments;
     SEL _selector;
-    BOOL _enumeratingDependencies;
+    BOOL _resolved;
+    BOOL _checkingReadyStatus;
 }
 
--(instancetype) initWithClass:(Class) objectClass
+-(instancetype) initWithClass:(Class)objectClass {
+    return nil;
+}
+
+-(instancetype) initWithClass:(Class)objectClass
           parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
                      selector:(SEL) selector
                          args:(nullable NSArray<id<ALCDependency>> *) arguments {
     self = [super initWithClass:objectClass];
     if (self) {
+        [ALCRuntime validateClass:parentObjectFactory.objectClass selector:selector arguments:arguments];
         _parentObjectFactory = parentObjectFactory;
         _selector = selector;
         _arguments = arguments;
@@ -38,40 +46,43 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) defaultName {
-    return str(@"%@::%@", NSStringFromClass(_parentObjectFactory.objectClass), NSStringFromSelector(_selector));
-}
-
--(NSString *) descriptionAttributes {
-    return [NSString stringWithFormat:@"method %@", self.defaultName];
+    return [ALCRuntime selectorDescription:_parentObjectFactory.objectClass selector:_selector];
 }
 
 -(void) resolveDependenciesWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {
+    blockSelf;
     [self resolveFactoryWithResolvingStack:resolvingStack
-                             resolvingFlag:&_enumeratingDependencies
+                              resolvedFlag:&_resolved
                                      block:^{
-                                         [self->_parentObjectFactory resolveWithStack:resolvingStack model:model];
-                                         [self->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
-                                             [argument resolveDependencyWithResolvingStack:resolvingStack withName:str(@"arg: %lu", idx) model:model];
+                                         [strongSelf->_parentObjectFactory resolveWithStack:resolvingStack model:model];
+                                         [strongSelf->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
+                                             [argument resolveDependencyWithResolvingStack:resolvingStack
+                                                                                  withName:str(@"arg: %lu", idx)
+                                                                                     model:model];
                                          }];
                                      }];
 }
 
 -(BOOL) ready {
     if (super.ready && _parentObjectFactory.ready) {
-        return [self dependenciesReady:_arguments resolvingFlag:&_enumeratingDependencies];
+        return [self dependenciesReady:_arguments checkingStatusFlag:&_checkingReadyStatus];
     }
     return NO;
 }
 
--(id) instantiateObject {
-    STLog(self.objectClass, @"Executing %@::%@", NSStringFromClass(self.objectClass), NSStringFromSelector(_selector));
+-(ALCInstantiation *) createObject {
     STStartScope(self.objectClass);
-    return [_parentObjectFactory.object invokeSelector:_selector arguments:_arguments];
+    ALCInstantiation *parentGeneration = _parentObjectFactory.objectInstantiation;
+    if (parentGeneration.completion) {
+        parentGeneration.completion();
+    }
+    return [parentGeneration.object invokeSelector:_selector arguments:_arguments];
 }
 
--(void) setObject:(id) object {
-    [_parentObjectFactory injectDependenciesIntoObject:object];
-    super.object = object;
+#pragma mark - Descriptions
+
+-(NSString *) descriptionAttributes {
+    return str(@" method %@", self.defaultName);
 }
 
 @end

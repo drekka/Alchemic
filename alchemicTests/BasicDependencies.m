@@ -8,126 +8,118 @@
 
 @import XCTest;
 
-#import "ALCContext.h"
-#import "ALCContextImpl.h"
-#import "ALCObjectFactory.h"
+#import <Alchemic/Alchemic.h>
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCClassObjectFactory.h"
-#import "ALCModelSearchCriteria.h"
-#import "ALCModelDependency.h"
-#import "ALCDependency.h"
+#import "ALCInstantiation.h"
+#import "ALCContextImpl.h"
 
-@interface TestDepClass:NSObject
-@end
-
-@implementation TestDepClass
-@end
-
-@interface TestClass1:NSObject
-@property (nonatomic, strong) TestDepClass *dep;
-@end
-
-@implementation TestClass1
-@end
-
-@interface TestClass2:NSObject
-@property (nonatomic, strong) NSArray<TestDepClass *> *deps;
-@end
-
-@implementation TestClass2
-@end
+#import "TopThing.h"
+#import "NestedThing.h"
 
 @interface BasicDependencies : XCTestCase
 @end
 
 @implementation BasicDependencies {
-    id<ALCContext> context;
+    id<ALCContext> _context;
+    ALCClassObjectFactory *_topThingFactory;
+    ALCClassObjectFactory *_nestedThingFactory;
 }
 
 -(void) setUp {
-    context = [[ALCContextImpl alloc] init];
+    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
+    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor whiteColor];
+    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor lightGrayColor];
+    STStartLogging(@"<ALCContext>");
+    STStartLogging(@"is [TopThing]");
+    STStartLogging(@"is [NestedThing]");
+    _context = [[ALCContextImpl alloc] init];
+    _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
+    _nestedThingFactory = [_context registerObjectFactoryForClass:[NestedThing class]];
 }
 
--(void) testSimpleDependency {
-
-    ALCClassObjectFactory *valueFactory = [context registerClass:[TestClass1 class]];
-    [context registerClass:[TestDepClass class]];
-
-    ALCModelSearchCriteria *criteria = [ALCModelSearchCriteria searchCriteriaForClass:[TestDepClass class]];
-    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:criteria];
-    [valueFactory registerDependency:modelDependency forVariable:@"dep"];
-
-    [context start];
-
-    TestClass1 *singleton = valueFactory.object;
-    XCTAssertNotNil(singleton);
-    XCTAssertNotNil(singleton.dep);
-    XCTAssertTrue([singleton.dep isKindOfClass:[TestDepClass class]]);
+-(void) testSimpleDependencyPublicVariable {
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNotNil(topThing.aNestedThing);
+    XCTAssertTrue([topThing.aNestedThing isKindOfClass:[NestedThing class]]);
 }
 
--(void) testSimpleArrayDependency {
-
-    ALCClassObjectFactory *valueFactory = [context registerClass:[TestClass2 class]];
-    id<ALCObjectFactory> depFactory = [context registerClass:[TestDepClass class]];
-    [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep1"];
-    depFactory = [context registerClass:[TestDepClass class]];
-    [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep2"];
-
-    ALCModelSearchCriteria *criteria = [ALCModelSearchCriteria searchCriteriaForClass:[TestDepClass class]];
-    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:criteria];
-    [valueFactory registerDependency:modelDependency forVariable:@"deps"];
-
-    [context start];
-
-    TestClass2 *singleton = valueFactory.object;
-    XCTAssertNotNil(singleton);
-    XCTAssertNotNil(singleton.deps);
-    XCTAssertTrue([singleton.deps isKindOfClass:[NSArray class]]);
-    XCTAssertEqual(2u, [singleton.deps count]);
-    XCTAssertNotEqual(singleton.deps[0], singleton.deps[1]);
+-(void) testSimpleDependencyInternalVariable {
+    [_context objectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNotNil(topThing.aNestedThing);
+    XCTAssertTrue([topThing.aNestedThing isKindOfClass:[NestedThing class]]);
 }
 
--(void) testSimpleDependencyUsingName {
-
-    ALCClassObjectFactory *valueFactory = [context registerClass:[TestClass2 class]];
-    id<ALCObjectFactory> depFactory = [context registerClass:[TestDepClass class]];
-    [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep1"];
-    depFactory = [context registerClass:[TestDepClass class]];
-    [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep2"];
-
-    ALCModelSearchCriteria *criteria = [ALCModelSearchCriteria searchCriteriaForName:@"dep2"];
-    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:criteria];
-    [valueFactory registerDependency:modelDependency forVariable:@"deps"];
-
-    [context start];
-
-    TestClass2 *singleton = valueFactory.object;
-    XCTAssertNotNil(singleton);
-    XCTAssertNotNil(singleton.deps);
-    XCTAssertTrue([singleton.deps isKindOfClass:[NSArray class]]);
-    XCTAssertEqual(1u, [singleton.deps count]);
+-(void) testSimpleDependencyArrayByClass {
+    [_context objectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcClass(NestedThing), nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNotNil(topThing.arrayOfNestedThings);
+    XCTAssertEqual(1u, topThing.arrayOfNestedThings.count);
+    XCTAssertTrue([topThing.arrayOfNestedThings[0] isKindOfClass:[NestedThing class]]);
 }
 
--(void) testSimpleDependencyUsingClassAndName {
-
-    ALCClassObjectFactory *valueFactory = [context registerClass:[TestClass1 class]];
-    id<ALCObjectFactory> depFactory = [context registerClass:[TestDepClass class]];
-    [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep1"];
-    depFactory = [context registerClass:[TestDepClass class]];
-    [context objectFactory:depFactory changedName:@"TestDepClass" newName:@"dep2"];
-
-    ALCModelSearchCriteria *classCriteria = [ALCModelSearchCriteria searchCriteriaForClass:[TestDepClass class]];
-    ALCModelSearchCriteria *nameCriteria = [ALCModelSearchCriteria searchCriteriaForName:@"dep2"];
-    classCriteria.nextSearchCriteria = nameCriteria;
-
-    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:classCriteria];
-    [valueFactory registerDependency:modelDependency forVariable:@"dep"];
-
-    [context start];
-
-    TestClass1 *singleton = valueFactory.object;
-    XCTAssertNotNil(singleton);
-    XCTAssertNotNil(singleton.dep);
+-(void) testSimpleDependencyArrayByProtocol {
+    [_context objectFactory:_topThingFactory vaiableInjection:@"arrayOfNestedThings", AcProtocol(NestedProtocol), nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNotNil(topThing.arrayOfNestedThings);
+    XCTAssertEqual(1u, topThing.arrayOfNestedThings.count);
+    XCTAssertTrue([topThing.arrayOfNestedThings[0] isKindOfClass:[NestedThing class]]);
 }
+
+#pragma mark - Search criteria
+
+-(void) testSimpleDependencyPublicVariableNameSearchUsingDefaultName {
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcName(@"NestedThing"), nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNotNil(topThing.aNestedThing);
+}
+
+-(void) testSimpleDependencyPublicVariableNameSearchUsingCustomName {
+    [_context objectFactoryConfig:_nestedThingFactory, [ALCFactoryName withName:@"abc"], nil];
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcName(@"abc"), nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNotNil(topThing.aNestedThing);
+}
+
+-(void) testSimpleDependencyPublicVariableProtocolSearch {
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcProtocol(NestedProtocol), nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNotNil(topThing.aNestedThing);
+}
+
+-(void) testSimpleDependencyPublicVariableClassSearch {
+    [_context objectFactory:_topThingFactory vaiableInjection:@"aNestedThing", AcClass(NestedThing), nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNotNil(topThing.aNestedThing);
+}
+
+-(void) testDependentObjectDependenciesInjected {
+    [_context objectFactory:_topThingFactory vaiableInjection:@"_aNestedThing", nil];
+    [_context objectFactory:_nestedThingFactory vaiableInjection:@"aInt", AcInt(5), nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    XCTAssertEqual(5, topThing.aNestedThing.aInt);
+}
+
 
 @end
 

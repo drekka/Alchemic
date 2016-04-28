@@ -6,13 +6,16 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <StoryTeller/StoryTeller.h>
+
 #import "ALCRuntime.h"
 #import "ALCInternalMacros.h"
+#import "ALCTypeData.h"
+#import "ALCContext.h"
+#import "ALCRuntimeScanner.h"
+#import "NSSet+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@implementation ALCTypeData
-@end
 
 @implementation ALCRuntime
 
@@ -23,6 +26,8 @@ static NSCharacterSet *__typeEncodingDelimiters;
     __protocolClass = objc_getClass("Protocol");
     __typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
 }
+
+#pragma mark - Querying things
 
 +(Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
 
@@ -52,9 +57,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     var = class_getInstanceVariable(aClass, [[@"_" stringByAppendingString:inj] UTF8String]);
 
     if (var == NULL) {
-        @throw [NSException exceptionWithName:@"AlchemicInjectionNotFound"
-                                       reason:str(@"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass))
-                                     userInfo:nil];
+        throwException(@"AlchemicInjectionNotFound", @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
     }
 
     return var;
@@ -100,24 +103,87 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return typeData;
 }
 
+#pragma mark - Setting variables
+
 +(void)setObject:(id) object variable:(Ivar) variable withValue:(id) value {
-
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
+    id finalValue = [self autoboxValueForType:(Class _Nonnull) ivarTypeData.objcClass value:value];
+    STLog([object class], @"Injecting %@ with a %@", [ALCRuntime propertyDescription:[object class] variable:variable], [finalValue class]);
+    object_setIvar(object, variable, finalValue);
+}
 
-    // Wrap the value in an array if it's not an array and ivar is.
-    if ([ivarTypeData.objcClass isSubclassOfClass:[NSArray class]] && ![value isKindOfClass:[NSArray class]]) {
-        value = @[value];
++(void) setInvocation:(NSInvocation *) inv argIndex:(int) idx withValue:(id) value ofClass:(Class) valueClass {
+    id finalValue = [self autoboxValueForType:valueClass value:value];
+    [inv setArgument:&finalValue atIndex:idx];
+}
+
++(id) autoboxValueForType:(Class) type value:(id) value {
+
+    // Wrap the value in an array if it's not alrady in an array.
+    if ([type isSubclassOfClass:[NSArray class]]) {
+        return [value isKindOfClass:[NSArray class]] ? value : @[value];
     }
 
-    if ([value isKindOfClass:ivarTypeData.objcClass]) {
-        object_setIvar(object, variable, value);
-    } else {
-        @throw [NSException exceptionWithName:@"AlchemicIncorrectType"
-                                       reason:str(@"Resolved value of type %2$@ cannot be cast to variable '%1$s' (%3$s)", ivar_getName(variable), NSStringFromClass([value class]), class_getName(ivarTypeData.objcClass))
-                                     userInfo:nil];
+    // Not targetting an array so extract the first value.
+    id finalValue = [value isKindOfClass:[NSArray class]] ? ((NSArray *) value)[0] : value;
+
+    if ([finalValue isKindOfClass:type]) {
+        return finalValue;
+    }
+
+    throwException(@"AlchemicTypeMissMatch", @"Value of type %@ cannot be cast to a %@", NSStringFromClass([value class]), NSStringFromClass(type));
+}
+
+#pragma mark - Validating
+
++(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
+    if (! [aClass instancesRespondToSelector:selector]) {
+        throwException(@"AlchemicSelectorNotFound", @"Failed to find selector %@", [self selectorDescription:aClass selector:selector]);
+    }
+
+    NSMethodSignature *sig = [NSMethodSignature methodSignatureForSelector:selector];
+    if (sig.numberOfArguments != (arguments ? arguments.count : 0)) {
+        throwException(@"AlchemicIncorrectNumberOfArguments", @"%@ expected %lu arguments, got %lu", [self selectorDescription:aClass selector:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
     }
 }
 
+#pragma mark - Describing things
+
++(NSString *) selectorDescription:(Class) aClass selector:(SEL)selector {
+    return str(@"%@[%@ %@]", [aClass respondsToSelector:selector] ? @"+" : @"-", NSStringFromClass(aClass), NSStringFromSelector(selector));
+}
+
++(NSString *) propertyDescription:(Class) aClass property:(NSString *)property {
+    return str(@"%@.%@", NSStringFromClass(aClass), property);
+}
+
++(NSString *) propertyDescription:(Class) aClass variable:(Ivar) variable {
+    return str(@"%@.%s", NSStringFromClass(aClass), ivar_getName(variable));
+}
+
+#pragma mark - Scanning
+
++(void) scanRuntimeWithContext:(id<ALCContext>) context {
+
+    // Use the app bundles and Alchemic framework as the base bundles to search configs classes.
+    NSMutableSet<NSBundle *> *appBundles = [[NSSet setWithArray:[NSBundle allBundles]] mutableCopy];
+    [appBundles addObject:[NSBundle bundleForClass:[self class]]];
+
+    // Scan the bundles, checking each class.
+    NSMutableSet<NSBundle *> *moreBundles = appBundles;
+    NSMutableSet<NSBundle *> *scannedBundles;
+    while (moreBundles.count > 0) {
+
+        // Add the bundles into the scanned list.
+        [NSSet unionSet:moreBundles intoMutableSet:&scannedBundles];
+
+        // San and return a list of new bundles.
+        moreBundles = [[ALCRuntimeScanner scanBundles:moreBundles context:context] mutableCopy];
+
+        // Make sure we have not already scanned the new bundles.
+        [moreBundles minusSet:scannedBundles];
+    }
+}
 
 @end
 

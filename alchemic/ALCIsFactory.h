@@ -1,0 +1,24 @@
+//
+//  IsSngleton.h
+//  alchemic
+//
+//  Created by Derek Clarkson on 7/06/2015.
+//  Copyright (c) 2015 Derek Clarkson. All rights reserved.
+//
+
+@import Foundation;
+
+/**
+ Used to tag registrations that are for factories. Ie. every time they are accessed, they create a new instance of the desired object.
+ */
+
+@interface ALCIsFactory : NSObject
+
+/**
+ Returns a singleton instance of the macro.
+
+ @return A singleton instance.
+ */
++(ALCIsFactory *) factoryMacro;
+
+@end

@@ -8,73 +8,58 @@
 
 @import XCTest;
 
-#import "ALCContext.h"
+#import "Alchemic.h"
 #import "ALCContextImpl.h"
-#import "ALCObjectFactory.h"
 #import "ALCClassObjectFactory.h"
-#import "ALCModelSearchCriteria.h"
-#import "ALCDependency.h"
-#import "ALCModelDependency.h"
+#import "ALCIsReference.h"
 
-@interface TestRefClass1:NSObject
-@end
-
-@implementation TestRefClass1
-@end
-
-@interface TestRefClass2:NSObject
-@property (nonatomic, strong) TestRefClass1 *ref1;
-@end
-
-@implementation TestRefClass2
-@end
+#import "TopThing.h"
+#import "NestedThing.h"
 
 @interface ExternalReferences : XCTestCase
 @end
 
-@implementation ExternalReferences
+@implementation ExternalReferences {
+    id<ALCContext> _context;
+    ALCClassObjectFactory *_topThing;
+}
 
--(void) testSingleReference {
+-(void)setUp {
+    _context = [[ALCContextImpl alloc] init];
+    _topThing = [_context registerObjectFactoryForClass:[TopThing class]];
+    [_topThing configureWithOptions:@[[ALCIsReference referenceMacro]] unknownOptionHandler:^(id option) {
+        XCTFail();
+    }];
+}
 
-    id<ALCContext> context = [[ALCContextImpl alloc] init];
-    ALCClassObjectFactory *valueFactory = [context registerClass:[TestRefClass1 class]];
-    valueFactory.factoryType = ALCFactoryTypeReference;
-    
-    [context start];
+-(void) testTopReferenceTypeInitiation {
 
-    XCTAssertFalse(valueFactory.ready);
+    [_context start];
 
-    id object = [[TestRefClass1 alloc] init];
-    valueFactory.object = object;
-
-    XCTAssertTrue(valueFactory.ready);
-
-    id storedObject = valueFactory.object;
-    XCTAssertEqual(object, storedObject);
+    XCTAssertFalse(_topThing.ready);
+    @try {
+        __unused id object = _topThing.objectInstantiation.object;
+        XCTFail(@"Exception not thrown getting reference type");
+    }
+    @catch (ALCException *exception) {
+        XCTAssertEqualObjects(@"AlchemicReferencedObjectNotSet", exception.name);
+    }
+    @catch (NSException *exception) {
+        XCTFail(@"Un-expected exception %@", exception);
+    }
 
 }
 
--(void) testCallbackBlockTriggersSingletonCreation {
+-(void) testTopReferenceTypeSet {
 
-    id<ALCContext> context = [[ALCContextImpl alloc] init];
+    [_context start];
 
-    ALCClassObjectFactory *valueFactory1 = [context registerClass:[TestRefClass1 class]];
-    ALCClassObjectFactory *valueFactory2 = [context registerClass:[TestRefClass2 class]];
+    id extObj = [[TopThing alloc] init];
+    [_topThing setObject:extObj];
 
-    valueFactory1.factoryType = ALCFactoryTypeReference;
-
-    ALCModelSearchCriteria *classCriteria = [ALCModelSearchCriteria searchCriteriaForClass:[TestRefClass1 class]];
-    id<ALCDependency> modelDependency = [[ALCModelDependency alloc] initWithCriteria:classCriteria];
-    [valueFactory2 registerDependency:modelDependency forVariable:@"ref1"];
-
-    [context start];
-
-    id object = [[TestRefClass1 alloc] init];
-    valueFactory1.object = object;
-
-    XCTAssertTrue(valueFactory2.ready);
-    XCTAssertNotNil(valueFactory2.object);
-
+    XCTAssertTrue(_topThing.ready);
+    id object = _topThing.objectInstantiation.object;
+    XCTAssertEqual(extObj, object);
 }
 
 @end

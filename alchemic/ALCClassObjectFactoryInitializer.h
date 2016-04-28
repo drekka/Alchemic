@@ -6,16 +6,16 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractObjectGenerator.h"
+#import "ALCInstantiator.h"
 
-@protocol ALCDependency;
 @class ALCClassObjectFactory;
+@protocol ALCDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCClassObjectFactoryInitializer : ALCAbstractObjectGenerator
+@interface ALCClassObjectFactoryInitializer : NSObject<ALCInstantiator>
 
--(instancetype) initWithClass:(Class) objectClass NS_UNAVAILABLE;
+-(instancetype) init NS_UNAVAILABLE;
 
 -(instancetype) initWithObjectFactory:(ALCClassObjectFactory *) objectFactory
                           initializer:(SEL) initializer
