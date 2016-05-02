@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(void) setInvocation:(NSInvocation *) inv argIndex:(int) idx withValue:(id) value ofClass:(Class) valueClass;
 
-+(id) autoboxValueForType:(Class) type value:(id) value;
++(id) mapValue:(id) value toType:(Class) type;
 
 #pragma mark - Validating
 

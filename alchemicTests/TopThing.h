@@ -37,8 +37,8 @@
 
 +(instancetype) classCreateWithString:(NSString *) aString;
 
--(instancetype) factoryMethod;
--(instancetype) factoryMethodWithString:(NSString *) aString;
--(instancetype) factoryMethodWithString:(NSString *) aString andInt:(int) aInt;
+-(NestedThing *) nestedThingFactoryMethod;
+-(NestedThing *) nestedThingFactoryMethodWithString:(NSString *) aString;
+-(NestedThing *) nestedThingFactoryMethodWithString:(NSString *) aString andInt:(int) aInt;
 
 @end

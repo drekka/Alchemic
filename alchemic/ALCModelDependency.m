@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(id) searchResult {
     NSArray<ALCInstantiation *> *instantiations = [self instantiations];
     id values = [self getValue:instantiations];
-    id finalValue = [ALCRuntime autoboxValueForType:self.objectClass value:values];
+    id finalValue = [ALCRuntime mapValue:values toType:self.objectClass];
     ALCSimpleBlock completion = [self combineCompletionBlocks:instantiations];
     if (completion) {
         completion();

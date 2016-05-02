@@ -97,7 +97,7 @@
 		6CC284921CB69B44006B613F /* BuiltConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68CF801C64E1F8003A7A54 /* BuiltConstants.m */; };
 		6CC284931CB69B44006B613F /* CircularReferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C67FF2B1C6A13C700ABEDDD /* CircularReferences.m */; };
 		6CC284941CB69B44006B613F /* ExternalReferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4B56231C7065580040AEC2 /* ExternalReferences.m */; };
-		6CC284951CB69B44006B613F /* MethodSingletons.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3DE2921C74A85D0021BE0E /* MethodSingletons.m */; };
+		6CC284951CB69B44006B613F /* FactoryMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3DE2921C74A85D0021BE0E /* FactoryMethods.m */; };
 		6CC284961CB69B44006B613F /* AnotherThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC284781CABBD1F006B613F /* AnotherThing.m */; };
 		6CC284991CB69CC5006B613F /* AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC284971CB69BDC006B613F /* AlchemicTests.m */; };
 		6CC2849B1CB69EE6006B613F /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */; };
@@ -198,7 +198,7 @@
 		6C3AFBD01C638C7800B4FCAA /* ALCRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCRuntime.h; sourceTree = "<group>"; };
 		6C3AFBD11C638C7800B4FCAA /* ALCRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCRuntime.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C3AFBD41C64CDEC00B4FCAA /* ClassSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ClassSingleton.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		6C3DE2921C74A85D0021BE0E /* MethodSingletons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodSingletons.m; sourceTree = "<group>"; };
+		6C3DE2921C74A85D0021BE0E /* FactoryMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactoryMethods.m; sourceTree = "<group>"; };
 		6C469BAD1BB0200200CD2286 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInternalMacros.h; sourceTree = "<group>"; };
 		6C4B56101C6E0A390040AEC2 /* ALCClassObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassObjectFactory.h; sourceTree = "<group>"; };
@@ -403,7 +403,7 @@
 				6C68CF801C64E1F8003A7A54 /* BuiltConstants.m */,
 				6C67FF2B1C6A13C700ABEDDD /* CircularReferences.m */,
 				6C4B56231C7065580040AEC2 /* ExternalReferences.m */,
-				6C3DE2921C74A85D0021BE0E /* MethodSingletons.m */,
+				6C3DE2921C74A85D0021BE0E /* FactoryMethods.m */,
 				6CB7C4191CC3BFF500C05B0B /* AccessingObjects.m */,
 				6CB7C43A1CC8F62F00C05B0B /* ClassFactories.m */,
 			);
@@ -774,7 +774,7 @@
 				6CC284931CB69B44006B613F /* CircularReferences.m in Sources */,
 				6CC284941CB69B44006B613F /* ExternalReferences.m in Sources */,
 				6CB7C43B1CC8F62F00C05B0B /* ClassFactories.m in Sources */,
-				6CC284951CB69B44006B613F /* MethodSingletons.m in Sources */,
+				6CC284951CB69B44006B613F /* FactoryMethods.m in Sources */,
 				6CC284961CB69B44006B613F /* AnotherThing.m in Sources */,
 				6CB7C41A1CC3BFF500C05B0B /* AccessingObjects.m in Sources */,
 				6C24CCDE1CA42B0C0026D18C /* TopThing.m in Sources */,

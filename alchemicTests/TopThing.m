@@ -7,6 +7,7 @@
 //
 
 #import "TopThing.h"
+#import "NestedThing.h"
 
 @implementation TopThing
 
@@ -46,17 +47,18 @@
     return [[TopThing alloc] initWithString:aString];
 }
 
--(instancetype) factoryMethod {
-    return [[TopThing alloc] initWithString:@"abc"];
+-(NestedThing *) nestedThingFactoryMethod {
+    return [self nestedThingFactoryMethodWithString:@"abc" andInt:5];
 }
 
--(instancetype) factoryMethodWithString:(NSString *) aString {
-    return [[TopThing alloc] initWithString:aString];
+-(NestedThing *) nestedThingFactoryMethodWithString:(NSString *) aString {
+    return [self nestedThingFactoryMethodWithString:aString andInt:5];
 }
 
--(instancetype) factoryMethodWithString:(NSString *) aString andInt:(int) aInt {
-    TopThing *thing = [[TopThing alloc] initWithString:aString];
+-(NestedThing *) nestedThingFactoryMethodWithString:(NSString *) aString andInt:(int) aInt {
+    NestedThing *thing = [[NestedThing alloc] init];
     thing.aInt = aInt;
+    thing.aString = aString;
     return thing;
 }
 

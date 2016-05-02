@@ -107,28 +107,34 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(void)setObject:(id) object variable:(Ivar) variable withValue:(id) value {
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
-    id finalValue = [self autoboxValueForType:(Class _Nonnull) ivarTypeData.objcClass value:value];
+    id finalValue = [self mapValue:value toType:(Class _Nonnull) ivarTypeData.objcClass];
     STLog([object class], @"Injecting %@ with a %@", [ALCRuntime propertyDescription:[object class] variable:variable], [finalValue class]);
     object_setIvar(object, variable, finalValue);
 }
 
 +(void) setInvocation:(NSInvocation *) inv argIndex:(int) idx withValue:(id) value ofClass:(Class) valueClass {
-    id finalValue = [self autoboxValueForType:valueClass value:value];
+    id finalValue = [self mapValue:value toType:(Class _Nonnull) valueClass];
     [inv setArgument:&finalValue atIndex:idx];
 }
 
-+(id) autoboxValueForType:(Class) type value:(id) value {
++(id) mapValue:(id) value toType:(Class) type {
 
     // Wrap the value in an array if it's not alrady in an array.
     if ([type isSubclassOfClass:[NSArray class]]) {
         return [value isKindOfClass:[NSArray class]] ? value : @[value];
     }
 
-    // Not targetting an array so extract the first value.
-    id finalValue = [value isKindOfClass:[NSArray class]] ? ((NSArray *) value)[0] : value;
+    // Throw an error if we are dealing with an array value and we have too many results.
+    if ([value isKindOfClass:[NSArray class]]) {
+        NSArray *values = (NSArray *) value;
+        if (values.count != 1) {
+            throwException(@"AlchemicTooManyValues", @"Target type is not an array and found %lu values", values.count);
+        }
+        return values[0];
+    }
 
-    if ([finalValue isKindOfClass:type]) {
-        return finalValue;
+    if ([value isKindOfClass:type]) {
+        return value;
     }
 
     throwException(@"AlchemicTypeMissMatch", @"Value of type %@ cannot be cast to a %@", NSStringFromClass([value class]), NSStringFromClass(type));
@@ -137,12 +143,21 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Validating
 
 +(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
-    if (! [aClass instancesRespondToSelector:selector]) {
+
+    // Get an instance method.
+    NSMethodSignature *sig = [aClass instanceMethodSignatureForSelector:selector];
+    if (!sig) {
+        // Or try for a class method.
+        sig = [aClass methodSignatureForSelector:selector];
+    }
+
+    // Not found.
+    if (!sig) {
         throwException(@"AlchemicSelectorNotFound", @"Failed to find selector %@", [self selectorDescription:aClass selector:selector]);
     }
 
-    NSMethodSignature *sig = [NSMethodSignature methodSignatureForSelector:selector];
-    if (sig.numberOfArguments != (arguments ? arguments.count : 0)) {
+    // Incorrect number of arguments. Allow for runtime in arguments.
+    if (sig.numberOfArguments - 2 != (arguments ? arguments.count : 0)) {
         throwException(@"AlchemicIncorrectNumberOfArguments", @"%@ expected %lu arguments, got %lu", [self selectorDescription:aClass selector:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
     }
 }
