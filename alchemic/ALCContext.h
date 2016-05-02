@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... NS_REQUIRES_NIL_TERMINATION;
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
-        factoryMethod:(SEL) selector
+registerFactoryMethod:(SEL) selector
            returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 -(void) objectFactory:(ALCClassObjectFactory *) parentObjectFactory

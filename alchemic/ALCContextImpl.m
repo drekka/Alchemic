@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
-        factoryMethod:(SEL) selector
+registerFactoryMethod:(SEL) selector
            returnType:(Class) returnType, ... {
 
     // Read in the arguments and sort them into factory config and method arguments.

@@ -22,7 +22,7 @@
 #define AcMethod(methodType, methodSelector, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerMethodObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
     [[Alchemic mainContext] objectFactory:classObjectFactory \
-                            factoryMethod:@selector(methodSelector) \
+                    registerFactoryMethod:@selector(methodSelector) \
                                returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 

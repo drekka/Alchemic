@@ -37,10 +37,10 @@
 -(void) testInstanceFactoryMethod {
 
     AcIgnoreSelectorWarnings(
-                           SEL selector = @selector(nestedThingFactoryMethod);
-                           )
+                             SEL selector = @selector(nestedThingFactoryMethod);
+                             )
     [_context objectFactory:_topThingFactory
-              factoryMethod:selector
+      registerFactoryMethod:selector
                  returnType:[NestedThing class], nil];
     [_context start];
 
@@ -50,10 +50,10 @@
 -(void) testInstanceFactoryMethodWithStringArg {
 
     AcIgnoreSelectorWarnings(
-                           SEL selector = @selector(nestedThingFactoryMethodWithString:);
-                           )
+                             SEL selector = @selector(nestedThingFactoryMethodWithString:);
+                             )
     [_context objectFactory:_topThingFactory
-              factoryMethod:selector
+      registerFactoryMethod:selector
                  returnType:[NestedThing class], AcString(@"def"), nil];
     [_context start];
 
@@ -63,10 +63,10 @@
 -(void) testInstanceFactoryMethodWithStringAndScalarArg {
 
     AcIgnoreSelectorWarnings(
-                           SEL selector = @selector(nestedThingFactoryMethodWithString:andInt:);
-                           )
+                             SEL selector = @selector(nestedThingFactoryMethodWithString:andInt:);
+                             )
     [_context objectFactory:_topThingFactory
-              factoryMethod:selector
+      registerFactoryMethod:selector
                  returnType:[NestedThing class], AcString(@"def"), AcInt(12), nil];
     [_context start];
 
