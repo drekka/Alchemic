@@ -17,10 +17,10 @@
 
 #import "TopThing.h"
 
-@interface BuiltConstants : XCTestCase
+@interface IntegrationConstantInjections : XCTestCase
 @end
 
-@implementation BuiltConstants {
+@implementation IntegrationConstantInjections {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
 }

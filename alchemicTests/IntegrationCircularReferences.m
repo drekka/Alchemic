@@ -19,11 +19,11 @@
 #import "TopThing.h"
 #import "AnotherThing.h"
 
-@interface CircularReferences : XCTestCase
+@interface IntegrationCircularReferences : XCTestCase
 
 @end
 
-@implementation CircularReferences {
+@implementation IntegrationCircularReferences {
     id<ALCContext> _context;
     id<ALCObjectFactory> _topFactory;
     id<ALCObjectFactory> _anotherFactory;
@@ -55,7 +55,7 @@
 }
 
 -(void) testInitializerToInitializer {
-    ignoreSelectorWarnings(
+    AcIgnoreSelectorWarnings(
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
@@ -72,7 +72,7 @@
 
 -(void) testPropertyToInitializer {
     [_context objectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
-    ignoreSelectorWarnings(
+    AcIgnoreSelectorWarnings(
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
     [_context objectFactory:_anotherFactory
@@ -91,7 +91,7 @@
 }
 
 -(void) testInitializerToProperty {
-    ignoreSelectorWarnings(
+    AcIgnoreSelectorWarnings(
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            )
     [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];

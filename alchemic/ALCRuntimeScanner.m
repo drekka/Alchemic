@@ -10,7 +10,7 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCRuntimeScanner.h"
-#import "ALCInternalMacros.h"
+#import "ALCMacros.h"
 #import "ALCContext.h"
 #import "ALCConfig.h"
 #import "NSBundle+Alchemic.h"
@@ -57,7 +57,7 @@ typedef NSSet<NSBundle *>  * _Nullable (^ALCClassProcessor) (Class aClass);
 #pragma mark - Factory methods
 
 +(nonnull instancetype) modelScannerForContext:(id<ALCContext>) context {
-    ignoreSelectorWarnings(
+    AcIgnoreSelectorWarnings(
                            SEL alchemicFunctionSelector = @selector(alchemic:);
                            )
     return [[ALCRuntimeScanner alloc]
@@ -70,7 +70,7 @@ typedef NSSet<NSBundle *>  * _Nullable (^ALCClassProcessor) (Class aClass);
                 if ([aClass respondsToSelector:alchemicFunctionSelector]) {
                     STLog(aClass, @"Swift class %@ has alchemic() method, executing it ...", NSStringFromClass(aClass));
                     ALCClassObjectFactory *objectFactory = [context registerObjectFactoryForClass:aClass];
-                    ignoreSelectorWarnings(
+                    AcIgnoreSelectorWarnings(
                                            SEL selector = @selector(alchemic:);
                                            ((void (*)(id, SEL, ALCClassObjectFactory *))objc_msgSend)(aClass, selector, objectFactory);
                                            )

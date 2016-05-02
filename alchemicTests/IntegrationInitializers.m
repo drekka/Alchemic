@@ -18,10 +18,10 @@
 #import "TopThing.h"
 #import "NestedThing.h"
 
-@interface ClassSingleton : XCTestCase
+@interface IntegrationInitializers : XCTestCase
 @end
 
-@implementation ClassSingleton {
+@implementation IntegrationInitializers {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
     ALCClassObjectFactory *_nestedThingFactory;
@@ -35,8 +35,10 @@
     _nestedThingFactory = [_context registerObjectFactoryForClass:[NestedThing class]];
 }
 
--(void) testSimpleInstantiation {
+-(void) testInitializer {
 
+    [_context objectFactory:_topThingFactory
+                initializer:@selector(init), nil];
     [_context start];
 
     XCTAssertTrue(_topThingFactory.ready);
@@ -45,7 +47,7 @@
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
 }
 
--(void) testInitializerInstantiationObject {
+-(void) testInitializerWithString {
 
     [_context objectFactory:_topThingFactory
                 initializer:@selector(initWithString:), AcString(@"abc"), nil];
@@ -58,11 +60,11 @@
     XCTAssertEqual(@"abc", ((TopThing *)value).aString);
 }
 
--(void) testInitializerInstantiationObjectAndScalar {
+-(void) testInitializerWithStringAndScalar {
 
-    ignoreSelectorWarnings(
-                           SEL selector = @selector(initWithString:andInt:);
-                           )
+    AcIgnoreSelectorWarnings(
+                             SEL selector = @selector(initWithString:andInt:);
+                             )
     [_context objectFactory:_topThingFactory
                 initializer:selector, AcString(@"abc"), AcInt(5), nil];
     [_context start];
@@ -75,10 +77,10 @@
     XCTAssertEqual(5, ((TopThing *)value).aInt);
 }
 
--(void) testInitializerInstantiationArray {
-    ignoreSelectorWarnings(
-                           SEL selector = @selector(initWithNestedThings:);
-                           )
+-(void) testInitializerWithArray {
+    AcIgnoreSelectorWarnings(
+                             SEL selector = @selector(initWithNestedThings:);
+                             )
     [_context objectFactory:_topThingFactory
                 initializer:selector, AcArgument([NSArray class], AcClass(NestedThing), nil), nil];
     [_context start];

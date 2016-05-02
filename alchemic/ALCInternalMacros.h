@@ -54,15 +54,6 @@ return NO
 methodNotImplemented; \
 return NULL
 
-#pragma mark - Unneccessary warnings
-
-#define ignoreSelectorWarnings(code) \
-_Pragma ("clang diagnostic push") \
-_Pragma ("clang diagnostic ignored \"-Wselector\"") \
-_Pragma ("clang diagnostic ignored \"-Wundeclared-selector\"") \
-code \
-_Pragma ("clang diagnostic pop")
-
 #pragma mark - Var arg lists
 
 // Processes varadic args including the arg that delimits the var arg list.

@@ -19,10 +19,10 @@
 #import "TopThing.h"
 #import "NestedThing.h"
 
-@interface FactoryMethods : XCTestCase
+@interface IntegrationFactoryMethods : XCTestCase
 @end
 
-@implementation FactoryMethods {
+@implementation IntegrationFactoryMethods {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
 }
@@ -36,7 +36,7 @@
 
 -(void) testInstanceFactoryMethod {
 
-    ignoreSelectorWarnings(
+    AcIgnoreSelectorWarnings(
                            SEL selector = @selector(nestedThingFactoryMethod);
                            )
     [_context objectFactory:_topThingFactory
@@ -44,14 +44,12 @@
                  returnType:[NestedThing class], nil];
     [_context start];
 
-    NestedThing *thing = [_context objectWithClass:[NestedThing class], nil];
-    XCTAssertEqualObjects(@"abc", thing.aString);
-    XCTAssertEqual(5, thing.aInt);
+    [self validateInstanceWithString:@"abc" int:5];
 }
 
 -(void) testInstanceFactoryMethodWithStringArg {
 
-    ignoreSelectorWarnings(
+    AcIgnoreSelectorWarnings(
                            SEL selector = @selector(nestedThingFactoryMethodWithString:);
                            )
     [_context objectFactory:_topThingFactory
@@ -59,14 +57,12 @@
                  returnType:[NestedThing class], AcString(@"def"), nil];
     [_context start];
 
-    NestedThing *thing = [_context objectWithClass:[NestedThing class], nil];
-    XCTAssertEqualObjects(@"def", thing.aString);
-    XCTAssertEqual(5, thing.aInt);
+    [self validateInstanceWithString:@"def" int:5];
 }
 
 -(void) testInstanceFactoryMethodWithStringAndScalarArg {
 
-    ignoreSelectorWarnings(
+    AcIgnoreSelectorWarnings(
                            SEL selector = @selector(nestedThingFactoryMethodWithString:andInt:);
                            )
     [_context objectFactory:_topThingFactory
@@ -74,9 +70,13 @@
                  returnType:[NestedThing class], AcString(@"def"), AcInt(12), nil];
     [_context start];
 
+    [self validateInstanceWithString:@"def" int:12];
+}
+
+-(void) validateInstanceWithString:(NSString *) aString int:(int) aInt {
     NestedThing *thing = [_context objectWithClass:[NestedThing class], nil];
-    XCTAssertEqualObjects(@"def", thing.aString);
-    XCTAssertEqual(12, thing.aInt);
+    XCTAssertEqualObjects(aString, thing.aString);
+    XCTAssertEqual(aInt, thing.aInt);
 }
 
 @end

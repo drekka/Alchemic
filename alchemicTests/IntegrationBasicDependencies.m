@@ -18,10 +18,10 @@
 #import "TopThing.h"
 #import "NestedThing.h"
 
-@interface BasicDependencies : XCTestCase
+@interface IntegrationBasicDependencies : XCTestCase
 @end
 
-@implementation BasicDependencies {
+@implementation IntegrationBasicDependencies {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
     ALCClassObjectFactory *_nestedThingFactory;

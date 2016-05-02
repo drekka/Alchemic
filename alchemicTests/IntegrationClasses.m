@@ -1,41 +1,51 @@
 //
-//  FactoryFactories.m
+//  SingletonTests.m
 //  Alchemic
 //
-//  Created by Derek Clarkson on 21/04/2016.
+//  Created by Derek Clarkson on 5/02/2016.
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
+
 #import <StoryTeller/StoryTeller.h>
+
 #import <Alchemic/Alchemic.h>
 
 #import "ALCContextImpl.h"
 #import "ALCClassObjectFactory.h"
-#import "ALCIsFactory.h"
 
 #import "TopThing.h"
 #import "NestedThing.h"
 
-@interface ClassFactories : XCTestCase
-
+@interface IntegrationClasses : XCTestCase
 @end
 
-@implementation ClassFactories {
+@implementation IntegrationClasses {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
     ALCClassObjectFactory *_nestedThingFactory;
 }
 
 -(void) setUp {
-    STStartLogging(@"<ALCContext>");
-    STStartLogging(@"is [TopThing]");
+    STStartLogging(@"[TopThing]");
+    STStartLogging(@"[Alchemic]");
     _context = [[ALCContextImpl alloc] init];
     _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
     _nestedThingFactory = [_context registerObjectFactoryForClass:[NestedThing class]];
 }
 
--(void) testCreatingNewInstances {
+-(void) testSimpleInstantiation {
+
+    [_context start];
+
+    XCTAssertTrue(_topThingFactory.ready);
+
+    id value = _topThingFactory.objectInstantiation.object;
+    XCTAssertTrue([value isKindOfClass:[TopThing class]]);
+}
+
+-(void) testFactoryCreatingNewInstances {
     [_topThingFactory configureWithOptions:@[[ALCIsFactory factoryMacro]] unknownOptionHandler:^(id option) {
         XCTFail();
     }];
@@ -50,7 +60,7 @@
     XCTAssertNotEqual(t1, t2);
 }
 
--(void) testCreatingNestedNewInstances {
+-(void) testFactoryCreatingNestedNewInstances {
     [_topThingFactory configureWithOptions:@[[ALCIsFactory factoryMacro]] unknownOptionHandler:^(id option) {
         XCTFail();
     }];
@@ -76,5 +86,44 @@
     XCTAssertNotNil(n2);
     XCTAssertNotEqual(n1, n2);
 }
+
+-(void) testReferenceInitiation {
+
+    [_topThingFactory configureWithOptions:@[[ALCIsReference referenceMacro]] unknownOptionHandler:^(id option) {
+        XCTFail();
+    }];
+
+    [_context start];
+
+    XCTAssertFalse(_topThingFactory.ready);
+    @try {
+        __unused id object = _topThingFactory.objectInstantiation.object;
+        XCTFail(@"Exception not thrown getting reference type");
+    }
+    @catch (ALCException *exception) {
+        XCTAssertEqualObjects(@"AlchemicReferencedObjectNotSet", exception.name);
+    }
+    @catch (NSException *exception) {
+        XCTFail(@"Un-expected exception %@", exception);
+    }
+
+}
+
+-(void) testReferenceSet {
+
+    [_topThingFactory configureWithOptions:@[[ALCIsReference referenceMacro]] unknownOptionHandler:^(id option) {
+        XCTFail();
+    }];
+
+    [_context start];
+
+    id extObj = [[TopThing alloc] init];
+    [_topThingFactory setObject:extObj];
+
+    XCTAssertTrue(_topThingFactory.ready);
+    id object = _topThingFactory.objectInstantiation.object;
+    XCTAssertEqual(extObj, object);
+}
+
 
 @end

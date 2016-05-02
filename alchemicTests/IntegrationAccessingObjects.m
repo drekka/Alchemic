@@ -16,10 +16,10 @@
 #import "NestedThing.h"
 
 
-@interface AccessingObjects : XCTestCase
+@interface IntegrationAccessingObjects : XCTestCase
 @end
 
-@implementation AccessingObjects {
+@implementation IntegrationAccessingObjects {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
     ALCClassObjectFactory *_nestedThingFactory;
