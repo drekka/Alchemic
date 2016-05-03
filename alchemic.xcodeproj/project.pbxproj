@@ -101,6 +101,7 @@
 		6CC2849B1CB69EE6006B613F /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */; };
 		6CC464221C7986D500B20A95 /* ALCDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC464211C7986D500B20A95 /* ALCDependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CCFA8D71CD78E940013BF71 /* IntegrationInitializers.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D61CD78E940013BF71 /* IntegrationInitializers.m */; };
+		6CCFA8DA1CD8EA960013BF71 /* SingletonC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D91CD8EA960013BF71 /* SingletonC.m */; };
 		6CDF430B1CCE3FFB00F132AE /* NonManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF43081CCE3E3700F132AE /* NonManagedObject.m */; };
 		6CED05761BCB545800B6C55B /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
 		6CED05781BCB548700B6C55B /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
@@ -256,6 +257,8 @@
 		6CC2849E1CB69FCA006B613F /* SingletonA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonA.m; sourceTree = "<group>"; };
 		6CC464211C7986D500B20A95 /* ALCDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependency.h; sourceTree = "<group>"; };
 		6CCFA8D61CD78E940013BF71 /* IntegrationInitializers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegrationInitializers.m; sourceTree = "<group>"; };
+		6CCFA8D81CD8EA960013BF71 /* SingletonC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonC.h; sourceTree = "<group>"; };
+		6CCFA8D91CD8EA960013BF71 /* SingletonC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonC.m; sourceTree = "<group>"; };
 		6CDF43071CCE3E3700F132AE /* NonManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonManagedObject.h; sourceTree = "<group>"; };
 		6CDF43081CCE3E3700F132AE /* NonManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NonManagedObject.m; sourceTree = "<group>"; };
 		6CED05751BCB545800B6C55B /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
@@ -526,6 +529,8 @@
 				6C237CD11CCA6EEF00B8F551 /* FactoryA.m */,
 				6CDF43071CCE3E3700F132AE /* NonManagedObject.h */,
 				6CDF43081CCE3E3700F132AE /* NonManagedObject.m */,
+				6CCFA8D81CD8EA960013BF71 /* SingletonC.h */,
+				6CCFA8D91CD8EA960013BF71 /* SingletonC.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -719,6 +724,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C2A286A1CB7EFB5008F43E6 /* SingletonA.m in Sources */,
+				6CCFA8DA1CD8EA960013BF71 /* SingletonC.m in Sources */,
 				6C2A28691CB7EF65008F43E6 /* SingletonB.m in Sources */,
 				6C237CD21CCA6EEF00B8F551 /* FactoryA.m in Sources */,
 				6CC284991CB69CC5006B613F /* AlchemicTests.m in Sources */,

@@ -19,6 +19,11 @@
     [[Alchemic mainContext] objectFactoryConfig:classObjectFactory, ## __VA_ARGS__, nil]; \
 }
 
+#define AcInitializer(initializerSelector, ...) \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryInitializer):(ALCClassObjectFactory *) classObjectFactory { \
+    [[Alchemic mainContext] objectFactory:classObjectFactory initializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
+}
+
 #define AcMethod(methodType, methodSelector, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerMethodObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
     [[Alchemic mainContext] objectFactory:classObjectFactory \

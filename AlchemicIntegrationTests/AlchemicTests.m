@@ -12,6 +12,7 @@
 
 #import "SingletonA.h"
 #import "SingletonB.h"
+#import "SingletonC.h"
 #import "FactoryA.h"
 #import "NonManagedObject.h"
 
@@ -52,6 +53,13 @@
 -(void) testAccessingSimpleFactoryMethodViaCustomName {
     NonManagedObject *nmo = AcGet(NonManagedObject, AcWithName(@"NonManagedInstance"));
     XCTAssertNotNil(nmo);
+}
+
+-(void) testSingletonCreatedUsingInitializer {
+    SingletonC *c = AcGet(SingletonC);
+    XCTAssertNotNil(c);
+    XCTAssertEqual(5, c.aInt);
+    XCTAssertNotNil(c.singletonB);
 }
 
 @end
