@@ -17,6 +17,33 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define AcRegister(...) \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _configureClassObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
+[[Alchemic mainContext] objectFactoryConfig:classObjectFactory, ## __VA_ARGS__, nil]; \
+}
+
+#define AcInitializer(initializerSelector, ...) \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryInitializer):(ALCClassObjectFactory *) classObjectFactory { \
+[[Alchemic mainContext] objectFactory:classObjectFactory initializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
+}
+
+#define AcMethod(methodType, methodSelector, ...) \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerMethodObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
+[[Alchemic mainContext] objectFactory:classObjectFactory \
+registerFactoryMethod:@selector(methodSelector) \
+returnType:[methodType class], ## __VA_ARGS__, nil]; \
+}
+
+// Registers an injection point in the current class.
+#define AcInject(variableName, ...) \
++(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryDependency):(ALCClassObjectFactory *) classObjectFactory { \
+[[Alchemic mainContext] objectFactory:classObjectFactory vaiableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
+}
+
+#define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
+
+#pragma mark -
+
 @protocol ALCContext <NSObject>
 
 #pragma mark - Lifecycle

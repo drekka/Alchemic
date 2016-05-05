@@ -14,6 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define AcArg(argClass, critieria, ...) [ALCArgument argumentWithClass:[argClass class] model:model criteria:criteria, ## __VA_ARGS__, nil]
+
 ALCArgument * AcArgument(Class argumentClass, id firstCriteria, ...) NS_REQUIRES_NIL_TERMINATION;
 
 @interface ALCArgument : NSObject

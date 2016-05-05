@@ -11,9 +11,9 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "Alchemic.h"
-#import "AlchemicAware.h"
 #import "ALCAbstractObjectFactory.h"
+
+#import "AlchemicAware.h"
 
 #import "ALCObjectFactoryType.h"
 #import "ALCObjectFactoryTypeSingleton.h"

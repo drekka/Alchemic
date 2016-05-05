@@ -51,7 +51,7 @@
 }
 
 -(void) testAccessingSimpleFactoryMethodViaCustomName {
-    NonManagedObject *nmo = AcGet(NonManagedObject, AcWithName(@"NonManagedInstance"));
+    NonManagedObject *nmo = AcGet(NonManagedObject, AcName(@"NonManagedInstance"));
     XCTAssertNotNil(nmo);
 }
 

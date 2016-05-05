@@ -8,10 +8,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-NSString *AlchemicDidCreateObject = @"AlchemicDidCreateObject";
-NSString *AlchemicDidCreateObjectUserInfoObject = @"object";
-NSString *AlchemicDidFinishStarting = @"AlchemicDidFinishStarting";
-
 @implementation Alchemic
 
 static __strong id<ALCContext> __mainContext;

@@ -12,15 +12,15 @@
 #import <StoryTeller/StoryTeller.h>
 #import <Alchemic/Alchemic.h>
 
-#import "ALCClassObjectFactory.h"
-#import "ALCContextImpl.h"
+//#import "ALCClassObjectFactory.h"
+//#import "ALCContextImpl.h"
 
 #import "TopThing.h"
 
-@interface IntegrationConstantInjections : XCTestCase
+@interface ConstantInjections : XCTestCase
 @end
 
-@implementation IntegrationConstantInjections {
+@implementation ConstantInjections {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
 }

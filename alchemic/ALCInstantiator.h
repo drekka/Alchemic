@@ -10,9 +10,7 @@
 
 #import "ALCResolvable.h"
 
-// Import so the umbrella header sees it, but it's semi hidden from users. Instead of @class ALCInstantiation;
-#import "ALCInstantiation.h"
-
+@class ALCInstantiation;
 
 NS_ASSUME_NONNULL_BEGIN
 

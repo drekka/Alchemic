@@ -12,16 +12,16 @@
 
 #import <Alchemic/Alchemic.h>
 
-#import "ALCContextImpl.h"
-#import "ALCClassObjectFactory.h"
+//#import "ALCContextImpl.h"
+//#import "ALCClassObjectFactory.h"
 
 #import "TopThing.h"
 #import "NestedThing.h"
 
-@interface IntegrationInitializers : XCTestCase
+@interface ClassInitializers : XCTestCase
 @end
 
-@implementation IntegrationInitializers {
+@implementation ClassInitializers {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
     ALCClassObjectFactory *_nestedThingFactory;

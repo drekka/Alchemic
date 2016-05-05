@@ -11,19 +11,14 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCInternalMacros.h"
-#import "ALCClassObjectFactory.h"
-#import "ALCInstantiation.h"
-#import "ALCContextImpl.h"
-
 #import "TopThing.h"
 #import "AnotherThing.h"
 
-@interface IntegrationCircularReferences : XCTestCase
+@interface CircularReferences : XCTestCase
 
 @end
 
-@implementation IntegrationCircularReferences {
+@implementation CircularReferences {
     id<ALCContext> _context;
     id<ALCObjectFactory> _topFactory;
     id<ALCObjectFactory> _anotherFactory;

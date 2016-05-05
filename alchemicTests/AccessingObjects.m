@@ -9,17 +9,19 @@
 #import <XCTest/XCTest.h>
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCContextImpl.h"
-#import "ALCInstantiation.h"
+#import <alchemic/Alchemic.h>
+
+//#import "ALCContextImpl.h"
+//#import "ALCInstantiation.h"
 
 #import "TopThing.h"
 #import "NestedThing.h"
 
 
-@interface IntegrationAccessingObjects : XCTestCase
+@interface AccessingObjects : XCTestCase
 @end
 
-@implementation IntegrationAccessingObjects {
+@implementation AccessingObjects {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
     ALCClassObjectFactory *_nestedThingFactory;

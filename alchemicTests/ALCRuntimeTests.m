@@ -9,8 +9,10 @@
 @import XCTest;
 @import ObjectiveC;
 
-#import "ALCRuntime.h"
-#import "ALCTypeData.h"
+#import <Alchemic/Alchemic.h>
+
+//#import "ALCRuntime.h"
+//#import "ALCTypeData.h"
 
 @interface ALCRuntimeTests : XCTestCase
 @property(nonatomic, strong) NSString *aStringProperty;

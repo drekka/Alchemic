@@ -16,15 +16,15 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 
 #pragma mark - C wrappers for Swift
 
-ALCModelSearchCriteria * AcWithClass(Class aClass) {
+ALCModelSearchCriteria * ac_class(Class aClass) {
     return [ALCModelSearchCriteria searchCriteriaForClass:aClass];
 }
 
-ALCModelSearchCriteria * AcWithProtocol(Protocol *aProtocol) {
+ALCModelSearchCriteria * ac_protocol(Protocol *aProtocol) {
     return [ALCModelSearchCriteria searchCriteriaForProtocol:aProtocol];
 }
 
-ALCModelSearchCriteria * AcWithName(NSString *name) {
+ALCModelSearchCriteria * ac_name(NSString *name) {
     return [ALCModelSearchCriteria searchCriteriaForName:name];
 }
 

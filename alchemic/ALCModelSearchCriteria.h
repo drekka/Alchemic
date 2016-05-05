@@ -9,10 +9,23 @@
 @import Foundation;
 
 @protocol ALCObjectFactory;
+@class ALCModelSearchCriteria;
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - Core
+#define AcClass(className) ac_class([className class])
+
+#define AcProtocol(protocolName) ac_protocol(@protocol(protocolName))
+
+#define AcName(objectName) ac_name(objectName)
+
+#pragma mark - C wrappers for Swift
+
+ALCModelSearchCriteria * ac_class(Class aClass);
+
+ALCModelSearchCriteria * ac_protocol(Protocol *aProtocol);
+
+ALCModelSearchCriteria * ac_name(NSString *name);
 
 @interface ALCModelSearchCriteria : NSObject
 
@@ -29,13 +42,5 @@ NS_ASSUME_NONNULL_BEGIN
 -(BOOL) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name;
 
 @end
-
-#pragma mark - C wrappers for Swift
-
-ALCModelSearchCriteria * AcWithClass(Class aClass);
-
-ALCModelSearchCriteria * AcWithProtocol(Protocol *aProtocol);
-
-ALCModelSearchCriteria * AcWithName(NSString *name);
 
 NS_ASSUME_NONNULL_END

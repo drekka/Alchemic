@@ -24,11 +24,6 @@
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
-		<key>Integration Tests.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>2</integer>
-		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -68,6 +63,11 @@
 			<true/>
 		</dict>
 		<key>6C66DC381A8B82C3009F9D94</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6CB5CCD91CDB7AF700DC1052</key>
 		<dict>
 			<key>primary</key>
 			<true/>

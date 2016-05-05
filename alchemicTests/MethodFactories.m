@@ -11,18 +11,13 @@
 #import <StoryTeller/StoryTeller.h>
 #import <Alchemic/Alchemic.h>
 
-#import "ALCContextImpl.h"
-#import "ALCClassObjectFactory.h"
-#import "ALCMethodObjectFactory.h"
-#import "ALCInstantiation.h"
-
 #import "TopThing.h"
 #import "NestedThing.h"
 
-@interface IntegrationFactoryMethods : XCTestCase
+@interface MethodFactories : XCTestCase
 @end
 
-@implementation IntegrationFactoryMethods {
+@implementation MethodFactories {
     id<ALCContext> _context;
     ALCClassObjectFactory *_topThingFactory;
 }

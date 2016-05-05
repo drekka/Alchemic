@@ -11,6 +11,7 @@
 
 #import "ALCRuntimeScanner.h"
 #import "ALCMacros.h"
+#import "ALCInternalMacros.h"
 #import "ALCContext.h"
 #import "ALCConfig.h"
 #import "NSBundle+Alchemic.h"
