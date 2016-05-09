@@ -18,13 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCDependency <ALCResolvable>
 
--(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable;
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable;
 
--(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
-
--(void) resolveDependencyWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
-                                   withName:(NSString *) name
-                                      model:(id<ALCModel>) model;
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
 
 @end
 

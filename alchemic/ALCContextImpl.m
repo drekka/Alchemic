@@ -57,6 +57,10 @@ NS_ASSUME_NONNULL_BEGIN
     return objectFactory;
 }
 
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory config:(NSArray *) configArguments {
+    [objectFactory configureWithOptions:configArguments unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
+}
+
 -(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... {
     alc_loadVarArgsAfterVariableIntoArray(objectFactory, configArguments);
     [objectFactory configureWithOptions:configArguments unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
@@ -108,6 +112,15 @@ registerFactoryMethod:(SEL) selector
     Ivar ivar = [ALCRuntime aClass:objectFactory.objectClass variableForInjectionPoint:variable];
     Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
     [objectFactory registerDependency:[valueArguments dependencyWithClass:varClass] forVariable:ivar withName:variable];
+}
+
+#pragma mark - Dependencies
+
+- (void)injectDependencies:(id)object {
+    STStartScope(object);
+    STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
+    NSDictionary<NSString *, id<ALCObjectFactory>> *factories = [_model objectFactoriesMatchingCriteria:[ALCModelSearchCriteria searchCriteriaForClass:[object class]]];
+    [[factories.allValues firstObject] injectDependencies:object];
 }
 
 #pragma mark - Accessing objects

@@ -21,15 +21,16 @@
 }
 
 -(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {}
--(void) resolveDependencyWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack withName:(NSString *) name model:(id<ALCModel>) model {}
 
--(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
-    methodNotImplemented;
-    return NULL;
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
+    methodReturningBlockNotImplemented;
 }
 
--(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
     methodNotImplemented;
+}
+
+-(ALCSimpleBlock) completion {
     return NULL;
 }
 

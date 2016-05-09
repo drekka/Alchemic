@@ -9,7 +9,10 @@
 @import Foundation;
 @import ObjectiveC;
 
+#import "ALCDefs.h"
+
 @class ALCTypeData;
+@class ALCInstantiation;
 @protocol ALCContext;
 @protocol ALCDependency;
 
@@ -25,9 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Seting variables
 
-+(void) setObject:(id) object variable:(Ivar) variable withValue:(id) value;
++(void) setObject:(id) object
+         variable:(Ivar) variable
+        withValue:(id) value;
 
-+(void) setInvocation:(NSInvocation *) inv argIndex:(int) idx withValue:(id) value ofClass:(Class) valueClass;
++(void) setInvocation:(NSInvocation *) inv
+             argIndex:(int) idx
+            withValue:(id) value
+              ofClass:(Class) valueClass;
 
 +(id) mapValue:(id) value toType:(Class) type;
 
@@ -53,6 +61,10 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Scanning
 
 +(void) scanRuntimeWithContext:(id<ALCContext>) context;
+
++(void) executeSimpleBlock:(nullable ALCSimpleBlock) block;
+
++(void) executeCompletion:(nullable ALCObjectCompletion) completion withObject:(id) object;
 
 @end
 

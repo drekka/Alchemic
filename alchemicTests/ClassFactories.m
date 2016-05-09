@@ -41,7 +41,7 @@
 
     XCTAssertTrue(_topThingFactory.ready);
 
-    id value = _topThingFactory.objectInstantiation.object;
+    id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
 }
 
@@ -97,7 +97,7 @@
 
     XCTAssertFalse(_topThingFactory.ready);
     @try {
-        __unused id object = _topThingFactory.objectInstantiation.object;
+        __unused id object = _topThingFactory.instantiation.object;
         XCTFail(@"Exception not thrown getting reference type");
     }
     @catch (ALCException *exception) {
@@ -121,7 +121,7 @@
     [_topThingFactory setObject:extObj];
 
     XCTAssertTrue(_topThingFactory.ready);
-    id object = _topThingFactory.objectInstantiation.object;
+    id object = _topThingFactory.instantiation.object;
     XCTAssertEqual(extObj, object);
 }
 

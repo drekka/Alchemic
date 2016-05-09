@@ -10,6 +10,9 @@
 
 #import "ALCInstantiator.h"
 
+@class ALCInstantiation;
+@protocol ALCContext;
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, ALCFactoryType) {
@@ -21,6 +24,8 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 @protocol ALCObjectFactory <ALCInstantiator>
 
 @property (nonatomic, assign, readonly) ALCFactoryType factoryType;
+
+-(void) injectDependencies:(id) object;
 
 @end
 

@@ -79,36 +79,31 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {}
 
--(ALCInstantiation *) objectInstantiation {
-
+-(ALCInstantiation *) instantiation {
     id object = _typeStrategy.object;
     if (object) {
         return [ALCInstantiation instantiationWithObject:object completion:NULL];
     }
-
-    ALCInstantiation *result = [self createObject];
-    [self setObject:result.object];
-    return result;
+    return [ALCInstantiation instantiationWithObject:[self createObject] completion:[self objectCompletion]];
 }
 
--(ALCInstantiation *) createObject {
+-(void) injectDependencies:(id) object {
+    [self objectCompletion](object);
+}
+
+-(id) createObject {
     methodReturningObjectNotImplemented;
 }
 
--(void) objectFinished:(id) object {
-    if ([object conformsToProtocol:@protocol(AlchemicAware)]) {
-        [(id<AlchemicAware>)object alchemicDidInjectDependencies];
-    }
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
-                                                        object:self
-                                                      userInfo:@{AlchemicDidCreateObjectUserInfoObject: object}];
+-(ALCObjectCompletion) objectCompletion {
+    methodReturningBlockNotImplemented;
 }
 
 #pragma mark - Updating
 
--(void) setObject:(id) object {
+-(ALCObjectCompletion) setObject:(id) object {
     _typeStrategy.object = object;
+    return [self objectCompletion];
 }
 
 #pragma mark - Descriptions

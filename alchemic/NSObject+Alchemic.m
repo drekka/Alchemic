@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation NSObject (Alchemic)
 
-+(ALCInstantiation *) object:(id) object invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
++(id) object:(id) object invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
 
     STLog(self, @"Executing %@", [ALCRuntime selectorDescription:[self class] selector:selector]);
 
@@ -33,13 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
     inv.selector = selector;
 
     // Load the arguments.
-    NSMutableArray *completionBlocks = [[NSMutableArray alloc] init];
     [arguments enumerateObjectsUsingBlock:^(id<ALCDependency> dependency, NSUInteger idx, BOOL *stop) {
         STLog(self.class, @"Injecting argument at index %i", idx);
-        ALCSimpleBlock argCompletion = [dependency setInvocation:inv argumentIndex:(int) idx + 2];
-        if (argCompletion) {
-            [completionBlocks addObject:argCompletion];
-        }
+        [dependency setInvocation:inv argumentIndex:(int) idx + 2];
     }];
 
     [inv invokeWithTarget:object];
@@ -48,16 +44,16 @@ NS_ASSUME_NONNULL_BEGIN
     if (strcmp(returnType, "v") != 0) {
         id __unsafe_unretained returnObj;
         [inv getReturnValue:&returnObj];
-        return [ALCInstantiation instantiationWithObject:returnObj completion:[completionBlocks combineBlocks]];
+        return [ALCInstantiation instantiationWithObject:returnObj completion:NULL];
     }
     return nil;
 }
 
--(ALCInstantiation *) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
+-(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
     return [[self class] object:self invokeSelector:selector arguments:arguments];
 }
 
-+(ALCInstantiation *) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
++(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
     return [self object:self invokeSelector:selector arguments:arguments];
 }
 

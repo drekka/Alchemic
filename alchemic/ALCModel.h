@@ -11,6 +11,7 @@
 @class ALCModelSearchCriteria;
 @protocol ALCObjectFactory;
 @protocol ALCResolvable;
+@protocol ALCContext;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,11 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName;
 
 -(void) resolveDependencies;
-
-/**
- Called when a dependency that does not resolve, resolved at a later stage.
- */
--(void) objectFactoryReady:(id<ALCResolvable>) objectFactory;
 
 -(void) startSingletons;
 

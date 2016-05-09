@@ -16,6 +16,7 @@
 #import "NSObject+Alchemic.h"
 #import "ALCInstantiation.h"
 #import "ALCRuntime.h"
+#import "NSArray+Alchemic.h"
 
 @implementation ALCClassObjectFactoryInitializer {
     NSArray<id<ALCDependency>> *_arguments;
@@ -49,18 +50,18 @@
                               resolvedFlag:&_resolved
                                      block:^{
                                          [self->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
-                                             [argument resolveDependencyWithResolvingStack:resolvingStack
-                                                                                  withName:str(@"arg: %lu", idx)
-                                                                                     model:model];
+                                             [resolvingStack addObject:str(@"arg: %lu", idx)];
+                                             [argument resolveWithStack:resolvingStack model:model];
+                                             [resolvingStack removeLastObject];
                                          }];
                                      }];
 }
 
--(ALCInstantiation *) objectInstantiation {
+-(ALCInstantiation *) instantiation {
     STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), NSStringFromSelector(_initializer));
-    STStartScope(self.objectClass);
     id obj = [self.objectClass alloc];
-    return [obj invokeSelector:_initializer arguments:_arguments];
+    obj = [obj invokeSelector:_initializer arguments:_arguments];
+    return [ALCInstantiation instantiationWithObject:obj completion:NULL];
 }
 
 -(NSString *) defaultName {

@@ -14,20 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 
-#pragma mark - C wrappers for Swift
-
-ALCModelSearchCriteria * ac_class(Class aClass) {
-    return [ALCModelSearchCriteria searchCriteriaForClass:aClass];
-}
-
-ALCModelSearchCriteria * ac_protocol(Protocol *aProtocol) {
-    return [ALCModelSearchCriteria searchCriteriaForProtocol:aProtocol];
-}
-
-ALCModelSearchCriteria * ac_name(NSString *name) {
-    return [ALCModelSearchCriteria searchCriteriaForName:name];
-}
-
 #pragma mark - Core
 
 @implementation ALCModelSearchCriteria {

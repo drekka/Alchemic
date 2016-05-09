@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id<ALCDependency>) dependencyWithClass:(Class) dependencyClass;
 
--(nullable ALCSimpleBlock) combineBlocks;
+-(nullable ALCSimpleBlock) combineSimpleBlocks;
 
 @end
 

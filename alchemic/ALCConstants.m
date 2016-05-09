@@ -35,13 +35,12 @@ id<ALCDependency> Ac ## name(type value) { \
     } \
     return self; \
 } \
--(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
     injectVariableCode \
     return NULL; \
 } \
--(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
     [inv setArgument:&_value atIndex:idx]; \
-    return NULL; \
 } \
 @end
 

@@ -43,7 +43,7 @@
 
     XCTAssertTrue(_topThingFactory.ready);
 
-    id value = _topThingFactory.objectInstantiation.object;
+    id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
 }
 
@@ -55,7 +55,7 @@
 
     XCTAssertTrue(_topThingFactory.ready);
 
-    id value = _topThingFactory.objectInstantiation.object;
+    id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
     XCTAssertEqual(@"abc", ((TopThing *)value).aString);
 }
@@ -71,7 +71,7 @@
 
     XCTAssertTrue(_topThingFactory.ready);
 
-    id value = _topThingFactory.objectInstantiation.object;
+    id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
     XCTAssertEqual(@"abc", ((TopThing *)value).aString);
     XCTAssertEqual(5, ((TopThing *)value).aInt);

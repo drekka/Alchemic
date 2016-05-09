@@ -8,14 +8,7 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCMethodObjectFactory.h"
-
-#import "ALCInternalMacros.h"
-#import "NSObject+Alchemic.h"
-#import "ALCClassObjectFactory.h"
-#import "ALCDependency.h"
-#import "ALCInstantiation.h"
-#import "ALCRuntime.h"
+#import "Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -56,9 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
                                      block:^{
                                          [strongSelf->_parentObjectFactory resolveWithStack:resolvingStack model:model];
                                          [strongSelf->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
-                                             [argument resolveDependencyWithResolvingStack:resolvingStack
-                                                                                  withName:str(@"arg: %lu", idx)
-                                                                                     model:model];
+                                             [resolvingStack addObject:str(@"arg: %lu", idx)];
+                                             [argument resolveWithStack:resolvingStack model:model];
                                          }];
                                      }];
 }
@@ -70,13 +62,19 @@ NS_ASSUME_NONNULL_BEGIN
     return NO;
 }
 
--(ALCInstantiation *) createObject {
+-(id) createObject {
     STStartScope(self.objectClass);
-    ALCInstantiation *parentGeneration = _parentObjectFactory.objectInstantiation;
-    if (parentGeneration.completion) {
-        parentGeneration.completion();
-    }
+    ALCInstantiation *parentGeneration = _parentObjectFactory.instantiation;
+    [parentGeneration complete];
     return [parentGeneration.object invokeSelector:_selector arguments:_arguments];
+}
+
+-(ALCObjectCompletion) objectCompletion {
+    blockSelf;
+    return ^(ALCObjectCompletionArgs){
+        STLog(strongSelf.objectClass, @"Executing completion for a %@", NSStringFromClass(strongSelf.objectClass));
+        [[Alchemic mainContext] injectDependencies:object];
+    };
 }
 
 #pragma mark - Descriptions

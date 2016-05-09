@@ -47,21 +47,15 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
--(void) objectFactoryReady:(id<ALCResolvable>) objectFactory {
-    [self startSingletons];
-}
-
 -(void) startSingletons {
     STLog(self, @"Instantiating ...");
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         if (objectFactory.factoryType == ALCFactoryTypeSingleton
             && objectFactory.ready) {
             STLog(objectFactory.objectClass, @"Starting '%@'", key);
-            ALCInstantiation *instantiation = objectFactory.objectInstantiation;
+            ALCInstantiation *instantiation = objectFactory.instantiation;
             __unused id obj = instantiation.object;
-            if (instantiation.completion) {
-                instantiation.completion();
-            }
+            [instantiation complete];
         }
     }];
 }

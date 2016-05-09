@@ -87,7 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
         } else {
             throwException(@"AlchemicIllegalArgument", @"Expected a search criteria or constant. Got: %@", criteria);
         }
-        
+
     }
 
     // Default to the dependency class if no constant or criteria provided.
@@ -99,11 +99,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                                         criteria:searchCriteria];
 }
 
--(nullable ALCSimpleBlock) combineBlocks {
-    if (self.count == 0) {
-        return NULL;
-    }
-    return ^{
+-(nullable ALCSimpleBlock) combineSimpleBlocks {
+    return self.count == 0 ? NULL : ^{
         for (ALCSimpleBlock block in self) {
             block();
         }

@@ -19,25 +19,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define AcRegister(...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _configureClassObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactoryConfig:classObjectFactory, ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] objectFactoryConfig:classObjectFactory, ## __VA_ARGS__, nil]; \
 }
 
 #define AcInitializer(initializerSelector, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryInitializer):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactory:classObjectFactory initializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] objectFactory:classObjectFactory initializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
 }
 
 #define AcMethod(methodType, methodSelector, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerMethodObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactory:classObjectFactory \
-registerFactoryMethod:@selector(methodSelector) \
-returnType:[methodType class], ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] objectFactory:classObjectFactory \
+                    registerFactoryMethod:@selector(methodSelector) \
+                               returnType:[methodType class], ## __VA_ARGS__, nil]; \
 }
 
 // Registers an injection point in the current class.
 #define AcInject(variableName, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryDependency):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactory:classObjectFactory vaiableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] objectFactory:classObjectFactory vaiableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
 #define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
@@ -65,6 +65,15 @@ registerFactoryMethod:(SEL) selector
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
      vaiableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+
+/**
+ Access point for objects which need to have dependencies injected.
+
+ @discussion This checks the model against the model. If a class builder is found which matches the class and protocols of the passed object, it is used to inject any listed dependencies into the object.
+
+ @param object the object which needs dependencies injected.
+ */
+-(void) injectDependencies:(id) object;
 
 #pragma mark - Accessing objects
 

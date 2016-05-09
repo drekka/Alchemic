@@ -8,16 +8,19 @@
 
 @import Foundation;
 
+@protocol ALCContext;
+
 #import "ALCDefs.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCInstantiation : NSObject
 
-@property (nonatomic, strong, readonly) id object;
-@property (nonatomic, strong, readonly, nullable) ALCSimpleBlock completion;
++(instancetype) instantiationWithObject:(id) object completion:(nullable ALCObjectCompletion) completion;
 
-+(instancetype) instantiationWithObject:(id) object completion:(nullable ALCSimpleBlock) completion;
+@property (nonatomic, strong, readonly) id object;
+
+-(void) complete;
 
 @end
 

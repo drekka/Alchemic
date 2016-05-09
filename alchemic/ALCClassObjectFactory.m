@@ -53,10 +53,8 @@
                                          }
                                          for (ALCDependencyRef *ref in strongSelf->_dependencies) {
                                              // Class dependencies start a new stack.
-                                             NSMutableArray *newStack = [[NSMutableArray alloc] init];
-                                             [ref.dependency resolveDependencyWithResolvingStack:newStack
-                                                                                        withName:str(@"%@.%@", strongSelf.defaultName, ref.name)
-                                                                                           model:model];
+                                             NSMutableArray *newStack = [@[str(@"%@.%@", strongSelf.defaultName, ref.name)] mutableCopy];
+                                             [ref.dependency resolveWithStack:newStack model:model];
                                          }
                                      }];
 }
@@ -68,31 +66,23 @@
     return NO;
 }
 
--(ALCInstantiation *) createObject {
-
-    id obj;
-    ALCSimpleBlock initializerCompletion = NULL;
+-(ALCInstantiation *)instantiation {
     if (_initializer) {
-        ALCInstantiation *initializerResult = _initializer.objectInstantiation;
-        obj = initializerResult.object;
-        initializerCompletion = initializerResult.completion;
-    } else {
-        STLog(self.objectClass, @"Instantiating a %@ using init", NSStringFromClass(self.objectClass));
-        obj = [[self.objectClass alloc] init];
+        return _initializer.instantiation;
     }
+    return super.instantiation;
+}
 
+-(id) createObject {
+    STLog(self.objectClass, @"Instantiating a %@ using init", NSStringFromClass(self.objectClass));
+    return [[self.objectClass alloc] init];
+}
+
+-(ALCObjectCompletion) objectCompletion {
     blockSelf;
-    return [ALCInstantiation instantiationWithObject:obj
-                                          completion:^{
-
-                                              STLog(strongSelf.objectClass, @"Executing completion for a %@", NSStringFromClass(strongSelf.objectClass));
-                                              if (initializerCompletion) {
-                                                  initializerCompletion();
-                                              }
-
-                                              [strongSelf injectDependenciesIntoObject:obj];
-                                              [strongSelf objectFinished:obj];
-                                          }];
+    return ^(ALCObjectCompletionArgs){
+        [ALCRuntime executeSimpleBlock:[strongSelf injectDependenciesIntoObject:object]];
+    };
 }
 
 -(NSArray<id<ALCDependency>> *) referencedDependencies {
@@ -103,14 +93,16 @@
     return deps;
 }
 
--(void) injectDependenciesIntoObject:(id) value {
+-(ALCSimpleBlock) injectDependenciesIntoObject:(id) value {
+
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
+
+    NSMutableArray<ALCSimpleBlock> *completions = [[NSMutableArray alloc] init];
     for (ALCDependencyRef *depRef in _dependencies) {
-        ALCSimpleBlock completion = [depRef.dependency setObject:value variable:depRef.ivar];
-        if (completion) {
-            completion();
-        }
+        [ALCRuntime executeSimpleBlock:[depRef.dependency setObject:value variable:depRef.ivar]];
     }
+
+    return [completions combineSimpleBlocks];
 }
 
 -(NSString *) descriptionAttributes {

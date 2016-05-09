@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCInstantiator <ALCResolvable>
 
-@property (nonatomic, strong, readonly) ALCInstantiation *objectInstantiation;
+@property (nonatomic, strong, readonly) ALCInstantiation *instantiation;
 
 @property (nonatomic, strong, readonly) NSString *defaultName;
 

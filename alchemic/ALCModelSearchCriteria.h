@@ -13,19 +13,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define AcClass(className) ac_class([className class])
+#define AcClass(className) [ALCModelSearchCriteria searchCriteriaForClass:[className class]]
 
-#define AcProtocol(protocolName) ac_protocol(@protocol(protocolName))
+#define AcProtocol(protocolName) [ALCModelSearchCriteria searchCriteriaForProtocol:@protocol(protocolName)]
 
-#define AcName(objectName) ac_name(objectName)
+#define AcName(objectName) [ALCModelSearchCriteria searchCriteriaForName:objectName]
 
 #pragma mark - C wrappers for Swift
-
-ALCModelSearchCriteria * ac_class(Class aClass);
-
-ALCModelSearchCriteria * ac_protocol(Protocol *aProtocol);
-
-ALCModelSearchCriteria * ac_name(NSString *name);
 
 @interface ALCModelSearchCriteria : NSObject
 

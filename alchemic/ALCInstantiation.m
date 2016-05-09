@@ -7,16 +7,34 @@
 //
 
 #import "ALCInstantiation.h"
+#import "AlchemicAware.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCInstantiation
+@implementation ALCInstantiation {
+    ALCObjectCompletion _completion;
+}
 
-+(instancetype) instantiationWithObject:(id) object completion:(nullable ALCSimpleBlock) completion {
-    ALCInstantiation *result = [[ALCInstantiation alloc] init];
-    result->_object = object;
-    result->_completion = completion;
-    return result;
++(instancetype) instantiationWithObject:(id) object completion:(nullable ALCObjectCompletion) completion {
+    ALCInstantiation *instantiation = [[ALCInstantiation alloc] init];
+    instantiation->_object = object;
+    instantiation->_completion = completion;
+    return instantiation;
+}
+
+-(void) complete {
+    if (_completion) {
+        _completion(_object);
+    }
+
+    if ([_object conformsToProtocol:@protocol(AlchemicAware)]) {
+        [(id<AlchemicAware>)_object alchemicDidInjectDependencies];
+    }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
+                                                        object:self
+                                                      userInfo:@{AlchemicDidCreateObjectUserInfoObject: _object}];
 }
 
 @end

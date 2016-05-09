@@ -8,7 +8,12 @@
 
 @import Foundation;
 
+@protocol ALCContext;
+
 typedef void (^ALCSimpleBlock) (void);
+
+#define ALCObjectCompletionArgs id object
+typedef void (^ALCObjectCompletion) (ALCObjectCompletionArgs);
 
 FOUNDATION_EXPORT NSString *AlchemicDidCreateObject;
 FOUNDATION_EXPORT NSString *AlchemicDidCreateObjectUserInfoObject;

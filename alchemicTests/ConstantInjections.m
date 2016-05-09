@@ -81,7 +81,7 @@
                   constant:(id<ALCDependency>) constant {
     [_context objectFactory:_topThingFactory vaiableInjection:property, constant, nil];
     [_context start];
-    TopThing *topThing = _topThingFactory.objectInstantiation.object;
+    TopThing *topThing = _topThingFactory.instantiation.object;
     return topThing;
 }
 

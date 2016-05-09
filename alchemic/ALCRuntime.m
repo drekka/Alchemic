@@ -105,14 +105,22 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - Setting variables
 
-+(void)setObject:(id) object variable:(Ivar) variable withValue:(id) value {
++(void) setObject:(id) object
+         variable:(Ivar) variable
+        withValue:(id) value {
+
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
+
     id finalValue = [self mapValue:value toType:(Class _Nonnull) ivarTypeData.objcClass];
+
     STLog([object class], @"Injecting %@ with a %@", [ALCRuntime propertyDescription:[object class] variable:variable], [finalValue class]);
     object_setIvar(object, variable, finalValue);
 }
 
-+(void) setInvocation:(NSInvocation *) inv argIndex:(int) idx withValue:(id) value ofClass:(Class) valueClass {
++(void) setInvocation:(NSInvocation *) inv
+             argIndex:(int) idx
+            withValue:(id) value
+              ofClass:(Class) valueClass {
     id finalValue = [self mapValue:value toType:(Class _Nonnull) valueClass];
     [inv setArgument:&finalValue atIndex:idx];
 }
@@ -199,6 +207,19 @@ static NSCharacterSet *__typeEncodingDelimiters;
         [moreBundles minusSet:scannedBundles];
     }
 }
+
++(void) executeSimpleBlock:(nullable ALCSimpleBlock) block {
+    if (block) {
+        block();
+    }
+}
+
++(void) executeCompletion:(ALCObjectCompletion) completion withObject:(id) object {
+    if (completion) {
+        completion(object);
+    }
+}
+
 
 @end
 

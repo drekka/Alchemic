@@ -13,7 +13,6 @@
 
 @protocol ALCDependency;
 @protocol ALCModel;
-@class ALCInstantiation;
 
 @interface NSObject (Alchemic)
 
@@ -24,7 +23,7 @@
  @param arguments The arguments required by the selector.
 
  */
--(ALCInstantiation *) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments;
+-(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments;
 
 /**
  Executes the specified selector and returns the result.
@@ -33,7 +32,7 @@
  @param arguments The arguments required by the selector.
 
  */
-+(ALCInstantiation *) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments;
++(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments;
 
 -(void) resolveFactoryWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
                             resolvedFlag:(BOOL *) resolvedFlag

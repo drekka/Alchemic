@@ -39,10 +39,10 @@
 
     [_context start];
 
-    TopThing *topThing = _topFactory.objectInstantiation.object;
+    TopThing *topThing = _topFactory.instantiation.object;
     XCTAssertNotNil(topThing);
 
-    AnotherThing *anotherThing = _anotherFactory.objectInstantiation.object;
+    AnotherThing *anotherThing = _anotherFactory.instantiation.object;
     XCTAssertNotNil(anotherThing);
 
     XCTAssertEqual(topThing.anotherThing, anotherThing);
@@ -75,10 +75,10 @@
 
     [_context start];
 
-    TopThing *topThing = _topFactory.objectInstantiation.object;
+    TopThing *topThing = _topFactory.instantiation.object;
     XCTAssertNotNil(topThing);
 
-    AnotherThing *anotherThing = _anotherFactory.objectInstantiation.object;
+    AnotherThing *anotherThing = _anotherFactory.instantiation.object;
     XCTAssertNotNil(anotherThing);
 
     XCTAssertEqual(topThing.anotherThing, anotherThing);
@@ -94,10 +94,10 @@
 
     [_context start];
 
-    TopThing *topThing = _topFactory.objectInstantiation.object;
+    TopThing *topThing = _topFactory.instantiation.object;
     XCTAssertNotNil(topThing);
 
-    AnotherThing *anotherThing = _anotherFactory.objectInstantiation.object;
+    AnotherThing *anotherThing = _anotherFactory.instantiation.object;
     XCTAssertNotNil(anotherThing);
 
     AnotherThing *nestedAnotherThing = topThing.anotherThing;

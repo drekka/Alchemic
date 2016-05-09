@@ -50,7 +50,8 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
--(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
+-(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack
+                   model:(id<ALCModel>) model {
 
     STLog(_objectClass, @"Searching model using %@", _criteria);
 
@@ -68,68 +69,54 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(void) resolveDependencyWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
-                                   withName:(NSString *) name
-                                      model:(id<ALCModel>) model {
-    id<ALCDependency> dependency = (id<ALCDependency>) self;
-    STLog(_objectClass, @"Resolving %@", name);
-    [resolvingStack addObject:name];
-    [dependency resolveWithStack:resolvingStack model:model];
-    [resolvingStack removeLastObject];
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
+    NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
+    [ALCRuntime setObject:object
+                 variable:variable
+                withValue:[self valuesFromInstantiations:instantations]];
+    return [self completionForInstantiations:instantations];
 }
 
--(nullable ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
-    NSArray<ALCInstantiation *> *instantiations = [self instantiations];
-    [ALCRuntime setObject:object variable:variable withValue:[self getValue:instantiations]];
-    return [self combineCompletionBlocks:instantiations];
-}
-
--(nullable ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
-    NSArray<ALCInstantiation *> *instantiations = [self instantiations];
-    [ALCRuntime setInvocation:inv argIndex:idx withValue:[self getValue:instantiations] ofClass:self.objectClass];
-    return [self combineCompletionBlocks:instantiations];
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
+    NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
+    [self completionForInstantiations:instantations]();
+    [ALCRuntime setInvocation:inv
+                     argIndex:idx
+                    withValue:[self valuesFromInstantiations:instantations]
+                      ofClass:self.objectClass];
 }
 
 -(id) searchResult {
-    NSArray<ALCInstantiation *> *instantiations = [self instantiations];
-    id values = [self getValue:instantiations];
-    id finalValue = [ALCRuntime mapValue:values toType:self.objectClass];
-    ALCSimpleBlock completion = [self combineCompletionBlocks:instantiations];
-    if (completion) {
-        completion();
-    }
-    return finalValue;
+    NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
+    NSArray *values = [self valuesFromInstantiations:instantations];
+    [self completionForInstantiations:instantations]();
+    return values;
 }
 
 #pragma mark - Internal
 
--(NSArray<ALCInstantiation *> *) instantiations {
-    NSMutableArray<ALCInstantiation *> *instantiations = [[NSMutableArray alloc] init];
-    for (id<ALCInstantiator> factory in _resolvedFactories) {
-        [instantiations addObject:factory.objectInstantiation];
+-(NSArray<ALCInstantiation *> *) retrieveInstantiations {
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    for (id<ALCObjectFactory> factory in _resolvedFactories) {
+        [results addObject:factory.instantiation];
     }
-    return instantiations;
+    return results;
 }
 
--(nullable ALCSimpleBlock) combineCompletionBlocks:(NSArray<ALCInstantiation *> *) instantiations {
-
-    NSMutableArray<ALCSimpleBlock> *blocks = [[NSMutableArray alloc] init];
-    for (ALCInstantiation *instantiation in instantiations) {
-        ALCSimpleBlock completion = instantiation.completion;
-        if (completion) {
-            [blocks addObject:completion];
-        }
-    }
-
-    return [blocks combineBlocks];
-}
-
--(NSArray<ALCInstantiation *> *) getValue:(NSArray<ALCInstantiation *> *) instantiations {
+-(NSArray *) valuesFromInstantiations:(NSArray<ALCInstantiation *> *) instantiations {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     for (ALCInstantiation *instantiation in instantiations) {
         [results addObject:instantiation.object];
     }
     return results;
+}
+
+-(ALCSimpleBlock) completionForInstantiations:(NSArray<ALCInstantiation *> *) instantiations {
+    return ^{
+        for (ALCInstantiation *instantiation in instantiations) {
+            [instantiation complete];
+        }
+    };
 }
 
 @end
