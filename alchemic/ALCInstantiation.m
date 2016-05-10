@@ -23,6 +23,25 @@ NS_ASSUME_NONNULL_BEGIN
     return instantiation;
 }
 
+-(void) addCompletion:(nullable ALCObjectCompletion) newCompletion {
+
+    // Exit if there is nothing to add.
+    if (!newCompletion) {
+        return;
+    }
+
+    if (_completion) {
+        ALCObjectCompletion currentCompletion = _completion;
+        _completion = ^(id object) {
+            currentCompletion(object);
+            newCompletion(object);
+        };
+    } else {
+        _completion = newCompletion;
+    }
+}
+
+
 -(void) complete {
     if (_completion) {
         _completion(_object);

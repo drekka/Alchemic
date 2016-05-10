@@ -103,7 +103,7 @@ registerFactoryMethod:(SEL) selector
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
-     vaiableInjection:(NSString *) variable, ... {
+     variableInjection:(NSString *) variable, ... {
 
     STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), variable);
 

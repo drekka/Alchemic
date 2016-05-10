@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Registers an injection point in the current class.
 #define AcInject(variableName, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryDependency):(ALCClassObjectFactory *) classObjectFactory { \
-    [[Alchemic mainContext] objectFactory:classObjectFactory vaiableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] objectFactory:classObjectFactory variableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
 #define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
@@ -64,7 +64,7 @@ registerFactoryMethod:(SEL) selector
           initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
-     vaiableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+     variableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  Access point for objects which need to have dependencies injected.

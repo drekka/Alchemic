@@ -84,7 +84,9 @@ NS_ASSUME_NONNULL_BEGIN
     if (object) {
         return [ALCInstantiation instantiationWithObject:object completion:NULL];
     }
-    return [ALCInstantiation instantiationWithObject:[self createObject] completion:[self objectCompletion]];
+    object = [self createObject];
+    ALCObjectCompletion completion = [self setObject:object];
+    return [ALCInstantiation instantiationWithObject:object completion:completion];
 }
 
 -(void) injectDependencies:(id) object {

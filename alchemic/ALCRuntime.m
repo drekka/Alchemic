@@ -214,7 +214,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 }
 
-+(void) executeCompletion:(ALCObjectCompletion) completion withObject:(id) object {
++(void) executeCompletion:(nullable ALCObjectCompletion) completion withObject:(id) object {
     if (completion) {
         completion(object);
     }

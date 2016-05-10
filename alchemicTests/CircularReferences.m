@@ -34,8 +34,8 @@
 }
 
 -(void) testPropertyToProperty {
-    [_context objectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
-    [_context objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
+    [_context objectFactory:_topFactory variableInjection:@"anotherThing", nil];
+    [_context objectFactory:_anotherFactory variableInjection:@"topThing", nil];
 
     [_context start];
 
@@ -66,7 +66,7 @@
 }
 
 -(void) testPropertyToInitializer {
-    [_context objectFactory:_topFactory vaiableInjection:@"anotherThing", nil];
+    [_context objectFactory:_topFactory variableInjection:@"anotherThing", nil];
     AcIgnoreSelectorWarnings(
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
@@ -90,7 +90,7 @@
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            )
     [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
-    [_context objectFactory:_anotherFactory vaiableInjection:@"topThing", nil];
+    [_context objectFactory:_anotherFactory variableInjection:@"topThing", nil];
 
     [_context start];
 

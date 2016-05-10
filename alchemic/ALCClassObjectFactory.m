@@ -68,7 +68,10 @@
 
 -(ALCInstantiation *)instantiation {
     if (_initializer) {
-        return _initializer.instantiation;
+        ALCInstantiation *instantiation = _initializer.instantiation;
+        [self setObject:instantiation.object];
+        [instantiation addCompletion:[self objectCompletion]];
+        return instantiation;
     }
     return super.instantiation;
 }

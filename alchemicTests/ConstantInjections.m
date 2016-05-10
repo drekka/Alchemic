@@ -27,6 +27,7 @@
 
 -(void)setUp {
     STStartLogging(@"[Alchemic]");
+    STStartLogging(@"<ALCContext>");
     STStartLogging(@"is [TopThing]");
     _context = [[ALCContextImpl alloc] init];
     _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
@@ -79,7 +80,7 @@
 
 -(id) setUpTestForProperty:(NSString *) property
                   constant:(id<ALCDependency>) constant {
-    [_context objectFactory:_topThingFactory vaiableInjection:property, constant, nil];
+    [_context objectFactory:_topThingFactory variableInjection:property, constant, nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     return topThing;

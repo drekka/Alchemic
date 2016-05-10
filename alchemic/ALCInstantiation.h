@@ -20,7 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) id object;
 
+-(void) addCompletion:(nullable ALCObjectCompletion) newCompletion;
+
 -(void) complete;
+
+
 
 @end
 
