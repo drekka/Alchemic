@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) init NS_UNAVAILABLE;
 
 -(instancetype) initWithObjectFactory:(ALCClassObjectFactory *) objectFactory
-                          initializer:(SEL) initializer
+                          setInitializer:(SEL) initializer
                                  args:(NSArray<id<ALCDependency>> *) arguments NS_DESIGNATED_INITIALIZER;
 
 @end

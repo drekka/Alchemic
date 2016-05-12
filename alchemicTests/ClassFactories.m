@@ -68,7 +68,7 @@
         XCTFail();
     }];
 
-    [_context objectFactory:_topThingFactory variableInjection:@"aNestedThing", nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", nil];
 
     [_context start];
 

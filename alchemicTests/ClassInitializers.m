@@ -37,20 +37,22 @@
 
 -(void) testInitializer {
 
-    [_context objectFactory:_topThingFactory
-                initializer:@selector(init), nil];
+    AcIgnoreSelectorWarnings(
+                             SEL initSel = @selector(initWithNoArgs);
+                             )
+    [_context objectFactory:_topThingFactory setInitializer:initSel, nil];
     [_context start];
 
     XCTAssertTrue(_topThingFactory.ready);
 
     id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
+    XCTAssertEqualObjects(@"abc", ((NestedThing *)value).aString);
 }
 
 -(void) testInitializerWithString {
 
-    [_context objectFactory:_topThingFactory
-                initializer:@selector(initWithString:), AcString(@"abc"), nil];
+    [_context objectFactory:_topThingFactory setInitializer:@selector(initWithString:), AcString(@"abc"), nil];
     [_context start];
 
     XCTAssertTrue(_topThingFactory.ready);
@@ -66,7 +68,7 @@
                              SEL selector = @selector(initWithString:andInt:);
                              )
     [_context objectFactory:_topThingFactory
-                initializer:selector, AcString(@"abc"), AcInt(5), nil];
+             setInitializer:selector, AcString(@"abc"), AcInt(5), nil];
     [_context start];
 
     XCTAssertTrue(_topThingFactory.ready);
@@ -82,7 +84,7 @@
                              SEL selector = @selector(initWithNestedThings:);
                              )
     [_context objectFactory:_topThingFactory
-                initializer:selector, AcArgument([NSArray class], AcClass(NestedThing), nil), nil];
+             setInitializer:selector, AcArgument([NSArray class], AcClass(NestedThing), nil), nil];
     [_context start];
     
 }

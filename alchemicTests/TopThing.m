@@ -11,6 +11,14 @@
 
 @implementation TopThing
 
+-(instancetype) initWithNoArgs {
+    self = [super init];
+    if (self) {
+        _aString = @"abc";
+    }
+    return self;
+}
+
 -(instancetype) initWithString:(NSString *) aString {
     self = [super init];
     if (self) {

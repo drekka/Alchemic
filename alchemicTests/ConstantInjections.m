@@ -80,7 +80,7 @@
 
 -(id) setUpTestForProperty:(NSString *) property
                   constant:(id<ALCDependency>) constant {
-    [_context objectFactory:_topThingFactory variableInjection:property, constant, nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:property, constant, nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     return topThing;

@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (strcmp(returnType, "v") != 0) {
         id __unsafe_unretained returnObj;
         [inv getReturnValue:&returnObj];
-        return [ALCInstantiation instantiationWithObject:returnObj completion:NULL];
+        return returnObj;
     }
     return nil;
 }

@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define AcInitializer(initializerSelector, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryInitializer):(ALCClassObjectFactory *) classObjectFactory { \
-    [[Alchemic mainContext] objectFactory:classObjectFactory initializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] objectFactory:classObjectFactory setInitializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
 }
 
 #define AcMethod(methodType, methodSelector, ...) \
@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Registers an injection point in the current class.
 #define AcInject(variableName, ...) \
 +(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryDependency):(ALCClassObjectFactory *) classObjectFactory { \
-    [[Alchemic mainContext] objectFactory:classObjectFactory variableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
+    [[Alchemic mainContext] objectFactory:classObjectFactory registerVariableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
 #define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
@@ -60,11 +60,9 @@ NS_ASSUME_NONNULL_BEGIN
 registerFactoryMethod:(SEL) selector
            returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory
-          initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory setInitializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory
-     variableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerVariableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  Access point for objects which need to have dependencies injected.

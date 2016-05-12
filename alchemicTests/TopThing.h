@@ -30,6 +30,7 @@
 
 @property (nonatomic, strong) NSArray<NestedThing *> *arrayOfNestedThings;
 
+-(instancetype) initWithNoArgs;
 -(instancetype) initWithString:(NSString *) aString;
 -(instancetype) initWithString:(NSString *) aString andInt:(int) aInt;
 -(instancetype) initWithAnotherThing:(AnotherThing *) anotherThing;

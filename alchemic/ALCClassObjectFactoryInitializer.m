@@ -32,7 +32,7 @@
 }
 
 -(instancetype) initWithObjectFactory:(ALCClassObjectFactory *) objectFactory
-                          initializer:(SEL) initializer
+                       setInitializer:(SEL) initializer
                                  args:(NSArray<id<ALCDependency>> *) arguments {
     self = [super init];
     if (self) {

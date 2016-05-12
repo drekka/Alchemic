@@ -34,8 +34,8 @@
 }
 
 -(void) testPropertyToProperty {
-    [_context objectFactory:_topFactory variableInjection:@"anotherThing", nil];
-    [_context objectFactory:_anotherFactory variableInjection:@"topThing", nil];
+    [_context objectFactory:_topFactory registerVariableInjection:@"anotherThing", nil];
+    [_context objectFactory:_anotherFactory registerVariableInjection:@"topThing", nil];
 
     [_context start];
 
@@ -54,8 +54,8 @@
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
-    [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
-    [_context objectFactory:_anotherFactory initializer:anotherThingInit, AcClass(TopThing), nil];
+    [_context objectFactory:_topFactory setInitializer:topThingInit, AcClass(AnotherThing), nil];
+    [_context objectFactory:_anotherFactory setInitializer:anotherThingInit, AcClass(TopThing), nil];
     @try {
         [_context start];
     } @catch (ALCException *exception) {
@@ -66,12 +66,12 @@
 }
 
 -(void) testPropertyToInitializer {
-    [_context objectFactory:_topFactory variableInjection:@"anotherThing", nil];
+    [_context objectFactory:_topFactory registerVariableInjection:@"anotherThing", nil];
     AcIgnoreSelectorWarnings(
                            SEL anotherThingInit =@selector(initWithTopThing:);
                            )
     [_context objectFactory:_anotherFactory
-                initializer:anotherThingInit, AcClass(TopThing), nil];
+                setInitializer:anotherThingInit, AcClass(TopThing), nil];
 
     [_context start];
 
@@ -89,8 +89,8 @@
     AcIgnoreSelectorWarnings(
                            SEL topThingInit =@selector(initWithAnotherThing:);
                            )
-    [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
-    [_context objectFactory:_anotherFactory variableInjection:@"topThing", nil];
+    [_context objectFactory:_topFactory setInitializer:topThingInit, AcClass(AnotherThing), nil];
+    [_context objectFactory:_anotherFactory registerVariableInjection:@"topThing", nil];
 
     [_context start];
 

@@ -88,8 +88,7 @@ registerFactoryMethod:(SEL) selector
     [methodFactory configureWithOptions:factoryOptions unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:methodFactory]];
 }
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory
-          initializer:(SEL) initializer, ... {
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory setInitializer:(SEL) initializer, ... {
 
     alc_loadVarArgsAfterVariableIntoArray(initializer, unknownArguments);
 
@@ -98,12 +97,11 @@ registerFactoryMethod:(SEL) selector
     }];
 
     __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:objectFactory
-                                                                        initializer:initializer
+                                                                     setInitializer:initializer
                                                                                args:arguments];
 }
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory
-     variableInjection:(NSString *) variable, ... {
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerVariableInjection:(NSString *) variable, ... {
 
     STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), variable);
 

@@ -36,7 +36,7 @@
 }
 
 -(void) testSimpleDependencyPublicVariable {
-    [_context objectFactory:_topThingFactory variableInjection:@"aNestedThing", nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertNotNil(topThing);
@@ -45,7 +45,7 @@
 }
 
 -(void) testSimpleDependencyInternalVariable {
-    [_context objectFactory:_topThingFactory variableInjection:@"_aNestedThing", nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"_aNestedThing", nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertNotNil(topThing);
@@ -54,7 +54,7 @@
 }
 
 -(void) testSimpleDependencyArrayByClass {
-    [_context objectFactory:_topThingFactory variableInjection:@"arrayOfNestedThings", AcClass(NestedThing), nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"arrayOfNestedThings", AcClass(NestedThing), nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertNotNil(topThing);
@@ -64,7 +64,7 @@
 }
 
 -(void) testSimpleDependencyArrayByProtocol {
-    [_context objectFactory:_topThingFactory variableInjection:@"arrayOfNestedThings", AcProtocol(NestedProtocol), nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"arrayOfNestedThings", AcProtocol(NestedProtocol), nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertNotNil(topThing);
@@ -76,7 +76,7 @@
 #pragma mark - Search criteria
 
 -(void) testSimpleDependencyPublicVariableNameSearchUsingDefaultName {
-    [_context objectFactory:_topThingFactory variableInjection:@"aNestedThing", AcName(@"NestedThing"), nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", AcName(@"NestedThing"), nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertNotNil(topThing);
@@ -85,7 +85,7 @@
 
 -(void) testSimpleDependencyPublicVariableNameSearchUsingCustomName {
     [_context objectFactoryConfig:_nestedThingFactory, [ALCFactoryName withName:@"abc"], nil];
-    [_context objectFactory:_topThingFactory variableInjection:@"aNestedThing", AcName(@"abc"), nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", AcName(@"abc"), nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertNotNil(topThing);
@@ -93,7 +93,7 @@
 }
 
 -(void) testSimpleDependencyPublicVariableProtocolSearch {
-    [_context objectFactory:_topThingFactory variableInjection:@"aNestedThing", AcProtocol(NestedProtocol), nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", AcProtocol(NestedProtocol), nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertNotNil(topThing);
@@ -101,7 +101,7 @@
 }
 
 -(void) testSimpleDependencyPublicVariableClassSearch {
-    [_context objectFactory:_topThingFactory variableInjection:@"aNestedThing", AcClass(NestedThing), nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", AcClass(NestedThing), nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertNotNil(topThing);
@@ -109,8 +109,8 @@
 }
 
 -(void) testDependentObjectDependenciesInjected {
-    [_context objectFactory:_topThingFactory variableInjection:@"_aNestedThing", nil];
-    [_context objectFactory:_nestedThingFactory variableInjection:@"aInt", AcInt(5), nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"_aNestedThing", nil];
+    [_context objectFactory:_nestedThingFactory registerVariableInjection:@"aInt", AcInt(5), nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertEqual(5, topThing.aNestedThing.aInt);

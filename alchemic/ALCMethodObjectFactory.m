@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(ALCObjectCompletion) objectCompletion {
     blockSelf;
     return ^(ALCObjectCompletionArgs){
-        STLog(strongSelf.objectClass, @"Executing completion for a %@", NSStringFromClass(strongSelf.objectClass));
+        STLog(strongSelf.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(strongSelf.objectClass));
         [[Alchemic mainContext] injectDependencies:object];
     };
 }
