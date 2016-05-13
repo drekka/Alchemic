@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable;
 
--(ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
 
 @end
 

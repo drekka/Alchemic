@@ -26,8 +26,12 @@
     methodReturningBlockNotImplemented;
 }
 
--(ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
-    methodReturningBlockNotImplemented;
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
+    methodNotImplemented;
+}
+
+-(ALCSimpleBlock) completion {
+    return NULL;
 }
 
 @end

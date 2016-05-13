@@ -39,9 +39,8 @@ id<ALCDependency> Ac ## name(type value) { \
     injectVariableCode \
     return NULL; \
 } \
--(ALCSimpleBlock) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
+-(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
     [inv setArgument:&_value atIndex:idx]; \
-return NULL; \
 } \
 @end
 
