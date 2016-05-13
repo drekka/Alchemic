@@ -46,8 +46,12 @@ NS_ASSUME_NONNULL_BEGIN
     return _typeStrategy.ready;
 }
 
--(NSString *) defaultName {
+-(NSString *) defaultModelKey {
     return NSStringFromClass(self.objectClass);
+}
+
+-(NSString *)attributesDescription {
+    return @"";
 }
 
 #pragma mark - Lifecycle
@@ -90,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) injectDependencies:(id) object {
-    [self objectCompletion](object);
+    self.objectCompletion(object);
 }
 
 -(id) createObject {
@@ -105,7 +109,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCObjectCompletion) setObject:(id) object {
     _typeStrategy.object = object;
-    return [self objectCompletion];
+    return self.objectCompletion;
 }
 
 #pragma mark - Descriptions
@@ -123,12 +127,7 @@ NS_ASSUME_NONNULL_BEGIN
         [description appendString:@" (App delegate)"];
     }
 
-    [description appendString:self.descriptionAttributes];
     return description;
-}
-
--(NSString *) descriptionAttributes {
-    return str(@" %@", self.defaultName);
 }
 
 @end

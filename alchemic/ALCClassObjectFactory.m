@@ -44,6 +44,7 @@
 }
 
 -(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
+    STLog(self.objectClass, @"Resolving class factory %@", NSStringFromClass(self.objectClass));
     blockSelf;
     [self resolveFactoryWithResolvingStack:resolvingStack
                               resolvedFlag:&_resolved
@@ -51,9 +52,10 @@
                                          if (strongSelf->_initializer) {
                                              [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
                                          }
+                                         STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
                                          for (ALCDependencyRef *ref in strongSelf->_dependencies) {
                                              // Class dependencies start a new stack.
-                                             NSMutableArray *newStack = [@[str(@"%@.%@", strongSelf.defaultName, ref.name)] mutableCopy];
+                                             NSMutableArray *newStack = [@[str(@"%@.%@", strongSelf.defaultModelKey, ref.name)] mutableCopy];
                                              [ref.dependency resolveWithStack:newStack model:model];
                                          }
                                      }];
@@ -66,17 +68,10 @@
     return NO;
 }
 
--(ALCInstantiation *)instantiation {
-    if (_initializer) {
-        ALCInstantiation *instantiation = _initializer.instantiation;
-        [self setObject:instantiation.object];
-        [instantiation addCompletion:[self objectCompletion]];
-        return instantiation;
-    }
-    return super.instantiation;
-}
-
 -(id) createObject {
+    if (_initializer) {
+        return _initializer.createObject;
+    }
     STLog(self.objectClass, @"Instantiating a %@ using init", NSStringFromClass(self.objectClass));
     return [[self.objectClass alloc] init];
 }
@@ -84,6 +79,12 @@
 -(ALCObjectCompletion) objectCompletion {
     blockSelf;
     return ^(ALCObjectCompletionArgs){
+        if (strongSelf->_initializer) {
+            ALCObjectCompletion completion = strongSelf->_initializer.objectCompletion;
+            if (completion) {
+                completion(object);
+            }
+        }
         [ALCRuntime executeSimpleBlock:[strongSelf injectDependenciesIntoObject:object]];
     };
 }
@@ -108,8 +109,8 @@
     return [completions combineSimpleBlocks];
 }
 
--(NSString *) descriptionAttributes {
-    return str(@" class %@", self.defaultName);
+-(NSString *) description {
+    return str(@"%@ class %@", super.description, self.defaultModelKey);
 }
 
 @end

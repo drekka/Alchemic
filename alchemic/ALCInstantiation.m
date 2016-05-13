@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) complete {
     if (_completion) {
-        STLog(_object, @"Completing %@", _object);
+        STLog(_object, @"Executing completing for %@", _object);
         _completion(_object);
     }
 

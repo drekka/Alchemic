@@ -197,9 +197,7 @@
 		6C237CD11CCA6EEF00B8F551 /* FactoryA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactoryA.m; sourceTree = "<group>"; };
 		6C237CD31CCA746700B8F551 /* ALCFactoryName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCFactoryName.h; sourceTree = "<group>"; };
 		6C237CD41CCA746700B8F551 /* ALCFactoryName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCFactoryName.m; sourceTree = "<group>"; };
-		6C24CCDD1CA418270026D18C /* .clang-format */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ".clang-format"; sourceTree = "<group>"; };
 		6C24CCFB1CA42BA80026D18C /* Integration tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Integration tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6C24CCFC1CA42BA90026D18C /* Alchemic tests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Alchemic tests copy-Info.plist"; path = "/Users/derekclarkson/projects/Alchemic/Alchemic tests copy-Info.plist"; sourceTree = "<absolute>"; };
 		6C24CD031CA539D00026D18C /* ALCMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMacros.h; sourceTree = "<group>"; };
 		6C25D2741C566E2D00D982DC /* ALCModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCModel.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCObjectFactory.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -262,7 +260,6 @@
 		6CB5CCD41CDB6F8C00DC1052 /* ALCDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ALCDefs.h; sourceTree = "<group>"; };
 		6CB5CCD61CDB70C800DC1052 /* ALCDefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCDefs.m; sourceTree = "<group>"; };
 		6CB5CCF41CDB7AF700DC1052 /* Functional tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Functional tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6CB5CCF51CDB7AF700DC1052 /* Unit tests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Unit tests copy-Info.plist"; path = "/Users/derekclarkson/projects/Alchemic/Unit tests copy-Info.plist"; sourceTree = "<absolute>"; };
 		6CB7C4191CC3BFF500C05B0B /* AccessingObjects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccessingObjects.m; sourceTree = "<group>"; };
 		6CB7C42E1CC7BC1300C05B0B /* ALCIsReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCIsReference.h; sourceTree = "<group>"; };
 		6CB7C42F1CC7BC1300C05B0B /* ALCIsReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCIsReference.m; sourceTree = "<group>"; };
@@ -367,16 +364,6 @@
 		6C25D2841C58E14D00D982DC /* Factories */ = {
 			isa = PBXGroup;
 			children = (
-				6C4D85AF1C7F37400061CA84 /* ALCInstantiator.h */,
-				6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */,
-				6C237CD31CCA746700B8F551 /* ALCFactoryName.h */,
-				6C237CD41CCA746700B8F551 /* ALCFactoryName.m */,
-				6CB7C42E1CC7BC1300C05B0B /* ALCIsReference.h */,
-				6CB7C42F1CC7BC1300C05B0B /* ALCIsReference.m */,
-				6CB7C4301CC7BC1300C05B0B /* ALCIsFactory.h */,
-				6CB7C4311CC7BC1300C05B0B /* ALCIsFactory.m */,
-				6CB7C4321CC7BC1300C05B0B /* ALCIsPrimary.h */,
-				6CB7C4331CC7BC1300C05B0B /* ALCIsPrimary.m */,
 				6C25D27E1C5760FF00D982DC /* ALCAbstractObjectFactory.h */,
 				6C25D27F1C5760FF00D982DC /* ALCAbstractObjectFactory.m */,
 				6C4B56101C6E0A390040AEC2 /* ALCClassObjectFactory.h */,
@@ -385,10 +372,20 @@
 				6C4D85AC1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.m */,
 				6C4B56181C6E0BF10040AEC2 /* ALCDependencyRef.h */,
 				6C4B56191C6E0BF10040AEC2 /* ALCDependencyRef.m */,
+				6C237CD31CCA746700B8F551 /* ALCFactoryName.h */,
+				6C237CD41CCA746700B8F551 /* ALCFactoryName.m */,
 				6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */,
 				6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */,
+				6C4D85AF1C7F37400061CA84 /* ALCInstantiator.h */,
+				6CB7C4301CC7BC1300C05B0B /* ALCIsFactory.h */,
+				6CB7C4311CC7BC1300C05B0B /* ALCIsFactory.m */,
+				6CB7C4321CC7BC1300C05B0B /* ALCIsPrimary.h */,
+				6CB7C4331CC7BC1300C05B0B /* ALCIsPrimary.m */,
+				6CB7C42E1CC7BC1300C05B0B /* ALCIsReference.h */,
+				6CB7C42F1CC7BC1300C05B0B /* ALCIsReference.m */,
 				6C4B56141C6E0AD10040AEC2 /* ALCMethodObjectFactory.h */,
 				6C4B56151C6E0AD10040AEC2 /* ALCMethodObjectFactory.m */,
+				6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */,
 				6C3AFBA81C5CE89500B4FCAA /* ALCObjectFactoryType.h */,
 				6C4B56201C6F6DF60040AEC2 /* types */,
 			);
@@ -465,9 +462,7 @@
 		6C66DC251A8B82C3009F9D94 = {
 			isa = PBXGroup;
 			children = (
-				6C24CCDD1CA418270026D18C /* .clang-format */,
 				6C66DC301A8B82C3009F9D94 /* Alchemic */,
-				6C24CCFC1CA42BA90026D18C /* Alchemic tests copy-Info.plist */,
 				6C469BAD1BB0200200CD2286 /* Cartfile */,
 				6C469BB61BB0210A00CD2286 /* Frameworks */,
 				6C66DC3F1A8B82C3009F9D94 /* Info.plist */,
@@ -475,7 +470,6 @@
 				6C66DC2F1A8B82C3009F9D94 /* Products */,
 				6C4B56221C6F6EA80040AEC2 /* Functional tests */,
 				6C66DC3D1A8B82C3009F9D94 /* Unit tests */,
-				6CB5CCF51CDB7AF700DC1052 /* Unit tests copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -560,7 +554,7 @@
 				6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */,
 			);
 			name = "Integration tests";
-			path = AlchemicIntegrationTests;
+			path = alchemicTests;
 			sourceTree = "<group>";
 		};
 		6CC2849C1CB69F4E006B613F /* Model */ = {
@@ -728,7 +722,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -900,7 +894,6 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/OCMock-3.1.2/iOS";
-				INFOPLIST_FILE = "Alchemic tests copy-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -922,7 +915,6 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/OCMock-3.1.2/iOS";
-				INFOPLIST_FILE = "Alchemic tests copy-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1182,7 +1174,6 @@
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
 					"$(SRCROOT)/alchemic/**",
 				);
-				INFOPLIST_FILE = "Unit tests copy-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1207,7 +1198,6 @@
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
 					"$(SRCROOT)/alchemic/**",
 				);
-				INFOPLIST_FILE = "Unit tests copy-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1241,7 +1231,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,

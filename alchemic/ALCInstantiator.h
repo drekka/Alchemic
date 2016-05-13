@@ -9,18 +9,18 @@
 @import Foundation;
 
 #import "ALCResolvable.h"
-
-@class ALCInstantiation;
+#import "ALCDefs.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCInstantiator <ALCResolvable>
 
-@property (nonatomic, strong, readonly) ALCInstantiation *instantiation;
+@property (nonatomic, strong, readonly) NSString *defaultModelKey;
 
-@property (nonatomic, strong, readonly) NSString *defaultName;
+@property (nonatomic, assign, readonly) ALCObjectCompletion objectCompletion;
 
-@property (nonatomic, strong, readonly) NSString *descriptionAttributes;
+-(id) createObject;
+
 
 @end
 

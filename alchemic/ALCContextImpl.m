@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz {
     STLog(clazz, @"Register object factory for %@", NSStringFromClass(clazz));
     ALCClassObjectFactory *objectFactory = [[ALCClassObjectFactory alloc] initWithClass:clazz];
-    [_model addObjectFactory:objectFactory withName:objectFactory.defaultName];
+    [_model addObjectFactory:objectFactory withName:objectFactory.defaultModelKey];
     return objectFactory;
 }
 
@@ -84,12 +84,14 @@ registerFactoryMethod:(SEL) selector
                                                                                  selector:selector
                                                                                      args:methodArguments];
 
-    [_model addObjectFactory:methodFactory withName:methodFactory.defaultName];
+    [_model addObjectFactory:methodFactory withName:methodFactory.defaultModelKey];
     [methodFactory configureWithOptions:factoryOptions unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:methodFactory]];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory setInitializer:(SEL) initializer, ... {
 
+    STLog(objectFactory.objectClass, @"Register object factory initializer %@", [ALCRuntime selectorDescription:objectFactory.objectClass selector:initializer]);
+    
     alc_loadVarArgsAfterVariableIntoArray(initializer, unknownArguments);
 
     NSArray<id<ALCDependency>> *arguments = [unknownArguments methodArgumentsWithUnknownArgumentHandler:^(id argument) {
@@ -132,7 +134,7 @@ registerFactoryMethod:(SEL) selector
     }
     ALCModelDependency *dependency = [criteria modelSearchWithClass:returnType];
     [dependency resolveWithStack:[[NSMutableArray alloc] init] model:_model];
-    return dependency.searchResult;
+    return [ALCRuntime mapValue:dependency.searchResult toType:returnType];
 }
 
 #pragma mark - Internal
@@ -141,7 +143,7 @@ registerFactoryMethod:(SEL) selector
     return ^(id option) {
         if ([(NSObject *) option isKindOfClass:[ALCFactoryName class]]) {
             [self->_model objectFactory:objectFactory
-                            changedName:objectFactory.defaultName
+                            changedName:objectFactory.defaultModelKey
                                 newName:((ALCFactoryName *) option).asName];
         } else {
             throwException(@"AlchemicIllegalArgument", @"Expected a factory config macro");

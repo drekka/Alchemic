@@ -46,6 +46,7 @@
 }
 
 -(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
+    STLog(self.objectClass, @"Resolving initializer %@", [self defaultModelKey]);
     [self resolveFactoryWithResolvingStack:resolvingStack
                               resolvedFlag:&_resolved
                                      block:^{
@@ -57,19 +58,22 @@
                                      }];
 }
 
--(ALCInstantiation *) instantiation {
-    STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), NSStringFromSelector(_initializer));
+-(id)createObject {
+    STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), [self defaultModelKey]);
     id obj = [self.objectClass alloc];
-    obj = [obj invokeSelector:_initializer arguments:_arguments];
-    return [ALCInstantiation instantiationWithObject:obj completion:NULL];
+    return [obj invokeSelector:_initializer arguments:_arguments];
 }
 
--(NSString *) defaultName {
+-(ALCObjectCompletion)objectCompletion {
+    return NULL;
+}
+
+-(NSString *) defaultModelKey {
     return [ALCRuntime selectorDescription: self.objectClass selector:_initializer];
 }
 
--(NSString *) descriptionAttributes {
-    return str(@"initializer %@", self.defaultName);
+-(NSString *) description {
+    return str(@"initializer %@", self.defaultModelKey);
 }
 
 -(BOOL) ready {

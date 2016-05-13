@@ -6,6 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import "ALCResolvable.h"
 #import "ALCInstantiator.h"
 
 @class ALCClassObjectFactory;
@@ -13,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCClassObjectFactoryInitializer : NSObject<ALCInstantiator>
+@interface ALCClassObjectFactoryInitializer : NSObject<ALCResolvable, ALCInstantiator>
 
 -(instancetype) init NS_UNAVAILABLE;
 

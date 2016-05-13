@@ -79,8 +79,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Descriptions
 
--(NSString *) descriptionAttributes {
-    return str(@" method %@", self.defaultName);
+-(NSString *) description {
+    return str(@"%@ method %@", super.description, self.defaultModelKey);
 }
 
 @end

@@ -61,8 +61,8 @@ NS_ASSUME_NONNULL_BEGIN
                             resolvedFlag:(BOOL *) resolvedFlag
                                    block:(void (^) (void)) block {
 
-    id<ALCInstantiator> generator = (id<ALCInstantiator>) self;
-    NSString *name = generator.defaultName;
+    id<ALCInstantiator, ALCResolvable> instantiator = (id<ALCInstantiator, ALCResolvable>) self;
+    NSString *name = instantiator.defaultModelKey;
 
     if (*resolvedFlag) {
         // If the object factory is in the same resolving chain, then we have a loop.
@@ -72,11 +72,10 @@ NS_ASSUME_NONNULL_BEGIN
         }
 
         // We are enumerating dependencies then we have looped back through a property injection so return.
-        STLog(generator.objectClass, @"Factory %@ already resolved", NSStringFromClass(generator.objectClass));
+        STLog(instantiator.defaultModelKey, @"%@ already resolved", NSStringFromClass(instantiator.objectClass));
         return;
     }
 
-    STLog(generator.objectClass, @"Resolving factory %@", name);
     *resolvedFlag = YES;
     [resolvingStack addObject:name];
     block();

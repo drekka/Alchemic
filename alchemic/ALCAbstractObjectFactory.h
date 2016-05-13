@@ -9,6 +9,8 @@
 @import Foundation;
 
 #import "ALCObjectFactory.h"
+#import "ALCResolvable.h"
+#import "ALCInstantiator.h"
 #import "ALCDefs.h"
 
 @class ALCInstantiation;
@@ -24,10 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) configureWithOptions:(NSArray *) options unknownOptionHandler:(void (^)(id option)) unknownOptionHandler;
 
 -(ALCObjectCompletion) setObject:(id) object;
-
--(id) createObject;
-
--(ALCObjectCompletion) objectCompletion;
 
 @end
 

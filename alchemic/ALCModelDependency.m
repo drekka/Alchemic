@@ -79,7 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
-    [self completionForInstantiations:instantations]();
+    [self completionForInstantiations:instantations](); // Too soon. Circular references will execute their blocks. Need to do later.
     [ALCRuntime setInvocation:inv
                      argIndex:idx
                     withValue:[self valuesFromInstantiations:instantations]

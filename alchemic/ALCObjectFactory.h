@@ -27,6 +27,8 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 
 -(void) injectDependencies:(id) object;
 
+@property (nonatomic, strong, readonly) ALCInstantiation *instantiation;
+
 @end
 
 NS_ASSUME_NONNULL_END
