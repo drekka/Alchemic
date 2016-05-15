@@ -49,14 +49,16 @@
     [self resolveFactoryWithResolvingStack:resolvingStack
                               resolvedFlag:&_resolved
                                      block:^{
-                                         if (strongSelf->_initializer) {
-                                             [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
-                                         }
+                                         [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
                                          STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
                                          for (ALCDependencyRef *ref in strongSelf->_dependencies) {
                                              // Class dependencies start a new stack.
-                                             NSMutableArray *newStack = [@[str(@"%@.%@", strongSelf.defaultModelKey, ref.name)] mutableCopy];
-                                             [ref.dependency resolveWithStack:newStack model:model];
+                                             [resolvingStack addObject:str(@"%@.%@", strongSelf.defaultModelKey, ref.name)];
+
+                                             //NSMutableArray *newStack = [@[str(@"%@.%@", strongSelf.defaultModelKey, ref.name)] mutableCopy];
+                                             //[ref.dependency resolveWithStack:newStack model:model];
+                                             [ref.dependency resolveWithStack:resolvingStack model:model];
+                                             [resolvingStack removeLastObject];
                                          }
                                      }];
 }

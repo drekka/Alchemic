@@ -11,7 +11,7 @@
 #import "ALCDefs.h"
 
 @protocol ALCDependency;
-
+@protocol ALCModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(id<ALCDependency>) dependencyWithClass:(Class) dependencyClass;
 
 -(nullable ALCSimpleBlock) combineSimpleBlocks;
+
+-(void)resolveArgumentsWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model;
 
 @end
 

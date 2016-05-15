@@ -47,14 +47,11 @@
 
 -(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
     STLog(self.objectClass, @"Resolving initializer %@", [self defaultModelKey]);
+    blockSelf;
     [self resolveFactoryWithResolvingStack:resolvingStack
                               resolvedFlag:&_resolved
                                      block:^{
-                                         [self->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
-                                             [resolvingStack addObject:str(@"arg: %lu", idx)];
-                                             [argument resolveWithStack:resolvingStack model:model];
-                                             [resolvingStack removeLastObject];
-                                         }];
+                                         [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
                                      }];
 }
 

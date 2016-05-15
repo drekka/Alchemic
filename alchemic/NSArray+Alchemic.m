@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
         if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
             searchCriteria = searchCriteria ? [searchCriteria combineWithCriteria:criteria] : criteria;
         } else {
-            throwException(@"AlchemicIllegalArgument", @"Expected a search criteria or constant. Got: %@", criteria);
+            throwException(@"AlchemicIllegalArgument", nil, @"Expected a search criteria or constant. Got: %@", criteria);
         }
     }
 
@@ -73,19 +73,19 @@ NS_ASSUME_NONNULL_BEGIN
         if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
 
             if (constant) {
-                throwException(@"AlchemicIllegalArgument", @"You cannot combine model search criteria and constants.");
+                throwException(@"AlchemicIllegalArgument", nil, @"You cannot combine model search criteria and constants.");
             }
             searchCriteria = searchCriteria ? [searchCriteria combineWithCriteria:criteria] : criteria;
 
         } else if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
 
             if (searchCriteria) {
-                throwException(@"AlchemicIllegalArgument", @"You cannot combine model search criteria and constants.");
+                throwException(@"AlchemicIllegalArgument", nil, @"You cannot combine model search criteria and constants.");
             }
             constant = criteria;
 
         } else {
-            throwException(@"AlchemicIllegalArgument", @"Expected a search criteria or constant. Got: %@", criteria);
+            throwException(@"AlchemicIllegalArgument", nil, @"Expected a search criteria or constant. Got: %@", criteria);
         }
 
     }
@@ -105,6 +105,14 @@ NS_ASSUME_NONNULL_BEGIN
             block();
         }
     };
+}
+
+-(void)resolveArgumentsWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
+    [self enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
+        [resolvingStack addObject:str(@"arg: %lu", idx)];
+        [argument resolveWithStack:resolvingStack model:model];
+        [resolvingStack removeLastObject];
+    }];
 }
 
 @end

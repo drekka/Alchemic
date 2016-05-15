@@ -27,11 +27,11 @@
 
 #define blockSelf __weak __typeof(self) weakSelf = self;__typeof(self) strongSelf = weakSelf
 
-#define throwException(exceptionName, template, ...) \
+#define throwException(exceptionName, userData, template, ...) \
 @throw [ALCException \
-        exceptionWithName:exceptionName \
-        reason:str(template, ## __VA_ARGS__) \
-        userInfo:nil]
+    exceptionWithName:exceptionName \
+    reason:str(template, ## __VA_ARGS__) \
+    userInfo:userData]
 
 #pragma mark - Assertions
 

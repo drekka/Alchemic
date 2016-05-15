@@ -68,7 +68,9 @@ NS_ASSUME_NONNULL_BEGIN
         // If the object factory is in the same resolving chain, then we have a loop.
         if ([resolvingStack containsObject:name]) {
             [resolvingStack addObject:name];
-            throwException(@"AlchemicCircularDependency", @"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]);
+            throwException(@"AlchemicCircularDependency",
+                           @{@"stack":resolvingStack},
+                           @"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]);
         }
 
         // We are enumerating dependencies then we have looped back through a property injection so return.

@@ -56,13 +56,8 @@
                            )
     [_context objectFactory:_topFactory setInitializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory setInitializer:anotherThingInit, AcClass(TopThing), nil];
-    @try {
-        [_context start];
-    } @catch (ALCException *exception) {
-        XCTAssertEqualObjects(@"AlchemicCircularDependency", exception.name);
-    } @catch (NSException *exception) {
-        XCTFail(@"Un-expected exception %@", exception);
-    }
+
+    [self validateExceptionThrown];
 }
 
 -(void) testPropertyToInitializer {
@@ -73,16 +68,7 @@
                            )
     [_context objectFactory:_anotherFactory setInitializer:anotherThingInit, AcClass(TopThing), nil];
 
-    [_context start];
-
-    TopThing *topThing = _topFactory.instantiation.object;
-    XCTAssertNotNil(topThing);
-
-    AnotherThing *anotherThing = _anotherFactory.instantiation.object;
-    XCTAssertNotNil(anotherThing);
-
-    XCTAssertEqual(topThing.anotherThing, anotherThing);
-    XCTAssertEqual(anotherThing.topThing, topThing);
+    [self validateExceptionThrown];
 }
 
 -(void) testInitializerToProperty {
@@ -93,17 +79,19 @@
     [_context objectFactory:_topFactory setInitializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory registerVariableInjection:@"topThing", nil];
 
-    [_context start];
+    [self validateExceptionThrown];
+}
 
-    TopThing *topThing = _topFactory.instantiation.object;
-    XCTAssertNotNil(topThing);
-
-    AnotherThing *anotherThing = _anotherFactory.instantiation.object;
-    XCTAssertNotNil(anotherThing);
-
-    AnotherThing *nestedAnotherThing = topThing.anotherThing;
-    XCTAssertEqual(nestedAnotherThing, anotherThing);
-    XCTAssertEqual(anotherThing.topThing, topThing);
+-(void) validateExceptionThrown {
+    @try {
+        [_context start];
+        XCTFail(@"Circular exception not thrown");
+    } @catch (ALCException *exception) {
+        STLog(_context, @"Stack: %@", exception.userInfo[@"stack"]);
+        XCTAssertEqualObjects(@"AlchemicCircularDependency", exception.name);
+    } @catch (NSException *exception) {
+        XCTFail(@"Un-expected exception %@", exception);
+    }
 }
 
 @end

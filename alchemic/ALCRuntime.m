@@ -57,7 +57,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     var = class_getInstanceVariable(aClass, [[@"_" stringByAppendingString:inj] UTF8String]);
 
     if (var == NULL) {
-        throwException(@"AlchemicInjectionNotFound", @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
+        throwException(@"AlchemicInjectionNotFound", nil, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
     }
 
     return var;
@@ -136,7 +136,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     if ([value isKindOfClass:[NSArray class]]) {
         NSArray *values = (NSArray *) value;
         if (values.count != 1) {
-            throwException(@"AlchemicTooManyValues", @"Target type is not an array and found %lu values", values.count);
+            throwException(@"AlchemicTooManyValues", nil, @"Target type is not an array and found %lu values", values.count);
         }
         return values[0];
     }
@@ -145,7 +145,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
         return value;
     }
 
-    throwException(@"AlchemicTypeMissMatch", @"Value of type %@ cannot be cast to a %@", NSStringFromClass([value class]), NSStringFromClass(type));
+    throwException(@"AlchemicTypeMissMatch", nil, @"Value of type %@ cannot be cast to a %@", NSStringFromClass([value class]), NSStringFromClass(type));
 }
 
 #pragma mark - Validating
@@ -161,12 +161,12 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
     // Not found.
     if (!sig) {
-        throwException(@"AlchemicSelectorNotFound", @"Failed to find selector %@", [self selectorDescription:aClass selector:selector]);
+        throwException(@"AlchemicSelectorNotFound", nil, @"Failed to find selector %@", [self selectorDescription:aClass selector:selector]);
     }
 
     // Incorrect number of arguments. Allow for runtime in arguments.
     if (sig.numberOfArguments - 2 != (arguments ? arguments.count : 0)) {
-        throwException(@"AlchemicIncorrectNumberOfArguments", @"%@ expected %lu arguments, got %lu", [self selectorDescription:aClass selector:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
+        throwException(@"AlchemicIncorrectNumberOfArguments", nil, @"%@ expected %lu arguments, got %lu", [self selectorDescription:aClass selector:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
     }
 }
 

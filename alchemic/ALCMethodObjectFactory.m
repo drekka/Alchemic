@@ -9,6 +9,7 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "Alchemic.h"
+#import "NSArray+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -48,10 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
                               resolvedFlag:&_resolved
                                      block:^{
                                          [strongSelf->_parentObjectFactory resolveWithStack:resolvingStack model:model];
-                                         [strongSelf->_arguments enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
-                                             [resolvingStack addObject:str(@"arg: %lu", idx)];
-                                             [argument resolveWithStack:resolvingStack model:model];
-                                         }];
+                                         [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
                                      }];
 }
 

@@ -54,7 +54,7 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 
 -(void) setNextSearchCriteria:(ALCModelSearchCriteria *) nextSearchCriteria {
     if (_unique || nextSearchCriteria->_unique) {
-        throwException(@"AlchemicIllegalArgument", @"You cannot combine model search criteria and constants in the one injection.");
+        throwException(@"AlchemicIllegalArgument", nil, @"You cannot combine model search criteria and constants in the one injection.");
     }
     _nextSearchCriteria = nextSearchCriteria;
 }

@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
     // Find dependencies
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria].allValues;
     if ([_resolvedFactories count] == 0) {
-        throwException(@"AlchemicNoDependenciesFound", @"No object factories found for criteria %@", _criteria);
+        throwException(@"AlchemicNoDependenciesFound", nil, @"No object factories found for criteria %@", _criteria);
     }
 
     // Resolve dependencies.

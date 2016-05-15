@@ -95,7 +95,7 @@ registerFactoryMethod:(SEL) selector
     alc_loadVarArgsAfterVariableIntoArray(initializer, unknownArguments);
 
     NSArray<id<ALCDependency>> *arguments = [unknownArguments methodArgumentsWithUnknownArgumentHandler:^(id argument) {
-        throwException(@"AlchemicIllegalArgument", @"Expected a argument definition, search criteria or constant. Got: %@", argument);
+        throwException(@"AlchemicIllegalArgument", nil, @"Expected a argument definition, search criteria or constant. Got: %@", argument);
     }];
 
     __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:objectFactory
@@ -146,7 +146,7 @@ registerFactoryMethod:(SEL) selector
                             changedName:objectFactory.defaultModelKey
                                 newName:((ALCFactoryName *) option).asName];
         } else {
-            throwException(@"AlchemicIllegalArgument", @"Expected a factory config macro");
+            throwException(@"AlchemicIllegalArgument", nil, @"Expected a factory config macro");
         }
     };
 }
