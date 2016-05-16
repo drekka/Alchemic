@@ -9,6 +9,7 @@
 #import "ALCAbstractConstantValue.h"
 
 #import "ALCInternalMacros.h"
+#import "ALCDefs.h"
 
 @implementation ALCAbstractConstantValue
 
@@ -17,10 +18,14 @@
 }
 
 -(Class) objectClass {
-    return NULL;
+    return [self class];
 }
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {}
+
+-(ALCSimpleBlock) injectObject:(id)object {
+    methodReturningBlockNotImplemented;
+}
 
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
     methodReturningBlockNotImplemented;

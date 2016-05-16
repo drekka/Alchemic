@@ -8,8 +8,9 @@
 
 @import Foundation;
 
-#import "ALCDependency.h"
 #import "ALCConstant.h"
+#import "ALCInjection.h"
 
-@interface ALCAbstractConstantValue : NSObject<ALCDependency, ALCConstant>
+@interface ALCAbstractConstantValue : NSObject<ALCConstant, ALCInjection>
+
 @end

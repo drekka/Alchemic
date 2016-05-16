@@ -8,14 +8,14 @@
 
 @import Foundation;
 
-#import "ALCDependency.h"
+#import "ALCInjection.h"
 
 @class ALCModelSearchCriteria;
 @class ALCInstantiation;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCModelDependency : NSObject<ALCDependency>
+@interface ALCModelInjection : NSObject<ALCInjection>
 
 @property (nonatomic, strong, readonly) id searchResult;
 

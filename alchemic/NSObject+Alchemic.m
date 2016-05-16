@@ -21,34 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation NSObject (Alchemic)
 
-+(id) object:(id) object invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
-
-    STLog(self, @"Executing %@", [ALCRuntime selectorDescription:[self class] selector:selector]);
-
-    // Get an invocation ready.
-    NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:selector];
-
-    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
-    [inv retainArguments];
-    inv.selector = selector;
-
-    // Load the arguments.
-    [arguments enumerateObjectsUsingBlock:^(id<ALCDependency> dependency, NSUInteger idx, BOOL *stop) {
-        STLog(self.class, @"Injecting argument at index %i", idx);
-        [dependency setInvocation:inv argumentIndex:(int) idx + 2];
-    }];
-
-    [inv invokeWithTarget:object];
-
-    const char *returnType = sig.methodReturnType;
-    if (strcmp(returnType, "v") != 0) {
-        id __unsafe_unretained returnObj;
-        [inv getReturnValue:&returnObj];
-        return returnObj;
-    }
-    return nil;
-}
-
 -(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
     return [[self class] object:self invokeSelector:selector arguments:arguments];
 }
@@ -70,6 +42,13 @@ NS_ASSUME_NONNULL_BEGIN
         if ([resolvingStack containsObject:resolvable]) {
             
             [resolvingStack addObject:resolvable];
+            
+            // Build names based on resolvable default model keys.
+//            NSMutableArray<NSString *> *names = [[NSMutableArray alloc] initWithCapacity:resolvingStack.count];
+//            [resolvingStack enumerateObjectsUsingBlock:^(id<ALCResolvable> stackResolvable, NSUInteger idx, BOOL *stop) {
+//                [names addObject:stackResolvable.defaultModelKey];
+//            }];
+//            
             throwException(@"AlchemicCircularDependency",
                            @{@"stack":resolvingStack},
                            @"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]);
@@ -107,6 +86,32 @@ NS_ASSUME_NONNULL_BEGIN
     // All dependencies are good to go.
     *checkingFlag = NO;
     return YES;
+}
+
+#pragma mark - Internal
+
++(id) object:(id) object invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
+    
+    STLog(self, @"Executing %@", [ALCRuntime selectorDescription:[self class] selector:selector]);
+    
+    // Get an invocation ready.
+    NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:selector];
+    
+    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+    [inv retainArguments];
+    inv.selector = selector;
+    
+    // Load the arguments.
+    [arguments enumerateObjectsUsingBlock:^(id<ALCDependency> dependency, NSUInteger idx, BOOL *stop) {
+        STLog(self.class, @"Injecting argument at index %i", idx);
+        [dependency injectObject:inv];
+    }];
+    
+    [inv invokeWithTarget:object];
+    
+    id __unsafe_unretained returnObj;
+    [inv getReturnValue:&returnObj];
+    return returnObj;
 }
 
 @end

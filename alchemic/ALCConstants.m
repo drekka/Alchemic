@@ -16,8 +16,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #define ALCConstantFunctionImplementation(name, type) \
-id<ALCDependency> Ac ## name(type value) { \
-    return [[ALCConstant ## name alloc] initWithValue:value]; \
+id<ALCInjection> Ac ## name(type value) { \
+    return [ALCConstant ## name constantValue:value]; \
 }
 
 #define ALCConstantImplementation(name, type, injectVariableCode) \
@@ -34,6 +34,9 @@ id<ALCDependency> Ac ## name(type value) { \
         _value = value; \
     } \
     return self; \
+} \
++(instancetype) constantValue:(type) value { \
+    return [[ALCConstant ## name alloc] initWithValue:value]; \
 } \
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
     injectVariableCode \

@@ -10,14 +10,14 @@
 
 #import "ALCAbstractObjectFactory.h"
 
-@protocol ALCDependency;
+@protocol ALCInjection;
 @class ALCClassObjectFactoryInitializer;
 
 @interface ALCClassObjectFactory : ALCAbstractObjectFactory
 
 @property (nonatomic, strong) ALCClassObjectFactoryInitializer *initializer;
 
--(void) registerDependency:(id<ALCDependency>) dependency forVariable:(Ivar) variable withName:(NSString *) variableName;
+-(void) registerInjection:(id<ALCInjection>) injection forVariable:(Ivar) variable withName:(NSString *) variableName;
 
 -(ALCSimpleBlock) injectDependenciesIntoObject:(id) value;
 

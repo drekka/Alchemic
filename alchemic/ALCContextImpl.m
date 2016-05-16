@@ -16,7 +16,7 @@
 #import "ALCMethodObjectFactory.h"
 #import "ALCClassObjectFactoryInitializer.h"
 #import "ALCDependency.h"
-#import "ALCModelDependency.h"
+#import "ALCModelInjection.h"
 #import "ALCConstant.h"
 #import "Alchemic.h"
 #import "NSArray+Alchemic.h"
@@ -111,7 +111,8 @@ registerFactoryMethod:(SEL) selector
 
     Ivar ivar = [ALCRuntime aClass:objectFactory.objectClass variableForInjectionPoint:variable];
     Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
-    [objectFactory registerDependency:[valueArguments dependencyWithClass:varClass] forVariable:ivar withName:variable];
+    id<ALCInjection> injection = [valueArguments injectionWithClass:varClass allowConstants:YES];
+    [objectFactory registerInjection:injection forVariable:ivar withName:variable];
 }
 
 #pragma mark - Dependencies
@@ -132,9 +133,9 @@ registerFactoryMethod:(SEL) selector
     if (criteria.count == 0) {
         [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[returnType class]]];
     }
-    ALCModelDependency *dependency = [criteria modelSearchWithClass:returnType];
-    [dependency resolveWithStack:[[NSMutableArray alloc] init] model:_model];
-    return [ALCRuntime mapValue:dependency.searchResult toType:returnType];
+    ALCModelInjection *injection = (ALCModelInjection *)[criteria injectionWithClass:returnType allowConstants:NO];
+    [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];
+    return [ALCRuntime mapValue:injection.searchResult toType:returnType];
 }
 
 #pragma mark - Internal

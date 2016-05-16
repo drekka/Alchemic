@@ -8,7 +8,7 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCModelDependency.h"
+#import "ALCModelInjection.h"
 #import "ALCModel.h"
 #import "ALCObjectFactory.h"
 #import "ALCInternalMacros.h"
@@ -19,7 +19,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCModelDependency {
+@implementation ALCModelInjection {
     ALCModelSearchCriteria *_criteria;
     NSArray<id<ALCObjectFactory>> *_resolvedFactories;
 }
@@ -71,6 +71,13 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+#pragma mark - Injecting
+
+// Not allowed to be called.
+-(ALCSimpleBlock)injectObject:(id)object {
+    methodReturningBlockNotImplemented;
+}
+
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     [ALCRuntime setObject:object
@@ -87,6 +94,8 @@ NS_ASSUME_NONNULL_BEGIN
                     withValue:[self valuesFromInstantiations:instantations]
                       ofClass:self.objectClass];
 }
+
+#pragma mark - Retrieving results
 
 -(id) searchResult {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];

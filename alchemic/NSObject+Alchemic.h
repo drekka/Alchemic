@@ -15,6 +15,8 @@
 @protocol ALCModel;
 @protocol ALCResolvable;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSObject (Alchemic)
 
 /**
@@ -42,3 +44,5 @@
 -(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies checkingStatusFlag:(BOOL *) checkingFlag;
 
 @end
+
+NS_ASSUME_NONNULL_END

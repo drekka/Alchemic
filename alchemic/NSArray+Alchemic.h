@@ -11,6 +11,7 @@
 #import "ALCDefs.h"
 
 @protocol ALCDependency;
+@protocol ALCInjection;
 @protocol ALCModel;
 @protocol ALCResolvable;
 
@@ -20,9 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
 
--(id<ALCDependency>) modelSearchWithClass:(Class) dependencyClass;
-
--(id<ALCDependency>) dependencyWithClass:(Class) dependencyClass;
+-(id<ALCInjection>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants;
 
 -(nullable ALCSimpleBlock) combineSimpleBlocks;
 

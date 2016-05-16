@@ -45,7 +45,7 @@
     return self;
 }
 
--(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
+-(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     STLog(self.objectClass, @"Resolving initializer %@", [self defaultModelKey]);
     blockSelf;
     [self resolveFactoryWithResolvingStack:resolvingStack
@@ -55,7 +55,7 @@
                                      }];
 }
 
--(id)createObject {
+-(id) createObject {
     STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), [self defaultModelKey]);
     id obj = [self.objectClass alloc];
     return [obj invokeSelector:_initializer arguments:_arguments];

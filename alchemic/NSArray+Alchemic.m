@@ -11,8 +11,8 @@
 #import "ALCDependency.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCConstant.h"
-#import "ALCModelDependency.h"
-#import "ALCArgument.h"
+#import "ALCModelInjection.h"
+#import "ALCMethodArgument.h"
 #import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -20,83 +20,74 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation NSArray (Alchemic)
 
 -(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
-
+    
     NSMutableArray<id<ALCDependency>> *arguments = [[NSMutableArray alloc] initWithCapacity:self.count];
+    
+    [self enumerateObjectsUsingBlock:^(id nextArgument, NSUInteger idx, BOOL * _Nonnull stop) {
 
-    for (id nextArgument in self) {
-
-        if ([nextArgument isKindOfClass:[ALCArgument class]]) {
-            [arguments addObject:((ALCArgument *) nextArgument).dependency];
+        ALCMethodArgument *methodArgument = nil;
+        
+        if ([nextArgument isKindOfClass:[ALCMethodArgument class]]) {
+            methodArgument = (ALCMethodArgument *) nextArgument;
 
         } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]) {
             ALCModelSearchCriteria *criteria = nextArgument;
-            id<ALCDependency> modelSearch = [[ALCModelDependency alloc] initWithObjectClass:[NSObject class] criteria:criteria];
-            [arguments addObject:modelSearch];
+            id<ALCInjection> modelSearch = [[ALCModelInjection alloc] initWithObjectClass:[NSObject class] criteria:criteria];
+            methodArgument = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:modelSearch, nil];
+            
+        } else if ([nextArgument conformsToProtocol:@protocol(ALCConstant)]) {
+            methodArgument = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:nextArgument, nil];
+        }
 
-        } else if ([nextArgument conformsToProtocol:@protocol(ALCDependency)]) {
+        if (methodArgument) {
+            methodArgument.index = (int) idx;
             [arguments addObject:nextArgument];
-
         } else {
             unknownArgumentHandler(nextArgument);
         }
-    }
-
+    }];
+    
     return arguments;
 }
 
--(id<ALCDependency>) modelSearchWithClass:(Class) dependencyClass {
-
+-(id<ALCInjection>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants {
+    
     __block ALCModelSearchCriteria *searchCriteria;
+    __block id<ALCInjection> constant;
+    
     for (id criteria in self) {
+        
         if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
-            searchCriteria = searchCriteria ? [searchCriteria combineWithCriteria:criteria] : criteria;
-        } else {
-            throwException(@"AlchemicIllegalArgument", nil, @"Expected a search criteria or constant. Got: %@", criteria);
-        }
-    }
-
-    // Default to the dependency class if no constant or criteria provided.
-    if (!searchCriteria) {
-        searchCriteria = [ALCModelSearchCriteria searchCriteriaForClass:dependencyClass];
-    }
-
-    return [[ALCModelDependency alloc] initWithObjectClass:dependencyClass criteria:searchCriteria];
-}
-
--(id<ALCDependency>) dependencyWithClass:(Class) dependencyClass {
-
-    __block ALCModelSearchCriteria *searchCriteria;
-    __block id<ALCDependency> constant;
-
-    for (id criteria in self) {
-
-        if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
-
+            
             if (constant) {
                 throwException(@"AlchemicIllegalArgument", nil, @"You cannot combine model search criteria and constants.");
             }
             searchCriteria = searchCriteria ? [searchCriteria combineWithCriteria:criteria] : criteria;
-
+            
         } else if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
-
+            
+            if (!allowConstants) {
+                throwException(@"AlchemicIllegalArgument", nil, @"Expected a search criteria or constant. Got: %@", criteria);
+            }
+            
             if (searchCriteria) {
                 throwException(@"AlchemicIllegalArgument", nil, @"You cannot combine model search criteria and constants.");
             }
             constant = criteria;
-
+            
         } else {
             throwException(@"AlchemicIllegalArgument", nil, @"Expected a search criteria or constant. Got: %@", criteria);
         }
-
+        
     }
-
+    
     // Default to the dependency class if no constant or criteria provided.
     if (!constant && !searchCriteria) {
-        searchCriteria = [ALCModelSearchCriteria searchCriteriaForClass:dependencyClass];
+        searchCriteria = [ALCModelSearchCriteria searchCriteriaForClass:injectionClass];
     }
-
-    return constant ? constant : [[ALCModelDependency alloc] initWithObjectClass:dependencyClass
-                                                                        criteria:searchCriteria];
+    
+    return constant ? constant : [[ALCModelInjection alloc] initWithObjectClass:injectionClass
+                                                                       criteria:searchCriteria];
 }
 
 -(nullable ALCSimpleBlock) combineSimpleBlocks {

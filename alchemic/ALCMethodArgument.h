@@ -8,19 +8,21 @@
 
 @import Foundation;
 
+#import "ALCAbstractDependency.h"
+
 @protocol ALCDependency;
 @protocol ALCModel;
-@class ALCArgument;
+@class ALCMethodArgument;
 
 NS_ASSUME_NONNULL_BEGIN
 
 #define AcArg(argClass, critieria, ...) [ALCArgument argumentWithClass:[argClass class] model:model criteria:criteria, ## __VA_ARGS__, nil]
 
-ALCArgument * AcArgument(Class argumentClass, id firstCriteria, ...) NS_REQUIRES_NIL_TERMINATION;
+@interface ALCMethodArgument : ALCAbstractDependency
 
-@interface ALCArgument : NSObject
+@property (nonatomic, assign) int index;
 
-@property (nonatomic, strong, readonly) id<ALCDependency> dependency;
+-(instancetype) init NS_UNAVAILABLE;
 
 +(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... NS_REQUIRES_NIL_TERMINATION;
 

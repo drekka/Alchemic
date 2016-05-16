@@ -9,7 +9,7 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCClassObjectFactory.h"
-#import "ALCDependencyRef.h"
+#import "ALCVariableDependency.h"
 #import "ALCRuntime.h"
 #import "NSObject+Alchemic.h"
 #import "ALCInternalMacros.h"
@@ -18,9 +18,10 @@
 #import "AlchemicAware.h"
 #import "Alchemic.h"
 #import "ALCInstantiation.h"
+#import "ALCVariableDependency.h"
 
 @implementation ALCClassObjectFactory {
-    NSMutableArray<ALCDependencyRef *> *_dependencies;
+    NSMutableArray<id<ALCDependency>> *_dependencies;
     BOOL _resolved;
     BOOL _checkingReadyStatus;
 }
@@ -35,11 +36,10 @@
     return self;
 }
 
--(void) registerDependency:(id<ALCDependency>) dependency forVariable:(Ivar) variable withName:(NSString *) variableName {
-    ALCDependencyRef *ref = [[ALCDependencyRef alloc] init];
-    ref.ivar = variable;
-    ref.name = variableName;
-    ref.dependency = dependency;
+-(void) registerInjection:(id<ALCInjection>) injection forVariable:(Ivar) variable withName:(NSString *) variableName {
+    ALCVariableDependency *ref = [ALCVariableDependency variableDependencyWithInjection:injection
+                                                                               intoIvar:variable
+                                                                                   name:variableName];
     [_dependencies addObject:ref];
 }
 
@@ -49,13 +49,13 @@
     [self resolveFactoryWithResolvingStack:resolvingStack
                               resolvedFlag:&_resolved
                                      block:^{
-
+                                         
                                          [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
                                          
                                          STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
-                                         for (ALCDependencyRef *ref in strongSelf->_dependencies) {
-                                             [resolvingStack addObject:strongSelf];
-                                             [ref.dependency resolveWithStack:resolvingStack model:model];
+                                         for (ALCVariableDependency *ref in strongSelf->_dependencies) {
+                                             [resolvingStack addObject:ref];
+                                             [ref.injection resolveWithStack:resolvingStack model:model];
                                              [resolvingStack removeLastObject];
                                          }
                                      }];
@@ -63,7 +63,7 @@
 
 -(BOOL) ready {
     if (super.ready && (!_initializer || _initializer.ready)) {
-        return [self dependenciesReady:[self referencedDependencies] checkingStatusFlag:&_checkingReadyStatus];
+        return [self dependenciesReady:_dependencies checkingStatusFlag:&_checkingReadyStatus];
     }
     return NO;
 }
@@ -89,23 +89,15 @@
     };
 }
 
--(NSArray<id<ALCDependency>> *) referencedDependencies {
-    NSMutableArray *deps = [NSMutableArray arrayWithCapacity:_dependencies.count];
-    for (ALCDependencyRef *ref in _dependencies) {
-        [deps addObject:ref.dependency];
-    }
-    return deps;
-}
-
--(ALCSimpleBlock) injectDependenciesIntoObject:(id) value {
-
+-(ALCSimpleBlock) injectDependenciesIntoObject:(id) object {
+    
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
-
+    
     NSMutableArray<ALCSimpleBlock> *completions = [[NSMutableArray alloc] init];
-    for (ALCDependencyRef *depRef in _dependencies) {
-        [ALCRuntime executeSimpleBlock:[depRef.dependency setObject:value variable:depRef.ivar]];
+    for (ALCVariableDependency *dep in _dependencies) {
+        [ALCRuntime executeSimpleBlock:[dep injectObject:object]];
     }
-
+    
     return [completions combineSimpleBlocks];
 }
 

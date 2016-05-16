@@ -10,14 +10,15 @@
 @import UIKit;
 
 #import "ALCAbstractConstantValue.h"
+#import "ALCInjection.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 #define ALCConstantHeader(name, type) \
-id<ALCDependency> Ac ## name(type value); \
+id<ALCInjection> Ac ## name(type value); \
 @interface ALCConstant ## name : ALCAbstractConstantValue \
 -(instancetype) init NS_UNAVAILABLE; \
--(instancetype) initWithValue:(type) value NS_DESIGNATED_INITIALIZER; \
++(instancetype) constantValue:(type) value; \
 @end
 
 // Scalar types

@@ -18,9 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCDependency <ALCResolvable>
 
--(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable;
+@property (nonatomic, strong, readonly) NSString *stackName;
 
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
+-(ALCSimpleBlock) injectObject:(id) object;
 
 @end
 
