@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<id<ALCObjectFactory>> *_resolvedFactories;
 }
 
+// TODO: Hello
+
 @synthesize objectClass = _objectClass;
 
 -(instancetype) init {
@@ -50,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
--(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack
+-(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack
                    model:(id<ALCModel>) model {
 
     STLog(_objectClass, @"Searching model using %@", _criteria);

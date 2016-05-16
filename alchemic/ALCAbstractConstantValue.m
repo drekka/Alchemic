@@ -20,7 +20,7 @@
     return NULL;
 }
 
--(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {}
+-(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {}
 
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
     methodReturningBlockNotImplemented;

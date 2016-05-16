@@ -45,7 +45,7 @@
     return self;
 }
 
--(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
+-(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     STLog(self.objectClass, @"Resolving initializer %@", [self defaultModelKey]);
     blockSelf;
     [self resolveFactoryWithResolvingStack:resolvingStack

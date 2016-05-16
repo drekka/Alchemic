@@ -10,7 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ALCDependencyStackItem;
 @protocol ALCModel;
 
 @protocol ALCResolvable <NSObject>
@@ -19,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) Class objectClass;
 
--(void) resolveWithStack:(NSMutableArray<NSString *> *) resolvingStack
+-(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                    model:(id<ALCModel>)model;
 
 @end

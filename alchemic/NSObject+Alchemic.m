@@ -57,40 +57,43 @@ NS_ASSUME_NONNULL_BEGIN
     return [self object:self invokeSelector:selector arguments:arguments];
 }
 
--(void) resolveFactoryWithResolvingStack:(NSMutableArray<NSString *> *) resolvingStack
+-(void) resolveFactoryWithResolvingStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                             resolvedFlag:(BOOL *) resolvedFlag
-                                   block:(void (^) (void)) block {
+                                   block:(ALCSimpleBlock) block {
 
-    id<ALCInstantiator, ALCResolvable> instantiator = (id<ALCInstantiator, ALCResolvable>) self;
-    NSString *name = instantiator.defaultModelKey;
+    id<ALCResolvable> resolvable = (id<ALCResolvable>) self;
 
+    // First check if we have already been resolved.
     if (*resolvedFlag) {
+
         // If the object factory is in the same resolving chain, then we have a loop.
-        if ([resolvingStack containsObject:name]) {
-            [resolvingStack addObject:name];
+        if ([resolvingStack containsObject:resolvable]) {
+            
+            [resolvingStack addObject:resolvable];
             throwException(@"AlchemicCircularDependency",
                            @{@"stack":resolvingStack},
                            @"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]);
         }
 
         // We are enumerating dependencies then we have looped back through a property injection so return.
-        STLog(instantiator.defaultModelKey, @"%@ already resolved", NSStringFromClass(instantiator.objectClass));
+        STLog(resolvable.objectClass, @"%@ already resolved", NSStringFromClass(resolvable.objectClass));
         return;
     }
 
     *resolvedFlag = YES;
-    [resolvingStack addObject:name];
+    [resolvingStack addObject:resolvable];
     block();
     [resolvingStack removeLastObject];
 }
 
 -(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies checkingStatusFlag:(BOOL *) checkingFlag {
 
-    // IF we have looped back here, consider us ready.
+    // If this flag is set then we have looped back to the original variable. So consider everything to be good.
     if (*checkingFlag) {
         return YES;
     }
 
+    // Set the checking flag so that we can detect loops.
     *checkingFlag = YES;
 
     for (id<ALCResolvable> resolvable in dependencies) {
@@ -101,6 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
 
+    // All dependencies are good to go.
     *checkingFlag = NO;
     return YES;
 }

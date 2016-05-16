@@ -81,7 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(void) resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {}
+-(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {}
 
 -(ALCInstantiation *) instantiation {
     id object = _typeStrategy.object;

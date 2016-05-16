@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [ALCRuntime selectorDescription:_parentObjectFactory.objectClass selector:_selector];
 }
 
--(void) resolveDependenciesWithStack:(NSMutableArray<NSString *> *) resolvingStack model:(id<ALCModel>) model {
+-(void) resolveDependenciesWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
     blockSelf;
     [self resolveFactoryWithResolvingStack:resolvingStack
                               resolvedFlag:&_resolved

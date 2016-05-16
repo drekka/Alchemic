@@ -12,6 +12,7 @@
 
 @protocol ALCDependency;
 @protocol ALCModel;
+@protocol ALCResolvable;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable ALCSimpleBlock) combineSimpleBlocks;
 
--(void)resolveArgumentsWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model;
+-(void)resolveArgumentsWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model;
 
 @end
 

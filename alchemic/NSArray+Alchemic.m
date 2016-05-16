@@ -107,9 +107,9 @@ NS_ASSUME_NONNULL_BEGIN
     };
 }
 
--(void)resolveArgumentsWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
+-(void)resolveArgumentsWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     [self enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
-        [resolvingStack addObject:str(@"arg: %lu", idx)];
+        [resolvingStack addObject:argument];
         [argument resolveWithStack:resolvingStack model:model];
         [resolvingStack removeLastObject];
     }];

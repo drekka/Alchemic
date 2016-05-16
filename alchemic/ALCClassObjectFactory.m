@@ -43,20 +43,18 @@
     [_dependencies addObject:ref];
 }
 
--(void)resolveWithStack:(NSMutableArray<NSString *> *)resolvingStack model:(id<ALCModel>) model {
+-(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     STLog(self.objectClass, @"Resolving class factory %@", NSStringFromClass(self.objectClass));
     blockSelf;
     [self resolveFactoryWithResolvingStack:resolvingStack
                               resolvedFlag:&_resolved
                                      block:^{
+
                                          [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
+                                         
                                          STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
                                          for (ALCDependencyRef *ref in strongSelf->_dependencies) {
-                                             // Class dependencies start a new stack.
-                                             [resolvingStack addObject:str(@"%@.%@", strongSelf.defaultModelKey, ref.name)];
-
-                                             //NSMutableArray *newStack = [@[str(@"%@.%@", strongSelf.defaultModelKey, ref.name)] mutableCopy];
-                                             //[ref.dependency resolveWithStack:newStack model:model];
+                                             [resolvingStack addObject:strongSelf];
                                              [ref.dependency resolveWithStack:resolvingStack model:model];
                                              [resolvingStack removeLastObject];
                                          }
