@@ -22,11 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
     return [[ALCMethodArgument alloc] initWithInjection:injection];
 }
 
--(NSString *)stackName {
+-(NSString *) stackName {
     return str(@"arg %i", self.index);
 }
 
--(ALCSimpleBlock)injectObject:(id)object {
+-(ALCSimpleBlock) injectObject:(id) object {
     [self.injection setInvocation:object argumentIndex:self.index + 2];
     return NULL;
 }

@@ -30,18 +30,14 @@ NS_ASSUME_NONNULL_BEGIN
         if ([nextArgument isKindOfClass:[ALCMethodArgument class]]) {
             methodArgument = (ALCMethodArgument *) nextArgument;
 
-        } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]) {
-            ALCModelSearchCriteria *criteria = nextArgument;
-            id<ALCInjection> modelSearch = [[ALCModelInjection alloc] initWithObjectClass:[NSObject class] criteria:criteria];
-            methodArgument = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:modelSearch, nil];
-            
-        } else if ([nextArgument conformsToProtocol:@protocol(ALCConstant)]) {
+        } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]
+                   || [nextArgument conformsToProtocol:@protocol(ALCConstant)]) {
             methodArgument = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:nextArgument, nil];
         }
 
         if (methodArgument) {
             methodArgument.index = (int) idx;
-            [arguments addObject:nextArgument];
+            [arguments addObject:methodArgument];
         } else {
             unknownArgumentHandler(nextArgument);
         }
