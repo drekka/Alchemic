@@ -16,6 +16,7 @@
 #import "ALCInstantiator.h"
 #import "ALCInstantiation.h"
 #import "NSArray+Alchemic.h"
+#import "ALCMethodArgument.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,49 +33,60 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveFactoryWithResolvingStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                             resolvedFlag:(BOOL *) resolvedFlag
                                    block:(ALCSimpleBlock) block {
-
-    id<ALCResolvable> resolvable = (id<ALCResolvable>) self;
-
+    
+    id<ALCResolvable> resolvableSelf = (id<ALCResolvable>) self;
+    
     // First check if we have already been resolved.
     if (*resolvedFlag) {
-
+        
         // If the object factory is in the same resolving chain, then we have a loop.
-        if ([resolvingStack containsObject:resolvable]) {
+        NSUInteger stackIndex = [resolvingStack indexOfObject:resolvableSelf];
+        if (stackIndex != NSNotFound) {
             
-            [resolvingStack addObject:resolvable];
-            
-            // Build names based on resolvable default model keys.
-            NSMutableArray<NSString *> *names = [[NSMutableArray alloc] initWithCapacity:resolvingStack.count];
-            [resolvingStack enumerateObjectsUsingBlock:^(id<ALCResolvable> stackResolvable, NSUInteger idx, BOOL *stop) {
-                [names addObject:stackResolvable.resolvingDescription];
-            }];
-            
-            throwException(@"AlchemicCircularDependency",
-                           @{@"stack":resolvingStack},
-                           @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
+            // Check through the circular reference in the stack and only if we find a method argument can we not resolve this. Method arguments are agressively resolved.
+            // Use this style of loop to stop issues with NSUInteger and negative values.
+            NSUInteger i = resolvingStack.count;
+            do {
+                i--;
+                if ([resolvingStack[i] isKindOfClass:[ALCMethodArgument class]]) {
+                    
+                    // A method is found. Bad.
+                    [resolvingStack addObject:resolvableSelf];
+                    
+                    // Build names based on resolvable default model keys.
+                    NSMutableArray<NSString *> *names = [[NSMutableArray alloc] initWithCapacity:resolvingStack.count];
+                    [resolvingStack enumerateObjectsUsingBlock:^(id<ALCResolvable> stackResolvable, NSUInteger idx, BOOL *stop) {
+                        [names addObject:stackResolvable.resolvingDescription];
+                    }];
+                    
+                    throwException(@"AlchemicCircularDependency",
+                                   @{@"stack":resolvingStack},
+                                   @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
+                }
+            } while (i > stackIndex);
         }
-
+        
         // We are enumerating dependencies then we have looped back through a property injection so return.
-        STLog(resolvable.objectClass, @"%@ already resolved", NSStringFromClass(resolvable.objectClass));
+        STLog(resolvableSelf.objectClass, @"%@ already resolved", NSStringFromClass(resolvableSelf.objectClass));
         return;
     }
-
+    
     *resolvedFlag = YES;
-    [resolvingStack addObject:resolvable];
+    [resolvingStack addObject:resolvableSelf];
     block();
     [resolvingStack removeLastObject];
 }
 
 -(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies checkingStatusFlag:(BOOL *) checkingFlag {
-
+    
     // If this flag is set then we have looped back to the original variable. So consider everything to be good.
     if (*checkingFlag) {
         return YES;
     }
-
+    
     // Set the checking flag so that we can detect loops.
     *checkingFlag = YES;
-
+    
     for (id<ALCResolvable> resolvable in dependencies) {
         // If a dependency is not ready then we stop checking and return a failure.
         if (!resolvable.ready) {
@@ -82,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
             return NO;
         }
     }
-
+    
     // All dependencies are good to go.
     *checkingFlag = NO;
     return YES;
