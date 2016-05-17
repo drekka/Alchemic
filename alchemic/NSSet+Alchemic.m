@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation NSSet (Alchemic)
 
 +(void) unionSet:(nullable NSSet *) sourceSet intoMutableSet:(NSMutableSet  * _Nullable * _Nonnull) destSet {
-    if (sourceSet) {
+    if (sourceSet && sourceSet.count > 0) {
         if (!*destSet) {
             *destSet = [[NSMutableSet alloc] init];
         }

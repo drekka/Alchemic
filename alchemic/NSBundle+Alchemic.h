@@ -8,10 +8,11 @@
 
 @import Foundation;
 
-@class ALCRuntimeScanner;
+@protocol ALCClassProcessor;
+@protocol ALCContext;
 
 @interface NSBundle (Alchemic)
 
--(NSSet<NSBundle *> *) scanWithScanners:(NSArray<ALCRuntimeScanner *> *) scanners;
+-(NSSet<NSBundle *> *) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context;
 
 @end

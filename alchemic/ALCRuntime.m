@@ -6,14 +6,17 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <StoryTeller/StoryTeller.h>
-
-#import "ALCRuntime.h"
-#import "ALCInternalMacros.h"
-#import "ALCTypeData.h"
+#import "ALCClassProcessor.h"
+#import "ALCConfigClassProcessor.h"
 #import "ALCContext.h"
-#import "ALCRuntimeScanner.h"
+#import "ALCInternalMacros.h"
+#import "ALCModelClassProcessor.h"
+#import "ALCResourceLocatorClassProcessor.h"
+#import "ALCRuntime.h"
+#import "ALCTypeData.h"
 #import "NSSet+Alchemic.h"
+#import <StoryTeller/StoryTeller.h>
+#import "NSBundle+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,14 +33,14 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Querying things
 
 +(Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
-
+    
     // First attempt to get an instance variable with the passed name
     const char * charName = [inj UTF8String];
     Ivar var = class_getInstanceVariable(aClass, charName);
     if (var) {
         return var;
     }
-
+    
     // Not found, so try for a property based on the passed name.
     // The property's internal variable may have a completely different variable name.
     objc_property_t prop = class_getProperty(aClass, charName);
@@ -46,20 +49,20 @@ static NSCharacterSet *__typeEncodingDelimiters;
         const char *propVarName = property_copyAttributeValue(prop, "V");
         return class_getInstanceVariable(aClass, propVarName);
     }
-
+    
     // Not a property so it may be a static class variable.
     var = class_getClassVariable(aClass, charName);
     if (var) {
         return var;
     }
-
+    
     // Still no luck so last attempt, try for an underscore prefixed variable.
     var = class_getInstanceVariable(aClass, [[@"_" stringByAppendingString:inj] UTF8String]);
-
+    
     if (var == NULL) {
         throwException(@"AlchemicInjectionNotFound", nil, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
     }
-
+    
     return var;
 }
 
@@ -69,17 +72,17 @@ static NSCharacterSet *__typeEncodingDelimiters;
 }
 
 +(ALCTypeData *) typeDataForEncoding:(NSString *) encoding {
-
+    
     // Get the type.
     ALCTypeData *typeData = [[ALCTypeData alloc] init];
     if ([encoding hasPrefix:@"@"]) {
-
+        
         // Start with a result that indicates an Id. We map Ids as NSObjects.
         typeData.objcClass = [NSObject class];
-
+        
         // Object type.
         NSArray<NSString *> *defs = [encoding componentsSeparatedByCharactersInSet:__typeEncodingDelimiters];
-
+        
         // If there is no more than 2 in the array then the dependency is an id.
         // Position 3 will be a class name, positions beyond that will be protocols.
         for (NSUInteger i = 2; i < [defs count]; i ++) {
@@ -97,7 +100,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
         }
         return typeData;
     }
-
+    
     // Not an object type.
     typeData.scalarType = encoding;
     return typeData;
@@ -108,11 +111,11 @@ static NSCharacterSet *__typeEncodingDelimiters;
 +(void) setObject:(id) object
          variable:(Ivar) variable
         withValue:(id) value {
-
+    
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
-
+    
     id finalValue = [self mapValue:value toType:(Class _Nonnull) ivarTypeData.objcClass];
-
+    
     STLog([object class], @"Injecting %@ with a %@", [ALCRuntime propertyDescription:[object class] variable:variable], [finalValue class]);
     object_setIvar(object, variable, finalValue);
 }
@@ -126,12 +129,12 @@ static NSCharacterSet *__typeEncodingDelimiters;
 }
 
 +(id) mapValue:(id) value toType:(Class) type {
-
+    
     // Wrap the value in an array if it's not alrady in an array.
     if ([type isSubclassOfClass:[NSArray class]]) {
         return [value isKindOfClass:[NSArray class]] ? value : @[value];
     }
-
+    
     // Throw an error if we are dealing with an array value and we have too many results.
     if ([value isKindOfClass:[NSArray class]]) {
         NSArray *values = (NSArray *) value;
@@ -140,30 +143,30 @@ static NSCharacterSet *__typeEncodingDelimiters;
         }
         return values[0];
     }
-
+    
     if ([value isKindOfClass:type]) {
         return value;
     }
-
+    
     throwException(@"AlchemicTypeMissMatch", nil, @"Value of type %@ cannot be cast to a %@", NSStringFromClass([value class]), NSStringFromClass(type));
 }
 
 #pragma mark - Validating
 
 +(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
-
+    
     // Get an instance method.
     NSMethodSignature *sig = [aClass instanceMethodSignatureForSelector:selector];
     if (!sig) {
         // Or try for a class method.
         sig = [aClass methodSignatureForSelector:selector];
     }
-
+    
     // Not found.
     if (!sig) {
         throwException(@"AlchemicSelectorNotFound", nil, @"Failed to find selector %@", [self selectorDescription:aClass selector:selector]);
     }
-
+    
     // Incorrect number of arguments. Allow for runtime in arguments.
     if (sig.numberOfArguments - 2 != (arguments ? arguments.count : 0)) {
         throwException(@"AlchemicIncorrectNumberOfArguments", nil, @"%@ expected %lu arguments, got %lu", [self selectorDescription:aClass selector:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
@@ -187,25 +190,40 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Scanning
 
 +(void) scanRuntimeWithContext:(id<ALCContext>) context {
-
+    
     // Use the app bundles and Alchemic framework as the base bundles to search configs classes.
     NSMutableSet<NSBundle *> *appBundles = [[NSSet setWithArray:[NSBundle allBundles]] mutableCopy];
     [appBundles addObject:[NSBundle bundleForClass:[self class]]];
-
+    
     // Scan the bundles, checking each class.
     NSMutableSet<NSBundle *> *moreBundles = appBundles;
     NSMutableSet<NSBundle *> *scannedBundles;
     while (moreBundles.count > 0) {
-
+        
         // Add the bundles into the scanned list.
         [NSSet unionSet:moreBundles intoMutableSet:&scannedBundles];
-
+        
         // San and return a list of new bundles.
-        moreBundles = [[ALCRuntimeScanner scanBundles:moreBundles context:context] mutableCopy];
-
+        moreBundles = [[self scanBundles:moreBundles context:context] mutableCopy];
+        
         // Make sure we have not already scanned the new bundles.
         [moreBundles minusSet:scannedBundles];
     }
+}
+
++(nullable NSSet<NSBundle *> *) scanBundles:(NSSet<NSBundle *> *) bundles context:(id<ALCContext>) context {
+    
+    NSArray<id<ALCClassProcessor>> *processors = @[
+                                                   [[ALCConfigClassProcessor alloc] init],
+                                                   [[ALCModelClassProcessor alloc] init],
+                                                   [[ALCResourceLocatorClassProcessor alloc] init]
+                                                   ];
+    NSMutableSet<NSBundle *> *moreBundles;
+    for (NSBundle *bundle in bundles) {
+        NSSet<NSBundle *> *addBundles = [bundle scanWithProcessors:processors context:context];
+        [NSSet unionSet:addBundles intoMutableSet:&moreBundles];
+    }
+    return moreBundles;
 }
 
 +(void) executeSimpleBlock:(nullable ALCSimpleBlock) block {

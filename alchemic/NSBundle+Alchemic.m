@@ -13,24 +13,27 @@
 #import <StoryTeller/StoryTeller.h>
 
 #import "NSSet+Alchemic.h"
-#import "ALCRuntimeScanner.h"
+#import "ALCClassProcessor.h"
 
 @implementation NSBundle (Alchemic)
 
--(NSSet<NSBundle *> *) scanWithScanners:(NSArray<ALCRuntimeScanner *> *) scanners {
-
+-(NSSet<NSBundle *> *) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
+    
     STLog(self, @"Scanning bundle %@", self.bundlePath.lastPathComponent);
     unsigned int count = 0;
     const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &count);
-
+    
     NSMutableSet<NSBundle *> *moreBundles;
     for(unsigned int i = 0;i < count;i++) {
         Class nextClass = objc_getClass(classes[i]);
-        for (ALCRuntimeScanner *scanner in scanners) {
-            [NSSet unionSet:[scanner scanClass:nextClass] intoMutableSet:&moreBundles];
+        for (id<ALCClassProcessor> classProcessor in processors) {
+            if ([classProcessor canProcessClass:nextClass]) {
+                NSSet<NSBundle *> *bundles = [classProcessor processClass:nextClass withContext:context];
+                [NSSet unionSet:bundles intoMutableSet:&moreBundles];
+            }
         }
     }
-
+    
     return moreBundles;
 }
 
