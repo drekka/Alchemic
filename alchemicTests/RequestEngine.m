@@ -6,13 +6,13 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "FactoryA.h"
+#import "RequestEngine.h"
 
 #import <Alchemic/Alchemic.h>
 
-@implementation FactoryA
+@implementation RequestEngine
 
 AcRegister(AcFactory)
-AcInject(singletonB)
+AcInject(ui)
 
 @end

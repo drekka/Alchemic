@@ -8,8 +8,8 @@
 
 @import Foundation;
 
-@class SingletonB;
+@class UserInterface;
 
-@interface FactoryA : NSObject
-@property (nonatomic, strong) SingletonB *singletonB;
+@interface RequestEngine : NSObject
+@property (nonatomic, strong) UserInterface *ui;
 @end

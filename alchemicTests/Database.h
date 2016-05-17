@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@class SingletonB;
+@class UserInterface;
 
-@interface SingletonC : NSObject
+@interface Database : NSObject
 @property (nonatomic, assign, readonly) int aInt;
-@property (nonatomic, strong) SingletonB *singletonB;
+@property (nonatomic, strong) UserInterface *ui;
 @end

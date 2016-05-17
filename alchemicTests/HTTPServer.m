@@ -6,8 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "NonManagedObject.h"
+#import "HTTPServer.h"
 
-@implementation NonManagedObject
+@implementation HTTPServer
 
 @end

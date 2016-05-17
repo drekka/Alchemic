@@ -9,12 +9,13 @@
 #import <XCTest/XCTest.h>
 
 #import <Alchemic/Alchemic.h>
+#import <StoryTeller/StoryTeller.h>
 
-#import "SingletonA.h"
-#import "SingletonB.h"
-#import "SingletonC.h"
-#import "FactoryA.h"
-#import "NonManagedObject.h"
+#import "Networking.h"
+#import "UserInterface.h"
+#import "Database.h"
+#import "RequestEngine.h"
+#import "HTTPServer.h"
 
 @interface AlchemicTests : XCTestCase
 
@@ -24,42 +25,42 @@
 
 -(void) testStartUp {
 
-    SingletonA *a = AcGet(SingletonA);
-    XCTAssertNotNil(a);
+    Networking *networking = AcGet(Networking);
+    XCTAssertNotNil(networking);
 
-    SingletonB *b = AcGet(SingletonB);
-    XCTAssertNotNil(b);
+    UserInterface *ui = AcGet(UserInterface);
+    XCTAssertNotNil(ui);
 
-    XCTAssertEqual(a.singletonB, b);
-    XCTAssertEqual(b.singletonA, a);
+    XCTAssertEqual(networking.ui, ui);
+    XCTAssertEqual(ui.networking, networking);
 }
 
 -(void) testSingletonViaName {
-    SingletonA *a = AcGet(SingletonA, AcName(@"SingletonAName"));
-    XCTAssertNotNil(a);
+    Networking *networking = AcGet(Networking, AcName(@"networking"));
+    XCTAssertNotNil(networking);
 }
 
 -(void) testFactoryClass {
-    FactoryA *a = AcGet(FactoryA);
-    FactoryA *b = AcGet(FactoryA);
-    XCTAssertNotEqual(a, b);
+    RequestEngine *rq1 = AcGet(RequestEngine);
+    RequestEngine *rq2 = AcGet(RequestEngine);
+    XCTAssertNotEqual(rq1, rq2);
 }
 
 -(void) testAccessingSimpleFactoryMethod {
-    NonManagedObject *nmo = AcGet(NonManagedObject);
-    XCTAssertNotNil(nmo);
+    HTTPServer *server = AcGet(HTTPServer);
+    XCTAssertNotNil(server);
 }
 
 -(void) testAccessingSimpleFactoryMethodViaCustomName {
-    NonManagedObject *nmo = AcGet(NonManagedObject, AcName(@"NonManagedInstance"));
-    XCTAssertNotNil(nmo);
+    HTTPServer *server = AcGet(HTTPServer, AcName(@"HTTPServer"));
+    XCTAssertNotNil(server);
 }
 
 -(void) testSingletonCreatedUsingInitializer {
-    SingletonC *c = AcGet(SingletonC);
-    XCTAssertNotNil(c);
-    XCTAssertEqual(5, c.aInt);
-    XCTAssertNotNil(c.singletonB);
+    Database *db = AcGet(Database);
+    XCTAssertNotNil(db);
+    XCTAssertEqual(5, db.aInt);
+    XCTAssertNotNil(db.ui);
 }
 
 @end

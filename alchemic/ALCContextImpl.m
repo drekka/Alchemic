@@ -118,10 +118,25 @@ registerFactoryMethod:(SEL) selector
 #pragma mark - Dependencies
 
 - (void)injectDependencies:(id)object {
+    
     STStartScope(object);
-    STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
+    
     NSDictionary<NSString *, id<ALCObjectFactory>> *factories = [_model objectFactoriesMatchingCriteria:[ALCModelSearchCriteria searchCriteriaForClass:[object class]]];
-    [[factories.allValues firstObject] injectDependencies:object];
+    
+    // We are only interested in class factories.
+    id<ALCObjectFactory> classFactory;
+    for (id<ALCObjectFactory> factory in factories.allValues) {
+        if ([factory isKindOfClass:[ALCClassObjectFactory class]]) {
+            classFactory = factory;
+        }
+    }
+    
+    if (classFactory) {
+        STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
+        [classFactory injectDependencies:object];
+    } else {
+        STLog(object, @"No class factory found for a %@", NSStringFromClass([object class]));
+    }
 }
 
 #pragma mark - Accessing objects

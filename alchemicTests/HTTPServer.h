@@ -8,6 +8,6 @@
 
 @import Foundation;
 
-@interface NonManagedObject : NSObject
+@interface HTTPServer : NSObject
 
 @end

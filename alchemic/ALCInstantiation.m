@@ -50,11 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     if ([_object conformsToProtocol:@protocol(AlchemicAware)]) {
-        STLog(_object, @"Telling object injections have finished");
+        STLog(_object, @"Telling %@ it's injections have finished", _object);
         [(id<AlchemicAware>)_object alchemicDidInjectDependencies];
     }
 
-    STLog(_object, @"Posting injections finished notification");
+    STLog(_object, @"Posting injections finished notification for %@", _object);
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
                                                         object:self
                                                       userInfo:@{AlchemicDidCreateObjectUserInfoObject: _object}];

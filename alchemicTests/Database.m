@@ -6,13 +6,13 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "SingletonC.h"
+#import "Database.h"
 
 #import <Alchemic/Alchemic.h>
 
-@implementation SingletonC
+@implementation Database
 
-AcInject(singletonB)
+AcInject(ui)
 
 AcInitializer(initWithInt:, AcInt(5))
 -(instancetype) initWithInt:(int) aInt {

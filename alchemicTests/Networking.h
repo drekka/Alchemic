@@ -1,5 +1,5 @@
 //
-//  SingletonB.h
+//  SingletonA.h
 //  Alchemic
 //
 //  Created by Derek Clarkson on 8/04/2016.
@@ -7,9 +7,8 @@
 //
 
 @import Foundation;
+@class UserInterface;
 
-@class SingletonA;
-
-@interface SingletonB : NSObject
-@property (nonatomic, strong) SingletonA *singletonA;
+@interface Networking : NSObject
+@property (nonatomic, strong) UserInterface *ui;
 @end

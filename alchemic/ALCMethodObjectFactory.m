@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(NSString *) defaultName {
+-(NSString *) defaultModelKey {
     return [ALCRuntime selectorDescription:_parentObjectFactory.objectClass selector:_selector];
 }
 
@@ -68,9 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ALCObjectCompletion) objectCompletion {
-    blockSelf;
     return ^(ALCObjectCompletionArgs){
-        STLog(strongSelf.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(strongSelf.objectClass));
         [[Alchemic mainContext] injectDependencies:object];
     };
 }

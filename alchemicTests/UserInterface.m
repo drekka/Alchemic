@@ -6,13 +6,13 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "SingletonB.h"
+#import "UserInterface.h"
 
 #import <Alchemic/Alchemic.h>
 
-@implementation SingletonB
+@implementation UserInterface
 
 AcRegister();
-AcInject(singletonA)
+AcInject(networking)
 
 @end

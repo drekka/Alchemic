@@ -13,7 +13,7 @@
 		6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB001C8DB88C00267E77 /* Alchemic.m */; };
 		6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C1ADB051C9050FB00267E77 /* ALCInstantiation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */; };
-		6C237CD21CCA6EEF00B8F551 /* FactoryA.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C237CD11CCA6EEF00B8F551 /* FactoryA.m */; };
+		6C237CD21CCA6EEF00B8F551 /* RequestEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C237CD11CCA6EEF00B8F551 /* RequestEngine.m */; };
 		6C237CD61CCA74C700B8F551 /* ALCFactoryName.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C237CD41CCA746700B8F551 /* ALCFactoryName.m */; };
 		6C237CD71CCA74CE00B8F551 /* ALCFactoryName.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C237CD31CCA746700B8F551 /* ALCFactoryName.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C24CCDE1CA42B0C0026D18C /* TopThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC301C96EB9F00B56578 /* TopThing.m */; };
@@ -31,8 +31,8 @@
 		6C25D27D1C57563200D982DC /* ALCModelImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C25D27B1C57563200D982DC /* ALCModelImpl.m */; };
 		6C25D2801C5760FF00D982DC /* ALCAbstractObjectFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D27E1C5760FF00D982DC /* ALCAbstractObjectFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C25D2811C5760FF00D982DC /* ALCAbstractObjectFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C25D27F1C5760FF00D982DC /* ALCAbstractObjectFactory.m */; };
-		6C2A28691CB7EF65008F43E6 /* SingletonB.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A28661CB7EF5D008F43E6 /* SingletonB.m */; };
-		6C2A286A1CB7EFB5008F43E6 /* SingletonA.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC2849E1CB69FCA006B613F /* SingletonA.m */; };
+		6C2A28691CB7EF65008F43E6 /* UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A28661CB7EF5D008F43E6 /* UserInterface.m */; };
+		6C2A286A1CB7EFB5008F43E6 /* Networking.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC2849E1CB69FCA006B613F /* Networking.m */; };
 		6C3AFBA91C5CE89500B4FCAA /* ALCObjectFactoryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C3AFBA81C5CE89500B4FCAA /* ALCObjectFactoryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C3AFBAC1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C3AFBAA1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C3AFBAD1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBAB1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.m */; };
@@ -111,8 +111,8 @@
 		6CC284991CB69CC5006B613F /* AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC284971CB69BDC006B613F /* AlchemicTests.m */; };
 		6CC2849B1CB69EE6006B613F /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */; };
 		6CC464221C7986D500B20A95 /* ALCDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC464211C7986D500B20A95 /* ALCDependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6CCFA8DA1CD8EA960013BF71 /* SingletonC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D91CD8EA960013BF71 /* SingletonC.m */; };
-		6CDF430B1CCE3FFB00F132AE /* NonManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF43081CCE3E3700F132AE /* NonManagedObject.m */; };
+		6CCFA8DA1CD8EA960013BF71 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D91CD8EA960013BF71 /* Database.m */; };
+		6CDF430B1CCE3FFB00F132AE /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF43081CCE3E3700F132AE /* HTTPServer.m */; };
 		6CED05761BCB545800B6C55B /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
 		6CED05781BCB548700B6C55B /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
 		6CED05791BCB54B800B6C55B /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -196,8 +196,8 @@
 		6C1ADB001C8DB88C00267E77 /* Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alchemic.m; sourceTree = "<group>"; };
 		6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInstantiation.h; sourceTree = "<group>"; };
 		6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCInstantiation.m; sourceTree = "<group>"; };
-		6C237CD01CCA6EEF00B8F551 /* FactoryA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactoryA.h; sourceTree = "<group>"; };
-		6C237CD11CCA6EEF00B8F551 /* FactoryA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactoryA.m; sourceTree = "<group>"; };
+		6C237CD01CCA6EEF00B8F551 /* RequestEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestEngine.h; sourceTree = "<group>"; };
+		6C237CD11CCA6EEF00B8F551 /* RequestEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestEngine.m; sourceTree = "<group>"; };
 		6C237CD31CCA746700B8F551 /* ALCFactoryName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCFactoryName.h; sourceTree = "<group>"; };
 		6C237CD41CCA746700B8F551 /* ALCFactoryName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCFactoryName.m; sourceTree = "<group>"; };
 		6C24CCFB1CA42BA80026D18C /* Integration tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Integration tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -209,8 +209,8 @@
 		6C25D27B1C57563200D982DC /* ALCModelImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCModelImpl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C25D27E1C5760FF00D982DC /* ALCAbstractObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractObjectFactory.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C25D27F1C5760FF00D982DC /* ALCAbstractObjectFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractObjectFactory.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		6C2A28651CB7EF5D008F43E6 /* SingletonB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonB.h; sourceTree = "<group>"; };
-		6C2A28661CB7EF5D008F43E6 /* SingletonB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonB.m; sourceTree = "<group>"; };
+		6C2A28651CB7EF5D008F43E6 /* UserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInterface.h; sourceTree = "<group>"; };
+		6C2A28661CB7EF5D008F43E6 /* UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInterface.m; sourceTree = "<group>"; };
 		6C36D74F1B3851680073C4FB /* Alchemic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alchemic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C3AFBA81C5CE89500B4FCAA /* ALCObjectFactoryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCObjectFactoryType.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C3AFBAA1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCObjectFactoryTypeSingleton.h; sourceTree = "<group>"; };
@@ -285,14 +285,14 @@
 		6CC2848C1CB671D5006B613F /* NSSet+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+Alchemic.m"; sourceTree = "<group>"; };
 		6CC284971CB69BDC006B613F /* AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlchemicTests.m; sourceTree = "<group>"; };
 		6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = StoryTellerConfig.json; sourceTree = "<group>"; };
-		6CC2849D1CB69FCA006B613F /* SingletonA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonA.h; sourceTree = "<group>"; };
-		6CC2849E1CB69FCA006B613F /* SingletonA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonA.m; sourceTree = "<group>"; };
+		6CC2849D1CB69FCA006B613F /* Networking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Networking.h; sourceTree = "<group>"; };
+		6CC2849E1CB69FCA006B613F /* Networking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Networking.m; sourceTree = "<group>"; };
 		6CC464211C7986D500B20A95 /* ALCDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCDependency.h; sourceTree = "<group>"; };
 		6CCFA8D61CD78E940013BF71 /* ClassInitializers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassInitializers.m; sourceTree = "<group>"; };
-		6CCFA8D81CD8EA960013BF71 /* SingletonC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonC.h; sourceTree = "<group>"; };
-		6CCFA8D91CD8EA960013BF71 /* SingletonC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonC.m; sourceTree = "<group>"; };
-		6CDF43071CCE3E3700F132AE /* NonManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonManagedObject.h; sourceTree = "<group>"; };
-		6CDF43081CCE3E3700F132AE /* NonManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NonManagedObject.m; sourceTree = "<group>"; };
+		6CCFA8D81CD8EA960013BF71 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
+		6CCFA8D91CD8EA960013BF71 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
+		6CDF43071CCE3E3700F132AE /* HTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPServer.h; sourceTree = "<group>"; };
+		6CDF43081CCE3E3700F132AE /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		6CED05751BCB545800B6C55B /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6CED05771BCB548700B6C55B /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
 		6CFD6E971B456D27008B6695 /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOCMock.a; path = "External/OCMock-3.1.2/iOS/libOCMock.a"; sourceTree = "<group>"; };
@@ -569,16 +569,16 @@
 		6CC2849C1CB69F4E006B613F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				6CC2849D1CB69FCA006B613F /* SingletonA.h */,
-				6CC2849E1CB69FCA006B613F /* SingletonA.m */,
-				6C2A28651CB7EF5D008F43E6 /* SingletonB.h */,
-				6C2A28661CB7EF5D008F43E6 /* SingletonB.m */,
-				6C237CD01CCA6EEF00B8F551 /* FactoryA.h */,
-				6C237CD11CCA6EEF00B8F551 /* FactoryA.m */,
-				6CDF43071CCE3E3700F132AE /* NonManagedObject.h */,
-				6CDF43081CCE3E3700F132AE /* NonManagedObject.m */,
-				6CCFA8D81CD8EA960013BF71 /* SingletonC.h */,
-				6CCFA8D91CD8EA960013BF71 /* SingletonC.m */,
+				6CC2849D1CB69FCA006B613F /* Networking.h */,
+				6CC2849E1CB69FCA006B613F /* Networking.m */,
+				6C2A28651CB7EF5D008F43E6 /* UserInterface.h */,
+				6C2A28661CB7EF5D008F43E6 /* UserInterface.m */,
+				6C237CD01CCA6EEF00B8F551 /* RequestEngine.h */,
+				6C237CD11CCA6EEF00B8F551 /* RequestEngine.m */,
+				6CDF43071CCE3E3700F132AE /* HTTPServer.h */,
+				6CDF43081CCE3E3700F132AE /* HTTPServer.m */,
+				6CCFA8D81CD8EA960013BF71 /* Database.h */,
+				6CCFA8D91CD8EA960013BF71 /* Database.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -801,12 +801,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C2A286A1CB7EFB5008F43E6 /* SingletonA.m in Sources */,
-				6CCFA8DA1CD8EA960013BF71 /* SingletonC.m in Sources */,
-				6C2A28691CB7EF65008F43E6 /* SingletonB.m in Sources */,
-				6C237CD21CCA6EEF00B8F551 /* FactoryA.m in Sources */,
+				6C2A286A1CB7EFB5008F43E6 /* Networking.m in Sources */,
+				6CCFA8DA1CD8EA960013BF71 /* Database.m in Sources */,
+				6C2A28691CB7EF65008F43E6 /* UserInterface.m in Sources */,
+				6C237CD21CCA6EEF00B8F551 /* RequestEngine.m in Sources */,
 				6CC284991CB69CC5006B613F /* AlchemicTests.m in Sources */,
-				6CDF430B1CCE3FFB00F132AE /* NonManagedObject.m in Sources */,
+				6CDF430B1CCE3FFB00F132AE /* HTTPServer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
