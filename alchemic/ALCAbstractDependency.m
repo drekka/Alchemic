@@ -41,6 +41,10 @@
     [_injection resolveWithStack:resolvingStack model:model];
 }
 
+-(NSString *)resolvingDescription {
+    methodReturningObjectNotImplemented;
+}
+
 #pragma mark - ALCDependency
 
 -(NSString *)stackName {

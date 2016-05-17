@@ -73,6 +73,10 @@
     return str(@"initializer %@", self.defaultModelKey);
 }
 
+-(NSString *)resolvingDescription {
+    return str(@"Initializer %@", self.defaultModelKey);
+}
+
 -(BOOL) ready {
     return [self dependenciesReady:_arguments checkingStatusFlag:&_checkingReadyStatus];
 }

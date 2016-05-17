@@ -23,6 +23,10 @@
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {}
 
+-(NSString *)resolvingDescription {
+    methodReturningObjectNotImplemented;
+}
+
 -(ALCSimpleBlock) injectObject:(id)object {
     methodReturningBlockNotImplemented;
 }

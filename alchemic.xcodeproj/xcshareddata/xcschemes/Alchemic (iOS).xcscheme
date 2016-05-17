@@ -34,6 +34,34 @@
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6CB5CCD91CDB7AF700DC1052"
+               BuildableName = "Functional tests.xctest"
+               BlueprintName = "Functional tests"
+               ReferencedContainer = "container:alchemic.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6C24CCE11CA42BA80026D18C"
+               BuildableName = "Integration tests.xctest"
+               BlueprintName = "Integration tests"
+               ReferencedContainer = "container:alchemic.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -50,6 +78,26 @@
                BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
                BuildableName = "Unit tests.xctest"
                BlueprintName = "Unit tests"
+               ReferencedContainer = "container:alchemic.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6CB5CCD91CDB7AF700DC1052"
+               BuildableName = "Functional tests.xctest"
+               BlueprintName = "Functional tests"
+               ReferencedContainer = "container:alchemic.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6C24CCE11CA42BA80026D18C"
+               BuildableName = "Integration tests.xctest"
+               BlueprintName = "Integration tests"
                ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>

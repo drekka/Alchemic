@@ -31,6 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
     return NULL;
 }
 
+-(NSString *)resolvingDescription {
+    return str(@"Argument %i", self.index);
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

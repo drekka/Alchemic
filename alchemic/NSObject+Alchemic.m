@@ -44,14 +44,14 @@ NS_ASSUME_NONNULL_BEGIN
             [resolvingStack addObject:resolvable];
             
             // Build names based on resolvable default model keys.
-//            NSMutableArray<NSString *> *names = [[NSMutableArray alloc] initWithCapacity:resolvingStack.count];
-//            [resolvingStack enumerateObjectsUsingBlock:^(id<ALCResolvable> stackResolvable, NSUInteger idx, BOOL *stop) {
-//                [names addObject:stackResolvable.defaultModelKey];
-//            }];
-//            
+            NSMutableArray<NSString *> *names = [[NSMutableArray alloc] initWithCapacity:resolvingStack.count];
+            [resolvingStack enumerateObjectsUsingBlock:^(id<ALCResolvable> stackResolvable, NSUInteger idx, BOOL *stop) {
+                [names addObject:stackResolvable.resolvingDescription];
+            }];
+            
             throwException(@"AlchemicCircularDependency",
                            @{@"stack":resolvingStack},
-                           @"Circular dependency detected: %@", [resolvingStack componentsJoinedByString:@" -> "]);
+                           @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
         }
 
         // We are enumerating dependencies then we have looped back through a property injection so return.

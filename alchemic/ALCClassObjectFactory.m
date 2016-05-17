@@ -105,4 +105,8 @@
     return str(@"%@ class %@", super.description, self.defaultModelKey);
 }
 
+-(NSString *)resolvingDescription {
+    return str(@"Class %@", NSStringFromClass(self.objectClass));
+}
+
 @end

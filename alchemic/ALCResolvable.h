@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) Class objectClass;
 
+@property (nonatomic, strong, readonly) NSString *resolvingDescription;
+
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                    model:(id<ALCModel>)model;
 

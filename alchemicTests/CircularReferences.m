@@ -92,7 +92,7 @@
         [_context start];
         XCTFail(@"Circular exception not thrown");
     } @catch (ALCException *exception) {
-        STLog(_context, @"Stack: %@", exception.userInfo[@"stack"]);
+        STLog(_context, @"Stack: %@", exception.description);
         XCTAssertEqualObjects(@"AlchemicCircularDependency", exception.name);
     } @catch (NSException *exception) {
         XCTFail(@"Un-expected exception %@", exception);

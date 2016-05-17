@@ -69,6 +69,10 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+-(NSString *)resolvingDescription {
+    methodReturningObjectNotImplemented;
+}
+
 #pragma mark - Injecting
 
 // Not allowed to be called.

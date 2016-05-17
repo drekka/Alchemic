@@ -50,10 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
     return NSStringFromClass(self.objectClass);
 }
 
--(NSString *)attributesDescription {
-    return @"";
-}
-
 #pragma mark - Lifecycle
 
 -(instancetype) init {
@@ -113,6 +109,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 #pragma mark - Descriptions
+
+-(NSString *)resolvingDescription {
+    methodReturningObjectNotImplemented;
+}
 
 -(NSString *) description {
 

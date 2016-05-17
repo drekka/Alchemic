@@ -81,6 +81,10 @@ NS_ASSUME_NONNULL_BEGIN
     return str(@"%@ method %@", super.description, self.defaultModelKey);
 }
 
+-(NSString *)resolvingDescription {
+    return str(@"Method %@", self.defaultModelKey);
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

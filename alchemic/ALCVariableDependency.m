@@ -8,6 +8,7 @@
 
 #import "ALCVariableDependency.h"
 #import "ALCInjector.h"
+#import "ALCInternalMacros.h"
 
 @implementation ALCVariableDependency {
     Ivar _ivar;
@@ -37,6 +38,10 @@
 
 -(ALCSimpleBlock)injectObject:(id)object {
     return [self.injection setObject:object variable:_ivar];
+}
+
+-(NSString *)resolvingDescription {
+    return str(@"Variable %@", _name);
 }
 
 @end
