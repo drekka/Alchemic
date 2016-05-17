@@ -226,6 +226,8 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return moreBundles;
 }
 
+#pragma mark - Executing blocks
+
 +(void) executeSimpleBlock:(nullable ALCSimpleBlock) block {
     if (block) {
         block();

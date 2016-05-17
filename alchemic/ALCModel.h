@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, strong) NSSet<id<ALCObjectFactory>> *objectFactories;
 
+@property (nonatomic, readonly, strong) NSSet<ALCClassObjectFactory *> *classObjectFactories;
+
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name;
 
 -(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;

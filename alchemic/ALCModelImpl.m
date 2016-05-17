@@ -6,19 +6,24 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import UIKit;
+
 #import <StoryTeller/StoryTeller.h>
 
 #import "ALCModelImpl.h"
 #import "ALCObjectFactory.h"
 #import "ALCAbstractObjectFactory.h"
+#import "ALCClassObjectFactory.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCInternalMacros.h"
 #import "ALCInstantiation.h"
+#import "ALCIsReference.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCModelImpl {
     NSMutableDictionary<NSString *, id<ALCObjectFactory>> *_objectFactories;
+    ALCClassObjectFactory *_uiAppDelegateFactory;
 }
 
 -(instancetype) init {
@@ -33,6 +38,16 @@ NS_ASSUME_NONNULL_BEGIN
     return _objectFactories.allValues;
 }
 
+-(NSArray<ALCClassObjectFactory *> *) classObjectFactories {
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
+        if ([objectFactory isKindOfClass:[ALCClassObjectFactory class]]) {
+            [results addObject:objectFactory];
+        }
+    }];
+    return results;
+}
+
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name {
     if (_objectFactories[name]) {
         throwException(@"AlchemicDuplicateName", nil, @"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name]);
@@ -41,13 +56,31 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) resolveDependencies {
+    
+    [self modelWillResolve];
+    
     STLog(self, @"Resolving ...");
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         [objectFactory resolveWithStack:[NSMutableArray array] model:self];
     }];
 }
 
+-(void) modelWillResolve {
+    
+    // Locate special factories and configure them.
+    [self.classObjectFactories enumerateObjectsUsingBlock:^(ALCClassObjectFactory *objectFactory, BOOL *stop) {
+        
+        // UIApplicationDelegate
+        if ([objectFactory.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
+            self->_uiAppDelegateFactory = objectFactory;
+            [objectFactory configureWithOptions:@[AcReference] unknownOptionHandler:^(id option){}];
+            *stop = YES;
+        }
+    }];
+}
+
 -(void) startSingletons {
+    
     STLog(self, @"Instantiating ...");
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         if (objectFactory.factoryType == ALCFactoryTypeSingleton
@@ -58,6 +91,16 @@ NS_ASSUME_NONNULL_BEGIN
             [instantiation complete];
         }
     }];
+    
+    [self modelDidInstantiate];
+}
+
+-(void) modelDidInstantiate {
+    if (_uiAppDelegateFactory) {
+        id delegate = [UIApplication sharedApplication].delegate;
+        ALCObjectCompletion completion = [_uiAppDelegateFactory setObject:delegate];
+        completion(delegate);
+    }
 }
 
 -(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {

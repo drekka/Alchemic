@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Validates that the passed selector occurs on the passed class and has a correct set of arguments stored in the macro processor.
-
+ 
  @param aClass The class to be used to check the selector again.
  @param selector The selector to check.
  @exception ALCException If there is a problem.
@@ -61,6 +61,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Scanning
 
 +(void) scanRuntimeWithContext:(id<ALCContext>) context;
+
+#pragma mark - Executing blocks
 
 +(void) executeSimpleBlock:(nullable ALCSimpleBlock) block;
 
