@@ -121,6 +121,8 @@
 		F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4023C031CE9827A00AEC0E5 /* ALCAbstractDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */; };
 		F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C041CE988F100AEC0E5 /* ALCInjector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F41DE2D51CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F41DE2D31CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h */; };
+		F41DE2D61CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -299,6 +301,8 @@
 		F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractDependency.h; sourceTree = "<group>"; };
 		F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractDependency.m; sourceTree = "<group>"; };
 		F4023C041CE988F100AEC0E5 /* ALCInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInjector.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		F41DE2D31CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeUIApplicationDelegate.h; sourceTree = "<group>"; };
+		F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeUIApplicationDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -579,6 +583,8 @@
 				6CDF43081CCE3E3700F132AE /* HTTPServer.m */,
 				6CCFA8D81CD8EA960013BF71 /* Database.h */,
 				6CCFA8D91CD8EA960013BF71 /* Database.m */,
+				F41DE2D31CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h */,
+				F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -625,6 +631,7 @@
 				6CC464221C7986D500B20A95 /* ALCDependency.h in Headers */,
 				6C4D85B01C7F37400061CA84 /* ALCInstantiator.h in Headers */,
 				6C3AFBBC1C60D96400B4FCAA /* ALCModelSearchCriteria.h in Headers */,
+				F41DE2D51CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h in Headers */,
 				6C25D2771C566E6A00D982DC /* ALCObjectFactory.h in Headers */,
 				6CB7C4381CC7BC1300C05B0B /* ALCIsPrimary.h in Headers */,
 				6CB7C4361CC7BC1300C05B0B /* ALCIsFactory.h in Headers */,
@@ -840,6 +847,7 @@
 				6CB5CCD71CDB70C800DC1052 /* ALCDefs.m in Sources */,
 				6C4B56131C6E0A390040AEC2 /* ALCClassObjectFactory.m in Sources */,
 				6C71D54C1CA1747200D25AC0 /* ALCTypeData.m in Sources */,
+				F41DE2D61CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m in Sources */,
 				6C25D27D1C57563200D982DC /* ALCModelImpl.m in Sources */,
 				6CB7C4391CC7BC1300C05B0B /* ALCIsPrimary.m in Sources */,
 				6CC284851CB53093006B613F /* ALCRuntimeScanner.m in Sources */,

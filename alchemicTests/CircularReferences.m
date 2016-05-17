@@ -25,11 +25,6 @@
 }
 
 -(void) setUp {
-    [STStoryTeller storyTeller].logger.lineTemplate = [NSString stringWithFormat:@"%@:%@ %@",
-                                                       STLoggerTemplateKeyFile,
-                                                       STLoggerTemplateKeyLine,
-                                                       STLoggerTemplateKeyMessage
-                                                       ];
     STStartLogging(@"<ALCContext>");
     STStartLogging(@"is [TopThing]");
     STStartLogging(@"is [AnotherThing]");

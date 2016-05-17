@@ -19,30 +19,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef BOOL (^ALCClassSelector) (Class aClass);
-typedef NSSet<NSBundle *>  * _Nullable (^ALCClassProcessor) (Class aClass);
+#define ALCClassSelectorArgs Class aClass
+typedef BOOL (^ALCClassSelector) (ALCClassSelectorArgs);
+
+#define ALCClassProcessorArgs ALCRuntimeScanner *scanner, Class aClass
+typedef NSSet<NSBundle *>  * _Nullable (^ALCClassProcessor) (ALCClassProcessorArgs);
 
 @implementation ALCRuntimeScanner {
     ALCClassSelector _classSelector;
     ALCClassProcessor _classProcessor;
 }
 
--(nonnull instancetype) initWithClassSelector:(nonnull ALCClassSelector) classSelector
-                               classProcessor:(nonnull ALCClassProcessor) classProcessor {
-    self = [super init];
-    if (self) {
-        _classSelector = classSelector;
-        _classProcessor = classProcessor;
-    }
-    return self;
-}
-
--(nullable NSSet<NSBundle *> *) scanClass:(Class) aClass {
-    return _classSelector(aClass) ? _classProcessor(aClass) : nil;
-}
-
 +(nullable NSSet<NSBundle *> *) scanBundles:(NSSet<NSBundle *> *) bundles context:(id<ALCContext>) context {
-
+    
     NSArray<ALCRuntimeScanner *> *scanners = @[
                                                [self modelScannerForContext:context],
                                                [self resourceLocatorScannerForContext:context],
@@ -57,76 +46,38 @@ typedef NSSet<NSBundle *>  * _Nullable (^ALCClassProcessor) (Class aClass);
 
 #pragma mark - Factory methods
 
-+(nonnull instancetype) modelScannerForContext:(id<ALCContext>) context {
-    AcIgnoreSelectorWarnings(
-                           SEL alchemicFunctionSelector = @selector(alchemic:);
-                           )
++(instancetype) modelScannerForContext:(id<ALCContext>) context {
     return [[ALCRuntimeScanner alloc]
-            initWithClassSelector:^BOOL(Class aClass) {
+            initWithClassSelector:^BOOL(ALCClassSelectorArgs) {
                 return YES;
             }
-            classProcessor:^NSSet<NSBundle *> *_Nullable (Class aClass) {
-
-                // First check for a swift based call.
-                if ([aClass respondsToSelector:alchemicFunctionSelector]) {
-                    STLog(aClass, @"Swift class %@ has alchemic() method, executing it ...", NSStringFromClass(aClass));
-                    ALCClassObjectFactory *objectFactory = [context registerObjectFactoryForClass:aClass];
-                    AcIgnoreSelectorWarnings(
-                                           SEL selector = @selector(alchemic:);
-                                           ((void (*)(id, SEL, ALCClassObjectFactory *))objc_msgSend)(aClass, selector, objectFactory);
-                                           )
-                    return nil;
-                }
-
-                // Get the class methods. We need to get the class of the class for them.
-                unsigned int methodCount;
-                Method *classMethods = class_copyMethodList(object_getClass(aClass), &methodCount);
-
-                // Search the methods for alchemic methods. Their presence triggers registrations.
+            classProcessor:^NSSet<NSBundle *> *_Nullable (ALCClassProcessorArgs) {
                 ALCClassObjectFactory *classObjectFactory;
-                for (size_t idx = 0; idx < methodCount; idx++) {
-
-                    // If the method is not an alchemic one, then ignore it.
-                    SEL nextSelector = method_getName(classMethods[idx]);
-                    if (![NSStringFromSelector(nextSelector) hasPrefix:alc_toNSString(ALCHEMIC_PREFIX)]) {
-                        continue;
-                    }
-
-                    // If we are here then we have an alchemic method to process, so create a class builder for for the class.
-                    if (classObjectFactory == nil) {
-                        STLog(aClass, @"Class %@ has Alchemic methods", NSStringFromClass(aClass));
-                        classObjectFactory = [context registerObjectFactoryForClass:aClass];
-                    }
-
-                    // Call the method, passing it the current class builder.
-                    ((void (*)(id, SEL, ALCClassObjectFactory *))objc_msgSend)(aClass, nextSelector, classObjectFactory);
-
-                }
-
-                free(classMethods);
+                [scanner context:context executeAlchemicMethod:aClass classFactory:&classObjectFactory];
+                [scanner context:context executeAlchemicRegistrationMethods:aClass classFactory:&classObjectFactory];
                 return nil;
             }];
 }
 
-+(nonnull instancetype) resourceLocatorScannerForContext:(id<ALCContext>) context {
++(instancetype) resourceLocatorScannerForContext:(id<ALCContext>) context {
     return [[ALCRuntimeScanner alloc]
-            initWithClassSelector:^BOOL(Class aClass) {
+            initWithClassSelector:^BOOL(ALCClassSelectorArgs) {
                 return NO;
                 //return [aClass conformsToProtocol:@protocol(ALCResourceLocator)];
             }
-            classProcessor:^NSSet<NSBundle *> *_Nullable (Class aClass) {
+            classProcessor:^NSSet<NSBundle *> *_Nullable (ALCClassProcessorArgs) {
                 //ALCBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
                 //classBuilder.value = [[aClass alloc] init];
                 return nil;
             }];
 }
 
-+(nonnull instancetype) configScannerForContext:(id<ALCContext>) context {
++(instancetype) configScannerForContext:(id<ALCContext>) context {
     return [[ALCRuntimeScanner alloc]
-            initWithClassSelector:^BOOL(Class aClass) {
+            initWithClassSelector:^BOOL(ALCClassSelectorArgs) {
                 return [aClass conformsToProtocol:@protocol(ALCConfig)];
             }
-            classProcessor:^NSSet<NSBundle *> *_Nullable (Class aClass) {
+            classProcessor:^NSSet<NSBundle *> *_Nullable (ALCClassProcessorArgs) {
                 STLog(self, @"Reading config from %@", NSStringFromClass(aClass));
                 NSMutableSet<NSBundle *> *moreBundles;
                 NSArray<Class> *configClasses = [((id<ALCConfig>)aClass) scanBundlesWithClasses];
@@ -138,6 +89,71 @@ typedef NSSet<NSBundle *>  * _Nullable (^ALCClassProcessor) (Class aClass);
                 }
                 return moreBundles;
             }];
+}
+
+#pragma mark - Initializer
+
+-(instancetype) initWithClassSelector:(ALCClassSelector) classSelector
+                               classProcessor:(ALCClassProcessor) classProcessor {
+    self = [super init];
+    if (self) {
+        _classSelector = classSelector;
+        _classProcessor = classProcessor;
+    }
+    return self;
+}
+
+#pragma mark - Tasks
+
+-(nullable NSSet<NSBundle *> *) scanClass:(Class) aClass {
+    return _classSelector(aClass) ? _classProcessor(self, aClass) : nil;
+}
+
+-(void) context:(id<ALCContext>) context executeAlchemicMethod:(Class) inClass classFactory:(ALCClassObjectFactory **) factory {
+    
+    AcIgnoreSelectorWarnings(
+                             SEL alchemicFunctionSelector = @selector(alchemic:);
+                             )
+    if (![inClass respondsToSelector:alchemicFunctionSelector]) {
+        return;
+    }
+    
+    STLog(inClass, @"Class %@ has alchemic() method, executing", NSStringFromClass(inClass));
+    if (!*factory) {
+        *factory = [context registerObjectFactoryForClass:inClass];
+    }
+    
+    // Call the function.
+    ((void (*)(id, SEL, ALCClassObjectFactory *))objc_msgSend)(inClass, alchemicFunctionSelector, *factory);
+}
+
+-(void) context:(id<ALCContext>) context executeAlchemicRegistrationMethods:(Class) inClass classFactory:(ALCClassObjectFactory **) factory {
+    
+    // Get the class methods. We need to get the class of the class for them.
+    unsigned int methodCount;
+    Method *classMethods = class_copyMethodList(object_getClass(inClass), &methodCount);
+    
+    // Search the methods for alchemic methods. Their presence triggers registrations.
+    for (size_t idx = 0; idx < methodCount; idx++) {
+        
+        // If the method is not an alchemic one, then ignore it.
+        SEL nextSelector = method_getName(classMethods[idx]);
+        if (![NSStringFromSelector(nextSelector) hasPrefix:alc_toNSString(ALCHEMIC_PREFIX)]) {
+            continue;
+        }
+        
+        // If we are here then we have an alchemic method to process, so create a class builder for for the class.
+        STLog(inClass, @"Class %@ has alchemic methods", NSStringFromClass(inClass));
+        if (!*factory) {
+            *factory = [context registerObjectFactoryForClass:inClass];
+        }
+        
+        // Call the method, passing it the current class builder.
+        ((void (*)(id, SEL, ALCClassObjectFactory *))objc_msgSend)(inClass, nextSelector, *factory);
+        
+    }
+    
+    free(classMethods);
 }
 
 @end

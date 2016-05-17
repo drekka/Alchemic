@@ -23,11 +23,13 @@ static __strong id<ALCContext> __mainContext;
             if ([processInfo.arguments containsObject:@"--alchemic-logAll"]) {
                 STStartLogging(@"LogAll");
             }
+
             if ([processInfo.arguments containsObject:@"--alchemic-colorizeLog"]) {
                 ((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
                 ((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor blackColor];
                 ((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor lightGrayColor];
             }
+
             if (! [processInfo.arguments containsObject:@"--alchemic-nostart"]) {
                 [self initContext];
                 [ALCRuntime scanRuntimeWithContext:__mainContext];
