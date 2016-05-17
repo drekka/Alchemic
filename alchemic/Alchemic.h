@@ -14,7 +14,7 @@ FOUNDATION_EXPORT double alchemicVersionNumber;
 //! Project version string for alchemic.
 FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 
-#import <Alchemic/ALCAbstractConstantValue.h>
+#import <Alchemic/ALCAbstractConstantInjector.h>
 #import <Alchemic/ALCAbstractDependency.h>
 #import <Alchemic/ALCAbstractObjectFactory.h>
 #import <Alchemic/ALCMethodArgument.h>
@@ -22,14 +22,14 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 #import <Alchemic/ALCClassObjectFactoryInitializer.h>
 #import <Alchemic/ALCConfig.h>
 #import <Alchemic/ALCConstant.h>
-#import <Alchemic/ALCConstants.h>
+#import <Alchemic/ALCConstantInjectors.h>
 #import <Alchemic/ALCContextImpl.h>
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCDependency.h>
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/AlchemicAware.h>
-#import <Alchemic/ALCInjection.h>
+#import <Alchemic/ALCInjector.h>
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCInstantiator.h>
 #import <Alchemic/ALCInternalMacros.h>
@@ -39,7 +39,7 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCMethodObjectFactory.h>
 #import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCModelInjection.h>
+#import <Alchemic/ALCModelObjectInjector.h>
 #import <Alchemic/ALCModelImpl.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCObjectFactory.h>

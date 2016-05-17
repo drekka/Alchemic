@@ -10,7 +10,7 @@
 
 #import "ALCInternalMacros.h"
 #import "NSArray+Alchemic.h"
-#import "ALCInjection.h"
+#import "ALCInjector.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... {
     alc_loadVarArgsIntoArray(firstCriteria, criteriaDefs);
-    id<ALCInjection> injection = [criteriaDefs injectionWithClass:argumentClass allowConstants:YES];
+    id<ALCInjector> injection = [criteriaDefs injectionWithClass:argumentClass allowConstants:YES];
     return [[ALCMethodArgument alloc] initWithInjection:injection];
 }
 

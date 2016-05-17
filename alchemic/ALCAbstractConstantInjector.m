@@ -6,12 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractConstantValue.h"
+#import "ALCAbstractConstantInjector.h"
 
 #import "ALCInternalMacros.h"
 #import "ALCDefs.h"
 
-@implementation ALCAbstractConstantValue
+@implementation ALCAbstractConstantInjector
 
 -(BOOL) ready {
     return YES;

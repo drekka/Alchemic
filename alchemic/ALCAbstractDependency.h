@@ -10,17 +10,17 @@
 
 #import "ALCDependency.h"
 
-@protocol ALCInjection;
+@protocol ALCInjector;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractDependency : NSObject<ALCDependency>
 
-@property(nonatomic, strong, readonly) id<ALCInjection> injection;
+@property(nonatomic, strong, readonly) id<ALCInjector> injection;
 
 -(instancetype) init NS_UNAVAILABLE;
 
--(instancetype) initWithInjection:(id<ALCInjection>) injection NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithInjection:(id<ALCInjector>) injection NS_DESIGNATED_INITIALIZER;
 
 @end
 

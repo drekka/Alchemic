@@ -36,7 +36,7 @@
     return self;
 }
 
--(void) registerInjection:(id<ALCInjection>) injection forVariable:(Ivar) variable withName:(NSString *) variableName {
+-(void) registerInjection:(id<ALCInjector>) injection forVariable:(Ivar) variable withName:(NSString *) variableName {
     ALCVariableDependency *ref = [ALCVariableDependency variableDependencyWithInjection:injection
                                                                                intoIvar:variable
                                                                                    name:variableName];

@@ -1,5 +1,5 @@
 //
-//  ALCInjection.h
+//  ALCInjector.h
 //  alchemic
 //
 //  Created by Derek Clarkson on 16/05/2016.
@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ALCInjection <ALCResolvable>
+@protocol ALCInjector <ALCResolvable>
 
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable;
 

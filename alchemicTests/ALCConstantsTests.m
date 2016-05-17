@@ -46,7 +46,7 @@
 }
 
 -(void) testMethodArgUsingALCInt {
-    id<ALCInjection> arg = AcInt(5);
+    id<ALCInjector> arg = AcInt(5);
     id<ALCDependency> dep = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:arg, nil];
     id result = [self invokeSelector:@selector(doWithInt:) arguments:@[dep]];
     XCTAssertEqual(5, self.anInt);
@@ -72,7 +72,7 @@
 }
 
 //-(void) testMethodArgUsingALCString {
-//    id<ALCInjection> arg = AcString(@"abc");
+//    id<ALCInjector> arg = AcString(@"abc");
 //    id<ALCDependency> dep = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:arg, nil];
 //    [self invokeSelector:@selector(setAString:) arguments:@[dep]];
 //    XCTAssertEqual(@"abc", self.aString);
@@ -96,7 +96,7 @@
 }
 
 //-(void) testMethodArgUsingALCCGRect {
-//    id<ALCInjection> arg = AcCGRect(CGRectMake(0.0, 0.0, 100.0, 100.0));
+//    id<ALCInjector> arg = AcCGRect(CGRectMake(0.0, 0.0, 100.0, 100.0));
 //    id<ALCDependency> dep = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:arg, nil];
 //    [self invokeSelector:@selector(setACGRect:) arguments:@[dep]];
 //    XCTAssertTrue(CGRectEqualToRect(CGRectMake(0.0, 0.0, 100.0, 100.0), self.aCGRect));
@@ -104,7 +104,7 @@
 
 #pragma mark - Internal
 
--(void) injectVariable:(NSString *) variable usingDependency:(id<ALCInjection>) dependency {
+-(void) injectVariable:(NSString *) variable usingDependency:(id<ALCInjector>) dependency {
     Ivar ivar = [ALCRuntime aClass:[self class] variableForInjectionPoint:variable];
     [dependency setObject:self variable:ivar];
 }

@@ -9,8 +9,8 @@
 @import Foundation;
 
 #import "ALCConstant.h"
-#import "ALCInjection.h"
+#import "ALCInjector.h"
 
-@interface ALCAbstractConstantValue : NSObject<ALCConstant, ALCInjection>
+@interface ALCAbstractConstantInjector : NSObject<ALCConstant, ALCInjector>
 
 @end

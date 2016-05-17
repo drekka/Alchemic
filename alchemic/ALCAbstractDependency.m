@@ -9,7 +9,7 @@
 #import "ALCAbstractDependency.h"
 
 #import "ALCInternalMacros.h"
-#import "ALCInjection.h"
+#import "ALCInjector.h"
 
 @implementation ALCAbstractDependency
 
@@ -18,7 +18,7 @@
     return nil;
 }
 
--(instancetype) initWithInjection:(id<ALCInjection>) injection {
+-(instancetype) initWithInjection:(id<ALCInjector>) injection {
     self = [super init];
     if (self) {
         _injection = injection;

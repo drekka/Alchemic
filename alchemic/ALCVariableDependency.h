@@ -11,7 +11,7 @@
 
 #import "ALCAbstractDependency.h"
 
-@protocol ALCInjection;
+@protocol ALCInjector;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(instancetype)initWithInjection:(id<ALCDependency>)injection NS_UNAVAILABLE;
 
-+(instancetype) variableDependencyWithInjection:(id<ALCInjection>) injection
++(instancetype) variableDependencyWithInjection:(id<ALCInjector>) injection
                                        intoIvar:(Ivar) ivar
                                            name:(NSString *) name;
 

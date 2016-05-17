@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCConstants.h"
+#import "ALCConstantInjectors.h"
 #import "NSObject+Alchemic.h"
 #import "ALCRuntime.h"
 #import "ALCInternalMacros.h"
@@ -16,7 +16,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #define ALCConstantFunctionImplementation(name, type) \
-id<ALCInjection> Ac ## name(type value) { \
+id<ALCInjector> Ac ## name(type value) { \
     return [ALCConstant ## name constantValue:value]; \
 }
 

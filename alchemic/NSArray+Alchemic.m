@@ -11,7 +11,7 @@
 #import "ALCDependency.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCConstant.h"
-#import "ALCModelInjection.h"
+#import "ALCModelObjectInjector.h"
 #import "ALCMethodArgument.h"
 #import "ALCInternalMacros.h"
 
@@ -46,10 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
     return arguments;
 }
 
--(id<ALCInjection>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants {
+-(id<ALCInjector>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants {
     
     __block ALCModelSearchCriteria *searchCriteria;
-    __block id<ALCInjection> constant;
+    __block id<ALCInjector> constant;
     
     for (id criteria in self) {
         
@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
         searchCriteria = [ALCModelSearchCriteria searchCriteriaForClass:injectionClass];
     }
     
-    return constant ? constant : [[ALCModelInjection alloc] initWithObjectClass:injectionClass
+    return constant ? constant : [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
                                                                        criteria:searchCriteria];
 }
 

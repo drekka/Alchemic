@@ -8,7 +8,7 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCModelInjection.h"
+#import "ALCModelObjectInjector.h"
 #import "ALCModel.h"
 #import "ALCObjectFactory.h"
 #import "ALCInternalMacros.h"
@@ -19,12 +19,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCModelInjection {
+@implementation ALCModelObjectInjector {
     ALCModelSearchCriteria *_criteria;
     NSArray<id<ALCObjectFactory>> *_resolvedFactories;
 }
-
-// TODO: Hello
 
 @synthesize objectClass = _objectClass;
 

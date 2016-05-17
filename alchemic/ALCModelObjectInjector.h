@@ -8,14 +8,14 @@
 
 @import Foundation;
 
-#import "ALCInjection.h"
+#import "ALCInjector.h"
 
 @class ALCModelSearchCriteria;
 @class ALCInstantiation;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCModelInjection : NSObject<ALCInjection>
+@interface ALCModelObjectInjector : NSObject<ALCInjector>
 
 @property (nonatomic, strong, readonly) id searchResult;
 

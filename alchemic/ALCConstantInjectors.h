@@ -9,14 +9,14 @@
 @import Foundation;
 @import UIKit;
 
-#import "ALCAbstractConstantValue.h"
-#import "ALCInjection.h"
+#import "ALCAbstractConstantInjector.h"
+#import "ALCInjector.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 #define ALCConstantHeader(name, type) \
-id<ALCInjection> Ac ## name(type value); \
-@interface ALCConstant ## name : ALCAbstractConstantValue \
+id<ALCInjector> Ac ## name(type value); \
+@interface ALCConstant ## name : ALCAbstractConstantInjector \
 -(instancetype) init NS_UNAVAILABLE; \
 +(instancetype) constantValue:(type) value; \
 @end

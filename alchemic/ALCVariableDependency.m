@@ -7,14 +7,14 @@
 //
 
 #import "ALCVariableDependency.h"
-#import "ALCinjection.h"
+#import "ALCInjector.h"
 
 @implementation ALCVariableDependency {
     Ivar _ivar;
     NSString *_name;
 }
 
--(instancetype) initWithInjection:(id<ALCInjection>) injection
+-(instancetype) initWithInjection:(id<ALCInjector>) injection
                          intoIvar:(Ivar) ivar
                              name:(NSString *) name {
     self = [super initWithInjection:injection];
@@ -25,7 +25,7 @@
     return self;
 }
 
-+(instancetype) variableDependencyWithInjection:(id<ALCDependency, ALCInjection>) injection
++(instancetype) variableDependencyWithInjection:(id<ALCDependency, ALCInjector>) injection
                                        intoIvar:(Ivar) ivar
                                            name:(NSString *) name {
     return [[ALCVariableDependency alloc] initWithInjection:injection intoIvar:ivar name:name];
