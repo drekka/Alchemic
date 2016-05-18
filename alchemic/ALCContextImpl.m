@@ -46,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
     [_model startSingletons];
     STLog(self, @"\n\n%@\n", _model);
     STLog(self, @"Alchemic started.");
+    
+    // TODO: send notification
 }
 
 #pragma mark - Registration

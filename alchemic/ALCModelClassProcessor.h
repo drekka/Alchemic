@@ -10,6 +10,9 @@
 
 #import "ALCClassProcessor.h"
 
+/**
+ *  Detects Alchemic methods in classes and executes them to perform model registrations.
+ */
 @interface ALCModelClassProcessor : NSObject<ALCClassProcessor>
 
 @end

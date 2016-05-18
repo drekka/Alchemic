@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
+#pragma mark - Accessing factories
+
 -(NSArray<id<ALCObjectFactory>> *) objectFactories {
     return _objectFactories.allValues;
 }
@@ -54,12 +56,31 @@ NS_ASSUME_NONNULL_BEGIN
     return nil;
 }
 
+-(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
+    NSMutableDictionary<NSString *, id<ALCObjectFactory>> *results = [[NSMutableDictionary alloc] init];
+    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
+        if ([criteria acceptsObjectFactory:objectFactory name:name]) {
+            results[name] = objectFactory;
+        }
+    }];
+    return results;
+}
+
+#pragma mark - The model
+
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name {
     if (_objectFactories[name]) {
         throwException(DuplicateName, @"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name]);
     }
     _objectFactories[name] = objectFactory;
 }
+
+-(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName {
+    [_objectFactories removeObjectForKey:oldName];
+    [self addObjectFactory:objectFactory withName:newName];
+}
+
+#pragma mark - Life cycle
 
 -(void) resolveDependencies {
     
@@ -112,20 +133,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
-    NSMutableDictionary<NSString *, id<ALCObjectFactory>> *results = [[NSMutableDictionary alloc] init];
-    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        if ([criteria acceptsObjectFactory:objectFactory name:name]) {
-            results[name] = objectFactory;
-        }
-    }];
-    return results;
-}
-
--(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName {
-    [_objectFactories removeObjectForKey:oldName];
-    [self addObjectFactory:objectFactory withName:newName];
-}
+#pragma mark - Logging
 
 -(NSString *) description {
     NSMutableString *desc = [NSMutableString stringWithString:@"Finished model (* - instantiated):"];
