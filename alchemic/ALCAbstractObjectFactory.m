@@ -6,27 +6,23 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-@import UIKit;
 @import ObjectiveC;
-
-#import <StoryTeller/StoryTeller.h>
-
+@import UIKit;
 #import "ALCAbstractObjectFactory.h"
-
-#import "AlchemicAware.h"
-
+// :: Framework ::
+#import <StoryTeller/StoryTeller.h>
+// :: Other ::
+#import "ALCInstantiation.h"
+#import "ALCInternalMacros.h"
+#import "ALCIsFactory.h"
+#import "ALCIsPrimary.h"
+#import "ALCIsReference.h"
+#import "ALCModel.h"
 #import "ALCObjectFactoryType.h"
-#import "ALCObjectFactoryTypeSingleton.h"
 #import "ALCObjectFactoryTypeFactory.h"
 #import "ALCObjectFactoryTypeReference.h"
-#import "ALCInstantiation.h"
-
-#import "ALCInternalMacros.h"
-#import "ALCModel.h"
-
-#import "ALCIsFactory.h"
-#import "ALCIsReference.h"
-#import "ALCIsPrimary.h"
+#import "ALCObjectFactoryTypeSingleton.h"
+#import "AlchemicAware.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @synthesize objectClass = _objectClass;
+@synthesize primary = _primary;
 
 #pragma mark - Property overrides
 
@@ -76,6 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
         _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
+    } else if ([option isKindOfClass:[ALCIsPrimary class]]) {
+        _primary = YES;
     } else {
         customOptionHandler(option);
     }

@@ -52,15 +52,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack
                    model:(id<ALCModel>) model {
-
+    
     STLog(_objectClass, @"Searching model using %@", _criteria);
-
+    
     // Find dependencies
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria].allValues;
     if ([_resolvedFactories count] == 0) {
         throwException(NoDependenciesFound, @"No object factories found for criteria %@", _criteria);
     }
-
+    
+    // Filter for primary factories and replace if there are any present.
+    NSArray<id<ALCObjectFactory>> *primaryFactories = [_resolvedFactories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id<ALCObjectFactory> objectFactory, NSDictionary<NSString *,id> *bindings) {
+        return objectFactory.primary;
+    }]];
+    if (primaryFactories.count > 0) {
+        STLog(_objectClass, @"%lu primary factories found.", (unsigned long) primaryFactories.count);
+        _resolvedFactories = primaryFactories;
+    }
+    
     // Resolve dependencies.
     STLog(_objectClass, @"Found %i object factories", _resolvedFactories.count);
     for (id<ALCResolvable> objectFactory in _resolvedFactories) {
@@ -74,11 +83,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 #pragma mark - Injecting
-
-// Not allowed to be called.
--(ALCSimpleBlock)injectObject:(id)object {
-    methodReturningBlockNotImplemented;
-}
 
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
