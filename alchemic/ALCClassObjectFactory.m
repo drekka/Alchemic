@@ -38,6 +38,14 @@
     return self;
 }
 
+-(void)configureWithOption:(id)option customOptionHandler:(void (^)(id _Nonnull))customOptionHandler {
+    if (_initializer && [option isKindOfClass:[ALCIsReference class]]) {
+        throwException(IllegalArgument, @"Factories with initializers cannot be set to reference external objects");
+    } else {
+        [super configureWithOption:option customOptionHandler:customOptionHandler];
+    }
+}
+
 -(void) registerInjection:(id<ALCInjector>) injection forVariable:(Ivar) variable withName:(NSString *) variableName {
     ALCVariableDependency *ref = [ALCVariableDependency variableDependencyWithInjection:injection
                                                                                intoIvar:variable
@@ -87,22 +95,18 @@
                 completion(object);
             }
         }
-        [ALCRuntime executeSimpleBlock:[strongSelf injectDependenciesIntoObject:object]];
+        
+        [self injectDependencies:object];
     };
 }
 
 #pragma mark - Tasks
 
--(ALCSimpleBlock) injectDependenciesIntoObject:(id) object {
-    
+-(void) injectDependencies:(id) object {
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
-    
-    NSMutableArray<ALCSimpleBlock> *completions = [[NSMutableArray alloc] init];
     for (ALCVariableDependency *dep in _dependencies) {
         [ALCRuntime executeSimpleBlock:[dep injectObject:object]];
     }
-    
-    return [completions combineSimpleBlocks];
 }
 
 #pragma mark - Descriptions

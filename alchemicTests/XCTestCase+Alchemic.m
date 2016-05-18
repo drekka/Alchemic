@@ -15,7 +15,7 @@
 -(void) executeBlockWithException:(Class) exceptionClass block:(ALCSimpleBlock) block {
     @try {
         block();
-        XCTFail(@"Exception not thrown");
+        XCTFail(@"Exception %@ not thrown", NSStringFromClass(exceptionClass));
     }
     @catch (AlchemicException *exception) {
         XCTAssertTrue([exception isKindOfClass:exceptionClass], @"Expected a %@, got a %@ instead", NSStringFromClass(exceptionClass), NSStringFromClass([exception class]));

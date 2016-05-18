@@ -25,7 +25,7 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 
 @property (nonatomic, assign, readonly) ALCFactoryType factoryType;
 
--(void) injectDependencies:(id) object;
+-(void) configureWithOptions:(NSArray *) options customOptionHandler:(void (^)(id option)) customOptionHandler;
 
 @property (nonatomic, strong, readonly) ALCInstantiation *instantiation;
 

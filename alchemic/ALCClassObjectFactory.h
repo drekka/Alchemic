@@ -19,6 +19,6 @@
 
 -(void) registerInjection:(id<ALCInjector>) injection forVariable:(Ivar) variable withName:(NSString *) variableName;
 
--(ALCSimpleBlock) injectDependenciesIntoObject:(id) value;
+-(void) injectDependencies:(id) object;
 
 @end

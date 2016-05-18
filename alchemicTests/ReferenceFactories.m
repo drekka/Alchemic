@@ -33,9 +33,7 @@
 
 -(void) testAcessingUnsetReferenceThrows {
     
-    [_topThingFactory configureWithOptions:@[AcReference] customOptionHandler:^(id option) {
-        XCTFail();
-    }];
+    [_context objectFactoryConfig:_topThingFactory, AcReference, nil];
     
     [_context start];
     
@@ -48,10 +46,7 @@
 
 -(void) testSettingReferenceBringsFactoryOnline {
     
-    [_topThingFactory configureWithOptions:@[AcReference] customOptionHandler:^(id option) {
-        XCTFail();
-    }];
-    
+    [_context objectFactoryConfig:_topThingFactory, AcReference, nil];
     [_context start];
     
     id extObj = [[TopThing alloc] init];
@@ -62,13 +57,24 @@
     XCTAssertEqual(extObj, object);
 }
 
--(void) testSettingFactoryWithInitializerThrowsException {
+-(void) testSettingInitializerOnReferenceFactoryThrowsException {
+    [_context objectFactoryConfig:_topThingFactory, AcReference, nil];
+    [self executeBlockWithException:[AlchemicIllegalArgumentException class] block:^{
+        [self->_context objectFactory:self->_topThingFactory setInitializer:@selector(initWithNoArgs), nil];
+    }];
+}
+
+-(void) testSettingFactoryWithInitializerToReferenceTypeThrowsException {
     [_context objectFactory:_topThingFactory setInitializer:@selector(initWithNoArgs), nil];
     
-    [self executeBlockWithException:[AlchemicReferencedObjectNotSetException class] block:^{
-        [self->_topThingFactory configureWithOptions:@[AcReference] customOptionHandler:^(id option) {
-            XCTFail();
-        }];
+    [self executeBlockWithException:[AlchemicIllegalArgumentException class] block:^{
+        [self->_context objectFactoryConfig:self->_topThingFactory, AcReference, nil];
+    }];
+}
+
+-(void) testSettingMethodFactoryAsReferenceTypeThrowsException {
+    [self executeBlockWithException:[AlchemicIllegalArgumentException class] block:^{
+        [self->_context objectFactory:self->_topThingFactory registerFactoryMethod:@selector(nestedThingFactoryMethod) returnType:[NestedThing class], AcReference, nil];
     }];
 }
 

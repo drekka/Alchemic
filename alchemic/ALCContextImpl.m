@@ -57,12 +57,12 @@ NS_ASSUME_NONNULL_BEGIN
     return objectFactory;
 }
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory config:(NSArray *) configArguments {
-    [objectFactory configureWithOptions:configArguments customOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
-}
-
 -(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... {
     alc_loadVarArgsAfterVariableIntoArray(objectFactory, configArguments);
+    [self objectFactory:objectFactory config:configArguments];
+}
+
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory config:(NSArray *) configArguments {
     [objectFactory configureWithOptions:configArguments customOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
 }
 
@@ -89,6 +89,11 @@ registerFactoryMethod:(SEL) selector
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory setInitializer:(SEL) initializer, ... {
+    
+    // Throw an exception if the factory is already set to a reference type.
+    if (objectFactory.factoryType == ALCFactoryTypeReference) {
+        throwException(IllegalArgument, @"Reference factories cannot have initializers");
+    }
     
     STLog(objectFactory.objectClass, @"Register object factory initializer %@", [ALCRuntime selectorDescription:objectFactory.objectClass selector:initializer]);
     
@@ -122,7 +127,7 @@ registerFactoryMethod:(SEL) selector
     STStartScope(object);
     
     // We are only interested in class factories.
-    id<ALCObjectFactory> classFactory = [_model classObjectFactoryForClass:[object class]];
+    ALCClassObjectFactory *classFactory = [_model classObjectFactoryForClass:[object class]];
     
     if (classFactory) {
         STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));

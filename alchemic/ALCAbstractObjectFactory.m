@@ -65,15 +65,19 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(void) configureWithOptions:(NSArray *) options customOptionHandler:(void (^)(id option)) unknownOptionHandler {
+-(void) configureWithOptions:(NSArray *) options customOptionHandler:(void (^)(id option)) customOptionHandler {
     for (id option in options) {
-        if ([option isKindOfClass:[ALCIsFactory class]]) {
-            _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
-        } else if ([option isKindOfClass:[ALCIsReference class]]) {
-            _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
-        } else {
-            unknownOptionHandler(option);
-        }
+        [self configureWithOption:option customOptionHandler:customOptionHandler];
+    }
+}
+
+-(void) configureWithOption:(id) option customOptionHandler:(void (^)(id option)) customOptionHandler {
+    if ([option isKindOfClass:[ALCIsFactory class]]) {
+        _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
+    } else if ([option isKindOfClass:[ALCIsReference class]]) {
+        _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
+    } else {
+        customOptionHandler(option);
     }
 }
 
@@ -87,10 +91,6 @@ NS_ASSUME_NONNULL_BEGIN
     object = [self createObject];
     ALCObjectCompletion completion = [self setObject:object];
     return [ALCInstantiation instantiationWithObject:object completion:completion];
-}
-
--(void) injectDependencies:(id) object {
-    self.objectCompletion(object);
 }
 
 -(id) createObject {

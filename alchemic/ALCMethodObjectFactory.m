@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL _checkingReadyStatus;
 }
 
+#pragma mark - Life cycle
+
 -(instancetype) initWithClass:(Class)objectClass {
     return nil;
 }
@@ -41,6 +43,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSString *) defaultModelKey {
     return [ALCRuntime selectorDescription:_parentObjectFactory.objectClass selector:_selector];
+}
+
+-(void)configureWithOption:(id)option customOptionHandler:(void (^)(id _Nonnull))customOptionHandler {
+    if ([option isKindOfClass:[ALCIsReference class]]) {
+        throwException(IllegalArgument, @"Method based factories cannot be set to reference external objects");
+    } else {
+        [super configureWithOption:option customOptionHandler:customOptionHandler];
+    }
 }
 
 -(void) resolveDependenciesWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
