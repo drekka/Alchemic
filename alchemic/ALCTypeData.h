@@ -8,8 +8,24 @@
 
 @import Foundation;
 
+/**
+ @brief Simple class containing information about a type.
+ */
 @interface ALCTypeData : NSObject
+
+/**
+ @brief A string containing the type data for scalar types.
+ */
 @property (nonatomic, strong, nullable) NSString *scalarType;
+
+/**
+ @brief The class if the type is an object type.
+ */
 @property (nonatomic, assign, nullable) Class objcClass;
+
+/**
+ @brief Any protocols that the class implements.
+ */
 @property (nonatomic, strong, nullable) NSArray<Protocol *> *objcProtocols;
+
 @end

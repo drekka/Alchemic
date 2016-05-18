@@ -10,6 +10,9 @@
 
 #import "ALCClassProcessor.h"
 
+/**
+ *  Scans classes for resources.
+ */
 @interface ALCResourceLocatorClassProcessor : NSObject<ALCClassProcessor>
 
 @end

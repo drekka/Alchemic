@@ -419,6 +419,13 @@
 		6C3AFBCF1C638C2700B4FCAA /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
+				6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */,
+				6CE234E11CEB489600728CBE /* ALCConfigClassProcessor.h */,
+				6CE234E21CEB489600728CBE /* ALCConfigClassProcessor.m */,
+				6CE234E91CEB4B9400728CBE /* ALCModelClassProcessor.h */,
+				6CE234EA1CEB4B9400728CBE /* ALCModelClassProcessor.m */,
+				6CE234E51CEB4ACC00728CBE /* ALCResourceLocatorClassProcessor.h */,
+				6CE234E61CEB4ACC00728CBE /* ALCResourceLocatorClassProcessor.m */,
 				6C3AFBD01C638C7800B4FCAA /* ALCRuntime.h */,
 				6C3AFBD11C638C7800B4FCAA /* ALCRuntime.m */,
 				6C71D5491CA1747200D25AC0 /* ALCTypeData.h */,
@@ -431,13 +438,6 @@
 				6C68CF881C6636D6003A7A54 /* NSObject+Alchemic.m */,
 				6CC2848B1CB671D5006B613F /* NSSet+Alchemic.h */,
 				6CC2848C1CB671D5006B613F /* NSSet+Alchemic.m */,
-				6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */,
-				6CE234E11CEB489600728CBE /* ALCConfigClassProcessor.h */,
-				6CE234E21CEB489600728CBE /* ALCConfigClassProcessor.m */,
-				6CE234E51CEB4ACC00728CBE /* ALCResourceLocatorClassProcessor.h */,
-				6CE234E61CEB4ACC00728CBE /* ALCResourceLocatorClassProcessor.m */,
-				6CE234E91CEB4B9400728CBE /* ALCModelClassProcessor.h */,
-				6CE234EA1CEB4B9400728CBE /* ALCModelClassProcessor.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -706,8 +706,8 @@
 			buildPhases = (
 				6C36D74A1B3851680073C4FB /* Sources */,
 				6C36D74B1B3851680073C4FB /* Frameworks */,
-				6C36D74C1B3851680073C4FB /* Headers */,
 				6CFF3BD41B709F8800538BA1 /* Appledoc */,
+				6C36D74C1B3851680073C4FB /* Headers */,
 			);
 			buildRules = (
 			);
@@ -833,8 +833,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "exit 0\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--project-name \"Alchemic\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n";
-			showEnvVarsInLog = 0;
+			shellScript = "\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -988,11 +987,9 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2.0;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1017,11 +1014,9 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2.0;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
