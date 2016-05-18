@@ -56,23 +56,23 @@ NS_ASSUME_NONNULL_BEGIN
         if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
             
             if (constant) {
-                throwException(@"AlchemicIllegalArgument", nil, @"You cannot combine model search criteria and constants.");
+                throwException(IllegalArgument, @"You cannot combine model search criteria and constants.");
             }
             searchCriteria = searchCriteria ? [searchCriteria combineWithCriteria:criteria] : criteria;
             
         } else if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
             
             if (!allowConstants) {
-                throwException(@"AlchemicIllegalArgument", nil, @"Expected a search criteria or constant. Got: %@", criteria);
+                throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
             }
             
             if (searchCriteria) {
-                throwException(@"AlchemicIllegalArgument", nil, @"You cannot combine model search criteria and constants.");
+                throwException(IllegalArgument, @"You cannot combine model search criteria and constants.");
             }
             constant = criteria;
             
         } else {
-            throwException(@"AlchemicIllegalArgument", nil, @"Expected a search criteria or constant. Got: %@", criteria);
+            throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
         }
         
     }

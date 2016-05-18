@@ -28,6 +28,8 @@
 
 @synthesize initializer = _initializer;
 
+#pragma mark - Life cycle
+
 -(instancetype) initWithClass:(Class) objectClass {
     self = [super initWithClass:objectClass];
     if (self) {
@@ -89,6 +91,8 @@
     };
 }
 
+#pragma mark - Tasks
+
 -(ALCSimpleBlock) injectDependenciesIntoObject:(id) object {
     
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
@@ -100,6 +104,8 @@
     
     return [completions combineSimpleBlocks];
 }
+
+#pragma mark - Descriptions
 
 -(NSString *) description {
     return str(@"%@ class %@", super.description, self.defaultModelKey);

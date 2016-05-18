@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name {
     if (_objectFactories[name]) {
-        throwException(@"AlchemicDuplicateName", nil, @"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name]);
+        throwException(DuplicateName, @"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name]);
     }
     _objectFactories[name] = objectFactory;
 }

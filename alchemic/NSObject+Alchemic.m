@@ -59,8 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
                         [names addObject:stackResolvable.resolvingDescription];
                     }];
                     
-                    throwException(@"AlchemicCircularDependency",
-                                   @{@"stack":resolvingStack},
+                    throwException(CircularReference,
                                    @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
                 }
             } while (i > stackIndex);

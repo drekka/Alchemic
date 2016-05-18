@@ -12,9 +12,6 @@
 
 #import <Alchemic/Alchemic.h>
 
-//#import "ALCContextImpl.h"
-//#import "ALCClassObjectFactory.h"
-
 #import "TopThing.h"
 #import "NestedThing.h"
 
@@ -85,44 +82,6 @@
     XCTAssertNotNil(n1);
     XCTAssertNotNil(n2);
     XCTAssertNotEqual(n1, n2);
-}
-
--(void) testReferenceInitiation {
-
-    [_topThingFactory configureWithOptions:@[[ALCIsReference referenceMacro]] customOptionHandler:^(id option) {
-        XCTFail();
-    }];
-
-    [_context start];
-
-    XCTAssertFalse(_topThingFactory.ready);
-    @try {
-        __unused id object = _topThingFactory.instantiation.object;
-        XCTFail(@"Exception not thrown getting reference type");
-    }
-    @catch (ALCException *exception) {
-        XCTAssertEqualObjects(@"AlchemicReferencedObjectNotSet", exception.name);
-    }
-    @catch (NSException *exception) {
-        XCTFail(@"Un-expected exception %@", exception);
-    }
-
-}
-
--(void) testReferenceSet {
-
-    [_topThingFactory configureWithOptions:@[[ALCIsReference referenceMacro]] customOptionHandler:^(id option) {
-        XCTFail();
-    }];
-
-    [_context start];
-
-    id extObj = [[TopThing alloc] init];
-    [_topThingFactory setObject:extObj];
-
-    XCTAssertTrue(_topThingFactory.ready);
-    id object = _topThingFactory.instantiation.object;
-    XCTAssertEqual(extObj, object);
 }
 
 

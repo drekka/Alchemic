@@ -20,7 +20,7 @@
 #import <Alchemic/ALCContextImpl.h>
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCDependency.h>
-#import <Alchemic/ALCException.h>
+#import <Alchemic/AlchemicException.h>
 #import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/AlchemicAware.h>
 #import <Alchemic/ALCInjector.h>

@@ -7,7 +7,7 @@
 //
 
 #import "ALCRuntime.h"
-#import "ALCException.h"
+#import "AlchemicException.h"
 
 #define ALCHEMIC_PREFIX _alc_
 #define ALCHEMIC_METHOD_PREFIX alc_concat(ALCHEMIC_PREFIX, __LINE__)
@@ -27,11 +27,8 @@
 
 #define blockSelf __weak __typeof(self) weakSelf = self;__typeof(self) strongSelf = weakSelf
 
-#define throwException(exceptionName, userData, template, ...) \
-@throw [ALCException \
-    exceptionWithName:exceptionName \
-    reason:str(template, ## __VA_ARGS__) \
-    userInfo:userData]
+#define throwException(exceptionName, template, ...) \
+@throw [Alchemic ## exceptionName ## Exception exceptionWithName:alc_toNSString(exceptionName) reason:str(template, ## __VA_ARGS__) userInfo:nil]
 
 #pragma mark - Assertions
 

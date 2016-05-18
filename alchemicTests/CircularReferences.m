@@ -11,6 +11,7 @@
 #import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
+#import "XCTestCase+Alchemic.h"
 #import "TopThing.h"
 #import "AnotherThing.h"
 
@@ -36,62 +37,56 @@
 -(void) testPropertyToProperty {
     [_context objectFactory:_topFactory registerVariableInjection:@"anotherThing", nil];
     [_context objectFactory:_anotherFactory registerVariableInjection:@"topThing", nil];
-
+    
     [_context start];
-
+    
     TopThing *topThing = _topFactory.instantiation.object;
     XCTAssertNotNil(topThing);
-
+    
     AnotherThing *anotherThing = _anotherFactory.instantiation.object;
     XCTAssertNotNil(anotherThing);
-
+    
     XCTAssertEqual(topThing.anotherThing, anotherThing);
     XCTAssertEqual(anotherThing.topThing, topThing);
 }
 
 -(void) testInitializerToInitializer {
     AcIgnoreSelectorWarnings(
-                           SEL topThingInit =@selector(initWithAnotherThing:);
-                           SEL anotherThingInit =@selector(initWithTopThing:);
-                           )
+                             SEL topThingInit =@selector(initWithAnotherThing:);
+                             SEL anotherThingInit =@selector(initWithTopThing:);
+                             )
     [_context objectFactory:_topFactory setInitializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory setInitializer:anotherThingInit, AcClass(TopThing), nil];
-
-    [self validateExceptionThrown];
+    
+    [self executeBlockWithException:[AlchemicCircularReferenceException class] block:^{
+        [self->_context start];
+    }];
 }
 
 -(void) testPropertyToInitializer {
-
+    
     [_context objectFactory:_topFactory registerVariableInjection:@"anotherThing", nil];
     AcIgnoreSelectorWarnings(
-                           SEL anotherThingInit = @selector(initWithTopThing:);
-                           )
+                             SEL anotherThingInit = @selector(initWithTopThing:);
+                             )
     [_context objectFactory:_anotherFactory setInitializer:anotherThingInit, AcClass(TopThing), nil];
-
-    [self validateExceptionThrown];
+    
+    [self executeBlockWithException:[AlchemicCircularReferenceException class] block:^{
+        [self->_context start];
+    }];
 }
 
 -(void) testInitializerToProperty {
     
     AcIgnoreSelectorWarnings(
-                           SEL topThingInit = @selector(initWithAnotherThing:);
-                           )
+                             SEL topThingInit = @selector(initWithAnotherThing:);
+                             )
     [_context objectFactory:_topFactory setInitializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory registerVariableInjection:@"topThing", nil];
-
-    [self validateExceptionThrown];
-}
-
--(void) validateExceptionThrown {
-    @try {
-        [_context start];
-        XCTFail(@"Circular exception not thrown");
-    } @catch (ALCException *exception) {
-        STLog(_context, @"Stack: %@", exception.description);
-        XCTAssertEqualObjects(@"AlchemicCircularDependency", exception.name);
-    } @catch (NSException *exception) {
-        XCTFail(@"Un-expected exception %@", exception);
-    }
+    
+    [self executeBlockWithException:[AlchemicCircularReferenceException class] block:^{
+        [self->_context start];
+    }];
 }
 
 @end
