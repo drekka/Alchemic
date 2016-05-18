@@ -55,17 +55,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveDependenciesWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
     blockSelf;
-    [self resolveFactoryWithResolvingStack:resolvingStack
-                              resolvedFlag:&_resolved
-                                     block:^{
-                                         [strongSelf->_parentObjectFactory resolveWithStack:resolvingStack model:model];
-                                         [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
-                                     }];
+    [self resolveWithResolvingStack:resolvingStack
+                       resolvedFlag:&_resolved
+                              block:^{
+                                  [strongSelf->_parentObjectFactory resolveWithStack:resolvingStack model:model];
+                                  [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
+                              }];
 }
 
 -(BOOL) ready {
     if (super.ready && _parentObjectFactory.ready) {
-        return [self dependenciesReady:_arguments checkingStatusFlag:&_checkingReadyStatus];
+        return [_arguments dependenciesReadyWithCurrentlyCheckingFlag:&_checkingReadyStatus];
     }
     return NO;
 }

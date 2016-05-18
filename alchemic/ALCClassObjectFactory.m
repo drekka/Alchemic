@@ -56,24 +56,24 @@
 -(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     STLog(self.objectClass, @"Resolving class factory %@", NSStringFromClass(self.objectClass));
     blockSelf;
-    [self resolveFactoryWithResolvingStack:resolvingStack
-                              resolvedFlag:&_resolved
-                                     block:^{
-                                         
-                                         [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
-                                         
-                                         STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
-                                         for (ALCVariableDependency *ref in strongSelf->_dependencies) {
-                                             [resolvingStack addObject:ref];
-                                             [ref.injection resolveWithStack:resolvingStack model:model];
-                                             [resolvingStack removeLastObject];
-                                         }
-                                     }];
+    [self resolveWithResolvingStack:resolvingStack
+                       resolvedFlag:&_resolved
+                              block:^{
+                                  
+                                  [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
+                                  
+                                  STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
+                                  for (ALCVariableDependency *ref in strongSelf->_dependencies) {
+                                      [resolvingStack addObject:ref];
+                                      [ref.injection resolveWithStack:resolvingStack model:model];
+                                      [resolvingStack removeLastObject];
+                                  }
+                              }];
 }
 
 -(BOOL) ready {
     if (super.ready && (!_initializer || _initializer.ready)) {
-        return [self dependenciesReady:_dependencies checkingStatusFlag:&_checkingReadyStatus];
+        return [_dependencies dependenciesReadyWithCurrentlyCheckingFlag:&_checkingReadyStatus];
     }
     return NO;
 }

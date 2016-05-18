@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [self object:self invokeSelector:selector arguments:arguments];
 }
 
--(void) resolveFactoryWithResolvingStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
+-(void) resolveWithResolvingStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                             resolvedFlag:(BOOL *) resolvedFlag
                                    block:(ALCSimpleBlock) block {
     
@@ -74,29 +74,6 @@ NS_ASSUME_NONNULL_BEGIN
     [resolvingStack addObject:resolvableSelf];
     block();
     [resolvingStack removeLastObject];
-}
-
--(BOOL) dependenciesReady:(NSArray<id<ALCResolvable>> *) dependencies checkingStatusFlag:(BOOL *) checkingFlag {
-    
-    // If this flag is set then we have looped back to the original variable. So consider everything to be good.
-    if (*checkingFlag) {
-        return YES;
-    }
-    
-    // Set the checking flag so that we can detect loops.
-    *checkingFlag = YES;
-    
-    for (id<ALCResolvable> resolvable in dependencies) {
-        // If a dependency is not ready then we stop checking and return a failure.
-        if (!resolvable.ready) {
-            *checkingFlag = NO;
-            return NO;
-        }
-    }
-    
-    // All dependencies are good to go.
-    *checkingFlag = NO;
-    return YES;
 }
 
 #pragma mark - Internal

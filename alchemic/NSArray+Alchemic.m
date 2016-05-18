@@ -24,17 +24,17 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableArray<id<ALCDependency>> *arguments = [[NSMutableArray alloc] initWithCapacity:self.count];
     
     [self enumerateObjectsUsingBlock:^(id nextArgument, NSUInteger idx, BOOL * _Nonnull stop) {
-
+        
         ALCMethodArgument *methodArgument = nil;
         
         if ([nextArgument isKindOfClass:[ALCMethodArgument class]]) {
             methodArgument = (ALCMethodArgument *) nextArgument;
-
+            
         } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]
                    || [nextArgument conformsToProtocol:@protocol(ALCConstant)]) {
             methodArgument = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:nextArgument, nil];
         }
-
+        
         if (methodArgument) {
             methodArgument.index = (int) idx;
             [arguments addObject:methodArgument];
@@ -83,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
     
     return constant ? constant : [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
-                                                                       criteria:searchCriteria];
+                                                                            criteria:searchCriteria];
 }
 
 -(nullable ALCSimpleBlock) combineSimpleBlocks {
@@ -100,6 +100,29 @@ NS_ASSUME_NONNULL_BEGIN
         [argument resolveWithStack:resolvingStack model:model];
         [resolvingStack removeLastObject];
     }];
+}
+
+-(BOOL) dependenciesReadyWithCurrentlyCheckingFlag:(BOOL *) checkingFlag {
+    
+    // If this flag is set then we have looped back to the original variable. So consider everything to be good.
+    if (*checkingFlag) {
+        return YES;
+    }
+    
+    // Set the checking flag so that we can detect loops.
+    *checkingFlag = YES;
+    
+    for (id<ALCResolvable> resolvable in self) {
+        // If a dependency is not ready then we stop checking and return a failure.
+        if (!resolvable.ready) {
+            *checkingFlag = NO;
+            return NO;
+        }
+    }
+
+    // All dependencies are good to go.
+    *checkingFlag = NO;
+    return YES;
 }
 
 @end

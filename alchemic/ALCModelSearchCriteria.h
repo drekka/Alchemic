@@ -13,6 +13,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// @name Macros
+
 #define AcClass(className) [ALCModelSearchCriteria searchCriteriaForClass:[className class]]
 
 #define AcProtocol(protocolName) [ALCModelSearchCriteria searchCriteriaForProtocol:@protocol(protocolName)]
@@ -32,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) ALCModelSearchCriteria *nextSearchCriteria;
 
 -(ALCModelSearchCriteria *) combineWithCriteria:(ALCModelSearchCriteria *) otherCriteria;
+
+/// @name Checking factories
 
 -(BOOL) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name;
 

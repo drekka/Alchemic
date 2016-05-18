@@ -48,11 +48,11 @@
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     STLog(self.objectClass, @"Resolving initializer %@", [self defaultModelKey]);
     blockSelf;
-    [self resolveFactoryWithResolvingStack:resolvingStack
-                              resolvedFlag:&_resolved
-                                     block:^{
-                                         [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
-                                     }];
+    [self resolveWithResolvingStack:resolvingStack
+                       resolvedFlag:&_resolved
+                              block:^{
+                                  [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
+                              }];
 }
 
 -(id) createObject {
@@ -78,7 +78,7 @@
 }
 
 -(BOOL) ready {
-    return [self dependenciesReady:_arguments checkingStatusFlag:&_checkingReadyStatus];
+    return [_arguments dependenciesReadyWithCurrentlyCheckingFlag:&_checkingReadyStatus];
 }
 
 @end
