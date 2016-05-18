@@ -9,6 +9,7 @@
 @import Foundation;
 
 @class ALCModelSearchCriteria;
+@class ALCClassObjectFactory;
 @protocol ALCObjectFactory;
 @protocol ALCResolvable;
 @protocol ALCContext;
@@ -17,15 +18,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCModel <NSObject>
 
-@property (nonatomic, readonly, strong) NSSet<id<ALCObjectFactory>> *objectFactories;
+@property (nonatomic, readonly, strong) NSArray<id<ALCObjectFactory>> *objectFactories;
 
-@property (nonatomic, readonly, strong) NSSet<ALCClassObjectFactory *> *classObjectFactories;
+@property (nonatomic, readonly, strong) NSArray<ALCClassObjectFactory *> *classObjectFactories;
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name;
 
 -(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
 
 -(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName;
+
+-(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass;
 
 -(void) resolveDependencies;
 

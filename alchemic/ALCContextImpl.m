@@ -58,12 +58,12 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory config:(NSArray *) configArguments {
-    [objectFactory configureWithOptions:configArguments unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
+    [objectFactory configureWithOptions:configArguments customOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
 }
 
 -(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... {
     alc_loadVarArgsAfterVariableIntoArray(objectFactory, configArguments);
-    [objectFactory configureWithOptions:configArguments unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
+    [objectFactory configureWithOptions:configArguments customOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
@@ -85,7 +85,7 @@ registerFactoryMethod:(SEL) selector
                                                                                      args:methodArguments];
     
     [_model addObjectFactory:methodFactory withName:methodFactory.defaultModelKey];
-    [methodFactory configureWithOptions:factoryOptions unknownOptionHandler:[self unknownOptionHandlerForObjectFactory:methodFactory]];
+    [methodFactory configureWithOptions:factoryOptions customOptionHandler:[self unknownOptionHandlerForObjectFactory:methodFactory]];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory setInitializer:(SEL) initializer, ... {
@@ -121,15 +121,8 @@ registerFactoryMethod:(SEL) selector
     
     STStartScope(object);
     
-    NSDictionary<NSString *, id<ALCObjectFactory>> *factories = [_model objectFactoriesMatchingCriteria:[ALCModelSearchCriteria searchCriteriaForClass:[object class]]];
-    
     // We are only interested in class factories.
-    id<ALCObjectFactory> classFactory;
-    for (id<ALCObjectFactory> factory in factories.allValues) {
-        if ([factory isKindOfClass:[ALCClassObjectFactory class]]) {
-            classFactory = factory;
-        }
-    }
+    id<ALCObjectFactory> classFactory = [_model classObjectFactoryForClass:[object class]];
     
     if (classFactory) {
         STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));

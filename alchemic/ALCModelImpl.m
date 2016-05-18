@@ -39,13 +39,19 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSArray<ALCClassObjectFactory *> *) classObjectFactories {
-    NSMutableArray *results = [[NSMutableArray alloc] init];
-    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        if ([objectFactory isKindOfClass:[ALCClassObjectFactory class]]) {
-            [results addObject:objectFactory];
+    return [self.objectFactories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id<ALCObjectFactory> objectFactory, NSDictionary<NSString *, id> *bindings) {
+        return [objectFactory isKindOfClass:[ALCClassObjectFactory class]];
+    }]];
+}
+
+-(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass {
+    for (id<ALCObjectFactory> objectFactory in _objectFactories) {
+        if ([objectFactory isKindOfClass:[ALCClassObjectFactory class]]
+            && objectFactory.objectClass == aClass) {
+            return objectFactory;
         }
-    }];
-    return results;
+    }
+    return nil;
 }
 
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name {
@@ -68,12 +74,12 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) modelWillResolve {
     
     // Locate special factories and configure them.
-    [self.classObjectFactories enumerateObjectsUsingBlock:^(ALCClassObjectFactory *objectFactory, BOOL *stop) {
+    [self.classObjectFactories enumerateObjectsUsingBlock:^(ALCClassObjectFactory *objectFactory, NSUInteger idx, BOOL *stop) {
         
         // UIApplicationDelegate
         if ([objectFactory.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
             self->_uiAppDelegateFactory = objectFactory;
-            [objectFactory configureWithOptions:@[AcReference] unknownOptionHandler:^(id option){}];
+            [objectFactory configureWithOptions:@[AcReference] customOptionHandler:^(id option){}];
             *stop = YES;
         }
     }];
@@ -98,8 +104,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) modelDidInstantiate {
     if (_uiAppDelegateFactory) {
         id delegate = [UIApplication sharedApplication].delegate;
-        ALCObjectCompletion completion = [_uiAppDelegateFactory setObject:delegate];
-        completion(delegate);
+        if (delegate) {
+            STLog(self, @"Injecting UIApplicationDelegate instance into model");
+            ALCObjectCompletion completion = [_uiAppDelegateFactory setObject:delegate];
+            completion(delegate);
+        }
     }
 }
 

@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(void) configureWithOptions:(NSArray *) options unknownOptionHandler:(void (^)(id option)) unknownOptionHandler {
+-(void) configureWithOptions:(NSArray *) options customOptionHandler:(void (^)(id option)) unknownOptionHandler {
     for (id option in options) {
         if ([option isKindOfClass:[ALCIsFactory class]]) {
             _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
@@ -115,18 +115,18 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-
+    
     ALCFactoryType factoryType = _typeStrategy.factoryType;
     BOOL instantiated = (factoryType == ALCFactoryTypeSingleton && _typeStrategy.object)
     || (factoryType == ALCFactoryTypeReference && _typeStrategy.ready);
     NSMutableString *description = [[NSMutableString alloc] initWithString:instantiated ? @"* " : @"  "];
-
+    
     [description appendString:_typeStrategy.description];
-
+    
     if ([_objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
         [description appendString:@" (App delegate)"];
     }
-
+    
     return description;
 }
 
