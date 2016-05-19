@@ -15,10 +15,10 @@
     NSString *_name;
 }
 
--(instancetype) initWithInjection:(id<ALCInjector>) injection
-                         intoIvar:(Ivar) ivar
-                             name:(NSString *) name {
-    self = [super initWithInjection:injection];
+-(instancetype) initWithInjector:(id<ALCInjector>) injector
+                        intoIvar:(Ivar) ivar
+                            name:(NSString *) name {
+    self = [super initWithInjector:injector];
     if (self) {
         _ivar = ivar;
         _name = name;
@@ -26,10 +26,10 @@
     return self;
 }
 
-+(instancetype) variableDependencyWithInjection:(id<ALCDependency, ALCInjector>) injection
-                                       intoIvar:(Ivar) ivar
-                                           name:(NSString *) name {
-    return [[ALCVariableDependency alloc] initWithInjection:injection intoIvar:ivar name:name];
++(instancetype) variableDependencyWithInjector:(id<ALCDependency, ALCInjector>) injector
+                                      intoIvar:(Ivar) ivar
+                                          name:(NSString *) name {
+    return [[ALCVariableDependency alloc] initWithInjector:injector intoIvar:ivar name:name];
 }
 
 -(NSString *)stackName {
@@ -37,7 +37,7 @@
 }
 
 -(ALCSimpleBlock)injectObject:(id)object {
-    return [self.injection setObject:object variable:_ivar];
+    return [self.injector setObject:object variable:_ivar];
 }
 
 -(NSString *)resolvingDescription {

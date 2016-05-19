@@ -7,12 +7,12 @@
 //
 
 @import Foundation;
+
 #import "ALCObjectFactoryType.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
+/**
+ @brief An ALCObjectFactoryType which is used for storing and managing singleton instances.
+ */
 @interface ALCObjectFactoryTypeSingleton : NSObject<ALCObjectFactoryType>
 
 @end
-
-NS_ASSUME_NONNULL_END

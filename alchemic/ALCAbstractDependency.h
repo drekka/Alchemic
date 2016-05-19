@@ -16,11 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractDependency : NSObject<ALCDependency>
 
-@property(nonatomic, strong, readonly) id<ALCInjector> injection;
+@property(nonatomic, strong, readonly) id<ALCInjector> injector;
 
 -(instancetype) init NS_UNAVAILABLE;
 
--(instancetype) initWithInjection:(id<ALCInjector>) injection NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithInjector:(id<ALCInjector>) injector NS_DESIGNATED_INITIALIZER;
 
 @end
 

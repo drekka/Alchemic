@@ -18,10 +18,10 @@
     return nil;
 }
 
--(instancetype) initWithInjection:(id<ALCInjector>) injection {
+-(instancetype) initWithInjector:(id<ALCInjector>) injector {
     self = [super init];
     if (self) {
-        _injection = injection;
+        _injector = injector;
     }
     return self;
 }
@@ -29,16 +29,16 @@
 #pragma mark - ALCResolvable
 
 -(bool)ready {
-    return _injection.ready;
+    return _injector.ready;
 }
 
 -(Class)objectClass {
-    return _injection.objectClass;
+    return _injector.objectClass;
 }
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                    model:(id<ALCModel>)model {
-    [_injection resolveWithStack:resolvingStack model:model];
+    [_injector resolveWithStack:resolvingStack model:model];
 }
 
 -(NSString *)resolvingDescription {

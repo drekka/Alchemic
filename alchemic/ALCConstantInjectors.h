@@ -14,10 +14,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ @brief Internal macro for building @interface definitions.
+ 
+ @param name The type name as used for name construction.
+ @param type The base type to be used.
+ */
 #define ALCConstantHeader(name, type) \
 id<ALCInjector> Ac ## name(type value); \
 @interface ALCConstant ## name : ALCAbstractConstantInjector \
+/* @brief Unavailable initializer. */ \
 -(instancetype) init NS_UNAVAILABLE; \
+/* @brief Factory method for creating instances. */ \
 +(instancetype) constantValue:(type) value; \
 @end
 

@@ -46,10 +46,10 @@
     }
 }
 
--(void) registerInjection:(id<ALCInjector>) injection forVariable:(Ivar) variable withName:(NSString *) variableName {
-    ALCVariableDependency *ref = [ALCVariableDependency variableDependencyWithInjection:injection
-                                                                               intoIvar:variable
-                                                                                   name:variableName];
+-(void) registerInjection:(id<ALCInjector>) injector forVariable:(Ivar) variable withName:(NSString *) variableName {
+    ALCVariableDependency *ref = [ALCVariableDependency variableDependencyWithInjector:injector
+                                                                              intoIvar:variable
+                                                                                  name:variableName];
     [_dependencies addObject:ref];
 }
 
@@ -65,7 +65,7 @@
                                   STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
                                   for (ALCVariableDependency *ref in strongSelf->_dependencies) {
                                       [resolvingStack addObject:ref];
-                                      [ref.injection resolveWithStack:resolvingStack model:model];
+                                      [ref.injector resolveWithStack:resolvingStack model:model];
                                       [resolvingStack removeLastObject];
                                   }
                               }];

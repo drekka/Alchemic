@@ -10,12 +10,13 @@
 
 #import "Alchemic.h"
 #import "NSArray+Alchemic.h"
+#import "ALCMethodArgument.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodObjectFactory {
     ALCClassObjectFactory *_parentObjectFactory;
-    NSArray<id<ALCDependency>> *_arguments;
+    NSArray<ALCMethodArgument *> *_arguments;
     SEL _selector;
     BOOL _resolved;
     BOOL _checkingReadyStatus;
@@ -30,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) initWithClass:(Class)objectClass
           parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
                      selector:(SEL) selector
-                         args:(nullable NSArray<id<ALCDependency>> *) arguments {
+                         args:(nullable NSArray<ALCMethodArgument *> *) arguments {
     self = [super initWithClass:objectClass];
     if (self) {
         [ALCRuntime validateClass:parentObjectFactory.objectClass selector:selector arguments:arguments];

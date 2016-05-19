@@ -98,6 +98,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param aClass The class to be used to check the selector again.
  @param selector The selector to check.
+ @param arguments The arguments to validate against.
  @exception ALCException If there is a problem.
  */
 +(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments;

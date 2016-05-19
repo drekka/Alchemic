@@ -7,12 +7,12 @@
 //
 
 @import Foundation;
+
 #import "ALCObjectFactoryType.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
+/**
+ @brief A ALCObjectFactoryType which manages externally referenced objects.
+ */
 @interface ALCObjectFactoryTypeReference : NSObject<ALCObjectFactoryType>
 
 @end
-
-NS_ASSUME_NONNULL_END

@@ -10,10 +10,9 @@
 
 #import "ALCContext.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
+/**
+ @brief The defaul implementation of ALCContext.
+ */
 @interface ALCContextImpl : NSObject<ALCContext>
 
 @end
-
-NS_ASSUME_NONNULL_END

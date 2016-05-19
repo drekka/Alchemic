@@ -9,6 +9,9 @@
 @import Foundation;
 #import "ALCModel.h"
 
+/**
+ @brief Implementation of the ALCModel protocol.
+ */
 @interface ALCModelImpl : NSObject<ALCModel>
 
 @end

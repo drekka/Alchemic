@@ -18,8 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... {
     alc_loadVarArgsIntoArray(firstCriteria, criteriaDefs);
-    id<ALCInjector> injection = [criteriaDefs injectionWithClass:argumentClass allowConstants:YES];
-    return [[ALCMethodArgument alloc] initWithInjection:injection];
+    id<ALCInjector> injector = [criteriaDefs injectionWithClass:argumentClass allowConstants:YES];
+    return [[ALCMethodArgument alloc] initWithInjector:injector];
 }
 
 -(NSString *) stackName {
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ALCSimpleBlock) injectObject:(id) object {
-    [self.injection setInvocation:object argumentIndex:self.index + 2];
+    [self.injector setInvocation:object argumentIndex:self.index + 2];
     return NULL;
 }
 
