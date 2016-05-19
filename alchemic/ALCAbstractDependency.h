@@ -14,12 +14,30 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ Abstract parent class of dependency classes.
+ 
+ Provides common implementations of methods.
+ */
 @interface ALCAbstractDependency : NSObject<ALCDependency>
 
+/**
+ The ALCInjector instance that will be used by the dependency.
+ */
 @property(nonatomic, strong, readonly) id<ALCInjector> injector;
 
+/**
+ Unavailable initializer.
+ */
 -(instancetype) init NS_UNAVAILABLE;
 
+/**
+ Default initializer.
+ 
+ @param injector The injector to be used by the dependency.
+ 
+ @return An instance of this class.
+ */
 -(instancetype) initWithInjector:(id<ALCInjector>) injector NS_DESIGNATED_INITIALIZER;
 
 @end

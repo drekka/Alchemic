@@ -18,17 +18,18 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol ALCDependency;
 
 /**
- @brief Implementation of the ALCDependency protocol which contains information for injecting a value into an object's variable or property.
+ Implementation of the ALCDependency protocol which contains information for injecting a value into an object's variable or property.
  */
 @interface ALCVariableDependency : ALCAbstractDependency
 
 /**
- @brief Unavailable initiailizer.
+ Unavailable initiailizer.
+ @param injector -
  */
 -(instancetype)initWithInjector:(id<ALCDependency>)injector NS_UNAVAILABLE;
 
 /**
- @brief Factory method for creating instances of ALCVariableDependency. 
+ Factory method for creating instances of ALCVariableDependency. 
  
  This is the only way these instances can be created.
  

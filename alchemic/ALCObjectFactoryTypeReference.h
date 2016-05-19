@@ -11,7 +11,7 @@
 #import "ALCObjectFactoryType.h"
 
 /**
- @brief A ALCObjectFactoryType which manages externally referenced objects.
+ A ALCObjectFactoryType which manages externally referenced objects.
  */
 @interface ALCObjectFactoryTypeReference : NSObject<ALCObjectFactoryType>
 

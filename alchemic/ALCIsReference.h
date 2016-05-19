@@ -9,13 +9,6 @@
 @import Foundation;
 
 /**
- When passed to a factory registration, sets the factory as storing and inject external objects.
-
- @discussion Can only be used on class factories as it makes no sense when set on method or initializers.
- */
-#define AcReference [ALCIsReference referenceMacro]
-
-/**
  Tag macro that indicates that the source of objects is external to Alchemic.
  */
 @interface ALCIsReference : NSObject

@@ -14,10 +14,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ An injector is a class that can inject values into variables or method arguments.
+ */
 @protocol ALCInjector <ALCResolvable>
 
+/**
+ Injects a value into a variable.
+ 
+ @param object   The object which contains the variable.
+ @param variable The variable to inject.
+ */
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable;
 
+/**
+ Injects a value into a method argument.
+ 
+ @param inv The NSInvocation to set the value on.
+ @param idx The index of the value. This is zero based with zero being the first argument to the selector.
+ */
 -(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
 
 @end

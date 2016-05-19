@@ -75,9 +75,11 @@ NS_ASSUME_NONNULL_BEGIN
     _objectFactories[name] = objectFactory;
 }
 
--(void) objectFactory:(id<ALCObjectFactory>) objectFactory changedName:(NSString *) oldName newName:(NSString *) newName {
+-(void) reindexObjectFactoryOldName:(NSString *) oldName newName:(NSString *) newName {
+    id<ALCObjectFactory> factory = _objectFactories[oldName];
+    _objectFactories[oldName] = nil;
+    [self addObjectFactory:factory withName:newName];
     [_objectFactories removeObjectForKey:oldName];
-    [self addObjectFactory:objectFactory withName:newName];
 }
 
 #pragma mark - Life cycle
@@ -100,7 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
         // UIApplicationDelegate
         if ([objectFactory.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
             self->_uiAppDelegateFactory = objectFactory;
-            [objectFactory configureWithOptions:@[AcReference] customOptionHandler:^(id option){}];
+            [objectFactory configureWithOptions:@[[ALCIsReference referenceMacro]] customOptionHandler:^(id option){}];
             *stop = YES;
         }
     }];

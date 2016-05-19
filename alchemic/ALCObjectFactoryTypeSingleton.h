@@ -11,7 +11,7 @@
 #import "ALCObjectFactoryType.h"
 
 /**
- @brief An ALCObjectFactoryType which is used for storing and managing singleton instances.
+ An ALCObjectFactoryType which is used for storing and managing singleton instances.
  */
 @interface ALCObjectFactoryTypeSingleton : NSObject<ALCObjectFactoryType>
 

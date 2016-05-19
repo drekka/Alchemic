@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodObjectFactory {
     ALCClassObjectFactory *_parentObjectFactory;
-    NSArray<ALCMethodArgument *> *_arguments;
+    NSArray<id<ALCDependency>> *_arguments;
     SEL _selector;
     BOOL _resolved;
     BOOL _checkingReadyStatus;
@@ -25,13 +25,14 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Life cycle
 
 -(instancetype) initWithClass:(Class)objectClass {
+    [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 
 -(instancetype) initWithClass:(Class)objectClass
           parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
                      selector:(SEL) selector
-                         args:(nullable NSArray<ALCMethodArgument *> *) arguments {
+                         args:(nullable NSArray<id<ALCDependency>> *) arguments {
     self = [super initWithClass:objectClass];
     if (self) {
         [ALCRuntime validateClass:parentObjectFactory.objectClass selector:selector arguments:arguments];

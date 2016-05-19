@@ -10,7 +10,7 @@
 #import "ALCModel.h"
 
 /**
- @brief Implementation of the ALCModel protocol.
+ Implementation of the ALCModel protocol.
  */
 @interface ALCModelImpl : NSObject<ALCModel>
 

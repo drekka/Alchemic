@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Lifecycle
 
 -(instancetype) init {
+    [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 

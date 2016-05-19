@@ -59,6 +59,9 @@ FOUNDATION_EXPORT double alchemicVersionNumber;
 //! Project version string for alchemic.
 FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
 
+/**
+ Base class for the Alchemic injection framework.
+ */
 @interface Alchemic : NSObject
 
 /**

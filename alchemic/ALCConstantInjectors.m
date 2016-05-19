@@ -25,7 +25,7 @@ id<ALCInjector> Ac ## name(type value) { \
     type _value; \
 } \
 -(instancetype) init { \
-    [self doesNotRecognizeSelector:@selector(init)]; \
+    [self doesNotRecognizeSelector:_cmd]; \
     return nil; \
 } \
 -(instancetype) initWithValue:(type) value { \

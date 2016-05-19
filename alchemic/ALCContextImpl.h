@@ -11,7 +11,7 @@
 #import "ALCContext.h"
 
 /**
- @brief The defaul implementation of ALCContext.
+ The defaul implementation of ALCContext.
  */
 @interface ALCContextImpl : NSObject<ALCContext>
 

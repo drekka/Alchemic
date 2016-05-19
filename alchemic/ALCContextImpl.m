@@ -150,7 +150,7 @@ registerFactoryMethod:(SEL) selector
     }
     ALCModelObjectInjector *injection = (ALCModelObjectInjector *)[criteria injectionWithClass:returnType allowConstants:NO];
     [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];
-    return [ALCRuntime mapValue:injection.searchResult toType:returnType];
+    return injection.searchResult;
 }
 
 #pragma mark - Internal
@@ -158,9 +158,8 @@ registerFactoryMethod:(SEL) selector
 -(void (^)(id option)) unknownOptionHandlerForObjectFactory:(id<ALCObjectFactory>) objectFactory {
     return ^(id option) {
         if ([(NSObject *) option isKindOfClass:[ALCFactoryName class]]) {
-            [self->_model objectFactory:objectFactory
-                            changedName:objectFactory.defaultModelKey
-                                newName:((ALCFactoryName *) option).asName];
+            NSString *newName = ((ALCFactoryName *) option).asName;
+            [self->_model reindexObjectFactoryOldName:objectFactory.defaultModelKey newName:newName];
         } else {
             throwException(IllegalArgument, @"Expected a factory config macro");
         }

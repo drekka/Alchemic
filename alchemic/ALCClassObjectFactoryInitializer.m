@@ -28,6 +28,7 @@
 @synthesize objectClass = _objectClass;
 
 -(instancetype) init {
+    [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 

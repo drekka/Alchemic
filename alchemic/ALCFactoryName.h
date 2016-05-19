@@ -8,11 +8,6 @@
 @import Foundation;
 
 /**
- Tells Alchemic to set a custom name on an object factory.
- */
-#define AcFactoryName(factoryName) [ALCFactoryName withName:factoryName]
-
-/**
  ALCWithName macros define a custom name for a object builder.
  */
 @interface ALCFactoryName : NSObject
@@ -24,9 +19,9 @@
 
 /**
  Default initializer.
-
+ 
  @param name	The name to use.
-
+ 
  @return An instance of ALCWithName.
  */
 +(instancetype) withName:(NSString *) name;

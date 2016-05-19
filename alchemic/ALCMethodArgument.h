@@ -16,14 +16,31 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define AcArg(argClass, critieria, ...) [ALCArgument argumentWithClass:[argClass class] model:model criteria:criteria, ## __VA_ARGS__, nil]
-
+/**
+ Defines an argument for a method. 
+ */
 @interface ALCMethodArgument : ALCAbstractDependency
 
+/**
+ The index of the argument for injecting into the executing NSInvocation.
+ */
 @property (nonatomic, assign) int index;
 
--(instancetype) init NS_UNAVAILABLE;
+/**
+ Unused initializer.
+ @param injector -
+ */
+-(instancetype) initWithInjector:(id<ALCInjector>) injector NS_UNAVAILABLE;
 
+/**
+ Factory method for creating instances of ALCMethodArgument.
+ 
+ @param argumentClass The class of the argument.
+ @param firstCriteria A var arg list of criteria that define the value for the argument.
+ @param ... further criteria.
+ 
+ @return An instance of this class.
+ */
 +(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end

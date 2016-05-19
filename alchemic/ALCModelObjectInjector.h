@@ -15,12 +15,31 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ An ALCInjector that sources values from the model using a variety of criteria.
+ */
 @interface ALCModelObjectInjector : NSObject<ALCInjector>
 
-@property (nonatomic, strong, readonly) id searchResult;
+/**
+ Executes a model search and return the results.
+ 
+ All returned objects will be fully completed.
+ */
+@property (nonatomic, strong, readonly)id searchResult;
 
+/**
+ Unused initializer.
+ */
 -(instancetype) init NS_UNAVAILABLE;
 
+/**
+ Default initializer.
+ 
+ @param objectClass The class of the value to be injected.
+ @param criteria    The ALCModelSearchCriteria to used when searching the model.
+ 
+ @return The results of the search, mapped to the objectClass type.
+ */
 -(instancetype) initWithObjectClass:(Class) objectClass
                            criteria:(ALCModelSearchCriteria *) criteria NS_DESIGNATED_INITIALIZER;
 

@@ -19,12 +19,12 @@
 @interface ALCClassObjectFactory : ALCAbstractObjectFactory
 
 /**
- @brief The ALCClassObjectFactoryInitializer to use when creating objects. If nil, then the default init is used.
+ The ALCClassObjectFactoryInitializer to use when creating objects. If nil, then the default init is used.
  */
 @property (nonatomic, strong) ALCClassObjectFactoryInitializer *initializer;
 
 /**
- @brief Adds a variable injection to the factory.
+ Adds a variable injection to the factory.
  
  After instantiating an instance using this factory, the completion block will perform all the injections registered via this method.
  
@@ -35,7 +35,7 @@
 -(void) registerInjection:(id<ALCInjector>) injector forVariable:(Ivar) variable withName:(NSString *) variableName;
 
 /**
- @brief Injects values into the passed object.
+ Injects values into the passed object.
  
  @param object The object to be injected.
  */

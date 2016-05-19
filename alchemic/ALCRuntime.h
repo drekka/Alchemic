@@ -19,7 +19,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- @brief Methods which provide access to the Objective-C runtime.
+ Methods which provide access to the Objective-C runtime.
  */
 @interface ALCRuntime : NSObject
 
@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @name Examining the runtime
 
 /**
- @brief Returns the ivar behind the name of a variable or property.
+ Returns the ivar behind the name of a variable or property.
  
  If the passed string is a property then the property is examined for the actual variable behind it. THis variable can be a completely different name to the property name. Internal variables can be accessed either with or without a '_' prefix.
  
@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
 /**
- @brief Returns an instance of ALCTypeData containing information about the type of the ivar.
+ Returns an instance of ALCTypeData containing information about the type of the ivar.
  
  @param iVar The ivar to examine.
  
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @name Setting values
 
 /**
- @brief Sets a variable within an object.
+ Sets a variable within an object.
  
  @param object   The object which contains the variable.
  @param variable The variable to be set.
@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
         withValue:(id) value;
 
 /**
- @brief Sets an argument in a passed invocation.
+ Sets an argument in a passed invocation.
  
  @param inv        The invocation.
  @param idx        The index of the argument. This is zero based with 0 being the first argument to the method.
@@ -78,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
               ofClass:(Class) valueClass;
 
 /**
- @brief Maps a value to a type.
+ Maps a value to a type.
  
  This basically means that the value is assessed to see if it can be converted to the target type. This also takes into account such things as the target being an array and possibly needing to wrap the passed value in an array.
  
@@ -108,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @name Describing objects
 
 /**
- @brief Returns a NSString description of a class and selector.
+ Returns a NSString description of a class and selector.
  
  @param aClass   The class.
  @param selector The selector to describe.
@@ -118,7 +118,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(NSString *) selectorDescription:(Class) aClass selector:(SEL)selector;
 
 /**
- @brief Returns a NSString description of a class and property.
+ Returns a NSString description of a class and property.
  
  @param aClass   The class.
  @param property The property.
@@ -128,7 +128,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(NSString *) propertyDescription:(Class) aClass property:(NSString *)property;
 
 /**
- @brief Returns a NSString description of a class and ivar.
+ Returns a NSString description of a class and ivar.
  
  @param aClass   The class.
  @param variable The ivar.
@@ -142,7 +142,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @name Other tasks
 
 /**
- @brief Scans the runtime looking for classes which define Alchemic model factories.
+ Scans the runtime looking for classes which define Alchemic model factories.
  
  The runtime is defined as all bundles for the current app, plsu any further bundles defined by classes which conform to the ALCConfig protocol. All the classes are read from each bundle and scanned for methods which Alchemic recognises. When it finds a method, appropriate model factories are created and setup according to what the method is.
  
@@ -153,7 +153,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Executing blocks
 
 /**
- @brief Executes a ALCSimpleBlock if it's not null.
+ Executes a ALCSimpleBlock if it's not null.
  
  This is mostly a conveniant method designed to remove boilderplate around block executions.
  
@@ -162,7 +162,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(void) executeSimpleBlock:(nullable ALCSimpleBlock) block;
 
 /**
- @brief Executes a passed block if it's not null.
+ Executes a passed block if it's not null.
  
  This is mostly a conveniant method designed to remove boilderplate around block executions.
  

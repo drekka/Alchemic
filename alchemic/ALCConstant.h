@@ -8,6 +8,9 @@
 
 @import Foundation;
 
+/**
+ A no-op protocol that is used to identify constant classes without having to test for each one individually.
+ */
 @protocol ALCConstant <NSObject>
 
 @end

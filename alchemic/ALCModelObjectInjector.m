@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize objectClass = _objectClass;
 
 -(instancetype) init {
-    [self doesNotRecognizeSelector:@selector(init)];
+    [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 
@@ -107,7 +107,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
     [self completionForInstantiations:instantations]();
-    return values;
+    return [ALCRuntime mapValue:values toType:_objectClass];
 }
 
 #pragma mark - Internal

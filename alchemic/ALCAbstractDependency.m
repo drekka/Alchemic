@@ -14,7 +14,7 @@
 @implementation ALCAbstractDependency
 
 -(instancetype) init {
-    [self doesNotRecognizeSelector:@selector(init)];
+    [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 

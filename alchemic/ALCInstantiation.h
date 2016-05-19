@@ -15,14 +15,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- @brief An instantiation contains a created object and an optional completion block that can be called to finish injecting values into the object. 
+ An instantiation contains a created object and an optional completion block that can be called to finish injecting values into the object. 
  
  The instantation of an instance of an object and performing injects of it is separated like this because we want to delay injections so that all objects get created before injections are performed. Note: that this won't work so we with method and initializers because argument values mush be fully instantiated before the method is called.
  */
 @interface ALCInstantiation : NSObject
 
 /**
- @brief Factory method for creation an ALCInstantion instance populated with an object and completion.
+ Factory method for creation an ALCInstantion instance populated with an object and completion.
  
  @param object     The object to store.
  @param completion The objects completion block.
@@ -32,12 +32,12 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype) instantiationWithObject:(id) object completion:(nullable ALCObjectCompletion) completion;
 
 /**
- @brief The stored object.
+ The stored object.
  */
 @property (nonatomic, strong, readonly) id object;
 
 /**
- @brief Combines the stored completion and a new completion. 
+ Combines the stored completion and a new completion. 
  
  Usually the new completion is a block that represents completions from other dependencies. This method also handles if either block is NULL.
  
@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) addCompletion:(nullable ALCObjectCompletion) newCompletion;
 
 /**
- @brief Tells the instantiation to execute it's completion block.
+ Tells the instantiation to execute it's completion block.
  
  This also notifies the object of the completion being execute and issues the AlchemicDidCreateObject notification.
  */

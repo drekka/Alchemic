@@ -17,58 +17,76 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - Macros
-
-#define AcRegister(...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _configureClassObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactoryConfig:classObjectFactory, ## __VA_ARGS__, nil]; \
-}
-
-#define AcInitializer(initializerSelector, ...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryInitializer):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactory:classObjectFactory setInitializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
-}
-
-#define AcMethod(methodType, methodSelector, ...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerMethodObjectFactory):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactory:classObjectFactory \
-registerFactoryMethod:@selector(methodSelector) \
-returnType:[methodType class], ## __VA_ARGS__, nil]; \
-}
-
-// Registers an injection point in the current class.
-#define AcInject(variableName, ...) \
-+(void) alc_concat(ALCHEMIC_METHOD_PREFIX, _registerObjectFactoryDependency):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactory:classObjectFactory registerVariableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
-}
-
-#define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
-
-// TODO: Add AcSet, AcInvoke
-
-#pragma mark -
-
+/**
+ The main facade for interacting with the Alchemic model.
+ */
 @protocol ALCContext <NSObject>
 
 #pragma mark - Lifecycle
 
+/// @name Lifecycle
+
+/**
+ Called to start the context.
+ 
+ This resolves all model objects and auto-starts any registered singletons.
+ */
 -(void) start;
 
 #pragma mark - Registering
 
+/// @name Registering
+
+/**
+ Registers a class factory in the model.
+ 
+ @param clazz The class to create the factory for.
+ 
+ @return An instance of ALCClassObjectFactory setup to create a a singleton instance using the default init constructor.
+ */
 -(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz;
 
+/**
+ Configures a class object factory,
+ 
+ @param objectFactory The class factory to configure.   
+ @param ... The configuration items.
+ */
 -(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ Registers a factory method found in the class factory's class.
+ 
+ @param objectFactory The parent class factory.
+ @param selector      The selector of the method.
+ @param returnType The class of the value that will be returned from the method.
+ @param ... A list of items that define the arguments to the method factory, or configure it.
+ */
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
 registerFactoryMethod:(SEL) selector
            returnType:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ Declares an initializer that will be used to created the instances of objects by the class factory.
+ 
+ @param objectFactory The parent class factory.
+ @param initializer   The initializer selector.
+ @param ... A list of initializer argument declarations. Factory configuration items are not accepted in this list.
+ */
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory setInitializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ Declares a variable injection for the objects created by a class factory.
+ 
+ @param objectFactory The parent object factory.
+ @param variable      The name of the variable. Can be a property name, variable name, or internal variable name.
+ @param ... A list of crteria or constant values that define the value to be injected.
+ */
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerVariableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Tasks
+
+/// @name Other functions
 
 /**
  Access point for objects which need to have dependencies injected.
@@ -79,6 +97,14 @@ registerFactoryMethod:(SEL) selector
  */
 -(void) injectDependencies:(id) object;
 
+/**
+ returns an object by seaching the model for matching factories and accessing the objects they manage.
+ 
+ @param returnType They type of value to be returned. Used when checking the returned objects from the factories.
+ @param ... Model search criteria that defines the object or objects to be returned.
+ 
+ @return An object of the appropriate type. All objects returned are fully resolved and completed.
+ */
 -(id) objectWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end

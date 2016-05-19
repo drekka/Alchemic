@@ -8,7 +8,7 @@
 
 #import "ALCAbstractObjectFactory.h"
 @class ALCClassObjectFactory;
-@class ALCMethodArgument;
+@protocol ALCDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,24 +22,25 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCMethodObjectFactory : ALCAbstractObjectFactory
 
 /**
- @brief Unavailable initializer.
+ Unavailable initializer.
+ @param objectClass -
  */
 -(instancetype) initWithClass:(Class)objectClass NS_UNAVAILABLE;
 
 /**
- @brief Default initializer.
+ Default initializer.
  
  @param objectClass         The class of the object that will be returned from the methods.
  @param parentObjectFactory A reference to a ALCClassObjectFactory that represents the parent class of the method.
  @param selector            The selector to execute.
- @param arguments           A NSArray of ALCMethodArgument instances which will be used to inejct values into the method call.
+ @param arguments           A NSArray of ALCDependency instances which will be used to inject values into the method call.
  
  @return An instance of this factory.
  */
 -(instancetype) initWithClass:(Class)objectClass
           parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
                      selector:(SEL) selector
-                         args:(nullable NSArray<ALCMethodArgument *> *) arguments NS_DESIGNATED_INITIALIZER;
+                         args:(nullable NSArray<id<ALCDependency>> *) arguments NS_DESIGNATED_INITIALIZER;
 
 @end
 
