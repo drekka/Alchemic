@@ -58,7 +58,12 @@ NS_ASSUME_NONNULL_BEGIN
             if (constant) {
                 throwException(IllegalArgument, @"You cannot combine model search criteria and constants.");
             }
-            searchCriteria = searchCriteria ? [searchCriteria combineWithCriteria:criteria] : criteria;
+            
+            if (searchCriteria) {
+                [searchCriteria appendSearchCriteria:criteria];
+            } else {
+                searchCriteria = criteria;
+            }
             
         } else if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
             
@@ -119,7 +124,7 @@ NS_ASSUME_NONNULL_BEGIN
             return NO;
         }
     }
-
+    
     // All dependencies are good to go.
     *checkingFlag = NO;
     return YES;

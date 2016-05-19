@@ -20,6 +20,7 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
     Criteria _acceptCriteria;
     BOOL _unique;
     NSString *_desc;
+    ALCModelSearchCriteria *_nextModelSearchCriteria;
 }
 
 #pragma mark - Factory methods
@@ -52,11 +53,17 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 
 #pragma mark - Tasks
 
--(void) setNextSearchCriteria:(ALCModelSearchCriteria *) nextSearchCriteria {
-    if (_unique || nextSearchCriteria->_unique) {
-        throwException(IllegalArgument, @"You cannot combine model search criteria and constants in the one injection.");
+-(void) appendSearchCriteria:(ALCModelSearchCriteria *) criteria {
+    
+    if (_unique || criteria->_unique) {
+        throwException(IllegalArgument, @"Name criteria must be the only critieria.");
     }
-    _nextSearchCriteria = nextSearchCriteria;
+    
+    if (_nextModelSearchCriteria) {
+        [_nextModelSearchCriteria appendSearchCriteria:criteria];
+    } else {
+        _nextModelSearchCriteria = criteria;
+    }
 }
 
 -(instancetype) initWithDesc:(NSString *) desc acceptorBlock:(Criteria) criteriaBlock {
@@ -68,18 +75,13 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
     return self;
 }
 
--(ALCModelSearchCriteria *) combineWithCriteria:(ALCModelSearchCriteria *) otherCriteria {
-    self.nextSearchCriteria = otherCriteria;
-    return self;
-}
-
 -(BOOL) acceptsObjectFactory:(id<ALCObjectFactory>) valueFactory name:(NSString *) name {
     return _acceptCriteria(name, valueFactory)
-    && (_nextSearchCriteria == nil || [_nextSearchCriteria acceptsObjectFactory:valueFactory name:name]);
+    && (_nextModelSearchCriteria == nil || [_nextModelSearchCriteria acceptsObjectFactory:valueFactory name:name]);
 }
 
 -(NSString *)description {
-    NSString *nextDesc = self.nextSearchCriteria.description;
+    NSString *nextDesc = _nextModelSearchCriteria.description;
     return nextDesc ? str(@"%@ and %@", _desc, nextDesc) : _desc;
 }
 
