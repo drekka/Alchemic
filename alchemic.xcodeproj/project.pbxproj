@@ -126,6 +126,7 @@
 		F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4023C031CE9827A00AEC0E5 /* ALCAbstractDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */; };
 		F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C041CE988F100AEC0E5 /* ALCInjector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F408073F1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */; };
 		F41DE2D61CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */; };
 		F45828341CEBFCFC0074A844 /* ReferenceFactories.m in Sources */ = {isa = PBXBuildFile; fileRef = F45828331CEBFCFC0074A844 /* ReferenceFactories.m */; };
 		F458283D1CEBFECE0074A844 /* XCTestCase+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = F458283C1CEBFECE0074A844 /* XCTestCase+Alchemic.m */; };
@@ -314,6 +315,7 @@
 		F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractDependency.h; sourceTree = "<group>"; };
 		F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractDependency.m; sourceTree = "<group>"; };
 		F4023C041CE988F100AEC0E5 /* ALCInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInjector.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConfigClassProcessorTests.m; sourceTree = "<group>"; };
 		F41DE2D31CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeUIApplicationDelegate.h; sourceTree = "<group>"; };
 		F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeUIApplicationDelegate.m; sourceTree = "<group>"; };
 		F45828331CEBFCFC0074A844 /* ReferenceFactories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReferenceFactories.m; sourceTree = "<group>"; };
@@ -553,6 +555,7 @@
 			isa = PBXGroup;
 			children = (
 				6C67FF281C6772A400ABEDDD /* ALCRuntimeTests.m */,
+				F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -903,6 +906,7 @@
 				6C24CCDF1CA42B0C0026D18C /* NestedThing.m in Sources */,
 				6C4D85AA1C7DB7460061CA84 /* ALCConstantsTests.m in Sources */,
 				F458283D1CEBFECE0074A844 /* XCTestCase+Alchemic.m in Sources */,
+				F408073F1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m in Sources */,
 				6C67FF291C6772A400ABEDDD /* ALCRuntimeTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

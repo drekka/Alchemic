@@ -47,7 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
     STLog(self, @"\n\n%@\n", _model);
     STLog(self, @"Alchemic started.");
     
-    // TODO: send notification
+    // Post the finished notification.
+    [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
 }
 
 #pragma mark - Registration
