@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Default initializer.
  
+ Takes and injector which will be used by the dependency to source the value to be injected.
+ 
  @param injector The injector to be used by the dependency.
  
  @return An instance of this class.

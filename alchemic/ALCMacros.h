@@ -101,7 +101,9 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  */
 #define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
 
-// TODO: Add AcSet, AcInvoke
+#define AcSet(value, ...)
+
+#define AcInvoke(returnType, criteria, ...)
 
 #pragma mark - Search criteria
 
