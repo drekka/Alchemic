@@ -9,7 +9,7 @@
 @import XCTest;
 
 #import <StoryTeller/StoryTeller.h>
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
 #import "TopThing.h"
 #import "NestedThing.h"

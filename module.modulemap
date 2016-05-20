@@ -1,0 +1,3 @@
+module Alchemic {
+    umbrella header "Headers/Alchemic.h"
+}

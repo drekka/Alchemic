@@ -7,8 +7,8 @@
 //
 
 @import XCTest;
-
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
+@import ObjectiveC;
 
 @interface ALCConstantsTests : XCTestCase
 @property (nonatomic, assign) int anInt;

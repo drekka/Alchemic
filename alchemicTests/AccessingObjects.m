@@ -9,10 +9,10 @@
 #import <XCTest/XCTest.h>
 #import <StoryTeller/StoryTeller.h>
 
-#import <alchemic/Alchemic.h>
+@import Alchemic;
 
-//#import "ALCContextImpl.h"
-//#import "ALCInstantiation.h"
+//#import <Alchemic/ALCContextImpl.h>
+//#import <Alchemic/ALCInstantiation.h>
 
 #import "TopThing.h"
 #import "NestedThing.h"

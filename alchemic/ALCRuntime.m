@@ -6,17 +6,17 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCClassProcessor.h"
-#import "ALCConfigClassProcessor.h"
-#import "ALCContext.h"
-#import "ALCInternalMacros.h"
-#import "ALCModelClassProcessor.h"
-#import "ALCResourceLocatorClassProcessor.h"
-#import "ALCRuntime.h"
-#import "ALCTypeData.h"
-#import "NSSet+Alchemic.h"
+#import <Alchemic/ALCClassProcessor.h>
+#import <Alchemic/ALCConfigClassProcessor.h>
+#import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCModelClassProcessor.h>
+#import <Alchemic/ALCResourceLocatorClassProcessor.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCTypeData.h>
+#import <Alchemic/NSSet+Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
-#import "NSBundle+Alchemic.h"
+#import <Alchemic/NSBundle+Alchemic.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "AlchemicException.h"
+#import <Alchemic/AlchemicException.h>
 
 @implementation AlchemicException
 @end

@@ -1,0 +1,4 @@
+explicit module Alchemic.Private {
+    header "PrivateHeaders/ALCConfigClassProcessor.h"
+    header "PrivateHeaders/ALCTypeDefs.h"
+}

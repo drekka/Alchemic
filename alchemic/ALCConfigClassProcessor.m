@@ -8,9 +8,9 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCConfigClassProcessor.h"
+#import <Alchemic/ALCConfigClassProcessor.h>
 
-#import "ALCConfig.h"
+#import <Alchemic/ALCConfig.h>
 
 @implementation ALCConfigClassProcessor
 

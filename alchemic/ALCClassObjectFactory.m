@@ -8,17 +8,17 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCClassObjectFactory.h"
-#import "ALCVariableDependency.h"
-#import "ALCRuntime.h"
-#import "NSObject+Alchemic.h"
-#import "ALCInternalMacros.h"
-#import "ALCDependency.h"
-#import "ALCClassObjectFactoryInitializer.h"
-#import "AlchemicAware.h"
-#import "Alchemic.h"
-#import "ALCInstantiation.h"
-#import "ALCVariableDependency.h"
+#import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCVariableDependency.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/ALCClassObjectFactoryInitializer.h>
+#import <Alchemic/AlchemicAware.h>
+#import <Alchemic/Alchemic.h>
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCVariableDependency.h>
 
 @implementation ALCClassObjectFactory {
     NSMutableArray<id<ALCDependency>> *_dependencies;

@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCObjectFactoryType.h"
+#import <Alchemic/ALCObjectFactoryType.h>
 
 /**
  An ALCObjectFactoryType which is used for storing and managing singleton instances.

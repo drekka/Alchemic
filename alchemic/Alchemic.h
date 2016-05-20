@@ -14,7 +14,7 @@
 #import <Alchemic/ALCClassObjectFactoryInitializer.h>
 #import <Alchemic/ALCClassProcessor.h>
 #import <Alchemic/ALCConfig.h>
-#import <Alchemic/ALCConfigClassProcessor.h>
+//#import <Alchemic/ALCConfigClassProcessor.h>
 #import <Alchemic/ALCConstant.h>
 #import <Alchemic/ALCConstantInjectors.h>
 #import <Alchemic/ALCContextImpl.h>

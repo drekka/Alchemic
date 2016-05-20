@@ -8,7 +8,7 @@
 
 #import "XCTestCase+Alchemic.h"
 
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
 @implementation XCTestCase (Alchemic)
 

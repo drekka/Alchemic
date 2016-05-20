@@ -7,8 +7,8 @@
 //
 
 @import XCTest;
-
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
+@import Alchemic.Private;
 #import <OCMock/OCMock.h>
 
 @interface ALCConfigClassProcessorTests : XCTestCase

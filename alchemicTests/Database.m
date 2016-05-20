@@ -8,7 +8,7 @@
 
 #import "Database.h"
 
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
 @implementation Database
 

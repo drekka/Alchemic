@@ -6,63 +6,62 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCConstantInjectors.h"
-#import "NSObject+Alchemic.h"
-#import "ALCRuntime.h"
-#import "ALCInternalMacros.h"
-#import "ALCTypeData.h"
-#import "ALCModel.h"
+#import <Alchemic/ALCConstantInjectors.h>
+#import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCTypeData.h>
+#import <Alchemic/ALCModel.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 #define ALCConstantFunctionImplementation(name, type) \
 id<ALCInjector> Ac ## name(type value) { \
-    return [ALCConstant ## name constantValue:value]; \
+return [ALCConstant ## name constantValue:value]; \
 }
 
 #define ALCConstantImplementation(name, type, injectVariableCode) \
 @implementation ALCConstant ## name { \
-    type _value; \
+type _value; \
 } \
 -(instancetype) init { \
-    [self doesNotRecognizeSelector:_cmd]; \
-    return nil; \
+methodReturningObjectNotImplemented; \
 } \
 -(instancetype) initWithValue:(type) value { \
-    self = [super init]; \
-    if (self) { \
-        _value = value; \
-    } \
-    return self; \
+self = [super init]; \
+if (self) { \
+_value = value; \
+} \
+return self; \
 } \
 +(instancetype) constantValue:(type) value { \
-    return [[ALCConstant ## name alloc] initWithValue:value]; \
+return [[ALCConstant ## name alloc] initWithValue:value]; \
 } \
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
-    injectVariableCode \
-    return NULL; \
+injectVariableCode \
+return NULL; \
 } \
 -(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
-    [inv setArgument:&_value atIndex:idx]; \
+[inv setArgument:&_value atIndex:idx]; \
 } \
 @end
 
 #define ALCConstantScalarImplementation(name, type, toObject) \
 ALCConstantImplementation(name, type, \
-    ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
-    if (ivarTypeData.objcClass) { \
-        [ALCRuntime setObject:object variable:variable withValue:toObject]; \
-    } else { \
-        CFTypeRef objRef = CFBridgingRetain(object); \
-        type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(variable)); \
-        *ivarPtr = _value; \
-        CFBridgingRelease(objRef); \
-    } \
+ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
+if (ivarTypeData.objcClass) { \
+[ALCRuntime setObject:object variable:variable withValue:toObject]; \
+} else { \
+CFTypeRef objRef = CFBridgingRetain(object); \
+type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(variable)); \
+*ivarPtr = _value; \
+CFBridgingRelease(objRef); \
+} \
 )
 
 #define ALCConstantObjectImplementation(name, type) \
 ALCConstantImplementation(name, type, \
-    [ALCRuntime setObject:object variable:variable withValue:_value]; \
+[ALCRuntime setObject:object variable:variable withValue:_value]; \
 )
 
 #pragma mark - Scalar types

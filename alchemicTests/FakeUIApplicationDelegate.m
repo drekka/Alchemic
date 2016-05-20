@@ -6,11 +6,11 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
 #import "FakeUIApplicationDelegate.h"
 
-#import "Networking.h"
+@class Networking;
 
 @implementation FakeUIApplicationDelegate {
     Networking *_networking;

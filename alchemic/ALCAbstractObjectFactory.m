@@ -8,21 +8,21 @@
 
 @import ObjectiveC;
 @import UIKit;
-#import "ALCAbstractObjectFactory.h"
+#import <Alchemic/ALCAbstractObjectFactory.h>
 // :: Framework ::
 #import <StoryTeller/StoryTeller.h>
 // :: Other ::
-#import "ALCInstantiation.h"
-#import "ALCInternalMacros.h"
-#import "ALCIsFactory.h"
-#import "ALCIsPrimary.h"
-#import "ALCIsReference.h"
-#import "ALCModel.h"
-#import "ALCObjectFactoryType.h"
-#import "ALCObjectFactoryTypeFactory.h"
-#import "ALCObjectFactoryTypeReference.h"
-#import "ALCObjectFactoryTypeSingleton.h"
-#import "AlchemicAware.h"
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCIsFactory.h>
+#import <Alchemic/ALCIsPrimary.h>
+#import <Alchemic/ALCIsReference.h>
+#import <Alchemic/ALCModel.h>
+#import <Alchemic/ALCObjectFactoryType.h>
+#import <Alchemic/ALCObjectFactoryTypeFactory.h>
+#import <Alchemic/ALCObjectFactoryTypeReference.h>
+#import <Alchemic/ALCObjectFactoryTypeSingleton.h>
+#import <Alchemic/AlchemicAware.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,8 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Lifecycle
 
 -(instancetype) init {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    methodReturningObjectNotImplemented;
 }
 
 -(instancetype) initWithClass:(Class) objectClass {
@@ -94,7 +93,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) createObject {
-    methodReturningObjectNotImplemented;
+    methodNotImplemented;
+    return [NSNull null];
 }
 
 -(ALCObjectCompletion) objectCompletion {
@@ -111,7 +111,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Descriptions
 
 -(NSString *)resolvingDescription {
-    methodReturningObjectNotImplemented;
+    methodNotImplemented;
+    return @"";
 }
 
 -(NSString *) description {

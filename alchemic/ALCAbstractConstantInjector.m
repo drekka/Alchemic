@@ -6,10 +6,10 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractConstantInjector.h"
+#import <Alchemic/ALCAbstractConstantInjector.h>
 
-#import "ALCInternalMacros.h"
-#import "ALCDefs.h"
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCDefs.h>
 
 @implementation ALCAbstractConstantInjector
 
@@ -24,7 +24,8 @@
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {}
 
 -(NSString *)resolvingDescription {
-    methodReturningObjectNotImplemented;
+    methodNotImplemented;
+    return @"";
 }
 
 -(ALCSimpleBlock) injectObject:(id)object {

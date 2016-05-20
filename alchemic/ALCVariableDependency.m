@@ -6,9 +6,9 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCVariableDependency.h"
-#import "ALCInjector.h"
-#import "ALCInternalMacros.h"
+#import <Alchemic/ALCVariableDependency.h>
+#import <Alchemic/ALCInjector.h>
+#import <Alchemic/ALCInternalMacros.h>
 
 @implementation ALCVariableDependency {
     Ivar _ivar;

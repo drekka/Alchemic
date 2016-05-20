@@ -8,10 +8,10 @@
 
 @import Foundation;
 
-#import "ALCObjectFactory.h"
-#import "ALCResolvable.h"
-#import "ALCInstantiator.h"
-#import "ALCDefs.h"
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCResolvable.h>
+#import <Alchemic/ALCInstantiator.h>
+#import <Alchemic/ALCDefs.h>
 
 @class ALCInstantiation;
 

@@ -8,15 +8,15 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCClassObjectFactoryInitializer.h"
+#import <Alchemic/ALCClassObjectFactoryInitializer.h>
 
-#import "ALCClassObjectFactory.h"
-#import "ALCInternalMacros.h"
-#import "ALCDependency.h"
-#import "NSObject+Alchemic.h"
-#import "ALCInstantiation.h"
-#import "ALCRuntime.h"
-#import "NSArray+Alchemic.h"
+#import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/NSArray+Alchemic.h>
 
 @implementation ALCClassObjectFactoryInitializer {
     NSArray<id<ALCDependency>> *_arguments;
@@ -28,8 +28,7 @@
 @synthesize objectClass = _objectClass;
 
 -(instancetype) init {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    methodReturningObjectNotImplemented;
 }
 
 -(instancetype) initWithObjectFactory:(ALCClassObjectFactory *) objectFactory

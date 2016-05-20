@@ -6,8 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCRuntime.h"
-#import "AlchemicException.h"
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/AlchemicException.h>
 
 #define ALCHEMIC_PREFIX _alc_
 #define ALCHEMIC_METHOD_PREFIX alc_concat(ALCHEMIC_PREFIX, __LINE__)
@@ -33,7 +33,7 @@
 #pragma mark - Assertions
 
 #define methodNotImplemented \
-NSAssert(NO, @"Abstract method %@ not implemented.", [ALCRuntime selectorDescription:[self class] selector:_cmd])
+[self doesNotRecognizeSelector:_cmd];
 
 #define methodReturningObjectNotImplemented \
 methodNotImplemented; \

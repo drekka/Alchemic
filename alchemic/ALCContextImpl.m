@@ -8,22 +8,22 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCContextImpl.h"
-#import "ALCModel.h"
-#import "ALCModelImpl.h"
-#import "ALCObjectFactory.h"
-#import "ALCClassObjectFactory.h"
-#import "ALCMethodObjectFactory.h"
-#import "ALCClassObjectFactoryInitializer.h"
-#import "ALCDependency.h"
-#import "ALCModelObjectInjector.h"
-#import "ALCConstant.h"
-#import "Alchemic.h"
-#import "NSArray+Alchemic.h"
-#import "ALCRuntime.h"
-#import "ALCTypeData.h"
-#import "ALCInternalMacros.h"
-#import "ALCFactoryName.h"
+#import <Alchemic/ALCContextImpl.h>
+#import <Alchemic/ALCModel.h>
+#import <Alchemic/ALCModelImpl.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCMethodObjectFactory.h>
+#import <Alchemic/ALCClassObjectFactoryInitializer.h>
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/ALCModelObjectInjector.h>
+#import <Alchemic/ALCConstant.h>
+#import <Alchemic/Alchemic.h>
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCTypeData.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCFactoryName.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

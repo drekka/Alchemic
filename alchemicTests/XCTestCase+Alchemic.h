@@ -8,7 +8,7 @@
 
 @import XCTest;
 
-#import "ALCDefs.h"
+@import Alchemic.Private;
 
 @interface XCTestCase (Alchemic)
 

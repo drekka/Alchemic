@@ -9,7 +9,7 @@
 #import "Networking.h"
 #import "HTTPServer.h"
 
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
 @implementation Networking
 

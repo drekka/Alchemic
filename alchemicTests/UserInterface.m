@@ -8,7 +8,7 @@
 
 #import "UserInterface.h"
 
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
 @implementation UserInterface
 

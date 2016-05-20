@@ -8,9 +8,9 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "Alchemic.h"
-#import "NSArray+Alchemic.h"
-#import "ALCMethodArgument.h"
+#import <Alchemic/Alchemic.h>
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/ALCMethodArgument.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,8 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Life cycle
 
 -(instancetype) initWithClass:(Class)objectClass {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    methodReturningObjectNotImplemented;
 }
 
 -(instancetype) initWithClass:(Class)objectClass

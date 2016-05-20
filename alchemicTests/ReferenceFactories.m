@@ -10,7 +10,7 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
 #import "XCTestCase+Alchemic.h"
 #import "TopThing.h"

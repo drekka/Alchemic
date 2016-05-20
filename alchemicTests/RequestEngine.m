@@ -8,7 +8,7 @@
 
 #import "RequestEngine.h"
 
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
 @implementation RequestEngine
 

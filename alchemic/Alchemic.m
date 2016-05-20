@@ -1,10 +1,10 @@
 
-#import "Alchemic.h"
+#import <Alchemic/Alchemic.h>
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCContextImpl.h"
-#import "ALCRuntime.h"
+#import <Alchemic/ALCContextImpl.h>
+#import <Alchemic/ALCRuntime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

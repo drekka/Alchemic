@@ -8,14 +8,14 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCModelObjectInjector.h"
-#import "ALCModel.h"
-#import "ALCObjectFactory.h"
-#import "ALCInternalMacros.h"
-#import "NSObject+Alchemic.h"
-#import "ALCRuntime.h"
-#import "ALCInstantiation.h"
-#import "NSArray+Alchemic.h"
+#import <Alchemic/ALCModelObjectInjector.h>
+#import <Alchemic/ALCModel.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/NSArray+Alchemic.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,8 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize objectClass = _objectClass;
 
 -(instancetype) init {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    methodReturningObjectNotImplemented;
 }
 
 -(instancetype) initWithObjectClass:(Class) objectClass
@@ -79,7 +78,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)resolvingDescription {
-    methodReturningObjectNotImplemented;
+    methodNotImplemented;
+    return @"";
 }
 
 #pragma mark - Injecting

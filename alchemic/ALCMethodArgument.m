@@ -6,11 +6,11 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCMethodArgument.h"
+#import <Alchemic/ALCMethodArgument.h>
 
-#import "ALCInternalMacros.h"
-#import "NSArray+Alchemic.h"
-#import "ALCInjector.h"
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/ALCInjector.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,8 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(instancetype) initWithInjector:(id<ALCInjector>) injector {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    methodReturningObjectNotImplemented;
 }
 
 -(NSString *) stackName {

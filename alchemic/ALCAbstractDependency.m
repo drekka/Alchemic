@@ -6,16 +6,15 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractDependency.h"
+#import <Alchemic/ALCAbstractDependency.h>
 
-#import "ALCInternalMacros.h"
-#import "ALCInjector.h"
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCInjector.h>
 
 @implementation ALCAbstractDependency
 
 -(instancetype) init {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    methodReturningObjectNotImplemented;
 }
 
 -(instancetype) initWithInjector:(id<ALCInjector>) injector {
@@ -42,13 +41,15 @@
 }
 
 -(NSString *)resolvingDescription {
-    methodReturningObjectNotImplemented;
+    methodNotImplemented;
+    return @"";
 }
 
 #pragma mark - ALCDependency
 
 -(NSString *)stackName {
-    methodReturningObjectNotImplemented;
+    methodNotImplemented;
+    return @"";
 }
 
 -(ALCSimpleBlock)injectObject:(id)object {

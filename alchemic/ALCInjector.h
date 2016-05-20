@@ -9,8 +9,8 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import "ALCResolvable.h"
-#import "ALCDefs.h"
+#import <Alchemic/ALCResolvable.h>
+#import <Alchemic/ALCInternalMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

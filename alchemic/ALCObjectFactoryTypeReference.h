@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCObjectFactoryType.h"
+#import <Alchemic/ALCObjectFactoryType.h>
 
 /**
  A ALCObjectFactoryType which manages externally referenced objects.

@@ -10,10 +10,10 @@
 @import UIKit;
 
 #import <StoryTeller/StoryTeller.h>
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
-//#import "ALCClassObjectFactory.h"
-//#import "ALCContextImpl.h"
+//#import <Alchemic/ALCClassObjectFactory.h>
+//#import <Alchemic/ALCContextImpl.h>
 
 #import "TopThing.h"
 

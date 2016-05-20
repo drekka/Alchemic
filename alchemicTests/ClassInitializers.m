@@ -10,10 +10,10 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 
-//#import "ALCContextImpl.h"
-//#import "ALCClassObjectFactory.h"
+//#import <Alchemic/ALCContextImpl.h>
+//#import <Alchemic/ALCClassObjectFactory.h>
 
 #import "TopThing.h"
 #import "NestedThing.h"
@@ -36,43 +36,43 @@
 }
 
 -(void) testInitializer {
-
+    
     AcIgnoreSelectorWarnings(
                              SEL initSel = @selector(initWithNoArgs);
                              )
     [_context objectFactory:_topThingFactory setInitializer:initSel, nil];
     [_context start];
-
+    
     XCTAssertTrue(_topThingFactory.ready);
-
+    
     id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
     XCTAssertEqualObjects(@"abc", ((NestedThing *)value).aString);
 }
 
 -(void) testInitializerWithString {
-
+    
     [_context objectFactory:_topThingFactory setInitializer:@selector(initWithString:), AcString(@"abc"), nil];
     [_context start];
-
+    
     XCTAssertTrue(_topThingFactory.ready);
-
+    
     id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
     XCTAssertEqual(@"abc", ((TopThing *)value).aString);
 }
 
 -(void) testInitializerWithStringAndScalar {
-
+    
     AcIgnoreSelectorWarnings(
                              SEL selector = @selector(initWithString:andInt:);
                              )
     [_context objectFactory:_topThingFactory
              setInitializer:selector, AcString(@"abc"), AcInt(5), nil];
     [_context start];
-
+    
     XCTAssertTrue(_topThingFactory.ready);
-
+    
     id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
     XCTAssertEqual(@"abc", ((TopThing *)value).aString);

@@ -7,8 +7,8 @@
 //
 
 @import XCTest;
+@import Alchemic;
 
-#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
 #import "XCTestCase+Alchemic.h"

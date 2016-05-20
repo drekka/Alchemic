@@ -10,14 +10,14 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCModelImpl.h"
-#import "ALCObjectFactory.h"
-#import "ALCAbstractObjectFactory.h"
-#import "ALCClassObjectFactory.h"
-#import "ALCModelSearchCriteria.h"
-#import "ALCInternalMacros.h"
-#import "ALCInstantiation.h"
-#import "ALCIsReference.h"
+#import <Alchemic/ALCModelImpl.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCAbstractObjectFactory.h>
+#import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCModelSearchCriteria.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCIsReference.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

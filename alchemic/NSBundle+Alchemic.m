@@ -8,12 +8,12 @@
 
 @import ObjectiveC;
 
-#import "NSBundle+Alchemic.h"
+#import <Alchemic/NSBundle+Alchemic.h>
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "NSSet+Alchemic.h"
-#import "ALCClassProcessor.h"
+#import <Alchemic/NSSet+Alchemic.h>
+#import <Alchemic/ALCClassProcessor.h>
 
 @implementation NSBundle (Alchemic)
 

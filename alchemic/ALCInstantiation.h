@@ -10,7 +10,7 @@
 
 @protocol ALCContext;
 
-#import "ALCDefs.h"
+#import <Alchemic/ALCTypeDefs.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

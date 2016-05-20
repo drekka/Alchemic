@@ -107,7 +107,7 @@ registerFactoryMethod:(SEL) selector
  */
 -(id) objectWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
--(void) 
+//-(void)
 
 @end
 

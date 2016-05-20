@@ -8,15 +8,15 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "NSObject+Alchemic.h"
-#import "ALCResolvable.h"
-#import "ALCRuntime.h"
-#import "ALCInternalMacros.h"
-#import "ALCDependency.h"
-#import "ALCInstantiator.h"
-#import "ALCInstantiation.h"
-#import "NSArray+Alchemic.h"
-#import "ALCMethodArgument.h"
+#import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCResolvable.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/ALCInstantiator.h>
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/ALCMethodArgument.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,8 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) resolveWithResolvingStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
-                            resolvedFlag:(BOOL *) resolvedFlag
-                                   block:(ALCSimpleBlock) block {
+                     resolvedFlag:(BOOL *) resolvedFlag
+                            block:(ALCSimpleBlock) block {
     
     id<ALCResolvable> resolvableSelf = (id<ALCResolvable>) self;
     

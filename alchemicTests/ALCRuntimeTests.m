@@ -9,10 +9,7 @@
 @import XCTest;
 @import ObjectiveC;
 
-#import <Alchemic/Alchemic.h>
-
-//#import "ALCRuntime.h"
-//#import "ALCTypeData.h"
+@import Alchemic;
 
 @interface ALCRuntimeTests : XCTestCase
 @property(nonatomic, strong) NSString *aStringProperty;
@@ -60,21 +57,21 @@
 }
 
 -(void) testAccessingMethods {
-
+    
     XCTAssertFalse([[self class] instancesRespondToSelector:@selector(classMethod)]);
     XCTAssertTrue([[self class] instancesRespondToSelector:@selector(instanceMethod)]);
-
+    
     XCTAssertTrue([[self class] respondsToSelector:@selector(classMethod)]);
     XCTAssertFalse([self respondsToSelector:@selector(classMethod)]);
-
+    
     XCTAssertTrue([self respondsToSelector:@selector(instanceMethod)]);
     XCTAssertFalse([[self class] respondsToSelector:@selector(instanceMethod)]);
 }
 
 -(void) testMethodSignature {
-
+    
     NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:@selector(methodWithString:andInt:)];
-
+    
     const char *arg2 = [sig getArgumentTypeAtIndex:2];
     const char *arg3 = [sig getArgumentTypeAtIndex:3];
     XCTAssertTrue(strcmp("@", arg2) == 0);

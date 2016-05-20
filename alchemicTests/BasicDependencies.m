@@ -8,7 +8,7 @@
 
 @import XCTest;
 
-#import <Alchemic/Alchemic.h>
+@import Alchemic;
 #import <StoryTeller/StoryTeller.h>
 
 #import "TopThing.h"

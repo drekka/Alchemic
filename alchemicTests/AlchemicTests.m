@@ -6,9 +6,10 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
+@import Alchemic;
+@import Alchemic.Private;
 
-#import <Alchemic/Alchemic.h>
 #import <StoryTeller/StoryTeller.h>
 
 #import "Networking.h"
@@ -23,14 +24,18 @@
 
 @implementation AlchemicTests
 
--(void) testStartUp {
+-(void) testPrivateHeader {
+    __unused ALCConfigClassProcessor *cp = [[ALCConfigClassProcessor alloc] init];
+}
 
+-(void) testStartUp {
+    
     Networking *networking = AcGet(Networking);
     XCTAssertNotNil(networking);
-
+    
     UserInterface *ui = AcGet(UserInterface);
     XCTAssertNotNil(ui);
-
+    
     XCTAssertEqual(networking.ui, ui);
     XCTAssertEqual(ui.networking, networking);
 }

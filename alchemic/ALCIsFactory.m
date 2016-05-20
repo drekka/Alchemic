@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCIsFactory.h"
+#import <Alchemic/ALCIsFactory.h>
 
 @implementation ALCIsFactory
 

@@ -8,8 +8,8 @@
 
 @import Foundation;
 
-#import "ALCConstant.h"
-#import "ALCInjector.h"
+#import <Alchemic/ALCConstant.h>
+#import <Alchemic/ALCInjector.h>
 
 /**
  Abstract parent class of all constant value injectors. 

@@ -6,7 +6,7 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCIsReference.h"
+#import <Alchemic/ALCIsReference.h>
 
 @implementation ALCIsReference
 

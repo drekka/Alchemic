@@ -8,8 +8,9 @@
 
 #import <StoryTeller/StoryTeller.h>
 
-#import "ALCInstantiation.h"
-#import "AlchemicAware.h"
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/AlchemicAware.h>
+#import <Alchemic/ALCDefs.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,12 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) addCompletion:(nullable ALCObjectCompletion) newCompletion {
-
+    
     // Exit if there is nothing to add.
     if (!newCompletion) {
         return;
     }
-
+    
     if (_completion) {
         ALCObjectCompletion currentCompletion = _completion;
         _completion = ^(id object) {
@@ -48,12 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
         STLog(_object, @"Executing completing for %@", _object);
         _completion(_object);
     }
-
+    
     if ([_object conformsToProtocol:@protocol(AlchemicAware)]) {
         STLog(_object, @"Telling %@ it's injections have finished", _object);
         [(id<AlchemicAware>)_object alchemicDidInjectDependencies];
     }
-
+    
     STLog(_object, @"Posting injections finished notification for %@", _object);
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
                                                         object:self

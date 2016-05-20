@@ -6,8 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCResolvable.h"
-#import "ALCInstantiator.h"
+#import <Alchemic/ALCResolvable.h>
+#import <Alchemic/ALCInstantiator.h>
 
 @class ALCClassObjectFactory;
 @protocol ALCDependency;

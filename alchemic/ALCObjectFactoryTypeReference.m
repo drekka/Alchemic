@@ -6,8 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCObjectFactoryTypeReference.h"
-#import "ALCInternalMacros.h"
+#import <Alchemic/ALCObjectFactoryTypeReference.h>
+#import <Alchemic/ALCInternalMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
