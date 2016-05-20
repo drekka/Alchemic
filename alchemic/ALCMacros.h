@@ -28,6 +28,8 @@
 #define alc_toNSString(chars) _alc_toNSString(chars)
 #define _alc_toNSString(chars) @#chars
 
+#define alc_methodName(name, line) alc_concat(alc_concat(ALCHEMIC_PREFIX, name), line)
+
 #pragma mark - registration
 
 /**
@@ -36,7 +38,7 @@
  @param ... A list of configuration items.
  */
 #define AcRegister(...) \
-+(void) alc_concat(ALCHEMIC_PREFIX ## configureClassObjectFactory_, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
++(void) alc_methodName(configureClassObjectFactory_, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
 [[Alchemic mainContext] objectFactoryConfig:classObjectFactory, ## __VA_ARGS__, nil]; \
 }
 
@@ -47,7 +49,7 @@
  @param ...                 Arguments for the initializer, if any.
  */
 #define AcInitializer(initializerSelector, ...) \
-+(void) alc_concat(ALCHEMIC_PREFIX ## registerObjectFactoryInitializer, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
++(void) alc_methodName(registerObjectFactoryInitializer, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
 [[Alchemic mainContext] objectFactory:classObjectFactory setInitializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
 }
 
@@ -59,7 +61,7 @@
  @param ...                 Arguments for the method, if any.
  */
 #define AcMethod(methodType, methodSelector, ...) \
-+(void) alc_concat(ALCHEMIC_PREFIX ## registerMethodObjectFactory, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
++(void) alc_methodName(registerMethodObjectFactory, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
 [[Alchemic mainContext] objectFactory:classObjectFactory \
 registerFactoryMethod:@selector(methodSelector) \
 returnType:[methodType class], ## __VA_ARGS__, nil]; \
@@ -72,7 +74,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @param ...          Option list of arguments that define the injection.
  */
 #define AcInject(variableName, ...) \
-+(void) alc_concat(ALCHEMIC_PREFIX ## registerObjectFactoryDependency, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
++(void) alc_methodName(registerObjectFactoryDependency, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
 [[Alchemic mainContext] objectFactory:classObjectFactory registerVariableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
