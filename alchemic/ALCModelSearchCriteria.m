@@ -6,9 +6,11 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+// :: Framework ::
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCInternalMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

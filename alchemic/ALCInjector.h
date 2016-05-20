@@ -10,7 +10,7 @@
 @import ObjectiveC;
 
 #import <Alchemic/ALCResolvable.h>
-#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCTypeDefs.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

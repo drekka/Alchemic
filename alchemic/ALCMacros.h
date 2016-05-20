@@ -6,6 +6,18 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <Alchemic/Alchemic.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCFactoryName.h>
+#import <Alchemic/ALCIsFactory.h>
+#import <Alchemic/ALCIsPrimary.h>
+#import <Alchemic/ALCIsReference.h>
+#import <Alchemic/ALCMethodArgument.h>
+#import <Alchemic/ALCModelSearchCriteria.h>
+#import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCInternalMacros.h>
+
 #pragma mark - registration
 
 /**
@@ -89,7 +101,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @param critieria The argument criteria or constant. If search criteria are being used to location model objects, then multiple can be specified.
  @param ...       further criteria.
  */
-#define AcArg(argClass, critieria, ...) [ALCArgument argumentWithClass:[argClass class] model:model criteria:criteria, ## __VA_ARGS__, nil]
+#define AcArg(argClass, critieria, ...) [ALCMethodArgument argumentWithClass:[argClass class] model:model criteria:criteria, ## __VA_ARGS__, nil]
 
 /**
  Used in code to directly retrieve an object from Alchemic.

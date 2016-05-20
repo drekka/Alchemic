@@ -11,11 +11,11 @@
 /**
  Simple extension to NSException for the soul purposes of being caught in try-catches.
  */
-@interface AlchemicException : NSException
+@interface ALCException : NSException
 @end
 
 #define declareException(name) \
-@interface Alchemic ## name ## Exception : AlchemicException \
+@interface Alchemic ## name ## Exception : ALCException \
 @end
 
 declareException(CircularReference)

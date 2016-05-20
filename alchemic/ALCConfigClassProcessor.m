@@ -6,10 +6,9 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 
 #import <Alchemic/ALCConfigClassProcessor.h>
-
 #import <Alchemic/ALCConfig.h>
 
 @implementation ALCConfigClassProcessor

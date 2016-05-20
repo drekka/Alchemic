@@ -6,9 +6,9 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/AlchemicException.h>
+#import <Alchemic/ALCException.h>
 
-@implementation AlchemicException
+@implementation ALCException
 @end
 
 #define declareExceptionImpl(name) \

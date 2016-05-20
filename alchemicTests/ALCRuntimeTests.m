@@ -10,6 +10,7 @@
 @import ObjectiveC;
 
 @import Alchemic;
+@import Alchemic.Private;
 
 @interface ALCRuntimeTests : XCTestCase
 @property(nonatomic, strong) NSString *aStringProperty;

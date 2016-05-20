@@ -6,10 +6,10 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 
 #import <Alchemic/ALCInstantiation.h>
-#import <Alchemic/AlchemicAware.h>
+#import <Alchemic/ALCAware.h>
 #import <Alchemic/ALCDefs.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -50,9 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
         _completion(_object);
     }
     
-    if ([_object conformsToProtocol:@protocol(AlchemicAware)]) {
+    if ([_object conformsToProtocol:@protocol(ALCAware)]) {
         STLog(_object, @"Telling %@ it's injections have finished", _object);
-        [(id<AlchemicAware>)_object alchemicDidInjectDependencies];
+        [(id<ALCAware>)_object alchemicDidInjectDependencies];
     }
     
     STLog(_object, @"Posting injections finished notification for %@", _object);

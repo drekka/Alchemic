@@ -14,6 +14,7 @@
 #import <Alchemic/ALCModelObjectInjector.h>
 #import <Alchemic/ALCMethodArgument.h>
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCException.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

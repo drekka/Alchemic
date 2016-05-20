@@ -10,7 +10,7 @@
 @import UIKit;
 #import <Alchemic/ALCAbstractObjectFactory.h>
 // :: Framework ::
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 // :: Other ::
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCInternalMacros.h>
@@ -22,7 +22,7 @@
 #import <Alchemic/ALCObjectFactoryTypeFactory.h>
 #import <Alchemic/ALCObjectFactoryTypeReference.h>
 #import <Alchemic/ALCObjectFactoryTypeSingleton.h>
-#import <Alchemic/AlchemicAware.h>
+#import <Alchemic/ALCAware.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

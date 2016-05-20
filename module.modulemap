@@ -1,3 +1,4 @@
 module Alchemic {
     umbrella header "Headers/Alchemic.h"
+    link framework "StoryTeller"
 }

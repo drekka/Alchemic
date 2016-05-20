@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 
 #import <Alchemic/ALCModelClassProcessor.h>
 

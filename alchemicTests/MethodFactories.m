@@ -8,8 +8,9 @@
 
 @import XCTest;
 
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 @import Alchemic;
+@import Alchemic.Private;
 
 #import "TopThing.h"
 #import "NestedThing.h"
@@ -30,7 +31,7 @@
 }
 
 -(void) testInstanceFactoryMethod {
-
+    
     AcIgnoreSelectorWarnings(
                              SEL selector = @selector(nestedThingFactoryMethod);
                              )
@@ -38,12 +39,12 @@
       registerFactoryMethod:selector
                  returnType:[NestedThing class], nil];
     [_context start];
-
+    
     [self validateInstanceWithString:@"abc" int:5];
 }
 
 -(void) testInstanceFactoryMethodWithStringArg {
-
+    
     AcIgnoreSelectorWarnings(
                              SEL selector = @selector(nestedThingFactoryMethodWithString:);
                              )
@@ -51,12 +52,12 @@
       registerFactoryMethod:selector
                  returnType:[NestedThing class], AcString(@"def"), nil];
     [_context start];
-
+    
     [self validateInstanceWithString:@"def" int:5];
 }
 
 -(void) testInstanceFactoryMethodWithStringAndScalarArg {
-
+    
     AcIgnoreSelectorWarnings(
                              SEL selector = @selector(nestedThingFactoryMethodWithString:andInt:);
                              )
@@ -64,7 +65,7 @@
       registerFactoryMethod:selector
                  returnType:[NestedThing class], AcString(@"def"), AcInt(12), nil];
     [_context start];
-
+    
     [self validateInstanceWithString:@"def" int:12];
 }
 

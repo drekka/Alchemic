@@ -10,7 +10,7 @@
 
 #import <Alchemic/NSBundle+Alchemic.h>
 
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 
 #import <Alchemic/NSSet+Alchemic.h>
 #import <Alchemic/ALCClassProcessor.h>

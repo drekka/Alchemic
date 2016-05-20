@@ -8,9 +8,10 @@
 
 @import XCTest;
 
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 
 @import Alchemic;
+@import Alchemic.Private;
 
 //#import <Alchemic/ALCContextImpl.h>
 //#import <Alchemic/ALCClassObjectFactory.h>

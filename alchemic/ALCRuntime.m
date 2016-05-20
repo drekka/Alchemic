@@ -5,6 +5,7 @@
 //  Created by Derek Clarkson on 5/02/2016.
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
+@import StoryTeller;
 
 #import <Alchemic/ALCClassProcessor.h>
 #import <Alchemic/ALCConfigClassProcessor.h>
@@ -15,8 +16,8 @@
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCTypeData.h>
 #import <Alchemic/NSSet+Alchemic.h>
-#import <StoryTeller/StoryTeller.h>
 #import <Alchemic/NSBundle+Alchemic.h>
+#import <Alchemic/ALCException.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

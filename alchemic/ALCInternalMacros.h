@@ -6,9 +6,6 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCRuntime.h>
-#import <Alchemic/AlchemicException.h>
-
 #define ALCHEMIC_PREFIX _alc_
 #define ALCHEMIC_METHOD_PREFIX alc_concat(ALCHEMIC_PREFIX, __LINE__)
 

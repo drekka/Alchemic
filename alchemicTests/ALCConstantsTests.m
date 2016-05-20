@@ -8,6 +8,7 @@
 
 @import XCTest;
 @import Alchemic;
+@import Alchemic.Private;
 @import ObjectiveC;
 
 @interface ALCConstantsTests : XCTestCase

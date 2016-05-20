@@ -7,12 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 
 @import Alchemic;
-
-//#import <Alchemic/ALCContextImpl.h>
-//#import <Alchemic/ALCInstantiation.h>
+@import Alchemic.Private;
 
 #import "TopThing.h"
 #import "NestedThing.h"
@@ -30,36 +28,36 @@
 -(void) setUp {
     STStartLogging(@"<ALCContext>");
     STStartLogging(@"is [TopThing]");
-
+    
     _context = [[ALCContextImpl alloc] init];
-
+    
     _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
     _nestedThingFactory = [_context registerObjectFactoryForClass:[NestedThing class]];
 }
 
 -(void) testSimpleGet {
-
+    
     [_context start];
-
+    
     TopThing *topThing = [_context objectWithClass:[TopThing class], nil];
-
+    
     XCTAssertNotNil(topThing);
     XCTAssertTrue([topThing isKindOfClass:[TopThing class]]);
 }
 
 -(void) testGetWithNestedValue {
-
+    
     [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", nil];
-
+    
     [_context start];
-
+    
     TopThing *topThing = [_context objectWithClass:[TopThing class], nil];
-
+    
     XCTAssertNotNil(topThing);
     XCTAssertTrue([topThing isKindOfClass:[TopThing class]]);
     XCTAssertNotNil(topThing.aNestedThing);
     XCTAssertTrue([topThing.aNestedThing isKindOfClass:[NestedThing class]]);
-
+    
 }
 
 @end

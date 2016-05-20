@@ -9,7 +9,7 @@
 @import XCTest;
 @import Alchemic;
 
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 
 #import "XCTestCase+Alchemic.h"
 #import "TopThing.h"

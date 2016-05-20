@@ -17,7 +17,7 @@
         block();
         XCTFail(@"Exception %@ not thrown", NSStringFromClass(exceptionClass));
     }
-    @catch (AlchemicException *exception) {
+    @catch (ALCException *exception) {
         XCTAssertTrue([exception isKindOfClass:exceptionClass], @"Expected a %@, got a %@ instead", NSStringFromClass(exceptionClass), NSStringFromClass([exception class]));
     }
     @catch (NSException *exception) {

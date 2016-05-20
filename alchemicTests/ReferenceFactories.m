@@ -8,7 +8,7 @@
 
 @import XCTest;
 
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 
 @import Alchemic;
 

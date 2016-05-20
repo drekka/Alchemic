@@ -8,9 +8,8 @@
 
 @import XCTest;
 @import Alchemic;
-@import Alchemic.Private;
 
-#import <StoryTeller/StoryTeller.h>
+@import StoryTeller;
 
 #import "Networking.h"
 #import "UserInterface.h"
@@ -23,10 +22,6 @@
 @end
 
 @implementation AlchemicTests
-
--(void) testPrivateHeader {
-    __unused ALCConfigClassProcessor *cp = [[ALCConfigClassProcessor alloc] init];
-}
 
 -(void) testStartUp {
     
