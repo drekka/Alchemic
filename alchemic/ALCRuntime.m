@@ -10,6 +10,7 @@
 #import <Alchemic/ALCClassProcessor.h>
 #import <Alchemic/ALCConfigClassProcessor.h>
 #import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCModelClassProcessor.h>
 #import <Alchemic/ALCResourceLocatorClassProcessor.h>

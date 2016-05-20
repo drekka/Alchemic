@@ -7,6 +7,7 @@
 //
 
 #import <Alchemic/ALCObjectFactoryTypeReference.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCException.h>
 

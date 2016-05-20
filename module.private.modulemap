@@ -13,6 +13,7 @@ explicit module Alchemic.Private {
     header "PrivateHeaders/ALCInjector.h"
     header "PrivateHeaders/ALCInstantiation.h"
     header "PrivateHeaders/ALCInstantiator.h"
+    header "PrivateHeaders/ALCInternalMacros.h"
     header "PrivateHeaders/ALCMethodArgument.h"
     header "PrivateHeaders/ALCMethodObjectFactory.h"
     header "PrivateHeaders/ALCModel.h"

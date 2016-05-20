@@ -14,6 +14,7 @@
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCIsReference.h>
 #import <Alchemic/ALCModelImpl.h>

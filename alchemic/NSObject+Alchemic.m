@@ -13,6 +13,7 @@
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCInstantiator.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCMethodArgument.h>
 #import <Alchemic/ALCResolvable.h>

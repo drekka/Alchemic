@@ -13,6 +13,7 @@
 #import <Alchemic/ALCConstant.h>
 #import <Alchemic/ALCModelObjectInjector.h>
 #import <Alchemic/ALCMethodArgument.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCException.h>
 

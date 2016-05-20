@@ -15,6 +15,7 @@
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCInjector.h>
 #import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCIsReference.h>
 #import <Alchemic/ALCRuntime.h>

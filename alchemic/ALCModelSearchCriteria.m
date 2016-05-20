@@ -8,6 +8,7 @@
 
 // :: Framework ::
 #import <Alchemic/ALCException.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCObjectFactory.h>

@@ -11,6 +11,7 @@
 // :: Framework ::
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCModelObjectInjector.h>
