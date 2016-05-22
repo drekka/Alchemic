@@ -7,7 +7,7 @@
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
-            buildForTesting = "NO"
+            buildForTesting = "YES"
             buildForRunning = "YES"
             buildForProfiling = "YES"
             buildForArchiving = "YES"
@@ -17,7 +17,7 @@
                BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
                BuildableName = "Alchemic.framework"
                BlueprintName = "Alchemic"
-               ReferencedContainer = "container:alchemic.xcodeproj">
+               ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -36,7 +36,7 @@
                BlueprintIdentifier = "6C24CCE11CA42BA80026D18C"
                BuildableName = "Integration tests.xctest"
                BlueprintName = "Integration tests"
-               ReferencedContainer = "container:alchemic.xcodeproj">
+               ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -65,7 +65,7 @@
             BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
             BuildableName = "Alchemic.framework"
             BlueprintName = "Alchemic"
-            ReferencedContainer = "container:alchemic.xcodeproj">
+            ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -83,7 +83,7 @@
             BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
             BuildableName = "Alchemic.framework"
             BlueprintName = "Alchemic"
-            ReferencedContainer = "container:alchemic.xcodeproj">
+            ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

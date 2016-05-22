@@ -1,4 +1,5 @@
 module Alchemic {
     umbrella header "Headers/Alchemic.h"
+    requires objc_arc
     link framework "StoryTeller"
 }
