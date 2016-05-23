@@ -570,6 +570,8 @@ AcRegister(AcReference)
 
 *Note: Because references are created externally, it makes no sense for method factories to declare as references. If you use __AcReference__ on a method factory declaration, Alchemic will throw an error.*
 
+See [Non-managed object injections](#non-managed-object-injections)
+
 # Other object factory settings
 
 ## Custom names
@@ -625,41 +627,37 @@ Primary object factories are most useful in testing. You can register mock or du
 
 Now that we know how to declare objects and inject them, lets look at how we retrieve objects in classes and code which is not managed by Alchemic. In other words, how to get Alchemic to work with the rest of your app.
 
-## Non-managed objects
+## Non-managed object injections
 
-Not all objects can be created and injected by Alchemic. For example, UIViewControllers in storyboards are created by the storyboard.  However you can still declare dependencies in these classes and get them injected as if Alchemic had created them. 
+As previously mentioned when you want to specify injections for classes created externally, use __AcReference__ to tag the class factory that defines the class of those objects. UIViewControllers in story boards being a typical example.
 
-Firstly when registering class injections, either avoid adding __AcRegister__, or add the __AcExternal__ flag. Either method will tell Alchemic to use the builder for declaring injections only and to not create any instances. 
-
-Later in your code you can make a call to trigger the injection process programmatically like this:
+After your code has created the object, it needs a way to trigger the injection of dependencies. 
 
 ```objc
 // Objective-C
 -(instancetype) initWithFrame:(CGRect) aFrame {
-self = [super initWithFrame:aFrame];
-if (self) {
-AcInjectDependencies(self);
-}
-return self;
+    self = [super initWithFrame:aFrame];
+    if (self) {
+        AcInjectDependencies(self);
+    }
+    return self;
 }
 ```
 
 ```swift
 // Swift
 func init(frame:CGRect) {
-AcInjectDependencies(self)
+    AcInjectDependencies(self)
 }
 ```
 
-You can add __AcInjectDependencies__ anywhere in the class. For example you might do it in the `viewDidLoad` method instead. 
+__AcInjectDependencies__ does this function. You can call i anywhere in your code and pass it the object whose dependencies you want injected. For example you might do it in the `viewDidLoad` method instead. 
 
-*Whilst I looked at several options for automatically injecting storyboard created instances, I did not find any technique that would work well and required less code. So for the moment Alchemic does not inject dependencies into them automatically.*
+*Note: Whilst I looked at several options for automatically injecting storyboard created instances, I did not find any technique that would work well and required less than a single line of code. So for the moment Alchemic does not inject dependencies into view controllers automatically.*
 
-## Programmatically obtaining objects
+## Getting objects using __AcGet__
 
-Sometimes (in testing for example) you want to get an object from Alchemic without specifying an injection.
-
-### Getting objects using __AcGet__
+Sometimes (in unit tests for example) you want to get an object from Alchemic without specifying an injection.
 
 __AcGet__ allows you to search for and return an object (or objects) in a similar fashion to how __AcInject__ works. Except it's inline with your code rather than a one off injection and can be accessed as many times as you like.
 
