@@ -1,16 +1,43 @@
 # Alchemic [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 By Derek Clarkson
 
+<form name="switcher">
+<input type="radio" name="switchers" value="objc" checked onclick="javascript:switchToObj();"> Objective-C<br>
+<input type="radio" name="switchers" value="swift" checked onclick="javascript:switchToSwift();"> Swift<br>
+</form>
+
+<script language="javascript">
+
+func switchToObjc() {
+switch("highlight-source-objc", "inline");
+switch("highlight-source-swift", "none");
+}
+func switchToSwift() {
+switch("highlight-source-objc", "none");
+switch("highlight-source-swift", "inline");
+}
+
+func switch(cssClass, displayStatus) {
+var myElements = document.querySelectorAll("." + cssClass);
+for (var i = 0; i < myElements.length; i++) {
+myElements[i].style.display = displayStatus;
+}
+}
+
+switchToObj();
+
+</script>
+
 ### Other documents: 
 
- * [What is Direct Injection (DI)?](./WhatIsDI.md)
- * [Objective-C quick guide](./Quick guide - Objective-C.md)
- * [Swift quick guide](./Quick guide - Swift.md)
+* [What is Direct Injection (DI)?](./WhatIsDI.md)
+* [Objective-C quick guide](./Quick guide - Objective-C.md)
+* [Swift quick guide](./Quick guide - Swift.md)
 
 ### Readme  
-  
 
-  
+
+
 #Intro
 
 Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS.  It's based loosely on some ideas from the [Spring](http://projects.spring.io/spring-framework/) Java framework, and my frustration at the limitations of various other iOS DI frameworks I tried. 
@@ -61,7 +88,7 @@ If your not using [Carthage](https://github.com/Carthage/Carthage), I would like
 
 Add this to your **Cartfile**:
 
-    github "drekka/alchemic" > 1.0
+github "drekka/alchemic" > 1.0
 
 Then run either the **bootstrap** or **update** carthage commands to download Alchemic from and compile it and it's dependencies into the  **<project-dir>/Carthage/Build/iOS/** directory. You can then include the frameworks into your project the same way you would add any other framework. 
 
@@ -131,9 +158,9 @@ Getting Swift classes to be recognised by Alchemic has to be done differently to
 
 ```swift
 class MyClass {
-    public static func alchemic(cb: ALCBuilder) {
-        /// Alchemic setup goes here.
-    }
+public static func alchemic(cb: ALCBuilder) {
+/// Alchemic setup goes here.
+}
 }
 ```
 
@@ -169,9 +196,9 @@ AcRegister()
 ```swift
 // Swift
 class MyClass {
-     public static func alchemic(cb: ALCBuilder) {
-        AcRegister(cb)
-    }
+public static func alchemic(cb: ALCBuilder) {
+AcRegister(cb)
+}
 }
 ```
 
@@ -189,7 +216,7 @@ By default, Alchemic will use the standard `init` method when initializing an in
 AcRegister()
 AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
 -(instancetype) initWithOtherObject:(id) obj {
-    // ...
+// ...
 }
 @end
 ```
@@ -197,16 +224,16 @@ AcInitializer(initWithOtherObject:, AcArg(MyOtherClass, AcClass(MyOtherClass))
 ```swift
 // Swift
 class MyClass {
-    @objc func init(otherObject: AnyObject) {
-        // ...
-    }
-    public static func alchemic(cb: ALCBuilder) {
-        AcRegister(cb)
-        AcInitializer(cb, 
-            initializer:"initWithOtherObject:", 
-            args:AcArg(MyOtherClass.self, source:AcClass(MyOtherClass.self))
-        )
-    }
+@objc func init(otherObject: AnyObject) {
+// ...
+}
+public static func alchemic(cb: ALCBuilder) {
+AcRegister(cb)
+AcInitializer(cb, 
+initializer:"initWithOtherObject:", 
+args:AcArg(MyOtherClass.self, source:AcClass(MyOtherClass.self))
+)
+}
 }
 ```
 
@@ -234,7 +261,7 @@ AcRegister(AcFactory)
 ```swift
 // Swift
 public static func alchemic(cb: ALCBuilder) {
-    AcRegister(cb, AcFactory())
+AcRegister(cb, AcFactory())
 }
 ```
 
@@ -254,7 +281,7 @@ AcRegister(AcWithName(@"JSON date formatter"))
 ```swift
 // Swift
 public static func alchemic(cb: ALCBuilder) {
-    AcRegister(cb, AcWithName("JSON date formatter"))
+AcRegister(cb, AcWithName("JSON date formatter"))
 }
 ```
 
@@ -273,7 +300,7 @@ Lets take a look at two sample methods which Alchemic will use to create objects
 ```objectivec
 // Objective-C
 @implementation Factory {
-    int x;
+int x;
 }
 
 AcRegister()
@@ -281,15 +308,15 @@ AcRegister()
 // First a singleton
 AcMethod(Database, generateDatabaseConnection)
 -(id<DBConnection>) generateDatabaseConnection {
-    // Complex connection setup code.
-    return dbConn;
+// Complex connection setup code.
+return dbConn;
 }
 
 // And a factory
 AcMethod(NSString, makeATransaction, AcFactory))
 -(Transaction *) makeATransaction {
-    return [[Transaction alloc] 
-        initWithName:[NSString stringWithFormat:@"Transaction %i", ++x]];
+return [[Transaction alloc] 
+initWithName:[NSString stringWithFormat:@"Transaction %i", ++x]];
 }
 @end
 ```
@@ -297,25 +324,25 @@ AcMethod(NSString, makeATransaction, AcFactory))
 ```swift
 // Swift
 class Factory {
-    var x
-    
-    public static func alchemic(cb: ALCBuilder) {
-        AcRegister()
-        AcMethod(cb, method:"generateDatabaseConnection", type:DBConnection.self)
-        AcMethod(cb, method:"makeATransaction", type:Transaction.self, args:AcFactory())
-    }
+var x
 
-    // First a singleton
-    @objc func generateDatabaseConnection() -> DBConnection {
-        // Complex connection setup code.
-        return dbConn
-    }
+public static func alchemic(cb: ALCBuilder) {
+AcRegister()
+AcMethod(cb, method:"generateDatabaseConnection", type:DBConnection.self)
+AcMethod(cb, method:"makeATransaction", type:Transaction.self, args:AcFactory())
+}
 
-    // And a factory
-    @objc func makeATransaction -> Transaction {
-        x++
-        return Transaction("Transaction \(x)")
-    }
+// First a singleton
+@objc func generateDatabaseConnection() -> DBConnection {
+// Complex connection setup code.
+return dbConn
+}
+
+// And a factory
+@objc func makeATransaction -> Transaction {
+x++
+return Transaction("Transaction \(x)")
+}
 }
 ```
 
@@ -330,30 +357,30 @@ Now lets take a look at a factory method with arguments:
 ```objectivec
 // Objective-C
 AcMethod(NSURLConnection, serverConnectionWithURL:retries:,
-	AcWithName(@"serverConnection"), 
-	AcArg(NSURL, AcName(@"db-server-url")),
-	AcArg(NSNumber, AcValue(@5))
-	)
+AcWithName(@"serverConnection"), 
+AcArg(NSURL, AcName(@"db-server-url")),
+AcArg(NSNumber, AcValue(@5))
+)
 -(NSURLConnection *) serverConnectionWithURL:(NSURL *) url 
-                                     retries:(NSNumber *) retries {
-    // lots of complex setup code here that creates newConnection.
-    return newConnection;
+retries:(NSNumber *) retries {
+// lots of complex setup code here that creates newConnection.
+return newConnection;
 }
 ```
 
 ```swift
 // Swift
 public static func alchemic(cb: ALCBuilder) {
-    AcRegister()
-    AcMethod(cb, method: "serverConnection:retries:", type:NSURLConnection.self,
-        AcWithName("serverConnection"),
-        AcArg(NSURL.self, source:AcName("db-server-url")),
-        AcArg(NSNumber.self, source:AcValue(5))
-    )
+AcRegister()
+AcMethod(cb, method: "serverConnection:retries:", type:NSURLConnection.self,
+AcWithName("serverConnection"),
+AcArg(NSURL.self, source:AcName("db-server-url")),
+AcArg(NSNumber.self, source:AcValue(5))
+)
 }
 @objc func serverConnection(url:NSURL, retries:NSNumber) -> NSURLConnection {
-    // lots of complex setup code here that creates newConnection.
-    return newConnection;
+// lots of complex setup code here that creates newConnection.
+return newConnection;
 }
 ```
 
@@ -367,13 +394,13 @@ Here are some other examples of the above declaration with nils:
 // Objective-C
 // Passing a nil URL.
 AcMethod(NSURLConnection, serverConnectionWithURL:retries:,
-	AcArg(NSURL, AcValue(nil)),
-	AcArg(NSNumber, AcValue(@5))
-	)
+AcArg(NSURL, AcValue(nil)),
+AcArg(NSNumber, AcValue(@5))
+)
 // Passing a nil retries value.
 AcMethod(NSURLConnection, serverConnectionWithURL:retries:,
-	AcArg(NSURL, AcName(@"db-server-url"))
-	)
+AcArg(NSURL, AcName(@"db-server-url"))
+)
 // All arguments are nil
 AcMethod(NSURLConnection, serverConnectionWithURL:retries:)
 ```
@@ -381,17 +408,17 @@ AcMethod(NSURLConnection, serverConnectionWithURL:retries:)
 ```swift
 // Swift
 public static func alchemic(cb: ALCBuilder) {
-    // Passing a nil URL.
-    AcMethod(cb, method: "serverConnection:retries:", type:NSURLConnection.self,
-        AcArg(NSURL.self, source:AcValue(nil)),
-        AcArg(NSNumber.self, source:AcValue(5))
-    )
-    // Passing a nil retries.
-    AcMethod(cb, method: "serverConnection:retries:", type:NSURLConnection.self,
-        AcArg(NSURL.self, source:AcName("db-server-url"))
-    )
-    // All arguments are nil.
-    AcMethod(cb, method: "serverConnection:retries:", type:NSURLConnection.self)
+// Passing a nil URL.
+AcMethod(cb, method: "serverConnection:retries:", type:NSURLConnection.self,
+AcArg(NSURL.self, source:AcValue(nil)),
+AcArg(NSNumber.self, source:AcValue(5))
+)
+// Passing a nil retries.
+AcMethod(cb, method: "serverConnection:retries:", type:NSURLConnection.self,
+AcArg(NSURL.self, source:AcName("db-server-url"))
+)
+// All arguments are nil.
+AcMethod(cb, method: "serverConnection:retries:", type:NSURLConnection.self)
 }
 ```
 
@@ -411,7 +438,7 @@ AcRegister(AcPrimary)
 ```swift
 // Swift
 public static func alchemic(cb:ALCBuilder) {
-	AcRegister(cb, AcPrimary())
+AcRegister(cb, AcPrimary())
 }
 ```
 
@@ -454,7 +481,7 @@ When being used in Objective-C source code, Alchemic can inject public propertie
 @end
 
 @implementation {
-    YetAnotherClass *_yetAnotherObj;
+YetAnotherClass *_yetAnotherObj;
 }
 
 AcInject(otherObj)
@@ -473,10 +500,10 @@ Here's a simple Swift example of specifying an injection:
 ```swift
 // Swift
 class MyClass
-    var otherClass:MyOtherObj?
-    public static func alchemic(cb: ALCBuilder) {
-        AcInject(cb, variable:"otherObj", type:MyOtherClass.self))
-    }
+var otherClass:MyOtherObj?
+public static func alchemic(cb: ALCBuilder) {
+AcInject(cb, variable:"otherObj", type:MyOtherClass.self))
+}
 }
 ```
 
@@ -502,8 +529,8 @@ AcInject(anotherObj, AcProtocol(MyProtocol))
 ```swift
 // Swift
 public static func Alchemic(cb:ALCBuilder) {
-    AcInject(cb, variable:"otherObj", type:NSObject.self, source:AcClass(OtherClass.self))
-    AcInject(cb, variable:"anotherObj", type:NSObject.self, source:AcProtocol(MyProtocol.self))
+AcInject(cb, variable:"otherObj", type:NSObject.self, source:AcClass(OtherClass.self))
+AcInject(cb, variable:"anotherObj", type:NSObject.self, source:AcProtocol(MyProtocol.self))
 }
 ``` 
 
@@ -514,7 +541,7 @@ For example, assuming that `AmexAccount` implements the `Account` protocol, we c
 ```objectivec
 // Objective-C
 @implementation {
-    id<Account> *_account;
+id<Account> *_account;
 }
 AcInject(_account, AcClass(AmexAccount))
 @end
@@ -523,10 +550,10 @@ AcInject(_account, AcClass(AmexAccount))
 ```objectivec
 // Swift
 class {
-    var account:Account
-    public static func alchemic(cb:ALCBuilder) {
-        AcInject(cb, variable:"account", type:Account.self, source:AcClass(AmexAccount.self))
-    } 
+var account:Account
+public static func alchemic(cb:ALCBuilder) {
+AcInject(cb, variable:"account", type:Account.self, source:AcClass(AmexAccount.self))
+} 
 }
 ```
 
@@ -539,7 +566,7 @@ Earlier on we discussed storing objects under custom names in the context so the
 ```objectivec
 // Objective-C
 @implementation MyClass {
-    NSDateFormatter *_jsonDateFormatter;
+NSDateFormatter *_jsonDateFormatter;
 }
 AcInject(_jsonDateFormatter_, AcName(@"JSON date formatter"))
 @end
@@ -548,10 +575,10 @@ AcInject(_jsonDateFormatter_, AcName(@"JSON date formatter"))
 ```swift
 // Swift
 class MyClass {
-    var jsonDateFormatter:NSDateFormatter
-    public static func alchemic(cb:ALCBuilder) {
-        AcInject(cb, variable:"jsonDateFormatter", type:NSDateFormatter.self, source:AcName("JSON date formatter"))
-    }
+var jsonDateFormatter:NSDateFormatter
+public static func alchemic(cb:ALCBuilder) {
+AcInject(cb, variable:"jsonDateFormatter", type:NSDateFormatter.self, source:AcName("JSON date formatter"))
+}
 @end
 }
 ```
@@ -567,7 +594,7 @@ Some times you might want to specify a constant value for a dependency. In this 
 ```objectivec
 // Objective-C
 @implementation MyClass {
-    NSString *_message;
+NSString *_message;
 }
 AcInject(_message, AcValue(@"hello world"))
 @end
@@ -576,10 +603,10 @@ AcInject(_message, AcValue(@"hello world"))
 ```swift
 // Swift
 class MyClass {
-    var message:NSString
-    public static func alchemic(cb:ALCBuilder) {
-        AcInject(cb, variable:"message", type:NSString.self, AcValue("hello world"))
-    }
+var message:NSString
+public static func alchemic(cb:ALCBuilder) {
+AcInject(cb, variable:"message", type:NSString.self, AcValue("hello world"))
+}
 }
 ```
 
@@ -594,7 +621,7 @@ For example, if we want a list of all NSDateFormatters objects that Alchemic is 
 ```objectivec
 // Objective-C
 @implementation MyClass {
-    NSArray<NSDateFormatter *> *_dateFormatters;
+NSArray<NSDateFormatter *> *_dateFormatters;
 }
 AcInject(_dateFormatters, AcClass(NSDateFormatter))
 @end
@@ -603,10 +630,10 @@ AcInject(_dateFormatters, AcClass(NSDateFormatter))
 ```swift
 // Swift
 class MyClass {
-    var dateFormatters:NSArray
-    public static func alchemic(cb:ALCBuilder) {
-        AcInject(cb, variable:"dateFormatters", type:NSArray.self, source:AcClass(NSDateFormatter.self))
-    }
+var dateFormatters:NSArray
+public static func alchemic(cb:ALCBuilder) {
+AcInject(cb, variable:"dateFormatters", type:NSArray.self, source:AcClass(NSDateFormatter.self))
+}
 }
 ```
 
@@ -629,18 +656,18 @@ Later in your code you can make a call to trigger the injection process programm
 ```objectivec
 // Objective-C
 -(instancetype) initWithFrame:(CGRect) aFrame {
-    self = [super initWithFrame:aFrame];
-    if (self) {
-        AcInjectDependencies(self);
-    }
-    return self;
+self = [super initWithFrame:aFrame];
+if (self) {
+AcInjectDependencies(self);
+}
+return self;
 }
 ```
 
 ```swift
 // Swift
 func init(frame:CGRect) {
-    AcInjectDependencies(self)
+AcInjectDependencies(self)
 }
 ```
 
@@ -659,16 +686,16 @@ Sometimes (in testing for example) you want to get an object from Alchemic witho
 ```objectivec
 // Objective-C
 -(void) myMethod {
-    NSDateFormatter *formatter = AcGet(NSDateFormatter, AcName(@"JSON date formatter"));
-    // Do stuff ....
+NSDateFormatter *formatter = AcGet(NSDateFormatter, AcName(@"JSON date formatter"));
+// Do stuff ....
 }
 ```
 
 ```swift
 // Swift
 func myMethod() {
-    var formatter:NSDateFormatter = AcGet(AcName(@"JSON date formatter"))
-    // Do stuff ....
+var formatter:NSDateFormatter = AcGet(AcName(@"JSON date formatter"))
+// Do stuff ....
 }
 ```
 
@@ -679,16 +706,16 @@ Arguments after the type are search criteria used to find candidate builders. So
 ```objectivec
 // Objective-C
 -(void) myMethod {
-    NSArray *formatters = AcGet(NSArray, AcClass(NSDateFormatter));
-    // Do stuff ....
+NSArray *formatters = AcGet(NSArray, AcClass(NSDateFormatter));
+// Do stuff ....
 }
 ```
 
 ```swift
 // Swift
 func myMethod() {
-    var formatters = AcGet(NSArray.self, source:AcClass(NSDateFormatter))
-    // Do stuff ....
+var formatters = AcGet(NSArray.self, source:AcClass(NSDateFormatter))
+// Do stuff ....
 }
 ```
 
@@ -697,16 +724,16 @@ Finally, you can leave out the search criteria macros like this:
 ```objectivec
 // Objective-C
 -(void) myMethod {
-    NSDateFormatter *formatter = AcGet(NSDateFormatter);
-    // Do stuff ....
+NSDateFormatter *formatter = AcGet(NSDateFormatter);
+// Do stuff ....
 }
 ```
 
 ```swift
 // Swift
 func myMethod() {
-    var formatter = AcGet(NSDateFormatter.self)
-    // Do stuff ....
+var formatter = AcGet(NSDateFormatter.self)
+// Do stuff ....
 }
 ```
 
@@ -720,19 +747,19 @@ Without any criteria, Alchemic will use the passed return type to determine the 
 // Objective-C
 AcInitializer(initWithText:, AcFactory, AcArg(NSString, AcValue(@"Default message")
 -(instancetype) initWithText:(NSString *) message {
-    // ...
+// ...
 }
 ```
 
 ```swift
 // Swift
 public static func alchemic(cb:ALCBuilder) {
-    AcInitializer(cb, initializer:"initWithMessage:", 
-        args:AcArg(NSString.self, source:AcValue(@"Default message"))
-    )
+AcInitializer(cb, initializer:"initWithMessage:", 
+args:AcArg(NSString.self, source:AcValue(@"Default message"))
+)
 }
 func init(message:NSString) {
-    // ...
+// ...
 }
 ```
 
@@ -741,16 +768,16 @@ In this scenario you want the factory method to give you a new instance of the o
 ```objectivec
 // Objective-C
 -(void) myMethod {
-    MyObj *myObj = AcInvoke(AcName(@"MyObj initWithText:"), @"Message text");
-    // Do stuff ....
+MyObj *myObj = AcInvoke(AcName(@"MyObj initWithText:"), @"Message text");
+// Do stuff ....
 }
 ```
 
 ```swift
 // Swift
 func myMethod() {
-    var myObj = AcInvoke(AcName("MyObj initWithText:"), args:"Message text")
-    // Do stuff ....
+var myObj = AcInvoke(AcName("MyObj initWithText:"), args:"Message text")
+// Do stuff ....
 }
 ```
 
@@ -765,16 +792,16 @@ Sometimes you have created an object outside of Alchemic, but want Alchemic to m
 ```objectivec
 // Objective-C
 -(void) myMethod {
-    MyObj *myObj = ... // create the object. 
-    AcSet(myObj, AcName(@"abc"));
+MyObj *myObj = ... // create the object. 
+AcSet(myObj, AcName(@"abc"));
 }
 ```
 
 ```swift
 // Swift
 func myMethod() {
-    let myObj = ... // create the object. 
-    AcSet(myObj, inBuilderWith:AcName("abc"))
+let myObj = ... // create the object. 
+AcSet(myObj, inBuilderWith:AcName("abc"))
 }
 ```
 
@@ -793,18 +820,18 @@ For example, you might have a table view controller that needs data from a singl
 ```objectivec
 // Objective-C
 -(void) viewDidLoad {
-    AcExecuteWhenStarted(^{
-        [self.tableView reloadData];
-    });
+AcExecuteWhenStarted(^{
+[self.tableView reloadData];
+});
 }
 ```
 
 ```swift
 // Swift
 func viewDidLoad() {
-    AcExecuteWhenStarted {() -> Void in
-            self.tableView.reloadData()
-        }
+AcExecuteWhenStarted {() -> Void in
+self.tableView.reloadData()
+}
 }
 ```
 
@@ -829,7 +856,7 @@ Sometimes it's useful to know when Alchemic has finished injecting values into a
 
 @implementation MyClass 
 -(void) alchemicDidInjectDependencies {
-    // Do stuff
+// Do stuff
 }
 @end
 ```
@@ -837,9 +864,9 @@ Sometimes it's useful to know when Alchemic has finished injecting values into a
 ```swift
 // Swift
 class MyClass:NSObject<AlchemicAware> {
-    func alchemicDidInjectDependencies() {
-    // Do stuff
-    }
+func alchemicDidInjectDependencies() {
+// Do stuff
+}
 }
 ```
 
@@ -854,12 +881,12 @@ Once all singletons have been loaded and injected, Alchemic sends out a notifica
 ```objectivec
 // Obejctive-C
 [[NSNotificationCenter 
-    defaultCenter] addObserverForName:AlchemicFinishedLoading
-                               object:nil
-                                queue:[NSOperationQueue mainQueue]
-                           usingBlock:^(NSNotification *notification) {
-                                     // .. do stuff
-                                     }];
+defaultCenter] addObserverForName:AlchemicFinishedLoading
+object:nil
+queue:[NSOperationQueue mainQueue]
+usingBlock:^(NSNotification *notification) {
+// .. do stuff
+}];
 ```
 
 ```swift
@@ -887,7 +914,7 @@ To let Alchemic know that there are further sources of classes that need injecti
 
 @implementation MyAppConfig
 -(NSArray<Class> scanBundlesWithClasses {
-    return @[[MyAppBusinessLogic class]];
+return @[[MyAppBusinessLogic class]];
 }
 @end
 ```
@@ -896,9 +923,9 @@ To let Alchemic know that there are further sources of classes that need injecti
 // Swift
 import Alchemic
 class MyAppConfig:NSObject<ALCConfig>
-    func scanBundlesWithClasses() -> NSArray<AnyClass> {
-        return [MyAppBusinessLogic.self]
-    }
+func scanBundlesWithClasses() -> NSArray<AnyClass> {
+return [MyAppBusinessLogic.self]
+}
 }
 ```
 
@@ -957,15 +984,15 @@ Alchemic has a central *'Context'* which manages all of the objects and classes 
 // Swift
 Alchemic.mainContext()...
 ```
-    
+
 # Credits
 
- * Thanks to Adam and Vitaly at Odecee who helped me with getting my head around some of the Swift code.
- * Big Thanks to the guys behind [Carthage](https://github.com/Carthage/Carthage) for writing a dependency tool that actual works well with XCode and Git.
- * Thanks to the guys behind the [Spring Framework](https://spring.io). The work you have done has made my life so much easier on so many Java projects.
- * Thanks to Mulle Cybernetik for [OCMock](ocmock.org). An outstanding mocking framework for Objective-C that has enabled me to test the un-testable many times.
- * Thanks to Todd Ditchendorf for [PEGKit](https://github.com/itod/pegkit). I've learned a lot from working with it on [Story Teller](https://github.com/drekka/StoryTeller).
- 
- 
+* Thanks to Adam and Vitaly at Odecee who helped me with getting my head around some of the Swift code.
+* Big Thanks to the guys behind [Carthage](https://github.com/Carthage/Carthage) for writing a dependency tool that actual works well with XCode and Git.
+* Thanks to the guys behind the [Spring Framework](https://spring.io). The work you have done has made my life so much easier on so many Java projects.
+* Thanks to Mulle Cybernetik for [OCMock](ocmock.org). An outstanding mocking framework for Objective-C that has enabled me to test the un-testable many times.
+* Thanks to Todd Ditchendorf for [PEGKit](https://github.com/itod/pegkit). I've learned a lot from working with it on [Story Teller](https://github.com/drekka/StoryTeller).
+
+
 
 
