@@ -18,7 +18,6 @@
 #import "HTTPServer.h"
 
 @interface AlchemicTests : XCTestCase
-
 @end
 
 @implementation AlchemicTests
