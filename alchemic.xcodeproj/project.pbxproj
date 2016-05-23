@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6C0747D21BE8DBB60096BF85 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
-		6C0747D31BE8DDE20096BF85 /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C1ADAFF1C8DB28400267E77 /* ALCAware.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADAFE1C8DB28400267E77 /* ALCAware.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB001C8DB88C00267E77 /* Alchemic.m */; };
 		6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -123,11 +121,21 @@
 		6CED05791BCB54B800B6C55B /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CED057A1BCB54B800B6C55B /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CFD6E981B456D27008B6695 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
-		6CFF9E601CF08A5D00BBE2A8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
 		F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F4023C031CE9827A00AEC0E5 /* ALCAbstractDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */; };
 		F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C041CE988F100AEC0E5 /* ALCInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F408073F1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */; };
+		F420FA6E1CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA651CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h */; };
+		F420FA6F1CF288D40032C212 /* OCMArg.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA661CF288D40032C212 /* OCMArg.h */; };
+		F420FA701CF288D40032C212 /* OCMConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA671CF288D40032C212 /* OCMConstraint.h */; };
+		F420FA711CF288D40032C212 /* OCMLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA681CF288D40032C212 /* OCMLocation.h */; };
+		F420FA721CF288D40032C212 /* OCMMacroState.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA691CF288D40032C212 /* OCMMacroState.h */; };
+		F420FA731CF288D40032C212 /* OCMock.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA6A1CF288D40032C212 /* OCMock.h */; };
+		F420FA741CF288D40032C212 /* OCMockObject.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA6B1CF288D40032C212 /* OCMockObject.h */; };
+		F420FA751CF288D40032C212 /* OCMRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA6C1CF288D40032C212 /* OCMRecorder.h */; };
+		F420FA761CF288D40032C212 /* OCMStubRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA6D1CF288D40032C212 /* OCMStubRecorder.h */; };
+		F420FA771CF28B6A0032C212 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
+		F420FA781CF28B740032C212 /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F425AEA01CEEA215002D91B1 /* FakeUIApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */; };
 		F4325ED41CEEAC41001A9FD6 /* ALCTypeDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = F4325ED31CEEAC3B001A9FD6 /* ALCTypeDefs.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F45828341CEBFCFC0074A844 /* ReferenceFactories.m in Sources */ = {isa = PBXBuildFile; fileRef = F45828331CEBFCFC0074A844 /* ReferenceFactories.m */; };
@@ -151,7 +159,7 @@
 			remoteGlobalIDString = 6C36D74E1B3851680073C4FB;
 			remoteInfo = Alchemic;
 		};
-		6CB95C1A1BEA290500D0B194 /* PBXContainerItemProxy */ = {
+		F45241A31CF294B200464D24 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6C66DC261A8B82C3009F9D94 /* Project object */;
 			proxyType = 1;
@@ -179,7 +187,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6C0747D31BE8DDE20096BF85 /* Alchemic.framework in CopyFiles */,
+				F420FA781CF28B740032C212 /* Alchemic.framework in CopyFiles */,
 				6CED05791BCB54B800B6C55B /* PEGKit.framework in CopyFiles */,
 				6CED057A1BCB54B800B6C55B /* StoryTeller.framework in CopyFiles */,
 			);
@@ -320,6 +328,15 @@
 		F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConfigClassProcessorTests.m; sourceTree = "<group>"; };
 		F41DE2D31CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeUIApplicationDelegate.h; sourceTree = "<group>"; };
 		F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeUIApplicationDelegate.m; sourceTree = "<group>"; };
+		F420FA651CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+OCMAdditions.h"; sourceTree = "<group>"; };
+		F420FA661CF288D40032C212 /* OCMArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMArg.h; sourceTree = "<group>"; };
+		F420FA671CF288D40032C212 /* OCMConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMConstraint.h; sourceTree = "<group>"; };
+		F420FA681CF288D40032C212 /* OCMLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMLocation.h; sourceTree = "<group>"; };
+		F420FA691CF288D40032C212 /* OCMMacroState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMMacroState.h; sourceTree = "<group>"; };
+		F420FA6A1CF288D40032C212 /* OCMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMock.h; sourceTree = "<group>"; };
+		F420FA6B1CF288D40032C212 /* OCMockObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMockObject.h; sourceTree = "<group>"; };
+		F420FA6C1CF288D40032C212 /* OCMRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMRecorder.h; sourceTree = "<group>"; };
+		F420FA6D1CF288D40032C212 /* OCMStubRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMStubRecorder.h; sourceTree = "<group>"; };
 		F421B7D21CEE9A1E008CB8E3 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		F425AEA11CEEA2EB002D91B1 /* module.private.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.private.modulemap; sourceTree = "<group>"; };
 		F4325ED31CEEAC3B001A9FD6 /* ALCTypeDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ALCTypeDefs.h; sourceTree = "<group>"; };
@@ -351,8 +368,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CFF9E601CF08A5D00BBE2A8 /* StoryTeller.framework in Frameworks */,
-				6C0747D21BE8DBB60096BF85 /* Alchemic.framework in Frameworks */,
+				F420FA771CF28B6A0032C212 /* Alchemic.framework in Frameworks */,
 				6CFD6E981B456D27008B6695 /* libOCMock.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -453,6 +469,7 @@
 		6C469BB61BB0210A00CD2286 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F420FA641CF288D40032C212 /* OCMock */,
 				6CFD6E971B456D27008B6695 /* libOCMock.a */,
 				6CED05771BCB548700B6C55B /* PEGKit.framework */,
 				6CED05751BCB545800B6C55B /* StoryTeller.framework */,
@@ -621,6 +638,23 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		F420FA641CF288D40032C212 /* OCMock */ = {
+			isa = PBXGroup;
+			children = (
+				F420FA651CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h */,
+				F420FA661CF288D40032C212 /* OCMArg.h */,
+				F420FA671CF288D40032C212 /* OCMConstraint.h */,
+				F420FA681CF288D40032C212 /* OCMLocation.h */,
+				F420FA691CF288D40032C212 /* OCMMacroState.h */,
+				F420FA6A1CF288D40032C212 /* OCMock.h */,
+				F420FA6B1CF288D40032C212 /* OCMockObject.h */,
+				F420FA6C1CF288D40032C212 /* OCMRecorder.h */,
+				F420FA6D1CF288D40032C212 /* OCMStubRecorder.h */,
+			);
+			name = OCMock;
+			path = "External/OCMock-3.1.2/iOS/OCMock";
+			sourceTree = "<group>";
+		};
 		F45828351CEBFE100074A844 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -640,16 +674,20 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F420FA751CF288D40032C212 /* OCMRecorder.h in Headers */,
 				6C3AFBCB1C63794C00B4FCAA /* ALCResolvable.h in Headers */,
 				6C4B560F1C6CC3800040AEC2 /* ALCInternalMacros.h in Headers */,
 				6C3AFBD21C638C7800B4FCAA /* ALCRuntime.h in Headers */,
 				6CC2847C1CB29A7C006B613F /* ALCException.h in Headers */,
+				F420FA701CF288D40032C212 /* OCMConstraint.h in Headers */,
 				6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */,
 				6C71D5401CA0198800D25AC0 /* ALCConstant.h in Headers */,
 				6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */,
 				F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */,
 				6CB5CCD81CDB792100DC1052 /* ALCConfig.h in Headers */,
 				6C68CF7E1C64DB06003A7A54 /* ALCContextImpl.h in Headers */,
+				F420FA6E1CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h in Headers */,
+				F420FA761CF288D40032C212 /* OCMStubRecorder.h in Headers */,
 				6C25D2801C5760FF00D982DC /* ALCAbstractObjectFactory.h in Headers */,
 				6C3AFBAC1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.h in Headers */,
 				6C4B56161C6E0AD10040AEC2 /* ALCMethodObjectFactory.h in Headers */,
@@ -657,12 +695,15 @@
 				6C68CF891C6636D6003A7A54 /* NSObject+Alchemic.h in Headers */,
 				6C3AFBA91C5CE89500B4FCAA /* ALCObjectFactoryType.h in Headers */,
 				6C3AFBB01C5E0CB800B4FCAA /* ALCObjectFactoryTypeFactory.h in Headers */,
+				F420FA711CF288D40032C212 /* OCMLocation.h in Headers */,
 				6C3AFBB41C5E0D5800B4FCAA /* ALCObjectFactoryTypeReference.h in Headers */,
 				6C4B561A1C6E0BF10040AEC2 /* ALCVariableDependency.h in Headers */,
 				6C1ADAFF1C8DB28400267E77 /* ALCAware.h in Headers */,
 				6C71D5471CA16BE600D25AC0 /* NSArray+Alchemic.h in Headers */,
 				6C4D85AD1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h in Headers */,
+				F420FA741CF288D40032C212 /* OCMockObject.h in Headers */,
 				6C71D54B1CA1747200D25AC0 /* ALCTypeData.h in Headers */,
+				F420FA731CF288D40032C212 /* OCMock.h in Headers */,
 				6CC2848D1CB671D5006B613F /* NSSet+Alchemic.h in Headers */,
 				6CC284891CB53F03006B613F /* NSBundle+Alchemic.h in Headers */,
 				6C25D27C1C57563200D982DC /* ALCModelImpl.h in Headers */,
@@ -671,6 +712,7 @@
 				6CB7C4341CC7BC1300C05B0B /* ALCIsReference.h in Headers */,
 				6CC284801CB2AF1A006B613F /* ALCAbstractConstantInjector.h in Headers */,
 				6C71D5431CA161A200D25AC0 /* ALCMethodArgument.h in Headers */,
+				F420FA721CF288D40032C212 /* OCMMacroState.h in Headers */,
 				6CC464221C7986D500B20A95 /* ALCDependency.h in Headers */,
 				6C4D85B01C7F37400061CA84 /* ALCInstantiator.h in Headers */,
 				6C3AFBBC1C60D96400B4FCAA /* ALCModelSearchCriteria.h in Headers */,
@@ -688,6 +730,7 @@
 				6C25D2791C566F7900D982DC /* Alchemic.h in Headers */,
 				6C7837241C5BAD8A004BE670 /* ALCContext.h in Headers */,
 				6C68CF841C64E430003A7A54 /* ALCConstantInjectors.h in Headers */,
+				F420FA6F1CF288D40032C212 /* OCMArg.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,11 +782,12 @@
 				6C66DC361A8B82C3009F9D94 /* Frameworks */,
 				6C66DC371A8B82C3009F9D94 /* Resources */,
 				6CAE806C1B424DD600217F9D /* CopyFiles */,
+				F420FA621CF2854D0032C212 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				6CB95C1B1BEA290500D0B194 /* PBXTargetDependency */,
+				F45241A41CF294B200464D24 /* PBXTargetDependency */,
 			);
 			name = "Unit tests";
 			productName = alchemicTests;
@@ -788,7 +832,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -847,6 +891,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "exit 0\n\n# Not sure why, but the latest versions of appledoc seem to be\n# fullof bugs and mess up the results quite badly.\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--templates \"$PROJECT_DIR/External/appledoc/templates\" \\\n--clean-output \\\n--create-docset \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\n--ignore ALCMacros.h \\\nAlchemic\n";
+		};
+		F420FA621CF2854D0032C212 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -952,10 +1009,10 @@
 			target = 6C36D74E1B3851680073C4FB /* Alchemic */;
 			targetProxy = 6CB5CCDB1CDB7AF700DC1052 /* PBXContainerItemProxy */;
 		};
-		6CB95C1B1BEA290500D0B194 /* PBXTargetDependency */ = {
+		F45241A41CF294B200464D24 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6C36D74E1B3851680073C4FB /* Alchemic */;
-			targetProxy = 6CB95C1A1BEA290500D0B194 /* PBXContainerItemProxy */;
+			targetProxy = F45241A31CF294B200464D24 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1190,15 +1247,11 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/iOS";
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					"$(SRCROOT)/alchemic/**",
+					"$(inherited)",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -1216,15 +1269,11 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/iOS";
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					"$(SRCROOT)/alchemic/**",
+					"$(inherited)",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -1300,7 +1349,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,

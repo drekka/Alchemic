@@ -15,7 +15,6 @@
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCInternalMacros.h>
 
 #define ALCHEMIC_PREFIX _alc_
 
