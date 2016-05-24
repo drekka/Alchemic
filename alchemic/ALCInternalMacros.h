@@ -6,29 +6,10 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#define ALCHEMIC_PREFIX _alc_
-
-#pragma mark - Useful code defines
-
-#define str(template, ...) [NSString stringWithFormat:template, ## __VA_ARGS__ ]
-
 #define blockSelf __weak __typeof(self) weakSelf = self;__typeof(self) strongSelf = weakSelf
 
 #define throwException(exceptionName, template, ...) \
 @throw [Alchemic ## exceptionName ## Exception exceptionWithName:alc_toNSString(exceptionName) reason:str(template, ## __VA_ARGS__) userInfo:nil]
-
-#pragma mark - String handling
-
-// Used to assemble two strings. We use double macros to ensure any
-// embedded macros are resolved.
-#define alc_concat(prefix, suffix) _alc_concat(prefix, suffix)
-#define _alc_concat(prefix, suffix) prefix ## suffix
-
-// Convert raw macro text to a NSString *
-#define alc_toNSString(chars) _alc_toNSString(chars)
-#define _alc_toNSString(chars) @#chars
-
-#define alc_methodName(name, line) alc_concat(alc_concat(ALCHEMIC_PREFIX, name), line)
 
 #pragma mark - Assertions
 

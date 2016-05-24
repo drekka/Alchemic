@@ -8,7 +8,7 @@
 
 #import <Alchemic/ALCVariableDependency.h>
 #import <Alchemic/ALCInjector.h>
-#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCStringMacros.h>
 
 @implementation ALCVariableDependency {
     Ivar _ivar;

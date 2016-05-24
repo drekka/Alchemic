@@ -9,6 +9,7 @@
 #import <Alchemic/ALCMethodArgument.h>
 
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/NSArray+Alchemic.h>
 #import <Alchemic/ALCInjector.h>
 

@@ -125,6 +125,7 @@
 		F4023C031CE9827A00AEC0E5 /* ALCAbstractDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */; };
 		F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C041CE988F100AEC0E5 /* ALCInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F408073F1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */; };
+		F41108A51CF408B600EEBFF7 /* ALCStringMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F41108A41CF408B600EEBFF7 /* ALCStringMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F420FA6E1CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA651CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h */; };
 		F420FA6F1CF288D40032C212 /* OCMArg.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA661CF288D40032C212 /* OCMArg.h */; };
 		F420FA701CF288D40032C212 /* OCMConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA671CF288D40032C212 /* OCMConstraint.h */; };
@@ -326,6 +327,7 @@
 		F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractDependency.m; sourceTree = "<group>"; };
 		F4023C041CE988F100AEC0E5 /* ALCInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInjector.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConfigClassProcessorTests.m; sourceTree = "<group>"; };
+		F41108A41CF408B600EEBFF7 /* ALCStringMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCStringMacros.h; sourceTree = "<group>"; };
 		F41DE2D31CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeUIApplicationDelegate.h; sourceTree = "<group>"; };
 		F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeUIApplicationDelegate.m; sourceTree = "<group>"; };
 		F420FA651CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+OCMAdditions.h"; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 				6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */,
 				6C24CD031CA539D00026D18C /* ALCMacros.h */,
 				6C3AFBCA1C63794C00B4FCAA /* ALCResolvable.h */,
+				F41108A41CF408B600EEBFF7 /* ALCStringMacros.h */,
 				F4325ED31CEEAC3B001A9FD6 /* ALCTypeDefs.h */,
 				6C68CF861C660869003A7A54 /* Dependencies */,
 				6C25D2841C58E14D00D982DC /* Factories */,
@@ -719,6 +722,7 @@
 				6C25D2771C566E6A00D982DC /* ALCObjectFactory.h in Headers */,
 				6CB7C4381CC7BC1300C05B0B /* ALCIsPrimary.h in Headers */,
 				6CB7C4361CC7BC1300C05B0B /* ALCIsFactory.h in Headers */,
+				F41108A51CF408B600EEBFF7 /* ALCStringMacros.h in Headers */,
 				F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */,
 				6CE234E31CEB489600728CBE /* ALCConfigClassProcessor.h in Headers */,
 				F4325ED41CEEAC41001A9FD6 /* ALCTypeDefs.h in Headers */,

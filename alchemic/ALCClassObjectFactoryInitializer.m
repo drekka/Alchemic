@@ -12,6 +12,7 @@
 
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCDependency.h>
 #import <Alchemic/NSObject+Alchemic.h>
 #import <Alchemic/ALCInstantiation.h>

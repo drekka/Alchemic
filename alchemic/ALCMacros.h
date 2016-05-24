@@ -15,7 +15,7 @@
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCStringMacros.h>
 
 #pragma mark - registration
 
