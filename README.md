@@ -651,13 +651,13 @@ AcRegister(AcReference)
 ### Setting references
 
 Once you have created a object, 
-objects. You can use __AcSet__ to do this:
+objects. You can use __AcSetReference__ to do this:
 
 ```objc
 // Objective-C
 -(void) myMethod {
 MyObj *myObj = ... // create the object. 
-AcSet(myObj, AcName(@"abc"));
+AcSetReference(myObj, AcName(@"abc"));
 }
 ```
 
@@ -665,11 +665,11 @@ AcSet(myObj, AcName(@"abc"));
 // Swift
 func myMethod() {
 let myObj = ... // create the object. 
-AcSet(myObj, inBuilderWith:AcName("abc"))
+AcSetReference(myObj, inBuilderWith:AcName("abc"))
 }
 ```
 
-Alchemic will locate the matching builder for the criteria passed as arguments after the object and set the object as it's value. __ACName__ is most useful when setting values as __AcSet__ expects there to be only one builder found by the passed crtieria. If zero or more than one builder is returned, __AcSet__ will throw an error.
+Alchemic will locate the matching builder for the criteria passed as arguments after the object and set the object as it's value. __ACName__ is most useful when setting values as __AcSetReference__ expects there to be only one builder found by the passed crtieria. If zero or more than one builder is returned, __AcSetReference__ will throw an error.
 
 *Note: that setting a new object for a builder does not effect any previously injected references to the old object. Only injections done after setting the object will receive it.*
 

@@ -121,7 +121,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 
 #define AcInvoke(returnType, criteria, ...)
 
-#define injectDependencies(object)
+#define AcInjectDependencies(object)
 
 #pragma mark - Search criteria
 
