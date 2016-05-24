@@ -23,8 +23,6 @@
 -(NSSet<NSBundle *> *) processClass:(Class) aClass
                         withContext:(id<ALCContext>) context {
     
-    ALCClassObjectFactory *factory;
-    
     AcIgnoreSelectorWarnings(
                              SEL alchemicFunctionSelector = @selector(alchemic:);
                              )
@@ -34,6 +32,7 @@
     Method *classMethods = class_copyMethodList(object_getClass(aClass), &methodCount);
     
     // Search the methods for alchemic methods. Their presence triggers registrations.
+    ALCClassObjectFactory *factory;
     for (size_t idx = 0; idx < methodCount; idx++) {
         
         // If the method is not an alchemic one, then ignore it.
