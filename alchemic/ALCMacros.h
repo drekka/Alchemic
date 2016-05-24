@@ -15,19 +15,7 @@
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCContext.h>
-
-#define ALCHEMIC_PREFIX _alc_
-
-// Used to assemble two strings. We use double macros to ensure any
-// embedded macros are resolved.
-#define alc_concat(prefix, suffix) _alc_concat(prefix, suffix)
-#define _alc_concat(prefix, suffix) prefix ## suffix
-
-// Convert raw macro text to a NSString *
-#define alc_toNSString(chars) _alc_toNSString(chars)
-#define _alc_toNSString(chars) @#chars
-
-#define alc_methodName(name, line) alc_concat(alc_concat(ALCHEMIC_PREFIX, name), line)
+#import <Alchemic/ALCInternalMacros.h>
 
 #pragma mark - registration
 
@@ -77,6 +65,8 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 [[Alchemic mainContext] objectFactory:classObjectFactory registerVariableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
+#pragma mark - Facotyr configuration
+
 /**
  Tells Alchemic to set a custom name on an object factory.
  */
@@ -105,6 +95,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  */
 #define AcReference [ALCIsReference referenceMacro]
 
+#pragma mark - Method arguments
 /**
  Shortcut macro for specifying method arguments.
  
@@ -113,6 +104,8 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @param ...       further criteria.
  */
 #define AcArg(argClass, critieria, ...) [ALCMethodArgument argumentWithClass:[argClass class] model:model criteria:criteria, ## __VA_ARGS__, nil]
+
+#pragma mark - Accessing the model
 
 /**
  Used in code to directly retrieve an object from Alchemic.
@@ -124,9 +117,11 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  */
 #define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
 
-#define AcSet(value, ...)
+#define AcSetReference(value, ...)
 
 #define AcInvoke(returnType, criteria, ...)
+
+#define injectDependencies(object)
 
 #pragma mark - Search criteria
 
@@ -150,6 +145,8 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @param objectName The factory name.
  */
 #define AcName(objectName) [ALCModelSearchCriteria searchCriteriaForName:objectName]
+
+#pragma mark - Misc
 
 #define AcIgnoreSelectorWarnings(code) \
 _Pragma ("clang diagnostic push") \

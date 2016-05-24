@@ -890,7 +890,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "exit 0\n\n# Not sure why, but the latest versions of appledoc seem to be\n# fullof bugs and mess up the results quite badly.\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--templates \"$PROJECT_DIR/External/appledoc/templates\" \\\n--clean-output \\\n--create-docset \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\n--ignore ALCMacros.h \\\nAlchemic\n";
+			shellScript = "exit 0\n\n# Not sure why, but the latest versions of appledoc seem to be\n# fullof bugs and mess up the results quite badly.\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--templates \"$PROJECT_DIR/External/appledoc/templates\" \\\n--clean-output \\\n--create-docset \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--verbose 6 \\\n--logformat 3 \\\n--keep-intermediate-files \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n#--ignore ALCMacros.h \\\n";
+			showEnvVarsInLog = 0;
 		};
 		F420FA621CF2854D0032C212 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

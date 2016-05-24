@@ -47,4 +47,10 @@ ALCConstantHeader(CGRect, CGRect)
 // Object types.
 ALCConstantHeader(String, NSString *)
 
+#pragma mark - Nil value injector
+
+id<ALCInjector> AcNil(id value);
+@interface ALCConstantNil : ALCAbstractConstantInjector
+@end
+
 NS_ASSUME_NONNULL_END
