@@ -16,7 +16,7 @@
 /**
  A string containing the type data for scalar types.
  */
-@property (nonatomic, strong, nullable) NSString *scalarType;
+@property (nonatomic, assign, nullable) const char *scalarType;
 
 /**
  The class if the type is an object type.

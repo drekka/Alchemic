@@ -499,12 +499,9 @@
 		6C66DC251A8B82C3009F9D94 = {
 			isa = PBXGroup;
 			children = (
+				F4908C821CF556AC00DB4830 /* Resources */,
 				6C66DC301A8B82C3009F9D94 /* Alchemic */,
-				6C469BAD1BB0200200CD2286 /* Cartfile */,
 				6C469BB61BB0210A00CD2286 /* Frameworks */,
-				6C66DC3F1A8B82C3009F9D94 /* Info.plist */,
-				F421B7D21CEE9A1E008CB8E3 /* module.modulemap */,
-				F425AEA11CEEA2EB002D91B1 /* module.private.modulemap */,
 				6C66DC2F1A8B82C3009F9D94 /* Products */,
 				F45828351CEBFE100074A844 /* Tests */,
 			);
@@ -650,6 +647,17 @@
 				F458283C1CEBFECE0074A844 /* XCTestCase+Alchemic.m */,
 			);
 			name = Tests;
+			sourceTree = "<group>";
+		};
+		F4908C821CF556AC00DB4830 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6C66DC3F1A8B82C3009F9D94 /* Info.plist */,
+				F421B7D21CEE9A1E008CB8E3 /* module.modulemap */,
+				F425AEA11CEEA2EB002D91B1 /* module.private.modulemap */,
+				6C469BAD1BB0200200CD2286 /* Cartfile */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
