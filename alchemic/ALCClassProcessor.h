@@ -16,21 +16,23 @@
 @protocol ALCClassProcessor <NSObject>
 
 /**
- *  Indicates if the processor can be applied to the class.
- *
- *  @param aClass The class to be checked.
- *
- *  @return YES if the class should be processed.
+ Indicates if the processor can be applied to the class.
+ 
+ @param aClass The class to be checked.
+ 
+ @return YES if the class should be processed.
  */
 -(BOOL) canProcessClass:(Class) aClass;
 
 /**
- *  Processes the class.
- *
- *  @param aClass  The class to be processed.
- *  @param context A reference to the Alchemic context.
- *
- *  @return A set of NSBundle instances which the processor thinks may have more classes to be checked.
+ Processes an individual class. 
+ 
+ Override this method in subclasses to implement the particular processor's logic.
+ 
+ @param aClass  The class to be processed.
+ @param context A reference to the Alchemic context.
+ 
+ @return A set of NSBundle instances which the processor thinks may have more classes to be checked.
  */
 -(NSSet<NSBundle *> *) processClass:(Class) aClass withContext:(id<ALCContext>) context;
 

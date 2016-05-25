@@ -14,7 +14,6 @@
 #import <OCMock/OCMock.h>
 
 @interface ALCConfigClassProcessorTests : XCTestCase<ALCConfig>
-
 @end
 
 @implementation ALCConfigClassProcessorTests {
@@ -38,8 +37,9 @@
     [_processor processClass:[self class] withContext:mockContext];
 }
 
+static NSArray<Class> *_configClasses;
 +(nullable NSArray<Class> *) scanBundlesWithClasses {
-    return nil;
+    return _configClasses;
 }
 
 @end
