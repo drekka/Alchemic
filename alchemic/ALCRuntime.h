@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return true if str begins with prefix, false otherwise.
  */
-bool strHasPrefix(const char *prefix, const char *str);
+bool strHasPrefix(const char *str, const char *prefix);
 
 /**
  Methods which provide access to the Objective-C runtime.

@@ -19,9 +19,10 @@
 
 -(NSSet<NSBundle *> *) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
     
-    STLog(self, @"Scanning bundle %@", self.bundlePath.lastPathComponent);
     unsigned int count = 0;
     const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &count);
+    
+    STLog(self, @"Scanning %i runtime classes in bundle %@", count, self.bundlePath.lastPathComponent);
     
     NSMutableSet<NSBundle *> *moreBundles;
     for(unsigned int i = 0;i < count;i++) {

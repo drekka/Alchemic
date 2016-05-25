@@ -12,7 +12,9 @@
 
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCRuntime.h>
 
 @implementation ALCModelClassProcessor
 
@@ -37,8 +39,8 @@
         
         // If the method is not an alchemic one, then ignore it.
         SEL nextSelector = method_getName(classMethods[idx]);
-        if (nextSelector == alchemicFunctionSelector
-            || [NSStringFromSelector(nextSelector) hasPrefix:alc_toNSString(ALCHEMIC_PREFIX)]) {
+        if (strHasPrefix(sel_getName(nextSelector), alc_toCString(ALCHEMIC_PREFIX))
+            || nextSelector == alchemicFunctionSelector) {
             
             // If we are here then we have an alchemic method to process, so create an object factory.
             if (!factory) {

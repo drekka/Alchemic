@@ -22,7 +22,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-bool strHasPrefix(const char *prefix, const char *str) {
+bool strHasPrefix(const char *str, const char *prefix) {
     return strncmp(prefix, str, strlen(prefix)) == 0;
 }
 
@@ -69,7 +69,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     
     // Get the type.
     ALCTypeData *typeData = [[ALCTypeData alloc] init];
-    if (strHasPrefix("@", encoding)) {
+    if (strHasPrefix(encoding, "@")) {
         
         // Start with a result that indicates an Id. We map Ids as NSObjects.
         typeData.objcClass = [NSObject class];

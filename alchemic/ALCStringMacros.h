@@ -16,6 +16,8 @@
 #define _alc_concat(prefix, suffix) prefix ## suffix
 
 // Convert raw macro text to a NSString *
+#define alc_toCString(chars) _alc_toCString(chars)
+#define _alc_toCString(chars) #chars
 #define alc_toNSString(chars) _alc_toNSString(chars)
 #define _alc_toNSString(chars) @#chars
 
