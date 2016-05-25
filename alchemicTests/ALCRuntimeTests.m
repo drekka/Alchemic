@@ -99,7 +99,7 @@
     
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
-    XCTAssertEqual("i", ivarData.scalarType);
+    XCTAssertEqual(0, strcmp("i", ivarData.scalarType));
 }
 
 -(void) testTypeDataForIVarCGRect {
