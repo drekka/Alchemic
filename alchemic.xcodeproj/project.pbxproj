@@ -146,23 +146,6 @@
 		F458283F1CEBFECE0074A844 /* XCTestCase+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = F458283C1CEBFECE0074A844 /* XCTestCase+Alchemic.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		6C24CCE31CA42BA80026D18C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6C66DC261A8B82C3009F9D94 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6C36D74E1B3851680073C4FB;
-			remoteInfo = Alchemic;
-		};
-		6CB5CCDB1CDB7AF700DC1052 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6C66DC261A8B82C3009F9D94 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6C36D74E1B3851680073C4FB;
-			remoteInfo = Alchemic;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		6C24CCF41CA42BA80026D18C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -752,7 +735,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6C24CCE21CA42BA80026D18C /* PBXTargetDependency */,
 			);
 			name = "Integration tests";
 			productName = alchemicTests;
@@ -806,7 +788,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6CB5CCDA1CDB7AF700DC1052 /* PBXTargetDependency */,
 			);
 			name = "Functional tests";
 			productName = alchemicTests;
@@ -832,7 +813,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -846,8 +827,8 @@
 			targets = (
 				6C36D74E1B3851680073C4FB /* Alchemic */,
 				6C66DC381A8B82C3009F9D94 /* Unit tests */,
-				6C24CCE11CA42BA80026D18C /* Integration tests */,
 				6CB5CCD91CDB7AF700DC1052 /* Functional tests */,
+				6C24CCE11CA42BA80026D18C /* Integration tests */,
 			);
 		};
 /* End PBXProject section */
@@ -980,19 +961,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		6C24CCE21CA42BA80026D18C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6C36D74E1B3851680073C4FB /* Alchemic */;
-			targetProxy = 6C24CCE31CA42BA80026D18C /* PBXContainerItemProxy */;
-		};
-		6CB5CCDA1CDB7AF700DC1052 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6C36D74E1B3851680073C4FB /* Alchemic */;
-			targetProxy = 6CB5CCDB1CDB7AF700DC1052 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		6C24CCF91CA42BA80026D18C /* Debug */ = {
@@ -1325,7 +1293,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,
