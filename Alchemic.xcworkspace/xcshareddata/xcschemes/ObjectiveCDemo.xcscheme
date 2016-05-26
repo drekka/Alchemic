@@ -17,7 +17,7 @@
                BlueprintIdentifier = "6CFFF29F1BE77F2F0038CB30"
                BuildableName = "ObjectiveCDemo.app"
                BlueprintName = "ObjectiveCDemo"
-               ReferencedContainer = "container:ObjectiveCDemo.xcodeproj">
+               ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
             BlueprintIdentifier = "6CFFF29F1BE77F2F0038CB30"
             BuildableName = "ObjectiveCDemo.app"
             BlueprintName = "ObjectiveCDemo"
-            ReferencedContainer = "container:ObjectiveCDemo.xcodeproj">
+            ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -58,7 +58,7 @@
             BlueprintIdentifier = "6CFFF29F1BE77F2F0038CB30"
             BuildableName = "ObjectiveCDemo.app"
             BlueprintName = "ObjectiveCDemo"
-            ReferencedContainer = "container:ObjectiveCDemo.xcodeproj">
+            ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -77,7 +77,7 @@
             BlueprintIdentifier = "6CFFF29F1BE77F2F0038CB30"
             BuildableName = "ObjectiveCDemo.app"
             BlueprintName = "ObjectiveCDemo"
-            ReferencedContainer = "container:ObjectiveCDemo.xcodeproj">
+            ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
