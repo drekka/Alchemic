@@ -8,12 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6CB95BFE1BEA12FA00D0B194 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95BFD1BEA12FA00D0B194 /* Cartfile */; };
-		6CB95C281BECDC7A00D0B194 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C221BECDC7A00D0B194 /* Alchemic.framework */; };
 		6CB95C2A1BECDC7A00D0B194 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C241BECDC7A00D0B194 /* PEGKit.framework */; };
-		6CB95C2C1BECDC7A00D0B194 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C261BECDC7A00D0B194 /* StoryTeller.framework */; };
-		6CB95C2E1BECDC8E00D0B194 /* Alchemic.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C231BECDC7A00D0B194 /* Alchemic.framework.dSYM */; };
 		6CB95C2F1BECDC8E00D0B194 /* PEGKit.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */; };
-		6CB95C301BECDC8E00D0B194 /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C271BECDC7A00D0B194 /* StoryTeller.framework.dSYM */; };
 		6CFFF2A51BE77F2F0038CB30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2A41BE77F2F0038CB30 /* main.m */; };
 		6CFFF2A81BE77F2F0038CB30 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2A71BE77F2F0038CB30 /* AppDelegate.m */; };
 		6CFFF2AB1BE77F2F0038CB30 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2AA1BE77F2F0038CB30 /* ViewController.m */; };
@@ -24,12 +20,8 @@
 
 /* Begin PBXFileReference section */
 		6CB95BFD1BEA12FA00D0B194 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
-		6CB95C221BECDC7A00D0B194 /* Alchemic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alchemic.framework; path = Carthage/Build/iOS/Alchemic.framework; sourceTree = "<group>"; };
-		6CB95C231BECDC7A00D0B194 /* Alchemic.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Alchemic.framework.dSYM; path = Carthage/Build/iOS/Alchemic.framework.dSYM; sourceTree = "<group>"; };
 		6CB95C241BECDC7A00D0B194 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
 		6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = PEGKit.framework.dSYM; path = Carthage/Build/iOS/PEGKit.framework.dSYM; sourceTree = "<group>"; };
-		6CB95C261BECDC7A00D0B194 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
-		6CB95C271BECDC7A00D0B194 /* StoryTeller.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = StoryTeller.framework.dSYM; path = Carthage/Build/iOS/StoryTeller.framework.dSYM; sourceTree = "<group>"; };
 		6CFFF2A01BE77F2F0038CB30 /* ObjectiveCDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjectiveCDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CFFF2A41BE77F2F0038CB30 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6CFFF2A61BE77F2F0038CB30 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -47,9 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CB95C281BECDC7A00D0B194 /* Alchemic.framework in Frameworks */,
 				6CB95C2A1BECDC7A00D0B194 /* PEGKit.framework in Frameworks */,
-				6CB95C2C1BECDC7A00D0B194 /* StoryTeller.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,12 +49,8 @@
 		6CFFF2971BE77F2F0038CB30 = {
 			isa = PBXGroup;
 			children = (
-				6CB95C221BECDC7A00D0B194 /* Alchemic.framework */,
-				6CB95C231BECDC7A00D0B194 /* Alchemic.framework.dSYM */,
 				6CB95C241BECDC7A00D0B194 /* PEGKit.framework */,
 				6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */,
-				6CB95C261BECDC7A00D0B194 /* StoryTeller.framework */,
-				6CB95C271BECDC7A00D0B194 /* StoryTeller.framework.dSYM */,
 				6CB95BFD1BEA12FA00D0B194 /* Cartfile */,
 				6CFFF2A21BE77F2F0038CB30 /* ObjectiveCDemo */,
 				6CFFF2A11BE77F2F0038CB30 /* Products */,
@@ -162,9 +148,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CB95C2E1BECDC8E00D0B194 /* Alchemic.framework.dSYM in Resources */,
 				6CB95C2F1BECDC8E00D0B194 /* PEGKit.framework.dSYM in Resources */,
-				6CB95C301BECDC8E00D0B194 /* StoryTeller.framework.dSYM in Resources */,
 				6CFFF2B31BE77F2F0038CB30 /* LaunchScreen.storyboard in Resources */,
 				6CFFF2B01BE77F2F0038CB30 /* Assets.xcassets in Resources */,
 				6CB95BFE1BEA12FA00D0B194 /* Cartfile in Resources */,
