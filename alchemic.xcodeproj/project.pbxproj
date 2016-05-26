@@ -13,6 +13,7 @@
 		6C1ADB051C9050FB00267E77 /* ALCInstantiation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */; };
 		6C1C10351CF475C900ED1A20 /* ALCModelClassProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1C10341CF475C900ED1A20 /* ALCModelClassProcessorTests.m */; };
 		6C1C10371CF494F500ED1A20 /* NSSet+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1C10361CF494F500ED1A20 /* NSSet+AlchemicTests.m */; };
+		6C1C10391CF496F700ED1A20 /* NSObject+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1C10381CF496F700ED1A20 /* NSObject+AlchemicTests.m */; };
 		6C237CD21CCA6EEF00B8F551 /* RequestEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C237CD11CCA6EEF00B8F551 /* RequestEngine.m */; };
 		6C237CD61CCA74C700B8F551 /* ALCFactoryName.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C237CD41CCA746700B8F551 /* ALCFactoryName.m */; };
 		6C237CD71CCA74CE00B8F551 /* ALCFactoryName.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C237CD31CCA746700B8F551 /* ALCFactoryName.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -222,6 +223,7 @@
 		6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCInstantiation.m; sourceTree = "<group>"; };
 		6C1C10341CF475C900ED1A20 /* ALCModelClassProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelClassProcessorTests.m; sourceTree = "<group>"; };
 		6C1C10361CF494F500ED1A20 /* NSSet+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+AlchemicTests.m"; sourceTree = "<group>"; };
+		6C1C10381CF496F700ED1A20 /* NSObject+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+AlchemicTests.m"; sourceTree = "<group>"; };
 		6C237CD01CCA6EEF00B8F551 /* RequestEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestEngine.h; sourceTree = "<group>"; };
 		6C237CD11CCA6EEF00B8F551 /* RequestEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestEngine.m; sourceTree = "<group>"; };
 		6C237CD31CCA746700B8F551 /* ALCFactoryName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCFactoryName.h; sourceTree = "<group>"; };
@@ -591,6 +593,7 @@
 				F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */,
 				6C1C10341CF475C900ED1A20 /* ALCModelClassProcessorTests.m */,
 				6C1C10361CF494F500ED1A20 /* NSSet+AlchemicTests.m */,
+				6C1C10381CF496F700ED1A20 /* NSObject+AlchemicTests.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -983,6 +986,7 @@
 				6C1C10351CF475C900ED1A20 /* ALCModelClassProcessorTests.m in Sources */,
 				6C24CCDF1CA42B0C0026D18C /* NestedThing.m in Sources */,
 				6C4D85AA1C7DB7460061CA84 /* ALCConstantsTests.m in Sources */,
+				6C1C10391CF496F700ED1A20 /* NSObject+AlchemicTests.m in Sources */,
 				F458283D1CEBFECE0074A844 /* XCTestCase+Alchemic.m in Sources */,
 				F408073F1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m in Sources */,
 				6C67FF291C6772A400ABEDDD /* ALCRuntimeTests.m in Sources */,
