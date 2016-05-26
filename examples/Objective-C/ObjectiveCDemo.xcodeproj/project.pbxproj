@@ -16,6 +16,10 @@
 		6CFFF2AE1BE77F2F0038CB30 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CFFF2AC1BE77F2F0038CB30 /* Main.storyboard */; };
 		6CFFF2B01BE77F2F0038CB30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CFFF2AF1BE77F2F0038CB30 /* Assets.xcassets */; };
 		6CFFF2B31BE77F2F0038CB30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CFFF2B11BE77F2F0038CB30 /* LaunchScreen.storyboard */; };
+		F40F17D51CF6D054003CA908 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40F17D31CF6D054003CA908 /* Alchemic.framework */; };
+		F40F17D61CF6D054003CA908 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40F17D41CF6D054003CA908 /* StoryTeller.framework */; };
+		F40F17D91CF6D082003CA908 /* Alchemic.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */; };
+		F40F17DA1CF6D082003CA908 /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +36,10 @@
 		6CFFF2AF1BE77F2F0038CB30 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6CFFF2B21BE77F2F0038CB30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6CFFF2B41BE77F2F0038CB30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F40F17D31CF6D054003CA908 /* Alchemic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alchemic.framework; path = Carthage/Build/iOS/Alchemic.framework; sourceTree = "<group>"; };
+		F40F17D41CF6D054003CA908 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
+		F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Alchemic.framework.dSYM; path = Carthage/Build/iOS/Alchemic.framework.dSYM; sourceTree = "<group>"; };
+		F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = StoryTeller.framework.dSYM; path = Carthage/Build/iOS/StoryTeller.framework.dSYM; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +47,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F40F17D51CF6D054003CA908 /* Alchemic.framework in Frameworks */,
+				F40F17D61CF6D054003CA908 /* StoryTeller.framework in Frameworks */,
 				6CB95C2A1BECDC7A00D0B194 /* PEGKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,6 +59,10 @@
 		6CFFF2971BE77F2F0038CB30 = {
 			isa = PBXGroup;
 			children = (
+				F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */,
+				F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */,
+				F40F17D31CF6D054003CA908 /* Alchemic.framework */,
+				F40F17D41CF6D054003CA908 /* StoryTeller.framework */,
 				6CB95C241BECDC7A00D0B194 /* PEGKit.framework */,
 				6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */,
 				6CB95BFD1BEA12FA00D0B194 /* Cartfile */,
@@ -148,6 +162,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F40F17DA1CF6D082003CA908 /* StoryTeller.framework.dSYM in Resources */,
+				F40F17D91CF6D082003CA908 /* Alchemic.framework.dSYM in Resources */,
 				6CB95C2F1BECDC8E00D0B194 /* PEGKit.framework.dSYM in Resources */,
 				6CFFF2B31BE77F2F0038CB30 /* LaunchScreen.storyboard in Resources */,
 				6CFFF2B01BE77F2F0038CB30 /* Assets.xcassets in Resources */,
