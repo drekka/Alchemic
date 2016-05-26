@@ -17,7 +17,7 @@
                BlueprintIdentifier = "6CFFF29F1BE77F2F0038CB30"
                BuildableName = "ObjectiveCDemo.app"
                BlueprintName = "ObjectiveCDemo"
-               ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
+               ReferencedContainer = "container:ObjectiveCDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "F4F7343D1CF6E569009E04AD"
                BuildableName = "ObjectiveCDemoUITests.xctest"
                BlueprintName = "ObjectiveCDemoUITests"
-               ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
+               ReferencedContainer = "container:ObjectiveCDemo.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -45,7 +45,7 @@
             BlueprintIdentifier = "6CFFF29F1BE77F2F0038CB30"
             BuildableName = "ObjectiveCDemo.app"
             BlueprintName = "ObjectiveCDemo"
-            ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
+            ReferencedContainer = "container:ObjectiveCDemo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -68,7 +68,7 @@
             BlueprintIdentifier = "6CFFF29F1BE77F2F0038CB30"
             BuildableName = "ObjectiveCDemo.app"
             BlueprintName = "ObjectiveCDemo"
-            ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
+            ReferencedContainer = "container:ObjectiveCDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -87,7 +87,7 @@
             BlueprintIdentifier = "6CFFF29F1BE77F2F0038CB30"
             BuildableName = "ObjectiveCDemo.app"
             BlueprintName = "ObjectiveCDemo"
-            ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
+            ReferencedContainer = "container:ObjectiveCDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
