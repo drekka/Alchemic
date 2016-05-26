@@ -8,28 +8,35 @@
 
 /* Begin PBXBuildFile section */
 		6CB95BFE1BEA12FA00D0B194 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95BFD1BEA12FA00D0B194 /* Cartfile */; };
-		6CB95C281BECDC7A00D0B194 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C221BECDC7A00D0B194 /* Alchemic.framework */; };
 		6CB95C2A1BECDC7A00D0B194 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C241BECDC7A00D0B194 /* PEGKit.framework */; };
-		6CB95C2C1BECDC7A00D0B194 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB95C261BECDC7A00D0B194 /* StoryTeller.framework */; };
-		6CB95C2E1BECDC8E00D0B194 /* Alchemic.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C231BECDC7A00D0B194 /* Alchemic.framework.dSYM */; };
 		6CB95C2F1BECDC8E00D0B194 /* PEGKit.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */; };
-		6CB95C301BECDC8E00D0B194 /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6CB95C271BECDC7A00D0B194 /* StoryTeller.framework.dSYM */; };
 		6CFFF2A51BE77F2F0038CB30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2A41BE77F2F0038CB30 /* main.m */; };
 		6CFFF2A81BE77F2F0038CB30 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2A71BE77F2F0038CB30 /* AppDelegate.m */; };
 		6CFFF2AB1BE77F2F0038CB30 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFF2AA1BE77F2F0038CB30 /* ViewController.m */; };
 		6CFFF2AE1BE77F2F0038CB30 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CFFF2AC1BE77F2F0038CB30 /* Main.storyboard */; };
 		6CFFF2B01BE77F2F0038CB30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CFFF2AF1BE77F2F0038CB30 /* Assets.xcassets */; };
 		6CFFF2B31BE77F2F0038CB30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CFFF2B11BE77F2F0038CB30 /* LaunchScreen.storyboard */; };
+		F40F17D51CF6D054003CA908 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40F17D31CF6D054003CA908 /* Alchemic.framework */; };
+		F40F17D61CF6D054003CA908 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40F17D41CF6D054003CA908 /* StoryTeller.framework */; };
+		F40F17D91CF6D082003CA908 /* Alchemic.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */; };
+		F40F17DA1CF6D082003CA908 /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */; };
+		F4F734411CF6E56A009E04AD /* ObjectiveCDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F734401CF6E56A009E04AD /* ObjectiveCDemoUITests.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F4F734431CF6E56A009E04AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6CFFF2981BE77F2F0038CB30 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6CFFF29F1BE77F2F0038CB30;
+			remoteInfo = ObjectiveCDemo;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		6CB95BFD1BEA12FA00D0B194 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
-		6CB95C221BECDC7A00D0B194 /* Alchemic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alchemic.framework; path = Carthage/Build/iOS/Alchemic.framework; sourceTree = "<group>"; };
-		6CB95C231BECDC7A00D0B194 /* Alchemic.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Alchemic.framework.dSYM; path = Carthage/Build/iOS/Alchemic.framework.dSYM; sourceTree = "<group>"; };
 		6CB95C241BECDC7A00D0B194 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
 		6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = PEGKit.framework.dSYM; path = Carthage/Build/iOS/PEGKit.framework.dSYM; sourceTree = "<group>"; };
-		6CB95C261BECDC7A00D0B194 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
-		6CB95C271BECDC7A00D0B194 /* StoryTeller.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = StoryTeller.framework.dSYM; path = Carthage/Build/iOS/StoryTeller.framework.dSYM; sourceTree = "<group>"; };
 		6CFFF2A01BE77F2F0038CB30 /* ObjectiveCDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjectiveCDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CFFF2A41BE77F2F0038CB30 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6CFFF2A61BE77F2F0038CB30 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -40,6 +47,13 @@
 		6CFFF2AF1BE77F2F0038CB30 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6CFFF2B21BE77F2F0038CB30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6CFFF2B41BE77F2F0038CB30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F40F17D31CF6D054003CA908 /* Alchemic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alchemic.framework; path = Carthage/Build/iOS/Alchemic.framework; sourceTree = "<group>"; };
+		F40F17D41CF6D054003CA908 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
+		F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Alchemic.framework.dSYM; path = Carthage/Build/iOS/Alchemic.framework.dSYM; sourceTree = "<group>"; };
+		F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = StoryTeller.framework.dSYM; path = Carthage/Build/iOS/StoryTeller.framework.dSYM; sourceTree = "<group>"; };
+		F4F7343E1CF6E569009E04AD /* ObjectiveCDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectiveCDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4F734401CF6E56A009E04AD /* ObjectiveCDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjectiveCDemoUITests.m; sourceTree = "<group>"; };
+		F4F734421CF6E56A009E04AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,9 +61,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CB95C281BECDC7A00D0B194 /* Alchemic.framework in Frameworks */,
+				F40F17D51CF6D054003CA908 /* Alchemic.framework in Frameworks */,
+				F40F17D61CF6D054003CA908 /* StoryTeller.framework in Frameworks */,
 				6CB95C2A1BECDC7A00D0B194 /* PEGKit.framework in Frameworks */,
-				6CB95C2C1BECDC7A00D0B194 /* StoryTeller.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4F7343B1CF6E569009E04AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,12 +80,8 @@
 		6CFFF2971BE77F2F0038CB30 = {
 			isa = PBXGroup;
 			children = (
-				6CB95C221BECDC7A00D0B194 /* Alchemic.framework */,
-				6CB95C231BECDC7A00D0B194 /* Alchemic.framework.dSYM */,
-				6CB95C241BECDC7A00D0B194 /* PEGKit.framework */,
-				6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */,
-				6CB95C261BECDC7A00D0B194 /* StoryTeller.framework */,
-				6CB95C271BECDC7A00D0B194 /* StoryTeller.framework.dSYM */,
+				F4F7343F1CF6E56A009E04AD /* ObjectiveCDemoUITests */,
+				F4F734391CF6E537009E04AD /* Frameworks */,
 				6CB95BFD1BEA12FA00D0B194 /* Cartfile */,
 				6CFFF2A21BE77F2F0038CB30 /* ObjectiveCDemo */,
 				6CFFF2A11BE77F2F0038CB30 /* Products */,
@@ -75,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				6CFFF2A01BE77F2F0038CB30 /* ObjectiveCDemo.app */,
+				F4F7343E1CF6E569009E04AD /* ObjectiveCDemoUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,6 +121,28 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		F4F734391CF6E537009E04AD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */,
+				F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */,
+				F40F17D31CF6D054003CA908 /* Alchemic.framework */,
+				F40F17D41CF6D054003CA908 /* StoryTeller.framework */,
+				6CB95C241BECDC7A00D0B194 /* PEGKit.framework */,
+				6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F4F7343F1CF6E56A009E04AD /* ObjectiveCDemoUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F4F734401CF6E56A009E04AD /* ObjectiveCDemoUITests.m */,
+				F4F734421CF6E56A009E04AD /* Info.plist */,
+			);
+			path = ObjectiveCDemoUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -124,6 +164,24 @@
 			productReference = 6CFFF2A01BE77F2F0038CB30 /* ObjectiveCDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F4F7343D1CF6E569009E04AD /* ObjectiveCDemoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F4F734451CF6E56A009E04AD /* Build configuration list for PBXNativeTarget "ObjectiveCDemoUITests" */;
+			buildPhases = (
+				F4F7343A1CF6E569009E04AD /* Sources */,
+				F4F7343B1CF6E569009E04AD /* Frameworks */,
+				F4F7343C1CF6E569009E04AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F4F734441CF6E56A009E04AD /* PBXTargetDependency */,
+			);
+			name = ObjectiveCDemoUITests;
+			productName = ObjectiveCDemoUITests;
+			productReference = F4F7343E1CF6E569009E04AD /* ObjectiveCDemoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -135,6 +193,11 @@
 				TargetAttributes = {
 					6CFFF29F1BE77F2F0038CB30 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 3MHZ7974Y8;
+					};
+					F4F7343D1CF6E569009E04AD = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = 6CFFF29F1BE77F2F0038CB30;
 					};
 				};
 			};
@@ -152,6 +215,7 @@
 			projectRoot = "";
 			targets = (
 				6CFFF29F1BE77F2F0038CB30 /* ObjectiveCDemo */,
+				F4F7343D1CF6E569009E04AD /* ObjectiveCDemoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -161,13 +225,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CB95C2E1BECDC8E00D0B194 /* Alchemic.framework.dSYM in Resources */,
+				F40F17DA1CF6D082003CA908 /* StoryTeller.framework.dSYM in Resources */,
+				F40F17D91CF6D082003CA908 /* Alchemic.framework.dSYM in Resources */,
 				6CB95C2F1BECDC8E00D0B194 /* PEGKit.framework.dSYM in Resources */,
-				6CB95C301BECDC8E00D0B194 /* StoryTeller.framework.dSYM in Resources */,
 				6CFFF2B31BE77F2F0038CB30 /* LaunchScreen.storyboard in Resources */,
 				6CFFF2B01BE77F2F0038CB30 /* Assets.xcassets in Resources */,
 				6CB95BFE1BEA12FA00D0B194 /* Cartfile in Resources */,
 				6CFFF2AE1BE77F2F0038CB30 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4F7343C1CF6E569009E04AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,7 +274,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F4F7343A1CF6E569009E04AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4F734411CF6E56A009E04AD /* ObjectiveCDemoUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F4F734441CF6E56A009E04AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6CFFF29F1BE77F2F0038CB30 /* ObjectiveCDemo */;
+			targetProxy = F4F734431CF6E56A009E04AD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6CFFF2AC1BE77F2F0038CB30 /* Main.storyboard */ = {
@@ -261,7 +348,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -298,7 +385,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -309,6 +396,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -325,6 +413,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -334,6 +423,30 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.ObjectiveCDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		F4F734461CF6E56A009E04AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = ObjectiveCDemoUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.ObjectiveCDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ObjectiveCDemo;
+			};
+			name = Debug;
+		};
+		F4F734471CF6E56A009E04AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = ObjectiveCDemoUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.ObjectiveCDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ObjectiveCDemo;
 			};
 			name = Release;
 		};
@@ -357,6 +470,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		F4F734451CF6E56A009E04AD /* Build configuration list for PBXNativeTarget "ObjectiveCDemoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4F734461CF6E56A009E04AD /* Debug */,
+				F4F734471CF6E56A009E04AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

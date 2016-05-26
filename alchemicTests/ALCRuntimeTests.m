@@ -12,6 +12,8 @@
 @import Alchemic;
 @import Alchemic.Private;
 
+#import "XCTestCase+Alchemic.h"
+
 @interface ALCRuntimeTests : XCTestCase
 @property(nonatomic, strong) NSString *aStringProperty;
 @property(nonatomic, strong) id aIdProperty;
@@ -25,37 +27,92 @@
 
 @end
 
-@implementation ALCRuntimeTests
+@implementation ALCRuntimeTests {
+    NSString *_privateVariable;
+    CGRect _aRect;
+}
 
--(void) testIVarClassNSString {
+@synthesize aStringProperty = __weirdInternalPropertyVariable;
+
+#pragma mark - VariableForInjectionPoint:
+
+-(void) testVariableForInjectionPointProperty {
+    Ivar expectedIvar = class_getInstanceVariable([self class], "__weirdInternalPropertyVariable");
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringProperty"];
+    XCTAssertEqual(expectedIvar, var);
+}
+
+-(void) testVariableForInjectionPointPrivateVariable {
+    Ivar expectedIvar = class_getInstanceVariable([self class], "_privateVariable");
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_privateVariable"];
+    XCTAssertEqual(expectedIvar, var);
+}
+
+-(void) testVariableForInjectionPointNotFound {
+    [self executeBlockWithException:[AlchemicInjectionNotFoundException class] block:^{
+        __unused Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_X_"];
+    }];
+}
+
+#pragma mark - TypeDataForIVar:
+
+-(void) testTypeDataForIVarString {
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
     XCTAssertEqual([NSString class], ivarData.objcClass);
 }
 
--(void) testIVarClassId {
+-(void) testTypeDataForIVarId {
+    
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aIdProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    
     XCTAssertEqual([NSObject class], ivarData.objcClass);
+    XCTAssertNil(ivarData.objcProtocols);
+    XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
--(void) testIVarClassProtocol {
+-(void) testTypeDataForIVarProtocol {
+    
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    
     XCTAssertEqual([NSObject class], ivarData.objcClass);
+    XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSCopying)]);
+    XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
--(void) testIVarClassNSStringProtocol {
+-(void) testTypeDataForIVarClassNSStringProtocol {
+    
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    
     XCTAssertEqual([NSString class], ivarData.objcClass);
+    XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSFastEnumeration)]);
+    XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
--(void) testIVarClassInt {
+-(void) testTypeDataForIVarInt {
+    
     Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aIntProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    
     XCTAssertNil(ivarData.objcClass);
+    XCTAssertNil(ivarData.objcProtocols);
+    XCTAssertEqual(0, strcmp("i", ivarData.scalarType));
 }
+
+-(void) testTypeDataForIVarCGRect {
+    
+    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aRect"];
+    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    
+    XCTAssertNil(ivarData.objcClass);
+    XCTAssertNil(ivarData.objcProtocols);
+    XCTAssertEqual(0, strcmp("{CGRect=\"origin\"{CGPoint=\"x\"d\"y\"d}\"size\"{CGSize=\"width\"d\"height\"d}}", ivarData.scalarType));
+}
+
+#pragma mark - general runtime tests
 
 -(void) testAccessingMethods {
     
@@ -78,6 +135,8 @@
     XCTAssertTrue(strcmp("@", arg2) == 0);
     XCTAssertTrue(strcmp("i", arg3) == 0);
 }
+
+#pragma mark - Empty implementations
 
 +(void) classMethod {}
 -(void) instanceMethod {}

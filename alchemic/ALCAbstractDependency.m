@@ -27,7 +27,7 @@
 
 #pragma mark - ALCResolvable
 
--(bool)ready {
+-(BOOL)ready {
     return _injector.ready;
 }
 

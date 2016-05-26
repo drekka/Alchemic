@@ -22,6 +22,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+bool strHasPrefix(const char *str, const char *prefix) {
+    return strncmp(prefix, str, strlen(prefix)) == 0;
+}
+
 @implementation ALCRuntime
 
 static Class __protocolClass;
@@ -38,52 +42,41 @@ static NSCharacterSet *__typeEncodingDelimiters;
     
     // First attempt to get an instance variable with the passed name
     const char * charName = [inj UTF8String];
-    Ivar var = class_getInstanceVariable(aClass, charName);
-    if (var) {
-        return var;
+    Ivar instanceVar = class_getInstanceVariable(aClass, charName);
+    if (instanceVar) {
+        return instanceVar;
     }
     
     // Not found, so try for a property based on the passed name.
-    // The property's internal variable may have a completely different variable name.
+    // The property's internal variable may have a completely different variable name so we have to dig that out and return it.
     objc_property_t prop = class_getProperty(aClass, charName);
     if (prop) {
         // Return the internal variable.
-        const char *propVarName = property_copyAttributeValue(prop, "V");
-        return class_getInstanceVariable(aClass, propVarName);
+        const char *propVarName = property_copyAttributeValue(prop, "V"); // This has to be free'd.
+        Ivar propertyVar = class_getInstanceVariable(aClass, propVarName);
+        free((void *) propVarName);
+        return propertyVar;
     }
     
-    // Not a property so it may be a static class variable.
-    var = class_getClassVariable(aClass, charName);
-    if (var) {
-        return var;
-    }
-    
-    // Still no luck so last attempt, try for an underscore prefixed variable.
-    var = class_getInstanceVariable(aClass, [[@"_" stringByAppendingString:inj] UTF8String]);
-    
-    if (var == NULL) {
-        throwException(InjectionNotFound, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
-    }
-    
-    return var;
+    throwException(InjectionNotFound, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
 }
 
 +(ALCTypeData *) typeDataForIVar:(Ivar) iVar {
-    NSString *variableTypeEncoding = [NSString stringWithUTF8String:ivar_getTypeEncoding(iVar)];
-    return [self typeDataForEncoding:variableTypeEncoding];
+    return [self typeDataForEncoding:ivar_getTypeEncoding(iVar)];
 }
 
-+(ALCTypeData *) typeDataForEncoding:(NSString *) encoding {
++(ALCTypeData *) typeDataForEncoding:(const char *) encoding {
     
     // Get the type.
     ALCTypeData *typeData = [[ALCTypeData alloc] init];
-    if ([encoding hasPrefix:@"@"]) {
+    if (strHasPrefix(encoding, "@")) {
         
         // Start with a result that indicates an Id. We map Ids as NSObjects.
         typeData.objcClass = [NSObject class];
         
         // Object type.
-        NSArray<NSString *> *defs = [encoding componentsSeparatedByCharactersInSet:__typeEncodingDelimiters];
+        
+        NSArray<NSString *> *defs = [[NSString stringWithUTF8String:encoding] componentsSeparatedByCharactersInSet:__typeEncodingDelimiters];
         
         // If there is no more than 2 in the array then the dependency is an id.
         // Position 3 will be a class name, positions beyond that will be protocols.
@@ -141,7 +134,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     if ([value isKindOfClass:[NSArray class]]) {
         NSArray *values = (NSArray *) value;
         if (values.count != 1) {
-            throwException(TooManyValues, @"Target type is not an array and found %lu values", values.count);
+            throwException(TooManyValues, @"Target type is not an array and found %lu values", (unsigned long) values.count);
         }
         return values[0];
     }

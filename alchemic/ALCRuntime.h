@@ -19,6 +19,18 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
+ Fast has prefix function for use on c strings.
+ 
+ Used when we are dealing with char *'s and don't want to convert to NSString * instances.
+ 
+ @param prefix The prefix we are looking for.
+ @param str    The string to test.
+ 
+ @return true if str begins with prefix, false otherwise.
+ */
+bool strHasPrefix(const char *str, const char *prefix);
+
+/**
  Methods which provide access to the Objective-C runtime.
  */
 @interface ALCRuntime : NSObject

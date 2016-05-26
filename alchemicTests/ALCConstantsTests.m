@@ -6,10 +6,11 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import Foundation;
+@import ObjectiveC;
 @import XCTest;
 @import Alchemic;
 @import Alchemic.Private;
-@import ObjectiveC;
 
 @interface ALCConstantsTests : XCTestCase
 @property (nonatomic, assign) int anInt;

@@ -14,12 +14,13 @@
 #import <OCMock/OCMock.h>
 
 @interface ALCConfigClassProcessorTests : XCTestCase<ALCConfig>
-
 @end
 
 @implementation ALCConfigClassProcessorTests {
     ALCConfigClassProcessor *_processor;
 }
+
+static NSSet<Class> *_configClasses;
 
 -(void) setUp {
     _processor = [[ALCConfigClassProcessor alloc] init];
@@ -35,11 +36,21 @@
 
 -(void) testProcessClassWithContext {
     id mockContext = OCMProtocolMock(@protocol(ALCContext));
-    [_processor processClass:[self class] withContext:mockContext];
+    NSSet<NSBundle *> *moreBundles = [_processor processClass:[self class] withContext:mockContext];
+    XCTAssertNil(moreBundles);
 }
 
-+(nullable NSArray<Class> *) scanBundlesWithClasses {
-    return nil;
+-(void) testProcessClassWithContextAndReturnsClasses {
+    _configClasses = [NSSet setWithObject:[NSString class]];
+    id mockContext = OCMProtocolMock(@protocol(ALCContext));
+    NSSet<NSBundle *> *moreBundles = [_processor processClass:[self class] withContext:mockContext];
+    XCTAssertEqual(1u, moreBundles.count);
+    NSBundle *stringBundle = [NSBundle bundleForClass:[NSString class]];
+    XCTAssertEqual(stringBundle, moreBundles.anyObject);
+}
+
++(nullable NSSet<Class> *) scanBundlesWithClasses {
+    return _configClasses;
 }
 
 @end

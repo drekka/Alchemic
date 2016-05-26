@@ -48,6 +48,4 @@
     XCTAssertNil(set1);
 }
 
-
-
 @end
