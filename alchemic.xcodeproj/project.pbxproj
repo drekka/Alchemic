@@ -1041,7 +1041,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				DYLIB_CURRENT_VERSION = 2.0;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
