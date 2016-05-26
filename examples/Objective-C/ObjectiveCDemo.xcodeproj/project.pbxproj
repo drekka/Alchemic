@@ -20,7 +20,18 @@
 		F40F17D61CF6D054003CA908 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40F17D41CF6D054003CA908 /* StoryTeller.framework */; };
 		F40F17D91CF6D082003CA908 /* Alchemic.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */; };
 		F40F17DA1CF6D082003CA908 /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */; };
+		F4F734411CF6E56A009E04AD /* ObjectiveCDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F734401CF6E56A009E04AD /* ObjectiveCDemoUITests.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F4F734431CF6E56A009E04AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6CFFF2981BE77F2F0038CB30 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6CFFF29F1BE77F2F0038CB30;
+			remoteInfo = ObjectiveCDemo;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		6CB95BFD1BEA12FA00D0B194 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
@@ -40,6 +51,9 @@
 		F40F17D41CF6D054003CA908 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
 		F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Alchemic.framework.dSYM; path = Carthage/Build/iOS/Alchemic.framework.dSYM; sourceTree = "<group>"; };
 		F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = StoryTeller.framework.dSYM; path = Carthage/Build/iOS/StoryTeller.framework.dSYM; sourceTree = "<group>"; };
+		F4F7343E1CF6E569009E04AD /* ObjectiveCDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectiveCDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4F734401CF6E56A009E04AD /* ObjectiveCDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjectiveCDemoUITests.m; sourceTree = "<group>"; };
+		F4F734421CF6E56A009E04AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,18 +67,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F4F7343B1CF6E569009E04AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		6CFFF2971BE77F2F0038CB30 = {
 			isa = PBXGroup;
 			children = (
-				F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */,
-				F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */,
-				F40F17D31CF6D054003CA908 /* Alchemic.framework */,
-				F40F17D41CF6D054003CA908 /* StoryTeller.framework */,
-				6CB95C241BECDC7A00D0B194 /* PEGKit.framework */,
-				6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */,
+				F4F7343F1CF6E56A009E04AD /* ObjectiveCDemoUITests */,
+				F4F734391CF6E537009E04AD /* Frameworks */,
 				6CB95BFD1BEA12FA00D0B194 /* Cartfile */,
 				6CFFF2A21BE77F2F0038CB30 /* ObjectiveCDemo */,
 				6CFFF2A11BE77F2F0038CB30 /* Products */,
@@ -75,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				6CFFF2A01BE77F2F0038CB30 /* ObjectiveCDemo.app */,
+				F4F7343E1CF6E569009E04AD /* ObjectiveCDemoUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,6 +121,28 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		F4F734391CF6E537009E04AD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F40F17D71CF6D082003CA908 /* Alchemic.framework.dSYM */,
+				F40F17D81CF6D082003CA908 /* StoryTeller.framework.dSYM */,
+				F40F17D31CF6D054003CA908 /* Alchemic.framework */,
+				F40F17D41CF6D054003CA908 /* StoryTeller.framework */,
+				6CB95C241BECDC7A00D0B194 /* PEGKit.framework */,
+				6CB95C251BECDC7A00D0B194 /* PEGKit.framework.dSYM */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F4F7343F1CF6E56A009E04AD /* ObjectiveCDemoUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F4F734401CF6E56A009E04AD /* ObjectiveCDemoUITests.m */,
+				F4F734421CF6E56A009E04AD /* Info.plist */,
+			);
+			path = ObjectiveCDemoUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -124,6 +164,24 @@
 			productReference = 6CFFF2A01BE77F2F0038CB30 /* ObjectiveCDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F4F7343D1CF6E569009E04AD /* ObjectiveCDemoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F4F734451CF6E56A009E04AD /* Build configuration list for PBXNativeTarget "ObjectiveCDemoUITests" */;
+			buildPhases = (
+				F4F7343A1CF6E569009E04AD /* Sources */,
+				F4F7343B1CF6E569009E04AD /* Frameworks */,
+				F4F7343C1CF6E569009E04AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F4F734441CF6E56A009E04AD /* PBXTargetDependency */,
+			);
+			name = ObjectiveCDemoUITests;
+			productName = ObjectiveCDemoUITests;
+			productReference = F4F7343E1CF6E569009E04AD /* ObjectiveCDemoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -136,6 +194,10 @@
 					6CFFF29F1BE77F2F0038CB30 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 3MHZ7974Y8;
+					};
+					F4F7343D1CF6E569009E04AD = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = 6CFFF29F1BE77F2F0038CB30;
 					};
 				};
 			};
@@ -153,6 +215,7 @@
 			projectRoot = "";
 			targets = (
 				6CFFF29F1BE77F2F0038CB30 /* ObjectiveCDemo */,
+				F4F7343D1CF6E569009E04AD /* ObjectiveCDemoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -169,6 +232,13 @@
 				6CFFF2B01BE77F2F0038CB30 /* Assets.xcassets in Resources */,
 				6CB95BFE1BEA12FA00D0B194 /* Cartfile in Resources */,
 				6CFFF2AE1BE77F2F0038CB30 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4F7343C1CF6E569009E04AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +274,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F4F7343A1CF6E569009E04AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4F734411CF6E56A009E04AD /* ObjectiveCDemoUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F4F734441CF6E56A009E04AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6CFFF29F1BE77F2F0038CB30 /* ObjectiveCDemo */;
+			targetProxy = F4F734431CF6E56A009E04AD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6CFFF2AC1BE77F2F0038CB30 /* Main.storyboard */ = {
@@ -340,6 +426,30 @@
 			};
 			name = Release;
 		};
+		F4F734461CF6E56A009E04AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = ObjectiveCDemoUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.ObjectiveCDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ObjectiveCDemo;
+			};
+			name = Debug;
+		};
+		F4F734471CF6E56A009E04AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = ObjectiveCDemoUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.ObjectiveCDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ObjectiveCDemo;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -360,6 +470,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		F4F734451CF6E56A009E04AD /* Build configuration list for PBXNativeTarget "ObjectiveCDemoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4F734461CF6E56A009E04AD /* Debug */,
+				F4F734471CF6E56A009E04AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

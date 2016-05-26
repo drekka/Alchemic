@@ -28,6 +28,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F4F7343D1CF6E569009E04AD"
+               BuildableName = "ObjectiveCDemoUITests.xctest"
+               BlueprintName = "ObjectiveCDemoUITests"
+               ReferencedContainer = "container:examples/Objective-C/ObjectiveCDemo.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
