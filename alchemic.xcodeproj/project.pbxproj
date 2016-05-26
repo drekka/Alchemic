@@ -20,9 +20,9 @@
 		6C24CCDF1CA42B0C0026D18C /* NestedThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC341C96EBBB00B56578 /* NestedThing.m */; };
 		6C24CCF11CA42BA80026D18C /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C24CCF21CA42BA80026D18C /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
-		6C24CCF51CA42BA80026D18C /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6C24CCF61CA42BA80026D18C /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6C24CCF71CA42BA80026D18C /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6C24CCF51CA42BA80026D18C /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6C24CCF61CA42BA80026D18C /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6C24CCF71CA42BA80026D18C /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C24CD031CA539D00026D18C /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C25D2751C566E2D00D982DC /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2741C566E2D00D982DC /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C25D2771C566E6A00D982DC /* ALCObjectFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -88,9 +88,9 @@
 		6CB5CCE81CDB7AF700DC1052 /* ClassFactories.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBD41C64CDEC00B4FCAA /* ClassFactories.m */; };
 		6CB5CCEA1CDB7AF700DC1052 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6CB5CCEB1CDB7AF700DC1052 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFD6E971B456D27008B6695 /* libOCMock.a */; };
-		6CB5CCEE1CDB7AF700DC1052 /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6CB5CCEF1CDB7AF700DC1052 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6CB5CCF01CDB7AF700DC1052 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CB5CCEE1CDB7AF700DC1052 /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6CB5CCEF1CDB7AF700DC1052 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6CB5CCF01CDB7AF700DC1052 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6CB7C4341CC7BC1300C05B0B /* ALCIsReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB7C42E1CC7BC1300C05B0B /* ALCIsReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB7C4351CC7BC1300C05B0B /* ALCIsReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB7C42F1CC7BC1300C05B0B /* ALCIsReference.m */; };
 		6CB7C4361CC7BC1300C05B0B /* ALCIsFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB7C4301CC7BC1300C05B0B /* ALCIsFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -126,8 +126,8 @@
 		F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C041CE988F100AEC0E5 /* ALCInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F408073F1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */; };
 		F41108A51CF408B600EEBFF7 /* ALCStringMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F41108A41CF408B600EEBFF7 /* ALCStringMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F41108AC1CF4411D00EEBFF7 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F41108AD1CF4411D00EEBFF7 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F41108AC1CF4411D00EEBFF7 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F41108AD1CF4411D00EEBFF7 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F420FA6E1CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA651CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h */; };
 		F420FA6F1CF288D40032C212 /* OCMArg.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA661CF288D40032C212 /* OCMArg.h */; };
 		F420FA701CF288D40032C212 /* OCMConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = F420FA671CF288D40032C212 /* OCMConstraint.h */; };
