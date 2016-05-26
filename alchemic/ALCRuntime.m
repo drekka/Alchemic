@@ -134,7 +134,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     if ([value isKindOfClass:[NSArray class]]) {
         NSArray *values = (NSArray *) value;
         if (values.count != 1) {
-            throwException(TooManyValues, @"Target type is not an array and found %lu values", values.count);
+            throwException(TooManyValues, @"Target type is not an array and found %lu values", (unsigned long) values.count);
         }
         return values[0];
     }
