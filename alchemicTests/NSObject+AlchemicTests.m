@@ -18,7 +18,7 @@
 
 -(void) testInstanceInvokeSelectorWithArguments {
     
-    NSString *obj = @"abc";
+    //NSString *obj = @"abc";
     
     
 }
