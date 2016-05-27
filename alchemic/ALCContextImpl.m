@@ -32,12 +32,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCContextImpl {
     id<ALCModel> _model;
+    NSMutableSet<ALCSimpleBlock> *_postStartBlocks;
 }
 
 -(instancetype)init {
     self = [super init];
     if (self) {
         _model = [[ALCModelImpl alloc] init];
+        _postStartBlocks = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -47,6 +49,13 @@ NS_ASSUME_NONNULL_BEGIN
     STLog(self, @"Starting Alchemic ...");
     [_model resolveDependencies];
     [_model startSingletons];
+    
+    // Call and registered blocks.
+    [_postStartBlocks enumerateObjectsUsingBlock:^(ALCSimpleBlock postStartBlock, BOOL *stop) {
+        postStartBlock();
+    }];
+    _postStartBlocks = nil; // Clear the blocks.
+    
     STLog(self, @"\n\n%@\n", _model);
     STLog(self, @"Alchemic started.");
     
@@ -155,6 +164,20 @@ registerFactoryMethod:(SEL) selector
     ALCModelObjectInjector *injection = (ALCModelObjectInjector *)[criteria injectionWithClass:returnType allowConstants:NO];
     [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];
     return injection.searchResult;
+}
+
+-(void) setReferenceObject:(id) object, ... {
+    STLog([object class], @"Storing reference for a %@", NSStringFromClass([object class]));
+    
+    // Now lets find our reference object
+    alc_loadVarArgsAfterVariableIntoArray(object, criteria);
+    if (criteria.count == 0) {
+        [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[object class]]];
+    }
+    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:[object class]];
+    
+    NSArray<id<ALCObjectFactory>> *factories = [_model objectFactoriesMatchingCriteria:searchCriteria];
+    
 }
 
 #pragma mark - Internal

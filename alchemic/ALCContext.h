@@ -107,7 +107,12 @@ registerFactoryMethod:(SEL) selector
  */
 -(id) objectWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
-//-(void)
+/**
+ Sets a reference value.
+ 
+ @param object The object to set. If there are not criteria then the class of this object will be used to find the reference to set.
+ */
+-(void) setReferenceObject:(id) object, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end
 

@@ -48,18 +48,12 @@ NS_ASSUME_NONNULL_BEGIN
     return arguments;
 }
 
--(id<ALCInjector>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants {
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass {
     
-    __block ALCModelSearchCriteria *searchCriteria;
-    __block id<ALCInjector> constant;
-    
+    ALCModelSearchCriteria *searchCriteria;
     for (id criteria in self) {
         
         if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
-            
-            if (constant) {
-                throwException(IllegalArgument, @"You cannot combine model search criteria and constants.");
-            }
             
             if (searchCriteria) {
                 [searchCriteria appendSearchCriteria:criteria];
@@ -69,14 +63,10 @@ NS_ASSUME_NONNULL_BEGIN
             
         } else if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
             
-            if (!allowConstants) {
-                throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
+            if (self.count > 1) {
+                throwException(IllegalArgument, @"Only a single constant value is allowed");
             }
-            
-            if (searchCriteria) {
-                throwException(IllegalArgument, @"You cannot combine model search criteria and constants.");
-            }
-            constant = criteria;
+            return nil;
             
         } else {
             throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
@@ -85,12 +75,19 @@ NS_ASSUME_NONNULL_BEGIN
     }
     
     // Default to the dependency class if no constant or criteria provided.
-    if (!constant && !searchCriteria) {
-        searchCriteria = [ALCModelSearchCriteria searchCriteriaForClass:injectionClass];
+    return searchCriteria ? searchCriteria: [ALCModelSearchCriteria searchCriteriaForClass:aClass];
+}
+
+-(id<ALCInjector>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants {
+    
+    ALCModelSearchCriteria *searchCriteria = [self modelSearchCriteriaForClass:injectionClass];
+    
+    if (! allowConstants && !searchCriteria) {
+        throwException(IllegalArgument, @"Cannot use constant expressions here.");
     }
     
-    return constant ? constant : [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
-                                                                            criteria:searchCriteria];
+    return searchCriteria ? [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
+                                                                       criteria:searchCriteria] : self[0];
 }
 
 -(nullable ALCSimpleBlock) combineSimpleBlocks {

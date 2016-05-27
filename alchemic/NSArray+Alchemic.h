@@ -14,6 +14,7 @@
 @protocol ALCInjector;
 @protocol ALCModel;
 @protocol ALCResolvable;
+@class ALCModelSearchCriteria;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
  @return A list of ALCDependencies, one per argument.
  */
 -(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
+
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass;
 
 /**
  Scans a list of seach criteria or constants to define an injection.
