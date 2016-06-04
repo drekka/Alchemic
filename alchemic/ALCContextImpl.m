@@ -26,7 +26,7 @@
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCTypeData.h>
 #import <Alchemic/NSArray+Alchemic.h>
-
+#import <Alchemic/NSObject+Alchemic.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -201,7 +201,8 @@ registerFactoryMethod:(SEL) selector
         }
         
         // Set the object and call the returned completion.
-        [((ALCAbstractObjectFactory *)factories[0]) setObject:object](object);
+        ALCObjectCompletion completionBlock = [((ALCAbstractObjectFactory *)factories[0]) setObject:object];
+        [object completeWithBlock:completionBlock];
     };
     
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.

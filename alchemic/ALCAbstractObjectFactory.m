@@ -22,7 +22,6 @@
 #import <Alchemic/ALCObjectFactoryTypeFactory.h>
 #import <Alchemic/ALCObjectFactoryTypeReference.h>
 #import <Alchemic/ALCObjectFactoryTypeSingleton.h>
-#import <Alchemic/AlchemicAware.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

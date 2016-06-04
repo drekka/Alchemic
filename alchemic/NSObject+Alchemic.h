@@ -53,6 +53,8 @@ NS_ASSUME_NONNULL_BEGIN
                      resolvedFlag:(BOOL *) resolvedFlag
                             block:(ALCSimpleBlock) block;
 
+-(void) completeWithBlock:(nullable ALCObjectCompletion) completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

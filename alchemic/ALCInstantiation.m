@@ -11,6 +11,7 @@
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/AlchemicAware.h>
 #import <Alchemic/ALCDefs.h>
+#import <Alchemic/NSObject+Alchemic.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,20 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 -(void) complete {
-    if (_completion) {
-        STLog(_object, @"Executing completing for %@", _object);
-        _completion(_object);
-    }
-    
-    if ([_object conformsToProtocol:@protocol(AlchemicAware)]) {
-        STLog(_object, @"Telling %@ it's injections have finished", _object);
-        [(id<AlchemicAware>)_object alchemicDidInjectDependencies];
-    }
-    
-    STLog(_object, @"Posting injections finished notification for %@", _object);
-    [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
-                                                        object:self
-                                                      userInfo:@{AlchemicDidCreateObjectUserInfoObject: _object}];
+    [_object completeWithBlock:_completion];
 }
 
 @end
