@@ -8,7 +8,7 @@
 
 @import StoryTeller;
 // :: Framework ::
-#import <Alchemic/ALCAware.h>
+#import <Alchemic/AlchemicAware.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCClassObjectFactoryInitializer.h>
 #import <Alchemic/ALCDependency.h>

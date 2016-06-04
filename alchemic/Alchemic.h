@@ -8,11 +8,12 @@
 
 @import Foundation;
 
+#import <Alchemic/AlchemicAware.h>
+
 #import <Alchemic/ALCConfig.h>
 #import <Alchemic/ALCContext.h>
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCException.h>
-#import <Alchemic/ALCAware.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCFactoryName.h>

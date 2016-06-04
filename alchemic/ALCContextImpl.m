@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableSet<ALCSimpleBlock> *_postStartBlocks;
 }
 
+#pragma mark - Lifecycle
+
 -(instancetype)init {
     self = [super init];
     if (self) {
@@ -50,14 +52,18 @@ NS_ASSUME_NONNULL_BEGIN
     [_model resolveDependencies];
     [_model startSingletons];
     
-    // Call and registered blocks.
-    [_postStartBlocks enumerateObjectsUsingBlock:^(ALCSimpleBlock postStartBlock, BOOL *stop) {
+    // Whilst not common, this executes certain functions which can be called before registrations have finished. ie AcSet()'s in initial view controllers, etc.
+    
+    // Move the post startup blocks away so other threads think we are started.
+    STLog(self, @"Executing post startup blocks");
+    NSSet<ALCSimpleBlock> *blocks = _postStartBlocks;
+    _postStartBlocks = nil;
+    // Now execute any stored blocks.
+    [blocks enumerateObjectsUsingBlock:^(ALCSimpleBlock postStartBlock, BOOL *stop) {
         postStartBlock();
     }];
-    _postStartBlocks = nil; // Clear the blocks.
     
-    STLog(self, @"\n\n%@\n", _model);
-    STLog(self, @"Alchemic started.");
+    STLog(self, @"Alchemic started.\n\n%@\n", _model);
     
     // Post the finished notification.
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
@@ -155,12 +161,19 @@ registerFactoryMethod:(SEL) selector
 #pragma mark - Accessing objects
 
 -(id) objectWithClass:(Class)returnType, ... {
+    
+    // Throw an error if this is called to early.
+    if (_postStartBlocks) {
+        throwException(Lifecycle, @"AcGet called before Alchemic is ready to serve objects.");
+    }
+    
     STLog(returnType, @"Manual retrieving an instance of %@", NSStringFromClass([returnType class]));
     
     alc_loadVarArgsAfterVariableIntoArray(returnType, criteria);
     if (criteria.count == 0) {
         [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[returnType class]]];
     }
+    
     ALCModelObjectInjector *injection = (ALCModelObjectInjector *)[criteria injectionWithClass:returnType allowConstants:NO];
     [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];
     return injection.searchResult;
@@ -171,26 +184,40 @@ registerFactoryMethod:(SEL) selector
     
     // Now lets find our reference object
     alc_loadVarArgsAfterVariableIntoArray(object, criteria);
-    if (criteria.count == 0) {
-        [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[object class]]];
+    
+    // Setup a block we want to execute.
+    ALCSimpleBlock setBlock = ^{
+        
+        if (criteria.count == 0) {
+            [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[object class]]];
+        }
+        
+        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:[object class]];
+        NSArray<id<ALCObjectFactory>> *factories = [self->_model settableObjectFactoriesMatchingCriteria:searchCriteria];
+        
+        // Error if we do not find one factory.
+        if (factories.count != 1) {
+            throwException(UnableToSetReference, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, factories.count);
+        }
+        
+        // Set the object and call the returned completion.
+        [((ALCAbstractObjectFactory *)factories[0]) setObject:object](object);
+    };
+    
+    // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.
+    if (_postStartBlocks) {
+        [_postStartBlocks addObject:setBlock];
+    } else {
+        setBlock();
     }
-    
-    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:[object class]];
-    NSArray<id<ALCObjectFactory>> *factories = [_model settableObjectFactoriesMatchingCriteria:searchCriteria];
-    
-    // Error if we do not find one factory.
-    if (factories.count != 1) {
-        throwException(UnableToSetReference, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, factories.count);
-    }
-    
-    // Set the object and call the returned completion.
-    [((ALCAbstractObjectFactory *)factories[0]) setObject:object](object);
 }
 
 #pragma mark - Internal
 
 -(void (^)(id option)) unknownOptionHandlerForObjectFactory:(id<ALCObjectFactory>) objectFactory {
+    
     return ^(id option) {
+        
         if ([(NSObject *) option isKindOfClass:[ALCFactoryName class]]) {
             NSString *newName = ((ALCFactoryName *) option).asName;
             [self->_model reindexObjectFactoryOldName:objectFactory.defaultModelKey newName:newName];

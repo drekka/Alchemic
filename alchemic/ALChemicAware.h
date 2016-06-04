@@ -11,7 +11,7 @@
 /**
  Implement this protocol if you need to be aware of Alchemics life cycle.
  */
-@protocol ALCAware <NSObject>
+@protocol AlchemicAware <NSObject>
 
 /**
  Called after all dependencies have been resolved.

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6C1ADAFF1C8DB28400267E77 /* ALCAware.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADAFE1C8DB28400267E77 /* ALCAware.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C1ADAFF1C8DB28400267E77 /* ALChemicAware.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADAFE1C8DB28400267E77 /* ALChemicAware.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB001C8DB88C00267E77 /* Alchemic.m */; };
 		6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C1ADB051C9050FB00267E77 /* ALCInstantiation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */; };
@@ -192,7 +192,7 @@
 		6C14FC331C96EBBB00B56578 /* NestedThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NestedThing.h; sourceTree = "<group>"; };
 		6C14FC341C96EBBB00B56578 /* NestedThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NestedThing.m; sourceTree = "<group>"; };
 		6C14FC381C9839DB00B56578 /* NestedProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NestedProtocol.h; sourceTree = "<group>"; };
-		6C1ADAFE1C8DB28400267E77 /* ALCAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAware.h; sourceTree = "<group>"; };
+		6C1ADAFE1C8DB28400267E77 /* ALChemicAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALChemicAware.h; sourceTree = "<group>"; };
 		6C1ADB001C8DB88C00267E77 /* Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alchemic.m; sourceTree = "<group>"; };
 		6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInstantiation.h; sourceTree = "<group>"; };
 		6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCInstantiation.m; sourceTree = "<group>"; };
@@ -526,7 +526,7 @@
 		6C66DC301A8B82C3009F9D94 /* Alchemic */ = {
 			isa = PBXGroup;
 			children = (
-				6C1ADAFE1C8DB28400267E77 /* ALCAware.h */,
+				6C1ADAFE1C8DB28400267E77 /* ALChemicAware.h */,
 				6CC284861CB53349006B613F /* ALCConfig.h */,
 				6C7837231C5BAD8A004BE670 /* ALCContext.h */,
 				6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */,
@@ -699,7 +699,7 @@
 				F420FA711CF288D40032C212 /* OCMLocation.h in Headers */,
 				6C3AFBB41C5E0D5800B4FCAA /* ALCObjectFactoryTypeReference.h in Headers */,
 				6C4B561A1C6E0BF10040AEC2 /* ALCVariableDependency.h in Headers */,
-				6C1ADAFF1C8DB28400267E77 /* ALCAware.h in Headers */,
+				6C1ADAFF1C8DB28400267E77 /* ALChemicAware.h in Headers */,
 				6C71D5471CA16BE600D25AC0 /* NSArray+Alchemic.h in Headers */,
 				6C4D85AD1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h in Headers */,
 				F420FA741CF288D40032C212 /* OCMockObject.h in Headers */,

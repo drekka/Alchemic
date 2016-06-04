@@ -9,7 +9,7 @@
 @import StoryTeller;
 
 #import <Alchemic/ALCInstantiation.h>
-#import <Alchemic/ALCAware.h>
+#import <Alchemic/AlchemicAware.h>
 #import <Alchemic/ALCDefs.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -50,9 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
         _completion(_object);
     }
     
-    if ([_object conformsToProtocol:@protocol(ALCAware)]) {
+    if ([_object conformsToProtocol:@protocol(AlchemicAware)]) {
         STLog(_object, @"Telling %@ it's injections have finished", _object);
-        [(id<ALCAware>)_object alchemicDidInjectDependencies];
+        [(id<AlchemicAware>)_object alchemicDidInjectDependencies];
     }
     
     STLog(_object, @"Posting injections finished notification for %@", _object);
