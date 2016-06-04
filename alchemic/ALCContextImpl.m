@@ -197,7 +197,7 @@ registerFactoryMethod:(SEL) selector
         
         // Error if we do not find one factory.
         if (factories.count != 1) {
-            throwException(UnableToSetReference, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, factories.count);
+            throwException(UnableToSetReference, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, (unsigned long) factories.count);
         }
         
         // Set the object and call the returned completion.
