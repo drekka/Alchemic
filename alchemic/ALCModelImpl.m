@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) init {
     self = [super init];
     if (self) {
-        _objectFactories = [@{} mutableCopy];
+        _objectFactories = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -63,6 +63,17 @@ NS_ASSUME_NONNULL_BEGIN
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         if ([criteria acceptsObjectFactory:objectFactory name:name]) {
             results[name] = objectFactory;
+        }
+    }];
+    return results;
+}
+
+-(NSArray<id<ALCObjectFactory>> *) settableObjectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
+    NSDictionary<NSString *, id<ALCObjectFactory>> *factories = [self objectFactoriesMatchingCriteria:criteria];
+    NSMutableArray<id<ALCObjectFactory>> *results = [[NSMutableArray alloc] init];
+    [factories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
+        if (objectFactory.factoryType == ALCFactoryTypeSingleton || objectFactory.factoryType == ALCFactoryTypeReference) {
+            [results addObject:objectFactory];
         }
     }];
     return results;

@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:examples/Objective-C/ObjectiveCDemo.xcodeproj">
+      location = "group:../Alchemic Objective-C Demo/ObjectiveCDemo.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:alchemic.xcodeproj">

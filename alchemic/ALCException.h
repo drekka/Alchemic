@@ -28,5 +28,6 @@ declareException(TooManyValues)
 declareException(TypeMissMatch)
 declareException(SelectorNotFound)
 declareException(IncorrectNumberOfArguments)
+declareException(UnableToSetReference)
 
 

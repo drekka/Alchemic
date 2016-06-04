@@ -166,7 +166,7 @@ registerFactoryMethod:(SEL) selector
     return injection.searchResult;
 }
 
--(void) setReferenceObject:(id) object, ... {
+-(void) setObject:(id) object, ... {
     STLog([object class], @"Storing reference for a %@", NSStringFromClass([object class]));
     
     // Now lets find our reference object
@@ -174,10 +174,17 @@ registerFactoryMethod:(SEL) selector
     if (criteria.count == 0) {
         [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[object class]]];
     }
+    
     ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:[object class]];
+    NSArray<id<ALCObjectFactory>> *factories = [_model settableObjectFactoriesMatchingCriteria:searchCriteria];
     
-    NSArray<id<ALCObjectFactory>> *factories = [_model objectFactoriesMatchingCriteria:searchCriteria];
+    // Error if we do not find one factory.
+    if (factories.count != 1) {
+        throwException(UnableToSetReference, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, factories.count);
+    }
     
+    // Set the object and call the returned completion.
+    [((ALCAbstractObjectFactory *)factories[0]) setObject:object](object);
 }
 
 #pragma mark - Internal

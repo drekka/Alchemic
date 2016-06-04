@@ -117,7 +117,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  */
 #define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
 
-#define AcSetReference(value, ...)
+#define AcSet(value, ...)  [[Alchemic mainContext] setObject:value, ## __VA_ARGS__, nil]
 
 #define AcInvoke(returnType, criteria, ...)
 

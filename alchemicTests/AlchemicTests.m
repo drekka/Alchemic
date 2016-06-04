@@ -16,6 +16,7 @@
 #import "Database.h"
 #import "RequestEngine.h"
 #import "HTTPServer.h"
+#import "ViewController.h"
 
 @interface AlchemicTests : XCTestCase
 @end
@@ -60,6 +61,12 @@
     XCTAssertNotNil(db);
     XCTAssertEqual(5, db.aInt);
     XCTAssertNotNil(db.ui);
+}
+
+-(void) testViewControllerReference {
+    ViewController *vc = [[ViewController alloc] init];
+    AcSet(vc);
+    XCTAssertNotNil(vc.ui);
 }
 
 @end

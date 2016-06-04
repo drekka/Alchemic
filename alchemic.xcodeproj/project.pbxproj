@@ -74,6 +74,7 @@
 		6C71D54B1CA1747200D25AC0 /* ALCTypeData.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C71D5491CA1747200D25AC0 /* ALCTypeData.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C71D54C1CA1747200D25AC0 /* ALCTypeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C71D54A1CA1747200D25AC0 /* ALCTypeData.m */; };
 		6C7837241C5BAD8A004BE670 /* ALCContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7837231C5BAD8A004BE670 /* ALCContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C83CCB01D02A6F900D7F0BC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C83CCAF1D02A6F900D7F0BC /* ViewController.m */; };
 		6CB5CCD51CDB6F9100DC1052 /* ALCDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB5CCD41CDB6F8C00DC1052 /* ALCDefs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB5CCD71CDB70C800DC1052 /* ALCDefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB5CCD61CDB70C800DC1052 /* ALCDefs.m */; };
 		6CB5CCD81CDB792100DC1052 /* ALCConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC284861CB53349006B613F /* ALCConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -262,6 +263,8 @@
 		6C71D54A1CA1747200D25AC0 /* ALCTypeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCTypeData.m; sourceTree = "<group>"; };
 		6C7837231C5BAD8A004BE670 /* ALCContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCContext.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C7837251C5BB116004BE670 /* BasicDependencies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BasicDependencies.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6C83CCAE1D02A6F900D7F0BC /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		6C83CCAF1D02A6F900D7F0BC /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		6CB5CCD41CDB6F8C00DC1052 /* ALCDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ALCDefs.h; sourceTree = "<group>"; };
 		6CB5CCD61CDB70C800DC1052 /* ALCDefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCDefs.m; sourceTree = "<group>"; };
 		6CB5CCF41CDB7AF700DC1052 /* Functional tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Functional tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -619,6 +622,8 @@
 				6CCFA8D91CD8EA960013BF71 /* Database.m */,
 				F41DE2D31CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h */,
 				F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */,
+				6C83CCAE1D02A6F900D7F0BC /* ViewController.h */,
+				6C83CCAF1D02A6F900D7F0BC /* ViewController.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -885,6 +890,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C83CCB01D02A6F900D7F0BC /* ViewController.m in Sources */,
 				F458283E1CEBFECE0074A844 /* XCTestCase+Alchemic.m in Sources */,
 				6C2A286A1CB7EFB5008F43E6 /* Networking.m in Sources */,
 				F425AEA01CEEA215002D91B1 /* FakeUIApplicationDelegate.m in Sources */,

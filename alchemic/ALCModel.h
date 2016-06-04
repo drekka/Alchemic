@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol ALCModel <NSObject>
 
+#pragma mark - Finding factories
 /// @name Retrieving
 
 /**
@@ -52,6 +53,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass;
 
+/**
+ Returns a list of object factories meeting a criteria.
+ 
+ The returned object factories will only be ones that can have their objects set. Currently these are either singleton or reference factories.
+ 
+ @param criteria The search criteria.
+ 
+ @return A list of object factories.
+ */
+-(NSArray<id<ALCObjectFactory>> *) settableObjectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
+
+#pragma mark - Setting up the model
 /// @name Modifying
 
 /**
@@ -70,6 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) reindexObjectFactoryOldName:(NSString *) oldName newName:(NSString *) newName;
 
+#pragma mark - Lifecycle
 /// @name Lifecycle
 
 /**
