@@ -52,7 +52,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithResolvingStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                      resolvedFlag:(BOOL *) resolvedFlag
                             block:(ALCSimpleBlock) block;
-
+/**
+ Executes the standard completion code on the object, using the passed block.
+ 
+ @param completion The completion block to execute. Usually this block injects values. Can be NULL if there is nothing to do.
+ */
 -(void) completeWithBlock:(nullable ALCObjectCompletion) completion;
 
 @end
