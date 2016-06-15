@@ -91,14 +91,9 @@ ALCConstantObjectImplementation(String, NSString *)
 
 #pragma mark - Nil injector
 
-id<ALCInjector> AcNil() {
-    return [[ALCConstantNil alloc] init];
-}
-
 @implementation ALCConstantNil
 
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
-    
     return NULL;
 }
 

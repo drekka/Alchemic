@@ -49,7 +49,7 @@ ALCConstantHeader(String, NSString *)
 
 #pragma mark - Nil value injector
 
-id<ALCInjector> AcNil(id value);
+#define AcNil [[ALCConstantNil alloc] init]
 @interface ALCConstantNil : ALCAbstractConstantInjector
 @end
 
