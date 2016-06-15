@@ -103,7 +103,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @param critieria The argument criteria or constant. If search criteria are being used to location model objects, then multiple can be specified.
  @param ...       further criteria.
  */
-#define AcArg(argClass, critieria, ...) [ALCMethodArgument argumentWithClass:[argClass class] model:model criteria:criteria, ## __VA_ARGS__, nil]
+#define AcArg(argClass, critieria, ...) [ALCMethodArgument argumentWithClass:[argClass class] criteria:criteria, ## __VA_ARGS__, nil]
 
 #pragma mark - Accessing the model
 
