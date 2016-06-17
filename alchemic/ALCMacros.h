@@ -21,7 +21,7 @@
 
 /**
  Shortcut macro for registering and configuring a class factory.
- 
+
  @param ... A list of configuration items.
  */
 #define AcRegister(...) \
@@ -31,7 +31,7 @@
 
 /**
  A short cut macro that adds an initializer to a class factory.
- 
+
  @param initializerSelector The initializer selector.
  @param ...                 Arguments for the initializer, if any.
  */
@@ -42,7 +42,7 @@
 
 /**
  registers a method factory.
- 
+
  @param methodType     The return type of the method.
  @param methodSelector The method selector.
  @param ...                 Arguments for the method, if any.
@@ -56,7 +56,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 
 /**
  Registers a variable injection in the class factory.
- 
+
  @param variableName The variable name. Can be a property name or internal variable name.
  @param ...          Option list of arguments that define the injection.
  */
@@ -74,23 +74,23 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 
 /**
  When passed to a factory registration, sets the factory to be a factory.
- 
+
  @discussion Factories create a new instance of an object every time they are accessed.
- 
+
  @param _objectName the name to set on the registration.
  */
 #define AcFactory [ALCIsFactory factoryMacro]
 
 /**
  When passed to a factory registration, sets the factory as a primary factory.
- 
+
  @discussion This is mainly used for a couple of situations. Firstly where there are a number of candiates and you don't want to use names to define a default. Secondly during unit testing, this can be used to set registrations in unit test code as overrides to the app's instances.
  */
 #define AcPrimary [ALCIsPrimary primaryMacro]
 
 /**
  When passed to a factory registration, sets the factory as storing and inject external objects.
- 
+
  @discussion Can only be used on class factories as it makes no sense when set on method or initializers.
  */
 #define AcReference [ALCIsReference referenceMacro]
@@ -98,7 +98,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 #pragma mark - Method arguments
 /**
  Shortcut macro for specifying method arguments.
- 
+
  @param argClass  The class of the argument. Used for final processing of model search results.
  @param critieria The argument criteria or constant. If search criteria are being used to location model objects, then multiple can be specified.
  @param ...       further criteria.
@@ -109,45 +109,54 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 
 /**
  Used in code to directly retrieve an object from Alchemic.
- 
+
  @param returnType The type of value to retrieve.
  @param ...        Option search criteria to locate the object. Constants are not allowed here as they make no sense.
- 
+
  @return The matching object.
  */
 #define AcGet(returnType, ...) [[Alchemic mainContext] objectWithClass:[returnType class], ## __VA_ARGS__, nil]
 
+/**
+ Stores an object in the Alchemic model.
+
+ This can be used to set an object on any factory declared as a singleton or external reference. Obviously it makes no sense to set a value on a factory.
+
+ @param value The object to store.
+ @param ... A set of model search criteria that will locate the factory where the value is to be stored.
+ */
 #define AcSet(value, ...)  [[Alchemic mainContext] setObject:value, ## __VA_ARGS__, nil]
-
-#define AcInvoke(returnType, firstCritieria, ...)
-
-#define AcInjectDependencies(object)
 
 #pragma mark - Search criteria
 
 /**
  Selects factories which return instances of the specified class.
- 
+
  @param className The class to search for.
  */
 #define AcClass(className) [ALCModelSearchCriteria searchCriteriaForClass:[className class]]
 
 /**
  Selects factories which return instances which conform to the specified protocol.
- 
+
  @param protocolName The protocol to look for.
  */
 #define AcProtocol(protocolName) [ALCModelSearchCriteria searchCriteriaForProtocol:@protocol(protocolName)]
 
 /**
  Selects a single factory based on it's unique name.
- 
+
  @param objectName The factory name.
  */
 #define AcName(objectName) [ALCModelSearchCriteria searchCriteriaForName:objectName]
 
 #pragma mark - Misc
 
+/**
+ Mostly used in testing, this macro hides selector warnings triggered when a selector is not declared on the current class.
+
+ @param code The code that generates the warning.
+ */
 #define AcIgnoreSelectorWarnings(code) \
 _Pragma ("clang diagnostic push") \
 _Pragma ("clang diagnostic ignored \"-Wselector\"") \
