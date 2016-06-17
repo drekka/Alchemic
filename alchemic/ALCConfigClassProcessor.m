@@ -20,16 +20,27 @@
 -(NSSet<NSBundle *> *) processClass:(Class) aClass
                         withContext:(id<ALCContext>) context {
     
-    STLog(self, @"Reading config from %@", NSStringFromClass(aClass));
-    NSMutableSet<NSBundle *> *moreBundles;
-    NSArray<Class> *configClasses = [((id<ALCConfig>)aClass) scanBundlesWithClasses];
-    if (configClasses) {
-        moreBundles = [[NSMutableSet alloc] initWithCapacity:configClasses.count];
-        for (Class nextClass in [((id<ALCConfig>)aClass) scanBundlesWithClasses]) {
-            [moreBundles addObject:[NSBundle bundleForClass:nextClass]];
-        };
+    STLog(self, @"Found config class %@", NSStringFromClass(aClass));
+
+    if ([aClass respondsToSelector:@selector(configure:)]) {
+        STLog(self, @"Executing configure method");
+        [(Class<ALCConfig>)aClass configure:context];
     }
-    return moreBundles;
+
+    if ([aClass respondsToSelector:@selector(scanBundlesWithClasses)]) {
+        STLog(self, @"Reading list fo additional bundles");
+        NSMutableSet<NSBundle *> *moreBundles;
+        NSArray<Class> *configClasses = [((id<ALCConfig>)aClass) scanBundlesWithClasses];
+        if (configClasses) {
+            moreBundles = [[NSMutableSet alloc] initWithCapacity:configClasses.count];
+            for (Class nextClass in [((id<ALCConfig>)aClass) scanBundlesWithClasses]) {
+                [moreBundles addObject:[NSBundle bundleForClass:nextClass]];
+            };
+        }
+        return moreBundles;
+    }
+    
+    return nil;
 }
 
 @end
