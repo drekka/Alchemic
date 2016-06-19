@@ -16,7 +16,7 @@
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCFactoryName.h>
-#import <Alchemic/ALCIsFactory.h>
+#import <Alchemic/ALCIsTemplate.h>
 #import <Alchemic/ALCIsPrimary.h>
 #import <Alchemic/ALCIsReference.h>
 #import <Alchemic/ALCMacros.h>

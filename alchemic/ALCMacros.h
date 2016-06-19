@@ -8,7 +8,7 @@
 
 #import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCFactoryName.h>
-#import <Alchemic/ALCIsFactory.h>
+#import <Alchemic/ALCIsTemplate.h>
 #import <Alchemic/ALCIsPrimary.h>
 #import <Alchemic/ALCIsReference.h>
 #import <Alchemic/ALCMethodArgument.h>
@@ -65,7 +65,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 [[Alchemic mainContext] objectFactory:classObjectFactory registerVariableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
-#pragma mark - Facotyr configuration
+#pragma mark - Factory configuration
 
 /**
  Tells Alchemic to set a custom name on an object factory.
@@ -73,13 +73,12 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 #define AcFactoryName(factoryName) [ALCFactoryName withName:factoryName]
 
 /**
- When passed to a factory registration, sets the factory to be a factory.
+ When passed to an object factory registration, sets the factory to be a template.
 
- @discussion Factories create a new instance of an object every time they are accessed.
+ @discussion Templates create a new instance of an object every time they are accessed and don't store any reference to the objects they have previously created.
 
- @param _objectName the name to set on the registration.
  */
-#define AcFactory [ALCIsFactory factoryMacro]
+#define AcTemplate [ALCIsTemplate templateMacro]
 
 /**
  When passed to a factory registration, sets the factory as a primary factory.

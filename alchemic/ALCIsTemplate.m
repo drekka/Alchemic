@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCIsFactory.h>
+#import <Alchemic/ALCIsTemplate.h>
 
-@implementation ALCIsFactory
+@implementation ALCIsTemplate
 
-+ (instancetype) factoryMacro  {
++ (instancetype) templateMacro  {
     static id singletonInstance = nil;
     if (!singletonInstance) {
         static dispatch_once_t onceToken;
@@ -22,7 +22,7 @@
 }
 
 + (id)allocWithZone:(NSZone *) zone {
-    return [self factoryMacro];
+    return [self templateMacro];
 }
 
 - (id)copyWithZone:(NSZone *) zone {

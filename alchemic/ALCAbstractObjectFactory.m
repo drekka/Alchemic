@@ -14,7 +14,7 @@
 // :: Other ::
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCIsFactory.h>
+#import <Alchemic/ALCIsTemplate.h>
 #import <Alchemic/ALCIsPrimary.h>
 #import <Alchemic/ALCIsReference.h>
 #import <Alchemic/ALCModel.h>
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) configureWithOption:(id) option customOptionHandler:(void (^)(id option)) customOptionHandler {
-    if ([option isKindOfClass:[ALCIsFactory class]]) {
+    if ([option isKindOfClass:[ALCIsTemplate class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
