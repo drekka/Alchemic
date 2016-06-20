@@ -13,6 +13,6 @@
 /**
  Defines factory storage for ALCObjectFactory instances. ie. No object is ever stored, causing object factories to create a new instance each time an object is requested from them.
  */
-@interface ALCObjectFactoryTypeFactory : NSObject<ALCObjectFactoryType>
+@interface ALCObjectFactoryTypeTemplate : NSObject<ALCObjectFactoryType>
 
 @end

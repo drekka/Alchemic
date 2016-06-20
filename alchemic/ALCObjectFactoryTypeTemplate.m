@@ -6,11 +6,11 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCObjectFactoryTypeFactory.h>
+#import <Alchemic/ALCObjectFactoryTypeTemplate.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCObjectFactoryTypeFactory
+@implementation ALCObjectFactoryTypeTemplate
 
 @synthesize object = _object;
 
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) setObject:(id) value {}
 
 -(NSString *)description {
-    return @"Factory";
+    return @"Template";
 }
 
 @end

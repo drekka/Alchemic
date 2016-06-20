@@ -20,7 +20,7 @@
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCObjectFactoryType.h>
-#import <Alchemic/ALCObjectFactoryTypeFactory.h>
+#import <Alchemic/ALCObjectFactoryTypeTemplate.h>
 #import <Alchemic/ALCObjectFactoryTypeReference.h>
 #import <Alchemic/ALCObjectFactoryTypeSingleton.h>
 
@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) configureWithOption:(id) option model:(id<ALCModel>) model {
 
     if ([option isKindOfClass:[ALCIsTemplate class]]) {
-        _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
+        _typeStrategy = [[ALCObjectFactoryTypeTemplate alloc] init];
 
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
