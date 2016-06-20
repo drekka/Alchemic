@@ -84,8 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory config:(NSArray *) configArguments {
-    if ([self processFactoryNameMacro:<#(nonnull NSObject *)#> forObjectFactory:<#(nonnull id<ALCObjectFactory>)#>])
-    [objectFactory configureWithOptions:configArguments customOptionHandler:[self unknownOptionHandlerForObjectFactory:objectFactory]];
+    [objectFactory configureWithOptions:configArguments model:_model];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
@@ -107,7 +106,7 @@ registerFactoryMethod:(SEL) selector
                                                                                      args:methodArguments];
 
     [_model addObjectFactory:methodFactory withName:methodFactory.defaultModelKey];
-    [methodFactory configureWithOptions:factoryOptions customOptionHandler:[self unknownOptionHandlerForObjectFactory:methodFactory]];
+    [methodFactory configureWithOptions:factoryOptions model:_model];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory setInitializer:(SEL) initializer, ... {
@@ -161,7 +160,7 @@ registerFactoryMethod:(SEL) selector
 
 #pragma mark - Accessing objects
 
--(id) objectWithClass:(Class)returnType, ... {
+-(id) objectWithClass:(Class) returnType, ... {
 
     // Throw an error if this is called to early.
     if (_postStartBlocks) {

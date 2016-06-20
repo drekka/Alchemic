@@ -6,6 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <Alchemic/ALCStringMacros.h>
+
 #define blockSelf __weak __typeof(self) weakSelf = self;__typeof(self) strongSelf = weakSelf
 
 #define throwException(exceptionName, template, ...) \

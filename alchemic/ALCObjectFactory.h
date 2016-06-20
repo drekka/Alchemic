@@ -56,9 +56,9 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
  Configures the factory.
  
  @param options             A list of options that define the factory configuration. For example, to make it a primary factory.
- @param customOptionHandler A block that is called if an option is unknown to the factory. This allows for customizing of further options by calling code.
+ @param model A reference to the model in case the configure code needs it.
  */
--(void) configureWithOptions:(NSArray *) options customOptionHandler:(void (^)(id option)) customOptionHandler;
+-(void) configureWithOptions:(NSArray *) options model:(id<ALCModel>) model;
 
 /**
  Tells the factory to instantiate an the represented object or return one if it already exists.

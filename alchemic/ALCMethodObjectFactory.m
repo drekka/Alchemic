@@ -54,11 +54,11 @@ NS_ASSUME_NONNULL_BEGIN
     return [ALCRuntime selectorDescription:_parentObjectFactory.objectClass selector:_selector];
 }
 
--(void)configureWithOption:(id)option customOptionHandler:(void (^)(id _Nonnull))customOptionHandler {
+-(void)configureWithOption:(id)option model:(id<ALCModel>) model {
     if ([option isKindOfClass:[ALCIsReference class]]) {
         throwException(IllegalArgument, @"Method based factories cannot be set to reference external objects");
     } else {
-        [super configureWithOption:option customOptionHandler:customOptionHandler];
+        [super configureWithOption:option model:model];
     }
 }
 

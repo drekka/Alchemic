@@ -9,11 +9,10 @@
 @import Foundation;
 
 #import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCResolvable.h>
-#import <Alchemic/ALCInstantiator.h>
 #import <Alchemic/ALCDefs.h>
 
 @class ALCInstantiation;
+@protocol ALCModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,9 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
  Called to configure the factory beyond default settings.
  
  @param option              The configuration option being set.
- @param customOptionHandler A block which is called if the option is an unknown one. This allows calling code to provide additional configuration settings beyond those known to this class.
+ @param model A reference to the model in case the factory needs it.
  */
--(void) configureWithOption:(id) option customOptionHandler:(void (^)(id option)) customOptionHandler;
+-(void) configureWithOption:(id) option model:(id<ALCModel>) model;
 
 /**
  Sets an object into the factory. 

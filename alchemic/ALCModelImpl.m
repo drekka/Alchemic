@@ -115,7 +115,7 @@ NS_ASSUME_NONNULL_BEGIN
         // UIApplicationDelegate
         if ([objectFactory.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
             self->_uiAppDelegateFactory = objectFactory;
-            [objectFactory configureWithOptions:@[[ALCIsReference macro]] customOptionHandler:^(id option){}];
+            [objectFactory configureWithOptions:@[[ALCIsReference macro]] model:self];
             *stop = YES;
         }
     }];

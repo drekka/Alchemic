@@ -8,6 +8,8 @@
 
 @import XCTest;
 
+#import <OCMock/OCMock.h>
+
 @import StoryTeller;
 
 @import Alchemic;
@@ -44,9 +46,9 @@
 }
 
 -(void) testFactoryCreatingNewInstances {
-    [_topThingFactory configureWithOptions:@[[ALCIsTemplate macro]] customOptionHandler:^(id option) {
-        XCTFail();
-    }];
+
+    id mockModel = OCMProtocolMock(@protocol(ALCModel));
+    [_topThingFactory configureWithOptions:@[[ALCIsTemplate macro]] model:mockModel];
 
     [_context start];
 
@@ -59,12 +61,10 @@
 }
 
 -(void) testFactoryCreatingNestedNewInstances {
-    [_topThingFactory configureWithOptions:@[[ALCIsTemplate macro]] customOptionHandler:^(id option) {
-        XCTFail();
-    }];
-    [_nestedThingFactory configureWithOptions:@[[ALCIsTemplate macro]] customOptionHandler:^(id option) {
-        XCTFail();
-    }];
+    
+    id mockModel = OCMProtocolMock(@protocol(ALCModel));
+    [_topThingFactory configureWithOptions:@[[ALCIsTemplate macro]] model:mockModel];
+    [_nestedThingFactory configureWithOptions:@[[ALCIsTemplate macro]] model:mockModel];
 
     [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", nil];
 
