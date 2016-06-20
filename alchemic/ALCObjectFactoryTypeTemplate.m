@@ -14,10 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize object = _object;
 
--(ALCFactoryType) factoryType {
-    return ALCFactoryTypeFactory;
-}
-
 -(BOOL) ready {
     return YES;
 }

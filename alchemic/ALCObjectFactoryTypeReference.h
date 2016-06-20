@@ -6,13 +6,11 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-@import Foundation;
-
-#import <Alchemic/ALCObjectFactoryType.h>
+#import <Alchemic/ALCAbstractObjectFactoryType.h>
 
 /**
  A ALCObjectFactoryType which manages externally referenced objects.
  */
-@interface ALCObjectFactoryTypeReference : NSObject<ALCObjectFactoryType>
+@interface ALCObjectFactoryTypeReference : ALCAbstractObjectFactoryType
 
 @end

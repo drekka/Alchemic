@@ -17,10 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol ALCObjectFactoryType<NSObject>
 
-/**
- The type of the factory.
- */
-@property (nonatomic, assign, readonly) ALCFactoryType factoryType;
+@property (nonatomic, assign, getter = isWeak) BOOL weak;
 
 /**
  The currently stored object. With some ALCObjectFactoryType implementations this will always be nil. Others will store and return the object.

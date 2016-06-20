@@ -12,12 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCObjectFactoryTypeSingleton
 
-@synthesize object = _object;
-
--(ALCFactoryType) factoryType {
-    return ALCFactoryTypeSingleton;
-}
-
 -(BOOL) ready {
     return YES;
 }
