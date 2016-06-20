@@ -66,6 +66,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) configureWithOption:(id) option customOptionHandler:(void (^)(id option)) customOptionHandler {
+    
+    // Errors first.
+    if (_typeStrategy isKindOfClass:ALCFactoryTypeFactory)
+    
     if ([option isKindOfClass:[ALCIsTemplate class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
     } else if ([option isKindOfClass:[ALCIsReference class]]) {

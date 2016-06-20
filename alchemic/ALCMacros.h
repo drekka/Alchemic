@@ -92,6 +92,13 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  */
 #define AcReference [ALCIsReference macro]
 
+/**
+ When passed to a singleton or reference factory registration, sets the factory as storing weak references rather than strng ones.
+ 
+ @discussion Illegal on template factories.
+ */
+#define AcWeak [ALCIsWeak macro]
+
 #pragma mark - Method arguments
 /**
  Shortcut macro for specifying method arguments.
