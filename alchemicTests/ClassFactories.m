@@ -44,7 +44,7 @@
 }
 
 -(void) testFactoryCreatingNewInstances {
-    [_topThingFactory configureWithOptions:@[[ALCIsTemplate templateMacro]] customOptionHandler:^(id option) {
+    [_topThingFactory configureWithOptions:@[[ALCIsTemplate macro]] customOptionHandler:^(id option) {
         XCTFail();
     }];
 
@@ -59,10 +59,10 @@
 }
 
 -(void) testFactoryCreatingNestedNewInstances {
-    [_topThingFactory configureWithOptions:@[[ALCIsTemplate templateMacro]] customOptionHandler:^(id option) {
+    [_topThingFactory configureWithOptions:@[[ALCIsTemplate macro]] customOptionHandler:^(id option) {
         XCTFail();
     }];
-    [_nestedThingFactory configureWithOptions:@[[ALCIsTemplate templateMacro]] customOptionHandler:^(id option) {
+    [_nestedThingFactory configureWithOptions:@[[ALCIsTemplate macro]] customOptionHandler:^(id option) {
         XCTFail();
     }];
 

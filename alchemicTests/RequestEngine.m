@@ -12,7 +12,7 @@
 
 @implementation RequestEngine
 
-AcRegister(AcFactory)
+AcRegister(AcTemplate)
 AcInject(ui)
 
 @end

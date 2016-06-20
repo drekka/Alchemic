@@ -8,9 +8,7 @@
 
 #import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCFactoryName.h>
-#import <Alchemic/ALCIsTemplate.h>
-#import <Alchemic/ALCIsPrimary.h>
-#import <Alchemic/ALCIsReference.h>
+#import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCMethodArgument.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCClassObjectFactory.h>
@@ -78,21 +76,21 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @discussion Templates create a new instance of an object every time they are accessed and don't store any reference to the objects they have previously created.
 
  */
-#define AcTemplate [ALCIsTemplate templateMacro]
+#define AcTemplate [ALCIsTemplate macro]
 
 /**
  When passed to a factory registration, sets the factory as a primary factory.
 
  @discussion This is mainly used for a couple of situations. Firstly where there are a number of candiates and you don't want to use names to define a default. Secondly during unit testing, this can be used to set registrations in unit test code as overrides to the app's instances.
  */
-#define AcPrimary [ALCIsPrimary primaryMacro]
+#define AcPrimary [ALCIsPrimary macro]
 
 /**
  When passed to a factory registration, sets the factory as storing and inject external objects.
 
  @discussion Can only be used on class factories as it makes no sense when set on method or initializers.
  */
-#define AcReference [ALCIsReference referenceMacro]
+#define AcReference [ALCIsReference macro]
 
 #pragma mark - Method arguments
 /**

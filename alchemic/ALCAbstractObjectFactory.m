@@ -14,9 +14,7 @@
 // :: Other ::
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCIsTemplate.h>
-#import <Alchemic/ALCIsPrimary.h>
-#import <Alchemic/ALCIsReference.h>
+#import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCObjectFactoryType.h>
 #import <Alchemic/ALCObjectFactoryTypeFactory.h>

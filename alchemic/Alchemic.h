@@ -16,9 +16,7 @@
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCFactoryName.h>
-#import <Alchemic/ALCIsTemplate.h>
-#import <Alchemic/ALCIsPrimary.h>
-#import <Alchemic/ALCIsReference.h>
+#import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCMethodArgument.h>
 #import <Alchemic/ALCModelSearchCriteria.h>

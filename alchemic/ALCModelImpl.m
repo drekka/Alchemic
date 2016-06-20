@@ -16,7 +16,7 @@
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCIsReference.h>
+#import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCModelImpl.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCObjectFactory.h>
@@ -115,7 +115,7 @@ NS_ASSUME_NONNULL_BEGIN
         // UIApplicationDelegate
         if ([objectFactory.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
             self->_uiAppDelegateFactory = objectFactory;
-            [objectFactory configureWithOptions:@[[ALCIsReference referenceMacro]] customOptionHandler:^(id option){}];
+            [objectFactory configureWithOptions:@[[ALCIsReference macro]] customOptionHandler:^(id option){}];
             *stop = YES;
         }
     }];
