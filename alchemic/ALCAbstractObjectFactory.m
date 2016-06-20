@@ -14,6 +14,7 @@
 // :: Other ::
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCObjectFactoryType.h>
@@ -61,23 +62,33 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) configureWithOptions:(NSArray *) options customOptionHandler:(void (^)(id option)) customOptionHandler {
     for (id option in options) {
-        [self configureWithOption:option customOptionHandler:customOptionHandler];
+        [self configureWithOption:option];
     }
 }
 
--(void) configureWithOption:(id) option customOptionHandler:(void (^)(id option)) customOptionHandler {
+-(void) configureWithOption:(id) option {
     
     // Errors first.
-    if (_typeStrategy isKindOfClass:ALCFactoryTypeFactory)
-    
     if ([option isKindOfClass:[ALCIsTemplate class]]) {
+
         _typeStrategy = [[ALCObjectFactoryTypeFactory alloc] init];
+
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
+
         _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
+
     } else if ([option isKindOfClass:[ALCIsPrimary class]]) {
+
         _primary = YES;
+
     } else {
-        customOptionHandler(option);
+
+        if ([(NSObject *) option isKindOfClass:[ALCFactoryName class]]) {
+            NSString *newName = ((ALCFactoryName *) option).asName;
+            [self->_model reindexObjectFactoryOldName:objectFactory.defaultModelKey newName:newName];
+        } else {
+            throwException(IllegalArgument, @"Expected a factory config macro");
+        }
     }
 }
 
