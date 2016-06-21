@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCObjectFactoryTypeReference
 
+-(ALCFactoryType) type {
+    return ALCFactoryTypeReference;
+}
+
 -(id) object {
     if (!self.ready) {
         throwException(ReferencedObjectNotSet, @"%@ is a reference factory which has not had a value set.", self);

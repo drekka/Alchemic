@@ -6,13 +6,11 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-@import Foundation;
-
-#import <Alchemic/ALCObjectFactoryType.h>
+#import <Alchemic/ALCAbstractObjectFactoryType.h>
 
 /**
  Defines factory storage for ALCObjectFactory instances. ie. No object is ever stored, causing object factories to create a new instance each time an object is requested from them.
  */
-@interface ALCObjectFactoryTypeTemplate : NSObject<ALCObjectFactoryType>
+@interface ALCObjectFactoryTypeTemplate : ALCAbstractObjectFactoryType
 
 @end

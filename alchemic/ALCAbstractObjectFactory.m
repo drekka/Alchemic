@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Property overrides
 
 -(ALCFactoryType) factoryType {
-    return _typeStrategy.factoryType;
+    return _typeStrategy.type;
 }
 
 -(BOOL) ready {
@@ -125,7 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSString *) description {
 
-    ALCFactoryType factoryType = _typeStrategy.factoryType;
+    ALCFactoryType factoryType = _typeStrategy.type;
     BOOL instantiated = (factoryType == ALCFactoryTypeSingleton && _typeStrategy.object)
     || (factoryType == ALCFactoryTypeReference && _typeStrategy.ready);
     NSMutableString *description = [[NSMutableString alloc] initWithString:instantiated ? @"* " : @"  "];

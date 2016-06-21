@@ -12,7 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCObjectFactoryTypeTemplate
 
-@synthesize object = _object;
+-(ALCFactoryType) type {
+    return ALCFactoryTypeTemplate;
+}
 
 -(BOOL) ready {
     return YES;

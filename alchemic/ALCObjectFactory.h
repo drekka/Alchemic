@@ -24,9 +24,9 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
      */
     ALCFactoryTypeSingleton,
     /**
-     Factory - Each time an object is requested, a new one is instantiated. Factories do not keep references to the objects they create.
+     Template - Each time an object is requested, a new one is instantiated. Factories do not keep references to the objects they create.
      */
-    ALCFactoryTypeFactory,
+    ALCFactoryTypeTemplate,
     /**
      Reference - Specifically designed for when the objects are not created by Alchemic. For example UIViewController instances created by storyboards. Setting a reference will automatically inject any dependencies it has declared.
      */

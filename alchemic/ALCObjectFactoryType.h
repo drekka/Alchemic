@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol ALCObjectFactoryType<NSObject>
 
+@property (nonatomic, assign, readonly) ALCFactoryType type;
+
 @property (nonatomic, assign, getter = isWeak) BOOL weak;
 
 /**

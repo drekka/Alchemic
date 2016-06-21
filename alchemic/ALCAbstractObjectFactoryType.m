@@ -19,6 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Override properties
 
+-(ALCFactoryType) type {
+    return ALCFactoryTypeSingleton;
+}
+
 -(void)setObject:(id) object {
     if (self.isWeak) {
         _weakObjectRef = object;

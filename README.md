@@ -1,37 +1,38 @@
 # Alchemic [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 By Derek Clarkson
-  
+ 
 *Other documents:* 
 
 * [Objective-C quick guide](./Quick guide - Objective-C.md)
 * [Swift quick guide](./Quick guide - Swift.md)
 
-
 # Intro #
 
-Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS. It's goal is to help you manage object creation, object properties and variables, and all with requiring minimal code on your part.  
+Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS. It's goal is to help you manage object creation, object properties and variables. And it should be as simple and easy to do this as possible.
 
 ___Main features___
 
-* Engineered in Objective-C, supports usage in Objective-C and Swift projects.
-* No external configuration or factory classes required.
+* Engineered in Objective-C, usable in Objective-C and Swift projects.
 * Definitions and injections are dynamically read from the runtime.
-* Automatically starts on a background thread for minimal impact on your app.
-* Objects can be created from classes, initializers or factory methods, and managed as singletons, factories (templates) or externally sourced.
-* Arguments to methods and initializers dynamically sourced from other objects or constants.
-* Object can be located using class, protocol or unique name searches.
-* Works with internal class variables, leaving your interfaces clean and minimal.
-* Automatic array management and injection.
-* Automatic injection of UIApplicationDelegate dependencies.
-
+* Automatically started on a background thread.
+* Objects can be instantiated using initializers or factory methods if desired.
+* Objects can be managed as singletons, factories (templates) or externally sourced.
+* Arguments to methods and initializers can be other objects or constants.
+* Objects can be located using class, protocol or unique name searches.
+* Works with implementation variables and methods, minimising public declarations.
+* Automatic array boxing for injection.
+* Automatic handling of UIApplicationDelegate instances.
 
 # Swift support
 
-Alchemic supports classes written in Swift. However the way you declare things is different to Objective-C. Objective-C is unable to understand some Swift constructs such as structs and protocol extensions. Therefore Swift classes and methods that are to be used by Alchemic must be annotated with `@objc` qualifier so that Alchemic can work with them. When injecting values into properties, the type of the property must be an Objective-C type. Arguments passed to Alchemic, do not have to be Objective-C types. However they must eventually be resolvable to Objective-C types as per the Swift documentation. 
+Alchemic supports classes written in Swift with some caveats. Objective-C is unable to understand some Swift constructs such as structs and protocol extensions. 
+
+ * Swift classes and methods that are to be used by Alchemic must be annotated with the `@objc` qualifier so Alchemic can see them. 
+ * When injecting values into properties, the type of the property must be an Objective-C type. 
+ * Arguments passed to Alchemic must be resolvable to Objective-C types as per the Swift documentation. 
 
 
 # Installation
-
 
 ## [Carthage](https://github.com/Carthage/Carthage)
 
@@ -650,14 +651,33 @@ public static func alchemic(objectFactory:ALCClassObjectFactory) {
 
 *Whilst this can solve situations where multiple candidates for a dependency are presents, if Alchemic finds Multiple Primary builders for a dependency which is not an array, it will still raise an error.*
 
+## Weak factories
+
+If you want to an object factory to hold not retain an object it is storing, you can configure the factory to hold a weak reference instead of the default strong reference using __AcWeak__: 
+
+```objc
+// Objective-C
+AcRegister(AcWeak)
+```
+
+```swift
+// Swift
+public static func alchemic(objectFactory:ALCClassObjectFactory) {
+    AcRegister(objectFactory, AcWeak())
+}
+```
+
+*Note: __AcWeak__ can only be specified on singleton or reference object factory types.* 
+
+The most common use case for __AcWeak__ is when configuring reference object factories for view controllers. By configuring them as weak, you can be assured that when the view controller is unloaded, that Alchemic will not keep it in memory.
+
 # Interfacing with Alchemic
 
 Now that we know how to declare objects and inject them, lets look at how we retrieve objects in classes and code which is not managed by Alchemic. In other words, how to get Alchemic to work with the rest of your app.
 
 ## Manual dependency injections
 
-Alchemic will automatically inject dependencies into any object it creates or manages.
-But depending on what you are doing in your app, you may need to create an object outside of Alchemic and then ask Alchemic to inject the object's dependencies. This is where __AcInjectDependencies__ can be used.
+Alchemic will automatically inject dependencies into any object it instantiates or manages. There may be situations where you need to create objects independantly and would still like Alchemic to handle the injection of dependencies. This is where __AcInjectDependencies__ can be used.
 
 ```objc
 // Objective-C
@@ -679,7 +699,7 @@ func init(frame:CGRect) {
 
 You can call __AcInjectDependencies__ anywhere in your code and pass it the object whose dependencies you want injected. Alchemic will search for a matching Class factory and use that to inject any dependencies specified in the model.
 
-## Getting objects using __AcGet__
+## Getting objects
 
 Sometimes (in unit tests for example) you want to get an object from Alchemic without specifying an injection. __AcGet__ allows you to search for and return an object (or objects) inline with your code rather than as an injection. 
 
@@ -829,7 +849,6 @@ func viewDidLoad() {
 
 # Callbacks and notifications
 
-
 ## Dependencies injected
 
 Sometimes it's useful to know when Alchemic has finished injecting values into an object. To facilitate this, add the `AlchemicAware` protocol and implement the `alchemicDidInjectDependencies` method. Alchemic will automatically call this method after it has finished injecting values.
@@ -881,14 +900,13 @@ This is most useful for classes which are not managed by Alchemic but still need
 
 # Additional configuration
 
-Alchemic needs no configuration out of the box. However sometimes there are things you might want to change before it starts. To do this, you need to create one or more classes and implement the `ALCConfig` protocol on them. Alchemic will automatically locate these classes during startup and read them for additional configuration settings. 
+Alchemic needs no configuration out of the box. However sometimes there are things you might want to change before it starts. To do this, you need to create one or more classes and implement the `ALCConfig` protocol on them. Alchemic will automatically locate these classes during startup and read them for additional configuration.
 
+## Additional bundles to scan
 
-## Adding bundles & frameworks
+By default, Alchemic scans your apps main bundles sourced from `[NSBundle allBundles]` and examines each class if finds, looking for Alchemic registrations and methods to setup the model. However you may have classes in other bundles that use  Alchemic and you want Alchemic to scan those as well. For example you might have setup a common framework for business logic. 
 
-By default, Alchemic scans your apps main bundles sourced from `[NSBundle allBundles]` looking for Alchemic registrations and methods so it can setup it's model of your app. However you may have code residing in other bundles or frameworks that require injections as well. For example you might have setup a common framework for business logic. 
-
-To let Alchemic know that there are further sources of classes that need injections, you need to implement the `ALCConfig` protocol and scanBundlesWithClasses` method like this:
+To let Alchemic know that there are classes that need managing in that bundle, you need to implement the `ALCConfig` protocol `scanBundlesWithClasses` method like this:
 
 ```objc
 // Objective-C
@@ -896,7 +914,7 @@ To let Alchemic know that there are further sources of classes that need injecti
 @end
 
 @implementation MyAppConfig
--(NSArray<Class> scanBundlesWithClasses {
++(NSArray<Class>) scanBundlesWithClasses {
     return @[[MyAppBusinessLogic class]];
 }
 @end
@@ -905,7 +923,7 @@ To let Alchemic know that there are further sources of classes that need injecti
 ```swift
 // Swift
 class MyAppConfig:NSObject<ALCConfig>
-    func scanBundlesWithClasses() -> NSArray<AnyClass> {
+    @objc static func scanBundlesWithClasses() -> NSArray<AnyClass> {
         return [MyAppBusinessLogic.self]
     }
 }
@@ -913,9 +931,40 @@ class MyAppConfig:NSObject<ALCConfig>
 
 During scanning, Alchemic will call this method for a list of classes. For each class returned, it will locate the bundle or framework that it came from and scan all classes within it. So adding an extra framework bundle is simply a matter of returning any class from that bundle.
 
+## Custom setups
+
+Another possible use case if where you need to configure Alchemic in a way that cannot be handled using the built-in macros. A use case would be to manage instances of a class that does not have Alchemic declarations. For example, a singleton service class from a framework that is not aware of Alchemic. 
+
+To get around this sort of problem, add the `ALCConfig configure:(id<ALCContext>) context` like this:
+
+```objc
+// Objective-C
+@interface MyAppConfig : NSObject<ALCConfig>
+@end
+
+@implementation MyAppConfig
++(void) configure:(id<ALCContext>) context {
+    ALCClassObjectFactory of = [Context registerObjectFactoryForClass:[MyService class]];
+    [context objectFactoryConfig:of, AcFactoryName(@"myService"), nil];
+    [Context objectFactory:of registerVariableInjection:@"aVar", nil];
+}
+@end
+```
+
+```swift
+// Swift
+class MyAppConfig:NSObject<ALCConfig>
+    @objc static func configure(context:ALCContext) {
+        let of = context.registerObjectFactoryForClass(MyService.class);
+        of.objectFactoryConfig:of, AcFactoryName("myService"), nil);
+        of.objectFactory(of registerVariableInjection:"aVar", nil);
+    }
+}
+```
+
+Here we are telling Alchemic to create and manage a singleton instance of `MyService` which comes from an API framework that is not Alchemic aware.  
 
 # Errors
-
 
 ## Exceptions
 
@@ -933,8 +982,7 @@ Alchemic attempts to detect these endless loops of dependencies when it starts u
 
 # Controlling Alchemic
 
-This section covers controlling Alchemic.
-
+This section covers manually controlling Alchemic.
 
 ## Stopping Alchemic from auto-starting
 
@@ -979,8 +1027,9 @@ Alchemic.mainContext()...
 
 # Credits
 
-* Thanks to Adam and Vitaly at Odecee who helped me with getting my head around some of the Swift code.
+* Thanks to Adam and Vitaly at [Odecee](http://odecee.com.au) who helped me with getting my head around some of the Swift code.
 * Big Thanks to the guys behind [Carthage](https://github.com/Carthage/Carthage) for writing a dependency tool that actual works well with XCode and Git.
 * Thanks to the guys behind the [Spring Framework](https://spring.io). The work you have done has made my life so much easier on so many Java projects.
 * Thanks to Mulle Cybernetik for [OCMock](ocmock.org). An outstanding mocking framework for Objective-C that has enabled me to test the un-testable many times.
 * Thanks to Todd Ditchendorf for [PEGKit](https://github.com/itod/pegkit). I've learned a lot from working with it on [Story Teller](https://github.com/drekka/StoryTeller).
+* Finally thanks to everyone who writes the crappy software that inspires me to give things like this ago. You know who you are.
