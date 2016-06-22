@@ -13,7 +13,7 @@
 
 #import <OCMock/OCMock.h>
 
-@interface ALCConfigClassProcessorTests : XCTestCase<ALCConfig>
+@interface ALCConfigClassProcessorTests : XCTestCase<AlchemicConfig>
 @end
 
 @implementation ALCConfigClassProcessorTests {

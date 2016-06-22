@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6C0076921D17D60500E88987 /* AbstractSingletonMacroTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0076911D17D60500E88987 /* AbstractSingletonMacroTests.m */; };
-		6C1ADAFF1C8DB28400267E77 /* ALChemicAware.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADAFE1C8DB28400267E77 /* ALChemicAware.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C1ADAFF1C8DB28400267E77 /* AlchemicAware.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB001C8DB88C00267E77 /* Alchemic.m */; };
 		6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C1ADB051C9050FB00267E77 /* ALCInstantiation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */; };
@@ -78,7 +78,7 @@
 		6C83CCB01D02A6F900D7F0BC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C83CCAF1D02A6F900D7F0BC /* ViewController.m */; };
 		6CB5CCD51CDB6F9100DC1052 /* ALCDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB5CCD41CDB6F8C00DC1052 /* ALCDefs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB5CCD71CDB70C800DC1052 /* ALCDefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB5CCD61CDB70C800DC1052 /* ALCDefs.m */; };
-		6CB5CCD81CDB792100DC1052 /* ALCConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC284861CB53349006B613F /* ALCConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6CB5CCD81CDB792100DC1052 /* AlchemicConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC284861CB53349006B613F /* AlchemicConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB5CCDD1CDB7AF700DC1052 /* BasicDependencies.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7837251C5BB116004BE670 /* BasicDependencies.m */; };
 		6CB5CCDE1CDB7AF700DC1052 /* ConstantInjections.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68CF801C64E1F8003A7A54 /* ConstantInjections.m */; };
 		6CB5CCDF1CDB7AF700DC1052 /* CircularReferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C67FF2B1C6A13C700ABEDDD /* CircularReferences.m */; };
@@ -193,7 +193,7 @@
 		6C14FC331C96EBBB00B56578 /* NestedThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NestedThing.h; sourceTree = "<group>"; };
 		6C14FC341C96EBBB00B56578 /* NestedThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NestedThing.m; sourceTree = "<group>"; };
 		6C14FC381C9839DB00B56578 /* NestedProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NestedProtocol.h; sourceTree = "<group>"; };
-		6C1ADAFE1C8DB28400267E77 /* ALChemicAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALChemicAware.h; sourceTree = "<group>"; };
+		6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlchemicAware.h; sourceTree = "<group>"; };
 		6C1ADB001C8DB88C00267E77 /* Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alchemic.m; sourceTree = "<group>"; };
 		6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInstantiation.h; sourceTree = "<group>"; };
 		6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCInstantiation.m; sourceTree = "<group>"; };
@@ -278,7 +278,7 @@
 		6CC2847B1CB29A7C006B613F /* ALCException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCException.m; sourceTree = "<group>"; };
 		6CC2847E1CB2AF1A006B613F /* ALCAbstractConstantInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractConstantInjector.h; sourceTree = "<group>"; };
 		6CC2847F1CB2AF1A006B613F /* ALCAbstractConstantInjector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractConstantInjector.m; sourceTree = "<group>"; };
-		6CC284861CB53349006B613F /* ALCConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ALCConfig.h; sourceTree = "<group>"; };
+		6CC284861CB53349006B613F /* AlchemicConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlchemicConfig.h; sourceTree = "<group>"; };
 		6CC284871CB53F03006B613F /* NSBundle+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Alchemic.h"; sourceTree = "<group>"; };
 		6CC284881CB53F03006B613F /* NSBundle+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSBundle+Alchemic.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CC2848B1CB671D5006B613F /* NSSet+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSet+Alchemic.h"; sourceTree = "<group>"; };
@@ -534,8 +534,6 @@
 		6C66DC301A8B82C3009F9D94 /* Alchemic */ = {
 			isa = PBXGroup;
 			children = (
-				6C1ADAFE1C8DB28400267E77 /* ALChemicAware.h */,
-				6CC284861CB53349006B613F /* ALCConfig.h */,
 				6C7837231C5BAD8A004BE670 /* ALCContext.h */,
 				6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */,
 				6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */,
@@ -545,6 +543,8 @@
 				6CC2847B1CB29A7C006B613F /* ALCException.m */,
 				6C25D2781C566F2E00D982DC /* Alchemic.h */,
 				6C1ADB001C8DB88C00267E77 /* Alchemic.m */,
+				6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */,
+				6CC284861CB53349006B613F /* AlchemicConfig.h */,
 				6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */,
 				6C24CD031CA539D00026D18C /* ALCMacros.h */,
 				6C3AFBCA1C63794C00B4FCAA /* ALCResolvable.h */,
@@ -702,7 +702,7 @@
 				6C71D5401CA0198800D25AC0 /* ALCConstant.h in Headers */,
 				6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */,
 				F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */,
-				6CB5CCD81CDB792100DC1052 /* ALCConfig.h in Headers */,
+				6CB5CCD81CDB792100DC1052 /* AlchemicConfig.h in Headers */,
 				6C68CF7E1C64DB06003A7A54 /* ALCContextImpl.h in Headers */,
 				F420FA6E1CF288D40032C212 /* NSNotificationCenter+OCMAdditions.h in Headers */,
 				F420FA761CF288D40032C212 /* OCMStubRecorder.h in Headers */,
@@ -716,7 +716,7 @@
 				F420FA711CF288D40032C212 /* OCMLocation.h in Headers */,
 				6C3AFBB41C5E0D5800B4FCAA /* ALCObjectFactoryTypeReference.h in Headers */,
 				6C4B561A1C6E0BF10040AEC2 /* ALCVariableDependency.h in Headers */,
-				6C1ADAFF1C8DB28400267E77 /* ALChemicAware.h in Headers */,
+				6C1ADAFF1C8DB28400267E77 /* AlchemicAware.h in Headers */,
 				6C71D5471CA16BE600D25AC0 /* NSArray+Alchemic.h in Headers */,
 				6C4D85AD1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h in Headers */,
 				F420FA741CF288D40032C212 /* OCMockObject.h in Headers */,
@@ -845,7 +845,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1328,7 +1328,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,

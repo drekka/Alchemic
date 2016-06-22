@@ -9,21 +9,21 @@
 @import StoryTeller;
 
 #import <Alchemic/ALCConfigClassProcessor.h>
-#import <Alchemic/ALCConfig.h>
+#import <Alchemic/AlchemicConfig.h>
 
 @implementation ALCConfigClassProcessor
 
 -(BOOL) canProcessClass:(Class) aClass {
-    return [aClass conformsToProtocol:@protocol(ALCConfig)];
+    return [aClass conformsToProtocol:@protocol(AlchemicConfig)];
 }
 
 -(void) processClass:(Class) aClass withContext:(id<ALCContext>) context {
     
     STLog(self, @"Found config class %@", NSStringFromClass(aClass));
     
-    if ([aClass respondsToSelector:@selector(configure:)]) {
+    if ([aClass respondsToSelector:@selector(configureAlchemic:)]) {
         STLog(self, @"Executing configure method");
-        [(Class<ALCConfig>)aClass configure:context];
+        [(Class<AlchemicConfig>)aClass configureAlchemic:context];
     }
     
 }

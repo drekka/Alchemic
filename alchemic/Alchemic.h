@@ -9,8 +9,8 @@
 @import Foundation;
 
 #import <Alchemic/AlchemicAware.h>
+#import <Alchemic/AlchemicConfig.h>
 
-#import <Alchemic/ALCConfig.h>
 #import <Alchemic/ALCConstantInjectors.h>
 #import <Alchemic/ALCContext.h>
 #import <Alchemic/ALCDefs.h>
