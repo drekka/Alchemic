@@ -762,7 +762,7 @@ var formatter = AcGet(NSDateFormatter.self)
 Without any criteria, Alchemic will use the passed return type to determine the search criteria for scanning the model based in it's class and any applicable protocols.
 
 
-### Getting objects with __AcInvoke__
+## Invoking methods
 
 __AcInvoke__ is for when you want to access a declared method or initializer and pass in the arguments manually. But you don't have access to the object it's declared on or may not even know it.  For example, you might declare a factory initializer like this:
 
@@ -875,7 +875,7 @@ class MyClass:NSObject<AlchemicAware> {
 ```
 
 
-## Notifications
+## Alchemic finished starting
 
 Once all singletons have been loaded and injected, Alchemic sends out a notification through the default `NSNotificationCenter`. There is a constant called `AlchemicFinishedLoading` in the `ALCAlchemic` class which can be used like this:
 
@@ -900,50 +900,21 @@ This is most useful for classes which are not managed by Alchemic but still need
 
 # Additional configuration
 
-Alchemic needs no configuration out of the box. However sometimes there are things you might want to change before it starts. To do this, you need to create one or more classes and implement the `ALCConfig` protocol on them. Alchemic will automatically locate these classes during startup and read them for additional configuration.
+Alchemic needs no configuration out of the box. However sometimes there are things you might want to change before it starts. To do this, you need to create one or more classes and implement the `AlchemicConfig` protocol on them. Alchemic will automatically locate these classes during startup and read them for additional configuration.
 
-## Additional bundles to scan
+## Programmatically registering factories
 
-By default, Alchemic scans your apps main bundles sourced from `[NSBundle allBundles]` and examines each class if finds, looking for Alchemic registrations and methods to setup the model. However you may have classes in other bundles that use  Alchemic and you want Alchemic to scan those as well. For example you might have setup a common framework for business logic. 
+It's possible you need to configure Alchemic in a way that cannot be handled using the built-in macros. For example, a singleton service class from a framework that is not aware of Alchemic. You might not not have access to the source code, or simply don't want to make it depend on Alchemic.
 
-To let Alchemic know that there are classes that need managing in that bundle, you need to implement the `ALCConfig` protocol `scanBundlesWithClasses` method like this:
-
-```objc
-// Objective-C
-@interface MyAppConfig : NSObject<ALCConfig>
-@end
-
-@implementation MyAppConfig
-+(NSArray<Class>) scanBundlesWithClasses {
-    return @[[MyAppBusinessLogic class]];
-}
-@end
-```
-
-```swift
-// Swift
-class MyAppConfig:NSObject<ALCConfig>
-    @objc static func scanBundlesWithClasses() -> NSArray<AnyClass> {
-        return [MyAppBusinessLogic.self]
-    }
-}
-```
-
-During scanning, Alchemic will call this method for a list of classes. For each class returned, it will locate the bundle or framework that it came from and scan all classes within it. So adding an extra framework bundle is simply a matter of returning any class from that bundle.
-
-## Custom setups
-
-Another possible use case if where you need to configure Alchemic in a way that cannot be handled using the built-in macros. A use case would be to manage instances of a class that does not have Alchemic declarations. For example, a singleton service class from a framework that is not aware of Alchemic. 
-
-To get around this sort of problem, add the `ALCConfig configure:(id<ALCContext>) context` like this:
+To get around this sort of problem, you can create a class and add the `AlchemicConfig configureAlchemic:(id<ALCContext>) context` like this:
 
 ```objc
 // Objective-C
-@interface MyAppConfig : NSObject<ALCConfig>
+@interface MyAppConfig : NSObject<AlchemicConfig>
 @end
 
 @implementation MyAppConfig
-+(void) configure:(id<ALCContext>) context {
++(void) configureAlchemic:(id<ALCContext>) context {
     ALCClassObjectFactory of = [Context registerObjectFactoryForClass:[MyService class]];
     [context objectFactoryConfig:of, AcFactoryName(@"myService"), nil];
     [Context objectFactory:of registerVariableInjection:@"aVar", nil];
@@ -953,8 +924,8 @@ To get around this sort of problem, add the `ALCConfig configure:(id<ALCContext>
 
 ```swift
 // Swift
-class MyAppConfig:NSObject<ALCConfig>
-    @objc static func configure(context:ALCContext) {
+class MyAppConfig:NSObject<AlchemicConfig>
+    @objc static func configureAlchemic(context:ALCContext) {
         let of = context.registerObjectFactoryForClass(MyService.class);
         of.objectFactoryConfig:of, AcFactoryName("myService"), nil);
         of.objectFactory(of registerVariableInjection:"aVar", nil);
