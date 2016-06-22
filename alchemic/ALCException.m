@@ -17,7 +17,7 @@
 
 declareExceptionImpl(CircularReference)
 declareExceptionImpl(IllegalArgument)
-declareExceptionImpl(ReferencedObjectNotSet)
+declareExceptionImpl(ReferenceObjectNotSet)
 declareExceptionImpl(NoDependenciesFound)
 declareExceptionImpl(DuplicateName)
 declareExceptionImpl(InjectionNotFound)

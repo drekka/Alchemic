@@ -20,7 +20,7 @@
 
 declareException(CircularReference)
 declareException(IllegalArgument)
-declareException(ReferencedObjectNotSet)
+declareException(ReferenceObjectNotSet)
 declareException(NoDependenciesFound)
 declareException(DuplicateName)
 declareException(InjectionNotFound)

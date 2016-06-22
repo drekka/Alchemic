@@ -33,6 +33,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) start;
 
+/**
+ Mostly used internal and for testing, this registers a block that will be executed when Alchemic has finished starting. 
+ 
+ If Alchemic has already started, the block is executed immediately on the current thread.
+
+ @param block A simple block.
+ */
 -(void) executeBlockWhenStarted:(void (^)()) block;
 
 #pragma mark - Registering
