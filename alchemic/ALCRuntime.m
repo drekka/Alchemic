@@ -186,39 +186,41 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(void) scanRuntimeWithContext:(id<ALCContext>) context {
     
-    // Use the app bundles and Alchemic framework as the base bundles to search configs classes.
-    NSMutableSet<NSBundle *> *appBundles = [[NSSet setWithArray:[NSBundle allBundles]] mutableCopy];
-    [appBundles addObject:[NSBundle bundleForClass:[self class]]];
+    // Start with the main app bundles.
+    NSMutableArray<NSBundle *> *appBundles = [[NSBundle allBundles] mutableCopy];
+
+    // Get resource ids of the framework directories from each bundle
+    NSMutableSet *mainBundleResourceIds = [[NSMutableSet alloc] init];
+    [appBundles enumerateObjectsUsingBlock:^(NSBundle *bundle, NSUInteger idx, BOOL *stop) {
+        id bundleFrameworksDirId = nil;
+        [bundle.privateFrameworksURL getResourceValue:&bundleFrameworksDirId forKey:NSURLFileResourceIdentifierKey error:nil];
+        if (bundleFrameworksDirId) {
+            [mainBundleResourceIds addObject:bundleFrameworksDirId];
+        }
+    }];
+
+    // Loop through the app's frameworks and add those that are in the app bundle's frameworks directories.
+    [[NSBundle allFrameworks] enumerateObjectsUsingBlock:^(NSBundle *framework, NSUInteger idx, BOOL *stop) {
+
+        NSURL *frameworkDirectoryURL = nil;
+        [framework.bundleURL getResourceValue:&frameworkDirectoryURL forKey:NSURLParentDirectoryURLKey error:nil];
+
+        id frameworkDirectoryId = nil;
+        [frameworkDirectoryURL getResourceValue:&frameworkDirectoryId forKey:NSURLFileResourceIdentifierKey error:nil];
+        if ([mainBundleResourceIds containsObject:frameworkDirectoryId]) {
+            [appBundles addObject:framework];
+        }
+    }];
     
     // Scan the bundles, checking each class.
-    NSMutableSet<NSBundle *> *moreBundles = appBundles;
-    NSMutableSet<NSBundle *> *scannedBundles;
-    while (moreBundles.count > 0) {
-        
-        // Add the bundles into the scanned list.
-        [NSSet unionSet:moreBundles intoMutableSet:&scannedBundles];
-        
-        // San and return a list of new bundles.
-        moreBundles = [[self scanBundles:moreBundles context:context] mutableCopy];
-        
-        // Make sure we have not already scanned the new bundles.
-        [moreBundles minusSet:scannedBundles];
-    }
-}
-
-+(nullable NSSet<NSBundle *> *) scanBundles:(NSSet<NSBundle *> *) bundles context:(id<ALCContext>) context {
-    
     NSArray<id<ALCClassProcessor>> *processors = @[
                                                    [[ALCConfigClassProcessor alloc] init],
                                                    [[ALCModelClassProcessor alloc] init],
                                                    [[ALCResourceLocatorClassProcessor alloc] init]
                                                    ];
-    NSMutableSet<NSBundle *> *moreBundles;
-    for (NSBundle *bundle in bundles) {
-        NSSet<NSBundle *> *addBundles = [bundle scanWithProcessors:processors context:context];
-        [NSSet unionSet:addBundles intoMutableSet:&moreBundles];
-    }
-    return moreBundles;
+    [appBundles enumerateObjectsUsingBlock:^(NSBundle *bundle, NSUInteger idx, BOOL *stop) {
+        [bundle scanWithProcessors:processors context:context];
+    }];
 }
 
 #pragma mark - Executing blocks
@@ -234,7 +236,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
         completion(object);
     }
 }
-
 
 @end
 

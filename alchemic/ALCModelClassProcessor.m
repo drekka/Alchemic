@@ -22,7 +22,7 @@
     return YES;
 }
 
--(NSSet<NSBundle *> *) processClass:(Class) aClass
+-(void) processClass:(Class) aClass
                         withContext:(id<ALCContext>) context {
     
     AcIgnoreSelectorWarnings(
@@ -55,7 +55,6 @@
     }
     
     free(classMethods);
-    return nil;
 }
 
 

@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)setObject:(id) object {
-    if (self.isWeak) {
+    if (_weak) {
         _weakObjectRef = object;
     } else {
         _strongObjectRef = object;
@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) object {
-    return self.isWeak ? _weakObjectRef : _strongObjectRef;
+    return _weak ? _weakObjectRef : _strongObjectRef;
 }
 
 -(BOOL) ready {

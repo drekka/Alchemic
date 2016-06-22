@@ -94,9 +94,7 @@
     return ^(ALCObjectCompletionArgs){
         if (strongSelf->_initializer) {
             ALCObjectCompletion completion = strongSelf->_initializer.objectCompletion;
-            if (completion) {
-                completion(object);
-            }
+            [ALCRuntime executeCompletion:completion withObject:object];
         }
         
         [self injectDependencies:object];

@@ -17,25 +17,22 @@
 
 @implementation NSBundle (Alchemic)
 
--(NSSet<NSBundle *> *) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
+-(void) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
     
     unsigned int count = 0;
     const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &count);
     
     STLog(self, @"Scanning %i runtime classes in bundle %@", count, self.bundlePath.lastPathComponent);
     
-    NSMutableSet<NSBundle *> *moreBundles;
     for(unsigned int i = 0;i < count;i++) {
         Class nextClass = objc_getClass(classes[i]);
+        STLog(self, @"%@, class: %@", self.bundlePath.lastPathComponent, NSStringFromClass(nextClass));
         for (id<ALCClassProcessor> classProcessor in processors) {
             if ([classProcessor canProcessClass:nextClass]) {
-                NSSet<NSBundle *> *bundles = [classProcessor processClass:nextClass withContext:context];
-                [NSSet unionSet:bundles intoMutableSet:&moreBundles];
+                [classProcessor processClass:nextClass withContext:context];
             }
         }
     }
-    
-    return moreBundles;
 }
 
 @end

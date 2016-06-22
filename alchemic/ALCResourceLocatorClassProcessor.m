@@ -15,11 +15,10 @@
     //return [aClass conformsToProtocol:@protocol(ALCResourceLocator)];
 }
 
--(NSSet<NSBundle *> *) processClass:(Class) aClass
+-(void) processClass:(Class) aClass
                         withContext:(id<ALCContext>) context {
     //ALCBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
     //classBuilder.value = [[aClass alloc] init];
-    return nil;
 }
 
 @end

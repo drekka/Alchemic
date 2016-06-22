@@ -36,21 +36,7 @@ static NSSet<Class> *_configClasses;
 
 -(void) testProcessClassWithContext {
     id mockContext = OCMProtocolMock(@protocol(ALCContext));
-    NSSet<NSBundle *> *moreBundles = [_processor processClass:[self class] withContext:mockContext];
-    XCTAssertNil(moreBundles);
-}
-
--(void) testProcessClassWithContextAndReturnsClasses {
-    _configClasses = [NSSet setWithObject:[NSString class]];
-    id mockContext = OCMProtocolMock(@protocol(ALCContext));
-    NSSet<NSBundle *> *moreBundles = [_processor processClass:[self class] withContext:mockContext];
-    XCTAssertEqual(1u, moreBundles.count);
-    NSBundle *stringBundle = [NSBundle bundleForClass:[NSString class]];
-    XCTAssertEqual(stringBundle, moreBundles.anyObject);
-}
-
-+(nullable NSSet<Class> *) scanBundlesWithClasses {
-    return _configClasses;
+    [_processor processClass:[self class] withContext:mockContext];
 }
 
 @end

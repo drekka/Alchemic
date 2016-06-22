@@ -32,8 +32,7 @@
  @param aClass  The class to be processed.
  @param context A reference to the Alchemic context.
  
- @return A set of NSBundle instances which the processor thinks may have more classes to be checked.
  */
--(NSSet<NSBundle *> *) processClass:(Class) aClass withContext:(id<ALCContext>) context;
+-(void) processClass:(Class) aClass withContext:(id<ALCContext>) context;
 
 @end

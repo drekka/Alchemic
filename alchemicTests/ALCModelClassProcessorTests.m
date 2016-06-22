@@ -65,9 +65,8 @@ static ALCClassObjectFactory *_of;
     
     OCMStub([mockContext registerObjectFactoryForClass:[AMCPDummy1 class]]).andReturn(mockFactory);
     
-    NSSet<NSBundle *> *bundles = [_processor processClass:[AMCPDummy1 class] withContext:mockContext];
+    [_processor processClass:[AMCPDummy1 class] withContext:mockContext];
     
-    XCTAssertNil(bundles);
     XCTAssertEqual(mockFactory, [AMCPDummy1 of]);
 }
 
@@ -78,9 +77,8 @@ static ALCClassObjectFactory *_of;
     
     OCMStub([mockContext registerObjectFactoryForClass:[AMCPDummy2 class]]).andReturn(mockFactory);
     
-    NSSet<NSBundle *> *bundles = [_processor processClass:[AMCPDummy2 class] withContext:mockContext];
+    [_processor processClass:[AMCPDummy2 class] withContext:mockContext];
     
-    XCTAssertNil(bundles);
     XCTAssertEqual(mockFactory, [AMCPDummy2 of]);
 }
 

@@ -69,6 +69,16 @@ NS_ASSUME_NONNULL_BEGIN
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
 }
 
+-(void) executeBlockWhenStarted:(void (^)()) block {
+    @synchronized (_postStartBlocks) {
+        if (_postStartBlocks) {
+            [_postStartBlocks addObject:block];
+        } else {
+            block();
+        }
+    }
+}
+
 #pragma mark - Registration
 
 -(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz {
@@ -206,11 +216,7 @@ registerFactoryMethod:(SEL) selector
     };
 
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.
-    if (_postStartBlocks) {
-        [_postStartBlocks addObject:setBlock];
-    } else {
-        setBlock();
-    }
+    [self executeBlockWhenStarted:setBlock];
 }
 
 #pragma mark - Internal

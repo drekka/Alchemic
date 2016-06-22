@@ -21,9 +21,7 @@
  
  @param processors A list of processors to scan all classes with.
  @param context    The current context.
- 
- @return nil or a list of additonal NSBundles that may contain further registrations.
  */
--(NSSet<NSBundle *> *) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context;
+-(void) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context;
 
 @end

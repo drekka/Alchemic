@@ -23,6 +23,17 @@
 
 @implementation AlchemicTests
 
+-(void)setUp {
+    
+    // Make sure Alchemic has a chance to start.
+    XCTestExpectation *e = [self expectationWithDescription:@"Alchemic start"];
+    [[Alchemic mainContext] executeBlockWhenStarted:^{
+        [e fulfill];
+    }];
+
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
 -(void) testStartUp {
     
     Networking *networking = AcGet(Networking);

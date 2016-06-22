@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL) ready {
-    return self.object != nil;
+    return super.object != nil;
 }
 
 -(NSString *)description {
