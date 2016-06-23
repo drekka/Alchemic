@@ -207,6 +207,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
         id frameworkDirectoryId = nil;
         [frameworkDirectoryURL getResourceValue:&frameworkDirectoryId forKey:NSURLFileResourceIdentifierKey error:nil];
+        
         if ([mainBundleResourceIds containsObject:frameworkDirectoryId]) {
             [appBundles addObject:framework];
         }

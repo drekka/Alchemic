@@ -26,7 +26,6 @@
     
     for(unsigned int i = 0;i < count;i++) {
         Class nextClass = objc_getClass(classes[i]);
-        STLog(self, @"%@, class: %@", self.bundlePath.lastPathComponent, NSStringFromClass(nextClass));
         for (id<ALCClassProcessor> classProcessor in processors) {
             if ([classProcessor canProcessClass:nextClass]) {
                 [classProcessor processClass:nextClass withContext:context];

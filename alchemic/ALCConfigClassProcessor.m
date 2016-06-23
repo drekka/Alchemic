@@ -18,14 +18,10 @@
 }
 
 -(void) processClass:(Class) aClass withContext:(id<ALCContext>) context {
-    
-    STLog(self, @"Found config class %@", NSStringFromClass(aClass));
-    
     if ([aClass respondsToSelector:@selector(configureAlchemic:)]) {
-        STLog(self, @"Executing configure method");
+        STLog(self, @"Executing +[%@ configureAlchemic:]", NSStringFromClass(aClass));
         [(Class<AlchemicConfig>)aClass configureAlchemic:context];
     }
-    
 }
 
 @end
