@@ -9,9 +9,6 @@
 #import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCException.h>
 
-#define setWeakSelf __weak __typeof(self) weakSelf = self
-#define setStrongSelf __typeof(self) strongSelf = weakSelf
-
 #define throwException(exceptionName, template, ...) \
 @throw [Alchemic ## exceptionName ## Exception exceptionWithName:alc_toNSString(exceptionName) reason:str(template, ## __VA_ARGS__) userInfo:nil]
 

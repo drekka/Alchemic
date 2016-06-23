@@ -63,11 +63,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) resolveDependenciesWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
-    setWeakSelf;
+    AcWeakSelf;
     [self resolveWithResolvingStack:resolvingStack
                        resolvedFlag:&_resolved
                               block:^{
-                                  setStrongSelf;
+                                  AcStrongSelf;
                                   [strongSelf->_parentObjectFactory resolveWithStack:resolvingStack model:model];
                                   [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
                               }];

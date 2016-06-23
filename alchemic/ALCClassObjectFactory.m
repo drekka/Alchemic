@@ -58,12 +58,12 @@
 
 -(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     STLog(self.objectClass, @"Resolving class factory %@", NSStringFromClass(self.objectClass));
-    setWeakSelf;
+    AcWeakSelf;
     [self resolveWithResolvingStack:resolvingStack
                        resolvedFlag:&_resolved
                               block:^{
                                   
-                                  setStrongSelf;
+                                  AcStrongSelf;
                                   [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
                                   
                                   STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
@@ -91,9 +91,9 @@
 }
 
 -(ALCObjectCompletion) objectCompletion {
-    setWeakSelf;
+    AcWeakSelf;
     return ^(ALCObjectCompletionArgs){
-        setStrongSelf;
+        AcStrongSelf;
         if (strongSelf->_initializer) {
             ALCObjectCompletion completion = strongSelf->_initializer.objectCompletion;
             [ALCRuntime executeCompletion:completion withObject:object];

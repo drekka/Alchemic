@@ -157,6 +157,18 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 #pragma mark - Misc
 
 /**
+ Declares a local weak self reference.
+ 
+ @discussion This should be declared before a block which is used externally and makes reference to self. Within the block, declare AcStrongSelf then use the created strongSelf variable to refer to self, thus braking any ciruclar references.
+ */
+#define AcWeakSelf __weak __typeof(self) weakSelf = self
+
+/**
+ Use with a block that needs to refer to self to create a local strong reference to the weak variable weakSelf created by AcWeakSelf.
+ */
+#define AcStrongSelf __typeof(self) strongSelf = weakSelf
+
+/**
  Mostly used in testing, this macro hides selector warnings triggered when a selector is not declared on the current class.
 
  @param code The code that generates the warning.

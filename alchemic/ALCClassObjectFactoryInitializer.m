@@ -48,11 +48,11 @@
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     STLog(self.objectClass, @"Resolving initializer %@", [self defaultModelKey]);
-    setWeakSelf;
+    AcWeakSelf;
     [self resolveWithResolvingStack:resolvingStack
                        resolvedFlag:&_resolved
                               block:^{
-                                  setStrongSelf;
+                                  AcStrongSelf;
                                   [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
                               }];
 }
