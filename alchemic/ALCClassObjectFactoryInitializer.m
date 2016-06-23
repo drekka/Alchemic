@@ -11,8 +11,8 @@
 #import <Alchemic/ALCClassObjectFactoryInitializer.h>
 
 #import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCDependency.h>
 #import <Alchemic/NSObject+Alchemic.h>
 #import <Alchemic/ALCInstantiation.h>
