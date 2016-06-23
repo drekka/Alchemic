@@ -7,7 +7,7 @@
 //
 
 @import StoryTeller;
-// :: Framework ::
+
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCClassObjectFactoryInitializer.h>
 #import <Alchemic/ALCDependency.h>
@@ -58,11 +58,12 @@
 
 -(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     STLog(self.objectClass, @"Resolving class factory %@", NSStringFromClass(self.objectClass));
-    blockSelf;
+    setWeakSelf;
     [self resolveWithResolvingStack:resolvingStack
                        resolvedFlag:&_resolved
                               block:^{
                                   
+                                  setStrongSelf;
                                   [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
                                   
                                   STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
@@ -90,8 +91,9 @@
 }
 
 -(ALCObjectCompletion) objectCompletion {
-    blockSelf;
+    setWeakSelf;
     return ^(ALCObjectCompletionArgs){
+        setStrongSelf;
         if (strongSelf->_initializer) {
             ALCObjectCompletion completion = strongSelf->_initializer.objectCompletion;
             [ALCRuntime executeCompletion:completion withObject:object];

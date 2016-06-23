@@ -70,11 +70,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) configureWithOption:(id) option model:(id<ALCModel>) model {
 
+    id<ALCObjectFactoryType> oldStrategy = _typeStrategy;
+
     if ([option isKindOfClass:[ALCIsTemplate class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeTemplate alloc] init];
+        _typeStrategy.weak = oldStrategy.weak;
 
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
+        _typeStrategy.weak = oldStrategy.weak;
 
     } else if ([option isKindOfClass:[ALCIsPrimary class]]) {
         _primary = YES;
@@ -83,6 +87,9 @@ NS_ASSUME_NONNULL_BEGIN
         NSString *newName = ((ALCFactoryName *) option).asName;
         [model reindexObjectFactoryOldName:self.defaultModelKey newName:newName];
 
+    } else if ([option isKindOfClass:[ALCIsWeak class]]) {
+        _typeStrategy.weak = YES;
+        
     } else {
         throwException(IllegalArgument, @"Expected a factory config macro");
     }

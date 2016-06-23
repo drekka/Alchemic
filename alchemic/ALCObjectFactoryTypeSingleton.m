@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)description {
-    return @"Singleton";
+    return self.weak ? @"Weak Singleton" : @"Singleton";
 }
 
 @end

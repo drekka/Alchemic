@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)description {
-    return @"Reference";
+    return self.weak ? @"Weak Reference" : @"Reference";
 }
 
 @end

@@ -39,7 +39,7 @@
     
     XCTAssertFalse(_topThingFactory.ready);
     
-    [self executeBlockWithException:[AlchemicReferencedObjectNotSetException class] block:^{
+    [self executeBlockWithException:[AlchemicReferenceObjectNotSetException class] block:^{
         __unused id object = self->_topThingFactory.instantiation.object;
     }];
 }

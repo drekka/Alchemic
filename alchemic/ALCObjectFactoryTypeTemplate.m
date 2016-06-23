@@ -7,6 +7,7 @@
 //
 
 #import <Alchemic/ALCObjectFactoryTypeTemplate.h>
+#import <Alchemic/ALCInternalMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,6 +15,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCFactoryType) type {
     return ALCFactoryTypeTemplate;
+}
+
+-(void)setWeak:(BOOL)weak {
+    super.weak = weak;
+    if (weak) {
+        throwException(IllegalArgument, @"Templates cannot be set as weak references.");
+    }
 }
 
 -(BOOL) ready {
