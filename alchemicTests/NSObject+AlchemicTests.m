@@ -16,11 +16,11 @@
 
 @implementation NSObject_AlchemicTests
 
--(void) testInstanceInvokeSelectorWithArguments {
-    
-    //NSString *obj = @"abc";
-    
+-(void) testClassInvokeSelectorArguments {
     
 }
 
+-(void) testInstanceInvokeSelectorArguments {
+
+}
 @end
