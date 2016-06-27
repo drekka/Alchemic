@@ -9,24 +9,28 @@ Table of Contents
 ## Install via Carthage [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 1. Add to your **Cartfile**:  
- `github "drekka/Alchemic" "master"`
+     `github "drekka/Alchemic" "master"`
 2. Build dependencies:  
- `carthage update`
+     `carthage update`
 3. Drag and drop the following frameworks into your project:
- * **<project-root>/Carthage/Build/iOS/Alchemic.framework**
- * **<project-root>/Carthage/Build/iOS/StoryTeller.framework**
- * **<project-root>/Carthage/Build/iOS/PEGKit.framework**
+    * **<project-root>/Carthage/Build/iOS/Alchemic.framework**
+    * **<project-root>/Carthage/Build/iOS/StoryTeller.framework**
+    * **<project-root>/Carthage/Build/iOS/PEGKit.framework**
 4. Ensure  the above frameworks are added to a build phase that copies them to the **Framworks** Destination. Check out the [carthage documentation](https://github.com/Carthage/Carthage) for the details of doing this. 
 
 # Starting Alchemic
  
-Nothing to do! Magic happens!
+Nothing to do! Magic happens! 
+
+Ok, I hate magic in software too. Alchemic will automatically start itself on a background thread.
  
-# Common Tasks
+# Tasks
 
 This list is by no means complete. But it gives a good indicative summary of how you can use Alchemic in your application.
  
-## Register a singleton instance
+# Registering
+
+## Singleton instances
 
 ```objectivec
 @implementation MyClass
@@ -36,7 +40,7 @@ AcRegister()
 
 MyClass will be created on application startup and managed as a singleton by Alchemic. 
 
-## Register a singleton created by a method
+## Singletons created by a method
 
 ```objectivec
 @implementation MyClass
@@ -52,7 +56,7 @@ AcMethod(SomeOtherClass , createSomeOtherClassWithMyClass:,
 
 MyClass will be instantiated and managed as a singleton. SomeOtherClass will then be instantiated using the createSomeOtherClassWithMyClass: method and also managed as a singleton. 
 
-## Register a factory with a name
+## Naming factories
 
 ```objectivec
 @implementation MyClass
@@ -62,7 +66,7 @@ AcRegister(AcFactory, AcWithName(@"Thing factory"))
 
 Every time a MyClass instance is required or requested, a new one will be created and returned.
 
-## Register a factory class using a custom initializer which finds all objects with a protocol
+## Custom initialisers
 
 ```objectivec
 @implementation MyClass
@@ -76,7 +80,9 @@ AcInitializer(initWithObjects:, AcArg(NSArray, AcProtocol(MyProtocol)))
 
 MyClass will be registered as a factory, using the initWithObjects: method to create each instance. The objects argument will be an array sourced from Alchemic managed objects which conform to the MyProtocol protocol.
  
-## Inject an object
+# Injections
+
+## Simple object
 
 ```objectivec
 @implementation MyClass {
@@ -88,7 +94,7 @@ MyClass will be registered as a factory, using the initWithObjects: method to cr
 
 Simplest form of injecting a value. The injected value will be found by searching the model for MyOtherClass objects. It is assumed that only one will be found and Alchemic will throw an error if there is zero or more than one.  
 
-## Inject a generaliased reference with a specific type
+## A generaliased reference with a specific type
 
 ```objectivec
 @implementation MyClass {
@@ -100,7 +106,7 @@ Simplest form of injecting a value. The injected value will be found by searchin
 
 This example shows how Alchemic can locate a specific object based on it's class (MyOtherClass) and inject into a more generic variable.
 
-## Inject an array of all objects with a protocol
+## An array of all objects with a protocol
 
 ```objectivec
 @implementation MyClass {
@@ -111,6 +117,8 @@ This example shows how Alchemic can locate a specific object based on it's class
 ```
 
 Locates all objects in Alchemic that conform to the MyProtocol protocol and injects them as an array.
+
+# Other tasks
   
 ## Register a override object in a unit test
 
@@ -164,15 +172,3 @@ AcInitializer(initWithText:, AcFactory, AcWithName(@"createSomething"), AcArg(NS
 ```
 
 Declaring a factory method and them calling it manually from other code. Notice that when calling the method there is no requirement to know what class it belongs to.
-
-## Register an aysnchronous startup block
-
-```objectivec
--(void) viewDidLoad {
-    AcExecuteWhenStarted(^{
-        [self reloadData];
-    });
-}
-```
-
-Called after Alchemic has finished loading. Use in code which starts at application startup. As Alchemic runs on a background thread, this ensures that the code runs after it has finished loading.
