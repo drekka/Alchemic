@@ -4,20 +4,7 @@ This guide is for using Alchemic with Objective-C sources.
 
 Table of Contents
 
-  * [Starting Alchemic](#starting-alchemic)
-  * [Common Tasks](#common-tasks)
-    * [Register a singleton instance](#register-a-singleton-instance)
-    * [Register a singleton created by a method](#register-a-singleton-created-by-a-method)
-    * [Register a factory with a name](#register-a-factory-with-a-name)
-    * [Register a factory class using a custom initializer which finds all objects with a protocol](#register-a-factory-class-using-a-custom-initializer-which-finds-all-objects-with-a-protocol)
-    * [Inject an object](#inject-an-object)
-    * [Inject a generaliased reference with a specific type](#inject-a-generaliased-reference-with-a-specific-type)
-    * [Inject an array of all objects with a protocol](#inject-an-array-of-all-objects-with-a-protocol)
-    * [Register a override object in a unit test](#register-a-override-object-in-a-unit-test)
-    * [Self injecting in non\-managed classes](#self-injecting-in-non-managed-classes)
-    * [Getting a object in code](#getting-a-object-in-code)
-    * [Using a factory initializer with custom arguments](#using-a-factory-initializer-with-custom-arguments)
-    * [Register an aysnchronous startup block](#register-an-aysnchronous-startup-block)
+
 
 ## Install via Carthage [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 

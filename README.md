@@ -6,6 +6,59 @@ By Derek Clarkson
 * [Objective-C quick guide](./Quick guide - Objective-C.md)
 * [Swift quick guide](./Quick guide - Swift.md)
 
+*Table of Contents*
+
+  * [Intro](#intro)
+  * [Swift support](#swift-support)
+  * [Installation](#installation)
+    * [<a href="https://github\.com/Carthage/Carthage">Carthage</a>](#carthage)
+  * [Adding Alchemic to your code](#adding-alchemic-to-your-code)
+    * [Objective\-C macros](#objective-c-macros)
+    * [Swift registration method](#swift-registration-method)
+  * [Alchemic components](#alchemic-components)
+    * [The context](#the-context)
+    * [The data model](#the-data-model)
+    * [Class object factories](#class-object-factories)
+      * [Using initializers](#using-initializers)
+    * [Method object factories](#method-object-factories)
+      * [Method arguments](#method-arguments)
+        * [Simple arguments](#simple-arguments)
+        * [Complex arguments](#complex-arguments)
+        * [Nil arguments](#nil-arguments)
+  * [Declaring injections](#declaring-injections)
+    * [Variable dependencies](#variable-dependencies)
+  * [Locating dependencies](#locating-dependencies)
+    * [Constants](#constants)
+    * [Model objects by Class/Protocol](#model-objects-by-classprotocol)
+    * [Model objects by Name](#model-objects-by-name)
+    * [Array injections](#array-injections)
+  * [Configuring Factories](#configuring-factories)
+    * [Templates](#templates)
+    * [References](#references)
+      * [Setting references](#setting-references)
+    * [Custom names](#custom-names)
+    * [Primary objects](#primary-objects)
+    * [Weak factories](#weak-factories)
+  * [Interfacing with Alchemic](#interfacing-with-alchemic)
+    * [Manual dependency injections](#manual-dependency-injections)
+    * [Getting objects](#getting-objects)
+    * [Invoking methods](#invoking-methods)
+  * [Alchemic's boot sequence](#alchemics-boot-sequence)
+    * [Managing the UIApplicationDelegate instance](#managing-the-uiapplicationdelegate-instance)
+    * [UIViewControllers and Story Boards](#uiviewcontrollers-and-story-boards)
+  * [Callbacks and notifications](#callbacks-and-notifications)
+    * [Dependencies injected](#dependencies-injected)
+    * [Alchemic finished starting](#alchemic-finished-starting)
+  * [Additional configuration](#additional-configuration)
+    * [Programmatically registering factories](#programmatically-registering-factories)
+  * [Errors](#errors)
+    * [Exceptions](#exceptions)
+    * [Circular dependency detection](#circular-dependency-detection)
+  * [Controlling Alchemic](#controlling-alchemic)
+    * [Stopping Alchemic from auto\-starting](#stopping-alchemic-from-auto-starting)
+    * [Manually starting](#manually-starting)
+  * [Credits](#credits)
+
 # Intro #
 
 Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS. It's goal is to help you manage object creation, object properties and variables. And it should be as simple and easy to do this as possible.
@@ -91,17 +144,9 @@ Yes ... *it's that simple to use!*
 ***Note: in the rest of this document, all Objective-C code example will use macros.*** 
 
 
-## The registration method
+## Swift registration method
 
-Optional in Objective-C, but required in Swift, you can add the `+(void) alchemic:` method to your class where you configure Alchemic:
-
-```objc
-@implementation MyClass 
-+(void) alchemic:(ALCClassObjectFactory *objectFactory) {
-    // Alchemic setup goes here.
-}
-@end
-```
+In Swift you can add the `+(void) alchemic:` method to your class where you configure Alchemic:
 
 ```swift
 @objc class MyClass {
@@ -111,10 +156,19 @@ Optional in Objective-C, but required in Swift, you can add the `+(void) alchemi
 }
 ```
 
+Once added you can then use a variety of Swift functions which are very similar or the same as their Objective-C equivalents.
 
-# The Alchemic data model
+*Note: You can also declare the same method in Objective-C code and use it in the same way.*  
 
-Alchemic maintains an in memory data model in which it stores all the information about  the objects you want to manage. When starting up, it scans the classes in your project, executing any registration methods it finds. 
+# Alchemic components
+
+## The context
+
+Every interaction with Alchemic takes place through the Alchemic context. Implementing `ALCContext`, the context is essentially a singleton instance that contains all the methods needed to tell Alchemic about the classes and methods you want it to manage. The context is also responsible for resolving dependencies and starting Alchemic.
+
+## The data model
+
+Behind the context, Alchemic maintains an in memory data model in which it stores all the information about  the objects you want to manage. When starting up, it scans the classes in your project, executing any registration methods it finds. 
 
 This data model mostly contains __Object factories__. Object factories describe to Alchemic what sort of object you want it to manage and the dependencies they have. Object factories are almost always added to the model automatically when Alchemic scans you classes and finds particular methods which tell it what you want it to do. This is referred to as _registering_. 
 
@@ -979,22 +1033,6 @@ Alchemic.start()
 ```
 
 But generally speaking, just letting Alchemic autostart is the best way.
-
-
-## The Alchemic context
-
-Alchemic has a central *'Context'* which manages all of the objects and classes that Alchemic needs. You generally don't need to do anything directly with the context as Alchemic provides a range of Objective-C *macros* and Swift functions which will take care of the dirty work for you. However should you need to access it directly, it can be accessed like this:
-
-```objc
-// Objective-C
-[Alchemic mainContext] ...;
-```
-
-```swift
-// Swift
-Alchemic.mainContext()...
-```
-
 
 # Credits
 
