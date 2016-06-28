@@ -111,6 +111,8 @@ PEGKit.framework | Used by StoryTeller.
 
 # Adding Alchemic to your code
 
+# Imports
+
 Alchemic is accessed from your implementation files. To use it, declare a module import at the top of your implementation (*.m files). 
 
 ```objc
@@ -124,9 +126,6 @@ import AlchemicSwift
 ```
 
 *Why is Alchemic in my implementations ? - A lot of Alchemic's power comes from how it integrates with your code. By being in your implementation, it has the ability to access initializers and methods which are internal to your classes. This has the advantage of allowing you to keep your header files clean and simple.*
-
-Alchemic is designed to be as unobtrusive as possible. With both Objective-C and Swift there is a special method you can declare which Alchemic will automatically find. Alternatively, if your project is written in Objective-C, there are also a set of pre-processor macros which can make things even easier.
-
 
 ## Objective-C macros
 

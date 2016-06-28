@@ -21,7 +21,6 @@
 		6C24CCDE1CA42B0C0026D18C /* TopThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC301C96EB9F00B56578 /* TopThing.m */; };
 		6C24CCDF1CA42B0C0026D18C /* NestedThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC341C96EBBB00B56578 /* NestedThing.m */; };
 		6C24CCF11CA42BA80026D18C /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
-		6C24CCF51CA42BA80026D18C /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6C24CCF61CA42BA80026D18C /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6C24CCF71CA42BA80026D18C /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C24CD031CA539D00026D18C /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -89,7 +88,6 @@
 		6CB5CCE51CDB7AF700DC1052 /* NestedThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC341C96EBBB00B56578 /* NestedThing.m */; };
 		6CB5CCE81CDB7AF700DC1052 /* ClassFactories.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBD41C64CDEC00B4FCAA /* ClassFactories.m */; };
 		6CB5CCEA1CDB7AF700DC1052 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
-		6CB5CCEE1CDB7AF700DC1052 /* Alchemic.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6CB5CCEF1CDB7AF700DC1052 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6CB5CCF01CDB7AF700DC1052 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6CB7C4341CC7BC1300C05B0B /* ALCFlagMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -115,6 +113,9 @@
 		6CC503DB1D1C2227004283DA /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; };
 		6CC503DC1D1C2228004283DA /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; };
 		6CC503DD1D1C2229004283DA /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; };
+		6CCBF46D1D228FBA00211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CCBF46E1D22902B00211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CCBF46F1D22903600211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CCFA8DA1CD8EA960013BF71 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D91CD8EA960013BF71 /* Database.m */; };
 		6CDF430B1CCE3FFB00F132AE /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF43081CCE3E3700F132AE /* HTTPServer.m */; };
 		6CE234E01CEB469900728CBE /* ALCClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -149,7 +150,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6C24CCF51CA42BA80026D18C /* Alchemic.framework in CopyFiles */,
+				6CCBF46F1D22903600211F08 /* OCMock.framework in CopyFiles */,
 				6C24CCF61CA42BA80026D18C /* PEGKit.framework in CopyFiles */,
 				6C24CCF71CA42BA80026D18C /* StoryTeller.framework in CopyFiles */,
 			);
@@ -161,7 +162,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6CB5CCEE1CDB7AF700DC1052 /* Alchemic.framework in CopyFiles */,
+				6CCBF46E1D22902B00211F08 /* OCMock.framework in CopyFiles */,
 				6CB5CCEF1CDB7AF700DC1052 /* PEGKit.framework in CopyFiles */,
 				6CB5CCF01CDB7AF700DC1052 /* StoryTeller.framework in CopyFiles */,
 			);
@@ -173,6 +174,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				6CCBF46D1D228FBA00211F08 /* OCMock.framework in CopyFiles */,
 				F41108AC1CF4411D00EEBFF7 /* PEGKit.framework in CopyFiles */,
 				F41108AD1CF4411D00EEBFF7 /* StoryTeller.framework in CopyFiles */,
 			);
@@ -971,17 +973,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/OCMock-3.1.2/iOS";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					"$(SRCROOT)/Carthage/Build/iOS",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -993,17 +985,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/OCMock-3.1.2/iOS";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					"$(SRCROOT)/Carthage/Build/iOS",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1096,7 +1078,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/iOS";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1164,7 +1146,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Carthage/Build/iOS";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
@@ -1199,19 +1181,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					"$(inherited)",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1222,19 +1192,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					"$(inherited)",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1246,19 +1204,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					"$(SRCROOT)/alchemic/**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1270,19 +1216,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-					"$(SRCROOT)/alchemic/**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/External/OCMock-3.1.2/iOS",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
