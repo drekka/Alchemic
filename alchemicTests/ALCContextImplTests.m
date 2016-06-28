@@ -97,6 +97,29 @@
 }
 
 -(void) testObjectFactoryRegisterFactoryMethodReturnType {
+
+    id mockObjectFactory = OCMClassMock([ALCMethodObjectFactory class]);
+
+    OCMExpect([mockObjectFactory configureWithOptions:[OCMArg checkWithBlock:^BOOL(NSArray *options) {
+        return [ALCIsReference macro] == options[0];
+    }]
+                                                model:_mockModel]);
+
+    OCMExpect([_mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(ALCMethodObjectFactory *objectFactory) {
+        return objectFactory.selector == @selector(description);
+    }]
+                                  withName:@"-[NSString description]"]);
+
+    [_context objectFactory:mockObjectFactory
+      registerFactoryMethod:@selector(description)
+                 returnType:[NSString class], nil
+     ];
+
+    OCMVerifyAll(mockObjectFactory);
+    OCMVerifyAll(_mockModel);
+}
+
+-(void) testObjectFactoryRegisterFactoryMethodReturnTypeWithConfig {
     OCMExpect([_mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(ALCMethodObjectFactory *objectFactory) {
         return objectFactory.selector == @selector(description);
     }]
