@@ -38,33 +38,33 @@
 
 -(void) testVariableForInjectionPointProperty {
     Ivar expectedIvar = class_getInstanceVariable([self class], "__weirdInternalPropertyVariable");
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringProperty"];
+    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aStringProperty"];
     XCTAssertEqual(expectedIvar, var);
 }
 
 -(void) testVariableForInjectionPointPrivateVariable {
     Ivar expectedIvar = class_getInstanceVariable([self class], "_privateVariable");
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_privateVariable"];
+    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"_privateVariable"];
     XCTAssertEqual(expectedIvar, var);
 }
 
 -(void) testVariableForInjectionPointNotFound {
     [self executeBlockWithException:[AlchemicInjectionNotFoundException class] block:^{
-        __unused Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_X_"];
+        __unused Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"_X_"];
     }];
 }
 
 #pragma mark - TypeDataForIVar:
 
 -(void) testTypeDataForIVarString {
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aStringProperty"];
+    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aStringProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
     XCTAssertEqual([NSString class], ivarData.objcClass);
 }
 
 -(void) testTypeDataForIVarId {
     
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aIdProperty"];
+    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIdProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
     
     XCTAssertEqual([NSObject class], ivarData.objcClass);
@@ -74,7 +74,7 @@
 
 -(void) testTypeDataForIVarProtocol {
     
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aProtocolProperty"];
+    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
     
     XCTAssertEqual([NSObject class], ivarData.objcClass);
@@ -84,7 +84,7 @@
 
 -(void) testTypeDataForIVarClassNSStringProtocol {
     
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
+    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
     
     XCTAssertEqual([NSString class], ivarData.objcClass);
@@ -94,7 +94,7 @@
 
 -(void) testTypeDataForIVarInt {
     
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"aIntProperty"];
+    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIntProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
     
     XCTAssertNil(ivarData.objcClass);
@@ -104,7 +104,7 @@
 
 -(void) testTypeDataForIVarCGRect {
     
-    Ivar var = [ALCRuntime aClass:[self class] variableForInjectionPoint:@"_aRect"];
+    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"_aRect"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
     
     XCTAssertNil(ivarData.objcClass);

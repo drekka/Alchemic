@@ -49,7 +49,7 @@ bool strHasPrefix(const char *str, const char *prefix);
  
  @return An ivar representing the variable.
  */
-+(Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
++(Ivar) class:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
 /**
  Returns an instance of ALCTypeData containing information about the type of the ivar.

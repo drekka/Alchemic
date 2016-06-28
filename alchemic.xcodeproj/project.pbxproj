@@ -116,6 +116,7 @@
 		6CCBF46D1D228FBA00211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CCBF46E1D22902B00211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CCBF46F1D22903600211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CCBF4711D2293D100211F08 /* ALCContextImplTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */; };
 		6CCFA8DA1CD8EA960013BF71 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D91CD8EA960013BF71 /* Database.m */; };
 		6CDF430B1CCE3FFB00F132AE /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF43081CCE3E3700F132AE /* HTTPServer.m */; };
 		6CE234E01CEB469900728CBE /* ALCClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -291,6 +292,7 @@
 		6CC503D51D1ACD62004283DA /* ALCObjectFactoryTypeSingletonTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCObjectFactoryTypeSingletonTests.m; path = alchemicTests/ALCObjectFactoryTypeSingletonTests.m; sourceTree = "<group>"; };
 		6CC503D71D1ACE67004283DA /* ALCObjectFactoryTypeTemplateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCObjectFactoryTypeTemplateTests.m; path = alchemicTests/ALCObjectFactoryTypeTemplateTests.m; sourceTree = "<group>"; };
 		6CC503D91D1C21FB004283DA /* OCMock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCMock.framework; path = Carthage/Build/iOS/OCMock.framework; sourceTree = "<group>"; };
+		6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCContextImplTests.m; sourceTree = "<group>"; };
 		6CCFA8D61CD78E940013BF71 /* ClassInitializers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassInitializers.m; sourceTree = "<group>"; };
 		6CCFA8D81CD8EA960013BF71 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
 		6CCFA8D91CD8EA960013BF71 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				6C0076901D17D5EC00E88987 /* Factories */,
 				6C14FC371C96EBE500B56578 /* Model */,
 				6C67FF271C67728800ABEDDD /* Runtime */,
+				6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */,
 			);
 			name = "Unit tests";
 			path = alchemicTests;
@@ -937,6 +940,7 @@
 				6C1C10391CF496F700ED1A20 /* NSObject+AlchemicTests.m in Sources */,
 				6CC503D61D1ACD62004283DA /* ALCObjectFactoryTypeSingletonTests.m in Sources */,
 				6CC503D81D1ACE67004283DA /* ALCObjectFactoryTypeTemplateTests.m in Sources */,
+				6CCBF4711D2293D100211F08 /* ALCContextImplTests.m in Sources */,
 				F458283D1CEBFECE0074A844 /* XCTestCase+Alchemic.m in Sources */,
 				F408073F1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m in Sources */,
 				6C67FF291C6772A400ABEDDD /* ALCRuntimeTests.m in Sources */,

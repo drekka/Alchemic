@@ -93,10 +93,6 @@ NS_ASSUME_NONNULL_BEGIN
     [self objectFactory:objectFactory config:configArguments];
 }
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory config:(NSArray *) configArguments {
-    [objectFactory configureWithOptions:configArguments model:_model];
-}
-
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
 registerFactoryMethod:(SEL) selector
            returnType:(Class) returnType, ... {
@@ -145,7 +141,7 @@ registerFactoryMethod:(SEL) selector
 
     alc_loadVarArgsAfterVariableIntoArray(variable, valueArguments);
 
-    Ivar ivar = [ALCRuntime aClass:objectFactory.objectClass variableForInjectionPoint:variable];
+    Ivar ivar = [ALCRuntime class:objectFactory.objectClass variableForInjectionPoint:variable];
     Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
     id<ALCInjector> injection = [valueArguments injectionWithClass:varClass allowConstants:YES];
     [objectFactory registerInjection:injection forVariable:ivar withName:variable];
@@ -220,6 +216,10 @@ registerFactoryMethod:(SEL) selector
 }
 
 #pragma mark - Internal
+
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory config:(NSArray *) options {
+    [objectFactory configureWithOptions:options model:_model];
+}
 
 -(BOOL) processFactoryNameMacro:(NSObject *) macro forObjectFactory:(id<ALCObjectFactory>) objectFactory {
     if ([macro isKindOfClass:[ALCFactoryName class]]) {

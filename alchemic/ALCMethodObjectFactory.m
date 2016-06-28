@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCMethodObjectFactory {
     ALCClassObjectFactory *_parentObjectFactory;
     NSArray<id<ALCDependency>> *_arguments;
-    SEL _selector;
     BOOL _resolved;
     BOOL _checkingReadyStatus;
 }

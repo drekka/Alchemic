@@ -22,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCMethodObjectFactory : ALCAbstractObjectFactory
 
 /**
+ The selector that will be called.
+ */
+@property (nonatomic, assign, readonly) SEL selector;
+
+/**
  Unavailable initializer.
  @param objectClass -
  */

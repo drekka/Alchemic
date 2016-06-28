@@ -38,7 +38,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - Querying things
 
-+(Ivar) aClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
++(Ivar) class:(Class) aClass variableForInjectionPoint:(NSString *) inj {
     
     // First attempt to get an instance variable with the passed name
     const char * charName = [inj UTF8String];

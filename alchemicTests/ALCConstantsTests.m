@@ -107,7 +107,7 @@
 #pragma mark - Internal
 
 -(void) injectVariable:(NSString *) variable usingDependency:(id<ALCInjector>) dependency {
-    Ivar ivar = [ALCRuntime aClass:[self class] variableForInjectionPoint:variable];
+    Ivar ivar = [ALCRuntime class:[self class] variableForInjectionPoint:variable];
     [dependency setObject:self variable:ivar];
 }
 
