@@ -68,7 +68,7 @@
 }
 
 -(NSString *) defaultModelKey {
-    return [ALCRuntime selectorDescription: self.objectClass selector:_initializer];
+    return [ALCRuntime class: self.objectClass selectorDescription:_initializer];
 }
 
 -(NSString *) description {

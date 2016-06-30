@@ -106,7 +106,7 @@ registerFactoryMethod:(SEL) selector
     }];
 
     // Build the factory.
-    ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:(Class) returnType
+    ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:returnType
                                                                       parentObjectFactory:objectFactory
                                                                                  selector:selector
                                                                                      args:methodArguments];
@@ -122,7 +122,7 @@ registerFactoryMethod:(SEL) selector
         throwException(IllegalArgument, @"Reference factories cannot have initializers");
     }
 
-    STLog(objectFactory.objectClass, @"Register object factory initializer %@", [ALCRuntime selectorDescription:objectFactory.objectClass selector:initializer]);
+    STLog(objectFactory.objectClass, @"Register object factory initializer %@", [ALCRuntime class:objectFactory.objectClass selectorDescription:initializer]);
 
     alc_loadVarArgsAfterVariableIntoArray(initializer, unknownArguments);
 

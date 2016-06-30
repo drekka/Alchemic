@@ -22,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCMethodObjectFactory : ALCAbstractObjectFactory
 
 /**
+The parent object factory that represents the class where the method resides.
+ */
+@property (nonatomic, strong, readonly) ALCClassObjectFactory *parentObjectFactory;
+
+/**
  The selector that will be called.
  */
 @property (nonatomic, assign, readonly) SEL selector;

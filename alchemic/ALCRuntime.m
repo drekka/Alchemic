@@ -111,7 +111,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     
     id finalValue = [self mapValue:value toType:(Class _Nonnull) ivarTypeData.objcClass];
     
-    STLog([object class], @"Injecting %@ with a %@", [ALCRuntime propertyDescription:[object class] variable:variable], [finalValue class]);
+    STLog([object class], @"Injecting %@ with a %@", [ALCRuntime class:[object class] variableDescription:variable], [finalValue class]);
     object_setIvar(object, variable, finalValue);
 }
 
@@ -159,26 +159,26 @@ static NSCharacterSet *__typeEncodingDelimiters;
     
     // Not found.
     if (!sig) {
-        throwException(SelectorNotFound, @"Failed to find selector %@", [self selectorDescription:aClass selector:selector]);
+        throwException(SelectorNotFound, @"Failed to find selector %@", [self class:aClass selectorDescription:selector]);
     }
     
     // Incorrect number of arguments. Allow for runtime in arguments.
     if (sig.numberOfArguments - 2 != (arguments ? arguments.count : 0)) {
-        throwException(IncorrectNumberOfArguments, @"%@ expected %lu arguments, got %lu", [self selectorDescription:aClass selector:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
+        throwException(IncorrectNumberOfArguments, @"%@ expected %lu arguments, got %lu", [self class:aClass selectorDescription:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
     }
 }
 
 #pragma mark - Describing things
 
-+(NSString *) selectorDescription:(Class) aClass selector:(SEL)selector {
++(NSString *) class:(Class) aClass selectorDescription:(SEL)selector {
     return str(@"%@[%@ %@]", [aClass respondsToSelector:selector] ? @"+" : @"-", NSStringFromClass(aClass), NSStringFromSelector(selector));
 }
 
-+(NSString *) propertyDescription:(Class) aClass property:(NSString *)property {
++(NSString *) class:(Class) aClass propertyDescription:(NSString *)property {
     return str(@"%@.%@", NSStringFromClass(aClass), property);
 }
 
-+(NSString *) propertyDescription:(Class) aClass variable:(Ivar) variable {
++(NSString *) class:(Class) aClass variableDescription:(Ivar) variable {
     return str(@"%@.%s", NSStringFromClass(aClass), ivar_getName(variable));
 }
 

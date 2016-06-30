@@ -136,6 +136,18 @@
     XCTAssertTrue(strcmp("i", arg3) == 0);
 }
 
+#pragma mark - Selector descriptions
+
+-(void) testSelectorDescriptionForClassMethod {
+    NSString *desc = [ALCRuntime class:[NSString class] selectorDescription:@selector(stringWithFormat:)];
+    XCTAssertEqualObjects(@"+[NSString stringWithFormat:]", desc);
+}
+
+-(void) testSelectorDescriptionForInstanceMethod {
+    NSString *desc = [ALCRuntime class:[NSString class] selectorDescription:@selector(initWithCharacters:length:)];
+    XCTAssertEqualObjects(@"-[NSString initWithCharacters:length:]", desc);
+}
+
 #pragma mark - Empty implementations
 
 +(void) classMethod {}

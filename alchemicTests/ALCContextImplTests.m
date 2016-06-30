@@ -85,6 +85,7 @@
                                   withName:@"NSString"]);
     id<ALCObjectFactory> objF = [_context registerObjectFactoryForClass:[NSString class]];
     XCTAssertEqual([NSString class], objF.objectClass);
+    OCMVerifyAll(_mockModel);
 }
 
 -(void) testObjectFactoryConfig {
@@ -98,32 +99,69 @@
 
 -(void) testObjectFactoryRegisterFactoryMethodReturnType {
 
-    id mockObjectFactory = OCMClassMock([ALCMethodObjectFactory class]);
+    id mockParentObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
+    OCMStub([mockParentObjectFactory objectClass]).andReturn([NSString class]);
 
-    OCMExpect([mockObjectFactory configureWithOptions:[OCMArg checkWithBlock:^BOOL(NSArray *options) {
-        return [ALCIsReference macro] == options[0];
+    __block ALCMethodObjectFactory *internalMethodFactory;
+    OCMExpect([_mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(ALCMethodObjectFactory *methodFactory) {
+        NSLog(@"Selector %@", NSStringFromSelector(methodFactory.selector));
+        internalMethodFactory = methodFactory;
+        return methodFactory.selector == @selector(description);
     }]
-                                                model:_mockModel]);
+                                  withName:@"+[NSString description]"]);
 
-    OCMExpect([_mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(ALCMethodObjectFactory *objectFactory) {
-        return objectFactory.selector == @selector(description);
-    }]
-                                  withName:@"-[NSString description]"]);
-
-    [_context objectFactory:mockObjectFactory
+    [_context objectFactory:mockParentObjectFactory
       registerFactoryMethod:@selector(description)
                  returnType:[NSString class], nil
      ];
 
-    OCMVerifyAll(mockObjectFactory);
+    XCTAssertNotNil(internalMethodFactory);
+    XCTAssertNotNil(internalMethodFactory.parentObjectFactory);
+    XCTAssertEqual(mockParentObjectFactory, internalMethodFactory.parentObjectFactory);
+    XCTAssertEqual(@selector(description), internalMethodFactory.selector);
+    XCTAssertEqual(ALCFactoryTypeSingleton, internalMethodFactory.factoryType);
+
+    OCMVerifyAll(mockParentObjectFactory);
     OCMVerifyAll(_mockModel);
 }
 
 -(void) testObjectFactoryRegisterFactoryMethodReturnTypeWithConfig {
-    OCMExpect([_mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(ALCMethodObjectFactory *objectFactory) {
-        return objectFactory.selector == @selector(description);
+
+    id mockParentObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
+    OCMStub([mockParentObjectFactory objectClass]).andReturn([NSString class]);
+
+    __block ALCMethodObjectFactory *internalMethodFactory;
+    OCMExpect([_mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(ALCMethodObjectFactory *methodFactory) {
+        NSLog(@"Selector %@", NSStringFromSelector(methodFactory.selector));
+        internalMethodFactory = methodFactory;
+        return methodFactory.selector == @selector(description);
     }]
-                                  withName:@"-[NSString description]"]);
+                                  withName:@"+[NSString description]"]);
+
+    [_context objectFactory:mockParentObjectFactory
+      registerFactoryMethod:@selector(description)
+                 returnType:[NSString class], AcTemplate, nil
+     ];
+
+    XCTAssertNotNil(internalMethodFactory);
+    XCTAssertNotNil(internalMethodFactory.parentObjectFactory);
+    XCTAssertEqual(mockParentObjectFactory, internalMethodFactory.parentObjectFactory);
+    XCTAssertEqual(@selector(description), internalMethodFactory.selector);
+    XCTAssertEqual(ALCFactoryTypeTemplate, internalMethodFactory.factoryType);
+
+    OCMVerifyAll(mockParentObjectFactory);
+    OCMVerifyAll(_mockModel);
+}
+
+-(void) testObjectFactoryRegisterFactoryMethodThrowsOnReferenceType {
+
+    id mockParentObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
+    OCMStub([mockParentObjectFactory objectClass]).andReturn([NSString class]);
+
+    XCTAssertThrowsSpecific(
+                            ([_context objectFactory:mockParentObjectFactory registerFactoryMethod:@selector(description) returnType:[NSString class], AcReference, nil]),
+                            AlchemicIllegalArgumentException);
+
 }
 
 @end

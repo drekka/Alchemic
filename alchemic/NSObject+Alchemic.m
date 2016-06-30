@@ -83,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(id) object:(id) object invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
     
-    STLog(self, @"Executing %@", [ALCRuntime selectorDescription:[self class] selector:selector]);
+    STLog(self, @"Executing %@", [ALCRuntime class:[self class] selectorDescription:selector]);
     
     // Get an invocation ready.
     NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:selector];

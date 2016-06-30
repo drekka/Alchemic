@@ -23,7 +23,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodObjectFactory {
-    ALCClassObjectFactory *_parentObjectFactory;
     NSArray<id<ALCDependency>> *_arguments;
     BOOL _resolved;
     BOOL _checkingReadyStatus;
@@ -50,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) defaultModelKey {
-    return [ALCRuntime selectorDescription:_parentObjectFactory.objectClass selector:_selector];
+    return [ALCRuntime class:_parentObjectFactory.objectClass selectorDescription:_selector];
 }
 
 -(void)configureWithOption:(id)option model:(id<ALCModel>) model {
