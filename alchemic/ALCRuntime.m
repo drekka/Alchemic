@@ -131,19 +131,20 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
     
     // Throw an error if we are dealing with an array value and we have too many results.
-    if ([value isKindOfClass:[NSArray class]]) {
-        NSArray *values = (NSArray *) value;
+    id finalValue = value;
+    if ([finalValue isKindOfClass:[NSArray class]]) {
+        NSArray *values = (NSArray *) finalValue;
         if (values.count != 1) {
             throwException(TooManyValues, @"Target type is not an array and found %lu values", (unsigned long) values.count);
         }
-        return values[0];
+        finalValue = values[0];
     }
     
-    if ([value isKindOfClass:type]) {
-        return value;
+    if ([finalValue isKindOfClass:type]) {
+        return finalValue;
     }
     
-    throwException(TypeMissMatch, @"Value of type %@ cannot be cast to a %@", NSStringFromClass([value class]), NSStringFromClass(type));
+    throwException(TypeMissMatch, @"Value of type %@ cannot be cast to a %@", NSStringFromClass([finalValue class]), NSStringFromClass(type));
 }
 
 #pragma mark - Validating

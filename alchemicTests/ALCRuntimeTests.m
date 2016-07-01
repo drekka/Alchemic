@@ -112,6 +112,43 @@
     XCTAssertEqual(0, strcmp("{CGRect=\"origin\"{CGPoint=\"x\"d\"y\"d}\"size\"{CGSize=\"width\"d\"height\"d}}", ivarData.scalarType));
 }
 
+#pragma mark - Mapping values
+
+-(void) testMapValueToTypeObjectToArray {
+    id result = [ALCRuntime mapValue:@"abc" toType:[NSArray class]];
+    XCTAssertTrue([result isKindOfClass:[NSArray class]]);
+    XCTAssertEqual(@"abc", result[0]);
+}
+
+-(void) testMapValueToTypeArrayToArray {
+    id result = [ALCRuntime mapValue:@[@"abc"] toType:[NSArray class]];
+    XCTAssertTrue([result isKindOfClass:[NSArray class]]);
+    XCTAssertEqual(@"abc", result[0]);
+}
+
+-(void) testMapValueToTypeArrayOfOneToObject {
+    id result = [ALCRuntime mapValue:@[@"abc"] toType:[NSString class]];
+    XCTAssertEqual(@"abc", result);
+}
+
+-(void) testMapValueToTypeArrayOfManyToObjectThrows {
+    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc", @"def"] toType:[NSString class]]), AlchemicTooManyValuesException, @"TooManyValues");
+}
+
+-(void) testMapValueToTypeTypeMissMatch {
+    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc"] toType:[NSNumber class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
+}
+
+-(void) testMapValueToTypeUpCast {
+    id value = [ALCRuntime mapValue:[@"abc" mutableCopy] toType:[NSString class]];
+    XCTAssertEqualObjects(@"abc", value);
+}
+
+-(void) testMapValueToTypeDownCastThrows {
+    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@{} toType:[NSMutableDictionary class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
+}
+
+
 #pragma mark - general runtime tests
 
 -(void) testAccessingMethods {
@@ -136,7 +173,7 @@
     XCTAssertTrue(strcmp("i", arg3) == 0);
 }
 
-#pragma mark - Selector descriptions
+#pragma mark - Descriptions
 
 -(void) testSelectorDescriptionForClassMethod {
     NSString *desc = [ALCRuntime class:[NSString class] selectorDescription:@selector(stringWithFormat:)];
@@ -146,6 +183,50 @@
 -(void) testSelectorDescriptionForInstanceMethod {
     NSString *desc = [ALCRuntime class:[NSString class] selectorDescription:@selector(initWithCharacters:length:)];
     XCTAssertEqualObjects(@"-[NSString initWithCharacters:length:]", desc);
+}
+
+-(void) testPropertyDescription {
+    NSString *desc = [ALCRuntime class:[self class] propertyDescription:@"aStringProperty"];
+    XCTAssertEqualObjects(@"ALCRuntimeTests.aStringProperty", desc);
+}
+
+-(void) testVariableDescription {
+    Ivar pv = class_getInstanceVariable([self class], "_privateVariable");
+    NSString *desc = [ALCRuntime class:[self class] variableDescription:pv];
+    XCTAssertEqualObjects(@"ALCRuntimeTests._privateVariable", desc);
+}
+
+#pragma mark - Block executions
+
+-(void) testExecuteSimpleBlock {
+    __block BOOL set = NO;
+    [ALCRuntime executeSimpleBlock:^{
+        set = YES;
+    }];
+    XCTAssertTrue(set);
+}
+
+-(void) testExecuteSimpleBlockNull {
+    // Literally nothing to do here.
+    [ALCRuntime executeSimpleBlock:NULL];
+}
+
+-(void) testExecuteCompletion {
+
+    __block BOOL set = NO;
+    ALCObjectCompletion completion = ^(ALCObjectCompletionArgs){
+        XCTAssertEqualObjects(@"abc", object);
+        set = YES;
+    };
+
+    [ALCRuntime executeCompletion:completion withObject:@"abc"];
+
+    XCTAssertTrue(set);
+}
+
+-(void) testExecuteCompletionNull {
+    // Literally nothing to do here.
+    [ALCRuntime executeCompletion:NULL withObject:@"abc"];
 }
 
 #pragma mark - Empty implementations
