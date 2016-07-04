@@ -120,7 +120,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
             withValue:(id) value
               ofClass:(Class) valueClass {
     id finalValue = [self mapValue:value toType:(Class _Nonnull) valueClass];
-    [inv setArgument:&finalValue atIndex:idx];
+    [inv setArgument:&finalValue atIndex:idx + 2];
 }
 
 +(id) mapValue:(id) value toType:(Class) type {

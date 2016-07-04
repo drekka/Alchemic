@@ -42,7 +42,7 @@ injectVariableCode \
 return NULL; \
 } \
 -(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
-[inv setArgument:&_value atIndex:idx]; \
+[inv setArgument:&_value atIndex:idx + 2]; \
 } \
 @end
 

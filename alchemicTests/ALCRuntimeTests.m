@@ -63,50 +63,50 @@
 }
 
 -(void) testTypeDataForIVarId {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIdProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertEqual([NSObject class], ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
 -(void) testTypeDataForIVarProtocol {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertEqual([NSObject class], ivarData.objcClass);
     XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSCopying)]);
     XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
 -(void) testTypeDataForIVarClassNSStringProtocol {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertEqual([NSString class], ivarData.objcClass);
     XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSFastEnumeration)]);
     XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
 -(void) testTypeDataForIVarInt {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIntProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(0, strcmp("i", ivarData.scalarType));
 }
 
 -(void) testTypeDataForIVarCGRect {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"_aRect"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(0, strcmp("{CGRect=\"origin\"{CGPoint=\"x\"d\"y\"d}\"size\"{CGSize=\"width\"d\"height\"d}}", ivarData.scalarType));
@@ -148,25 +148,71 @@
     XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@{} toType:[NSMutableDictionary class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
 }
 
+#pragma mark - Setting values
+
+-(void) testSetInvocationArgIndexWithValueOfClass {
+    NSMethodSignature *sig = [self methodSignatureForSelector:@selector(methodWithString:andInt:)];
+    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+    [ALCRuntime setInvocation:inv
+                     argIndex:0
+                    withValue:@"abc"
+                      ofClass:[NSString class]];
+    NSString *storedArg;
+    [inv getArgument:&storedArg atIndex:2];
+    XCTAssertEqualObjects(@"abc", storedArg);
+}
+
+-(void) testSetObjectVariableWithValue {
+    Ivar ivar = class_getInstanceVariable([self class], "_privateVariable");
+    [ALCRuntime setObject:self variable:ivar withValue:@"abc"];
+    XCTAssertEqualObjects(@"abc", _privateVariable);
+}
+
+#pragma mark - Validating
+
+-(void) testValidateClassSelectorArgumentsClassMethod {
+    [ALCRuntime validateClass:[self class] selector:@selector(classMethod) arguments:nil];
+}
+
+-(void) testValidateClassSelectorArgumentsInstanceMethod {
+    [ALCRuntime validateClass:[self class] selector:@selector(instanceMethod) arguments:nil];
+}
+
+-(void) testValidateClassSelectorArgumentsWithArgs {
+    id<ALCDependency> arg1 = AcArg(NSString, AcString(@"abc"));
+    id<ALCDependency> arg2 = AcArg(NSNumber, AcInt(5));
+    [ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) arguments:@[arg1, arg2]];
+}
+
+-(void) testValidateClassSelectorArgumentsIncorrectNumberArguments {
+    id<ALCDependency> arg1 = AcArg(NSString, AcString(@"abc"));
+    XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) arguments:@[arg1]]), AlchemicIncorrectNumberOfArgumentsException, @"IncorrectNumberOfArguments");
+}
+
+-(void) testValidateClassSelectorArgumentsSelectorNotFound {
+    AcIgnoreSelectorWarnings(
+                             XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(xxxx) arguments:nil]), AlchemicSelectorNotFoundException, @"SelectorNotFound");
+                             );
+}
 
 #pragma mark - general runtime tests
 
 -(void) testAccessingMethods {
-    
+
     XCTAssertFalse([[self class] instancesRespondToSelector:@selector(classMethod)]);
     XCTAssertTrue([[self class] instancesRespondToSelector:@selector(instanceMethod)]);
-    
+
     XCTAssertTrue([[self class] respondsToSelector:@selector(classMethod)]);
     XCTAssertFalse([self respondsToSelector:@selector(classMethod)]);
-    
+
     XCTAssertTrue([self respondsToSelector:@selector(instanceMethod)]);
     XCTAssertFalse([[self class] respondsToSelector:@selector(instanceMethod)]);
 }
 
 -(void) testMethodSignature {
-    
+
     NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:@selector(methodWithString:andInt:)];
-    
+
     const char *arg2 = [sig getArgumentTypeAtIndex:2];
     const char *arg3 = [sig getArgumentTypeAtIndex:3];
     XCTAssertTrue(strcmp("@", arg2) == 0);

@@ -126,6 +126,8 @@
 		6CE234E81CEB4ACC00728CBE /* ALCResourceLocatorClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE234E61CEB4ACC00728CBE /* ALCResourceLocatorClassProcessor.m */; };
 		6CE234EB1CEB4B9400728CBE /* ALCModelClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CE234E91CEB4B9400728CBE /* ALCModelClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CE234EC1CEB4B9400728CBE /* ALCModelClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE234EA1CEB4B9400728CBE /* ALCModelClassProcessor.m */; };
+		6CE6FFF71D2A9B2100D61613 /* ALCFactoryNameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE6FFF61D2A9B2100D61613 /* ALCFactoryNameTests.m */; };
+		6CE6FFF91D2A9CAD00D61613 /* NSArray+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE6FFF81D2A9CAD00D61613 /* NSArray+AlchemicTests.m */; };
 		6CED05761BCB545800B6C55B /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
 		6CED05781BCB548700B6C55B /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
 		F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -305,6 +307,8 @@
 		6CE234E61CEB4ACC00728CBE /* ALCResourceLocatorClassProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCResourceLocatorClassProcessor.m; sourceTree = "<group>"; };
 		6CE234E91CEB4B9400728CBE /* ALCModelClassProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCModelClassProcessor.h; sourceTree = "<group>"; };
 		6CE234EA1CEB4B9400728CBE /* ALCModelClassProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelClassProcessor.m; sourceTree = "<group>"; };
+		6CE6FFF61D2A9B2100D61613 /* ALCFactoryNameTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCFactoryNameTests.m; sourceTree = "<group>"; };
+		6CE6FFF81D2A9CAD00D61613 /* NSArray+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+AlchemicTests.m"; sourceTree = "<group>"; };
 		6CED05751BCB545800B6C55B /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6CED05771BCB548700B6C55B /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
 		F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractDependency.h; sourceTree = "<group>"; };
@@ -368,6 +372,7 @@
 			children = (
 				6CC503D01D19688B004283DA /* Types */,
 				6C0076911D17D60500E88987 /* AbstractSingletonMacroTests.m */,
+				6CE6FFF61D2A9B2100D61613 /* ALCFactoryNameTests.m */,
 			);
 			name = Factories;
 			path = ..;
@@ -571,6 +576,7 @@
 				6C67FF281C6772A400ABEDDD /* ALCRuntimeTests.m */,
 				6C1C10381CF496F700ED1A20 /* NSObject+AlchemicTests.m */,
 				6C1C10361CF494F500ED1A20 /* NSSet+AlchemicTests.m */,
+				6CE6FFF81D2A9CAD00D61613 /* NSArray+AlchemicTests.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -932,6 +938,7 @@
 			files = (
 				6CC284961CB69B44006B613F /* AnotherThing.m in Sources */,
 				6C24CCDE1CA42B0C0026D18C /* TopThing.m in Sources */,
+				6CE6FFF91D2A9CAD00D61613 /* NSArray+AlchemicTests.m in Sources */,
 				6C1C10351CF475C900ED1A20 /* ALCModelClassProcessorTests.m in Sources */,
 				6C24CCDF1CA42B0C0026D18C /* NestedThing.m in Sources */,
 				6C4D85AA1C7DB7460061CA84 /* ALCConstantsTests.m in Sources */,
@@ -939,6 +946,7 @@
 				6CC503D21D1968C4004283DA /* ALCAbstractObjectFactoryTypeTests.m in Sources */,
 				6C1C10391CF496F700ED1A20 /* NSObject+AlchemicTests.m in Sources */,
 				6CC503D61D1ACD62004283DA /* ALCObjectFactoryTypeSingletonTests.m in Sources */,
+				6CE6FFF71D2A9B2100D61613 /* ALCFactoryNameTests.m in Sources */,
 				6CC503D81D1ACE67004283DA /* ALCObjectFactoryTypeTemplateTests.m in Sources */,
 				6CCBF4711D2293D100211F08 /* ALCContextImplTests.m in Sources */,
 				F458283D1CEBFECE0074A844 /* XCTestCase+Alchemic.m in Sources */,

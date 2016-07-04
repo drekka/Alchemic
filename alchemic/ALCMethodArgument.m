@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ALCSimpleBlock) injectObject:(id) object {
-    [self.injector setInvocation:object argumentIndex:self.index + 2];
+    [self.injector setInvocation:object argumentIndex:self.index];
     return NULL;
 }
 
