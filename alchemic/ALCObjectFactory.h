@@ -46,11 +46,16 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 @property (nonatomic, assign, readonly) ALCFactoryType factoryType;
 
 /**
+ If the factory is holding a weak reference to the objects it manages.
+ */
+@property (nonatomic, assign, getter = isWeak) BOOL weak;
+
+/**
  Whether the factory is classified as a Primary factory. 
  
  When searching the model for factories, if primary factories are found in the results, then only those factories will be returned.
  */
-@property (nonatomic, assign, readonly) BOOL primary;
+@property (nonatomic, assign, readonly, getter = isPrimary) BOOL primary;
 
 /**
  Configures the factory.

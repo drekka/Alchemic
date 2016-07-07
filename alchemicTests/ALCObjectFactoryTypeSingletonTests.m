@@ -23,7 +23,7 @@
 }
 
 -(void) testReady {
-    XCTAssertTrue(_objectFactoryType.ready);
+    XCTAssertTrue(_objectFactoryType.isReady);
 }
 
 -(void) testDescription {

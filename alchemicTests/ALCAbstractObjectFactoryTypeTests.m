@@ -45,7 +45,7 @@
 
 -(void) testReadThrows {
     @try {
-        __unused BOOL ready = _factoryType.ready;
+        __unused BOOL ready = _factoryType.isReady;
         XCTFail(@"Exception not thrown");
     }
     @catch (NSException *e) {

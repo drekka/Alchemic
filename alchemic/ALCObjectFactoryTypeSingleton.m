@@ -12,12 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCObjectFactoryTypeSingleton
 
--(BOOL) ready {
+-(BOOL) isReady {
     return YES;
 }
 
 -(NSString *)description {
-    return self.weak ? @"Weak Singleton" : @"Singleton";
+    return self.isWeak ? @"Weak Singleton" : @"Singleton";
 }
 
 @end

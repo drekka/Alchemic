@@ -27,8 +27,8 @@
 
 #pragma mark - ALCResolvable
 
--(BOOL)ready {
-    return _injector.ready;
+-(BOOL) isReady {
+    return _injector.isReady;
 }
 
 -(Class)objectClass {

@@ -115,7 +115,7 @@ registerFactoryMethod:(SEL) selector
     [methodFactory configureWithOptions:factoryOptions model:_model];
 }
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory setInitializer:(SEL) initializer, ... {
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory initializer:(SEL) initializer, ... {
 
     // Throw an exception if the factory is already set to a reference type.
     if (objectFactory.factoryType == ALCFactoryTypeReference) {
@@ -131,7 +131,7 @@ registerFactoryMethod:(SEL) selector
     }];
 
     __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:objectFactory
-                                                                     setInitializer:initializer
+                                                                     initializer:initializer
                                                                                args:arguments];
 }
 

@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize objectClass = _objectClass;
 @synthesize primary = _primary;
+@dynamic weak;
+@dynamic ready;
 
 #pragma mark - Property overrides
 
@@ -39,8 +41,12 @@ NS_ASSUME_NONNULL_BEGIN
     return _typeStrategy.type;
 }
 
--(BOOL) ready {
-    return _typeStrategy.ready;
+-(BOOL) isWeak {
+    return _typeStrategy.isWeak;
+}
+
+-(BOOL) isReady {
+    return _typeStrategy.isReady;
 }
 
 -(NSString *) defaultModelKey {
@@ -74,11 +80,11 @@ NS_ASSUME_NONNULL_BEGIN
 
     if ([option isKindOfClass:[ALCIsTemplate class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeTemplate alloc] init];
-        _typeStrategy.weak = oldStrategy.weak;
+        _typeStrategy.weak = oldStrategy.isWeak;
 
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
-        _typeStrategy.weak = oldStrategy.weak;
+        _typeStrategy.weak = oldStrategy.isWeak;
 
     } else if ([option isKindOfClass:[ALCIsPrimary class]]) {
         _primary = YES;
@@ -134,7 +140,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     ALCFactoryType factoryType = _typeStrategy.type;
     BOOL instantiated = (factoryType == ALCFactoryTypeSingleton && _typeStrategy.object)
-    || (factoryType == ALCFactoryTypeReference && _typeStrategy.ready);
+    || (factoryType == ALCFactoryTypeReference && _typeStrategy.isReady);
     NSMutableString *description = [[NSMutableString alloc] initWithString:instantiated ? @"* " : @"  "];
 
     [description appendString:_typeStrategy.description];

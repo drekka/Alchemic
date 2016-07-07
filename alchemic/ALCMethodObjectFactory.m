@@ -71,8 +71,8 @@ NS_ASSUME_NONNULL_BEGIN
                               }];
 }
 
--(BOOL) ready {
-    if (super.ready && _parentObjectFactory.ready) {
+-(BOOL) isReady {
+    if (super.isReady && _parentObjectFactory.isReady) {
         return [_arguments dependenciesReadyWithCurrentlyCheckingFlag:&_checkingReadyStatus];
     }
     return NO;

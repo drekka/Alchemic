@@ -118,7 +118,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     for (id<ALCResolvable> resolvable in self) {
         // If a dependency is not ready then we stop checking and return a failure.
-        if (!resolvable.ready) {
+        if (!resolvable.isReady) {
             *checkingFlag = NO;
             return NO;
         }

@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(BOOL) ready {
+-(BOOL) isReady {
     return YES;
 }
 

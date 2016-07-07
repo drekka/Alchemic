@@ -25,11 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation NSObject (Alchemic)
 
--(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
+-(id) invokeSelector:(SEL) selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
     return [[self class] object:self invokeSelector:selector arguments:arguments];
 }
 
-+(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
++(id) invokeSelector:(SEL) selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
     return [self object:self invokeSelector:selector arguments:arguments];
 }
 
@@ -81,7 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Internal
 
-+(id) object:(id) object invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments {
++(id) object:(id) object invokeSelector:(SEL) selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
     
     STLog(self, @"Executing %@", [ALCRuntime class:[self class] selectorDescription:selector]);
     

@@ -32,12 +32,12 @@
 }
 
 -(void) testReadWhenObjectNotSet {
-    XCTAssertFalse(_objectFactoryType.ready);
+    XCTAssertFalse(_objectFactoryType.isReady);
 }
 
 -(void) testReadWhenObjectSet {
     _objectFactoryType.object = @"abc";
-    XCTAssertTrue(_objectFactoryType.ready);
+    XCTAssertTrue(_objectFactoryType.isReady);
 }
 
 -(void) testDescription {

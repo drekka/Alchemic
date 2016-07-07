@@ -55,8 +55,8 @@
                              SEL topThingInit =@selector(initWithAnotherThing:);
                              SEL anotherThingInit =@selector(initWithTopThing:);
                              )
-    [_context objectFactory:_topFactory setInitializer:topThingInit, AcClass(AnotherThing), nil];
-    [_context objectFactory:_anotherFactory setInitializer:anotherThingInit, AcClass(TopThing), nil];
+    [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
+    [_context objectFactory:_anotherFactory initializer:anotherThingInit, AcClass(TopThing), nil];
     
     [self executeBlockWithException:[AlchemicCircularReferenceException class] block:^{
         [self->_context start];
@@ -69,7 +69,7 @@
     AcIgnoreSelectorWarnings(
                              SEL anotherThingInit = @selector(initWithTopThing:);
                              )
-    [_context objectFactory:_anotherFactory setInitializer:anotherThingInit, AcClass(TopThing), nil];
+    [_context objectFactory:_anotherFactory initializer:anotherThingInit, AcClass(TopThing), nil];
     
     [self executeBlockWithException:[AlchemicCircularReferenceException class] block:^{
         [self->_context start];
@@ -81,7 +81,7 @@
     AcIgnoreSelectorWarnings(
                              SEL topThingInit = @selector(initWithAnotherThing:);
                              )
-    [_context objectFactory:_topFactory setInitializer:topThingInit, AcClass(AnotherThing), nil];
+    [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory registerVariableInjection:@"topThing", nil];
     
     [self executeBlockWithException:[AlchemicCircularReferenceException class] block:^{

@@ -41,10 +41,10 @@
     AcIgnoreSelectorWarnings(
                              SEL initSel = @selector(initWithNoArgs);
                              )
-    [_context objectFactory:_topThingFactory setInitializer:initSel, nil];
+    [_context objectFactory:_topThingFactory initializer:initSel, nil];
     [_context start];
     
-    XCTAssertTrue(_topThingFactory.ready);
+    XCTAssertTrue(_topThingFactory.isReady);
     
     id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
@@ -53,10 +53,10 @@
 
 -(void) testInitializerWithString {
     
-    [_context objectFactory:_topThingFactory setInitializer:@selector(initWithString:), AcString(@"abc"), nil];
+    [_context objectFactory:_topThingFactory initializer:@selector(initWithString:), AcString(@"abc"), nil];
     [_context start];
     
-    XCTAssertTrue(_topThingFactory.ready);
+    XCTAssertTrue(_topThingFactory.isReady);
     
     id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
@@ -69,10 +69,10 @@
                              SEL selector = @selector(initWithString:andInt:);
                              )
     [_context objectFactory:_topThingFactory
-             setInitializer:selector, AcString(@"abc"), AcInt(5), nil];
+             initializer:selector, AcString(@"abc"), AcInt(5), nil];
     [_context start];
     
-    XCTAssertTrue(_topThingFactory.ready);
+    XCTAssertTrue(_topThingFactory.isReady);
     
     id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);
@@ -85,7 +85,7 @@
                              SEL selector = @selector(initWithNestedThings:);
                              )
     ALCMethodArgument *arg = [ALCMethodArgument argumentWithClass:[NSArray class] criteria:AcClass(NestedThing), nil];
-    [_context objectFactory:_topThingFactory setInitializer:selector, arg, nil];
+    [_context objectFactory:_topThingFactory initializer:selector, arg, nil];
     [_context start];
     
 }

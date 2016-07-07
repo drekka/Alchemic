@@ -39,7 +39,7 @@
 
     [_context start];
 
-    XCTAssertTrue(_topThingFactory.ready);
+    XCTAssertTrue(_topThingFactory.isReady);
 
     id value = _topThingFactory.instantiation.object;
     XCTAssertTrue([value isKindOfClass:[TopThing class]]);

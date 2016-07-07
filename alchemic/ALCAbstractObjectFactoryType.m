@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
     return _weak ? _weakObjectRef : _strongObjectRef;
 }
 
--(BOOL) ready {
+-(BOOL) isReady {
     [self doesNotRecognizeSelector:_cmd];
     return NO;
 }

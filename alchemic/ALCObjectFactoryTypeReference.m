@@ -20,18 +20,18 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) object {
-    if (!self.ready) {
+    if (!self.isReady) {
         throwException(ReferenceObjectNotSet, @"%@ is a reference factory which has not had a value set.", self);
     }
     return super.object;
 }
 
--(BOOL) ready {
+-(BOOL) isReady {
     return super.object != nil;
 }
 
 -(NSString *)description {
-    return self.weak ? @"Weak Reference" : @"Reference";
+    return self.isWeak ? @"Weak Reference" : @"Reference";
 }
 
 @end

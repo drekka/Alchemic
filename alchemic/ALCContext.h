@@ -82,7 +82,7 @@ registerFactoryMethod:(SEL) selector
  @param initializer   The initializer selector.
  @param ... A list of initializer argument declarations. Factory configuration items are not accepted in this list.
  */
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory setInitializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory initializer:(SEL) initializer, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  Declares a variable injection for the objects created by a class factory.

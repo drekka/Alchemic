@@ -35,7 +35,7 @@
  */
 #define AcInitializer(initializerSelector, ...) \
 +(void) alc_methodName(registerObjectFactoryInitializer, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactory:classObjectFactory setInitializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
+[[Alchemic mainContext] objectFactory:classObjectFactory initializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
 }
 
 /**

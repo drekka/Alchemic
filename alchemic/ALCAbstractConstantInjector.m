@@ -13,7 +13,7 @@
 
 @implementation ALCAbstractConstantInjector
 
--(BOOL) ready {
+-(BOOL) isReady {
     return YES;
 }
 

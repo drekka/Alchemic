@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  YES if the resolvable is resolved and ready to be used. For example, a factory that is ready to supply values.
  */
-@property (nonatomic, assign, readonly) BOOL ready;
+@property (nonatomic, assign, readonly, getter = isReady) BOOL ready;
 
 /**
  The class that the resolvable represents. This is used when the model is being serached.

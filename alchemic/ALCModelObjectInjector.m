@@ -43,9 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(BOOL)ready {
+-(BOOL) isReady {
     for (id<ALCResolvable> objectFactory in _resolvedFactories) {
-        if (!objectFactory.ready) {
+        if (!objectFactory.isReady) {
             return NO;
         }
     }
@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     // Filter for primary factories and replace if there are any present.
     NSArray<id<ALCObjectFactory>> *primaryFactories = [_resolvedFactories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id<ALCObjectFactory> objectFactory, NSDictionary<NSString *,id> *bindings) {
-        return objectFactory.primary;
+        return objectFactory.isPrimary;
     }]];
     if (primaryFactories.count > 0) {
         STLog(_objectClass, @"%lu primary factories found.", (unsigned long) primaryFactories.count);

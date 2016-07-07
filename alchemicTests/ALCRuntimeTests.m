@@ -170,6 +170,10 @@
 
 #pragma mark - Validating
 
+-(void) testValidateClassSelectorArgumentsInheritedMethod {
+    [ALCRuntime validateClass:[self class] selector:@selector(copy) arguments:nil];
+}
+
 -(void) testValidateClassSelectorArgumentsClassMethod {
     [ALCRuntime validateClass:[self class] selector:@selector(classMethod) arguments:nil];
 }
@@ -229,6 +233,12 @@
 -(void) testSelectorDescriptionForInstanceMethod {
     NSString *desc = [ALCRuntime class:[NSString class] selectorDescription:@selector(initWithCharacters:length:)];
     XCTAssertEqualObjects(@"-[NSString initWithCharacters:length:]", desc);
+}
+
+-(void) testSelectorDescriptionForInit {
+    NSString *desc = [ALCRuntime class:[NSObject class] selectorDescription:@selector(init)];
+    // Note classes have a +init method according to the runtime.
+    XCTAssertEqualObjects(@"+[NSObject init]", desc);
 }
 
 -(void) testPropertyDescription {

@@ -20,22 +20,27 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCClassObjectFactoryInitializer : NSObject<ALCResolvable, ALCInstantiator>
 
 /**
+ The initializer that will be called. Mainly used by tests.
+ */
+@property (nonatomic, assign, readonly) SEL initializer;
+
+/**
  Unused initializer.
  */
 -(instancetype) init NS_UNAVAILABLE;
 
 /**
  Default initializer.
- 
+
  @param objectFactory The ALCClassObjectFactory that describes the class to be instantiated.
  @param initializer   The initializer to call.
- @param arguments     A NSArray of 
- 
- @return <#return value description#>
+ @param arguments     A NSArray of
+
+ @return An instance of this class.
  */
 -(instancetype) initWithObjectFactory:(ALCClassObjectFactory *) objectFactory
-                       setInitializer:(SEL) initializer
-                                 args:(NSArray<id<ALCDependency>> *) arguments NS_DESIGNATED_INITIALIZER;
+                          initializer:(SEL) initializer
+                                 args:(nullable NSArray<id<ALCDependency>> *) arguments NS_DESIGNATED_INITIALIZER;
 
 @end
 

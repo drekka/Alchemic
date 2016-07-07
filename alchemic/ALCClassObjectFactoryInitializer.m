@@ -21,7 +21,6 @@
 
 @implementation ALCClassObjectFactoryInitializer {
     NSArray<id<ALCDependency>> *_arguments;
-    SEL _initializer;
     BOOL _resolved;
     BOOL _checkingReadyStatus;
 }
@@ -33,15 +32,15 @@
 }
 
 -(instancetype) initWithObjectFactory:(ALCClassObjectFactory *) objectFactory
-                       setInitializer:(SEL) initializer
-                                 args:(NSArray<id<ALCDependency>> *) arguments {
+                          initializer:(SEL) initializer
+                                 args:(nullable NSArray<id<ALCDependency>> *) arguments {
     self = [super init];
     if (self) {
         [ALCRuntime validateClass:objectFactory.objectClass selector:initializer arguments:arguments];
         objectFactory.initializer = self;
         _objectClass = objectFactory.objectClass;
         _initializer = initializer;
-        _arguments = arguments;
+        _arguments = arguments.count == 0 ? nil : arguments;
     }
     return self;
 }
@@ -63,7 +62,7 @@
     return [obj invokeSelector:_initializer arguments:_arguments];
 }
 
--(ALCObjectCompletion)objectCompletion {
+-(ALCObjectCompletion) objectCompletion {
     return NULL;
 }
 
@@ -75,12 +74,12 @@
     return str(@"initializer %@", self.defaultModelKey);
 }
 
--(NSString *)resolvingDescription {
-    return str(@"Initializer %@", self.defaultModelKey);
+-(NSString *) resolvingDescription {
+    return [self description];
 }
 
--(BOOL) ready {
-    return [_arguments dependenciesReadyWithCurrentlyCheckingFlag:&_checkingReadyStatus];
+-(BOOL) isReady {
+    return !_arguments || [_arguments dependenciesReadyWithCurrentlyCheckingFlag:&_checkingReadyStatus];
 }
 
 @end

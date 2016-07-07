@@ -37,7 +37,7 @@
     
     [_context start];
     
-    XCTAssertFalse(_topThingFactory.ready);
+    XCTAssertFalse(_topThingFactory.isReady);
     
     [self executeBlockWithException:[AlchemicReferenceObjectNotSetException class] block:^{
         __unused id object = self->_topThingFactory.instantiation.object;
@@ -52,7 +52,7 @@
     id extObj = [[TopThing alloc] init];
     [_topThingFactory setObject:extObj];
     
-    XCTAssertTrue(_topThingFactory.ready);
+    XCTAssertTrue(_topThingFactory.isReady);
     id object = _topThingFactory.instantiation.object;
     XCTAssertEqual(extObj, object);
 }
@@ -60,12 +60,12 @@
 -(void) testSettingInitializerOnReferenceFactoryThrowsException {
     [_context objectFactoryConfig:_topThingFactory, AcReference, nil];
     [self executeBlockWithException:[AlchemicIllegalArgumentException class] block:^{
-        [self->_context objectFactory:self->_topThingFactory setInitializer:@selector(initWithNoArgs), nil];
+        [self->_context objectFactory:self->_topThingFactory initializer:@selector(initWithNoArgs), nil];
     }];
 }
 
 -(void) testSettingFactoryWithInitializerToReferenceTypeThrowsException {
-    [_context objectFactory:_topThingFactory setInitializer:@selector(initWithNoArgs), nil];
+    [_context objectFactory:_topThingFactory initializer:@selector(initWithNoArgs), nil];
     
     [self executeBlockWithException:[AlchemicIllegalArgumentException class] block:^{
         [self->_context objectFactoryConfig:self->_topThingFactory, AcReference, nil];

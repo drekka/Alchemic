@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param arguments The arguments required by the selector.
  @return the result from the method call. It is expected that the method will return a value.
  */
--(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments;
+-(id) invokeSelector:(SEL) selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments;
 
 /**
  Executes a class method and returns the result.
@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param arguments The arguments required by the selector.
  @return the result from the method call. It is expected that the method will return a value.
  */
-+(id) invokeSelector:(SEL) selector arguments:(NSArray<id<ALCDependency>> *) arguments;
++(id) invokeSelector:(SEL) selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments;
 
 /**
  Used during model object resolving.
