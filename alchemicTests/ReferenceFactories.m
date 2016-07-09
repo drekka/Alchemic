@@ -11,6 +11,7 @@
 @import StoryTeller;
 
 @import Alchemic;
+@import Alchemic.Private;
 
 #import "XCTestCase+Alchemic.h"
 #import "TopThing.h"
@@ -38,10 +39,8 @@
     [_context start];
     
     XCTAssertFalse(_topThingFactory.isReady);
-    
-    [self executeBlockWithException:[AlchemicReferenceObjectNotSetException class] block:^{
-        __unused id object = self->_topThingFactory.instantiation.object;
-    }];
+
+    XCTAssertThrowsSpecific(self->_topThingFactory.instantiation.object, AlchemicReferenceObjectNotSetException);
 }
 
 -(void) testSettingReferenceBringsFactoryOnline {
@@ -59,23 +58,16 @@
 
 -(void) testSettingInitializerOnReferenceFactoryThrowsException {
     [_context objectFactoryConfig:_topThingFactory, AcReference, nil];
-    [self executeBlockWithException:[AlchemicIllegalArgumentException class] block:^{
-        [self->_context objectFactory:self->_topThingFactory initializer:@selector(initWithNoArgs), nil];
-    }];
+    XCTAssertThrowsSpecific(([self->_context objectFactory:self->_topThingFactory initializer:@selector(initWithNoArgs), nil]), AlchemicIllegalArgumentException);
 }
 
 -(void) testSettingFactoryWithInitializerToReferenceTypeThrowsException {
     [_context objectFactory:_topThingFactory initializer:@selector(initWithNoArgs), nil];
-    
-    [self executeBlockWithException:[AlchemicIllegalArgumentException class] block:^{
-        [self->_context objectFactoryConfig:self->_topThingFactory, AcReference, nil];
-    }];
+    XCTAssertThrowsSpecific(([self->_context objectFactoryConfig:self->_topThingFactory, AcReference, nil]), AlchemicIllegalArgumentException);
 }
 
 -(void) testSettingMethodFactoryAsReferenceTypeThrowsException {
-    [self executeBlockWithException:[AlchemicIllegalArgumentException class] block:^{
-        [self->_context objectFactory:self->_topThingFactory registerFactoryMethod:@selector(nestedThingFactoryMethod) returnType:[NestedThing class], AcReference, nil];
-    }];
+    XCTAssertThrowsSpecific(([self->_context objectFactory:self->_topThingFactory registerFactoryMethod:@selector(nestedThingFactoryMethod) returnType:[NestedThing class], AcReference, nil]), AlchemicIllegalArgumentException);
 }
 
 @end

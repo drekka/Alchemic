@@ -8,10 +8,8 @@
 
 @import XCTest;
 
-@import Alchemic.Private;
-
 @interface XCTestCase (Alchemic)
 
--(void) executeBlockWithException:(Class) exceptionClass block:(ALCSimpleBlock) block;
+-(id) getVariable:(NSString *) variable fromObject:(id) obj;
 
 @end

@@ -8,6 +8,7 @@
 
 @import XCTest;
 @import Alchemic;
+@import Alchemic.Private;
 
 @import StoryTeller;
 
@@ -57,10 +58,8 @@
                              )
     [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory initializer:anotherThingInit, AcClass(TopThing), nil];
-    
-    [self executeBlockWithException:[AlchemicCircularReferenceException class] block:^{
-        [self->_context start];
-    }];
+
+    XCTAssertThrowsSpecific([self->_context start], AlchemicCircularReferenceException);
 }
 
 -(void) testPropertyToInitializer {
@@ -71,9 +70,7 @@
                              )
     [_context objectFactory:_anotherFactory initializer:anotherThingInit, AcClass(TopThing), nil];
     
-    [self executeBlockWithException:[AlchemicCircularReferenceException class] block:^{
-        [self->_context start];
-    }];
+    XCTAssertThrowsSpecific([self->_context start], AlchemicCircularReferenceException);
 }
 
 -(void) testInitializerToProperty {
@@ -84,9 +81,7 @@
     [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory registerVariableInjection:@"topThing", nil];
     
-    [self executeBlockWithException:[AlchemicCircularReferenceException class] block:^{
-        [self->_context start];
-    }];
+    XCTAssertThrowsSpecific([self->_context start], AlchemicCircularReferenceException);
 }
 
 @end

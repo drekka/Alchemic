@@ -28,15 +28,17 @@ NS_ASSUME_NONNULL_BEGIN
     [self enumerateObjectsUsingBlock:^(id nextArgument, NSUInteger idx, BOOL * _Nonnull stop) {
         
         ALCMethodArgument *methodArgument = nil;
-        
+
+        // Method arguments are passed through.
         if ([nextArgument isKindOfClass:[ALCMethodArgument class]]) {
             methodArgument = (ALCMethodArgument *) nextArgument;
-            
+
+        // Search criteria are assumed to return a NSObject
         } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]
                    || [nextArgument conformsToProtocol:@protocol(ALCConstant)]) {
             methodArgument = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:nextArgument, nil];
         }
-        
+
         if (methodArgument) {
             methodArgument.index = (int) idx;
             [arguments addObject:methodArgument];

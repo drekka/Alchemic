@@ -49,9 +49,7 @@
 }
 
 -(void) testVariableForInjectionPointNotFound {
-    [self executeBlockWithException:[AlchemicInjectionNotFoundException class] block:^{
-        __unused Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"_X_"];
-    }];
+    XCTAssertThrowsSpecific([ALCRuntime class:[self class] variableForInjectionPoint:@"_X_"], AlchemicInjectionNotFoundException);
 }
 
 #pragma mark - TypeDataForIVar:

@@ -8,21 +8,13 @@
 
 #import "XCTestCase+Alchemic.h"
 
-@import Alchemic;
+@import ObjectiveC;
 
 @implementation XCTestCase (Alchemic)
 
--(void) executeBlockWithException:(Class) exceptionClass block:(ALCSimpleBlock) block {
-    @try {
-        block();
-        XCTFail(@"Exception %@ not thrown", NSStringFromClass(exceptionClass));
-    }
-    @catch (ALCException *exception) {
-        XCTAssertTrue([exception isKindOfClass:exceptionClass], @"Expected a %@, got a %@ instead", NSStringFromClass(exceptionClass), NSStringFromClass([exception class]));
-    }
-    @catch (NSException *exception) {
-        XCTFail(@"Un-expected exception %@", exception);
-    }
+-(id) getVariable:(NSString *) variable fromObject:(id) obj {
+    Ivar ivar = class_getInstanceVariable([obj class], variable.UTF8String);
+    return object_getIvar(obj, ivar);
 }
 
 @end
