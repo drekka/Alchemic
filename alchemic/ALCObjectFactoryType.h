@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The currently stored object. With some ALCObjectFactoryType implementations this will always be nil. Others will store and return the object.
  */
-@property (nonatomic, strong) id object;
+@property (nonatomic, strong, nullable) id object;
 
 /**
  Whether the ALCObjectFactoryType is ready. Ready is defined depending on the factoryType. For example, factories are always available where as reference types are only ready if they have a stored object.

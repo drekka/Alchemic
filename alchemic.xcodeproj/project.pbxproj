@@ -233,7 +233,7 @@
 		6C3AFBCA1C63794C00B4FCAA /* ALCResolvable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCResolvable.h; sourceTree = "<group>"; };
 		6C3AFBD01C638C7800B4FCAA /* ALCRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCRuntime.h; sourceTree = "<group>"; };
 		6C3AFBD11C638C7800B4FCAA /* ALCRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCRuntime.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		6C3AFBD41C64CDEC00B4FCAA /* ClassFactories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ClassFactories.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6C3AFBD41C64CDEC00B4FCAA /* ClassFactories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ClassFactories.m; sourceTree = "<group>"; };
 		6C3DE2921C74A85D0021BE0E /* MethodFactories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodFactories.m; sourceTree = "<group>"; };
 		6C469BAD1BB0200200CD2286 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInternalMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -328,7 +328,7 @@
 		F421B7D21CEE9A1E008CB8E3 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		F425AEA11CEEA2EB002D91B1 /* module.private.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.private.modulemap; sourceTree = "<group>"; };
 		F4325ED31CEEAC3B001A9FD6 /* ALCTypeDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ALCTypeDefs.h; sourceTree = "<group>"; };
-		F45828331CEBFCFC0074A844 /* ReferenceFactories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReferenceFactories.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		F45828331CEBFCFC0074A844 /* ReferenceFactories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReferenceFactories.m; sourceTree = "<group>"; };
 		F458283B1CEBFECE0074A844 /* XCTestCase+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "XCTestCase+Alchemic.h"; path = "alchemicTests/XCTestCase+Alchemic.h"; sourceTree = "<group>"; };
 		F458283C1CEBFECE0074A844 /* XCTestCase+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "XCTestCase+Alchemic.m"; path = "alchemicTests/XCTestCase+Alchemic.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 /* End PBXFileReference section */
@@ -839,7 +839,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1013,7 +1013,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1025,7 +1024,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1036,7 +1034,6 @@
 		6C36D7611B3851690073C4FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_CURRENT_VERSION = 2.0;
@@ -1062,7 +1059,6 @@
 		6C36D7621B3851690073C4FB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				DYLIB_CURRENT_VERSION = 2.0;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1220,7 +1216,6 @@
 		6C66DC461A8B82C3009F9D94 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = NO;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
@@ -1232,7 +1227,6 @@
 		6C66DC471A8B82C3009F9D94 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1244,7 +1238,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1256,7 +1249,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1285,7 +1277,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,

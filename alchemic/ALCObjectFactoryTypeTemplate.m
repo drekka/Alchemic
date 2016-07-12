@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)setWeak:(BOOL)weak {
-    super.weak = weak;
     if (weak) {
         throwException(IllegalArgument, @"Templates cannot be set as weak references.");
     }
@@ -28,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
--(void) setObject:(id) value {}
+-(void) setObject:(nullable id) value {}
 
 -(NSString *)description {
     return @"Template";

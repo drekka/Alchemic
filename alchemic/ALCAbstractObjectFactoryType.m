@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
     return ALCFactoryTypeSingleton;
 }
 
--(void)setObject:(id) object {
+-(void)setObject:(nullable id) object {
     if (_weak) {
         _weakObjectRef = object;
     } else {
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(id) object {
+-(nullable id) object {
     return _weak ? _weakObjectRef : _strongObjectRef;
 }
 
