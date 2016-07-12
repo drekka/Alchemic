@@ -22,8 +22,8 @@
     _objectFactoryType = [[ALCObjectFactoryTypeReference alloc] init];
 }
 
--(void) testObjectThrowsWhenNotReady {
-    XCTAssertThrowsSpecific(_objectFactoryType.object, AlchemicReferenceObjectNotSetException, @"");
+-(void) testObjectIsNil {
+    XCTAssertNil(_objectFactoryType.object);
 }
 
 -(void) testObjectReturnsSetObject {
@@ -31,11 +31,11 @@
     XCTAssertEqualObjects(@"abc", _objectFactoryType.object);
 }
 
--(void) testReadWhenObjectNotSet {
-    XCTAssertFalse(_objectFactoryType.isReady);
+-(void) testReadyWhenObjectNotSet {
+    XCTAssertTrue(_objectFactoryType.isReady);
 }
 
--(void) testReadWhenObjectSet {
+-(void) testReadyWhenObjectSet {
     _objectFactoryType.object = @"abc";
     XCTAssertTrue(_objectFactoryType.isReady);
 }
