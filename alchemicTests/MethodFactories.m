@@ -24,8 +24,6 @@
 }
 
 -(void) setUp {
-    STStartLogging(@"[Alchemic]");
-    STStartLogging(@"[TopThing]");
     _context = [[ALCContextImpl alloc] init];
     _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
 }

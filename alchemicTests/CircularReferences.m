@@ -27,9 +27,6 @@
 }
 
 -(void) setUp {
-    STStartLogging(@"<ALCContext>");
-    STStartLogging(@"is [TopThing]");
-    STStartLogging(@"is [AnotherThing]");
     _context = [[ALCContextImpl alloc] init];
     _topFactory = [_context registerObjectFactoryForClass:[TopThing class]];
     _anotherFactory = [_context registerObjectFactoryForClass:[AnotherThing class]];

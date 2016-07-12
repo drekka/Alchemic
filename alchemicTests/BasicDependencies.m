@@ -25,12 +25,6 @@
 }
 
 -(void) setUp {
-    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).addXcodeColours = YES;
-    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).messageColour = [UIColor whiteColor];
-    //((STConsoleLogger *)[STStoryTeller storyTeller].logger).detailsColour = [UIColor lightGrayColor];
-    STStartLogging(@"<ALCContext>");
-    STStartLogging(@"is [TopThing]");
-    STStartLogging(@"is [NestedThing]");
     _context = [[ALCContextImpl alloc] init];
     _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
     _nestedThingFactory = [_context registerObjectFactoryForClass:[NestedThing class]];
