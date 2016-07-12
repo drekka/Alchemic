@@ -38,9 +38,9 @@
     
     [_context start];
     
-    XCTAssertFalse(_topThingFactory.isReady);
+    XCTAssertTrue(_topThingFactory.isReady);
 
-    XCTAssertThrowsSpecific(self->_topThingFactory.instantiation.object, AlchemicReferenceObjectNotSetException);
+    XCTAssertNil(self->_topThingFactory.instantiation.object);
 }
 
 -(void) testSettingReferenceBringsFactoryOnline {

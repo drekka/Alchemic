@@ -19,15 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
     return ALCFactoryTypeReference;
 }
 
--(id) object {
-    if (!self.isReady) {
-        throwException(ReferenceObjectNotSet, @"%@ is a reference factory which has not had a value set.", self);
-    }
-    return super.object;
-}
-
 -(BOOL) isReady {
-    return super.object != nil;
+    return YES;
 }
 
 -(NSString *)description {
