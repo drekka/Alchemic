@@ -93,7 +93,15 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 #define AcReference [ALCIsReference macro]
 
 /**
- When passed to a singleton or reference factory registration, sets the factory as storing weak references rather than strng ones.
+ Defines a reference factory as allowing null values.
+
+ @discussion Normally factories will throw an exception if a nil is set. This allows nils to be set and in the case of reference factories, to be returned.
+
+ */
+#define AcNullable [ALCIsNullable macro]
+
+/**
+ When passed to a reference factory registration, sets the factory as storing weak references rather than strng ones.
  
  @discussion Illegal on template factories.
  */

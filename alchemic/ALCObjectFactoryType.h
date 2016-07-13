@@ -13,7 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Protocol defining the public interface of classes that manage instantiated objects created by ALCObjectFactory instances.
+ Protocol define various ALCObjectFactory type strategies.
  */
 @protocol ALCObjectFactoryType<NSObject>
 
@@ -26,6 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
  If the type is storing a weak or strong reference to the object being managed.
  */
 @property (nonatomic, assign, getter = isWeak) BOOL weak;
+
+/**
+ If set, allows the storage of nil values.
+ */
+@property (nonatomic, assign, getter = isNullable) BOOL nullable;
 
 /**
  The currently stored object. With some ALCObjectFactoryType implementations this will always be nil. Others will store and return the object.

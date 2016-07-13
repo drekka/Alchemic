@@ -7,6 +7,7 @@
 //
 
 #import "ALCAbstractObjectFactoryType.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @synthesize weak = _weak;
+@synthesize nullable = _nullable;
 
 #pragma mark - Override properties
 
@@ -24,6 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)setObject:(nullable id) object {
+    if (!_nullable) {
+        throwException(NilValue, @"Cannot set a nil value.");
+    }
     if (_weak) {
         _weakObjectRef = object;
     } else {
@@ -36,9 +41,18 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL) isReady {
-    [self doesNotRecognizeSelector:_cmd];
-    return NO;
+    methodReturningBooleanNotImplemented;
 }
+
+-(NSString *) description {
+    methodNotImplemented;
+    return @"";
+}
+
+-(NSString *) descriptionWithType:(NSString *) type {
+    return str(@"%@%@%@", self.nullable ? @"Nullable " : @"", self.isWeak ? @"Weak " : @"", type);
+}
+
 
 @end
 

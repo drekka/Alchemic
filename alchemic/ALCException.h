@@ -30,5 +30,7 @@ declareException(SelectorNotFound)
 declareException(IncorrectNumberOfArguments)
 declareException(UnableToSetReference)
 declareException(Lifecycle)
+declareException(Template)
+declareException(NilValue)
 
 

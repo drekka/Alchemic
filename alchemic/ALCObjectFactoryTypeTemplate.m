@@ -17,9 +17,15 @@ NS_ASSUME_NONNULL_BEGIN
     return ALCFactoryTypeTemplate;
 }
 
--(void)setWeak:(BOOL)weak {
+-(void) setWeak:(BOOL) weak {
     if (weak) {
         throwException(IllegalArgument, @"Templates cannot be set as weak references.");
+    }
+}
+
+-(void) setNullable:(BOOL) nullable {
+    if (nullable) {
+        throwException(IllegalArgument, @"Templates cannot be set as nullable.");
     }
 }
 
@@ -27,7 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
--(void) setObject:(nullable id) value {}
+-(void) setObject:(nullable id) value {
+    throwException(Template, @"Templates cannot have their values set.");
+}
 
 -(NSString *)description {
     return @"Template";

@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCAbstractObjectFactoryType : NSObject<ALCObjectFactoryType>
 
+-(NSString *) descriptionWithType:(NSString *) type;
+
 @end
 
 NS_ASSUME_NONNULL_END
