@@ -126,7 +126,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSArray *) valuesFromInstantiations:(NSArray<ALCInstantiation *> *) instantiations {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     for (ALCInstantiation *instantiation in instantiations) {
-        [results addObject:instantiation.object];
+        id obj = instantiation.object;
+        if (obj) {
+            [results addObject:obj];
+        }
     }
     return results;
 }

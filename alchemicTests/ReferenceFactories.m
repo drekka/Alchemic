@@ -30,15 +30,17 @@
     _topThingFactory = [_context registerObjectFactoryForClass:[TopThing class]];
 }
 
--(void) testAcessingUnsetReferenceThrows {
-    
+-(void) testAccessingUnsetReferenceThrows {
     [_context objectFactoryConfig:_topThingFactory, AcReference, nil];
-    
     [_context start];
-    
-    XCTAssertTrue(_topThingFactory.isReady);
+    XCTAssertFalse(_topThingFactory.isReady);
+}
 
-    XCTAssertNil(self->_topThingFactory.instantiation.object);
+-(void) testAccessingUnsetNullableReference {
+    [_context objectFactoryConfig:_topThingFactory, AcReference, AcNullable, nil];
+    [_context start];
+    XCTAssertTrue(_topThingFactory.isReady);
+    XCTAssertNil(_topThingFactory.instantiation.object);
 }
 
 -(void) testSettingReferenceBringsFactoryOnline {

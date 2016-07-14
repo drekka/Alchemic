@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
     ALCObjectCompletion _completion;
 }
 
-+(instancetype) instantiationWithObject:(id) object completion:(nullable ALCObjectCompletion) completion {
++(instancetype) instantiationWithObject:(nullable id) object completion:(nullable ALCObjectCompletion) completion {
     ALCInstantiation *instantiation = [[ALCInstantiation alloc] init];
     instantiation->_object = object;
     instantiation->_completion = completion;

@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) setObject:(nullable id) value {
-    throwException(Template, @"Templates cannot have their values set.");
+    // Templates just ignore any value being set.
 }
 
 -(NSString *)description {

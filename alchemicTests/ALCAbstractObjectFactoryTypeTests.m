@@ -43,14 +43,8 @@
     XCTAssertNil(returnedObj);
 }
 
--(void) testReadThrows {
-    @try {
-        __unused BOOL ready = _factoryType.isReady;
-        XCTFail(@"Exception not thrown");
-    }
-    @catch (NSException *e) {
-        XCTAssertEqualObjects(NSInvalidArgumentException, e.name);
-    }
+-(void) testReadyThrows {
+    XCTAssertThrowsSpecific((_factoryType.isReady), NSException);
 }
 
 @end

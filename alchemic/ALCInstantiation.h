@@ -29,12 +29,12 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return An instance of this class.
  */
-+(instancetype) instantiationWithObject:(id) object completion:(nullable ALCObjectCompletion) completion;
++(instancetype) instantiationWithObject:(nullable id) object completion:(nullable ALCObjectCompletion) completion;
 
 /**
  The stored object.
  */
-@property (nonatomic, strong, readonly) id object;
+@property (nonatomic, strong, readonly, nullable) id object;
 
 /**
  Combines the stored completion and a new completion. 

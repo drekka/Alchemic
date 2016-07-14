@@ -79,10 +79,16 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) createObject {
+    
     STStartScope(self.objectClass);
+    
     ALCInstantiation *parentGeneration = _parentObjectFactory.instantiation;
+    if (!parentGeneration.object) {
+        throwException(NilParentObject, @"Parent object of method is nil.");
+    }
+    
     [parentGeneration complete];
-    return [parentGeneration.object invokeSelector:_selector arguments:_arguments];
+    return [(NSObject *) parentGeneration.object invokeSelector:_selector arguments:_arguments];
 }
 
 -(ALCObjectCompletion) objectCompletion {

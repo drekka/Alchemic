@@ -22,7 +22,12 @@
     _objectFactoryType = [[ALCObjectFactoryTypeReference alloc] init];
 }
 
--(void) testObjectIsNil {
+-(void) testObjectIsNilWhenNotNullable {
+    XCTAssertThrowsSpecific(_objectFactoryType.object, AlchemicReferenceObjectNotSetException);
+}
+
+-(void) testObjectIsNilWhenNullable {
+    _objectFactoryType.nullable = YES;
     XCTAssertNil(_objectFactoryType.object);
 }
 
@@ -32,6 +37,11 @@
 }
 
 -(void) testReadyWhenObjectNotSet {
+    XCTAssertFalse(_objectFactoryType.isReady);
+}
+
+-(void) testReadyWhenObjectNotSetAndNullable {
+    _objectFactoryType.nullable = YES;
     XCTAssertTrue(_objectFactoryType.isReady);
 }
 
