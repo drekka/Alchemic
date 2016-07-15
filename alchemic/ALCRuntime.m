@@ -233,9 +233,9 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 }
 
-+(void) executeCompletion:(nullable ALCObjectCompletion) completion withObject:(id) object {
-    if (completion) {
-        completion(object);
++(void) executeBlock:(nullable ALCBlockWithObject) block withObject:(id) object {
+    if (block) {
+        block(object);
     }
 }
 

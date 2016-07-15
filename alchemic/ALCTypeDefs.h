@@ -12,9 +12,9 @@
 typedef void (^ALCSimpleBlock) (void);
 
 /**
- Typedef for completion blocks.
+ Typedef for blocks which are passed a single object.
  
- @param object The object that is completing.
+ @param object The object to be passed to the block.
  */
-#define ALCObjectCompletionArgs id object
-typedef void (^ALCObjectCompletion) (ALCObjectCompletionArgs);
+#define ALCBlockWithObjectArgs id object
+typedef void (^ALCBlockWithObject) (ALCBlockWithObjectArgs);

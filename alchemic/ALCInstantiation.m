@@ -11,22 +11,24 @@
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/AlchemicAware.h>
 #import <Alchemic/ALCDefs.h>
+#import <Alchemic/ALCTypeDefs.h>
 #import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCRuntime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCInstantiation {
-    ALCObjectCompletion _completion;
+    ALCBlockWithObject _completion;
 }
 
-+(instancetype) instantiationWithObject:(nullable id) object completion:(nullable ALCObjectCompletion) completion {
++(instancetype) instantiationWithObject:(nullable id) object completion:(nullable ALCBlockWithObject) completion {
     ALCInstantiation *instantiation = [[ALCInstantiation alloc] init];
     instantiation->_object = object;
     instantiation->_completion = completion;
     return instantiation;
 }
 
--(void) addCompletion:(nullable ALCObjectCompletion) newCompletion {
+-(void) addCompletion:(nullable ALCBlockWithObject) newCompletion {
     
     // Exit if there is nothing to add.
     if (!newCompletion) {
@@ -34,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
     
     if (_completion) {
-        ALCObjectCompletion currentCompletion = _completion;
+        ALCBlockWithObject currentCompletion = _completion;
         _completion = ^(id object) {
             currentCompletion(object);
             newCompletion(object);
@@ -46,7 +48,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 -(void) complete {
-    [_object completeWithBlock:_completion];
+    [_object executeInjectionBlock:^(id object) {
+        
+        // If there is a completion block then call it.
+        if (self->_object) {
+
+            [ALCRuntime executeBlock:self->_completion withObject:(id) self->_object];
+            
+            // Now tell everyone the object has been instantiated.
+            STLog(self, @"Posting instantiation notification for %@", self);
+            [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
+                                                                object:self
+                                                              userInfo:@{AlchemicDidCreateObjectUserInfoObject: self}];
+        }
+    }];
+     
 }
 
 @end

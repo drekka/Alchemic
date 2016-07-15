@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return An instance of this class.
  */
-+(instancetype) instantiationWithObject:(nullable id) object completion:(nullable ALCObjectCompletion) completion;
++(instancetype) instantiationWithObject:(nullable id) object completion:(nullable ALCBlockWithObject) completion;
 
 /**
  The stored object.
@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param newCompletion The block to add to the current completion.
  */
--(void) addCompletion:(nullable ALCObjectCompletion) newCompletion;
+-(void) addCompletion:(nullable ALCBlockWithObject) newCompletion;
 
 /**
  Tells the instantiation to execute it's completion block.

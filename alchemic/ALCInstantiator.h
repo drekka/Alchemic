@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The completion block that can be executed to finished the object from createObject.
  */
-@property (nonatomic, assign, readonly) ALCObjectCompletion objectCompletion;
+@property (nonatomic, assign, readonly) ALCBlockWithObject objectCompletion;
 
 /**
  Called to instantiate an object.

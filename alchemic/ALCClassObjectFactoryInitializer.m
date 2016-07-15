@@ -62,7 +62,7 @@
     return [obj invokeSelector:_initializer arguments:_arguments];
 }
 
--(ALCObjectCompletion) objectCompletion {
+-(ALCBlockWithObject) objectCompletion {
     return NULL;
 }
 

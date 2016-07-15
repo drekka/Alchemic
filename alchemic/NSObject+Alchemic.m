@@ -105,21 +105,14 @@ NS_ASSUME_NONNULL_BEGIN
     return returnObj;
 }
 
--(void) completeWithBlock:(nullable ALCObjectCompletion) completion {
-    if (completion) {
-        STLog(self, @"Executing completing for %@", self);
-        completion(self);
-    }
+-(void) executeInjectionBlock:(nullable ALCBlockWithObject) injections {
+
+    [ALCRuntime executeBlock:injections withObject:self];
     
-    if ([self conformsToProtocol:@protocol(AlchemicAware)]) {
+    if ([self respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
         STLog(self, @"Telling %@ it's injections have finished", self);
         [(id<AlchemicAware>)self alchemicDidInjectDependencies];
     }
-    
-    STLog(self, @"Posting injections finished notification for %@", self);
-    [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
-                                                        object:self
-                                                      userInfo:@{AlchemicDidCreateObjectUserInfoObject: self}];
 }
 
 @end

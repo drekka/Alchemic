@@ -53,11 +53,11 @@ NS_ASSUME_NONNULL_BEGIN
                      resolvedFlag:(BOOL *) resolvedFlag
                             block:(ALCSimpleBlock) block;
 /**
- Executes the standard completion code on the object, using the passed block.
+ Executes the passed block then calls the objects alchemicDidInjectDependencies method if it exists.
  
- @param completion The completion block to execute. Usually this block injects values. Can be NULL if there is nothing to do.
+ @param injections A block which handles the injections. Can be NULL if there is nothing to do.
  */
--(void) completeWithBlock:(nullable ALCObjectCompletion) completion;
+-(void) executeInjectionBlock:(nullable ALCBlockWithObject) injections;
 
 @end
 

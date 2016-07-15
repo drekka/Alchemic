@@ -142,7 +142,7 @@ NS_ASSUME_NONNULL_BEGIN
         id delegate = [UIApplication sharedApplication].delegate;
         if (delegate) {
             STLog(self, @"Injecting UIApplicationDelegate instance into model");
-            ALCObjectCompletion completion = [_uiAppDelegateFactory setObject:delegate];
+            ALCBlockWithObject completion = [_uiAppDelegateFactory setObject:delegate];
             completion(delegate);
         }
     }

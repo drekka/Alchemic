@@ -90,16 +90,11 @@
     return [[self.objectClass alloc] init];
 }
 
--(ALCObjectCompletion) objectCompletion {
+-(ALCBlockWithObject) objectCompletion {
     AcWeakSelf;
-    return ^(ALCObjectCompletionArgs){
+    return ^(ALCBlockWithObjectArgs){
         AcStrongSelf;
-        if (strongSelf->_initializer) {
-            ALCObjectCompletion completion = strongSelf->_initializer.objectCompletion;
-            [ALCRuntime executeCompletion:completion withObject:object];
-        }
-        
-        [self injectDependencies:object];
+        [strongSelf injectDependencies:object];
     };
 }
 

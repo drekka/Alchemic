@@ -265,22 +265,22 @@
     [ALCRuntime executeSimpleBlock:NULL];
 }
 
--(void) testExecuteCompletion {
+-(void) testExecuteBlockWithObject {
 
     __block BOOL set = NO;
-    ALCObjectCompletion completion = ^(ALCObjectCompletionArgs){
+    ALCBlockWithObject completion = ^(ALCBlockWithObjectArgs){
         XCTAssertEqualObjects(@"abc", object);
         set = YES;
     };
 
-    [ALCRuntime executeCompletion:completion withObject:@"abc"];
+    [ALCRuntime executeBlock:completion withObject:@"abc"];
 
     XCTAssertTrue(set);
 }
 
--(void) testExecuteCompletionNull {
+-(void) testExecuteBlockWithObjectNullBlock {
     // Literally nothing to do here.
-    [ALCRuntime executeCompletion:NULL withObject:@"abc"];
+    [ALCRuntime executeBlock:NULL withObject:@"abc"];
 }
 
 #pragma mark - Empty implementations

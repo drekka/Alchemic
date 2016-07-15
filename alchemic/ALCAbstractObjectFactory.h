@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return the completion block that can be called to perform injections into the stored object.
  */
--(ALCObjectCompletion) setObject:(id) object;
+-(ALCBlockWithObject) setObject:(id) object;
 
 @end
 

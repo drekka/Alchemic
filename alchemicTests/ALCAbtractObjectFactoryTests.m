@@ -26,8 +26,8 @@
     return @"abc";
 }
 
--(ALCObjectCompletion) objectCompletion {
-    return ^(ALCObjectCompletionArgs) {
+-(ALCBlockWithObject) objectCompletion {
+    return ^(ALCBlockWithObjectArgs) {
         self->_completionCalled = YES;
     };
 }

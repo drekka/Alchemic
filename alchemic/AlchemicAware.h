@@ -13,6 +13,15 @@
  */
 @protocol AlchemicAware <NSObject>
 
+@optional
+
+/**
+ If presentCalled after all dependencies have been resolved.
+ 
+ @param variable The variable that was just injected.
+ */
+-(void) alchemicDidInjectVariable:(NSString *) variable;
+
 /**
  Called after all dependencies have been resolved.
  */

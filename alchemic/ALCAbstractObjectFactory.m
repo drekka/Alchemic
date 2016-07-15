@@ -114,7 +114,7 @@ NS_ASSUME_NONNULL_BEGIN
         return [ALCInstantiation instantiationWithObject:object completion:NULL];
     }
     object = [self createObject];
-    ALCObjectCompletion completion = [self setObject:object];
+    ALCBlockWithObject completion = [self setObject:object];
     return [ALCInstantiation instantiationWithObject:object completion:completion];
 }
 
@@ -123,13 +123,13 @@ NS_ASSUME_NONNULL_BEGIN
     return [NSNull null];
 }
 
--(ALCObjectCompletion) objectCompletion {
+-(ALCBlockWithObject) objectCompletion {
     methodReturningBlockNotImplemented;
 }
 
 #pragma mark - Updating
 
--(ALCObjectCompletion) setObject:(id) object {
+-(ALCBlockWithObject) setObject:(id) object {
     _typeStrategy.object = object;
     return self.objectCompletion;
 }

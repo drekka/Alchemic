@@ -91,8 +91,8 @@ NS_ASSUME_NONNULL_BEGIN
     return [(NSObject *) parentGeneration.object invokeSelector:_selector arguments:_arguments];
 }
 
--(ALCObjectCompletion) objectCompletion {
-    return ^(ALCObjectCompletionArgs){
+-(ALCBlockWithObject) objectCompletion {
+    return ^(ALCBlockWithObjectArgs){
         [[Alchemic mainContext] injectDependencies:object];
     };
 }

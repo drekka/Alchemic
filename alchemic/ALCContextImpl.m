@@ -207,8 +207,8 @@ registerFactoryMethod:(SEL) selector
         }
 
         // Set the object and call the returned completion.
-        ALCObjectCompletion completionBlock = [((ALCAbstractObjectFactory *)factories[0]) setObject:object];
-        [object completeWithBlock:completionBlock];
+        ALCBlockWithObject completionBlock = [((ALCAbstractObjectFactory *)factories[0]) setObject:object];
+        [object executeInjectionBlock:completionBlock];
     };
 
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.
