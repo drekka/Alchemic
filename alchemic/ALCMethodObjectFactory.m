@@ -9,7 +9,7 @@
 @import StoryTeller;
 
 // :: Framework ::
-#import <Alchemic/ALCMethodArgument.h>
+#import <Alchemic/ALCMethodArgumentDependency.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCMethodObjectFactory.h>
 #import <Alchemic/NSArray+Alchemic.h>

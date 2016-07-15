@@ -22,6 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCVariableDependency : ALCAbstractDependency
 
+/// The name of the variable that will be injected.
+@property (nonatomic, strong, readonly) NSString *name;
+
+/// if set, the variable is regarded as transient and will be re-injected every time the injector detects a value change.
+@property (nonatomic, assign, readonly) BOOL transient;
+
 /**
  Unavailable initiailizer.
  @param injector -

@@ -10,6 +10,7 @@
 
 #import <Alchemic/ALCConstant.h>
 #import <Alchemic/ALCInjector.h>
+#import <Alchemic/ALCTypeDefs.h>
 
 /**
  Abstract parent class of all constant value injectors. 

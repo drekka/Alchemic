@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize objectClass = _objectClass;
 
+#pragma mark - Lifecycle
+
 -(instancetype) init {
     methodReturningObjectNotImplemented;
 }
@@ -49,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
             return NO;
         }
     }
-    return YES;
+    return _resolvedFactories.count > 0;
 }
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack
@@ -85,6 +87,12 @@ NS_ASSUME_NONNULL_BEGIN
     return @"";
 }
 
+-(void) watch:(void (^)(id _Nullable oldValue, id _Nullable newValue)) valueChangedBlock {
+    [_resolvedFactories enumerateObjectsUsingBlock:^(id<ALCObjectFactory> objectFactory, NSUInteger idx, BOOL *stop) {
+        [objectFactory watch:valueChangedBlock];
+    }];
+}
+
 #pragma mark - Injecting
 
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
@@ -97,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
-    [self completionForInstantiations:instantations](); // Too soon. Circular references will execute their blocks. Need to do later.
+    [self completionForInstantiations:instantations]();
     [ALCRuntime setInvocation:inv
                      argIndex:idx
                     withValue:[self valuesFromInstantiations:instantations]

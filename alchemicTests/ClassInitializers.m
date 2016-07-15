@@ -82,7 +82,7 @@
     AcIgnoreSelectorWarnings(
                              SEL selector = @selector(initWithNestedThings:);
                              )
-    ALCMethodArgument *arg = [ALCMethodArgument argumentWithClass:[NSArray class] criteria:AcClass(NestedThing), nil];
+    ALCMethodArgumentDependency *arg = [ALCMethodArgumentDependency argumentWithClass:[NSArray class] criteria:AcClass(NestedThing), nil];
     [_context objectFactory:_topThingFactory initializer:selector, arg, nil];
     [_context start];
     

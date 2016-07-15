@@ -104,7 +104,12 @@
 
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
     for (ALCVariableDependency *dep in _dependencies) {
+
         [ALCRuntime executeSimpleBlock:[dep injectObject:object]];
+        
+        if ([object respondsToSelector:@selector(alchemicDidInjectVariable:)]) {
+            [(id<AlchemicAware>)self alchemicDidInjectVariable:dep.name];
+        }
     }
     
     if ([object respondsToSelector:@selector(alchemicDidInjectDependencies)]) {

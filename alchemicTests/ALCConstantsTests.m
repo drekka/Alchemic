@@ -49,7 +49,7 @@
 
 -(void) testMethodArgUsingALCInt {
     id<ALCInjector> arg = AcInt(5);
-    id<ALCDependency> dep = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:arg, nil];
+    id<ALCDependency> dep = [ALCMethodArgumentDependency argumentWithClass:[NSObject class] criteria:arg, nil];
     id result = [self invokeSelector:@selector(doWithInt:) arguments:@[dep]];
     XCTAssertEqual(5, self.anInt);
     XCTAssertTrue([result isKindOfClass:[NSNumber class]]);
@@ -75,7 +75,7 @@
 
 //-(void) testMethodArgUsingALCString {
 //    id<ALCInjector> arg = AcString(@"abc");
-//    id<ALCDependency> dep = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:arg, nil];
+//    id<ALCDependency> dep = [ALCMethodArgumentDependency argumentWithClass:[NSObject class] criteria:arg, nil];
 //    [self invokeSelector:@selector(setAString:) arguments:@[dep]];
 //    XCTAssertEqual(@"abc", self.aString);
 //}
@@ -99,7 +99,7 @@
 
 //-(void) testMethodArgUsingALCCGRect {
 //    id<ALCInjector> arg = AcCGRect(CGRectMake(0.0, 0.0, 100.0, 100.0));
-//    id<ALCDependency> dep = [ALCMethodArgument argumentWithClass:[NSObject class] criteria:arg, nil];
+//    id<ALCDependency> dep = [ALCMethodArgumentDependency argumentWithClass:[NSObject class] criteria:arg, nil];
 //    [self invokeSelector:@selector(setACGRect:) arguments:@[dep]];
 //    XCTAssertTrue(CGRectEqualToRect(CGRectMake(0.0, 0.0, 100.0, 100.0), self.aCGRect));
 //}

@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param object   The object which contains the variable.
  @param variable The variable to inject.
+ @result A simple block that can be called to execute objections.
  */
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable;
 
@@ -34,6 +35,16 @@ NS_ASSUME_NONNULL_BEGIN
  @param idx The index of the value. This is zero based with zero being the first argument to the selector.
  */
 -(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
+
+/**
+ When the value of this injector, the passed block will be called.
+ 
+ @discussion This is only implemented on model object injectors. All other injectors do nothing. Again this is to help with taking a consistent protocol driven design.
+ 
+ @param valueChangedBlock A block that will be called whenever a new value is set.
+ 
+ */
+-(void) watch:(void (^)(id _Nullable oldValue, id _Nullable newValue)) valueChangedBlock;
 
 @end
 

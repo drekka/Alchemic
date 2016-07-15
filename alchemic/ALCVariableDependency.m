@@ -12,7 +12,6 @@
 
 @implementation ALCVariableDependency {
     Ivar _ivar;
-    NSString *_name;
 }
 
 -(instancetype) initWithInjector:(id<ALCInjector>) injector

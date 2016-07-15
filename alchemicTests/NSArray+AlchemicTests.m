@@ -18,8 +18,8 @@
 
 -(void) testMethodArgumentsWithUnknownArgumentHandlerWithMethodArgument {
 
-    ALCMethodArgument *argument = AcArg(NSString, AcString(@"abc"));
-    NSArray<ALCMethodArgument *> *args = @[argument];
+    ALCMethodArgumentDependency *argument = AcArg(NSString, AcString(@"abc"));
+    NSArray<ALCMethodArgumentDependency *> *args = @[argument];
 
     __block BOOL handlerCalled = NO;
     NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithUnknownArgumentHandler:^(id passedArgument){
@@ -28,7 +28,7 @@
 
     XCTAssertFalse(handlerCalled);
     XCTAssertEqual(1u, methodArgs.count);
-    ALCMethodArgument *returnedArg = methodArgs[0];
+    ALCMethodArgumentDependency *returnedArg = methodArgs[0];
     XCTAssertEqual(0, returnedArg.index);
     XCTAssertEqual(argument, returnedArg);
 }
@@ -44,7 +44,7 @@
 
     XCTAssertFalse(handlerCalled);
     XCTAssertEqual(1u, methodArgs.count);
-    ALCMethodArgument *returnedArg = methodArgs[0];
+    ALCMethodArgumentDependency *returnedArg = methodArgs[0];
     XCTAssertEqual(0, returnedArg.index);
 
     id<ALCInjector> injector = returnedArg.injector;

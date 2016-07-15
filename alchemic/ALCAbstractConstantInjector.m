@@ -44,4 +44,6 @@
     return NULL;
 }
 
+-(void) watch:(void (^)(id _Nullable oldValue, id _Nullable newValue)) valueChangedBlock {}
+
 @end

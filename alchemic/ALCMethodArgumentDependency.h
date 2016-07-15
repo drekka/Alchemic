@@ -12,14 +12,14 @@
 
 @protocol ALCDependency;
 @protocol ALCModel;
-@class ALCMethodArgument;
+@class ALCMethodArgumentDependency;
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Defines an argument for a method. 
  */
-@interface ALCMethodArgument : ALCAbstractDependency
+@interface ALCMethodArgumentDependency : ALCAbstractDependency
 
 /**
  The index of the argument for injecting into the executing NSInvocation.
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) initWithInjector:(id<ALCInjector>) injector NS_UNAVAILABLE;
 
 /**
- Factory method for creating instances of ALCMethodArgument.
+ Factory method for creating instances of ALCMethodArgumentDependency.
  
  @param argumentClass The class of the argument.
  @param firstCriteria A var arg list of criteria that define the value for the argument.

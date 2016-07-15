@@ -70,6 +70,16 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
  */
 @property (nonatomic, strong, readonly) ALCInstantiation *instantiation;
 
+/**
+ When the value of this factory changes, the passed block will be called.
+ 
+ @discussion At the moment this only works for variable injections wich are marked as transient and reference factories. However it's on all types in case we need to expand it and it makes this strategy interface more general.
+ 
+ @param valueChangedBlock A block that will be called whenever a new value is set.
+ 
+ */
+-(void) watch:(void (^)(id _Nullable oldValue, id _Nullable newValue)) valueChangedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

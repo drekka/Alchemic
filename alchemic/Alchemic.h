@@ -18,7 +18,7 @@
 #import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCMethodArgument.h>
+#import <Alchemic/ALCMethodArgumentDependency.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 
 //! Project version number for alchemic.

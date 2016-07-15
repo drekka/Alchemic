@@ -9,7 +9,7 @@
 #import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/ALCFlagMacros.h>
-#import <Alchemic/ALCMethodArgument.h>
+#import <Alchemic/ALCMethodArgumentDependency.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCContext.h>
@@ -115,7 +115,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @param critieria The argument criteria or constant. If search criteria are being used to location model objects, then multiple can be specified.
  @param ...       further criteria.
  */
-#define AcArg(argClass, firstCritieria, ...) [ALCMethodArgument argumentWithClass:[argClass class] criteria:firstCritieria, ## __VA_ARGS__, nil]
+#define AcArg(argClass, firstCritieria, ...) [ALCMethodArgumentDependency argumentWithClass:[argClass class] criteria:firstCritieria, ## __VA_ARGS__, nil]
 
 #pragma mark - Accessing the model
 

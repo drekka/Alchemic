@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractObjectFactory {
     id<ALCObjectFactoryType> _typeStrategy;
+    NSMutableSet *_valueChangedBlocks;
 }
 
 @synthesize objectClass = _objectClass;
@@ -118,6 +119,13 @@ NS_ASSUME_NONNULL_BEGIN
     return [ALCInstantiation instantiationWithObject:object completion:completion];
 }
 
+-(void) watch:(void (^)(id _Nullable oldValue, id _Nullable newValue)) valueChangedBlock {
+    if (!_valueChangedBlocks) {
+        _valueChangedBlocks = [[NSMutableSet alloc] init];
+    }
+    [_valueChangedBlocks addObject:valueChangedBlock];
+}
+
 -(id) createObject {
     methodNotImplemented;
     return [NSNull null];
@@ -130,7 +138,15 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Updating
 
 -(ALCBlockWithObject) setObject:(id) object {
+
+    id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
     _typeStrategy.object = object;
+    
+    // Notify observers.
+    [_valueChangedBlocks enumerateObjectsUsingBlock:^(void (^block)(id _Nullable oldValue, id _Nullable newValue), BOOL *stop) {
+        block(oldValue, object);
+    }];
+    
     return self.objectCompletion;
 }
 

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCMethodArgument.h>
+#import <Alchemic/ALCMethodArgumentDependency.h>
 
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCStringMacros.h>
@@ -15,11 +15,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCMethodArgument
+@implementation ALCMethodArgumentDependency
 
 +(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... {
     alc_loadVarArgsIntoArray(firstCriteria, criteriaDefs);
-    return [[ALCMethodArgument alloc] initWithArgumentClass:argumentClass criteria:criteriaDefs];
+    return [[ALCMethodArgumentDependency alloc] initWithArgumentClass:argumentClass criteria:criteriaDefs];
 }
 
 -(instancetype) initWithArgumentClass:(Class) aClass criteria:(NSArray *) criteria {

@@ -15,7 +15,7 @@
 #import <Alchemic/ALCInstantiator.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCMethodArgument.h>
+#import <Alchemic/ALCMethodArgumentDependency.h>
 #import <Alchemic/ALCResolvable.h>
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/NSArray+Alchemic.h>
@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
             NSUInteger i = resolvingStack.count;
             do {
                 i--;
-                if ([resolvingStack[i] isKindOfClass:[ALCMethodArgument class]]) {
+                if ([resolvingStack[i] isKindOfClass:[ALCMethodArgumentDependency class]]) {
                     
                     // A method is found. Bad.
                     [resolvingStack addObject:resolvableSelf];
