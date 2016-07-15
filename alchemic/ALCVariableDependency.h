@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *name;
 
 /// if set, the variable is regarded as transient and will be re-injected every time the injector detects a value change.
-@property (nonatomic, assign, readonly) BOOL transient;
+@property (nonatomic, assign) BOOL transient;
 
 /**
  Unavailable initiailizer.
