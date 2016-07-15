@@ -176,12 +176,12 @@ bool strHasPrefix(const char *str, const char *prefix);
 /**
  Executes a passed block if it's not null.
  
- This is mostly a conveniant method designed to remove boilderplate around block executions.
+ This is mostly a conveniant method designed to remove boilderplate around block executions. Only if both the block and the object are present will the block be called.
  
  @param block The block to be executed.
  @param object     An object to be passed to the completion.
  */
-+(void) executeBlock:(nullable ALCBlockWithObject) block withObject:(id) object;
++(void) executeBlock:(nullable ALCBlockWithObject) block withObject:(nullable id) object;
 
 @end
 

@@ -233,8 +233,8 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 }
 
-+(void) executeBlock:(nullable ALCBlockWithObject) block withObject:(id) object {
-    if (block) {
++(void) executeBlock:(nullable ALCBlockWithObject) block withObject:(nullable id) object {
+    if (object && block) {
         block(object);
     }
 }

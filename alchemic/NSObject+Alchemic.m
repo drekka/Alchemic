@@ -105,16 +105,6 @@ NS_ASSUME_NONNULL_BEGIN
     return returnObj;
 }
 
--(void) executeInjectionBlock:(nullable ALCBlockWithObject) injections {
-
-    [ALCRuntime executeBlock:injections withObject:self];
-    
-    if ([self respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
-        STLog(self, @"Telling %@ it's injections have finished", self);
-        [(id<AlchemicAware>)self alchemicDidInjectDependencies];
-    }
-}
-
 @end
 
 NS_ASSUME_NONNULL_END

@@ -52,12 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithResolvingStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                      resolvedFlag:(BOOL *) resolvedFlag
                             block:(ALCSimpleBlock) block;
-/**
- Executes the passed block then calls the objects alchemicDidInjectDependencies method if it exists.
- 
- @param injections A block which handles the injections. Can be NULL if there is nothing to do.
- */
--(void) executeInjectionBlock:(nullable ALCBlockWithObject) injections;
 
 @end
 

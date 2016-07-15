@@ -48,21 +48,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 -(void) complete {
-    [_object executeInjectionBlock:^(id object) {
+    [ALCRuntime executeBlock:^(id object) {
         
-        // If there is a completion block then call it.
-        if (self->_object) {
-
-            [ALCRuntime executeBlock:self->_completion withObject:(id) self->_object];
-            
-            // Now tell everyone the object has been instantiated.
-            STLog(self, @"Posting instantiation notification for %@", self);
-            [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
-                                                                object:self
-                                                              userInfo:@{AlchemicDidCreateObjectUserInfoObject: self}];
-        }
-    }];
-     
+        [ALCRuntime executeBlock:self->_completion withObject:object];
+        
+        // Now tell everyone the object has been instantiated.
+        STLog(self, @"Posting instantiation notification for %@", self);
+        [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
+                                                            object:self
+                                                          userInfo:@{AlchemicDidCreateObjectUserInfoObject: self}];
+    }
+                  withObject:_object];
+    
 }
 
 @end

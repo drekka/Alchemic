@@ -101,9 +101,15 @@
 #pragma mark - Tasks
 
 -(void) injectDependencies:(id) object {
+
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
     for (ALCVariableDependency *dep in _dependencies) {
         [ALCRuntime executeSimpleBlock:[dep injectObject:object]];
+    }
+    
+    if ([object respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
+        STLog(self, @"Telling %@ it's injections have finished", object);
+        [(id<AlchemicAware>)self alchemicDidInjectDependencies];
     }
 }
 
