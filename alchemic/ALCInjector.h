@@ -12,6 +12,8 @@
 #import <Alchemic/ALCResolvable.h>
 #import <Alchemic/ALCTypeDefs.h>
 
+@protocol ALCObjectFactory;
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -37,14 +39,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
 
 /**
- When the value of this injector, the passed block will be called.
+ Returns YES if the passed object factory is referenced by this injector.
  
- @discussion This is only implemented on model object injectors. All other injectors do nothing. Again this is to help with taking a consistent protocol driven design.
- 
- @param valueChangedBlock A block that will be called whenever a new value is set.
- 
+ @param objectFactory The object factroy to query for.
  */
--(void) watch:(void (^)(id _Nullable oldValue, id _Nullable newValue)) valueChangedBlock;
+-(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory;
 
 @end
 

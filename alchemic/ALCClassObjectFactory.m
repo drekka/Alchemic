@@ -24,9 +24,18 @@
 
 
 @implementation ALCClassObjectFactory {
-    NSMutableArray<id<ALCDependency>> *_dependencies;
+    
     BOOL _resolved;
     BOOL _checkingReadyStatus;
+    
+    NSMutableArray<id<ALCDependency>> *_dependencies;
+    
+    // Populated so we can reinject values if dependencies update.
+    // Using a weak based hashtable so we don't have to maintain it.
+    NSHashTable *_injectedObjectHistory;
+    
+    // If set during resolving, will cause all objects in the history to be reinjected if a dependency posts an object set notification.
+    id _dependencyChangedObserver;
 }
 
 @synthesize initializer = _initializer;
@@ -37,6 +46,7 @@
     self = [super initWithClass:objectClass];
     if (self) {
         _dependencies = [[NSMutableArray alloc] init];
+        _injectedObjectHistory = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory capacity:0];
     }
     return self;
 }
@@ -57,7 +67,9 @@
 }
 
 -(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
+    
     STLog(self.objectClass, @"Resolving class factory %@", NSStringFromClass(self.objectClass));
+    
     AcWeakSelf;
     [self resolveWithResolvingStack:resolvingStack
                        resolvedFlag:&_resolved
@@ -73,7 +85,44 @@
                                       [resolvingStack removeLastObject];
                                   }
                               }];
+    
+    // Check for the need to watch notifications.
+    for (ALCVariableDependency *dependency in _dependencies) {
+        if (dependency.transient) {
+            [self setDependencyUpdateObserver];
+            break;
+        }
+    }
 }
+
+-(void) setDependencyUpdateObserver {
+    
+    STLog(self.objectClass, @"Watch for dependency changes");
+
+    // Block to reinject dependencies.
+    AcWeakSelf;
+    void (^watchBlock) (NSNotification *) = ^(NSNotification *notification) {
+        
+        AcStrongSelf;
+        
+        // Check each dependency and if it's a transient that references the source object factory, then loop through all the injected objects and updated them.
+        id sourceObjectFactory = notification.object;
+        for (ALCVariableDependency *dependency in strongSelf->_dependencies) {
+            if (dependency.transient && [dependency referencesObjectFactory:sourceObjectFactory]) {
+                for (id object in strongSelf->_injectedObjectHistory) {
+                    [self injectObject:object dependency:dependency];
+                }
+            }
+        }
+    };
+    
+    // Add observer.
+    self->_dependencyChangedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AlchemicDidStoreObject
+                                                                                         object:nil
+                                                                                          queue:nil
+                                                                                     usingBlock:watchBlock];
+}
+
 
 -(BOOL) isReady {
     if (super.isReady && (!_initializer || _initializer.isReady)) {
@@ -103,18 +152,26 @@
 -(void) injectDependencies:(id) object {
 
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
+    
+    // Perform injections.
     for (ALCVariableDependency *dep in _dependencies) {
-
-        [ALCRuntime executeSimpleBlock:[dep injectObject:object]];
-        
-        if ([object respondsToSelector:@selector(alchemicDidInjectVariable:)]) {
-            [(id<AlchemicAware>)self alchemicDidInjectVariable:dep.name];
-        }
+        [self injectObject:object dependency:dep];
     }
     
+    // Store a weak reference.
+    [_injectedObjectHistory addObject:object];
+    
+    // Notify of injection completion.
     if ([object respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
         STLog(self, @"Telling %@ it's injections have finished", object);
         [(id<AlchemicAware>)self alchemicDidInjectDependencies];
+    }
+}
+
+-(void) injectObject:(id) object dependency:(ALCVariableDependency *) dependency {
+    [ALCRuntime executeSimpleBlock:[dependency injectObject:object]];
+    if ([object respondsToSelector:@selector(alchemicDidInjectVariable:)]) {
+        [(id<AlchemicAware>)self alchemicDidInjectVariable:dependency.name];
     }
 }
 

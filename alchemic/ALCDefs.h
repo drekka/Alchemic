@@ -25,3 +25,18 @@ FOUNDATION_EXPORT NSString *AlchemicDidCreateObjectUserInfoObject;
  */
 FOUNDATION_EXPORT NSString *AlchemicDidFinishStarting;
 
+/**
+ Notification sent when Alchemic stores a new object in a factory.
+ */
+FOUNDATION_EXPORT NSString *AlchemicDidStoreObject;
+
+/**
+ Key for AlchemicDidStoreObject, contains the old value.
+ */
+FOUNDATION_EXPORT NSString *AlchemicDidStoreObjectUserInfoOldValue;
+
+/**
+ Key for AlchemicDidStoreObject, contains the new value.
+ */
+FOUNDATION_EXPORT NSString *AlchemicDidStoreObjectUserInfoNewValue;
+

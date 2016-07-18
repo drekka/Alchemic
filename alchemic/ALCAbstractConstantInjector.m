@@ -28,6 +28,10 @@
     return @"";
 }
 
+-(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {
+    return NO;
+}
+
 -(ALCSimpleBlock) injectObject:(id)object {
     methodReturningBlockNotImplemented;
 }
@@ -43,7 +47,5 @@
 -(ALCSimpleBlock) completion {
     return NULL;
 }
-
--(void) watch:(void (^)(id _Nullable oldValue, id _Nullable newValue)) valueChangedBlock {}
 
 @end

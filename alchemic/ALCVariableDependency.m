@@ -39,16 +39,6 @@
     return [self.injector setObject:object variable:_ivar];
 }
 
--(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
-                   model:(id<ALCModel>)model {
-    [super resolveWithStack:resolvingStack model:model];
-    if (self.transient) {
-        [self.injector watch:^(id  _Nullable oldValue, id  _Nullable newValue) {
-            self injectObject:(id) objectå∫
-        }];
-    }
-}
-
 -(NSString *)resolvingDescription {
     return str(@"Variable %@", _name);
 }

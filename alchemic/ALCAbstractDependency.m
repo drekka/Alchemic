@@ -40,6 +40,10 @@
     [_injector resolveWithStack:resolvingStack model:model];
 }
 
+-(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {
+    return [self.injector referencesObjectFactory:objectFactory];
+}
+
 -(NSString *)resolvingDescription {
     methodNotImplemented;
     return @"";

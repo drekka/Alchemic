@@ -82,15 +82,19 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+-(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {
+    for (id<ALCObjectFactory> resolvedObjectFactory in _resolvedFactories) {
+        if (resolvedObjectFactory == objectFactory) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+
 -(NSString *)resolvingDescription {
     methodNotImplemented;
     return @"";
-}
-
--(void) watch:(void (^)(id _Nullable oldValue, id _Nullable newValue)) valueChangedBlock {
-    [_resolvedFactories enumerateObjectsUsingBlock:^(id<ALCObjectFactory> objectFactory, NSUInteger idx, BOOL *stop) {
-        [objectFactory watch:valueChangedBlock];
-    }];
 }
 
 #pragma mark - Injecting

@@ -14,6 +14,7 @@
 // :: Other ::
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
@@ -28,7 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractObjectFactory {
     id<ALCObjectFactoryType> _typeStrategy;
-    NSMutableSet *_valueChangedBlocks;
 }
 
 @synthesize objectClass = _objectClass;
@@ -76,32 +76,32 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) configureWithOption:(id) option model:(id<ALCModel>) model {
-
+    
     id<ALCObjectFactoryType> oldStrategy = _typeStrategy;
-
+    
     if ([option isKindOfClass:[ALCIsTemplate class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeTemplate alloc] init];
         _typeStrategy.weak = oldStrategy.isWeak;
         _typeStrategy.nullable = oldStrategy.isNullable;
-
+        
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
         _typeStrategy.weak = oldStrategy.isWeak;
         _typeStrategy.nullable = oldStrategy.isNullable;
-
+        
     } else if ([option isKindOfClass:[ALCIsPrimary class]]) {
         _primary = YES;
-
+        
     } else if ([option isKindOfClass:[ALCFactoryName class]]) {
         NSString *newName = ((ALCFactoryName *) option).asName;
         [model reindexObjectFactoryOldName:self.defaultModelKey newName:newName];
-
+        
     } else if ([option isKindOfClass:[ALCIsWeak class]]) {
         _typeStrategy.weak = YES;
-
+        
     } else if ([option isKindOfClass:[ALCIsNullable class]]) {
         _typeStrategy.nullable = YES;
-
+        
     } else {
         throwException(IllegalArgument, @"Expected a factory config macro");
     }
@@ -119,13 +119,6 @@ NS_ASSUME_NONNULL_BEGIN
     return [ALCInstantiation instantiationWithObject:object completion:completion];
 }
 
--(void) watch:(void (^)(id _Nullable oldValue, id _Nullable newValue)) valueChangedBlock {
-    if (!_valueChangedBlocks) {
-        _valueChangedBlocks = [[NSMutableSet alloc] init];
-    }
-    [_valueChangedBlocks addObject:valueChangedBlock];
-}
-
 -(id) createObject {
     methodNotImplemented;
     return [NSNull null];
@@ -138,15 +131,18 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Updating
 
 -(ALCBlockWithObject) setObject:(id) object {
-
+    
     id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
+
     _typeStrategy.object = object;
     
-    // Notify observers.
-    [_valueChangedBlocks enumerateObjectsUsingBlock:^(void (^block)(id _Nullable oldValue, id _Nullable newValue), BOOL *stop) {
-        block(oldValue, object);
-    }];
-    
+    // Let othe factories known we have updated.
+    [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidStoreObject
+                                                        object:self
+                                                      userInfo:@{
+                                                                 AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],
+                                                                 AlchemicDidStoreObjectUserInfoNewValue:object ? object : [NSNull null]
+                                                                 }];
     return self.objectCompletion;
 }
 
@@ -158,18 +154,18 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-
+    
     ALCFactoryType factoryType = _typeStrategy.type;
     BOOL instantiated = (factoryType == ALCFactoryTypeSingleton && _typeStrategy.object)
     || (factoryType == ALCFactoryTypeReference && _typeStrategy.isReady);
     NSMutableString *description = [[NSMutableString alloc] initWithString:instantiated ? @"* " : @"  "];
-
+    
     [description appendString:_typeStrategy.description];
-
+    
     if ([_objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
         [description appendString:@" (App delegate)"];
     }
-
+    
     return description;
 }
 
