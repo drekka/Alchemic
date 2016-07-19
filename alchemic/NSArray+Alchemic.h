@@ -29,11 +29,12 @@ NS_ASSUME_NONNULL_BEGIN
 Scans a list of seach criteria or constants to define an injection.
 
 @param injectionClass The class of the target injection. Used to provide default search criteria when there is none in the list.
-@param allowConstants If YES, allows constants to be defined for the injection. If NO and a constant is detected in the list, an exception will be thrown.
-
-@return An injector which is ready to set values as defined by the list.
+@param allowConstants If YES, allows constants to be defined for the injection. If this block is NULL or returns a nil, then an exception is thrown.
+@param unknownArgumentHandler A block which is called if an unknown type of argument is encountered. If it returns a YES then the argument was handled. Otherwise it should return NO which will trigger an exception.
 */
--(id<ALCInjector>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants;
+-(id<ALCInjector>) injectorForClass:(Class) injectionClass
+                     allowConstants:(BOOL) allowConstants
+             unknownArgumentHandler:(nullable BOOL (^)(id argument)) unknownArgumentHandler;
 
 /**
  Converts a list of arguments for methods into a set of dependencies, ready for use by a method factory.
@@ -44,7 +45,7 @@ Scans a list of seach criteria or constants to define an injection.
  */
 -(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
 
--(nullable ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass;
+-(ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass;
 
 /// @name Resolving
 

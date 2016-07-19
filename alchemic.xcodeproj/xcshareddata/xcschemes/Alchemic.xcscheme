@@ -17,7 +17,7 @@
                BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
                BuildableName = "Alchemic.framework"
                BlueprintName = "Alchemic"
-               ReferencedContainer = "container:Alchemic.xcodeproj">
+               ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,7 +31,7 @@
                BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
                BuildableName = "Unit tests.xctest"
                BlueprintName = "Unit tests"
-               ReferencedContainer = "container:Alchemic.xcodeproj">
+               ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -45,7 +45,7 @@
                BlueprintIdentifier = "6CB5CCD91CDB7AF700DC1052"
                BuildableName = "Functional tests.xctest"
                BlueprintName = "Functional tests"
-               ReferencedContainer = "container:Alchemic.xcodeproj">
+               ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -64,7 +64,7 @@
                BlueprintIdentifier = "6C66DC381A8B82C3009F9D94"
                BuildableName = "Unit tests.xctest"
                BlueprintName = "Unit tests"
-               ReferencedContainer = "container:Alchemic.xcodeproj">
+               ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -74,7 +74,7 @@
                BlueprintIdentifier = "6CB5CCD91CDB7AF700DC1052"
                BuildableName = "Functional tests.xctest"
                BlueprintName = "Functional tests"
-               ReferencedContainer = "container:Alchemic.xcodeproj">
+               ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -84,7 +84,7 @@
                BlueprintIdentifier = "6C24CCE11CA42BA80026D18C"
                BuildableName = "Integration tests.xctest"
                BlueprintName = "Integration tests"
-               ReferencedContainer = "container:Alchemic.xcodeproj">
+               ReferencedContainer = "container:alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -107,7 +107,7 @@
             BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
             BuildableName = "Alchemic.framework"
             BlueprintName = "Alchemic"
-            ReferencedContainer = "container:Alchemic.xcodeproj">
+            ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -125,7 +125,7 @@
             BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
             BuildableName = "Alchemic.framework"
             BlueprintName = "Alchemic"
-            ReferencedContainer = "container:Alchemic.xcodeproj">
+            ReferencedContainer = "container:alchemic.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

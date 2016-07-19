@@ -27,6 +27,7 @@
 #import <Alchemic/ALCTypeData.h>
 #import <Alchemic/NSArray+Alchemic.h>
 #import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCVariableDependency.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,9 +52,9 @@ NS_ASSUME_NONNULL_BEGIN
     STLog(self, @"Starting Alchemic ...");
     [_model resolveDependencies];
     [_model startSingletons];
-
+    
     // Whilst not common, this executes certain functions which can be called before registrations have finished. ie AcSet()'s in initial view controllers, etc.
-
+    
     // Move the post startup blocks away so other threads think we are started.
     STLog(self, @"Executing post startup blocks");
     NSSet<ALCSimpleBlock> *blocks = _postStartBlocks;
@@ -62,9 +63,9 @@ NS_ASSUME_NONNULL_BEGIN
     [blocks enumerateObjectsUsingBlock:^(ALCSimpleBlock postStartBlock, BOOL *stop) {
         postStartBlock();
     }];
-
+    
     STLog(self, @"Alchemic started.\n\n%@\n", _model);
-
+    
     // Post the finished notification.
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
 }
@@ -96,66 +97,76 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
 registerFactoryMethod:(SEL) selector
            returnType:(Class) returnType, ... {
-
+    
     // Read in the arguments and sort them into factory config and method arguments.
     alc_loadVarArgsAfterVariableIntoArray(returnType, factoryArguments);
-
+    
     NSMutableArray *factoryOptions = [[NSMutableArray alloc] init];
     NSArray<id<ALCDependency>> *methodArguments = [factoryArguments methodArgumentsWithUnknownArgumentHandler:^(id argument) {
         [factoryOptions addObject:argument];
     }];
-
+    
     // Build the factory.
     ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:returnType
                                                                       parentObjectFactory:objectFactory
                                                                                  selector:selector
                                                                                      args:methodArguments];
-
+    
     [_model addObjectFactory:methodFactory withName:methodFactory.defaultModelKey];
     [methodFactory configureWithOptions:factoryOptions model:_model];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory initializer:(SEL) initializer, ... {
-
+    
     // Throw an exception if the factory is already set to a reference type.
     if (objectFactory.factoryType == ALCFactoryTypeReference) {
         throwException(IllegalArgument, @"Reference factories cannot have initializers");
     }
-
+    
     STLog(objectFactory.objectClass, @"Register object factory initializer %@", [ALCRuntime class:objectFactory.objectClass selectorDescription:initializer]);
-
+    
     alc_loadVarArgsAfterVariableIntoArray(initializer, unknownArguments);
-
+    
     NSArray<id<ALCDependency>> *arguments = [unknownArguments methodArgumentsWithUnknownArgumentHandler:^(id argument) {
         throwException(IllegalArgument, @"Expected a argument definition, search criteria or constant. Got: %@", argument);
     }];
-
+    
     __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:objectFactory
-                                                                     initializer:initializer
+                                                                        initializer:initializer
                                                                                args:arguments];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerVariableInjection:(NSString *) variable, ... {
-
+    
     STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), variable);
-
+    
     alc_loadVarArgsAfterVariableIntoArray(variable, valueArguments);
-
+    
     Ivar ivar = [ALCRuntime class:objectFactory.objectClass variableForInjectionPoint:variable];
     Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
-    id<ALCInjector> injection = [valueArguments injectionWithClass:varClass allowConstants:YES];
-    [objectFactory registerInjection:injection forVariable:ivar withName:variable];
+    __block BOOL transient = NO;
+    id<ALCInjector> injector = [valueArguments injectorForClass:varClass
+                                                 allowConstants:YES
+                                         unknownArgumentHandler:^ BOOL (id argument) {
+                                             if ([argument isKindOfClass:[ALCIsTransient class]]) {
+                                                 transient = YES;
+                                                 return YES;
+                                             }
+                                             return NO;
+                                         }];
+    ALCVariableDependency *dependency = [objectFactory registerVariableDependency:ivar injector:injector withName:variable];
+    dependency.transient = transient;
 }
 
 #pragma mark - Dependencies
 
 - (void)injectDependencies:(id)object {
-
+    
     STStartScope(object);
-
+    
     // We are only interested in class factories.
     ALCClassObjectFactory *classFactory = [_model classObjectFactoryForClass:[object class]];
-
+    
     if (classFactory) {
         STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
         [classFactory injectDependencies:object];
@@ -167,50 +178,52 @@ registerFactoryMethod:(SEL) selector
 #pragma mark - Accessing objects
 
 -(id) objectWithClass:(Class) returnType, ... {
-
+    
     // Throw an error if this is called to early.
     if (_postStartBlocks) {
         throwException(Lifecycle, @"AcGet called before Alchemic is ready to serve objects.");
     }
-
+    
     STLog(returnType, @"Manual retrieving an instance of %@", NSStringFromClass([returnType class]));
-
+    
     alc_loadVarArgsAfterVariableIntoArray(returnType, criteria);
     if (criteria.count == 0) {
         [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[returnType class]]];
     }
-
-    ALCModelObjectInjector *injection = (ALCModelObjectInjector *)[criteria injectionWithClass:returnType allowConstants:NO];
+    
+    ALCModelObjectInjector *injection = (ALCModelObjectInjector *)[criteria injectorForClass:returnType
+                                                                              allowConstants:NO
+                                                                      unknownArgumentHandler:NULL];
     [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];
     return injection.searchResult;
 }
 
 -(void) setObject:(id) object, ... {
     STLog([object class], @"Storing reference for a %@", NSStringFromClass([object class]));
-
+    
     // Now lets find our reference object
     alc_loadVarArgsAfterVariableIntoArray(object, criteria);
-
+    
     // Setup a block we want to execute.
     ALCSimpleBlock setBlock = ^{
-
+        
         if (criteria.count == 0) {
             [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[object class]]];
         }
-
+        
         ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:[object class]];
         NSArray<id<ALCObjectFactory>> *factories = [self->_model settableObjectFactoriesMatchingCriteria:searchCriteria];
-
+        
         // Error if we do not find one factory.
         if (factories.count != 1) {
             throwException(UnableToSetReference, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, (unsigned long) factories.count);
         }
-
+        
         // Set the object and call the returned completion.
         ALCBlockWithObject injectionBlock = [((ALCAbstractObjectFactory *)factories[0]) setObject:object];
         [ALCRuntime executeBlock:injectionBlock withObject:object];
     };
-
+    
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.
     [self executeBlockWhenStarted:setBlock];
 }

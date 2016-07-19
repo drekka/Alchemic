@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(instancetype) initWithArgumentClass:(Class) aClass criteria:(NSArray *) criteria {
-    id<ALCInjector> injector = [criteria injectionWithClass:aClass allowConstants:YES];
+    id<ALCInjector> injector = [criteria injectorForClass:aClass allowConstants:YES unknownArgumentHandler:NULL];
     self = [super initWithInjector:injector];
     if (self) {
     }

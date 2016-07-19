@@ -52,19 +52,59 @@ NS_ASSUME_NONNULL_BEGIN
     return arguments;
 }
 
--(id<ALCInjector>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants {
+-(id<ALCInjector>) injectorForClass:(Class) injectionClass
+                     allowConstants:(BOOL) allowConstants
+             unknownArgumentHandler:(nullable BOOL (^)(id argument)) unknownArgumentHandler {
     
-    ALCModelSearchCriteria *searchCriteria = [self modelSearchCriteriaForClass:injectionClass];
+ //   ALCModelSearchCriteria *searchCriteria;
+    id<ALCInjector> constantInjector;
+    NSMutableArray<ALCModelSearchCriteria *> *searchCriteria = [[NSMutableArray alloc] init];
     
-    if (! allowConstants && !searchCriteria) {
-        throwException(IllegalArgument, @"Cannot use constant expressions here.");
+    for (id criteria in self) {
+        
+        if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
+            
+            if (constantInjector) {
+                throwException(IllegalArgument, @"Cannot use constants and model search criteria together");
+            } else {
+                [searchCriteria addObject:criteria];
+            }
+            
+        } else if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
+            
+            if (!allowConstants) {
+                throwException(IllegalArgument, @"Constants cannot be used in this criteria");
+            } else if (searchCriteria.count > 0) {
+                    throwException(IllegalArgument, @"Cannot use constants and model search criteria together");
+            } else if (constantInjector) {
+                throwException(IllegalArgument, @"Only a single constant value is allowed");
+            } else {
+                constantInjector = criteria;
+            }
+            
+        } else {
+            if (unknownArgumentHandler && unknownArgumentHandler(criteria)) {
+                // Everything good. Argument handled.
+            } else {
+                throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
+            }
+            
+        }
     }
     
-    return searchCriteria ? [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
-                                                                       criteria:searchCriteria] : self[0];
+    // Default to the dependency class if no constant or criteria provided.
+    if (constantInjector) {
+        return constantInjector;
+    }
+    
+    
+    
+    // Default to the dependency class if no constant or criteria provided.
+    return [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
+                                                      criteria:[searchCriteria modelSearchCriteriaForClass:injectionClass]];
 }
 
--(nullable ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass withUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
+-(ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass {
     
     ALCModelSearchCriteria *searchCriteria;
     for (id criteria in self) {
@@ -77,31 +117,13 @@ NS_ASSUME_NONNULL_BEGIN
                 searchCriteria = criteria;
             }
             
-        } else if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
-            
-            if (self.count > 1) {
-                throwException(IllegalArgument, @"Only a single constant value is allowed");
-            }
-            return nil;
-            
         } else {
             throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
         }
         
     }
     
-    // Default to the dependency class if no constant or criteria provided.
     return searchCriteria ? searchCriteria: [ALCModelSearchCriteria searchCriteriaForClass:aClass];
-}
-
--(id<ALCInjector> (^) (id criteria)) constantArgumentWithUnknownArgumentHandler:(id<ALCInjector> (^)(id argument)) unknownArgumentHandler {
-    return ^(id criteria) {
-        if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
-            return criteria;
-        } else {
-            return unknownArgumentHandler(criteria);
-        }
-    };
 }
 
 #pragma mark - Blocks

@@ -59,11 +59,14 @@
     }
 }
 
--(void) registerInjection:(id<ALCInjector>) injector forVariable:(Ivar) variable withName:(NSString *) variableName {
+-(ALCVariableDependency *) registerVariableDependency:(Ivar) variable
+                                             injector:(id<ALCInjector>) injector
+                                             withName:(NSString *) variableName {
     ALCVariableDependency *ref = [ALCVariableDependency variableDependencyWithInjector:injector
                                                                               intoIvar:variable
                                                                                   name:variableName];
     [_dependencies addObject:ref];
+    return ref;
 }
 
 -(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
@@ -98,7 +101,7 @@
 -(void) setDependencyUpdateObserver {
     
     STLog(self.objectClass, @"Watch for dependency changes");
-
+    
     // Block to reinject dependencies.
     AcWeakSelf;
     void (^watchBlock) (NSNotification *) = ^(NSNotification *notification) {
@@ -150,7 +153,7 @@
 #pragma mark - Tasks
 
 -(void) injectDependencies:(id) object {
-
+    
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
     
     // Perform injections.
