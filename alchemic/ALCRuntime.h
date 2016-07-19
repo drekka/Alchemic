@@ -104,7 +104,7 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 
  @return A new value matching the passed type.
  */
-+(nullable id) mapValue:(nullable id) value toNillable:(BOOL) allowNil type:(Class) type;
++(nullable id) mapValue:(nullable id) value allowNils:(BOOL) allowNil type:(Class) type;
 
 #pragma mark - Validating
 

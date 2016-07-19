@@ -30,6 +30,11 @@
     _nestedThingFactory = [_context registerObjectFactoryForClass:[NestedThing class]];
 }
 
+-(void)tearDown {
+    [_topThingFactory unload];
+    [_nestedThingFactory unload];
+}
+
 -(void) testSimpleDependencyPublicVariable {
     [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", nil];
     [_context start];
@@ -114,12 +119,22 @@
 #pragma mark - Transients
 
 -(void) testTransientDependency {
+
     [_context objectFactoryConfig:_nestedThingFactory, AcReference, AcNullable, nil];
     [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", AcTransient, nil];
     [_context start];
+
+    // Validate initial setup
     TopThing *topThing = _topThingFactory.instantiation.object;
     XCTAssertNotNil(topThing);
     XCTAssertNil(topThing.aNestedThing);
+
+    // Now set a value.
+    NestedThing *nt = [[NestedThing alloc] init];
+    [_nestedThingFactory setObject:nt];
+
+    XCTAssertNotNil(topThing.aNestedThing);
+    XCTAssertEqual(nt, topThing.aNestedThing);
 }
 
 @end

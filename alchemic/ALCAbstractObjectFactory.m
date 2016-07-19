@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractObjectFactory {
     id<ALCObjectFactoryType> _typeStrategy;
+    // The notification observer listening to dependency updates. Currently only used by transient dependencies.
+    id _dependencyChangedObserver;
 }
 
 @synthesize objectClass = _objectClass;
@@ -109,13 +111,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {}
 
+-(void) setDependencyUpdateObserverWithBlock:(void (^) (NSNotification *)) watchBlock {
+    STLog(self.objectClass, @"Watch for dependency changes");
+    self->_dependencyChangedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AlchemicDidStoreObject
+                                                                                         object:nil
+                                                                                          queue:nil
+                                                                                     usingBlock:watchBlock];
+}
+
 -(ALCInstantiation *) instantiation {
     id object = _typeStrategy.object;
     if (object || _typeStrategy.nullable) {
         return [ALCInstantiation instantiationWithObject:object completion:NULL];
     }
     object = [self createObject];
-    ALCBlockWithObject completion = [self setObject:object];
+    ALCBlockWithObject completion = [self storeObject:object];
     return [ALCInstantiation instantiationWithObject:object completion:completion];
 }
 
@@ -130,20 +140,32 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Updating
 
--(ALCBlockWithObject) setObject:(id) object {
+-(void) setObject:(id) object {
     
     id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
 
-    _typeStrategy.object = object;
-    
-    // Let othe factories known we have updated.
+    // forward to the storeObject: method.
+    ALCBlockWithObject completion = [self storeObject:object];
+    completion(object);
+
+    // Let other factories know we have updated.
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidStoreObject
                                                         object:self
                                                       userInfo:@{
                                                                  AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],
                                                                  AlchemicDidStoreObjectUserInfoNewValue:object ? object : [NSNull null]
                                                                  }];
+}
+
+-(ALCBlockWithObject) storeObject:(id) object {
+    _typeStrategy.object = object;
     return self.objectCompletion;
+}
+
+-(void) unload {
+    if (_dependencyChangedObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:_dependencyChangedObserver];
+    }
 }
 
 #pragma mark - Descriptions

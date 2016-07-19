@@ -125,7 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
     [self completionForInstantiations:instantations]();
-    return (id) [ALCRuntime mapValue:values toNillable:NO type:_objectClass];
+    return (id) [ALCRuntime mapValue:values allowNils:NO type:_objectClass];
 }
 
 #pragma mark - Internal

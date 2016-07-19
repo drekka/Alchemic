@@ -123,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) startSingletons {
     
-    STLog(self, @"Instantiating ...");
+    STLog(self, @"Instantiating singletons ...");
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         if (objectFactory.factoryType == ALCFactoryTypeSingleton
             && objectFactory.isReady) {
@@ -142,8 +142,7 @@ NS_ASSUME_NONNULL_BEGIN
         id delegate = [UIApplication sharedApplication].delegate;
         if (delegate) {
             STLog(self, @"Injecting UIApplicationDelegate instance into model");
-            ALCBlockWithObject completion = [_uiAppDelegateFactory setObject:delegate];
-            completion(delegate);
+            [_uiAppDelegateFactory setObject:delegate];
         }
     }
 }

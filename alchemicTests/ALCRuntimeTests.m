@@ -113,37 +113,37 @@
 #pragma mark - Mapping values
 
 -(void) testMapValueToTypeObjectToArray {
-    id result = [ALCRuntime mapValue:@"abc" toNillable:NO type:[NSArray class]];
+    id result = [ALCRuntime mapValue:@"abc" allowNils:NO type:[NSArray class]];
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(@"abc", result[0]);
 }
 
 -(void) testMapValueToTypeArrayToArray {
-    id result = [ALCRuntime mapValue:@[@"abc"] toNillable:NO type:[NSArray class]];
+    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSArray class]];
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(@"abc", result[0]);
 }
 
 -(void) testMapValueToTypeArrayOfOneToObject {
-    id result = [ALCRuntime mapValue:@[@"abc"] toNillable:NO type:[NSString class]];
+    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSString class]];
     XCTAssertEqual(@"abc", result);
 }
 
 -(void) testMapValueToTypeArrayOfManyToObjectThrows {
-    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc", @"def"] toNillable:NO type:[NSString class]]), AlchemicIncorrectNumberOfValuesException, @"IncorrectNumberOfValues");
+    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc", @"def"] allowNils:NO type:[NSString class]]), AlchemicIncorrectNumberOfValuesException, @"IncorrectNumberOfValues");
 }
 
 -(void) testMapValueToTypeTypeMissMatch {
-    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc"] toNillable:NO type:[NSNumber class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
+    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSNumber class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
 }
 
 -(void) testMapValueToTypeUpCast {
-    id value = [ALCRuntime mapValue:[@"abc" mutableCopy] toNillable:NO type:[NSString class]];
+    id value = [ALCRuntime mapValue:[@"abc" mutableCopy] allowNils:NO type:[NSString class]];
     XCTAssertEqualObjects(@"abc", value);
 }
 
 -(void) testMapValueToTypeDownCastThrows {
-    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@{} toNillable:NO type:[NSMutableDictionary class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
+    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@{} allowNils:NO type:[NSMutableDictionary class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
 }
 
 #pragma mark - Setting values

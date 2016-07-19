@@ -137,7 +137,7 @@
 
 -(void) testInstantiationWhenObjectPresent {
     DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
-    XCTAssertNotNil([df setObject:@"abc"]);
+    [df setObject:@"abc"];
     ALCInstantiation *inst = df.instantiation;
     XCTAssertEqualObjects(@"abc", inst.object);
     [inst complete];
@@ -152,7 +152,7 @@
 
 -(void) testDescriptionWhenSet {
     DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
-    XCTAssertNotNil([df setObject:@"abc"]);
+    [df setObject:@"abc"];
     XCTAssertEqualObjects(@"* Singleton", [df description]);
 }
 
@@ -167,7 +167,7 @@
     DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
     id mockModel = OCMProtocolMock(@protocol(ALCModel));
     [df configureWithOptions:@[AcReference] model:mockModel];
-    XCTAssertNotNil([df setObject:@"abc"]);
+    [df setObject:@"abc"];
     XCTAssertEqualObjects(@"* Reference", [df description]);
 }
 

@@ -154,8 +154,8 @@ registerFactoryMethod:(SEL) selector
                                              }
                                              return NO;
                                          }];
-    ALCVariableDependency *dependency = [objectFactory registerVariableDependency:ivar injector:injector withName:variable];
-    dependency.transient = transient;
+    injector.allowNilValues = transient;
+    [objectFactory registerVariableDependency:ivar injector:injector withName:variable];
 }
 
 #pragma mark - Dependencies
@@ -220,8 +220,7 @@ registerFactoryMethod:(SEL) selector
         }
         
         // Set the object and call the returned completion.
-        ALCBlockWithObject injectionBlock = [((ALCAbstractObjectFactory *)factories[0]) setObject:object];
-        [ALCRuntime executeBlock:injectionBlock withObject:object];
+        [((ALCAbstractObjectFactory *)factories[0]) setObject:object];
     };
     
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.

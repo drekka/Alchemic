@@ -58,17 +58,24 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 @property (nonatomic, assign, readonly, getter = isPrimary) BOOL primary;
 
 /**
+ Tells the factory to instantiate an the represented object or return one if it already exists.
+ */
+@property (nonatomic, strong, readonly) ALCInstantiation *instantiation;
+
+/**
  Configures the factory.
- 
+
  @param options             A list of options that define the factory configuration. For example, to make it a primary factory.
  @param model A reference to the model in case the configure code needs it.
  */
 -(void) configureWithOptions:(NSArray *) options model:(id<ALCModel>) model;
 
 /**
- Tells the factory to instantiate an the represented object or return one if it already exists.
+ Call just before unloading the object factory.
+ 
+ @discussion Usually this is during testing as in an app, the DI framework is typically not unloaded.
  */
-@property (nonatomic, strong, readonly) ALCInstantiation *instantiation;
+-(void) unload;
 
 @end
 

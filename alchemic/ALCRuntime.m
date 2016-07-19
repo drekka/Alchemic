@@ -110,7 +110,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
 
-    id finalValue = [self mapValue:value toNillable:allowNil type:(Class) ivarTypeData.objcClass];
+    id finalValue = [self mapValue:value allowNils:allowNil type:(Class) ivarTypeData.objcClass];
 
     STLog([object class], @"Injecting %@ with a %@", [ALCRuntime class:[object class] variableDescription:variable], [finalValue class]);
     object_setIvar(object, variable, finalValue);
@@ -121,20 +121,20 @@ static NSCharacterSet *__typeEncodingDelimiters;
             allowNils:(BOOL) allowNil
                 value:(nullable id) value
               ofClass:(Class) valueClass {
-    id finalValue = [self mapValue:value toNillable:allowNil type:(Class) valueClass];
+    id finalValue = [self mapValue:value allowNils:allowNil type:(Class) valueClass];
     if (finalValue) {
         [inv setArgument:&finalValue atIndex:idx + 2];
     }
 }
 
-+(nullable id) mapValue:(nullable id) value toNillable:(BOOL) allowNil type:(Class) type {
++(nullable id) mapValue:(nullable id) value allowNils:(BOOL) allowNil type:(Class) type {
 
     // If the passed value is nil or an empty array.
     if (!value) {
         if (allowNil) {
             return nil;
         } else {
-            throwException(NilValue, @"Nil value or empty array encountered where a value was expected");
+            throwException(NilValue, @"Nil value encountered where a value was expected");
         }
     }
 
@@ -149,8 +149,10 @@ static NSCharacterSet *__typeEncodingDelimiters;
     id finalValue = value;
     if ([finalValue isKindOfClass:[NSArray class]]) {
         NSArray *values = (NSArray *) finalValue;
-        if (values.count > 1) {
-            throwException(IncorrectNumberOfValues, @"Target type is not an array and found %lu values", (unsigned long) values.count);
+        if (values.count == 0 && allowNil) {
+            return nil;
+        } else if (values.count != 1) {
+            throwException(IncorrectNumberOfValues, @"Expected 1 value, got %lu", (unsigned long) values.count);
         }
         finalValue = values[0];
     }

@@ -31,6 +31,10 @@
     return [[ALCVariableDependency alloc] initWithInjector:injector intoIvar:ivar name:name];
 }
 
+-(BOOL) transient {
+    return self.injector;
+}
+
 -(NSString *)stackName {
     return _name;
 }

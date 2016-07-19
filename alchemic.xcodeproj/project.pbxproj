@@ -398,6 +398,7 @@
 				6CC284781CABBD1F006B613F /* AnotherThing.m */,
 			);
 			name = Model;
+			path = alchemicTests;
 			sourceTree = "<group>";
 		};
 		6C25D2731C566E0A00D982DC /* Model */ = {
@@ -568,7 +569,6 @@
 			children = (
 				6C4D85A81C7DB6A80061CA84 /* Dependencies */,
 				6C0076901D17D5EC00E88987 /* Factories */,
-				6C14FC371C96EBE500B56578 /* Model */,
 				6C67FF271C67728800ABEDDD /* Runtime */,
 				6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */,
 			);
@@ -659,6 +659,7 @@
 			children = (
 				6C4B56221C6F6EA80040AEC2 /* Functional tests */,
 				6CC2848F1CB69AB6006B613F /* Integration tests */,
+				6C14FC371C96EBE500B56578 /* Model */,
 				6C66DC3D1A8B82C3009F9D94 /* Unit tests */,
 				F458283B1CEBFECE0074A844 /* XCTestCase+Alchemic.h */,
 				F458283C1CEBFECE0074A844 /* XCTestCase+Alchemic.m */,
@@ -839,7 +840,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1277,7 +1278,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,
