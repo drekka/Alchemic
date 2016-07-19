@@ -104,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     [ALCRuntime setObject:object
                  variable:variable
-             withNillable:self.allowNilValues
+             allowNils:self.allowNilValues
                      value:[self valuesFromInstantiations:instantations]];
     return [self completionForInstantiations:instantations];
 }
@@ -114,7 +114,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self completionForInstantiations:instantations]();
     [ALCRuntime setInvocation:inv
                      argIndex:idx
-     withNillable:self.allowNilValues
+     allowNils:self.allowNilValues
                     value:[self valuesFromInstantiations:instantations]
                       ofClass:self.objectClass];
 }

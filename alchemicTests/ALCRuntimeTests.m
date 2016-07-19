@@ -153,7 +153,7 @@
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
     [ALCRuntime setInvocation:inv
                      argIndex:0
-                 withNillable:NO
+                 allowNils:NO
                         value:@"abc"
                       ofClass:[NSString class]];
     NSString *storedArg;
@@ -163,7 +163,7 @@
 
 -(void) testSetObjectVariableWithValue {
     Ivar ivar = class_getInstanceVariable([self class], "_privateVariable");
-    [ALCRuntime setObject:self variable:ivar withNillable:NO value:@"abc"];
+    [ALCRuntime setObject:self variable:ivar allowNils:NO value:@"abc"];
     XCTAssertEqualObjects(@"abc", _privateVariable);
 }
 
