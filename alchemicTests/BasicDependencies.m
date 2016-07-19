@@ -111,6 +111,16 @@
     XCTAssertEqual(5, topThing.aNestedThing.aInt);
 }
 
+#pragma mark - Transients
+
+-(void) testTransientDependency {
+    [_context objectFactoryConfig:_nestedThingFactory, AcReference, AcNullable, nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", AcTransient, nil];
+    [_context start];
+    TopThing *topThing = _topThingFactory.instantiation.object;
+    XCTAssertNotNil(topThing);
+    XCTAssertNil(topThing.aNestedThing);
+}
 
 @end
 

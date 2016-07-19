@@ -42,6 +42,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly, getter = isReady) BOOL ready;
 
+/**
+ Whether the ALCObjectFactoryType current has an object stored.
+ */
+@property (nonatomic, assign, readonly, getter = isObjectPresent) BOOL objectPresent;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return true if str begins with prefix, false otherwise.
  */
-bool strHasPrefix(const char *str, const char *prefix);
+bool AcStrHasPrefix(const char *str, const char *prefix);
 
 /**
  Methods which provide access to the Objective-C runtime.
@@ -69,12 +69,14 @@ bool strHasPrefix(const char *str, const char *prefix);
  
  @param object   The object which contains the variable.
  @param variable The variable to be set.
+ @param nillable If YES, allows nil values to be passed and set. Otherwise throws an error if nil values or empty arrays are encountered when there should be values.
  @param value    The value to set.
  */
 
 +(void) setObject:(id) object
          variable:(Ivar) variable
-        withValue:(id) value;
+     withNillable:(BOOL) nillable
+            value:(nullable id) value;
 
 /**
  Sets an argument in a passed invocation.
@@ -82,11 +84,13 @@ bool strHasPrefix(const char *str, const char *prefix);
  @param inv        The invocation.
  @param idx        The index of the argument. This is zero based with 0 being the first argument to the method.
  @param value      The value to set.
+ @param nillable If YES, allows nil values to be passed and set. Otherwise throws an error if nil values or empty arrays are encountered when there should be values.
  @param valueClass The type of the value to be set. This is used when assess if the passed value needs to be wrapped further before being passed to the invocation.
  */
 +(void) setInvocation:(NSInvocation *) inv
              argIndex:(int) idx
-            withValue:(id) value
+         withNillable:(BOOL) nillable
+                value:(nullable id) value
               ofClass:(Class) valueClass;
 
 /**
@@ -96,10 +100,11 @@ bool strHasPrefix(const char *str, const char *prefix);
  
  @param value The value to check.
  @param type  The type it needs to be.
+ @param nillable If YES, allows nil values to be passed and set. Otherwise throws an error if nil values or empty arrays are encountered when there should be values.
  
  @return A new value matching the passed type.
  */
-+(id) mapValue:(id) value toType:(Class) type;
++(nullable id) mapValue:(nullable id) value toNillable:(BOOL) nillable type:(Class) type;
 
 #pragma mark - Validating
 

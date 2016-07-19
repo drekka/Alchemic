@@ -107,6 +107,16 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  */
 #define AcWeak [ALCIsWeak macro]
 
+/**
+ Transient dependencies are injections which can change over time. 
+ 
+ @discussion When added to a variable injection, causes Alchemic to watch the factories which are used to populate the injected value. Should any factory change it's value. The injection is automatically redone.
+ 
+ This flag can only be set on variable injections which reference factories of the Singleton or Reference types.
+ 
+ */
+#define AcTransient [ALCIsTransient macro]
+
 #pragma mark - Method arguments
 /**
  Shortcut macro for specifying method arguments.

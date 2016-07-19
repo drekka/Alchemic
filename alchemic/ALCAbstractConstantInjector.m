@@ -13,6 +13,8 @@
 
 @implementation ALCAbstractConstantInjector
 
+@synthesize allowNilValues = _allowNilValues;
+
 -(BOOL) isReady {
     return YES;
 }

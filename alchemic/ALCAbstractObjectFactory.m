@@ -155,10 +155,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSString *) description {
     
-    ALCFactoryType factoryType = _typeStrategy.type;
-    BOOL instantiated = (factoryType == ALCFactoryTypeSingleton && _typeStrategy.object)
-    || (factoryType == ALCFactoryTypeReference && _typeStrategy.isReady);
-    NSMutableString *description = [[NSMutableString alloc] initWithString:instantiated ? @"* " : @"  "];
+    NSMutableString *description = [[NSMutableString alloc] initWithString:_typeStrategy.isObjectPresent ? @"* " : @"  "];
     
     [description appendString:_typeStrategy.description];
     

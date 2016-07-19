@@ -50,7 +50,7 @@ return NULL; \
 ALCConstantImplementation(name, type, \
 ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
 if (ivarTypeData.objcClass) { \
-[ALCRuntime setObject:object variable:variable withValue:toObject]; \
+[ALCRuntime setObject:object variable:variable withNillable:NO value:toObject]; \
 } else { \
 CFTypeRef objRef = CFBridgingRetain(object); \
 type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(variable)); \
@@ -61,7 +61,7 @@ CFBridgingRelease(objRef); \
 
 #define ALCConstantObjectImplementation(name, type) \
 ALCConstantImplementation(name, type, \
-[ALCRuntime setObject:object variable:variable withValue:_value]; \
+[ALCRuntime setObject:object variable:variable withNillable:NO value:_value]; \
 )
 
 #pragma mark - Scalar types

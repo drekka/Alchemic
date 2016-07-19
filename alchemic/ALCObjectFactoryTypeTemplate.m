@@ -33,12 +33,16 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
+-(BOOL)isObjectPresent {
+    return NO;
+}
+
 -(void) setObject:(nullable id) value {
     // Templates just ignore any value being set.
 }
 
 -(NSString *)description {
-    return @"Template";
+    return [self descriptionWithType:@"template"];
 }
 
 @end

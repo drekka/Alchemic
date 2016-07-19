@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)description {
-    return [self descriptionWithType:@"Singleton"];
+    return [self descriptionWithType:@"singleton"];
 }
 
 @end

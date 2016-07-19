@@ -61,50 +61,50 @@
 }
 
 -(void) testTypeDataForIVarId {
-
+    
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIdProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
+    
     XCTAssertEqual([NSObject class], ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
 -(void) testTypeDataForIVarProtocol {
-
+    
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
+    
     XCTAssertEqual([NSObject class], ivarData.objcClass);
     XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSCopying)]);
     XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
 -(void) testTypeDataForIVarClassNSStringProtocol {
-
+    
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
+    
     XCTAssertEqual([NSString class], ivarData.objcClass);
     XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSFastEnumeration)]);
     XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
 -(void) testTypeDataForIVarInt {
-
+    
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIntProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
+    
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(0, strcmp("i", ivarData.scalarType));
 }
 
 -(void) testTypeDataForIVarCGRect {
-
+    
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"_aRect"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
+    
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(0, strcmp("{CGRect=\"origin\"{CGPoint=\"x\"d\"y\"d}\"size\"{CGSize=\"width\"d\"height\"d}}", ivarData.scalarType));
@@ -113,37 +113,37 @@
 #pragma mark - Mapping values
 
 -(void) testMapValueToTypeObjectToArray {
-    id result = [ALCRuntime mapValue:@"abc" toType:[NSArray class]];
+    id result = [ALCRuntime mapValue:@"abc" toNillable:NO type:[NSArray class]];
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(@"abc", result[0]);
 }
 
 -(void) testMapValueToTypeArrayToArray {
-    id result = [ALCRuntime mapValue:@[@"abc"] toType:[NSArray class]];
+    id result = [ALCRuntime mapValue:@[@"abc"] toNillable:NO type:[NSArray class]];
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(@"abc", result[0]);
 }
 
 -(void) testMapValueToTypeArrayOfOneToObject {
-    id result = [ALCRuntime mapValue:@[@"abc"] toType:[NSString class]];
+    id result = [ALCRuntime mapValue:@[@"abc"] toNillable:NO type:[NSString class]];
     XCTAssertEqual(@"abc", result);
 }
 
 -(void) testMapValueToTypeArrayOfManyToObjectThrows {
-    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc", @"def"] toType:[NSString class]]), AlchemicTooManyValuesException, @"TooManyValues");
+    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc", @"def"] toNillable:NO type:[NSString class]]), AlchemicIncorrectNumberOfValuesException, @"IncorrectNumberOfValues");
 }
 
 -(void) testMapValueToTypeTypeMissMatch {
-    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc"] toType:[NSNumber class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
+    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc"] toNillable:NO type:[NSNumber class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
 }
 
 -(void) testMapValueToTypeUpCast {
-    id value = [ALCRuntime mapValue:[@"abc" mutableCopy] toType:[NSString class]];
+    id value = [ALCRuntime mapValue:[@"abc" mutableCopy] toNillable:NO type:[NSString class]];
     XCTAssertEqualObjects(@"abc", value);
 }
 
 -(void) testMapValueToTypeDownCastThrows {
-    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@{} toType:[NSMutableDictionary class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
+    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@{} toNillable:NO type:[NSMutableDictionary class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
 }
 
 #pragma mark - Setting values
@@ -153,7 +153,8 @@
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
     [ALCRuntime setInvocation:inv
                      argIndex:0
-                    withValue:@"abc"
+                 withNillable:NO
+                        value:@"abc"
                       ofClass:[NSString class]];
     NSString *storedArg;
     [inv getArgument:&storedArg atIndex:2];
@@ -162,7 +163,7 @@
 
 -(void) testSetObjectVariableWithValue {
     Ivar ivar = class_getInstanceVariable([self class], "_privateVariable");
-    [ALCRuntime setObject:self variable:ivar withValue:@"abc"];
+    [ALCRuntime setObject:self variable:ivar withNillable:NO value:@"abc"];
     XCTAssertEqualObjects(@"abc", _privateVariable);
 }
 
@@ -200,21 +201,21 @@
 #pragma mark - general runtime tests
 
 -(void) testAccessingMethods {
-
+    
     XCTAssertFalse([[self class] instancesRespondToSelector:@selector(classMethod)]);
     XCTAssertTrue([[self class] instancesRespondToSelector:@selector(instanceMethod)]);
-
+    
     XCTAssertTrue([[self class] respondsToSelector:@selector(classMethod)]);
     XCTAssertFalse([self respondsToSelector:@selector(classMethod)]);
-
+    
     XCTAssertTrue([self respondsToSelector:@selector(instanceMethod)]);
     XCTAssertFalse([[self class] respondsToSelector:@selector(instanceMethod)]);
 }
 
 -(void) testMethodSignature {
-
+    
     NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:@selector(methodWithString:andInt:)];
-
+    
     const char *arg2 = [sig getArgumentTypeAtIndex:2];
     const char *arg3 = [sig getArgumentTypeAtIndex:3];
     XCTAssertTrue(strcmp("@", arg2) == 0);
@@ -266,15 +267,15 @@
 }
 
 -(void) testExecuteBlockWithObject {
-
+    
     __block BOOL set = NO;
     ALCBlockWithObject completion = ^(ALCBlockWithObjectArgs){
         XCTAssertEqualObjects(@"abc", object);
         set = YES;
     };
-
+    
     [ALCRuntime executeBlock:completion withObject:@"abc"];
-
+    
     XCTAssertTrue(set);
 }
 

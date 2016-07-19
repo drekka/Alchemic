@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @synthesize objectClass = _objectClass;
+@synthesize allowNilValues = _allowNilValues;
 
 #pragma mark - Lifecycle
 
@@ -103,7 +104,8 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     [ALCRuntime setObject:object
                  variable:variable
-                withValue:[self valuesFromInstantiations:instantations]];
+             withNillable:self.allowNilValues
+                     value:[self valuesFromInstantiations:instantations]];
     return [self completionForInstantiations:instantations];
 }
 
@@ -112,7 +114,8 @@ NS_ASSUME_NONNULL_BEGIN
     [self completionForInstantiations:instantations]();
     [ALCRuntime setInvocation:inv
                      argIndex:idx
-                    withValue:[self valuesFromInstantiations:instantations]
+     withNillable:self.allowNilValues
+                    value:[self valuesFromInstantiations:instantations]
                       ofClass:self.objectClass];
 }
 
@@ -122,7 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
     [self completionForInstantiations:instantations]();
-    return [ALCRuntime mapValue:values toType:_objectClass];
+    return (id) [ALCRuntime mapValue:values toNillable:NO type:_objectClass];
 }
 
 #pragma mark - Internal

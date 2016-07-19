@@ -47,13 +47,17 @@ NS_ASSUME_NONNULL_BEGIN
     methodReturningBooleanNotImplemented;
 }
 
+-(BOOL)isObjectPresent {
+    return self.object != nil;
+}
+
 -(NSString *) description {
     methodNotImplemented;
     return @"";
 }
 
 -(NSString *) descriptionWithType:(NSString *) type {
-    return str(@"%@%@%@", self.nullable ? @"Nullable " : @"", self.isWeak ? @"Weak " : @"", type);
+    return str(@"%@%@%@", self.nullable ? @"nullable " : @"", self.isWeak ? @"Weak " : @"", type);
 }
 
 

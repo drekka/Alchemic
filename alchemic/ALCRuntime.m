@@ -22,7 +22,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-bool strHasPrefix(const char *str, const char *prefix) {
+bool AcStrHasPrefix(const char *str, const char *prefix) {
     return strncmp(prefix, str, strlen(prefix)) == 0;
 }
 
@@ -69,7 +69,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     
     // Get the type.
     ALCTypeData *typeData = [[ALCTypeData alloc] init];
-    if (strHasPrefix(encoding, "@")) {
+    if (AcStrHasPrefix(encoding, "@")) {
         
         // Start with a result that indicates an Id. We map Ids as NSObjects.
         typeData.objcClass = [NSObject class];
@@ -105,11 +105,12 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(void) setObject:(id) object
          variable:(Ivar) variable
-        withValue:(id) value {
+     withNillable:(BOOL) nillable
+            value:(nullable id) value {
     
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
     
-    id finalValue = [self mapValue:value toType:(Class _Nonnull) ivarTypeData.objcClass];
+    id finalValue = [self mapValue:value toNillable:nillable type:(Class) ivarTypeData.objcClass];
     
     STLog([object class], @"Injecting %@ with a %@", [ALCRuntime class:[object class] variableDescription:variable], [finalValue class]);
     object_setIvar(object, variable, finalValue);
@@ -117,25 +118,39 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(void) setInvocation:(NSInvocation *) inv
              argIndex:(int) idx
-            withValue:(id) value
+         withNillable:(BOOL) nillable
+                value:(nullable id) value
               ofClass:(Class) valueClass {
-    id finalValue = [self mapValue:value toType:(Class _Nonnull) valueClass];
-    [inv setArgument:&finalValue atIndex:idx + 2];
+    id finalValue = [self mapValue:value toNillable:nillable type:(Class) valueClass];
+    if (finalValue) {
+        [inv setArgument:&finalValue atIndex:idx + 2];
+    }
 }
 
-+(id) mapValue:(id) value toType:(Class) type {
++(nullable id) mapValue:(nullable id) value toNillable:(BOOL) nillable type:(Class) type {
     
-    // Wrap the value in an array if it's not alrady in an array.
+    // If the passed value is nil or an empty array.
+    if (!value || ([value isKindOfClass:[NSArray class]] && ((NSArray *) value).count == 0)) {
+        if (nillable) {
+            return [type isSubclassOfClass:[NSArray class]] ? @[] : nil;
+        } else {
+            throwException(NilValue, @"Nil value or empty array encountered where a value was expected");
+        }
+    }
+    
+    // If the target value is an array wrap up the value and return.
     if ([type isSubclassOfClass:[NSArray class]]) {
         return [value isKindOfClass:[NSArray class]] ? value : @[value];
     }
     
-    // Throw an error if we are dealing with an array value and we have too many results.
+    // Target is not an array
+    
+    // Throw an error if the source value is an array and we have too many or too few results.
     id finalValue = value;
     if ([finalValue isKindOfClass:[NSArray class]]) {
         NSArray *values = (NSArray *) finalValue;
-        if (values.count != 1) {
-            throwException(TooManyValues, @"Target type is not an array and found %lu values", (unsigned long) values.count);
+        if (values.count > 1) {
+            throwException(IncorrectNumberOfValues, @"Target type is not an array and found %lu values", (unsigned long) values.count);
         }
         finalValue = values[0];
     }
@@ -189,7 +204,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     
     // Start with the main app bundles.
     NSMutableArray<NSBundle *> *appBundles = [[NSBundle allBundles] mutableCopy];
-
+    
     // Get resource ids of the framework directories from each bundle
     NSMutableSet *mainBundleResourceIds = [[NSMutableSet alloc] init];
     [appBundles enumerateObjectsUsingBlock:^(NSBundle *bundle, NSUInteger idx, BOOL *stop) {
@@ -199,13 +214,13 @@ static NSCharacterSet *__typeEncodingDelimiters;
             [mainBundleResourceIds addObject:bundleFrameworksDirId];
         }
     }];
-
+    
     // Loop through the app's frameworks and add those that are in the app bundle's frameworks directories.
     [[NSBundle allFrameworks] enumerateObjectsUsingBlock:^(NSBundle *framework, NSUInteger idx, BOOL *stop) {
-
+        
         NSURL *frameworkDirectoryURL = nil;
         [framework.bundleURL getResourceValue:&frameworkDirectoryURL forKey:NSURLParentDirectoryURLKey error:nil];
-
+        
         id frameworkDirectoryId = nil;
         [frameworkDirectoryURL getResourceValue:&frameworkDirectoryId forKey:NSURLFileResourceIdentifierKey error:nil];
         

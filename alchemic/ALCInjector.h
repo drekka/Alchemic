@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol ALCInjector <ALCResolvable>
 
+/// If YES, the injector can inject nil values. Otherwise it will throw an exception on encountering a nil.
+@property (nonatomic, assign) BOOL allowNilValues;
+
 /**
  Injects a value into a variable.
  

@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)description {
-    return [self descriptionWithType:@"Reference"];
+    return [self descriptionWithType:@"reference"];
 }
 
 @end
