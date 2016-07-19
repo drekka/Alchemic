@@ -26,6 +26,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// @name Analysing array contents
 
 /**
+Scans a list of seach criteria or constants to define an injection.
+
+@param injectionClass The class of the target injection. Used to provide default search criteria when there is none in the list.
+@param allowConstants If YES, allows constants to be defined for the injection. If NO and a constant is detected in the list, an exception will be thrown.
+
+@return An injector which is ready to set values as defined by the list.
+*/
+-(id<ALCInjector>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants;
+
+/**
  Converts a list of arguments for methods into a set of dependencies, ready for use by a method factory.
  
  @param unknownArgumentHandler A block that is called if the current argumet is unknown.
@@ -35,16 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
 
 -(nullable ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass;
-
-/**
- Scans a list of seach criteria or constants to define an injection.
- 
- @param injectionClass The class of the target injection. Used to provide default search criteria when there is none in the list.
- @param allowConstants If YES, allows constants to be defined for the injection. If NO and a constant is detected in the list, an exception will be thrown.
- 
- @return An injector which is ready to set values as defined by the list.
- */
--(id<ALCInjector>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants;
 
 /// @name Resolving
 

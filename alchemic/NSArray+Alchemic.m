@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation NSArray (Alchemic)
 
+#pragma mark - Argument scanning
+
 -(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
     
     NSMutableArray<id<ALCDependency>> *arguments = [[NSMutableArray alloc] initWithCapacity:self.count];
@@ -28,17 +30,17 @@ NS_ASSUME_NONNULL_BEGIN
     [self enumerateObjectsUsingBlock:^(id nextArgument, NSUInteger idx, BOOL * _Nonnull stop) {
         
         ALCMethodArgumentDependency *methodArgument = nil;
-
+        
         // Method arguments are passed through.
         if ([nextArgument isKindOfClass:[ALCMethodArgumentDependency class]]) {
             methodArgument = (ALCMethodArgumentDependency *) nextArgument;
-
-        // Search criteria are assumed to return a NSObject
+            
+            // Search criteria are assumed to return a NSObject
         } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]
                    || [nextArgument conformsToProtocol:@protocol(ALCConstant)]) {
             methodArgument = [ALCMethodArgumentDependency argumentWithClass:[NSObject class] criteria:nextArgument, nil];
         }
-
+        
         if (methodArgument) {
             methodArgument.index = (int) idx;
             [arguments addObject:methodArgument];
@@ -50,7 +52,19 @@ NS_ASSUME_NONNULL_BEGIN
     return arguments;
 }
 
--(nullable ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass {
+-(id<ALCInjector>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants {
+    
+    ALCModelSearchCriteria *searchCriteria = [self modelSearchCriteriaForClass:injectionClass];
+    
+    if (! allowConstants && !searchCriteria) {
+        throwException(IllegalArgument, @"Cannot use constant expressions here.");
+    }
+    
+    return searchCriteria ? [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
+                                                                       criteria:searchCriteria] : self[0];
+}
+
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass withUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
     
     ALCModelSearchCriteria *searchCriteria;
     for (id criteria in self) {
@@ -80,17 +94,17 @@ NS_ASSUME_NONNULL_BEGIN
     return searchCriteria ? searchCriteria: [ALCModelSearchCriteria searchCriteriaForClass:aClass];
 }
 
--(id<ALCInjector>) injectionWithClass:(Class) injectionClass allowConstants:(BOOL) allowConstants {
-    
-    ALCModelSearchCriteria *searchCriteria = [self modelSearchCriteriaForClass:injectionClass];
-    
-    if (! allowConstants && !searchCriteria) {
-        throwException(IllegalArgument, @"Cannot use constant expressions here.");
-    }
-    
-    return searchCriteria ? [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
-                                                                       criteria:searchCriteria] : self[0];
+-(id<ALCInjector> (^) (id criteria)) constantArgumentWithUnknownArgumentHandler:(id<ALCInjector> (^)(id argument)) unknownArgumentHandler {
+    return ^(id criteria) {
+        if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
+            return criteria;
+        } else {
+            return unknownArgumentHandler(criteria);
+        }
+    };
 }
+
+#pragma mark - Blocks
 
 -(nullable ALCSimpleBlock) combineSimpleBlocks {
     return self.count == 0 ? NULL : ^{
@@ -99,6 +113,8 @@ NS_ASSUME_NONNULL_BEGIN
         }
     };
 }
+
+#pragma mark - Resolving
 
 -(void)resolveArgumentsWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
     [self enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
