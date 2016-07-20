@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  If set, allows the storage of nil values.
  */
-@property (nonatomic, assign, getter = isNullable) BOOL nullable;
+@property (nonatomic, assign, getter = isNillable) BOOL nillable;
 
 /**
  The currently stored object. With some ALCObjectFactoryType implementations this will always be nil. Others will store and return the object.

@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCObjectFactoryTypeSingleton
 
--(void) setNullable:(BOOL) nullable {
-    if (nullable) {
-        throwException(IllegalArgument, @"Singletons cannot be set as nullable.");
+-(void) setNillable:(BOOL) nillable {
+    if (nillable) {
+        throwException(IllegalArgument, @"Singletons cannot be set as nillable.");
     }
 }
 

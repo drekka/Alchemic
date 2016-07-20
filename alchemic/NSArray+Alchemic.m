@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id<ALCInjector>) injectorForClass:(Class) injectionClass
                      allowConstants:(BOOL) allowConstants
-             unknownArgumentHandler:(nullable BOOL (^)(id argument)) unknownArgumentHandler {
+             unknownArgumentHandler:(nullable void (^)(id argument)) unknownArgumentHandler {
     
  //   ALCModelSearchCriteria *searchCriteria;
     id<ALCInjector> constantInjector;
@@ -83,12 +83,11 @@ NS_ASSUME_NONNULL_BEGIN
             }
             
         } else {
-            if (unknownArgumentHandler && unknownArgumentHandler(criteria)) {
-                // Everything good. Argument handled.
+            if (unknownArgumentHandler) {
+                unknownArgumentHandler(criteria);
             } else {
                 throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
             }
-            
         }
     }
     

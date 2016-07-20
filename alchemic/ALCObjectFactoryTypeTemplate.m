@@ -23,9 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(void) setNullable:(BOOL) nullable {
-    if (nullable) {
-        throwException(IllegalArgument, @"Templates cannot be set as nullable.");
+-(void) setNillable:(BOOL) nillable {
+    if (nillable) {
+        throwException(IllegalArgument, @"Templates cannot be set as nillable.");
     }
 }
 

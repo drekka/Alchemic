@@ -144,18 +144,16 @@ registerFactoryMethod:(SEL) selector
     
     Ivar ivar = [ALCRuntime class:objectFactory.objectClass variableForInjectionPoint:variable];
     Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
-    __block BOOL transient = NO;
+    NSMutableArray *dependencyConfig = [[NSMutableArray alloc] init];
+    __block BOOL allowNils = NO;
     id<ALCInjector> injector = [valueArguments injectorForClass:varClass
                                                  allowConstants:YES
-                                         unknownArgumentHandler:^ BOOL (id argument) {
-                                             if ([argument isKindOfClass:[ALCIsTransient class]]) {
-                                                 transient = YES;
-                                                 return YES;
-                                             }
-                                             return NO;
+                                         unknownArgumentHandler:^(id argument) {
+                                             [dependencyConfig addObject:argument];
                                          }];
-    injector.allowNilValues = transient;
-    [objectFactory registerVariableDependency:ivar injector:injector withName:variable];
+    injector.allowNilValues = allowNils;
+    ALCVariableDependency *dependency = [objectFactory registerVariableDependency:ivar injector:injector withName:variable];
+    [dependency configureWithOptions:dependencyConfig];
 }
 
 #pragma mark - Dependencies
