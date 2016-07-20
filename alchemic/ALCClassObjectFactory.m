@@ -24,16 +24,16 @@
 
 
 @implementation ALCClassObjectFactory {
-
+    
     BOOL _resolved;
     BOOL _checkingReadyStatus;
-
+    
     NSMutableArray<id<ALCDependency>> *_dependencies;
-
+    
     // Populated so we can reinject values if dependencies update.
     // Using a weak based hashtable so we don't have to maintain it.
     NSHashTable *_injectedObjectHistory;
-
+    
 }
 
 @synthesize initializer = _initializer;
@@ -57,27 +57,28 @@
     }
 }
 
--(void) registerVariableDependency:(Ivar) variable
-                          injector:(id<ALCInjector>) injector
-                          withName:(NSString *) variableName {
-    ALCVariableDependency *ref = [ALCVariableDependency variableDependencyWithInjector:injector
-                                                                              intoIvar:variable
-                                                                                  name:variableName];
-    [_dependencies addObject:ref];
+-(ALCVariableDependency *) registerVariableDependency:(Ivar) variable
+                                             injector:(id<ALCInjector>) injector
+                                             withName:(NSString *) variableName {
+    ALCVariableDependency *dependency = [ALCVariableDependency variableDependencyWithInjector:injector
+                                                                                     intoIvar:variable
+                                                                                         name:variableName];
+    [_dependencies addObject:dependency];
+    return dependency;
 }
 
 -(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
-
+    
     STLog(self.objectClass, @"Resolving class factory %@", NSStringFromClass(self.objectClass));
-
+    
     AcWeakSelf;
     [self resolveWithResolvingStack:resolvingStack
                        resolvedFlag:&_resolved
                               block:^{
-
+                                  
                                   AcStrongSelf;
                                   [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
-
+                                  
                                   STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
                                   for (ALCVariableDependency *ref in strongSelf->_dependencies) {
                                       [resolvingStack addObject:ref];
@@ -85,7 +86,7 @@
                                       [resolvingStack removeLastObject];
                                   }
                               }];
-
+    
     // Check for the need to watch notifications.
     for (ALCVariableDependency *dependency in _dependencies) {
         if (dependency.transient) {
@@ -132,17 +133,17 @@
 #pragma mark - Tasks
 
 -(void) injectDependencies:(id) object {
-
+    
     STLog(self.objectClass, @"Injecting dependencies into a %@", NSStringFromClass(self.objectClass));
-
+    
     // Perform injections.
     for (ALCVariableDependency *dep in _dependencies) {
         [self injectObject:object dependency:dep];
     }
-
+    
     // Store a weak reference.
     [_injectedObjectHistory addObject:object];
-
+    
     // Notify of injection completion.
     if ([object respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
         STLog(self, @"Telling %@ it's injections have finished", object);

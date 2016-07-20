@@ -9,6 +9,9 @@
 #import <Alchemic/ALCVariableDependency.h>
 #import <Alchemic/ALCInjector.h>
 #import <Alchemic/ALCStringMacros.h>
+#import <Alchemic/ALCFlagMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCException.h>
 
 @implementation ALCVariableDependency {
     Ivar _ivar;
@@ -31,8 +34,16 @@
     return [[ALCVariableDependency alloc] initWithInjector:injector intoIvar:ivar name:name];
 }
 
--(BOOL) transient {
-    return self.injector;
+-(void) configureWithOptions:(NSArray *) options {
+    for (id option in options) {
+        if ([option isKindOfClass:[ALCIsNullable class]]) {
+            self.injector.allowNilValues = YES;
+        } else if ([option isKindOfClass:[ALCIsTransient class]]) {
+            _transient = YES;
+        } else {
+           throwException(IllegalArgument, @"Unknown variable dependency option: %@", option);
+        }
+    }
 }
 
 -(NSString *)stackName {

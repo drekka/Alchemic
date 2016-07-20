@@ -34,7 +34,7 @@ Scans a list of seach criteria or constants to define an injection.
 */
 -(id<ALCInjector>) injectorForClass:(Class) injectionClass
                      allowConstants:(BOOL) allowConstants
-             unknownArgumentHandler:(nullable BOOL (^)(id argument)) unknownArgumentHandler;
+             unknownArgumentHandler:(nullable void (^)(id argument)) unknownArgumentHandler;
 
 /**
  Converts a list of arguments for methods into a set of dependencies, ready for use by a method factory.
