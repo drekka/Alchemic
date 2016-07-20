@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL)isObjectPresent {
-    return self.object != nil;
+    return _weakObjectRef || _strongObjectRef;
 }
 
 -(NSString *) description {

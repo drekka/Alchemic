@@ -135,6 +135,11 @@
 
     XCTAssertNotNil(topThing.aNestedThing);
     XCTAssertEqual(nt, topThing.aNestedThing);
+
+    // Now nil it out again.
+    [_nestedThingFactory setObject:nil];
+    
+    XCTAssertNil(topThing.aNestedThing);
 }
 
 @end

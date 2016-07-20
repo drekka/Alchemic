@@ -141,7 +141,7 @@
     ALCInstantiation *inst = df.instantiation;
     XCTAssertEqualObjects(@"abc", inst.object);
     [inst complete];
-    XCTAssertFalse(df.completionCalled);
+    XCTAssertTrue(df.completionCalled);
 }
 
 #pragma mark - Describing things

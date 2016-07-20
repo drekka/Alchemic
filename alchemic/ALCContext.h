@@ -120,7 +120,7 @@ registerFactoryMethod:(SEL) selector
  Sets a value on a factory.
  
  Can only be used on factories which represent singletons or references as it makes no sense to set a factory value.
- @param object The object to set. If there are not criteria then the class of this object will be used to find the reference to set.
+ @param object The object to set. If there are not criteria then the class of this object will be used to find the reference to set. To nil out a stored object, pass AcNil.
  */
 -(void) setObject:(id) object, ... NS_REQUIRES_NIL_TERMINATION;
 

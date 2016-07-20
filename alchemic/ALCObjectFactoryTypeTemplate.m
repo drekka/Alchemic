@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)description {
-    return [self descriptionWithType:@"template"];
+    return [self descriptionWithType:@"Template"];
 }
 
 @end

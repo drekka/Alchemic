@@ -45,31 +45,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) configureWithOption:(id) option model:(id<ALCModel>) model;
 
+/**
+ Sets the observer to execute a block when a change to a dependency is detected.
+ */
 -(void) setDependencyUpdateObserverWithBlock:(void (^) (NSNotification *)) watchBlock;
-
-/**
- Sets an object into the factory. 
- 
- @discussion This is only legal for singleton or reference class factories. Any factory that involves a method such as method factories and class factories with initializers will reject having a value set.
-
- This method is for calling from the main context. It forwards to the storeObject: method and then sends notifications to dependencies that are listen for changes.
-
- @param object The object to store.
- 
- @return the completion block that can be called to perform injections into the stored object.
- */
--(void) setObject:(id) object;
-
-/**
- Stores an object in the factory.
-
- This is only legal for singleton or reference class factories. Any factory that involves a method such as method factories and class factories with initializers will reject having a value set.
-
- @param object The object to store.
-
- @return the completion block that can be called to perform injections into the stored object.
- */
-//-(ALCBlockWithObject) storeObject:(id) object;
 
 @end
 

@@ -24,6 +24,7 @@
 #import <Alchemic/ALCObjectFactoryTypeTemplate.h>
 #import <Alchemic/ALCObjectFactoryTypeReference.h>
 #import <Alchemic/ALCObjectFactoryTypeSingleton.h>
+#import <Alchemic/ALCRuntime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -140,13 +141,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Updating
 
--(void) setObject:(id) object {
+-(void) setObject:(nullable id) object {
     
     id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
 
     // forward to the storeObject: method.
     ALCBlockWithObject completion = [self storeObject:object];
-    completion(object);
+    [ALCRuntime executeBlock:completion withObject:object];
 
     // Let other factories know we have updated.
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidStoreObject
@@ -157,9 +158,9 @@ NS_ASSUME_NONNULL_BEGIN
                                                                  }];
 }
 
--(ALCBlockWithObject) storeObject:(id) object {
+-(ALCBlockWithObject) storeObject:(nullable id) object {
     _typeStrategy.object = object;
-    return self.objectCompletion;
+    return object ? self.objectCompletion : NULL;
 }
 
 -(void) unload {

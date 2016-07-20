@@ -199,19 +199,26 @@ registerFactoryMethod:(SEL) selector
 }
 
 -(void) setObject:(id) object, ... {
-    STLog([object class], @"Storing reference for a %@", NSStringFromClass([object class]));
     
     // Now lets find our reference object
     alc_loadVarArgsAfterVariableIntoArray(object, criteria);
     
     // Setup a block we want to execute.
+    id finalObject = [object isKindOfClass:[ALCConstantNil class]] ? nil : object;
+    Class objClass = [object class];
+    STLog(objClass, @"Storing reference for a %@", NSStringFromClass(objClass));
+    
     ALCSimpleBlock setBlock = ^{
         
         if (criteria.count == 0) {
-            [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:[object class]]];
+            if (!finalObject) {
+                throwException(IncorrectNumberOfArguments, @"When setting nil, at least one search criteria is needed to find the relevant object factory");
+            } else {
+                [criteria addObject:[ALCModelSearchCriteria searchCriteriaForClass:objClass]];
+            }
         }
         
-        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:[object class]];
+        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:objClass];
         NSArray<id<ALCObjectFactory>> *factories = [self->_model settableObjectFactoriesMatchingCriteria:searchCriteria];
         
         // Error if we do not find one factory.
@@ -220,7 +227,7 @@ registerFactoryMethod:(SEL) selector
         }
         
         // Set the object and call the returned completion.
-        [((ALCAbstractObjectFactory *)factories[0]) setObject:object];
+        [((ALCAbstractObjectFactory *)factories[0]) setObject:finalObject];
     };
     
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.
