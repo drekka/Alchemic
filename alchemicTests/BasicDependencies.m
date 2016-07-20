@@ -138,8 +138,16 @@
 
     // Now nil it out again.
     [_nestedThingFactory setObject:nil];
-    
     XCTAssertNil(topThing.aNestedThing);
+
+    // Now set a new value.
+    NestedThing *nt2 = [[NestedThing alloc] init];
+    [_nestedThingFactory setObject:nt2];
+
+    XCTAssertNotNil(topThing.aNestedThing);
+    XCTAssertEqual(nt2, topThing.aNestedThing);
+    XCTAssertNotEqual(nt, topThing.aNestedThing);
+
 }
 
 @end
