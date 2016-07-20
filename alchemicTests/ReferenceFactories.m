@@ -36,8 +36,8 @@
     XCTAssertFalse(_topThingFactory.isReady);
 }
 
--(void) testAccessingUnsetNullableReference {
-    [_context objectFactoryConfig:_topThingFactory, AcReference, AcNullable, nil];
+-(void) testAccessingUnsetNillableReference {
+    [_context objectFactoryConfig:_topThingFactory, AcReference, AcNillable, nil];
     [_context start];
     XCTAssertTrue(_topThingFactory.isReady);
     XCTAssertNil(_topThingFactory.instantiation.object);

@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @synthesize weak = _weak;
-@synthesize nullable = _nullable;
+@synthesize nillable = _nillable;
 
 #pragma mark - Override properties
 
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)setObject:(nullable id) object {
     
-    if (!object && !_nullable) {
+    if (!object && !_nillable) {
         throwException(NilValue, @"Cannot set a nil value.");
     }
     
@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) descriptionWithType:(NSString *) type {
-    return str(@"%@%@%@", self.nullable ? @"nullable " : @"", self.isWeak ? @"Weak " : @"", type);
+    return str(@"%@%@%@", self.nillable ? @"nillable " : @"", self.isWeak ? @"Weak " : @"", type);
 }
 
 

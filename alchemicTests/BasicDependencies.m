@@ -120,8 +120,8 @@
 
 -(void) testTransientDependency {
 
-    [_context objectFactoryConfig:_nestedThingFactory, AcReference, AcNullable, nil];
-    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", AcTransient, AcNullable, nil];
+    [_context objectFactoryConfig:_nestedThingFactory, AcReference, AcNillable, nil];
+    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", AcTransient, AcNillable, nil];
     [_context start];
 
     // Validate initial setup

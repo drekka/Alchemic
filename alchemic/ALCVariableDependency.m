@@ -36,7 +36,7 @@
 
 -(void) configureWithOptions:(NSArray *) options {
     for (id option in options) {
-        if ([option isKindOfClass:[ALCIsNullable class]]) {
+        if ([option isKindOfClass:[ALCIsNillable class]]) {
             self.injector.allowNilValues = YES;
         } else if ([option isKindOfClass:[ALCIsTransient class]]) {
             _transient = YES;

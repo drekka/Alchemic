@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL) isReady {
-    return self.nullable || super.object != nil;
+    return self.nillable || super.object != nil;
 }
 
 -(NSString *)description {

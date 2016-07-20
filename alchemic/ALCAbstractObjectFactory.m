@@ -85,12 +85,12 @@ NS_ASSUME_NONNULL_BEGIN
     if ([option isKindOfClass:[ALCIsTemplate class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeTemplate alloc] init];
         _typeStrategy.weak = oldStrategy.isWeak;
-        _typeStrategy.nullable = oldStrategy.isNullable;
+        _typeStrategy.nillable = oldStrategy.isNillable;
         
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
         _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
         _typeStrategy.weak = oldStrategy.isWeak;
-        _typeStrategy.nullable = oldStrategy.isNullable;
+        _typeStrategy.nillable = oldStrategy.isNillable;
         
     } else if ([option isKindOfClass:[ALCIsPrimary class]]) {
         _primary = YES;
@@ -102,8 +102,8 @@ NS_ASSUME_NONNULL_BEGIN
     } else if ([option isKindOfClass:[ALCIsWeak class]]) {
         _typeStrategy.weak = YES;
         
-    } else if ([option isKindOfClass:[ALCIsNullable class]]) {
-        _typeStrategy.nullable = YES;
+    } else if ([option isKindOfClass:[ALCIsNillable class]]) {
+        _typeStrategy.nillable = YES;
         
     } else {
         throwException(IllegalArgument, @"Expected a factory config macro");
@@ -122,7 +122,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCInstantiation *) instantiation {
     id object = _typeStrategy.object;
-    if (object || _typeStrategy.nullable) {
+    if (object || _typeStrategy.isNillable) {
         return [ALCInstantiation instantiationWithObject:object completion:NULL];
     }
     object = [self createObject];
