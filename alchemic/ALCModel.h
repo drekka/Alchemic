@@ -34,35 +34,35 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly, strong) NSArray<ALCClassObjectFactory *> *classObjectFactories;
 
-
 /**
  Searches the model and returns a list of match ALCObjectFactory instances.
- 
+
  @param criteria The ALCModelSearchCriteria that defines what to return.
- 
+
  @return A NSDictionary of name/factory pairs that match the search criteria.
  */
 -(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
 
 /**
- Returns the matching ALCClassObjectFactory for a specific class.
- 
- @param aClass The class to search for.
- 
- @return The matching object factory or nil if none can be found.
- */
--(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass;
-
-/**
  Returns a list of object factories meeting a criteria.
- 
+
  The returned object factories will only be ones that can have their objects set. Currently these are either singleton or reference factories.
- 
+
  @param criteria The search criteria.
- 
+
  @return A list of object factories.
  */
 -(NSArray<id<ALCObjectFactory>> *) settableObjectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
+
+#pragma mark - Creating object factories
+/**
+ Returns the matching ALCClassObjectFactory for a specific class.
+
+ @param aClass The class to search for.
+
+ @return The matching object factory or nil if none can be found.
+ */
+-(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass;
 
 #pragma mark - Setting up the model
 /// @name Modifying
