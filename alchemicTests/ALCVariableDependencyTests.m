@@ -20,13 +20,14 @@
     id aIvar;
     ALCVariableDependency *_dependency;
     id _injectorMock;
+    Ivar _ivar;
 }
 
 -(void)setUp {
-    Ivar ivar = class_getInstanceVariable([self class], "aIvar");
+    _ivar = class_getInstanceVariable([self class], "aIvar");
     _injectorMock = OCMProtocolMock(@protocol(ALCInjector));
     _dependency = [ALCVariableDependency variableDependencyWithInjector:_injectorMock
-                                                               intoIvar:ivar
+                                                               intoIvar:_ivar
                                                                    name:@"abc"];
 }
 
@@ -36,13 +37,41 @@
     XCTAssertEqualObjects(@"abc", _dependency.name);
 }
 
+#pragma mark - Configuring
+
 -(void) testConfigureWithOptionsNillable {
+    OCMExpect([_injectorMock setAllowNilValues:YES]);
     [_dependency configureWithOptions:@[AcNillable]];
-    BOOL yes = YES;
-    OCMExpect([_injectorMock setAllowNilValues:OCMOCK_VALUE(yes)]);
     OCMVerifyAll(_injectorMock);
 }
 
+-(void) testConfigureWithOptionsTransient {
+    OCMExpect([_injectorMock setAllowNilValues:YES]);
+    [_dependency configureWithOptions:@[AcTransient]];
+    OCMVerifyAll(_injectorMock);
+    XCTAssertTrue(_dependency.transient);
+}
 
+-(void) testConfigureWithOptionsUnknownOption {
+    XCTAssertThrowsSpecific(([_dependency configureWithOptions:@[@"XXX"]]), AlchemicIllegalArgumentException);
+}
+
+#pragma mark - Naming
+
+-(void) testStackName {
+    XCTAssertEqualObjects(@"abc", _dependency.stackName);
+}
+
+-(void) testResolvingDescription {
+    XCTAssertEqualObjects(@"Variable abc", _dependency.resolvingDescription);
+}
+
+#pragma mark - Injecting
+
+-(void) testInjecting {
+    OCMExpect([_injectorMock setObject:@"abc" variable:_ivar]);
+    [_dependency injectObject:@"abc"];
+    OCMVerifyAll(_injectorMock);
+}
 
 @end

@@ -136,6 +136,7 @@
 		6CE234EC1CEB4B9400728CBE /* ALCModelClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE234EA1CEB4B9400728CBE /* ALCModelClassProcessor.m */; };
 		6CE6FFF71D2A9B2100D61613 /* ALCFactoryNameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE6FFF61D2A9B2100D61613 /* ALCFactoryNameTests.m */; };
 		6CE6FFFB1D2AA59A00D61613 /* ALCClassObjectFactoryInitializerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE6FFFA1D2AA59A00D61613 /* ALCClassObjectFactoryInitializerTests.m */; };
+		6CE7F68F1D410269005DEE2C /* ALCMOdelSearchCriteriaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE7F68E1D410269005DEE2C /* ALCMOdelSearchCriteriaTests.m */; };
 		6CED05761BCB545800B6C55B /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
 		6CED05781BCB548700B6C55B /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
 		F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -319,6 +320,7 @@
 		6CE6FFF61D2A9B2100D61613 /* ALCFactoryNameTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCFactoryNameTests.m; path = alchemicTests/ALCFactoryNameTests.m; sourceTree = "<group>"; };
 		6CE6FFF81D2A9CAD00D61613 /* NSArray+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+AlchemicTests.m"; sourceTree = "<group>"; };
 		6CE6FFFA1D2AA59A00D61613 /* ALCClassObjectFactoryInitializerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCClassObjectFactoryInitializerTests.m; path = alchemicTests/ALCClassObjectFactoryInitializerTests.m; sourceTree = "<group>"; };
+		6CE7F68E1D410269005DEE2C /* ALCMOdelSearchCriteriaTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMOdelSearchCriteriaTests.m; sourceTree = "<group>"; };
 		6CED05751BCB545800B6C55B /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6CED05771BCB548700B6C55B /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
 		F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractDependency.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -572,6 +574,7 @@
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;
 			children = (
+				6CE7F68C1D41021A005DEE2C /* Model */,
 				6C4D85A81C7DB6A80061CA84 /* Dependencies */,
 				6C0076901D17D5EC00E88987 /* Factories */,
 				6C67FF271C67728800ABEDDD /* Runtime */,
@@ -658,6 +661,14 @@
 				6CC503D71D1ACE67004283DA /* ALCObjectFactoryTypeTemplateTests.m */,
 			);
 			name = Types;
+			sourceTree = "<group>";
+		};
+		6CE7F68C1D41021A005DEE2C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6CE7F68E1D410269005DEE2C /* ALCMOdelSearchCriteriaTests.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		F45828351CEBFE100074A844 /* Tests */ = {
@@ -846,7 +857,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -975,6 +986,7 @@
 				6C24CCDE1CA42B0C0026D18C /* TopThing.m in Sources */,
 				6C1C10351CF475C900ED1A20 /* ALCModelClassProcessorTests.m in Sources */,
 				6C24CCDF1CA42B0C0026D18C /* NestedThing.m in Sources */,
+				6CE7F68F1D410269005DEE2C /* ALCMOdelSearchCriteriaTests.m in Sources */,
 				6C4D85AA1C7DB7460061CA84 /* ALCConstantsTests.m in Sources */,
 				6C7DE1781D313C4700FAC6A0 /* NSArray+AlchemicTests.m in Sources */,
 				6C0076921D17D60500E88987 /* AbstractSingletonMacroTests.m in Sources */,
@@ -1286,7 +1298,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,
