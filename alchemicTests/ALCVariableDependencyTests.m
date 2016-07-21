@@ -38,8 +38,11 @@
 
 -(void) testConfigureWithOptionsNillable {
     [_dependency configureWithOptions:@[AcNillable]];
-    OCMExpect([_injectorMock setAllowNilValues:YES]);
+    BOOL yes = YES;
+    OCMExpect([_injectorMock setAllowNilValues:OCMOCK_VALUE(yes)]);
     OCMVerifyAll(_injectorMock);
 }
+
+
 
 @end
