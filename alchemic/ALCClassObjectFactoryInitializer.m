@@ -79,7 +79,7 @@
 }
 
 -(BOOL) isReady {
-    return !_arguments || [_arguments dependenciesReadyWithCurrentlyCheckingFlag:&_checkingReadyStatus];
+    return !_arguments || [_arguments dependenciesReadyWithCheckingFlag:&_checkingReadyStatus];
 }
 
 @end

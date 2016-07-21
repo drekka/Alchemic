@@ -23,7 +23,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCModelObjectInjector {
-    ALCModelSearchCriteria *_criteria;
     NSArray<id<ALCObjectFactory>> *_resolvedFactories;
 }
 

@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL) isReady {
     if (super.isReady && _parentObjectFactory.isReady) {
-        return [_arguments dependenciesReadyWithCurrentlyCheckingFlag:&_checkingReadyStatus];
+        return [_arguments dependenciesReadyWithCheckingFlag:&_checkingReadyStatus];
     }
     return NO;
 }

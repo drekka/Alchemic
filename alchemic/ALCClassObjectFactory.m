@@ -109,7 +109,7 @@
 
 -(BOOL) isReady {
     if (super.isReady && (!_initializer || _initializer.isReady)) {
-        return [_dependencies dependenciesReadyWithCurrentlyCheckingFlag:&_checkingReadyStatus];
+        return [_dependencies dependenciesReadyWithCheckingFlag:&_checkingReadyStatus];
     }
     return NO;
 }

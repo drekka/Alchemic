@@ -56,7 +56,6 @@ NS_ASSUME_NONNULL_BEGIN
                      allowConstants:(BOOL) allowConstants
              unknownArgumentHandler:(nullable void (^)(id argument)) unknownArgumentHandler {
     
- //   ALCModelSearchCriteria *searchCriteria;
     id<ALCInjector> constantInjector;
     NSMutableArray<ALCModelSearchCriteria *> *searchCriteria = [[NSMutableArray alloc] init];
     
@@ -123,16 +122,6 @@ NS_ASSUME_NONNULL_BEGIN
     return searchCriteria ? searchCriteria: [ALCModelSearchCriteria searchCriteriaForClass:aClass];
 }
 
-#pragma mark - Blocks
-
--(nullable ALCSimpleBlock) combineSimpleBlocks {
-    return self.count == 0 ? NULL : ^{
-        for (ALCSimpleBlock block in self) {
-            block();
-        }
-    };
-}
-
 #pragma mark - Resolving
 
 -(void)resolveArgumentsWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
@@ -143,7 +132,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
--(BOOL) dependenciesReadyWithCurrentlyCheckingFlag:(BOOL *) checkingFlag {
+-(BOOL) dependenciesReadyWithCheckingFlag:(BOOL *) checkingFlag {
     
     // If this flag is set then we have looped back to the original variable. So consider everything to be good.
     if (*checkingFlag) {

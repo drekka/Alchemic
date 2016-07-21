@@ -64,16 +64,7 @@ Scans a list of seach criteria or constants to define an injection.
  
  @return YES if all dependencies are ready for injection.
  */
--(BOOL) dependenciesReadyWithCurrentlyCheckingFlag:(BOOL *) checkingFlag;
-
-/// @name Tasks
-
-/**
- Combines a list of ALCSimpleBlock objects into a single block.
- 
- @return A block which will execute all the blocks in the list.
- */
--(nullable ALCSimpleBlock) combineSimpleBlocks;
+-(BOOL) dependenciesReadyWithCheckingFlag:(BOOL *) checkingFlag;
 
 @end
 

@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCModelObjectInjector : NSObject<ALCInjector>
 
+/// The search criteria that will be used to find the object.
+@property (nonatomic, strong, readonly) ALCModelSearchCriteria *criteria;
+
 /**
  Executes a model search and return the results.
  
