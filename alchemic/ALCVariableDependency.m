@@ -28,7 +28,7 @@
     return self;
 }
 
-+(instancetype) variableDependencyWithInjector:(id<ALCDependency, ALCInjector>) injector
++(instancetype) variableDependencyWithInjector:(id<ALCInjector>) injector
                                       intoIvar:(Ivar) ivar
                                           name:(NSString *) name {
     return [[ALCVariableDependency alloc] initWithInjector:injector intoIvar:ivar name:name];
