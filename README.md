@@ -395,13 +395,37 @@ Swift is similar, however there are a couple of rules which don't apply to Objec
 * You have to specify the type of the variable in __AcInject__. This is required because the Objective-C runtime that Alchemic uses is not able to determine the type of Swift variables as easily as it can when looking at Objective-C classes.
 * The Swift variables have to be of a type that Alchemic can inject. This means classes which extend NSObject. Alchemic cannot inject Swift types such as String or Int. 
 
+### Nillable dependencies
 
-e are usually referred to as [Singletons](https://en.wikipedia.org/wiki/Singleton_pattern). There are a number of opinions amongst developers about singletons and how they should be declared and used in code.
+Normally if Alchemic attempts to do an injection and the value to be injected resolves down to a nil, an exception will be thrown. However you can configure an injection using __AcWeak__ to tell Alchemic that it can inject nil values. 
 
-By default, Alchemic assumes that any class or method object factory represents a singleton unless told otherwise. It keeps one instance of the class in it's context and injects that same instance wherever it is needed. 
+```objc
+// Objective-C
+@implementation {
+    MyOtherClass *_possiblyNil;
+}
 
-On startup, any object factory that represents a singleton instance will have that instance created and stored ready for use.
+AcInject(_possiblyNil, AcWeak)
+@end
+```
 
+### Transient dependencies
+
+Configuring a dependency as transient tells Alchemic that you expect it to change from time to time. With transient dependencies, Alchemic watches all object factories that the dependency sources values from. When one of these values change, Alchemic automatically re-injects the dependency with the new values.
+
+```objc
+// Objective-C
+@implementation {
+    MyOtherClass *_changingInstance;
+}
+
+AcInject(_changingInstance, AcTransient)
+@end
+```
+
+*Note: __AcTransient__ is only allowed in a limited set of situations. It can only be used when all the values for the injection are either singleton or reference factories. Constants are also not allowed.*
+
+Transient injections trigger some additional processing by Alchemic. Firstly, when a factory has a transient dependency, the factory automatically tracks all the objects it has injected in a weak collection. Including objects created externally and injected via the __AcInjectDependencies__ function. It then starts watching all the factories that have been resolved by the transient dependencies. Finally when one of those watches reports a new value being set (for example, with __AcSet__), Alchemic then loops trough all the transient dependies and previously injected objects, and re-injects the updated values. 
 
 # Locating dependencies
 
@@ -1041,3 +1065,5 @@ But generally speaking, just letting Alchemic autostart is the best way.
 * Thanks to Mulle Cybernetik for [OCMock](ocmock.org). An outstanding mocking framework for Objective-C that has enabled me to test the un-testable many times.
 * Thanks to Todd Ditchendorf for [PEGKit](https://github.com/itod/pegkit). I've learned a lot from working with it on [Story Teller](https://github.com/drekka/StoryTeller).
 * Finally thanks to everyone who writes the crappy software that inspires me to give things like this ago. You know who you are.
+
+
