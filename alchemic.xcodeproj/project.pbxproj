@@ -10,6 +10,7 @@
 		6C0076921D17D60500E88987 /* AbstractSingletonMacroTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0076911D17D60500E88987 /* AbstractSingletonMacroTests.m */; };
 		6C019F1A1D3527F9005C7D7D /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */; };
 		6C019F1C1D35283B005C7D7D /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */; };
+		6C0D87831D40876600FEC25A /* NSBundle+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D87821D40876600FEC25A /* NSBundle+AlchemicTests.m */; };
 		6C1ADAFF1C8DB28400267E77 /* AlchemicAware.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB001C8DB88C00267E77 /* Alchemic.m */; };
 		6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -191,6 +192,7 @@
 
 /* Begin PBXFileReference section */
 		6C0076911D17D60500E88987 /* AbstractSingletonMacroTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AbstractSingletonMacroTests.m; path = alchemicTests/AbstractSingletonMacroTests.m; sourceTree = "<group>"; };
+		6C0D87821D40876600FEC25A /* NSBundle+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+AlchemicTests.m"; sourceTree = "<group>"; };
 		6C14FC2F1C96EB9F00B56578 /* TopThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopThing.h; sourceTree = "<group>"; };
 		6C14FC301C96EB9F00B56578 /* TopThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopThing.m; sourceTree = "<group>"; };
 		6C14FC331C96EBBB00B56578 /* NestedThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NestedThing.h; sourceTree = "<group>"; };
@@ -585,6 +587,7 @@
 				6C1C10381CF496F700ED1A20 /* NSObject+AlchemicTests.m */,
 				6C1C10361CF494F500ED1A20 /* NSSet+AlchemicTests.m */,
 				6CE6FFF81D2A9CAD00D61613 /* NSArray+AlchemicTests.m */,
+				6C0D87821D40876600FEC25A /* NSBundle+AlchemicTests.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -840,7 +843,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -973,6 +976,7 @@
 				6C7DE1781D313C4700FAC6A0 /* NSArray+AlchemicTests.m in Sources */,
 				6C0076921D17D60500E88987 /* AbstractSingletonMacroTests.m in Sources */,
 				6CC503D21D1968C4004283DA /* ALCAbstractObjectFactoryTypeTests.m in Sources */,
+				6C0D87831D40876600FEC25A /* NSBundle+AlchemicTests.m in Sources */,
 				6CE6FFFB1D2AA59A00D61613 /* ALCClassObjectFactoryInitializerTests.m in Sources */,
 				6C1C10391CF496F700ED1A20 /* NSObject+AlchemicTests.m in Sources */,
 				6CC503D61D1ACD62004283DA /* ALCObjectFactoryTypeSingletonTests.m in Sources */,
@@ -1278,7 +1282,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,

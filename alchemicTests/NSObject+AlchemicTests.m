@@ -52,7 +52,80 @@
     XCTAssertThrowsSpecific([NSString invokeSelector:@selector(localizedCapitalizedString) arguments:nil], AlchemicMethodNotFoundException);
 }
 
+#pragma mark - Resolving
 
+-(void) testResolveWithResolvingStackIfNotResolvedCallsBlock {
+    
+    NSMutableArray *stack = [[NSMutableArray alloc] init];
+    __block BOOL resolved = NO;
+    __block BOOL blockCalled = NO;
+    // Must be an object factory.
+    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    
+    [factory resolveWithResolvingStack:stack
+                          resolvedFlag:&resolved
+                                 block:^{
+                                     XCTAssertTrue([stack containsObject:factory]);
+                                     XCTAssertTrue(resolved);
+                                     blockCalled = YES;
+                                 }];
+    
+    XCTAssertTrue(blockCalled);
+    XCTAssertEqual(0u, stack.count);
+}
 
+-(void) testResolveWithResolvingStackWhenObjectNotInStack {
+    
+    NSMutableArray *stack = [[NSMutableArray alloc] init];
+    __block BOOL resolved = YES;
+    
+    // Must be an object factory.
+    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    
+    [factory resolveWithResolvingStack:stack
+                          resolvedFlag:&resolved
+                                 block:^{
+                                     XCTFail(@"Should not be called"); }];
+    // Nothing to validate here.
+}
+
+-(void) testResolveWithResolvingStackWhenObjectInStack {
+    
+    NSMutableArray *stack = [[NSMutableArray alloc] init];
+    __block BOOL resolved = YES;
+    
+    // Must be an object factory.
+    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    
+    [stack addObject:factory];
+    
+    [factory resolveWithResolvingStack:stack
+                          resolvedFlag:&resolved
+                                 block:^{
+                                     XCTFail(@"Should not be called"); }];
+    // Nothing to validate here.
+}
+
+-(void) testResolveWithResolvingStackWhenMethodArgumentInStackAfterPreviousFactory {
+    
+    NSMutableArray *stack = [[NSMutableArray alloc] init];
+    __block BOOL resolved = YES;
+    
+    // Must be an object factory.
+    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    
+    ALCMethodArgumentDependency *methodArgDep = [ALCMethodArgumentDependency argumentWithClass:[NSString class] criteria:AcClass(NSString), nil];
+    
+    [stack addObject:factory];
+    [stack addObject:methodArgDep];
+    
+    XCTAssertThrowsSpecific(
+                            ([factory resolveWithResolvingStack:stack
+                                                   resolvedFlag:&resolved
+                                                          block:^{
+                                                              XCTFail(@"Should not be called");
+                                                          }]),
+                            AlchemicCircularReferenceException);
+}
 
 @end
