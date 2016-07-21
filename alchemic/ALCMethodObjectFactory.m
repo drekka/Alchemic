@@ -9,16 +9,16 @@
 @import StoryTeller;
 
 // :: Framework ::
-#import <Alchemic/ALCMethodArgumentDependency.h>
-#import <Alchemic/ALCClassObjectFactory.h>
-#import <Alchemic/ALCMethodObjectFactory.h>
+#import "ALCMethodArgumentDependency.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCMethodObjectFactory.h"
 #import <Alchemic/NSArray+Alchemic.h>
 #import <Alchemic/NSObject+Alchemic.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCFlagMacros.h>
-#import <Alchemic/ALCInstantiation.h>
-#import <Alchemic/Alchemic.h>
-#import <Alchemic/ALCRuntime.h>
+#import "ALCInternalMacros.h"
+#import "ALCFlagMacros.h"
+#import "ALCInstantiation.h"
+#import "Alchemic.h"
+#import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

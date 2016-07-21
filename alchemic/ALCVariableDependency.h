@@ -9,7 +9,7 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCAbstractDependency.h>
+#import "ALCAbstractDependency.h"
 
 @protocol ALCInjector;
 

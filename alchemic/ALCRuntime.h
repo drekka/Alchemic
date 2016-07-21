@@ -9,7 +9,7 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCTypeDefs.h>
+#import "ALCTypeDefs.h"
 
 @class ALCTypeData;
 @class ALCInstantiation;

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCTypeData.h>
+#import "ALCTypeData.h"
 
 @implementation ALCTypeData
 

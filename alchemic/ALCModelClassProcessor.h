@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCClassProcessor.h>
+#import "ALCClassProcessor.h"
 
 /**
  *  Detects Alchemic methods in classes and executes them to perform model registrations.

@@ -8,14 +8,14 @@
 
 #import <Alchemic/NSArray+Alchemic.h>
 
-#import <Alchemic/ALCDependency.h>
-#import <Alchemic/ALCModelSearchCriteria.h>
-#import <Alchemic/ALCConstant.h>
-#import <Alchemic/ALCModelObjectInjector.h>
-#import <Alchemic/ALCMethodArgumentDependency.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCException.h>
+#import "ALCDependency.h"
+#import "ALCModelSearchCriteria.h"
+#import "ALCConstant.h"
+#import "ALCModelObjectInjector.h"
+#import "ALCMethodArgumentDependency.h"
+#import "ALCMacros.h"
+#import "ALCInternalMacros.h"
+#import "ALCException.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

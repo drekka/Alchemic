@@ -6,10 +6,10 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCAbstractConstantInjector.h>
+#import "ALCAbstractConstantInjector.h"
 
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCDefs.h>
+#import "ALCInternalMacros.h"
+#import "ALCDefs.h"
 
 @implementation ALCAbstractConstantInjector
 

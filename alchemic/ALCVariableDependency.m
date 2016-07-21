@@ -6,12 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCVariableDependency.h>
-#import <Alchemic/ALCInjector.h>
-#import <Alchemic/ALCStringMacros.h>
-#import <Alchemic/ALCFlagMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCException.h>
+#import "ALCVariableDependency.h"
+#import "ALCInjector.h"
+#import "ALCStringMacros.h"
+#import "ALCFlagMacros.h"
+#import "ALCInternalMacros.h"
+#import "ALCException.h"
 
 @implementation ALCVariableDependency {
     Ivar _ivar;
@@ -36,10 +36,14 @@
 
 -(void) configureWithOptions:(NSArray *) options {
     for (id option in options) {
+
         if ([option isKindOfClass:[ALCIsNillable class]]) {
             self.injector.allowNilValues = YES;
+        
         } else if ([option isKindOfClass:[ALCIsTransient class]]) {
             _transient = YES;
+            self.injector.allowNilValues = YES;
+        
         } else {
            throwException(IllegalArgument, @"Unknown variable dependency option: %@", option);
         }

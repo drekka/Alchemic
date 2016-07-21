@@ -9,14 +9,14 @@
 @import StoryTeller;
 
 // :: Framework ::
-#import <Alchemic/ALCException.h>
-#import <Alchemic/ALCInstantiation.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCModelObjectInjector.h>
-#import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCRuntime.h>
+#import "ALCException.h"
+#import "ALCInstantiation.h"
+#import "ALCMacros.h"
+#import "ALCInternalMacros.h"
+#import "ALCModel.h"
+#import "ALCModelObjectInjector.h"
+#import "ALCObjectFactory.h"
+#import "ALCRuntime.h"
 #import <Alchemic/NSArray+Alchemic.h>
 #import <Alchemic/NSObject+Alchemic.h>
 

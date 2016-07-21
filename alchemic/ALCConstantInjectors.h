@@ -9,8 +9,8 @@
 @import Foundation;
 @import UIKit;
 
-#import <Alchemic/ALCAbstractConstantInjector.h>
-#import <Alchemic/ALCInjector.h>
+#import "ALCAbstractConstantInjector.h"
+#import "ALCInjector.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

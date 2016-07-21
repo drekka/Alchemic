@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCAbstractObjectFactoryType.h>
+#import "ALCAbstractObjectFactoryType.h"
 
 /**
  A ALCObjectFactoryType which manages externally referenced objects.

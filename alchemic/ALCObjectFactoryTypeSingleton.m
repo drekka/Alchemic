@@ -6,9 +6,9 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCObjectFactoryTypeSingleton.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCStringMacros.h>
+#import "ALCObjectFactoryTypeSingleton.h"
+#import "ALCInternalMacros.h"
+#import "ALCStringMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

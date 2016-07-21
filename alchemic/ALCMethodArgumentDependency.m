@@ -6,12 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCMethodArgumentDependency.h>
+#import "ALCMethodArgumentDependency.h"
 
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCStringMacros.h>
+#import "ALCInternalMacros.h"
+#import "ALCStringMacros.h"
 #import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/ALCInjector.h>
+#import "ALCInjector.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

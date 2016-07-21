@@ -8,26 +8,26 @@
 
 @import StoryTeller;
 // :: Framework ::
-#import <Alchemic/ALCClassObjectFactory.h>
-#import <Alchemic/ALCClassObjectFactoryInitializer.h>
-#import <Alchemic/ALCConstant.h>
-#import <Alchemic/ALCContextImpl.h>
-#import <Alchemic/ALCDependency.h>
-#import <Alchemic/ALCException.h>
-#import <Alchemic/ALCFactoryName.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCMethodObjectFactory.h>
-#import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCModelImpl.h>
-#import <Alchemic/ALCModelObjectInjector.h>
-#import <Alchemic/ALCModelSearchCriteria.h>
-#import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCRuntime.h>
-#import <Alchemic/ALCTypeData.h>
+#import "ALCClassObjectFactory.h"
+#import "ALCClassObjectFactoryInitializer.h"
+#import "ALCConstant.h"
+#import "ALCContextImpl.h"
+#import "ALCDependency.h"
+#import "ALCException.h"
+#import "ALCFactoryName.h"
+#import "ALCMacros.h"
+#import "ALCInternalMacros.h"
+#import "ALCMethodObjectFactory.h"
+#import "ALCModel.h"
+#import "ALCModelImpl.h"
+#import "ALCModelObjectInjector.h"
+#import "ALCModelSearchCriteria.h"
+#import "ALCObjectFactory.h"
+#import "ALCRuntime.h"
+#import "ALCTypeData.h"
 #import <Alchemic/NSArray+Alchemic.h>
 #import <Alchemic/NSObject+Alchemic.h>
-#import <Alchemic/ALCVariableDependency.h>
+#import "ALCVariableDependency.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

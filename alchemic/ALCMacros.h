@@ -6,14 +6,14 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/Alchemic.h>
-#import <Alchemic/ALCFactoryName.h>
-#import <Alchemic/ALCFlagMacros.h>
-#import <Alchemic/ALCMethodArgumentDependency.h>
-#import <Alchemic/ALCModelSearchCriteria.h>
-#import <Alchemic/ALCClassObjectFactory.h>
-#import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCStringMacros.h>
+#import "Alchemic.h"
+#import "ALCFactoryName.h"
+#import "ALCFlagMacros.h"
+#import "ALCMethodArgumentDependency.h"
+#import "ALCModelSearchCriteria.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCContext.h"
+#import "ALCStringMacros.h"
 
 #pragma mark - registration
 
