@@ -14,10 +14,10 @@
 #import "ALCMacros.h"
 #import "ALCInternalMacros.h"
 #import "ALCDependency.h"
-#import <Alchemic/NSObject+Alchemic.h>
+#import "NSObject+Alchemic.h"
 #import "ALCInstantiation.h"
 #import "ALCRuntime.h"
-#import <Alchemic/NSArray+Alchemic.h>
+#import "NSArray+Alchemic.h"
 
 @implementation ALCClassObjectFactoryInitializer {
     NSArray<id<ALCDependency>> *_arguments;

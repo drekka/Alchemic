@@ -10,7 +10,7 @@
 
 #import "ALCInternalMacros.h"
 #import "ALCStringMacros.h"
-#import <Alchemic/NSArray+Alchemic.h>
+#import "NSArray+Alchemic.h"
 #import "ALCInjector.h"
 
 NS_ASSUME_NONNULL_BEGIN

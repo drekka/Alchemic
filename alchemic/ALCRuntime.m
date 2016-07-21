@@ -16,8 +16,8 @@
 #import "ALCResourceLocatorClassProcessor.h"
 #import "ALCRuntime.h"
 #import "ALCTypeData.h"
-#import <Alchemic/NSSet+Alchemic.h>
-#import <Alchemic/NSBundle+Alchemic.h>
+#import "NSSet+Alchemic.h"
+#import "NSBundle+Alchemic.h"
 #import "ALCException.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -189,7 +189,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Describing things
 
 +(NSString *) class:(Class) aClass selectorDescription:(SEL)selector {
-    return str(@"%@[%@ %@]", [aClass respondsToSelector:selector] ? @"+" : @"-", NSStringFromClass(aClass), NSStringFromSelector(selector));
+    return [self class:aClass selectorDescription:selector static:[aClass respondsToSelector:selector]];
 }
 
 +(NSString *) class:(Class) aClass propertyDescription:(NSString *)property {
@@ -198,6 +198,10 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(NSString *) class:(Class) aClass variableDescription:(Ivar) variable {
     return str(@"%@.%s", NSStringFromClass(aClass), ivar_getName(variable));
+}
+
++(NSString *) class:(Class) aClass selectorDescription:(SEL)selector static:(BOOL) isStatic {
+    return str(@"%@[%@ %@]", isStatic ? @"+" : @"-", NSStringFromClass(aClass), NSStringFromSelector(selector));
 }
 
 #pragma mark - Scanning

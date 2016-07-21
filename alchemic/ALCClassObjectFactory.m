@@ -19,8 +19,8 @@
 #import "ALCInternalMacros.h"
 #import "ALCRuntime.h"
 #import "ALCVariableDependency.h"
-#import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/NSObject+Alchemic.h>
+#import "NSArray+Alchemic.h"
+#import "NSObject+Alchemic.h"
 
 
 @implementation ALCClassObjectFactory {

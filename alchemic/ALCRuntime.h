@@ -127,12 +127,25 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 /**
  Returns a NSString description of a class and selector.
 
+ @discussion This internally works out whether the method is a class or instance method and then calls class:selectorDescription:static:
+ 
  @param aClass   The class.
  @param selector The selector to describe.
 
  @return A string which describes the class and selector.
  */
 +(NSString *) class:(Class) aClass selectorDescription:(SEL)selector;
+
+/**
+ Returns a NSString description of a class and selector.
+ 
+ @param aClass   The class.
+ @param selector The selector to describe.
+ @param isStatic YES if the method is a class method.
+ 
+ @return A string which describes the class and selector.
+ */
++(NSString *) class:(Class) aClass selectorDescription:(SEL)selector static:(BOOL) isStatic;
 
 /**
  Returns a NSString description of a class and property.

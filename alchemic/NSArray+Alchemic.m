@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/NSArray+Alchemic.h>
+#import "NSArray+Alchemic.h"
 
 #import "ALCDependency.h"
 #import "ALCModelSearchCriteria.h"
@@ -95,8 +95,6 @@ NS_ASSUME_NONNULL_BEGIN
     if (constantInjector) {
         return constantInjector;
     }
-    
-    
     
     // Default to the dependency class if no constant or criteria provided.
     return [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass

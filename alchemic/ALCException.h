@@ -32,5 +32,6 @@ declareException(UnableToSetReference)
 declareException(Lifecycle)
 declareException(NilValue)
 declareException(NilParentObject)
+declareException(MethodNotFound)
 
 

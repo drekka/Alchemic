@@ -17,8 +17,8 @@
 #import "ALCModelObjectInjector.h"
 #import "ALCObjectFactory.h"
 #import "ALCRuntime.h"
-#import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/NSObject+Alchemic.h>
+#import "NSArray+Alchemic.h"
+#import "NSObject+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

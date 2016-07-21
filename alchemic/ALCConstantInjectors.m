@@ -7,7 +7,7 @@
 //
 
 #import "ALCConstantInjectors.h"
-#import <Alchemic/NSObject+Alchemic.h>
+#import "NSObject+Alchemic.h"
 #import "ALCRuntime.h"
 #import "ALCInternalMacros.h"
 #import "ALCTypeData.h"

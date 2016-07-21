@@ -12,8 +12,8 @@
 #import "ALCMethodArgumentDependency.h"
 #import "ALCClassObjectFactory.h"
 #import "ALCMethodObjectFactory.h"
-#import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/NSObject+Alchemic.h>
+#import "NSArray+Alchemic.h"
+#import "NSObject+Alchemic.h"
 #import "ALCInternalMacros.h"
 #import "ALCFlagMacros.h"
 #import "ALCInstantiation.h"

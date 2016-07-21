@@ -18,8 +18,8 @@
 #import "ALCMethodArgumentDependency.h"
 #import "ALCResolvable.h"
 #import "ALCRuntime.h"
-#import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/NSObject+Alchemic.h>
+#import "NSArray+Alchemic.h"
+#import "NSObject+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -86,7 +86,16 @@ NS_ASSUME_NONNULL_BEGIN
     STLog(self, @"Executing %@", [ALCRuntime class:[self class] selectorDescription:selector]);
     
     // Get an invocation ready.
-    NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:selector];
+    NSMethodSignature *sig = [object methodSignatureForSelector:selector];
+    
+    // Error checks
+    if (!sig) {
+        throwException(MethodNotFound, @"Method %@ not found", [ALCRuntime class:[self class] selectorDescription:selector]);
+    }
+    
+    if (strcmp(sig.methodReturnType, "@") != 0) {
+        throwException(IllegalArgument, @"Method %@ does not return an object", [ALCRuntime class:[self class] selectorDescription:selector]);
+    }
     
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
     [inv retainArguments];
