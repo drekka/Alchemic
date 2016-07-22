@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(NSString *) defaultModelKey {
+-(NSString *) defaultModelName {
     return [ALCRuntime class:_parentObjectFactory.objectClass selectorDescription:_selector];
 }
 
@@ -100,11 +100,11 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Descriptions
 
 -(NSString *) description {
-    return str(@"%@ method %@ -> %@", super.description, self.defaultModelKey, NSStringFromClass(self.objectClass));
+    return str(@"%@ method %@ -> %@", super.description, self.defaultModelName, NSStringFromClass(self.objectClass));
 }
 
 -(NSString *)resolvingDescription {
-    return str(@"Method %@", self.defaultModelKey);
+    return str(@"Method %@", self.defaultModelName);
 }
 
 @end

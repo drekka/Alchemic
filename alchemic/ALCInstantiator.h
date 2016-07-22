@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The default name for storing the instantiator in the model.
  */
-@property (nonatomic, strong, readonly) NSString *defaultModelKey;
+@property (nonatomic, strong, readonly) NSString *defaultModelName;
 
 /**
  The completion block that can be executed to finished the object from createObject.

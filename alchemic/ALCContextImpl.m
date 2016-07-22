@@ -85,13 +85,13 @@ NS_ASSUME_NONNULL_BEGIN
 -(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz {
     STLog(clazz, @"Register object factory for %@", NSStringFromClass(clazz));
     ALCClassObjectFactory *objectFactory = [[ALCClassObjectFactory alloc] initWithClass:clazz];
-    [_model addObjectFactory:objectFactory withName:objectFactory.defaultModelKey];
+    [_model addObjectFactory:objectFactory withName:nil];
     return objectFactory;
 }
 
 -(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory, ... {
     alc_loadVarArgsAfterVariableIntoArray(objectFactory, configArguments);
-    [self objectFactory:objectFactory config:configArguments];
+    [objectFactory configureWithOptions:configArguments model:_model];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
@@ -112,7 +112,7 @@ registerFactoryMethod:(SEL) selector
                                                                                  selector:selector
                                                                                      args:methodArguments];
     
-    [_model addObjectFactory:methodFactory withName:methodFactory.defaultModelKey];
+    [_model addObjectFactory:methodFactory withName:nil];
     [methodFactory configureWithOptions:factoryOptions model:_model];
 }
 
@@ -230,21 +230,6 @@ registerFactoryMethod:(SEL) selector
     
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.
     [self executeBlockWhenStarted:setBlock];
-}
-
-#pragma mark - Internal
-
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory config:(NSArray *) options {
-    [objectFactory configureWithOptions:options model:_model];
-}
-
--(BOOL) processFactoryNameMacro:(NSObject *) macro forObjectFactory:(id<ALCObjectFactory>) objectFactory {
-    if ([macro isKindOfClass:[ALCFactoryName class]]) {
-        NSString *newName = ((ALCFactoryName *) macro).asName;
-        [_model reindexObjectFactoryOldName:objectFactory.defaultModelKey newName:newName];
-        return YES;
-    }
-    return NO;
 }
 
 @end

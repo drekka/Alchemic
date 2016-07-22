@@ -49,8 +49,8 @@
     XCTAssertTrue(_factory.isReady);
 }
 
--(void) testDefaultModelKey {
-    XCTAssertEqualObjects(@"NSString", _factory.defaultModelKey);
+-(void) testdefaultModelName {
+    XCTAssertEqualObjects(@"NSString", _factory.defaultModelName);
 }
 
 -(void) testInitWithClass {

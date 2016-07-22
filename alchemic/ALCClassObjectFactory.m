@@ -161,7 +161,7 @@
 #pragma mark - Descriptions
 
 -(NSString *) description {
-    return str(@"%@ class %@", super.description, self.defaultModelKey);
+    return str(@"%@ class %@", super.description, self.defaultModelName);
 }
 
 -(NSString *)resolvingDescription {

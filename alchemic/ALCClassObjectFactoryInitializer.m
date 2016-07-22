@@ -46,7 +46,7 @@
 }
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
-    STLog(self.objectClass, @"Resolving initializer %@", [self defaultModelKey]);
+    STLog(self.objectClass, @"Resolving initializer %@", [self defaultModelName]);
     AcWeakSelf;
     [self resolveWithResolvingStack:resolvingStack
                        resolvedFlag:&_resolved
@@ -57,7 +57,7 @@
 }
 
 -(id) createObject {
-    STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), [self defaultModelKey]);
+    STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), [self defaultModelName]);
     id obj = [self.objectClass alloc];
     return [obj invokeSelector:_initializer arguments:_arguments];
 }
@@ -66,12 +66,12 @@
     return NULL;
 }
 
--(NSString *) defaultModelKey {
+-(NSString *) defaultModelName {
     return [ALCRuntime class: self.objectClass selectorDescription:_initializer];
 }
 
 -(NSString *) description {
-    return str(@"initializer %@", self.defaultModelKey);
+    return str(@"initializer %@", self.defaultModelName);
 }
 
 -(NSString *) resolvingDescription {

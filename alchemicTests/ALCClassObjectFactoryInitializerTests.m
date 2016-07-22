@@ -82,9 +82,9 @@
     XCTAssertNil([_initializer objectCompletion]);
 }
 
--(void) testDefaultModelKey {
+-(void) testdefaultModelName {
     [self setUpWithInitializer:@selector(init) args:nil];
-    XCTAssertEqualObjects(@"+[ALCClassObjectFactoryInitializerTests init]", [_initializer defaultModelKey]);
+    XCTAssertEqualObjects(@"+[ALCClassObjectFactoryInitializerTests init]", [_initializer defaultModelName]);
 }
 
 -(void) testDescription {

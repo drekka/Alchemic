@@ -35,13 +35,22 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, strong) NSArray<ALCClassObjectFactory *> *classObjectFactories;
 
 /**
+ Returns the matching ALCClassObjectFactory for a specific class.
+ 
+ @param aClass The class to search for.
+ 
+ @return The matching object factory or nil if none can be found.
+ */
+-(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass;
+
+/**
  Searches the model and returns a list of match ALCObjectFactory instances.
 
  @param criteria The ALCModelSearchCriteria that defines what to return.
 
- @return A NSDictionary of name/factory pairs that match the search criteria.
+ @return A NSArray of factories that match the search criteria.
  */
--(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
+-(NSArray<id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
 
 /**
  Returns a list of object factories meeting a criteria.
@@ -54,16 +63,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(NSArray<id<ALCObjectFactory>> *) settableObjectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria;
 
-#pragma mark - Creating object factories
-/**
- Returns the matching ALCClassObjectFactory for a specific class.
-
- @param aClass The class to search for.
-
- @return The matching object factory or nil if none can be found.
- */
--(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass;
-
 #pragma mark - Setting up the model
 /// @name Modifying
 
@@ -71,9 +70,9 @@ NS_ASSUME_NONNULL_BEGIN
  Adds a ALCObjectFactory to the model.
  
  @param objectFactory The factory to add.
- @param name          The name to add the model under. This must be unique.
+ @param name          The name to add the model under. This must be unique. If nil, the factory is queried for it's defaultModelName property which is then used instead.
  */
--(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name;
+-(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(nullable NSString *) name;
 
 /**
  Changes the name that an ALCObjectFactory is stored under.

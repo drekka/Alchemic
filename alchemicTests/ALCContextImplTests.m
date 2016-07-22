@@ -82,7 +82,7 @@
     OCMExpect([_mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(id<ALCObjectFactory> objectFactory) {
         return objectFactory != nil;
     }]
-                                  withName:@"NSString"]);
+                                  withName:nil]);
     id<ALCObjectFactory> objF = [_context registerObjectFactoryForClass:[NSString class]];
     XCTAssertEqual([NSString class], objF.objectClass);
     OCMVerifyAll(_mockModel);
@@ -108,7 +108,7 @@
         internalMethodFactory = methodFactory;
         return methodFactory.selector == @selector(description);
     }]
-                                  withName:@"+[NSString description]"]);
+                                  withName:nil]);
 
     [_context objectFactory:mockParentObjectFactory
       registerFactoryMethod:@selector(description)
@@ -136,7 +136,7 @@
         internalMethodFactory = methodFactory;
         return methodFactory.selector == @selector(description);
     }]
-                                  withName:@"+[NSString description]"]);
+                                  withName:nil]);
 
     [_context objectFactory:mockParentObjectFactory
       registerFactoryMethod:@selector(description)

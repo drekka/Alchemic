@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass {
-    for (id<ALCObjectFactory> objectFactory in _objectFactories) {
+    for (id<ALCObjectFactory> objectFactory in self.objectFactories) {
         if ([objectFactory isKindOfClass:[ALCClassObjectFactory class]]
             && objectFactory.objectClass == aClass) {
             return objectFactory;
@@ -58,21 +58,22 @@ NS_ASSUME_NONNULL_BEGIN
     return nil;
 }
 
--(NSDictionary<NSString *, id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
+-(NSArray<id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
     NSMutableDictionary<NSString *, id<ALCObjectFactory>> *results = [[NSMutableDictionary alloc] init];
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         if ([criteria acceptsObjectFactory:objectFactory name:name]) {
             results[name] = objectFactory;
         }
     }];
-    return results;
+    return results.allValues;
 }
 
 -(NSArray<id<ALCObjectFactory>> *) settableObjectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
-    NSDictionary<NSString *, id<ALCObjectFactory>> *factories = [self objectFactoriesMatchingCriteria:criteria];
     NSMutableArray<id<ALCObjectFactory>> *results = [[NSMutableArray alloc] init];
-    [factories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        if (objectFactory.factoryType == ALCFactoryTypeSingleton || objectFactory.factoryType == ALCFactoryTypeReference) {
+    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
+        if ((objectFactory.factoryType == ALCFactoryTypeSingleton
+             || objectFactory.factoryType == ALCFactoryTypeReference)
+            && [criteria acceptsObjectFactory:objectFactory name:name]) {
             [results addObject:objectFactory];
         }
     }];
@@ -81,11 +82,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - The model
 
--(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(NSString *) name {
-    if (_objectFactories[name]) {
-        throwException(DuplicateName, @"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[name]);
+-(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(nullable NSString *) name {
+    NSString *finalName = name ? name : objectFactory.defaultModelName;
+    if (_objectFactories[finalName]) {
+        throwException(DuplicateName, @"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[finalName]);
     }
-    _objectFactories[name] = objectFactory;
+    _objectFactories[finalName] = objectFactory;
 }
 
 -(void) reindexObjectFactoryOldName:(NSString *) oldName newName:(NSString *) newName {
@@ -115,7 +117,7 @@ NS_ASSUME_NONNULL_BEGIN
         // UIApplicationDelegate
         if ([objectFactory.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
             self->_uiAppDelegateFactory = objectFactory;
-            [objectFactory configureWithOptions:@[[ALCIsReference macro]] model:self];
+            [objectFactory configureWithOptions:@[AcReference] model:self];
             *stop = YES;
         }
     }];

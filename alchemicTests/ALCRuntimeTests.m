@@ -173,6 +173,10 @@
     [ALCRuntime validateClass:[self class] selector:@selector(copy) arguments:nil];
 }
 
+-(void) testValidateClassSelectorArgumentsInheritedProperty {
+    [ALCRuntime validateClass:[self class] selector:@selector(description) arguments:nil];
+}
+
 -(void) testValidateClassSelectorArgumentsClassMethod {
     [ALCRuntime validateClass:[self class] selector:@selector(classMethod) arguments:nil];
 }

@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
     STLog(_objectClass, @"Searching model using %@", _criteria);
     
     // Find dependencies
-    _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria].allValues;
+    _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];
     if ([_resolvedFactories count] == 0) {
         throwException(NoDependenciesFound, @"No object factories found for criteria %@", _criteria);
     }

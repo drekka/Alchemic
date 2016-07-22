@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
     return _typeStrategy.isReady;
 }
 
--(NSString *) defaultModelKey {
+-(NSString *) defaultModelName {
     return NSStringFromClass(self.objectClass);
 }
 
@@ -96,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
         
     } else if ([option isKindOfClass:[ALCFactoryName class]]) {
         NSString *newName = ((ALCFactoryName *) option).asName;
-        [model reindexObjectFactoryOldName:self.defaultModelKey newName:newName];
+        [model reindexObjectFactoryOldName:self.defaultModelName newName:newName];
         
     } else if ([option isKindOfClass:[ALCIsWeak class]]) {
         _typeStrategy.weak = YES;
