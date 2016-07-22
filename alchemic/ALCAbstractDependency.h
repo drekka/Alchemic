@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCDependency.h"
+#import <Alchemic/ALCDependency.h>
 
 @protocol ALCInjector;
 

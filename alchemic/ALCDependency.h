@@ -9,8 +9,8 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import "ALCTypeDefs.h"
-#import "ALCResolvable.h"
+#import <Alchemic/ALCTypeDefs.h>
+#import <Alchemic/ALCResolvable.h>
 
 @protocol ALCModel;
 @protocol ALCObjectFactory;

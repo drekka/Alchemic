@@ -6,8 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCStringMacros.h"
-#import "ALCException.h"
+#import <Alchemic/ALCStringMacros.h>
+#import <Alchemic/ALCException.h>
 
 #define throwException(exceptionName, template, ...) \
 @throw [Alchemic ## exceptionName ## Exception exceptionWithName:alc_toNSString(exceptionName) reason:str(template, ## __VA_ARGS__) userInfo:nil]

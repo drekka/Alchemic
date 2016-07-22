@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCInjector.h"
+#import <Alchemic/ALCInjector.h>
 
 @class ALCModelSearchCriteria;
 @class ALCInstantiation;

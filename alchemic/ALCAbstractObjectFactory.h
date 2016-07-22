@@ -8,8 +8,8 @@
 
 @import Foundation;
 
-#import "ALCObjectFactory.h"
-#import "ALCDefs.h"
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCDefs.h>
 
 @class ALCInstantiation;
 @protocol ALCModel;
