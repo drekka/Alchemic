@@ -27,14 +27,15 @@
     XCTAssertEqual(ALCFactoryTypeSingleton, _factoryType.type);
 }
 
--(void) testStrongObjectStorage {
+-(void) testSetObjectStrong {
     NSString *obj = @"abc";
     _factoryType.object = obj;
+    obj = nil;
     NSString *returnedObj = _factoryType.object;
-    XCTAssertEqual(obj, returnedObj);
+    XCTAssertEqual(@"abc", returnedObj);
 }
 
--(void) testWeakObjectStorage {
+-(void) testSetObjectWeak {
     NSObject *obj = [[NSObject alloc] init];
     _factoryType.weak = YES;
     _factoryType.object = obj;
@@ -43,8 +44,47 @@
     XCTAssertNil(returnedObj);
 }
 
+-(void) testSetObjectWhenNillableAndNil {
+    _factoryType.nillable = YES;
+    _factoryType.object = @"abc";
+    XCTAssertEqualObjects(@"abc", _factoryType.object);
+    _factoryType.object = nil;
+    XCTAssertNil(_factoryType.object);
+}
+
+-(void) testSetObjectThrowsWhenNilAndNotNillable {
+    XCTAssertThrowsSpecific({_factoryType.object = nil;}, AlchemicNilValueException);
+}
+
 -(void) testReadyThrows {
     XCTAssertThrowsSpecific((_factoryType.isReady), NSException);
+}
+
+-(void) testObjectPresentWhenNil {
+    XCTAssertFalse(_factoryType.objectPresent);
+}
+
+-(void) testObjectPresent {
+    _factoryType.object = @"abc";
+    XCTAssertTrue(_factoryType.objectPresent);
+}
+
+-(void) testDescriptionWithType {
+    XCTAssertEqualObjects(@"XXX", [_factoryType descriptionWithType:@"XXX"]);
+}
+
+-(void) testDescriptionWithTypeNillable {
+    _factoryType.nillable = YES;
+    XCTAssertEqualObjects(@"nillable XXX", [_factoryType descriptionWithType:@"XXX"]);
+}
+
+-(void) testDescriptionWithTypeWeak {
+    _factoryType.weak = YES;
+    XCTAssertEqualObjects(@"weak XXX", [_factoryType descriptionWithType:@"XXX"]);
+}
+
+-(void) testDescriptionThrows {
+    XCTAssertThrowsSpecific((_factoryType.description), NSException);
 }
 
 @end

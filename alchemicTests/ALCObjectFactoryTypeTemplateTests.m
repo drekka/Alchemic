@@ -11,31 +11,36 @@
 @import Alchemic.Private;
 
 @interface ALCObjectFactoryTypeTemplateTests : XCTestCase
-
 @end
 
-@implementation ALCObjectFactoryTypeTemplateTests
-
-- (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+@implementation ALCObjectFactoryTypeTemplateTests {
+    ALCObjectFactoryTypeTemplate *_factoryType;
 }
 
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
+-(void) setUp {
+    _factoryType = [[ALCObjectFactoryTypeTemplate alloc] init];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+-(void) testWeakThrows {
+    XCTAssertThrowsSpecific({_factoryType.weak = YES;}, AlchemicIllegalArgumentException);
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+-(void) testNillableThrows {
+    XCTAssertThrowsSpecific({_factoryType.nillable = YES;}, AlchemicIllegalArgumentException);
 }
+
+-(void) testReadyAlwaysYes {
+    XCTAssertTrue(_factoryType.isReady);
+}
+
+-(void) testSetObjectDoesNothing {
+    _factoryType.object = @"abc";
+    XCTAssertNil(_factoryType.object);
+}
+
+-(void) testDescription {
+    XCTAssertEqualObjects(@"nillable Template", _factoryType.description);
+}
+
 
 @end

@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) descriptionWithType:(NSString *) type {
-    return str(@"%@%@%@", self.nillable ? @"nillable " : @"", self.isWeak ? @"Weak " : @"", type);
+    return str(@"%@%@%@", self.nillable ? @"nillable " : @"", self.isWeak ? @"weak " : @"", type);
 }
 
 

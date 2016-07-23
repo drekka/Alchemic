@@ -156,7 +156,7 @@
 }
 
 -(void) testStartSingletonsWithUIApplicationDelegate {
-    // This is rather trick to mock out or test. So not doing it ATM.
+    // This is rather tricky to mock out or test. So not doing it ATM.
 }
 
 @end

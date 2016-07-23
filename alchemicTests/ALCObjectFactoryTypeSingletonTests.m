@@ -27,7 +27,8 @@
 }
 
 -(void) testDescription {
-    XCTAssertEqualObjects(@"Singleton", _objectFactoryType.description);
+    _objectFactoryType.nillable = YES;
+    XCTAssertEqualObjects(@"nillable Singleton", _objectFactoryType.description);
 }
 
 @end
