@@ -11,10 +11,12 @@
 @import Alchemic.Private;
 @import OCMock;
 
-@interface DummyDelegate : NSObject<UIApplicationDelegate>
+#pragma mark - Test classes
+
+@interface DummyAppDelegate : NSObject<UIApplicationDelegate>
 @end
 
-@implementation DummyDelegate
+@implementation DummyAppDelegate
 @end
 
 @interface DummyFactory : ALCAbstractObjectFactory
@@ -34,14 +36,18 @@
 
 @end
 
+#pragma mark - Tests
+
 @interface ALCAbtractObjectFactoryTests : XCTestCase
 @end
 
 @implementation ALCAbtractObjectFactoryTests {
     ALCAbstractObjectFactory *_factory;
+    id _mockModel;
 }
 
 -(void)setUp {
+    _mockModel = OCMProtocolMock(@protocol(ALCModel));
     _factory = [[ALCAbstractObjectFactory alloc] initWithClass:[NSString class]];
 }
 
@@ -49,7 +55,12 @@
     XCTAssertTrue(_factory.isReady);
 }
 
--(void) testdefaultModelName {
+-(void) testIsWeak {
+    [_factory configureWithOptions:@[AcWeak] model:_mockModel];
+    XCTAssertTrue(_factory.isWeak);
+}
+
+-(void) testDefaultModelName {
     XCTAssertEqualObjects(@"NSString", _factory.defaultModelName);
 }
 
@@ -61,67 +72,63 @@
 #pragma mark - Configuring
 
 -(void) testConfigureWithOptions {
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [_factory configureWithOptions:@[AcTemplate] model:mockModel];
+    [_factory configureWithOptions:@[AcTemplate] model:_mockModel];
     XCTAssertEqual(ALCFactoryTypeTemplate, _factory.factoryType);
 }
 
 -(void) testConfigureWithOptionTemplate {
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [_factory configureWithOption:AcTemplate model:mockModel];
+    [_factory configureWithOption:AcTemplate model:_mockModel];
     XCTAssertEqual(ALCFactoryTypeTemplate, _factory.factoryType);
 }
 
 -(void) testConfigureWithOptionTemplateWeakThrows {
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [_factory configureWithOption:AcWeak model:mockModel];
-    XCTAssertThrowsSpecific(([_factory configureWithOption:AcTemplate model:mockModel]), AlchemicIllegalArgumentException);
+    [_factory configureWithOption:AcWeak model:_mockModel];
+    XCTAssertThrowsSpecific(([_factory configureWithOption:AcTemplate model:_mockModel]), AlchemicIllegalArgumentException);
 }
 
 -(void) testConfigureWithOptionReference {
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [_factory configureWithOption:AcReference model:mockModel];
+    [_factory configureWithOption:AcReference model:_mockModel];
     XCTAssertEqual(ALCFactoryTypeReference, _factory.factoryType);
 }
 
 -(void) testConfigureWithOptionReferenceWeak {
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [_factory configureWithOption:AcWeak model:mockModel];
-    [_factory configureWithOption:AcReference model:mockModel];
+    [_factory configureWithOption:AcWeak model:_mockModel];
+    [_factory configureWithOption:AcReference model:_mockModel];
     XCTAssertEqual(ALCFactoryTypeReference, _factory.factoryType);
     XCTAssertTrue(_factory.isWeak);
 }
 
 -(void) testConfigureWithOptionPrimary {
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [_factory configureWithOption:AcPrimary model:mockModel];
+    [_factory configureWithOption:AcPrimary model:_mockModel];
     XCTAssertTrue(_factory.isPrimary);
 }
 
 -(void) testConfigureWithOptionFactoryName {
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    OCMExpect([mockModel reindexObjectFactoryOldName:@"NSString" newName:@"abc"]);
-    [_factory configureWithOption:AcFactoryName(@"abc") model:mockModel];
-    OCMVerifyAll(mockModel);
+    OCMExpect([_mockModel reindexObjectFactoryOldName:@"NSString" newName:@"abc"]);
+    [_factory configureWithOption:AcFactoryName(@"abc") model:_mockModel];
+    OCMVerifyAll(_mockModel);
 }
 
 -(void) testConfigureWithOptionWeak {
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [_factory configureWithOption:AcWeak model:mockModel];
+    [_factory configureWithOption:AcWeak model:_mockModel];
+    XCTAssertTrue(_factory.isWeak);
+}
+
+-(void) testConfigureWithOptionNillable {
+    [_factory configureWithOption:AcNillable model:_mockModel];
+    XCTAssertTrue(_factory.isNillable);
     XCTAssertTrue(_factory.isWeak);
 }
 
 -(void) testConfigureWithOptionUnknownOptionThrows {
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    XCTAssertThrowsSpecific(([_factory configureWithOption:@"xxx" model:mockModel]), AlchemicIllegalArgumentException);
+    XCTAssertThrowsSpecific(([_factory configureWithOption:@"xxx" model:_mockModel]), AlchemicIllegalArgumentException);
 }
 
 #pragma mark - Resolving
 
 -(void) testResolveWithStackModel {
     NSMutableArray *stack = [[NSMutableArray alloc] init];
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [_factory resolveWithStack:stack model:mockModel];
+    [_factory resolveWithStack:stack model:_mockModel];
     // Does nothing so no validation.
 }
 
@@ -144,6 +151,27 @@
     XCTAssertTrue(df.completionCalled);
 }
 
+#pragma mark - Storing values
+
+-(void) testSetObject {
+    DummyFactory *dummyFactory = [[DummyFactory alloc] initWithClass:[NSString class]];
+    [dummyFactory setObject:@"abc"];
+    XCTAssertEqualObjects(@"abc", dummyFactory.instantiation.object);
+}
+
+-(void) testSetObjectPostNotification {
+
+    DummyFactory *dummyFactory = [[DummyFactory alloc] initWithClass:[NSString class]];
+
+    [self expectationForNotification:AlchemicDidStoreObject
+                              object:dummyFactory
+                             handler:nil];
+    [dummyFactory setObject:@"abc"];
+
+    [self waitForExpectationsWithTimeout:0.3 handler:nil];
+
+}
+
 #pragma mark - Describing things
 
 -(void) testDescription {
@@ -158,21 +186,19 @@
 
 -(void) testDescriptionWhenReferenceNotSet {
     DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [df configureWithOptions:@[AcReference] model:mockModel];
+    [df configureWithOptions:@[AcReference] model:_mockModel];
     XCTAssertEqualObjects(@"  Reference", [df description]);
 }
 
 -(void) testDescriptionWhenReferenceSet {
     DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
-    id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    [df configureWithOptions:@[AcReference] model:mockModel];
+    [df configureWithOptions:@[AcReference] model:_mockModel];
     [df setObject:@"abc"];
     XCTAssertEqualObjects(@"* Reference", [df description]);
 }
 
 -(void) testDescriptionWhenUIApplicationDelegate {
-    DummyFactory *df = [[DummyFactory alloc] initWithClass:[DummyDelegate class]];
+    DummyFactory *df = [[DummyFactory alloc] initWithClass:[DummyAppDelegate class]];
     XCTAssertEqualObjects(@"  Singleton (App delegate)", [df description]);
 }
 

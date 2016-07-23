@@ -39,7 +39,7 @@
 }
 
 -(void) testDescription {
-    XCTAssertEqualObjects(@"nillable Template", _factoryType.description);
+    XCTAssertEqualObjects(@"Template", _factoryType.description);
 }
 
 

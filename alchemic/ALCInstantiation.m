@@ -28,25 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
     return instantiation;
 }
 
--(void) addCompletion:(nullable ALCBlockWithObject) newCompletion {
-    
-    // Exit if there is nothing to add.
-    if (!newCompletion) {
-        return;
-    }
-    
-    if (_completion) {
-        ALCBlockWithObject currentCompletion = _completion;
-        _completion = ^(id object) {
-            currentCompletion(object);
-            newCompletion(object);
-        };
-    } else {
-        _completion = newCompletion;
-    }
-}
-
-
 -(void) complete {
     [ALCRuntime executeBlock:^(id object) {
         

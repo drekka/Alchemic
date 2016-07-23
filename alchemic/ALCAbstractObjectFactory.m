@@ -48,6 +48,10 @@ NS_ASSUME_NONNULL_BEGIN
     return _typeStrategy.isWeak;
 }
 
+-(BOOL) isNillable {
+    return _typeStrategy.isNillable;
+}
+
 -(BOOL) isReady {
     return _typeStrategy.isReady;
 }

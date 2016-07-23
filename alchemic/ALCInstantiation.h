@@ -37,15 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) id object;
 
 /**
- Combines the stored completion and a new completion. 
- 
- Usually the new completion is a block that represents completions from other dependencies. This method also handles if either block is NULL.
- 
- @param newCompletion The block to add to the current completion.
- */
--(void) addCompletion:(nullable ALCBlockWithObject) newCompletion;
-
-/**
  Tells the instantiation to execute it's completion block.
  
  This also notifies the object of the completion being execute and issues the AlchemicDidCreateObject notification.

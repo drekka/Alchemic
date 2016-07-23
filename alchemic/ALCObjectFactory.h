@@ -48,7 +48,12 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 /**
  If the factory is holding a weak reference to the objects it manages.
  */
-@property (nonatomic, assign, getter = isWeak) BOOL weak;
+@property (nonatomic, assign, readonly, getter = isWeak) BOOL weak;
+
+/**
+ If the factory can hold a nil value.
+ */
+@property (nonatomic, assign, readonly, getter = isNillable) BOOL nillable;
 
 /**
  Whether the factory is classified as a Primary factory. 
