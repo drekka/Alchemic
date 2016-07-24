@@ -392,12 +392,12 @@
 			children = (
 				6CA787DF1D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m */,
 				6CE6FFFA1D2AA59A00D61613 /* ALCClassObjectFactoryInitializerTests.m */,
+				6CB57E9B1D43C66B00CFE4DF /* ALCClassObjectFactoryTests.m */,
 				6CE6FFF61D2A9B2100D61613 /* ALCFactoryNameTests.m */,
 				6C0076911D17D60500E88987 /* ALCFlagMacrosTests.m */,
 				6CB57E951D43C52C00CFE4DF /* ALCInstantiationTests.m */,
 				6CB57E961D43C52C00CFE4DF /* ALCMethodObjectFactoryTests.m */,
 				6CC503D01D19688B004283DA /* Types */,
-				6CB57E9B1D43C66B00CFE4DF /* ALCClassObjectFactoryTests.m */,
 			);
 			name = Factories;
 			path = ..;
