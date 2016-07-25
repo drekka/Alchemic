@@ -2,7 +2,7 @@
 title: hello
 ---
 
-# helll
+# hello
 
 {{ site.data.macros.register }}
 
