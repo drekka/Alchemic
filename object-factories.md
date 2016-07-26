@@ -2,21 +2,25 @@
 title: Object Factories
 ---
 
-# Class object factories
+# Object factories
 
-The first type of object factory Alchemic has are __Class Object Factories__. A class object factory is automatically created and stored in the model if Alchemic finds any registration methods in a class. This object factory can then be updated with information about whether to build instances of your class or managed external ones, whether  objects should be instantiated through a custom initializer, and how to find and inject the object's dependencies.
+Object factories are how Alchemic manages instances and injections.
+
+## Class object factories
+
+The first type of object factory are __Class Object Factories__. A class object factory is automatically created and stored in the model if Alchemic finds any registration methods in a class. This object factory can then be updated with information about whether to build instances of your class or managed external ones, whether  objects should be instantiated through a custom initializer, and how to find and inject the object's dependencies.
 
 This example is the simplest form of a registering a class. It will create an object factory which generates a singleton.
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 @implementation MyClass
 AcRegister()
 @end
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 @objc class MyClass {
     @objc public static func alchemic(objectFactory: ALCClassObjectFactory) {
     }
@@ -30,8 +34,8 @@ AcRegister()
 
 By default, Alchemic will use the `init` method when initializing an instance of a class. However it also supports custom initializers and arguments through the __AcInitializer__.
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 @implementation MyClass
 AcInitializer(initWithOtherObject:, AcClass(MyOtherClass))
 -(instancetype) initWithOtherObject:(MyOtherClass *) obj {
@@ -40,8 +44,8 @@ AcInitializer(initWithOtherObject:, AcClass(MyOtherClass))
 @end
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 @objc class MyClass {
  
    public static func alchemic(objectFactory: ALCClassObjectFactory) {
