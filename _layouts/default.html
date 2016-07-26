@@ -1,37 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
-    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="css/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="css/print.css" media="print">
+    <head>
+        <meta charset='utf-8'>
+            <meta http-equiv="X-UA-Compatible" content="chrome=1">
+                <meta name="description" content="Alchemic : An Awesome DI framework for iOS">
+                    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+                        <title>Alchemic</title>
+                        </head>
 
-    <title>Alchemic by Derek Clarkson</title>
-  </head>
+    <body>
 
-  <body>
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+            <header class="inner">
+                <a id="forkme_banner" href="https://github.com/drekka/Alchemic">View on GitHub</a>
+                <h1 id="project_title">Alchemic</h1>
+                <p id="project_tagline">An Awesome DI framework for iOS by {{ site.author }}</p>
+                <p>
+                <a href="https://github.com/Carthage/Carthage"><img id="carthage-compatible"  src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
+                </p>
 
-    <header>
-      <div class="container">
-        <h1>Alchemic</h1><br />An Awesome DI framework for iOS
+                <p id="toc">
+                <a href="./index.html">Home</a>
+                &#8226; <a href="./installation.html">Installation</a>
+                &#8226; <a href="./imports.html">Imports</a>
+                </p>
 
-        <section id="downloads">
-          <a href="https://github.com/drekka/Alchemic/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/drekka/Alchemic/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/drekka/Alchemic" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+            </header>
+        </div>
 
-    <div class="container">
-      <section id="main_content">
-        <h1>
-<a id="alchemic-" class="anchor" href="#alchemic-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alchemic <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
-</h1>
+        <!-- MAIN CONTENT -->
+        <div id="main_content_wrap" class="outer">
+            <section id="main_content" class="inner">
 
-{{ page.content }}
+                {{ page.content }}
 
-  </body>
+            </section>
+        </div>
+
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+            <footer class="inner">
+                <p class="copyright">Alchemic maintained by <a href="https://github.com/drekka">{{ site.author }}</a></p>
+            </footer>
+        </div>
+        
+        
+        
+    </body>
 </html>

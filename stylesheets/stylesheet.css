@@ -118,7 +118,9 @@ a {
   -ms-transition: text-shadow 0.5s ease;
 }
 
-a:hover, a:focus {text-decoration: underline;}
+a:hover, a:focus, a:link, a:visited {
+    text-decoration: none;
+}
 
 footer a {
   color: #F2F2F2;
@@ -296,7 +298,11 @@ Full-Width Styles
 }
 
 #header_wrap .inner {
-  padding: 50px 10px 30px 10px;
+    padding: 20px 10px 0px 10px;
+}
+
+#toc {
+    color: #aaa;
 }
 
 #project_title {
@@ -308,11 +314,16 @@ Full-Width Styles
 }
 
 #project_tagline {
-  color: #fff;
-  font-size: 24px;
-  font-weight: 300;
+  color: #aaa;
+  font-size: 14px;
+  font-weight: 200;
   background: none;
   text-shadow: #111 0px 0px 10px;
+  margin-top: -15px;
+}
+
+#carthage-compatible {
+    box-shadow: none;
 }
 
 #downloads {
@@ -366,6 +377,13 @@ Full-Width Styles
 
 #footer_wrap {
   background: #212121;
+}
+
+.language-title {
+    font-size:10px;
+    color: #aaa;
+    font-style: italic;
+    margin-bottom: 0px;
 }
 
 
