@@ -25,3 +25,13 @@ Alchemic supports classes written in Swift with some caveats. Objective-C is una
  * When injecting values into properties, the type of the property must be an Objective-C type. 
  * Arguments passed to Alchemic must be resolvable to Objective-C types as per the Swift documentation. 
 
+# Credits
+
+* Thanks to Adam and Vitaly at [Odecee](http://odecee.com.au) who helped me with getting my head around some of the Swift code.
+* Big Thanks to the guys behind [Carthage](https://github.com/Carthage/Carthage) for writing a dependency tool that actual works well with XCode and Git.
+* Thanks to the guys behind the [Spring Framework](https://spring.io). The work you have done has made my life so much easier on so many Java projects.
+* Thanks to Mulle Cybernetik for [OCMock](ocmock.org). An outstanding mocking framework for Objective-C that has enabled me to test the un-testable many times.
+* Thanks to Todd Ditchendorf for [PEGKit](https://github.com/itod/pegkit). I've learned a lot from working with it on [Story Teller](https://github.com/drekka/StoryTeller).
+* Finally thanks to everyone who writes the crappy software that inspires me to give things like this ago. You know who you are.
+
+

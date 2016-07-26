@@ -48,4 +48,3 @@ Once added you can then use a variety of Swift functions which are very similar 
 
 *Note: You can also declare the same method in Objective-C code and use it in the same way.*  
 
-
