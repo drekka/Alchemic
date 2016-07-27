@@ -112,12 +112,13 @@
 -(void) testConfigureWithOptionWeak {
     [_factory configureWithOption:AcWeak model:_mockModel];
     XCTAssertTrue(_factory.isWeak);
+    XCTAssertFalse(_factory.isNillable);
 }
 
 -(void) testConfigureWithOptionNillable {
     [_factory configureWithOption:AcNillable model:_mockModel];
     XCTAssertTrue(_factory.isNillable);
-    XCTAssertTrue(_factory.isWeak);
+    XCTAssertFalse(_factory.isWeak);
 }
 
 -(void) testConfigureWithOptionUnknownOptionThrows {

@@ -107,7 +107,6 @@ NS_ASSUME_NONNULL_BEGIN
         
     } else if ([option isKindOfClass:[ALCIsNillable class]]) {
         _typeStrategy.nillable = YES;
-        _typeStrategy.weak = YES;
         
     } else {
         throwException(IllegalArgument, @"Unknown factory configuration option: %@", option);
