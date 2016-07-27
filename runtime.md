@@ -92,6 +92,12 @@ var formatter = AcGet(NSDateFormatter.self)
 
 Without any criteria, Alchemic will use the passed return type to determine the search criteria for scanning the model based in it's class and any applicable protocols.
 
+## Setting objects
+
+Alchemic will locate the matching object factory for the criteria passed as arguments after the object. It will then set the object as it's value. __ACName__ is most useful when setting values as __AcSet__ expects there to be only one object factory to set. If zero or more than one object factory is found, __AcSet__ will throw an error.
+
+*Note: that setting a new object for an object factory does not effect any previously injected references to the old object. Only injections done after setting the new object will receive it.*
+
 
 ## Invoking methods
 
