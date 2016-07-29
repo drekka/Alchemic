@@ -5,6 +5,6 @@ errors: ./errors.html
 imports: ./imports.html
 injections: ./injections.html
 installation: ./installation.html
-objectFactories: ./object-factories.html
+object-factories: ./object-factories.html
 runtime: ./runtime.html
-injectionValues: ./injection-values.html
+injection-values: ./injection-values.html

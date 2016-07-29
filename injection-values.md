@@ -24,15 +24,15 @@ AcSize(0, 0) | CGSize, CGSize
 AcRect(0, 0, 100, 100) | CGRect, CGRect
 AcNil | id
 
-Most of these functions are fairly simple to understand. __AcNil__ is a special case to be used when you want to set a nil value (__AcNil()__ in Swift).
+Most of these functions are fairly simple to understand. __AcNil__ is a special case to be used when you want to set a nil value.
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 AcInject(_message, AcString(@"hello world"))
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 class MyClass {
     var message:NSString
     public static func alchemic(objectFactory:ALCClassObjectFactory) {
@@ -45,15 +45,15 @@ class MyClass {
 
 You can tell Alchemic to search the model for object factories on their class and/or the protocols they conform to. After locating them, it then instantiates values from them for injection.
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 AcInject(otherObj, AcClass(OtherClass))
 AcInject(anotherObj, AcProtocol(MyProtocol))
 AcInject(otherObj, AcClass(OtherClass), AcProtocol(MyProtocol))
 ``` 
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 public static func Alchemic(objectFactory:ACLClassObjectFactory) {
     AcInject(objectFactory, variable:"otherObj", type:NSObject.self, source:AcClass(OtherClass.self))
     AcInject(cb, variable:"anotherObj", type:NSObject.self, source:AcProtocol(MyProtocol.self))
@@ -67,8 +67,8 @@ __AcClass__ tells Alchemic to locate object factories that produce objects of th
 
 Where this is of most useful is where your variables are quite general and you want to inject more specific types. For example, you can declare a protocol and inject a specific class. 
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 @implementation {
     id<Account> *_account;
 }
@@ -76,8 +76,8 @@ AcInject(_account, AcClass(AmexAccount))
 @end
 ```
 
+{{ site.lang-title-swift }}
 ```objc
-// Swift
 class MyClass {
     var account:Account
     public static func alchemic(objectFactory:ALCClassObjectFactory) {
@@ -93,8 +93,8 @@ As programming to protocols is considered a good practice, this sort of injectio
 
 You can also inject an object by retrieving it based on the unique name assigned to it's factory when added to the model. By default the name is the name of the class, or class and method. It can also be custom name.
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 @implementation MyClass {
 NSDateFormatter *_jsonDateFormatter;
 }
@@ -102,8 +102,8 @@ AcInject(_jsonDateFormatter_, AcName(@"JSON date formatter"))
 @end
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 class MyClass {
 var jsonDateFormatter:NSDateFormatter
     public static func alchemic(objectFactory:ALCClassObjectFactory) {
@@ -123,8 +123,8 @@ But Alchemic has a trick up it's sleeve you can use in this situation. If you sp
 
 This is useful when you have a number of object factories for the same type or protocol. As an example, lets assume we have a number of  `NSDateFormatter` object factories registered:
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 @implementation MyClass {
     NSArray<NSDateFormatter *> *_dateFormatters;
 }
@@ -132,8 +132,8 @@ AcInject(_dateFormatters, AcClass(NSDateFormatter))
 @end
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 class MyClass {
     var dateFormatters:NSArray
     public static func alchemic(objectFactory:ALCClassObjectFactory) {

@@ -2,6 +2,17 @@
 title: Runtime
 ---
 
+  * [Interfacing with Alchemic](#interfacing-with-alchemic)
+    * [Manual dependency injections](#manual-dependency-injections)
+    * [Getting objects](#getting-objects)
+    * [Setting objects](#setting-objects)
+    * [Invoking methods](#invoking-methods)
+    * [Managing the UIApplicationDelegate instance](#managing-the-uiapplicationdelegate-instance)
+    * [UIViewControllers and Story Boards](#uiviewcontrollers-and-story-boards)
+  * [Callbacks and notifications](#callbacks-and-notifications)
+    * [Dependencies injected](#dependencies-injected)
+    * [Alchemic finished starting](#alchemic-finished-starting)
+
 # Interfacing with Alchemic
 
 Now that we know how to declare objects and inject them, lets look at how we retrieve objects in classes and code which is not managed by Alchemic. In other words, how to get Alchemic to work with the rest of your app.
@@ -10,8 +21,8 @@ Now that we know how to declare objects and inject them, lets look at how we ret
 
 Alchemic will automatically inject dependencies into any object it instantiates or manages. There may be situations where you need to create objects independantly and would still like Alchemic to handle the injection of dependencies. This is where __AcInjectDependencies__ can be used.
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 -(instancetype) initWithFrame:(CGRect) aFrame {
     self = [super initWithFrame:aFrame];
     if (self) {
@@ -21,8 +32,8 @@ Alchemic will automatically inject dependencies into any object it instantiates 
 }
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 func init(frame:CGRect) {
     AcInjectDependencies(self)
 }
@@ -34,16 +45,16 @@ You can call __AcInjectDependencies__ anywhere in your code and pass it the obje
 
 Sometimes (in unit tests for example) you want to get an object from Alchemic without specifying an injection. __AcGet__ allows you to search for and return an object (or objects) inline with your code rather than as an injection. 
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 -(void) myMethod {
     NSDateFormatter *formatter = AcGet(NSDateFormatter, AcName(@"JSON date formatter"));
     // Do stuff ....
 }
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 func myMethod() {
     var formatter:NSDateFormatter = AcGet(AcName(@"JSON date formatter"))
     // Do stuff ....
@@ -56,16 +67,16 @@ Arguments after the type are search criteria used to find candidate builders. So
 
 Note that __AcGet__ also does standard Alchemic `NSArray` processing. For example the following code will return an array of all Alchemic registered date formatters:
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 -(void) myMethod {
 NSArray *formatters = AcGet(NSArray, AcClass(NSDateFormatter));
 // Do stuff ....
 }
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 func myMethod() {
 var formatters = AcGet(NSArray.self, source:AcClass(NSDateFormatter))
 // Do stuff ....
@@ -74,8 +85,8 @@ var formatters = AcGet(NSArray.self, source:AcClass(NSDateFormatter))
 
 Finally, you can leave out the search criteria macros like this:
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 -(void) myMethod {
 NSDateFormatter *formatter = AcGet(NSDateFormatter);
 // Do stuff ....
@@ -83,7 +94,6 @@ NSDateFormatter *formatter = AcGet(NSDateFormatter);
 ```
 
 ```swift
-// Swift
 func myMethod() {
 var formatter = AcGet(NSDateFormatter.self)
 // Do stuff ....
@@ -103,16 +113,16 @@ Alchemic will locate the matching object factory for the criteria passed as argu
 
 __AcInvoke__ is for when you want to access a declared method or initializer and pass in the arguments manually. But you don't have access to the object it's declared on or may not even know it.  For example, you might declare a factory initializer like this:
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 AcInitializer(initWithText:, AcFactory, AcArg(NSString, AcValue(@"Default message")
 -(instancetype) initWithText:(NSString *) message {
 // ...
 }
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 public static func alchemic(cb:ALCBuilder) {
 AcInitializer(cb, initializer:"initWithMessage:", 
 args:AcArg(NSString.self, source:AcValue(@"Default message"))
@@ -125,16 +135,16 @@ func init(message:NSString) {
 
 In this scenario you want the factory method to give you a new instance of the object when you need it, but with a different message. So you can it like this:
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 -(void) myMethod {
 MyObj *myObj = AcInvoke(AcName(@"MyObj initWithText:"), @"Message text");
 // Do stuff ....
 }
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 func myMethod() {
 var myObj = AcInvoke(AcName("MyObj initWithText:"), args:"Message text")
 // Do stuff ....
@@ -156,15 +166,15 @@ Alchemic has some special processing for `UIApplicationDelegates`. After startin
 
 Whilst I looked at several options for automatically injecting storyboard created instances of UIViewControllers, I did not find any technique that would work reliably and required less than a single line of code. So for the moment Alchemic does not inject dependencies into view controllers automatically. Instead, the simplest solution is to self inject in `awakeFromNib` or `viewDidLoad`.
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 -(void) viewDidLoad {
     AcInjectDependencies(self);
 }
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 func viewDidLoad() {
     AcInjectDependencies(self)
 }
@@ -177,8 +187,8 @@ func viewDidLoad() {
 
 Sometimes it's useful to know when Alchemic has finished injecting values into an object. To facilitate this, add the `AlchemicAware` protocol and implement the `alchemicDidInjectDependencies` method. Alchemic will automatically call this method after it has finished injecting values.
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 @interface MyClass:NSObject<AlchemicAware>
 @end 
 
@@ -189,8 +199,8 @@ Sometimes it's useful to know when Alchemic has finished injecting values into a
 @end
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 class MyClass:NSObject<AlchemicAware> {
     func alchemicDidInjectDependencies() {
         // Do stuff
@@ -198,13 +208,12 @@ class MyClass:NSObject<AlchemicAware> {
 }
 ```
 
-
 ## Alchemic finished starting
 
 Once all singletons have been loaded and injected, Alchemic sends out a notification through the default `NSNotificationCenter`. There is a constant called `AlchemicFinishedLoading` in the `ALCAlchemic` class which can be used like this:
 
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 [[NSNotificationCenter defaultCenter] 
     addObserverForName:AlchemicFinishedLoading
                 object:nil
@@ -214,10 +223,11 @@ Once all singletons have been loaded and injected, Alchemic sends out a notifica
 }];
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 -- need example here --
 ```
 
 This is most useful for classes which are not managed by Alchemic but still need to know when Alchemic has finished loading.
+
 

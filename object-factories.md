@@ -2,9 +2,22 @@
 title: Object Factories
 ---
 
+* [Class object factories](#class-object-factories)
+  * [Using initializers](#using-initializers)
+* [Method object factories](#method-object-factories)
+  * [Simple argument values](#simple-argument-values)
+  * [Complex arguments](#complex-arguments)
+* [Configuring Factories](#configuring-factories)
+  * [Template mode](#template-mode)
+  * [Reference mode](#reference-mode)
+  * [Custom names](#custom-names)
+  * [Primary object factories](#primary-object-factories)
+  * [Weak factories](#weak-factories)
+
+
 # Object factories
 
-Object factories are the objects that describe your application classes to  Alchemic. They contain information on the class or method they represent, how it's to be instantiated or called and what injected values it needs.
+Object factories describe your application classes to Alchemic. They contain information on the class or method they represent, how it's to be instantiated or called and what injected values it needs.
 
 ## Class object factories
 
@@ -104,17 +117,11 @@ AcMethod(Database, generateDatabaseConnection)
 
 __AcMethod__ can define any class or instance method as a source of objects. If it declares a instance method, Alchemic will ensure that the parent class is instantiated before the method is called. This allows the method to make use of those dependencies if it wants to when creating the return object. If the method is a class method then Alchemic will simply call it directly.
 
+### Simple argument values
 
-### Method arguments
+Both __AcInitializer__ and __AcMethod__ can take arguments which define where to find the values to pass to the method when it is executed. To see more on the types of values that can be used as method arguments, see [Injection types]({{ site.data.pages.injection-values }}).
 
-Now lets look at method arguments. Both __AcInitializer__ and __AcMethod__ can take arguments which define where to find the values to pass to the method when it is executed. 
-
-To see more on the types of values that can be used as method arguments, see [Injection types]({{ site.data.pages.injection-values }}).
-
-
-#### Simple argument values
-
-Firstly, you can specify a simple constant or single model search criteria.  Alchemic will use this information to determine the correct type of the argument.
+Firstly, you can specify a simple constant or single model search criteria.  Alchemic will use the type of the argument to determine the type of the argument being set.
 
 {{ site.lang-title-objc }}
 ```objc
@@ -146,7 +153,7 @@ Doing this, Alchemic assumes that the value you specify will match the target ar
 However this is not always the case. If the type of the argument is different to the type of value being injected, or the model search criteria for the argument is more complex, we must use the __AcArg__ function to fill out the arguments details. 
 
 
-#### Complex arguments
+### Complex arguments
 
 {{ site.lang-title-objc }}
 ```objc
@@ -172,17 +179,15 @@ The first argument to __AcArg__ defines the expected argument type. This is used
 
 ## Configuring Factories
 
-Class and method factories also have a range of settings that configure how they operate. By default a class or method will assume that they are to genereate a singleton which Alchemic will manage and inject as needed.
+Class and method factories also have a range of settings that configure how they operate. By default a class or method will create an object factory in singleton mode. This means that Alchemic will manage a single instance of the class, injecting it where necessary.
 
-But there are other options:
+### Template mode
 
-## Templates
-
-Configuring an object factory as a template means that every time Alchemic needs to inject a value, the object factory will create a new one. This is different to the default mode where the factory only creates an object the first time, stores it and keeps returning the same instance. Templates never store the objects they create. 
+Configuring an object factory to use template mode tells it that every time Alchemic asks for an object, the object factory will create a new one. Hence calling it template mode because it acts like a template, continuously creating new instances on each request. 
  
-Templates can be useful in a variety of situations. For example, an email message class could be declared as a template. Every time your code needs an instance, a new email message will be created and it's dependencies injected, ready for you to use. 
+Templates can be useful in a variety of situations. For example, an email message class could be declared as a template. Every time your code request an instance from Alchemic, a new email message will be created, have it's dependencies injected and returned, ready for use. 
 
-Templates are configured using the __AcTemplate__ flag macro:
+Templates are configured using the __AcTemplate__ macro:
 
 {{ site.lang-title-objc }}
 ```objc
@@ -225,13 +230,11 @@ AcMethod(Database, generateDatabaseConnection, AcTemplate)
 ```
 
 
-## References
+### Reference mode
 
-References are an alternatice to singletons and templates. They are most useful when dealing with UI classes such as `UIViewController` instances. 
+Often you cannot use Alchemic to create objects. For example, `UIViewController` instances created by story boards, or instances created by other APIs. However you can still use Alchemic to manage them, inject their dependencies, and then inject them into other objects when needed. 
 
-References tell the object factory not to create objects at all. Instead external code will create the object and give it to Alchemic to inject dependencies and manage from there on.
-
-The use case for this is view controllers. Typically they get created by storyboards. Upon creation, we can tell Alchemic to store a reference to it and inject it's dependencies. By storing the instance, Alchemic can then inject it into other objects.
+To manage these instances, set a class object factories into reference mode. This tells Alchemic not to create objects. Instead it assumes that you will pass the object to it at some stage in the future.  
 
 {{ site.lang-title-objc }}
 ```objc
@@ -251,7 +254,7 @@ AcRegister(AcReference)
 
 *Note: Because references are created externally, it makes no sense for method factories to be configured as references. If you use __AcReference__ on a method factory declaration, Alchemic will throw an error.*
 
-Once you have created a object, you can use __AcSet__ to pass it to Alchemic (see [Inline usage - Setting objects]({{ site.data.pages.runtime }}) for details):
+Once you have created a object, you can use __AcSet__ to pass it to Alchemic (see [Inline usage - Setting objects]({{ site.data.pages.runtime }}) for more details):
 
 {{ site.lang-title-objc }}
 ```objc
@@ -267,16 +270,16 @@ override func viewDidLoad() {
 }
 ```
 
-## Custom names
+### Custom names
 
-Objects are automatically given a name when they are registered. By default it's the class name or method name for method factories. For example:
+Objects are automatically associated with a unique name when they are registered. By default it's the class name, or in the case of method factories - the method name. For example:
 
 Object factory | Name
 --- | --- 
 Class MyClass | MyClass
 Method -[MyClass methodWithArg:] | -[MyClass methodWithArg:]
 
-However you might want to change it to something more appropriate, especially with method names which are not that intuitive. To do this, you use __AcFactoryName__ to provide a custom name for the object factory:
+Most of the time you probably don't need to care about these names. However there are situations where it's useful to be able to assign your own name. Especially with method names which are not that intuitive. To change the name assocaiated with an object factory, use __AcFactoryName__ to provide a custom name:
 
 {{ site.lang-title-objc }}
 ```objc
@@ -290,54 +293,62 @@ public static func alchemic(objectFactory:ALCClassObjectFactory) {
 }
 ```
 
-For example, one use custom names is you have several `NSDateFormatter` object factories. Using __ACFactoryName__ allows you to provide meaningful names such as  *'JSON date formatter'*, *'DB date formatter'*, etc.
-
 *Note: names __must__ be unique or Alchemic will throw an error.*
 
-## Primary objects
+One good example of where this can be useful is when dealing with various method factories which produce similar types of objects.
 
-Sometimes we want to define an object factory as effectively being more important than others. A good example being when writing unit tests where you want to inset a dummy object. You want the dummy object factory to override the default one.
-
-To solve this, Alchemic introduces the concept of ___Primary___ object factories which it has borrowed from the [*Spring framework*](http://spring.io). 
-
-When Alchemic has located multiple object factories for a dependency and before injecting them, it checks each one to see if it's configured as a *'Primary'* object factory. If one or more are configured this way, then all the others are ignored and Alchemic only injects the primary ones. 
-
-Here's how to declare a Primary object factory:
-
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
+AcMethod(NSDateFormatter, jsonDateFormatter, AcWithName(@"JSON date formatter"))
+-(NSDateFormatter *) jsonDateFormatter { ... }
+
+AcMethod(NSDateFormatter, displayDateFormatter, AcWithName(@"Display date formatter"))
+-(NSDateFormatter *) displayDateFormatter { ... }
+```
+
+You can see examples of using these names in values - [model objects by name]({{site.data.pages.injection-values}}#model-objects-by-name) section. 
+
+### Primary object factories
+
+Sometimes we want to define an object factory as effectively being more important than others when deciding what to inject. A good example being unit tests where you want to insert a dummy/mock object into Alchemic's model. Effectively you want the dummy object factory to override the default one when injecting into other objects.
+
+To solve this, Alchemic copies the concept of *__Primary__* object factories from the [*Spring framework*](http://spring.io). 
+
+When Alchemic has located multiple object factories for a dependency and before injecting them, it checks each one to see if it's configured as a *'Primary'* object factory. If one or more are configured this way, then all the others are ignored and Alchemic only keeps the primaries for the injection. 
+
+{{ site.lang-title-objc }}
+```objc
 AcRegister(AcPrimary)
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 public static func alchemic(objectFactory:ALCClassObjectFactory) {
     AcRegister(objectFactory, AcPrimary())
 }
 ```
 
-*Whilst this can solve situations where multiple candidates for a dependency are presents, if Alchemic finds Multiple Primary builders for a dependency which is not an array, it will still raise an error.*
+*Whilst this can solve situations where multiple candidates for a dependency are presents, if Alchemic finds multiple Primary object factories for a dependency which is not an array, it will still raise an error.*
 
-## Weak factories
+### Weak factories
 
-If you want to an object factory to hold not retain an object it is storing, you can configure the factory to hold a weak reference instead of the default strong reference using __AcWeak__: 
+Normally you want an objet factory to retain the instance it is storing so that it is preserved for future injections. But there are times when you also want the object factory to store it weakly. 
 
+An example of this is when setting up reference mode object factories for `UIViewController` instances. In this case, by setting the factories as weak, Alchemic does not interfer with the normal unloading of the view controllers and thus, avoids memory leaks. Simple use __ACWeak__ to configure the object factory.
+
+
+{{ site.lang-title-objc }}
 ```objc
-// Objective-C
 AcRegister(AcWeak)
 ```
 
+{{ site.lang-title-swift }}
 ```swift
-// Swift
 public static func alchemic(objectFactory:ALCClassObjectFactory) {
     AcRegister(objectFactory, AcWeak())
 }
 ```
 
 *Note: __AcWeak__ can only be specified on singleton or reference object factory types.* 
-
-The most common use case for __AcWeak__ is when configuring reference object factories for view controllers. By configuring them as weak, you can be assured that when the view controller is unloaded, that Alchemic will not keep it in memory.
-
-
 
 
