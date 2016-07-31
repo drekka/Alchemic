@@ -159,4 +159,12 @@
     // This is rather tricky to mock out or test. So not doing it ATM.
 }
 
+-(void) testDescription {
+    NSString *desc = _model.description;
+    XCTAssertTrue([desc containsString:@"Finished model (* - instantiated):"]);
+    XCTAssertTrue([desc containsString:@"Singleton class NSString, as 'NSString'"]);
+    XCTAssertTrue([desc containsString:@"Singleton class NSString, as 'ref'"]);
+    XCTAssertTrue([desc containsString:@"Template method +[NSString description] -> NSString, as 'abc'"]);
+}
+
 @end
