@@ -35,12 +35,10 @@
     
     // Search the methods for alchemic methods. Their presence triggers registrations.
     ALCClassObjectFactory *factory;
-    STLog(self, @"\tFound %i class methods", methodCount);
     for (size_t idx = 0; idx < methodCount; idx++) {
         
         // If the method is not an alchemic one, then ignore it.
         SEL nextSelector = method_getName(classMethods[idx]);
-        STLog(self, @"\tChecking %@", NSStringFromSelector(nextSelector));
         if (AcStrHasPrefix(sel_getName(nextSelector), alc_toCString(ALCHEMIC_PREFIX))
             || nextSelector == alchemicFunctionSelector) {
             
