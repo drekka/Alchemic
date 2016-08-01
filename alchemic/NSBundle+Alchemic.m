@@ -26,6 +26,7 @@
     
     for(unsigned int i = 0;i < count;i++) {
         Class nextClass = objc_getClass(classes[i]);
+        STLog(self, @"Scanning class %@", NSStringFromClass(nextClass));
         for (id<ALCClassProcessor> classProcessor in processors) {
             if ([classProcessor canProcessClass:nextClass]) {
                 [classProcessor processClass:nextClass withContext:context];
