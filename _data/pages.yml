@@ -8,3 +8,4 @@ installation: ./installation.html
 object-factories: ./object-factories.html
 runtime: ./runtime.html
 injection-values: ./injection-values.html
+ref: ./ref.html

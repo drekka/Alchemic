@@ -2,6 +2,13 @@
 title: Injection types
 ---
 
+  * [Injection types](#injection-types)
+    * [Constants](#constants)
+    * [Model objects](#model-objects)
+      * [By Class/Protocol](#by-classprotocol)
+      * [By Name](#by-name)
+    * [Array injections](#array-injections)
+Model
 # Injection types
 
 Alchemic has a range of things it can inject into a method argument or variable injection.
@@ -41,7 +48,9 @@ class MyClass {
 }
 ```
 
-## Model objects by Class/Protocol
+## Model objects
+
+### By Class/Protocol
 
 You can tell Alchemic to search the model for object factories on their class and/or the protocols they conform to. After locating them, it then instantiates values from them for injection.
 
@@ -89,7 +98,7 @@ class MyClass {
 As programming to protocols is considered a good practice, this sort of injection allows you classes to be quite general in how they refer to other classes in the code, yet you can still locate specific objects to inject.
 
 
-## Model objects by Name
+### By Name
 
 You can also inject an object by retrieving it based on the unique name assigned to it's factory when added to the model. By default the name is the name of the class, or class and method. It can also be custom name.
 

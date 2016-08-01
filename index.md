@@ -1,22 +1,22 @@
 ---
-title: Alchemic
+title: Alchemic {{ site.alchemic-version }}
 ---
 
-Alchemic is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS. 
+Alchemic {{ site.alchemic-version }} is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS. 
 
 It's job is to help simplify your applications code by creating and managing your applications objects, and the dependencies they need. Alchemic's goal is to do this as simply as possible. 
 
-___Main features___
+## Features
 
-* Definitions and injections dynamically read from your app's classes.
+* [Configuration]({{ site.data.pages.object-factories }}) and injection declarations dynamically read from your app's classes.
 * Automatically starts on a background thread.
-* Can instantiate objects using initializers or factory methods.
-* Objects can be managed as singletons, templates or external references.
-* Factory Methods and initializers can source argument values from objects or constants.
-* Values for injections can be located using class, protocol or unique name searches.
+* Instantiate objects using [initializers]({{ site.data.pages.object-factories }}#using-initializers) or [factory methods]({{ site.data.pages.object-factories }}#method-object-factories).
+* Objects can be managed as singletons, [templates]({{ site.data.pages.object-factories }}#template-mode) or [external references]({{ site.data.pages.object-factories }}#reference-mode).
+* [factory methods]({{ site.data.pages.object-factories }}#method-object-factories) and [initializers]({{ site.data.pages.object-factories }}#using-initializers) can source argument values from [objects]({{ site.data.pages.injection-values }}#model-objects) or [constants]({{ site.data.pages.injection-values }}#constants).
+* Values for injections can be located using [class, protocol]({{ site.data.pages.injection-values }}#by-classprotocol) or [unique name]({{ site.data.pages.injection-values }}#by-name) searches.
 * Works inside your implementations, keeping your public interfaces minimal.
-* Automatic array boxing of values.
-* Automatic management of UIApplicationDelegate instances.
+* Automatic [array boxing]({{ site.data.pages.injection-values }}#array-injections) of values.
+* Automatic management of [UIApplicationDelegate]({{ site.data.pages.runtime }}#managing-the-uiapplicationdelegate-instance) instances.
 * Engineered in Objective-C, usable in Objective-C and Swift projects.
 
 # Swift support
