@@ -43,16 +43,15 @@ In Swift, you cannot use macros so Alchemic automatically locates and excutes a 
 
 {{ site.lang-title-swift }}
 ```swift
-{{ site.data.code.swift-class }} {
-    {{ site.data.code.swift-alchemic-method }} {
+{{ site.data.code.swift-class-declaration }}
+@objc class MyClass {
+    @objc public static func alchemic(objectFactory: ALCClassObjectFactory) {
         // Alchemic setup goes here.
     }
 }
 ```
 
-Inside it you can use a variety of Swift functions which are very similar to their Objective-C macro counterparts. 
-
-*Note the usage of the '_' as the external parameter name in the method signature. This is important as it ensures that Alchemic's Objective-C runtime scanning code can see the method as `alchemic:`. Otherwise it would see it as `alchemicOf:` and therefore not recognise it.* 
+Inside it you can use a variety of Swift functions which are very similar to their Objective-C macro counterparts.
 
 *Note: You can also declare the same method in Objective-C code and use it the same way.*  
 

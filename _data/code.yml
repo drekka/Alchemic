@@ -1,2 +1,2 @@
-swift-class: class Singleton:NSObject
-swift-alchemic-method: "static func alchemic( _ of: ALCClassObjectFactory)"
+swift-class-declaration:"class MyClass:NSObject {"
+Swift-alchemic-method:"    static func alchemic( _ of: ALCClassObjectFactory) {"
