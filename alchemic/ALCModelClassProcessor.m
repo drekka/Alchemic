@@ -39,6 +39,7 @@
         
         // If the method is not an alchemic one, then ignore it.
         SEL nextSelector = method_getName(classMethods[idx]);
+        STLog(self, @"\tChecking %@", NSStringFromSelector(nextSelector));
         if (AcStrHasPrefix(sel_getName(nextSelector), alc_toCString(ALCHEMIC_PREFIX))
             || nextSelector == alchemicFunctionSelector) {
             
