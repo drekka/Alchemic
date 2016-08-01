@@ -35,6 +35,7 @@
     
     // Search the methods for alchemic methods. Their presence triggers registrations.
     ALCClassObjectFactory *factory;
+    STLog(self, @"\tFound %i class methods", methodCount);
     for (size_t idx = 0; idx < methodCount; idx++) {
         
         // If the method is not an alchemic one, then ignore it.
