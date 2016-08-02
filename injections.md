@@ -35,10 +35,10 @@ In Swift, an injection is declared like this:
 
 {{ site.lang-title-swift }}
 ```swift
-class MyClass
+{{ site.data.code.swift-class }} {
     var otherClass:MyOtherObj?
-    public static func alchemic(objectFactory:ALCClassObjectFactory) {
-        AcInject(objectFactory, variable:"otherObj", type:MyOtherClass.self))
+    {{ site.data.code.swift-alchemic-method }} {
+        AcInject(of, variable:"otherObj", type:MyOtherClass.self))
     }
 }
 ```

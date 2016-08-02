@@ -40,10 +40,10 @@ AcInject(_message, AcString(@"hello world"))
 
 {{ site.lang-title-swift }}
 ```swift
-class MyClass {
+{{ site.data.code.swift-class }} {
     var message:NSString
-    public static func alchemic(objectFactory:ALCClassObjectFactory) {
-        AcInject(objectFactory, variable:"message", type:NSString.self, AcString("hello world"))
+    {{ site.data.code.swift-alchemic-method }} {
+        AcInject(of, variable:"message", type:NSString.self, AcString("hello world"))
     }
 }
 ```
@@ -63,10 +63,10 @@ AcInject(otherObj, AcClass(OtherClass), AcProtocol(MyProtocol))
 
 {{ site.lang-title-swift }}
 ```swift
-public static func Alchemic(objectFactory:ACLClassObjectFactory) {
-    AcInject(objectFactory, variable:"otherObj", type:NSObject.self, source:AcClass(OtherClass.self))
-    AcInject(cb, variable:"anotherObj", type:NSObject.self, source:AcProtocol(MyProtocol.self))
-    AcInject(objectFactory, variable:"otherObj", type:NSObject.self, source:AcClass(OtherClass.self), AcProtocol(MyProtocol.self))
+{{ site.data.code.swift-alchemic-method }} {
+    AcInject(of, variable:"otherObj", type:NSObject.self, source:AcClass(OtherClass.self))
+    AcInject(of, variable:"anotherObj", type:NSObject.self, source:AcProtocol(MyProtocol.self))
+    AcInject(of, variable:"otherObj", type:NSObject.self, source:AcClass(OtherClass.self), AcProtocol(MyProtocol.self))
 }
 ``` 
 
@@ -87,10 +87,10 @@ AcInject(_account, AcClass(AmexAccount))
 
 {{ site.lang-title-swift }}
 ```objc
-class MyClass {
+{{ site.data.code.swift-class }} {
     var account:Account
-    public static func alchemic(objectFactory:ALCClassObjectFactory) {
-        AcInject(objectFactory, variable:"account", type:Account.self, source:AcClass(AmexAccount.self))
+    {{ site.data.code.swift-alchemic-method }} {
+        AcInject(of, variable:"account", type:Account.self, source:AcClass(AmexAccount.self))
     } 
 }
 ```
@@ -113,10 +113,10 @@ AcInject(_jsonDateFormatter_, AcName(@"JSON date formatter"))
 
 {{ site.lang-title-swift }}
 ```swift
-class MyClass {
-var jsonDateFormatter:NSDateFormatter
-    public static func alchemic(objectFactory:ALCClassObjectFactory) {
-        AcInject(objectFactory, variable:"jsonDateFormatter", type:NSDateFormatter.self, source:AcName("JSON date formatter"))
+{{ site.data.code.swift-class }} {
+    var jsonDateFormatter:NSDateFormatter
+    {{ site.data.code.swift-alchemic-method }} {
+        AcInject(of, variable:"jsonDateFormatter", type:NSDateFormatter.self, source:AcName("JSON date formatter"))
     }
 }
 ```
@@ -143,10 +143,10 @@ AcInject(_dateFormatters, AcClass(NSDateFormatter))
 
 {{ site.lang-title-swift }}
 ```swift
-class MyClass {
+{{ site.data.code.swift-class }} {
     var dateFormatters:NSArray
-    public static func alchemic(objectFactory:ALCClassObjectFactory) {
-        AcInject(objectFactory, variable:"dateFormatters", type:NSArray.self, source:AcClass(NSDateFormatter.self))
+    {{ site.data.code.swift-alchemic-method }} {
+        AcInject(of:"dateFormatters", type:NSArray.self, source:AcClass(NSDateFormatter.self))
     }
 }
 ```

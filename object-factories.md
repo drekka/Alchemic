@@ -34,8 +34,8 @@ AcRegister()
 
 {{ site.lang-title-swift }}
 ```swift
-@objc class MyClass {
-    @objc public static func alchemic(objectFactory: ALCClassObjectFactory) {
+{{ site.data.code.swift-class }} {
+    {{ site.data.code.swift-alchemic-method }} {
     }
 }
 ```
@@ -58,9 +58,9 @@ AcInitializer(initWithOtherObject:, AcClass(MyOtherClass))
 
 {{ site.lang-title-swift }}
 ```swift
-@objc class MyClass {
-   public static func alchemic(objectFactory: ALCClassObjectFactory) {
-        AcInitializer(objectFactory, 
+{{ site.data.code.swift-class }} {
+    {{ site.data.code.swift-alchemic-method }} {
+        AcInitializer(of, 
             initializer:"initWithMyOtherObject:", 
             args:AcClass(MyOtherClass.self)
         )
@@ -97,10 +97,9 @@ AcMethod(Database, generateDatabaseConnection)
 
 {{ site.lang-title-swift }}
 ```swift
-@objc class MyDatabaseService 
-
-    @objc public static func alchemic(objectFactory: ALCClassObjectFactory) {
-        AcMethod(objectFactory,
+{{ site.data.code.swift-class }} {
+    {{ site.data.code.swift-alchemic-method }} {
+        AcMethod(of,
             method:"generateDatabaseConnection",
             type:DBConnection.self
             )
@@ -137,8 +136,8 @@ retries:(int) retries {
 
 {{ site.lang-title-swift }}
 ```swift
-@objc public static func alchemic(objectFactory: ALCClassObjectFactory) {
-    AcMethod(objectFactory, method: "serverConnectionToServer:retries:", type:NSURLConnection.self,
+{{ site.data.code.swift-alchemic-method }} {
+    AcMethod(of, method: "serverConnectionToServer:retries:", type:NSURLConnection.self,
         AcClass(MyServer.self),
         AcInt(5)
     )
@@ -166,8 +165,8 @@ AcMethod(NSURLConnection, serverConnectionToServer:retries:,
 
 {{ site.lang-title-swift }}
 ```swift
-@objc public static func alchemic(objectFactory: ALCClassObjectFactory) {
-    AcMethod(objectFactory, method: "serverConnectionToServer:retries:", type:NSObject.self,
+{{ site.data.code.swift-alchemic-method }} {
+    AcMethod(of, method: "serverConnectionToServer:retries:", type:NSObject.self,
         AcArg(NSURL.self, AcProtocol(MyServerProtocol)),
         AcArg(NSUInteger.self, AcInt(5))
     )
@@ -198,9 +197,9 @@ AcRegister(AcTemplate)
 
 {{ site.lang-title-swift }}
 ```swift
-@objc class Factory 
-    public static func alchemic(objectFactory: ALCClassObjectFactory) {
-        AcRegister(objectFactory, AcTemplate())
+{{ site.data.code.swift-class }} {
+    {{ site.data.code.swift-alchemic-method }} {
+        AcRegister(of, AcTemplate())
     }
 }
 ```
@@ -218,9 +217,9 @@ AcMethod(Database, generateDatabaseConnection, AcTemplate)
 
 {{ site.lang-title-swift }}
 ```swift
-@objc class Factory 
-    @objc public static func alchemic(objectFactory: ALCClassObjectFactory) {
-        AcMethod(objectFactory,
+{{ site.data.code.swift-class }} {
+    {{ site.data.code.swift-alchemic-method }} {
+        AcMethod(of,
             method:"generateDatabaseConnection",
             type:DBConnection.self,
             AcTemplate()
@@ -245,9 +244,9 @@ AcRegister(AcReference)
 
 {{ site.lang-title-swift }}
 ```swift
-@objc class Factory 
-    public static func alchemic(objectFactory: ALCClassObjectFactory) {
-        AcRegister(objectFactory, AcReference())
+{{ site.data.code.swift-class }} {
+    {{ site.data.code.swift-alchemic-method }} {
+        AcRegister(of, AcReference())
     }
 }
 ```
@@ -288,8 +287,8 @@ AcRegister(AcFactoryName(@"JSON date formatter"))
 
 {{ site.lang-title-swift }}
 ```swift
-public static func alchemic(objectFactory:ALCClassObjectFactory) {
-    AcRegister(objectFactory, AcFactoryName("JSON date formatter"))
+{{ site.data.code.swift-alchemic-method }} {
+    AcRegister(of, AcFactoryName("JSON date formatter"))
 }
 ```
 
@@ -323,8 +322,8 @@ AcRegister(AcPrimary)
 
 {{ site.lang-title-swift }}
 ```swift
-public static func alchemic(objectFactory:ALCClassObjectFactory) {
-    AcRegister(objectFactory, AcPrimary())
+{{ site.data.code.swift-alchemic-method }} {
+    AcRegister(of, AcPrimary())
 }
 ```
 
@@ -344,8 +343,8 @@ AcRegister(AcWeak)
 
 {{ site.lang-title-swift }}
 ```swift
-public static func alchemic(objectFactory:ALCClassObjectFactory) {
-    AcRegister(objectFactory, AcWeak())
+{{ site.data.code.swift-alchemic-method }} {
+    AcRegister(of, AcWeak())
 }
 ```
 

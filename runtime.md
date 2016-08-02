@@ -117,16 +117,16 @@ __AcInvoke__ is for when you want to access a declared method or initializer and
 ```objc
 AcInitializer(initWithText:, AcFactory, AcArg(NSString, AcValue(@"Default message")
 -(instancetype) initWithText:(NSString *) message {
-// ...
+    // ...
 }
 ```
 
 {{ site.lang-title-swift }}
 ```swift
-public static func alchemic(cb:ALCBuilder) {
-AcInitializer(cb, initializer:"initWithMessage:", 
-args:AcArg(NSString.self, source:AcValue(@"Default message"))
-)
+{{ site.data.code.swift-alchemic-method }} {
+    AcInitializer(of, initializer:"initWithMessage:", 
+        args:AcArg(NSString.self, source:AcValue(@"Default message"))
+    )
 }
 func init(message:NSString) {
 // ...
@@ -138,16 +138,16 @@ In this scenario you want the factory method to give you a new instance of the o
 {{ site.lang-title-objc }}
 ```objc
 -(void) myMethod {
-MyObj *myObj = AcInvoke(AcName(@"MyObj initWithText:"), @"Message text");
-// Do stuff ....
+    MyObj *myObj = AcInvoke(AcName(@"MyObj initWithText:"), @"Message text");
+    // Do stuff ....
 }
 ```
 
 {{ site.lang-title-swift }}
 ```swift
 func myMethod() {
-var myObj = AcInvoke(AcName("MyObj initWithText:"), args:"Message text")
-// Do stuff ....
+    var myObj = AcInvoke(AcName("MyObj initWithText:"), args:"Message text")
+    // Do stuff ....
 }
 ```
 
