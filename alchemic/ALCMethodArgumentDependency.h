@@ -9,8 +9,7 @@
 @import Foundation;
 
 #import <Alchemic/ALCAbstractDependency.h>
-
-#import "ALCMethodArgumentDependencyInternal.h"
+#import <Alchemic/ALCMethodArgumentDependencyInternal.h>
 
 @protocol ALCDependency;
 @protocol ALCModel;
