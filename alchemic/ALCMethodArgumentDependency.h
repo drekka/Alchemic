@@ -10,6 +10,8 @@
 
 #import <Alchemic/ALCAbstractDependency.h>
 
+#import "ALCMethodArgumentDependencyInternal.h"
+
 @protocol ALCDependency;
 @protocol ALCModel;
 @class ALCMethodArgumentDependency;
@@ -19,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Defines an argument for a method. 
  */
-@interface ALCMethodArgumentDependency : ALCAbstractDependency
+@interface ALCMethodArgumentDependency : ALCAbstractDependency <ALCMethodArgumentDependencyInternal>
 
 /**
  The index of the argument for injecting into the executing NSInvocation.

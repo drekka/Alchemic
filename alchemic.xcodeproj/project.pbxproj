@@ -104,6 +104,7 @@
 		6CB7C4341CC7BC1300C05B0B /* ALCFlagMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB7C4351CC7BC1300C05B0B /* ALCFlagMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */; };
 		6CBABD111D535B3A00E44EC4 /* ALCContextInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CBABD131D5380F900E44EC4 /* ALCMethodArgumentDependencyInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD121D5380F900E44EC4 /* ALCMethodArgumentDependencyInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CC2847C1CB29A7C006B613F /* ALCException.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC2847A1CB29A7C006B613F /* ALCException.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CC2847D1CB29A7C006B613F /* ALCException.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC2847B1CB29A7C006B613F /* ALCException.m */; };
 		6CC284801CB2AF1A006B613F /* ALCAbstractConstantInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC2847E1CB2AF1A006B613F /* ALCAbstractConstantInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -290,6 +291,7 @@
 		6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCFlagMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCFlagMacros.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCContextInternal.h; sourceTree = "<group>"; };
+		6CBABD121D5380F900E44EC4 /* ALCMethodArgumentDependencyInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMethodArgumentDependencyInternal.h; sourceTree = "<group>"; };
 		6CC284771CABBD1F006B613F /* AnotherThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnotherThing.h; sourceTree = "<group>"; };
 		6CC284781CABBD1F006B613F /* AnotherThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnotherThing.m; sourceTree = "<group>"; };
 		6CC2847A1CB29A7C006B613F /* ALCException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCException.h; sourceTree = "<group>"; };
@@ -626,6 +628,7 @@
 				F4023C041CE988F100AEC0E5 /* ALCInjector.h */,
 				6C71D5411CA161A200D25AC0 /* ALCMethodArgumentDependency.h */,
 				6C71D5421CA161A200D25AC0 /* ALCMethodArgumentDependency.m */,
+				6CBABD121D5380F900E44EC4 /* ALCMethodArgumentDependencyInternal.h */,
 				6C3AFBC61C636DC500B4FCAA /* ALCModelObjectInjector.h */,
 				6C3AFBC71C636DC500B4FCAA /* ALCModelObjectInjector.m */,
 				6C4B56181C6E0BF10040AEC2 /* ALCVariableDependency.h */,
@@ -722,6 +725,7 @@
 				6C3AFBD21C638C7800B4FCAA /* ALCRuntime.h in Headers */,
 				6CC2847C1CB29A7C006B613F /* ALCException.h in Headers */,
 				6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */,
+				6CBABD131D5380F900E44EC4 /* ALCMethodArgumentDependencyInternal.h in Headers */,
 				6C71D5401CA0198800D25AC0 /* ALCConstant.h in Headers */,
 				6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */,
 				F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */,

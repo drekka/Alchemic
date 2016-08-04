@@ -227,13 +227,13 @@
 -(void) runMethodArgumentsTestWithValidArguments:(NSArray *) args {
     
     __block BOOL handlerCalled = NO;
-    NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithUnknownArgumentHandler:^(id passedArgument){
+    NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithUnknownArgumentHandler:^(id passedArgument) {
         handlerCalled = YES;
     }];
     
     XCTAssertFalse(handlerCalled);
     XCTAssertEqual(1u, methodArgs.count);
-    ALCMethodArgumentDependency *returnedArg = methodArgs[0];
+    ALCMethodArgumentDependency *returnedArg = (ALCMethodArgumentDependency *) methodArgs[0];
     XCTAssertEqual(0, returnedArg.index);
     
     id<ALCInjector> injector = returnedArg.injector;
