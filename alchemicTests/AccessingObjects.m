@@ -43,7 +43,7 @@
 
 -(void) testGetWithNestedValue {
     
-    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", nil];
+    [_context objectFactory:_topThingFactory registerInjection:@"aNestedThing", nil];
     
     [_context start];
     

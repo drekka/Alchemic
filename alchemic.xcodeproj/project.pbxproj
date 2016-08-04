@@ -103,6 +103,7 @@
 		6CB5CCF01CDB7AF700DC1052 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CB7C4341CC7BC1300C05B0B /* ALCFlagMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB7C4351CC7BC1300C05B0B /* ALCFlagMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */; };
+		6CBABD111D535B3A00E44EC4 /* ALCContextInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CC2847C1CB29A7C006B613F /* ALCException.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC2847A1CB29A7C006B613F /* ALCException.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CC2847D1CB29A7C006B613F /* ALCException.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC2847B1CB29A7C006B613F /* ALCException.m */; };
 		6CC284801CB2AF1A006B613F /* ALCAbstractConstantInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC2847E1CB2AF1A006B613F /* ALCAbstractConstantInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -288,6 +289,7 @@
 		6CB7C4191CC3BFF500C05B0B /* AccessingObjects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccessingObjects.m; sourceTree = "<group>"; };
 		6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCFlagMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCFlagMacros.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCContextInternal.h; sourceTree = "<group>"; };
 		6CC284771CABBD1F006B613F /* AnotherThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnotherThing.h; sourceTree = "<group>"; };
 		6CC284781CABBD1F006B613F /* AnotherThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnotherThing.m; sourceTree = "<group>"; };
 		6CC2847A1CB29A7C006B613F /* ALCException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCException.h; sourceTree = "<group>"; };
@@ -558,6 +560,7 @@
 			isa = PBXGroup;
 			children = (
 				6C7837231C5BAD8A004BE670 /* ALCContext.h */,
+				6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */,
 				6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */,
 				6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */,
 				6CB5CCD41CDB6F8C00DC1052 /* ALCDefs.h */,
@@ -737,6 +740,7 @@
 				6C71D5471CA16BE600D25AC0 /* NSArray+Alchemic.h in Headers */,
 				6C4D85AD1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h in Headers */,
 				6C71D54B1CA1747200D25AC0 /* ALCTypeData.h in Headers */,
+				6CBABD111D535B3A00E44EC4 /* ALCContextInternal.h in Headers */,
 				6CC2848D1CB671D5006B613F /* NSSet+Alchemic.h in Headers */,
 				6CC284891CB53F03006B613F /* NSBundle+Alchemic.h in Headers */,
 				6C25D27C1C57563200D982DC /* ALCModelImpl.h in Headers */,

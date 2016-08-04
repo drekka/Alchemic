@@ -33,8 +33,8 @@
 }
 
 -(void) testPropertyToProperty {
-    [_context objectFactory:_topFactory registerVariableInjection:@"anotherThing", nil];
-    [_context objectFactory:_anotherFactory registerVariableInjection:@"topThing", nil];
+    [_context objectFactory:_topFactory registerInjection:@"anotherThing", nil];
+    [_context objectFactory:_anotherFactory registerInjection:@"topThing", nil];
     
     [_context start];
     
@@ -61,7 +61,7 @@
 
 -(void) testPropertyToInitializer {
     
-    [_context objectFactory:_topFactory registerVariableInjection:@"anotherThing", nil];
+    [_context objectFactory:_topFactory registerInjection:@"anotherThing", nil];
     AcIgnoreSelectorWarnings(
                              SEL anotherThingInit = @selector(initWithTopThing:);
                              )
@@ -76,7 +76,7 @@
                              SEL topThingInit = @selector(initWithAnotherThing:);
                              )
     [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
-    [_context objectFactory:_anotherFactory registerVariableInjection:@"topThing", nil];
+    [_context objectFactory:_anotherFactory registerInjection:@"topThing", nil];
     
     XCTAssertThrowsSpecific([self->_context start], AlchemicCircularReferenceException);
 }

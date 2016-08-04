@@ -64,7 +64,7 @@
     [_topThingFactory configureWithOptions:@[[ALCIsTemplate macro]] model:mockModel];
     [_nestedThingFactory configureWithOptions:@[[ALCIsTemplate macro]] model:mockModel];
 
-    [_context objectFactory:_topThingFactory registerVariableInjection:@"aNestedThing", nil];
+    [_context objectFactory:_topThingFactory registerInjection:@"aNestedThing", nil];
 
     [_context start];
 

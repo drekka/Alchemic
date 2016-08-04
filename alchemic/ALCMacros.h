@@ -60,7 +60,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  */
 #define AcInject(variableName, ...) \
 +(void) alc_methodName(registerObjectFactoryDependency, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
-[[Alchemic mainContext] objectFactory:classObjectFactory registerVariableInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
+[[Alchemic mainContext] objectFactory:classObjectFactory registerInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
 #pragma mark - Factory configuration

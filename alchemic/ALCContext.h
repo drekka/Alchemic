@@ -91,7 +91,7 @@ registerFactoryMethod:(SEL) selector
  @param variable      The name of the variable. Can be a property name, variable name, or internal variable name.
  @param ... A list of crteria or constant values that define the value to be injected.
  */
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerVariableInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerInjection:(NSString *) variable, ... NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - Tasks
 

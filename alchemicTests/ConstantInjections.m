@@ -75,7 +75,7 @@
 
 -(id) setUpTestForProperty:(NSString *) property
                   constant:(id<ALCInjector>) constant {
-    [_context objectFactory:_topThingFactory registerVariableInjection:property, constant, nil];
+    [_context objectFactory:_topThingFactory registerInjection:property, constant, nil];
     [_context start];
     TopThing *topThing = _topThingFactory.instantiation.object;
     return topThing;

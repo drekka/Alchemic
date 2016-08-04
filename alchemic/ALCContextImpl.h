@@ -9,10 +9,11 @@
 @import Foundation;
 
 #import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCContextInternal.h>
 
 /**
  The defaul implementation of ALCContext.
  */
-@interface ALCContextImpl : NSObject<ALCContext>
+@interface ALCContextImpl : NSObject<ALCContext, ALCContextInternal>
 
 @end
