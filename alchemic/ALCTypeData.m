@@ -10,4 +10,17 @@
 
 @implementation ALCTypeData
 
+-(NSString *) description {
+    if (self.scalarType) {
+        return [NSString stringWithFormat:@"Scalar %s", self.scalarType];
+    } else {
+        NSString *className = self.objcClass ? NSStringFromClass((Class) self.objcClass) : @"";
+        NSMutableArray<NSString *> *protocols = [[NSMutableArray alloc] init];
+        for (Protocol *protocol in self.objcProtocols) {
+            [protocols addObject:NSStringFromProtocol(protocol)];
+        }
+        return [NSString stringWithFormat:@"%@<%@>", className, [protocols componentsJoinedByString:@","]];
+    }
+}
+
 @end

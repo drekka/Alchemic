@@ -109,6 +109,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
             value:(nullable id) value {
 
     ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
+    STLog([object class], @"Variable %@ type data: %@", [ALCRuntime class:[object class] variableDescription:variable], ivarTypeData);
 
     id finalValue = [self mapValue:value allowNils:allowNil type:(Class) ivarTypeData.objcClass];
 
