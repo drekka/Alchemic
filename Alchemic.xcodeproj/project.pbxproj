@@ -539,6 +539,7 @@
 		6C66DC251A8B82C3009F9D94 = {
 			isa = PBXGroup;
 			children = (
+				6C469BAD1BB0200200CD2286 /* Cartfile */,
 				6C66DC301A8B82C3009F9D94 /* Alchemic */,
 				6C469BB61BB0210A00CD2286 /* Frameworks */,
 				6C66DC2F1A8B82C3009F9D94 /* Products */,
@@ -708,7 +709,6 @@
 				6C66DC3F1A8B82C3009F9D94 /* Info.plist */,
 				F421B7D21CEE9A1E008CB8E3 /* module.modulemap */,
 				F425AEA11CEEA2EB002D91B1 /* module.private.modulemap */,
-				6C469BAD1BB0200200CD2286 /* Cartfile */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -877,7 +877,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */;
+			buildConfigurationList = 6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1322,7 +1322,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "alchemic" */ = {
+		6C66DC291A8B82C3009F9D94 /* Build configuration list for PBXProject "Alchemic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6C66DC401A8B82C3009F9D94 /* Debug */,

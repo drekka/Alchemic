@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:../Alchemic-Swift/AlchemicSwift.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/derekclarkson/projects/Alchemic/Alchemic.xcodeproj">
+   </FileRef>
+</Workspace>
