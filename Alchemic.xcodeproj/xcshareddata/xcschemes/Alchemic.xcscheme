@@ -67,6 +67,16 @@
                ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6CB5CCD91CDB7AF700DC1052"
+               BuildableName = "Functional tests.xctest"
+               BlueprintName = "Functional tests"
+               ReferencedContainer = "container:Alchemic.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
