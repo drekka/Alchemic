@@ -61,50 +61,50 @@
 }
 
 -(void) testTypeDataForIVarId {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIdProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertEqual([NSObject class], ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
 -(void) testTypeDataForIVarProtocol {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertEqual([NSObject class], ivarData.objcClass);
     XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSCopying)]);
     XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
 -(void) testTypeDataForIVarClassNSStringProtocol {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertEqual([NSString class], ivarData.objcClass);
     XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSFastEnumeration)]);
     XCTAssertEqual(NULL, ivarData.scalarType);
 }
 
 -(void) testTypeDataForIVarInt {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIntProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(0, strcmp("i", ivarData.scalarType));
 }
 
 -(void) testTypeDataForIVarCGRect {
-    
+
     Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"_aRect"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    
+
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(0, strcmp("{CGRect=\"origin\"{CGPoint=\"x\"d\"y\"d}\"size\"{CGSize=\"width\"d\"height\"d}}", ivarData.scalarType));
@@ -153,9 +153,9 @@
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
     [ALCRuntime setInvocation:inv
                      argIndex:0
-                 allowNils:NO
-                        value:@"abc"
-                      ofClass:[NSString class]];
+                       ofType:[NSString class]
+                    allowNils:NO
+                        value:@"abc"];
     NSString *storedArg;
     [inv getArgument:&storedArg atIndex:2];
     XCTAssertEqualObjects(@"abc", storedArg);
@@ -163,7 +163,7 @@
 
 -(void) testSetObjectVariableWithValue {
     Ivar ivar = class_getInstanceVariable([self class], "_privateVariable");
-    [ALCRuntime setObject:self variable:ivar allowNils:NO value:@"abc"];
+    [ALCRuntime setObject:self variable:ivar ofType:[NSString class] allowNils:NO value:@"abc"];
     XCTAssertEqualObjects(@"abc", _privateVariable);
 }
 
@@ -205,21 +205,21 @@
 #pragma mark - general runtime tests
 
 -(void) testAccessingMethods {
-    
+
     XCTAssertFalse([[self class] instancesRespondToSelector:@selector(classMethod)]);
     XCTAssertTrue([[self class] instancesRespondToSelector:@selector(instanceMethod)]);
-    
+
     XCTAssertTrue([[self class] respondsToSelector:@selector(classMethod)]);
     XCTAssertFalse([self respondsToSelector:@selector(classMethod)]);
-    
+
     XCTAssertTrue([self respondsToSelector:@selector(instanceMethod)]);
     XCTAssertFalse([[self class] respondsToSelector:@selector(instanceMethod)]);
 }
 
 -(void) testMethodSignature {
-    
+
     NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:@selector(methodWithString:andInt:)];
-    
+
     const char *arg2 = [sig getArgumentTypeAtIndex:2];
     const char *arg3 = [sig getArgumentTypeAtIndex:3];
     XCTAssertTrue(strcmp("@", arg2) == 0);
@@ -271,15 +271,15 @@
 }
 
 -(void) testExecuteBlockWithObject {
-    
+
     __block BOOL set = NO;
     ALCBlockWithObject completion = ^(ALCBlockWithObjectArgs){
         XCTAssertEqualObjects(@"abc", object);
         set = YES;
     };
-    
+
     [ALCRuntime executeBlock:completion withObject:@"abc"];
-    
+
     XCTAssertTrue(set);
 }
 

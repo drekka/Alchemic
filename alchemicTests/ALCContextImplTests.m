@@ -25,7 +25,7 @@
     _context = [[ALCContextImpl alloc] init];
     Ivar modelVar = [ALCRuntime class:[ALCContextImpl class] variableForInjectionPoint:@"_model"];
     _mockModel = OCMClassMock([ALCModelImpl class]);
-    [ALCRuntime setObject:_context variable:modelVar allowNils:NO value:(NSObject *)_mockModel];
+    [ALCRuntime setObject:_context variable:modelVar ofType:[ALCModelImpl class] allowNils:NO value:(NSObject *)_mockModel];
 }
 
 -(void) testStart {
