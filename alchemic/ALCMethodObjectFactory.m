@@ -61,6 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) resolveDependenciesWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
+    STStartScope(self.objectClass);
     AcWeakSelf;
     [self resolveWithResolvingStack:resolvingStack
                        resolvedFlag:&_resolved

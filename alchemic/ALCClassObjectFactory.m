@@ -60,6 +60,7 @@
 
 -(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
 
+    STStartScope(self.objectClass);
     STLog(self.objectClass, @"Resolving class factory %@", NSStringFromClass(self.objectClass));
 
     // Validate we are not trying to specify an intializer for a reference factory.
