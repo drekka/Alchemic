@@ -6,6 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import StoryTeller;
+
 #import "ALCAbstractDependency.h"
 
 #import "ALCInternalMacros.h"
@@ -37,6 +39,7 @@
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                    model:(id<ALCModel>)model {
+    STLog(self, @"Resolving %@", self.resolvingDescription);
     [_injector resolveWithStack:resolvingStack model:model];
 }
 
