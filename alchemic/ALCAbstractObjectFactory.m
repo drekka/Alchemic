@@ -154,12 +154,13 @@ NS_ASSUME_NONNULL_BEGIN
     [ALCRuntime executeBlock:completion withObject:object];
 
     // Let other factories know we have updated.
+    NSDictionary *userInfo = @{
+                               AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],
+                               AlchemicDidStoreObjectUserInfoNewValue:object ? object : [NSNull null]
+                               };
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidStoreObject
                                                         object:self
-                                                      userInfo:@{
-                                                                 AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],
-                                                                 AlchemicDidStoreObjectUserInfoNewValue:object ? object : [NSNull null]
-                                                                 }];
+                                                      userInfo:userInfo];
 }
 
 -(ALCBlockWithObject) storeObject:(nullable id) object {

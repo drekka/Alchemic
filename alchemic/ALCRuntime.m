@@ -105,13 +105,13 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(void) setObject:(id) object
          variable:(Ivar) variable
+           ofType:(Class) type
         allowNils:(BOOL) allowNil
             value:(nullable id) value {
 
-    ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable];
-    STLog([object class], @"Variable %@ type data: %@", [ALCRuntime class:[object class] variableDescription:variable], ivarTypeData);
+    STLog([object class], @"Variable %@ type: %@", [ALCRuntime class:[object class] variableDescription:variable], NSStringFromClass(type));
 
-    id finalValue = [self mapValue:value allowNils:allowNil type:(Class) ivarTypeData.objcClass];
+    id finalValue = [self mapValue:value allowNils:allowNil type:type];
 
     STLog([object class], @"Injecting %@ with a %@", [ALCRuntime class:[object class] variableDescription:variable], [finalValue class]);
     object_setIvar(object, variable, finalValue);
@@ -119,10 +119,10 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(void) setInvocation:(NSInvocation *) inv
              argIndex:(int) idx
+               ofType:(Class) type
             allowNils:(BOOL) allowNil
-                value:(nullable id) value
-              ofClass:(Class) valueClass {
-    id finalValue = [self mapValue:value allowNils:allowNil type:(Class) valueClass];
+                value:(nullable id) value {
+    id finalValue = [self mapValue:value allowNils:allowNil type:(Class) type];
     if (finalValue) {
         [inv setArgument:&finalValue atIndex:idx + 2];
     }

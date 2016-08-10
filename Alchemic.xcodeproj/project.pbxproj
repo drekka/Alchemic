@@ -105,6 +105,10 @@
 		6CB7C4351CC7BC1300C05B0B /* ALCFlagMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */; };
 		6CBABD111D535B3A00E44EC4 /* ALCContextInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CBABD131D5380F900E44EC4 /* ALCMethodArgumentDependencyInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD121D5380F900E44EC4 /* ALCMethodArgumentDependencyInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CBABD161D577A3B00E44EC4 /* Singleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD151D577A3B00E44EC4 /* Singleton.m */; };
+		6CBABD181D577A5F00E44EC4 /* SwiftEquivalentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD171D577A5F00E44EC4 /* SwiftEquivalentTests.m */; };
+		6CBABD1B1D577CE600E44EC4 /* Template.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD1A1D577CE600E44EC4 /* Template.m */; };
+		6CBABD1E1D577F0E00E44EC4 /* Reference.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD1D1D577F0E00E44EC4 /* Reference.m */; };
 		6CC2847C1CB29A7C006B613F /* ALCException.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC2847A1CB29A7C006B613F /* ALCException.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CC2847D1CB29A7C006B613F /* ALCException.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC2847B1CB29A7C006B613F /* ALCException.m */; };
 		6CC284801CB2AF1A006B613F /* ALCAbstractConstantInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC2847E1CB2AF1A006B613F /* ALCAbstractConstantInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -292,6 +296,13 @@
 		6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCFlagMacros.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCContextInternal.h; sourceTree = "<group>"; };
 		6CBABD121D5380F900E44EC4 /* ALCMethodArgumentDependencyInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCMethodArgumentDependencyInternal.h; sourceTree = "<group>"; };
+		6CBABD141D577A3B00E44EC4 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
+		6CBABD151D577A3B00E44EC4 /* Singleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Singleton.m; sourceTree = "<group>"; };
+		6CBABD171D577A5F00E44EC4 /* SwiftEquivalentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftEquivalentTests.m; sourceTree = "<group>"; };
+		6CBABD191D577CE600E44EC4 /* Template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Template.h; sourceTree = "<group>"; };
+		6CBABD1A1D577CE600E44EC4 /* Template.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Template.m; sourceTree = "<group>"; };
+		6CBABD1C1D577F0E00E44EC4 /* Reference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reference.h; sourceTree = "<group>"; };
+		6CBABD1D1D577F0E00E44EC4 /* Reference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reference.m; sourceTree = "<group>"; };
 		6CC284771CABBD1F006B613F /* AnotherThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnotherThing.h; sourceTree = "<group>"; };
 		6CC284781CABBD1F006B613F /* AnotherThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnotherThing.m; sourceTree = "<group>"; };
 		6CC2847A1CB29A7C006B613F /* ALCException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCException.h; sourceTree = "<group>"; };
@@ -644,6 +655,7 @@
 				6CC2849C1CB69F4E006B613F /* Model */,
 				6CC284971CB69BDC006B613F /* AlchemicTests.m */,
 				6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */,
+				6CBABD171D577A5F00E44EC4 /* SwiftEquivalentTests.m */,
 			);
 			name = "Integration tests";
 			path = alchemicTests;
@@ -666,6 +678,12 @@
 				F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */,
 				6C83CCAE1D02A6F900D7F0BC /* ViewController.h */,
 				6C83CCAF1D02A6F900D7F0BC /* ViewController.m */,
+				6CBABD141D577A3B00E44EC4 /* Singleton.h */,
+				6CBABD151D577A3B00E44EC4 /* Singleton.m */,
+				6CBABD191D577CE600E44EC4 /* Template.h */,
+				6CBABD1A1D577CE600E44EC4 /* Template.m */,
+				6CBABD1C1D577F0E00E44EC4 /* Reference.h */,
+				6CBABD1D1D577F0E00E44EC4 /* Reference.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -948,14 +966,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C83CCB01D02A6F900D7F0BC /* ViewController.m in Sources */,
+				6CBABD1E1D577F0E00E44EC4 /* Reference.m in Sources */,
+				6CBABD1B1D577CE600E44EC4 /* Template.m in Sources */,
 				6C2A286A1CB7EFB5008F43E6 /* Networking.m in Sources */,
 				F425AEA01CEEA215002D91B1 /* FakeUIApplicationDelegate.m in Sources */,
 				6CCFA8DA1CD8EA960013BF71 /* Database.m in Sources */,
 				6C7DE1761D313C2600FAC6A0 /* XCTestCase+Alchemic.m in Sources */,
+				6CBABD181D577A5F00E44EC4 /* SwiftEquivalentTests.m in Sources */,
 				6C2A28691CB7EF65008F43E6 /* UserInterface.m in Sources */,
 				6C237CD21CCA6EEF00B8F551 /* RequestEngine.m in Sources */,
 				6CC284991CB69CC5006B613F /* AlchemicTests.m in Sources */,
 				6CDF430B1CCE3FFB00F132AE /* HTTPServer.m in Sources */,
+				6CBABD161D577A3B00E44EC4 /* Singleton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

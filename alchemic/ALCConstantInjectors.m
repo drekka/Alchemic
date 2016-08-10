@@ -48,20 +48,15 @@ return NULL; \
 
 #define ALCConstantScalarImplementation(name, type, toObject) \
 ALCConstantImplementation(name, type, \
-ALCTypeData *ivarTypeData = [ALCRuntime typeDataForIVar:variable]; \
-if (ivarTypeData.objcClass) { \
-[ALCRuntime setObject:object variable:variable allowNils:NO value:toObject]; \
-} else { \
 CFTypeRef objRef = CFBridgingRetain(object); \
 type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(variable)); \
 *ivarPtr = _value; \
 CFBridgingRelease(objRef); \
-} \
 )
 
 #define ALCConstantObjectImplementation(name, type) \
-ALCConstantImplementation(name, type, \
-[ALCRuntime setObject:object variable:variable allowNils:NO value:_value]; \
+ALCConstantImplementation(name, type *, \
+[ALCRuntime setObject:object variable:variable ofType:[type class] allowNils:NO value:_value]; \
 )
 
 #pragma mark - Scalar types
@@ -87,7 +82,7 @@ ALCConstantScalarImplementation(CGRect, CGRect, [NSValue valueWithCGRect:_value]
 #pragma mark - Object types
 
 ALCConstantFunctionImplementation(String, NSString *)
-ALCConstantObjectImplementation(String, NSString *)
+ALCConstantObjectImplementation(String, NSString)
 
 #pragma mark - Nil injector
 

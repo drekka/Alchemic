@@ -136,7 +136,9 @@ registerFactoryMethod:(SEL) selector
     [self objectFactory:objectFactory initializer:initializer args:arguments];
 }
 
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory initializer:(SEL) initializer args:(NSArray *) args {
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory
+          initializer:(SEL) initializer
+                 args:(NSArray *) args {
 
     // Throw an exception if the factory is already set to a reference type.
     if (objectFactory.factoryType == ALCFactoryTypeReference) {
@@ -157,26 +159,35 @@ registerFactoryMethod:(SEL) selector
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerInjection:(NSString *) variable, ... {
     alc_loadVarArgsAfterVariableIntoArray(variable, config);
-    [self objectFactory:objectFactory registerInjection:variable config:config];
-}
-
--(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerInjection:(NSString *) variable config:(NSArray *) config {
-
-    STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), variable);
-
     Ivar ivar = [ALCRuntime class:objectFactory.objectClass variableForInjectionPoint:variable];
     Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
+    [self objectFactory:objectFactory
+      registerInjection:ivar
+               withName:variable
+                 ofType:varClass
+                 config:config];
+}
+
+-(void) objectFactory:(ALCClassObjectFactory *) objectFactory
+    registerInjection:(Ivar) variable
+             withName:(NSString *) name
+               ofType:(Class) type
+               config:(NSArray *) config {
+
+    STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), name);
 
     NSMutableArray *dependencyConfig = [[NSMutableArray alloc] init];
     __block BOOL allowNils = NO;
-    id<ALCInjector> injector = [config injectorForClass:varClass
+    id<ALCInjector> injector = [config injectorForClass:type
                                          allowConstants:YES
                                  unknownArgumentHandler:^(id argument) {
                                      [dependencyConfig addObject:argument];
                                  }];
     injector.allowNilValues = allowNils;
 
-    ALCVariableDependency *dependency = [objectFactory registerVariableDependency:ivar injector:injector withName:variable];
+    ALCVariableDependency *dependency = [objectFactory registerVariableDependency:variable
+                                                                         injector:injector
+                                                                         withName:name];
     [dependency configureWithOptions:dependencyConfig];
 }
 

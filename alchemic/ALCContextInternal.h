@@ -7,6 +7,7 @@
 //
 
 @import Foundation;
+@import ObjectiveC;
 
 @class ALCClassObjectFactory;
 
@@ -27,7 +28,9 @@ registerFactoryMethod:(SEL) selector
                  args:(NSArray *) args;
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
-    registerInjection:(NSString *) variable
+    registerInjection:(Ivar) variable
+             withName:(NSString *) name
+               ofType:(Class) type
                config:(NSArray *) config;
 
 -(id) objectWithClass:(Class) returnType

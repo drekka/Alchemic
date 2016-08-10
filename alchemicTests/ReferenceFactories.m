@@ -63,7 +63,8 @@
 
 -(void) testSettingFactoryWithInitializerToReferenceTypeThrowsException {
     [_context objectFactory:_topThingFactory initializer:@selector(initWithNoArgs), nil];
-    XCTAssertThrowsSpecific(([self->_context objectFactoryConfig:self->_topThingFactory, AcReference, nil]), AlchemicIllegalArgumentException);
+    [self->_context objectFactoryConfig:self->_topThingFactory, AcReference, nil];
+    XCTAssertThrowsSpecific(([_context start]), AlchemicIllegalArgumentException);
 }
 
 -(void) testSettingMethodFactoryAsReferenceTypeThrowsException {
