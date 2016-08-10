@@ -50,12 +50,12 @@ Scans a list of seach criteria or constants to define an injection.
 /// @name Resolving
 
 /**
- Loops through the arguments in the list and resolves them.
+ Loops through the resolvables in the list and resolves them.
  
  @param resolvingStack The current resolving stack.
  @param model          The model.
  */
--(void)resolveArgumentsWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model;
+-(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model;
 
 /**
  Asks the list of dependencies if they are ready for injection.

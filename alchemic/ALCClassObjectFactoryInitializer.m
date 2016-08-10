@@ -52,7 +52,7 @@
                        resolvedFlag:&_resolved
                               block:^{
                                   AcStrongSelf;
-                                  [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
+                                  [strongSelf->_arguments resolveWithStack:resolvingStack model:model];
                               }];
 }
 

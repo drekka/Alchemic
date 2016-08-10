@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
                               block:^{
                                   AcStrongSelf;
                                   [strongSelf->_parentObjectFactory resolveWithStack:resolvingStack model:model];
-                                  [strongSelf->_arguments resolveArgumentsWithStack:resolvingStack model:model];
+                                  [strongSelf->_arguments resolveWithStack:resolvingStack model:model];
                               }];
 }
 

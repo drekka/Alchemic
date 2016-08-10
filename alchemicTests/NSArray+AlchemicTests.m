@@ -155,7 +155,7 @@
 
 #pragma mark - resolving
 
--(void) testResolveArgumentsWithStackModel {
+-(void) testResolveWithStackModel {
     
     id modelMock = OCMProtocolMock(@protocol(ALCModel));
     NSMutableArray *stack = [[NSMutableArray alloc] init];
@@ -167,7 +167,7 @@
     OCMExpect([argMock1 resolveWithStack:stack model:modelMock]);
     OCMExpect([argMock2 resolveWithStack:stack model:modelMock]);
     
-    [args resolveArgumentsWithStack:stack model:modelMock];
+    [args resolveWithStack:stack model:modelMock];
     
     XCTAssertEqual(0u, stack.count);
     

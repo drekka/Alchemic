@@ -124,10 +124,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Resolving
 
--(void)resolveArgumentsWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
-    [self enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *argument, NSUInteger idx, BOOL *stop) {
-        [resolvingStack addObject:argument];
-        [argument resolveWithStack:resolvingStack model:model];
+-(void)resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
+    [self enumerateObjectsUsingBlock:^(NSObject<ALCDependency> *resolvable, NSUInteger idx, BOOL *stop) {
+        [resolvingStack addObject:resolvable];
+        [resolvable resolveWithStack:resolvingStack model:model];
         [resolvingStack removeLastObject];
     }];
 }
