@@ -105,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     STLog(self, @"Resolving model ...");
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        STLog(self, @"--- Initialing resolve for factory ----");
+        STLog(self, @"--- Initiating resolve for %@ factory ----", key);
         [objectFactory resolveWithStack:[NSMutableArray array] model:self];
     }];
 }
