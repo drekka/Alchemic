@@ -130,7 +130,7 @@ NS_ASSUME_NONNULL_BEGIN
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         if (objectFactory.factoryType == ALCFactoryTypeSingleton
             && objectFactory.isReady) {
-            STLog(objectFactory.objectClass, @"Starting %@, as '%@'", [objectFactory description], key);
+            STLog(self, @"Starting %@, as '%@'", [objectFactory description], key);
             ALCInstantiation *instantiation = objectFactory.instantiation;
             __unused id obj = instantiation.object;
             [instantiation complete];
