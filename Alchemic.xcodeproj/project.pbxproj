@@ -24,7 +24,7 @@
 		6C237CD71CCA74CE00B8F551 /* ALCFactoryName.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C237CD31CCA746700B8F551 /* ALCFactoryName.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C24CCDE1CA42B0C0026D18C /* TopThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC301C96EB9F00B56578 /* TopThing.m */; };
 		6C24CCDF1CA42B0C0026D18C /* NestedThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC341C96EBBB00B56578 /* NestedThing.m */; };
-		6C24CCF11CA42BA80026D18C /* Alchemic iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic iOS.framework */; };
+		6C24CCF11CA42BA80026D18C /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6C24CCF61CA42BA80026D18C /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C24CCF71CA42BA80026D18C /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C24CD031CA539D00026D18C /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -182,7 +182,7 @@
 		6CB5CCE41CDB7AF700DC1052 /* ClassInitializers.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D61CD78E940013BF71 /* ClassInitializers.m */; };
 		6CB5CCE51CDB7AF700DC1052 /* NestedThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC341C96EBBB00B56578 /* NestedThing.m */; };
 		6CB5CCE81CDB7AF700DC1052 /* ClassFactories.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBD41C64CDEC00B4FCAA /* ClassFactories.m */; };
-		6CB5CCEA1CDB7AF700DC1052 /* Alchemic iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic iOS.framework */; };
+		6CB5CCEA1CDB7AF700DC1052 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6CB5CCEF1CDB7AF700DC1052 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CB5CCF01CDB7AF700DC1052 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CB7C4341CC7BC1300C05B0B /* ALCFlagMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -240,7 +240,7 @@
 		F41108A51CF408B600EEBFF7 /* ALCStringMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F41108A41CF408B600EEBFF7 /* ALCStringMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F41108AC1CF4411D00EEBFF7 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F41108AD1CF4411D00EEBFF7 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F420FA771CF28B6A0032C212 /* Alchemic iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic iOS.framework */; };
+		F420FA771CF28B6A0032C212 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		F425AEA01CEEA215002D91B1 /* FakeUIApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */; };
 		F4325ED41CEEAC41001A9FD6 /* ALCTypeDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = F4325ED31CEEAC3B001A9FD6 /* ALCTypeDefs.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F45828341CEBFCFC0074A844 /* ReferenceFactories.m in Sources */ = {isa = PBXBuildFile; fileRef = F45828331CEBFCFC0074A844 /* ReferenceFactories.m */; };
@@ -318,7 +318,7 @@
 		6C2A28651CB7EF5D008F43E6 /* UserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInterface.h; sourceTree = "<group>"; };
 		6C2A28661CB7EF5D008F43E6 /* UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInterface.m; sourceTree = "<group>"; };
 		6C34CA371D5D91C60080D428 /* Alchemic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alchemic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6C36D74F1B3851680073C4FB /* Alchemic iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Alchemic iOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C36D74F1B3851680073C4FB /* Alchemic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alchemic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C3AFBA81C5CE89500B4FCAA /* ALCObjectFactoryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCObjectFactoryType.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C3AFBAA1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCObjectFactoryTypeSingleton.h; sourceTree = "<group>"; };
 		6C3AFBAB1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCObjectFactoryTypeSingleton.m; sourceTree = "<group>"; };
@@ -453,7 +453,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CC503DD1D1C2229004283DA /* OCMock.framework in Frameworks */,
-				6C24CCF11CA42BA80026D18C /* Alchemic iOS.framework in Frameworks */,
+				6C24CCF11CA42BA80026D18C /* Alchemic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,7 +480,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CC503DB1D1C2227004283DA /* OCMock.framework in Frameworks */,
-				F420FA771CF28B6A0032C212 /* Alchemic iOS.framework in Frameworks */,
+				F420FA771CF28B6A0032C212 /* Alchemic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,7 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CC503DC1D1C2228004283DA /* OCMock.framework in Frameworks */,
-				6CB5CCEA1CDB7AF700DC1052 /* Alchemic iOS.framework in Frameworks */,
+				6CB5CCEA1CDB7AF700DC1052 /* Alchemic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,7 +657,7 @@
 			isa = PBXGroup;
 			children = (
 				6C66DC391A8B82C3009F9D94 /* Unit tests.xctest */,
-				6C36D74F1B3851680073C4FB /* Alchemic iOS.framework */,
+				6C36D74F1B3851680073C4FB /* Alchemic.framework */,
 				6C24CCFB1CA42BA80026D18C /* Integration tests.xctest */,
 				6CB5CCF41CDB7AF700DC1052 /* Functional tests.xctest */,
 				6C34CA371D5D91C60080D428 /* Alchemic.framework */,
@@ -997,7 +997,7 @@
 			);
 			name = "Alchemic iOS";
 			productName = alchemic;
-			productReference = 6C36D74F1B3851680073C4FB /* Alchemic iOS.framework */;
+			productReference = 6C36D74F1B3851680073C4FB /* Alchemic.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		6C66DC381A8B82C3009F9D94 /* Unit tests */ = {
@@ -1388,7 +1388,7 @@
 				MODULEMAP_FILE = module.modulemap;
 				MODULEMAP_PRIVATE_FILE = module.private.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Alchemic;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1411,7 +1411,7 @@
 				MODULEMAP_FILE = module.modulemap;
 				MODULEMAP_PRIVATE_FILE = module.private.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Alchemic;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
