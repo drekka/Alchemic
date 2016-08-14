@@ -114,6 +114,16 @@ static NSCharacterSet *__typeEncodingDelimiters;
     id finalValue = [self mapValue:value allowNils:allowNil type:type];
 
     STLog([object class], @"Injecting %@ with a %@", [ALCRuntime class:[object class] variableDescription:variable], [finalValue class]);
+
+    // Patch for Swift Ivars not being retained.
+    const char *encoding = ivar_getTypeEncoding(variable);
+    if (strlen(encoding) == 0) {
+        // Swift ivar? Currently returning no encoding.
+        // Fixing bug with missing retain when addressing Swift ivars which causes EXC BAD ACCESS
+        const void * ptr = CFBridgingRetain(value);
+        finalValue = CFBridgingRelease(ptr);
+    }
+
     object_setIvar(object, variable, finalValue);
 }
 
