@@ -19,7 +19,15 @@
         for (Protocol *protocol in self.objcProtocols) {
             [protocols addObject:NSStringFromProtocol(protocol)];
         }
-        return [NSString stringWithFormat:@"%@<%@>", className, [protocols componentsJoinedByString:@","]];
+        if (self.objcProtocols.count > 0) {
+            if (self.objcClass) {
+                return [NSString stringWithFormat:@"%@<%@>", className, [protocols componentsJoinedByString:@","]];
+            } else {
+                return [NSString stringWithFormat:@"<%@>", [protocols componentsJoinedByString:@","]];
+            }
+        } else {
+            return [NSString stringWithFormat:@"%@", className];
+        }
     }
 }
 
