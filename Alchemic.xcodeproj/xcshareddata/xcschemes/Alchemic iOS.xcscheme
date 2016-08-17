@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
-               BuildableName = "Alchemic iOS.framework"
+               BuildableName = "Alchemic.framework"
                BlueprintName = "Alchemic iOS"
                ReferencedContainer = "container:Alchemic.xcodeproj">
             </BuildableReference>
@@ -82,7 +82,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
-            BuildableName = "Alchemic iOS.framework"
+            BuildableName = "Alchemic.framework"
             BlueprintName = "Alchemic iOS"
             ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
@@ -110,7 +110,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
-            BuildableName = "Alchemic iOS.framework"
+            BuildableName = "Alchemic.framework"
             BlueprintName = "Alchemic iOS"
             ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
@@ -133,7 +133,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6C36D74E1B3851680073C4FB"
-            BuildableName = "Alchemic iOS.framework"
+            BuildableName = "Alchemic.framework"
             BlueprintName = "Alchemic iOS"
             ReferencedContainer = "container:Alchemic.xcodeproj">
          </BuildableReference>
