@@ -99,7 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Injecting
 
--(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable error:(NSError **) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     [ALCRuntime setObject:object
                  variable:variable
@@ -109,7 +109,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [self completionForInstantiations:instantations];
 }
 
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
+-(BOOL) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx error:(NSError **) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     [self completionForInstantiations:instantations]();
     [ALCRuntime setInvocation:inv
@@ -117,6 +117,7 @@ NS_ASSUME_NONNULL_BEGIN
                        ofType:self.objectClass
                     allowNils:self.allowNilValues
                         value:[self valuesFromInstantiations:instantations]];
+    return YES;
 }
 
 #pragma mark - Retrieving results

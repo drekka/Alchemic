@@ -34,7 +34,9 @@
 -(void) testALC ## name ## VariableInjection { \
     id<ALCInjector> inj = macro; \
     Ivar ivar = [ALCRuntime class:[self class] variableForInjectionPoint:alc_toNSString(x ## name)]; \
-    [inj setObject:self variable:ivar]; \
+    NSError *error; \
+    [inj setObject:self variable:ivar error:&error]; \
+    XCTAssertNil(error); \
     XCTAssertTrue(assert); \
 } \
 -(void) testMethodArgUsingALC ## name { \
@@ -42,8 +44,10 @@
     NSMethodSignature *sig = [self methodSignatureForSelector:@selector(setter)]; \
     NSInvocation  *inv = [NSInvocation invocationWithMethodSignature:sig]; \
     inv.selector = @selector(setter); \
-    [constant setInvocation:inv argumentIndex:0]; \
+    NSError *error; \
+    [constant setInvocation:inv argumentIndex:0 error:&error]; \
     [inv invokeWithTarget:self]; \
+    XCTAssertNil(error); \
     XCTAssertTrue(assert); \
 }
 

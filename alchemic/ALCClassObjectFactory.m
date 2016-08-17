@@ -69,15 +69,15 @@
     }
 
     AcWeakSelf;
-    [self resolveWithResolvingStack:resolvingStack
-                       resolvedFlag:&_resolved
-                              block:^{
-                                  AcStrongSelf;
-                                  [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
+    [self resolveWithStack:resolvingStack
+              resolvedFlag:&_resolved
+                     block:^{
+                         AcStrongSelf;
+                         [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
 
-                                  STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
-                                  [strongSelf->_dependencies resolveWithStack:resolvingStack model:model];
-                              }];
+                         STLog(strongSelf.objectClass, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.objectClass));
+                         [strongSelf->_dependencies resolveWithStack:resolvingStack model:model];
+                     }];
 
     // Find the first transient dependency and setup watching notifications.
     for (ALCVariableDependency *dependency in _dependencies) {

@@ -37,12 +37,13 @@ return self; \
 +(instancetype) constantValue:(type) value { \
 return [[ALCConstant ## name alloc] initWithValue:value]; \
 } \
--(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable { \
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable error:(NSError **) error { \
 injectVariableCode \
 return NULL; \
 } \
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx { \
+-(BOOL) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx error:(NSError **) error { \
 [inv setArgument:&_value atIndex:idx + 2]; \
+return YES; \
 } \
 @end
 

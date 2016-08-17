@@ -63,13 +63,13 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveDependenciesWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
     STStartScope(self.objectClass);
     AcWeakSelf;
-    [self resolveWithResolvingStack:resolvingStack
-                       resolvedFlag:&_resolved
-                              block:^{
-                                  AcStrongSelf;
-                                  [strongSelf->_parentObjectFactory resolveWithStack:resolvingStack model:model];
-                                  [strongSelf->_arguments resolveWithStack:resolvingStack model:model];
-                              }];
+    [self resolveWithStack:resolvingStack
+              resolvedFlag:&_resolved
+                     block:^{
+                         AcStrongSelf;
+                         [strongSelf->_parentObjectFactory resolveWithStack:resolvingStack model:model];
+                         [strongSelf->_arguments resolveWithStack:resolvingStack model:model];
+                     }];
 }
 
 -(BOOL) isReady {
@@ -80,14 +80,14 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) createObject {
-    
+
     STStartScope(self.objectClass);
-    
+
     ALCInstantiation *parentGeneration = _parentObjectFactory.instantiation;
     if (!parentGeneration.object) {
         throwException(NilParentObject, @"Parent object of method is nil.");
     }
-    
+
     [parentGeneration complete];
     return [(NSObject *) parentGeneration.object invokeSelector:_selector arguments:_arguments];
 }

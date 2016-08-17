@@ -33,46 +33,45 @@ NS_ASSUME_NONNULL_BEGIN
     return [self object:self invokeSelector:selector arguments:arguments];
 }
 
--(void) resolveWithResolvingStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
-                     resolvedFlag:(BOOL *) resolvedFlag
-                            block:(ALCSimpleBlock) block {
-    
+-(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
+            resolvedFlag:(BOOL *) resolvedFlag
+                   block:(ALCSimpleBlock) block {
+
     id<ALCResolvable> resolvableSelf = (id<ALCResolvable>) self;
-    
+
     // First check if we have already been resolved.
     if (*resolvedFlag) {
-        
+
         // If the object factory is in the same resolving chain, then we have a loop.
         NSUInteger stackIndex = [resolvingStack indexOfObject:resolvableSelf];
         if (stackIndex != NSNotFound) {
-            
+
             // Check through the circular reference in the stack and only if we find a method argument can we not resolve this. Method arguments are agressively resolved.
             // Use this style of loop to stop issues with NSUInteger and negative values.
             NSUInteger i = resolvingStack.count;
             do {
                 i--;
                 if ([resolvingStack[i] isKindOfClass:[ALCMethodArgumentDependency class]]) {
-                    
+
                     // A method is found. Bad.
                     [resolvingStack addObject:resolvableSelf];
-                    
+
                     // Build names based on resolvable default model keys.
                     NSMutableArray<NSString *> *names = [[NSMutableArray alloc] initWithCapacity:resolvingStack.count];
                     [resolvingStack enumerateObjectsUsingBlock:^(id<ALCResolvable> stackResolvable, NSUInteger idx, BOOL *stop) {
                         [names addObject:stackResolvable.resolvingDescription];
                     }];
-                    
-                    throwException(CircularReference,
-                                   @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
+
+                    throwException(Resolving, @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
                 }
             } while (i > stackIndex);
         }
-        
+
         // We are enumerating dependencies then we have looped back through a property injection so return.
         STLog(resolvableSelf.objectClass, @"%@ already resolved", NSStringFromClass(resolvableSelf.objectClass));
         return;
     }
-    
+
     *resolvedFlag = YES;
     [resolvingStack addObject:resolvableSelf];
     block();
@@ -82,33 +81,33 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Internal
 
 +(id) object:(id) object invokeSelector:(SEL) selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
-    
+
     STLog(self, @"Executing %@", [ALCRuntime class:[self class] selectorDescription:selector]);
-    
+
     // Get an invocation ready.
     NSMethodSignature *sig = [object methodSignatureForSelector:selector];
-    
+
     // Error checks
     if (!sig) {
         throwException(MethodNotFound, @"Method %@ not found", [ALCRuntime class:[self class] selectorDescription:selector]);
     }
-    
+
     if (strcmp(sig.methodReturnType, "@") != 0) {
         throwException(IllegalArgument, @"Method %@ does not return an object", [ALCRuntime class:[self class] selectorDescription:selector]);
     }
-    
+
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
     [inv retainArguments];
     inv.selector = selector;
-    
+
     // Load the arguments.
     [arguments enumerateObjectsUsingBlock:^(id<ALCDependency> dependency, NSUInteger idx, BOOL *stop) {
         STLog(self.class, @"Injecting argument at index %i", idx);
         [dependency injectObject:inv];
     }];
-    
+
     [inv invokeWithTarget:object];
-    
+
     id __unsafe_unretained returnObj;
     [inv getReturnValue:&returnObj];
     return returnObj;

@@ -18,6 +18,9 @@
 @interface Alchemic ## name ## Exception : ALCException \
 @end
 
+declareException(Resolving)
+declareException(Injection)
+
 declareException(CircularReference)
 declareException(IllegalArgument)
 declareException(ReferenceObjectNotSet)

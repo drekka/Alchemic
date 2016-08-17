@@ -38,12 +38,12 @@
     methodReturningBlockNotImplemented;
 }
 
--(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable {
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable error:(NSError **) error {
     methodReturningBlockNotImplemented;
 }
 
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx {
-    methodNotImplemented;
+-(BOOL) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx error:(NSError **) error {
+    methodReturningBooleanNotImplemented;
 }
 
 -(ALCSimpleBlock) completion {
