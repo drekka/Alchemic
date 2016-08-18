@@ -103,50 +103,17 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - Setting variables
 
-+(void) setObject:(id) object
-         variable:(Ivar) variable
-           ofType:(Class) type
-        allowNils:(BOOL) allowNil
-            value:(nullable id) value {
-
-    STLog([object class], @"Variable %@ type: %@", [ALCRuntime class:[object class] variableDescription:variable], NSStringFromClass(type));
-
-    id finalValue = [self mapValue:value allowNils:allowNil type:type];
-
-    STLog([object class], @"Injecting %@ with a %@", [ALCRuntime class:[object class] variableDescription:variable], [finalValue class]);
-
-    // Patch for Swift Ivars not being retained.
-    const char *encoding = ivar_getTypeEncoding(variable);
-    if (strlen(encoding) == 0) {
-        // Swift ivar? Currently returning no encoding.
-        // Fixing bug with missing retain when addressing Swift ivars which causes EXC BAD ACCESS
-        const void * ptr = CFBridgingRetain(value);
-        finalValue = CFBridgingRelease(ptr);
-    }
-
-    object_setIvar(object, variable, finalValue);
-}
-
-+(void) setInvocation:(NSInvocation *) inv
-             argIndex:(int) idx
-               ofType:(Class) type
-            allowNils:(BOOL) allowNil
-                value:(nullable id) value {
-    id finalValue = [self mapValue:value allowNils:allowNil type:(Class) type];
-    if (finalValue) {
-        [inv setArgument:&finalValue atIndex:idx + 2];
-    }
-}
-
-+(nullable id) mapValue:(nullable id) value allowNils:(BOOL) allowNil type:(Class) type {
++(nullable id) mapValue:(nullable id) value
+              allowNils:(BOOL) allowNil
+                   type:(Class) type
+                  error:(NSError * _Nullable *) error {
 
     // If the passed value is nil or an empty array.
     if (!value) {
-        if (allowNil) {
-            return nil;
-        } else {
-            throwException(NilValue, @"Nil value encountered where a value was expected");
+        if (!allowNil) {
+            setError(@"Nil value encountered where a value was expected")
         }
+        return nil;
     }
 
     // If the target value is an array wrap up the value and return.
@@ -163,7 +130,8 @@ static NSCharacterSet *__typeEncodingDelimiters;
         if (values.count == 0 && allowNil) {
             return nil;
         } else if (values.count != 1) {
-            throwException(IncorrectNumberOfValues, @"Expected 1 value, got %lu", (unsigned long) values.count);
+            setError(@"Expected 1 value, got %lu", (unsigned long) values.count);
+            return nil;
         }
         finalValue = values[0];
     }
@@ -172,7 +140,8 @@ static NSCharacterSet *__typeEncodingDelimiters;
         return finalValue;
     }
 
-    throwException(TypeMissMatch, @"Value of type %@ cannot be cast to a %@", NSStringFromClass([finalValue class]), NSStringFromClass(type));
+    setError(@"Value of type %@ cannot be cast to a %@", NSStringFromClass([finalValue class]), NSStringFromClass(type));
+    return nil;
 }
 
 #pragma mark - Validating

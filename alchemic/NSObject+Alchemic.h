@@ -53,6 +53,23 @@ NS_ASSUME_NONNULL_BEGIN
             resolvedFlag:(BOOL *) resolvedFlag
                    block:(ALCSimpleBlock) block;
 
+/**
+ Sets a variable within an object.
+
+ @param object   The object which contains the variable.
+ @param variable The variable to be set.
+ @param allowNil If YES, allows nil values to be passed and set. Otherwise throws an error if nil values or empty arrays are encountered when there should be values.
+ @param value    The value to set.
+ @param error A pointer to a NSError variable that will be set if an error occurs.
+ @return YES if the variable was set.
+ */
+
+-(BOOL) setVariable:(Ivar) variable
+             ofType:(Class) type
+          allowNils:(BOOL) allowNil
+              value:(nullable id) value
+              error:(NSError * _Nullable *) error;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -37,11 +37,11 @@ return self; \
 +(instancetype) constantValue:(type) value { \
 return [[ALCConstant ## name alloc] initWithValue:value]; \
 } \
--(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable error:(NSError **) error { \
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable error:(NSError * _Nullable *) error { \
 injectVariableCode \
 return NULL; \
 } \
--(BOOL) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx error:(NSError **) error { \
+-(BOOL) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx error:(NSError * _Nullable *) error { \
 [inv setArgument:&_value atIndex:idx + 2]; \
 return YES; \
 } \
@@ -57,7 +57,7 @@ CFBridgingRelease(objRef); \
 
 #define ALCConstantObjectImplementation(name, type) \
 ALCConstantImplementation(name, type *, \
-[ALCRuntime setObject:object variable:variable ofType:[type class] allowNils:NO value:_value]; \
+[object setVariable:variable ofType:[type class] allowNils:NO value:_value error:error]; \
 )
 
 #pragma mark - Scalar types

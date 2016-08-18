@@ -20,6 +20,7 @@
 
 declareException(Resolving)
 declareException(Injection)
+declareException(MappingValue)
 
 declareException(CircularReference)
 declareException(IllegalArgument)

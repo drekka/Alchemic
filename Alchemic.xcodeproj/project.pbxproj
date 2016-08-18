@@ -221,6 +221,10 @@
 		6CCBF46F1D22903600211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CCBF4711D2293D100211F08 /* ALCContextImplTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */; };
 		6CCFA8DA1CD8EA960013BF71 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D91CD8EA960013BF71 /* Database.m */; };
+		6CD8EB881D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; };
+		6CD8EB891D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; };
+		6CD8EB8A1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */; };
+		6CD8EB8B1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */; };
 		6CDF430B1CCE3FFB00F132AE /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF43081CCE3E3700F132AE /* HTTPServer.m */; };
 		6CE234E01CEB469900728CBE /* ALCClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CE234E31CEB489600728CBE /* ALCConfigClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CE234E11CEB489600728CBE /* ALCConfigClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -419,6 +423,8 @@
 		6CCFA8D61CD78E940013BF71 /* ClassInitializers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassInitializers.m; sourceTree = "<group>"; };
 		6CCFA8D81CD8EA960013BF71 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
 		6CCFA8D91CD8EA960013BF71 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
+		6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+Alchemic.h"; sourceTree = "<group>"; };
+		6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+Alchemic.m"; sourceTree = "<group>"; };
 		6CDF43071CCE3E3700F132AE /* HTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPServer.h; sourceTree = "<group>"; };
 		6CDF43081CCE3E3700F132AE /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassProcessor.h; sourceTree = "<group>"; };
@@ -589,6 +595,8 @@
 				6C68CF881C6636D6003A7A54 /* NSObject+Alchemic.m */,
 				6CC2848B1CB671D5006B613F /* NSSet+Alchemic.h */,
 				6CC2848C1CB671D5006B613F /* NSSet+Alchemic.m */,
+				6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */,
+				6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -887,6 +895,7 @@
 				6C34CA2F1D5D91C60080D428 /* ALCDefs.h in Headers */,
 				6C34CA301D5D91C60080D428 /* ALCFactoryName.h in Headers */,
 				6C34CA311D5D91C60080D428 /* Alchemic.h in Headers */,
+				6CD8EB891D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */,
 				6C34CA321D5D91C60080D428 /* ALCContext.h in Headers */,
 				6C34CA331D5D91C60080D428 /* ALCConstantInjectors.h in Headers */,
 			);
@@ -944,6 +953,7 @@
 				6CB5CCD51CDB6F9100DC1052 /* ALCDefs.h in Headers */,
 				6C237CD71CCA74CE00B8F551 /* ALCFactoryName.h in Headers */,
 				6C25D2791C566F7900D982DC /* Alchemic.h in Headers */,
+				6CD8EB881D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */,
 				6C7837241C5BAD8A004BE670 /* ALCContext.h in Headers */,
 				6C68CF841C64E430003A7A54 /* ALCConstantInjectors.h in Headers */,
 			);
@@ -1183,6 +1193,7 @@
 				6C34C9E01D5D91C60080D428 /* ALCResourceLocatorClassProcessor.m in Sources */,
 				6C34C9E11D5D91C60080D428 /* NSObject+Alchemic.m in Sources */,
 				6C34C9E21D5D91C60080D428 /* ALCAbstractConstantInjector.m in Sources */,
+				6CD8EB8B1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */,
 				6C34C9E31D5D91C60080D428 /* NSSet+Alchemic.m in Sources */,
 				6C34C9E41D5D91C60080D428 /* Alchemic.m in Sources */,
 				6C34C9E51D5D91C60080D428 /* ALCModelObjectInjector.m in Sources */,
@@ -1222,6 +1233,7 @@
 				6CE234E81CEB4ACC00728CBE /* ALCResourceLocatorClassProcessor.m in Sources */,
 				6C68CF8A1C6636D6003A7A54 /* NSObject+Alchemic.m in Sources */,
 				6CC284811CB2AF1A006B613F /* ALCAbstractConstantInjector.m in Sources */,
+				6CD8EB8A1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */,
 				6CC2848E1CB671D5006B613F /* NSSet+Alchemic.m in Sources */,
 				6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */,
 				6C3AFBC91C636DC500B4FCAA /* ALCModelObjectInjector.m in Sources */,

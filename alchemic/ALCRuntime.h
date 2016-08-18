@@ -65,36 +65,6 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 /// @name Setting values
 
 /**
- Sets a variable within an object.
-
- @param object   The object which contains the variable.
- @param variable The variable to be set.
- @param allowNil If YES, allows nil values to be passed and set. Otherwise throws an error if nil values or empty arrays are encountered when there should be values.
- @param value    The value to set.
- */
-
-+(void) setObject:(id) object
-         variable:(Ivar) variable
-           ofType:(Class) type
-        allowNils:(BOOL) allowNil
-            value:(nullable id) value;
-
-/**
- Sets an argument in a passed invocation.
-
- @param inv        The invocation.
- @param idx        The index of the argument. This is zero based with 0 being the first argument to the method.
- @param value      The value to set.
- @param allowNil If YES, allows nil values to be passed and set. Otherwise throws an error if nil values or empty arrays are encountered when there should be values.
- @param type The type of the value to be set. This is used when assess if the passed value needs to be wrapped further before being passed to the invocation.
- */
-+(void) setInvocation:(NSInvocation *) inv
-             argIndex:(int) idx
-               ofType:(Class) type
-            allowNils:(BOOL) allowNil
-                value:(nullable id) value;
-
-/**
  Maps a value to a type.
 
  This basically means that the value is assessed to see if it can be converted to the target type. This also takes into account such things as the target being an array and possibly needing to wrap the passed value in an array.
@@ -102,10 +72,14 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
  @param value The value to check.
  @param type  The type it needs to be.
  @param allowNil If YES, allows nil values to be passed and set. Otherwise throws an error if nil values or empty arrays are encountered when there should be values.
+ @param error a pointer to a NSError vaiable which will be populated if an error occurs.
 
  @return A new value matching the passed type.
  */
-+(nullable id) mapValue:(nullable id) value allowNils:(BOOL) allowNil type:(Class) type;
++(nullable id) mapValue:(nullable id) value
+              allowNils:(BOOL) allowNil
+                   type:(Class) type
+                  error:(NSError * _Nullable *) error;
 
 #pragma mark - Validating
 

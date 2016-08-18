@@ -19,6 +19,7 @@
 #import "ALCRuntime.h"
 #import "NSArray+Alchemic.h"
 #import "NSObject+Alchemic.h"
+#import "NSInvocation+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -101,32 +102,31 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable error:(NSError **) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
-    [ALCRuntime setObject:object
-                 variable:variable
-                   ofType:_objectClass
-                allowNils:self.allowNilValues
-                    value:[self valuesFromInstantiations:instantations]];
+    [object setVariable:variable
+                 ofType:_objectClass
+              allowNils:self.allowNilValues
+                  value:[self valuesFromInstantiations:instantations]
+                  error:error];
     return [self completionForInstantiations:instantations];
 }
 
 -(BOOL) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx error:(NSError **) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     [self completionForInstantiations:instantations]();
-    [ALCRuntime setInvocation:inv
-                     argIndex:idx
-                       ofType:self.objectClass
-                    allowNils:self.allowNilValues
-                        value:[self valuesFromInstantiations:instantations]];
-    return YES;
+    return [inv setArgIndex:idx
+                     ofType:self.objectClass
+                  allowNils:self.allowNilValues
+                      value:[self valuesFromInstantiations:instantations]
+                      error:error];
 }
 
 #pragma mark - Retrieving results
 
--(id) searchResult {
+-(nullable id) searchResultWithError:(NSError * _Nullable *) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
     [self completionForInstantiations:instantations]();
-    return (id) [ALCRuntime mapValue:values allowNils:NO type:_objectClass];
+    return [ALCRuntime mapValue:values allowNils:NO type:_objectClass error:error];
 }
 
 #pragma mark - Internal

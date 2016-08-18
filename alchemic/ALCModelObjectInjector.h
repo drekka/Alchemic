@@ -24,13 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) ALCModelSearchCriteria *criteria;
 
 /**
- Executes a model search and return the results.
- 
- All returned objects will be fully completed.
- */
-@property (nonatomic, strong, readonly)id searchResult;
-
-/**
  Unused initializer.
  */
 -(instancetype) init NS_UNAVAILABLE;
@@ -45,6 +38,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(instancetype) initWithObjectClass:(Class) objectClass
                            criteria:(ALCModelSearchCriteria *) criteria NS_DESIGNATED_INITIALIZER;
+
+/**
+ Executes a model search and return the results.
+
+ @param error A pointer to a NSError variable that will be populated if there is an error.
+ All returned objects will be fully completed.
+ */
+-(nullable id) searchResultWithError:(NSError * _Nullable *) error;
 
 @end
 

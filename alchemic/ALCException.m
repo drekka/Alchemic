@@ -17,6 +17,7 @@
 
 declareExceptionImpl(Resolving)
 declareExceptionImpl(Injection)
+declareExceptionImpl(MappingValue)
 
 declareExceptionImpl(CircularReference)
 declareExceptionImpl(IllegalArgument)
