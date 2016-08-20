@@ -235,6 +235,8 @@ registerFactoryMethod:(SEL) selector
     return injection.searchResult;
 }
 
+#pragma mark - Storing objects
+
 -(void) setObject:(id) object, ... {
     alc_loadVarArgsAfterVariableIntoArray(object, criteria);
     [self setObject:object searchCriteria:criteria];
