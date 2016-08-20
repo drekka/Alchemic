@@ -15,6 +15,10 @@
 @implementation Alchemic ## name ## Exception \
 @end
 
+declareExceptionImpl(Resolving)
+declareExceptionImpl(Injection)
+declareExceptionImpl(MappingValue)
+
 declareExceptionImpl(CircularReference)
 declareExceptionImpl(IllegalArgument)
 declareExceptionImpl(ReferenceObjectNotSet)

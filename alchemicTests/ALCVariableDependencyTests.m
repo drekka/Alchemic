@@ -69,7 +69,7 @@
 #pragma mark - Injecting
 
 -(void) testInjecting {
-    OCMExpect([_injectorMock setObject:@"abc" variable:_ivar]);
+    OCMExpect([_injectorMock setObject:@"abc" variable:_ivar error:[OCMArg setTo:nil]]);
     [_dependency injectObject:@"abc"];
     OCMVerifyAll(_injectorMock);
 }

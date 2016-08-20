@@ -56,7 +56,7 @@
     [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory initializer:anotherThingInit, AcClass(TopThing), nil];
 
-    XCTAssertThrowsSpecific([self->_context start], AlchemicCircularReferenceException);
+    XCTAssertThrowsSpecific([self->_context start], AlchemicResolvingException);
 }
 
 -(void) testPropertyToInitializer {
@@ -67,7 +67,7 @@
                              )
     [_context objectFactory:_anotherFactory initializer:anotherThingInit, AcClass(TopThing), nil];
     
-    XCTAssertThrowsSpecific([self->_context start], AlchemicCircularReferenceException);
+    XCTAssertThrowsSpecific([self->_context start], AlchemicResolvingException);
 }
 
 -(void) testInitializerToProperty {
@@ -78,7 +78,7 @@
     [_context objectFactory:_topFactory initializer:topThingInit, AcClass(AnotherThing), nil];
     [_context objectFactory:_anotherFactory registerInjection:@"topThing", nil];
     
-    XCTAssertThrowsSpecific([self->_context start], AlchemicCircularReferenceException);
+    XCTAssertThrowsSpecific([self->_context start], AlchemicResolvingException);
 }
 
 @end

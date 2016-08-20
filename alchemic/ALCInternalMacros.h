@@ -9,8 +9,15 @@
 #import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCException.h>
 
+#define AlchemicDomain @"Alchemic"
+
 #define throwException(exceptionName, template, ...) \
 @throw [Alchemic ## exceptionName ## Exception exceptionWithName:alc_toNSString(exceptionName) reason:str(template, ## __VA_ARGS__) userInfo:nil]
+
+#define setError(template, ...) \
+if (error) { \
+    *error = [NSError errorWithDomain:AlchemicDomain code:0 userInfo:@{NSLocalizedDescriptionKey:str(template, ## __VA_ARGS__)}]; \
+}
 
 #pragma mark - Assertions
 

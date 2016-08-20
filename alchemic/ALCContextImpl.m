@@ -232,7 +232,13 @@ registerFactoryMethod:(SEL) selector
                                                                                    allowConstants:NO
                                                                            unknownArgumentHandler:NULL];
     [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];
-    return injection.searchResult;
+
+    NSError *error;
+    id value = [injection searchResultWithError:&error];
+    if (!value && error) {
+        throwException(MappingValue, @"Mapping error: %@", error.localizedDescription);
+    }
+    return value;
 }
 
 #pragma mark - Storing objects

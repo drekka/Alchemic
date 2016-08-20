@@ -39,7 +39,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ALCSimpleBlock) injectObject:(id) object {
-    [self.injector setInvocation:object argumentIndex:self.index];
+    NSError *error;
+    if (![self.injector setInvocation:object argumentIndex:self.index error:&error]) {
+        throwException(Injection, @"Error injecting argument %i: %@", self.index, error.localizedDescription);
+    }
+    
     return NULL;
 }
 

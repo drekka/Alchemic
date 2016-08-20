@@ -12,6 +12,7 @@
 #import "ALCFlagMacros.h"
 #import "ALCInternalMacros.h"
 #import "ALCException.h"
+#import "ALCRuntime.h"
 
 @implementation ALCVariableDependency {
     Ivar _ivar;
@@ -55,7 +56,13 @@
 }
 
 -(ALCSimpleBlock)injectObject:(id)object {
-    return [self.injector setObject:object variable:_ivar];
+    NSError *error;
+    ALCSimpleBlock completionBlock = [self.injector setObject:object variable:_ivar error:&error];
+    if (!completionBlock && error) {
+        throwException(Injection, @"Error injecting %@: %@", [ALCRuntime class:[object class] variableDescription:_ivar], error.localizedDescription);
+        return nil;
+    }
+    return completionBlock;
 }
 
 -(NSString *)resolvingDescription {

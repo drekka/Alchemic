@@ -29,9 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param object   The object which contains the variable.
  @param variable The variable to inject.
- @result A simple block that can be called to execute objections.
+ @param error A pointer to an NSError variable where errors will be stored.
+ @result A simple block that can be called to execute injections.
  */
--(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable;
+-(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable error:(NSError **) error;
 
 /**
  Injects a value into a method argument.
@@ -39,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param inv The NSInvocation to set the value on.
  @param idx The index of the value. This is zero based with zero being the first argument to the selector.
  */
--(void) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx;
+-(BOOL) setInvocation:(NSInvocation *) inv argumentIndex:(int) idx error:(NSError **) error;
 
 /**
  Returns YES if the passed object factory is referenced by this injector.
