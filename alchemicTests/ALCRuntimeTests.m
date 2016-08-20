@@ -113,37 +113,54 @@
 #pragma mark - Mapping values
 
 -(void) testMapValueToTypeObjectToArray {
-    id result = [ALCRuntime mapValue:@"abc" allowNils:NO type:[NSArray class]];
+    NSError *error;
+    id result = [ALCRuntime mapValue:@"abc" allowNils:NO type:[NSArray class] error:&error];
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(@"abc", result[0]);
+    XCTAssertNil(error);
 }
 
 -(void) testMapValueToTypeArrayToArray {
-    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSArray class]];
+    NSError *error;
+    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSArray class] error:&error];
     XCTAssertTrue([result isKindOfClass:[NSArray class]]);
     XCTAssertEqual(@"abc", result[0]);
+    XCTAssertNil(error);
 }
 
 -(void) testMapValueToTypeArrayOfOneToObject {
-    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSString class]];
+    NSError *error;
+    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSString class] error:&error];
     XCTAssertEqual(@"abc", result);
+    XCTAssertNil(error);
 }
 
 -(void) testMapValueToTypeArrayOfManyToObjectThrows {
-    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc", @"def"] allowNils:NO type:[NSString class]]), AlchemicIncorrectNumberOfValuesException, @"IncorrectNumberOfValues");
+    NSError *error;
+    id result = [ALCRuntime mapValue:@[@"abc", @"def"] allowNils:NO type:[NSString class] error:&error];
+    XCTAssertNil(result);
+    XCTAssertEqualObjects(@"Expected 1 value, got 2", error.localizedDescription);
 }
 
 -(void) testMapValueToTypeTypeMissMatch {
-    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSNumber class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
+    NSError *error;
+    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSNumber class] error:&error];
+    XCTAssertNil(result);
+    XCTAssertEqualObjects(@"Value of type __NSCFConstantString cannot be cast to a NSNumber", error.localizedDescription);
 }
 
 -(void) testMapValueToTypeUpCast {
-    id value = [ALCRuntime mapValue:[@"abc" mutableCopy] allowNils:NO type:[NSString class]];
+    NSError *error;
+    id value = [ALCRuntime mapValue:[@"abc" mutableCopy] allowNils:NO type:[NSString class] error:&error];
     XCTAssertEqualObjects(@"abc", value);
+    XCTAssertNil(error);
 }
 
 -(void) testMapValueToTypeDownCastThrows {
-    XCTAssertThrowsSpecificNamed(([ALCRuntime mapValue:@{} allowNils:NO type:[NSMutableDictionary class]]), AlchemicTypeMissMatchException, @"TypeMissMatch");
+    NSError *error;
+    id result = [ALCRuntime mapValue:@{} allowNils:NO type:[NSMutableDictionary class] error:&error];
+    XCTAssertNil(result);
+    XCTAssertEqualObjects(@"Value of type __NSDictionary0 cannot be cast to a NSMutableDictionary", error.localizedDescription);
 }
 
 #pragma mark - Setting values
@@ -151,20 +168,24 @@
 -(void) testSetInvocationArgIndexWithValueOfClass {
     NSMethodSignature *sig = [self methodSignatureForSelector:@selector(methodWithString:andInt:)];
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
-    [ALCRuntime setInvocation:inv
-                     argIndex:0
-                       ofType:[NSString class]
-                    allowNils:NO
-                        value:@"abc"];
+    NSError *error;
+    [inv setArgIndex:0
+              ofType:[NSString class]
+           allowNils:NO
+               value:@"abc"
+               error:&error];
     NSString *storedArg;
     [inv getArgument:&storedArg atIndex:2];
     XCTAssertEqualObjects(@"abc", storedArg);
+    XCTAssertNil(error);
 }
 
 -(void) testSetObjectVariableWithValue {
     Ivar ivar = class_getInstanceVariable([self class], "_privateVariable");
-    [ALCRuntime setObject:self variable:ivar ofType:[NSString class] allowNils:NO value:@"abc"];
+    NSError *error;
+    [self setVariable:ivar ofType:[NSString class] allowNils:NO value:@"abc" error:&error];
     XCTAssertEqualObjects(@"abc", _privateVariable);
+    XCTAssertNil(error);
 }
 
 #pragma mark - Validating
@@ -193,12 +214,12 @@
 
 -(void) testValidateClassSelectorArgumentsIncorrectNumberArguments {
     id<ALCDependency> arg1 = AcArg(NSString, AcString(@"abc"));
-    XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) arguments:@[arg1]]), AlchemicIncorrectNumberOfArgumentsException, @"IncorrectNumberOfArguments");
+    XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) arguments:@[arg1]]), AlchemicIncorrectNumberOfArgumentsException, @"AlchemicIncorrectNumberOfArgumentsException");
 }
 
 -(void) testValidateClassSelectorArgumentsSelectorNotFound {
     AcIgnoreSelectorWarnings(
-                             XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(xxxx) arguments:nil]), AlchemicSelectorNotFoundException, @"SelectorNotFound");
+                             XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(xxxx) arguments:nil]), AlchemicSelectorNotFoundException, @"AlchemicSelectorNotFoundException");
                              );
 }
 

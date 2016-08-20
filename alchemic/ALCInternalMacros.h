@@ -12,7 +12,7 @@
 #define AlchemicDomain @"Alchemic"
 
 #define throwException(exceptionName, template, ...) \
-@throw [Alchemic ## exceptionName ## Exception exceptionWithName:alc_toNSString(exceptionName) reason:str(template, ## __VA_ARGS__) userInfo:nil]
+@throw [Alchemic ## exceptionName ## Exception exceptionWithName:alc_toNSString(Alchemic ## exceptionName ## Exception) reason:str(template, ## __VA_ARGS__) userInfo:nil]
 
 #define setError(template, ...) \
 if (error) { \

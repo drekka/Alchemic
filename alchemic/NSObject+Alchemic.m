@@ -8,7 +8,8 @@
 
 @import StoryTeller;
 
-// :: Framework ::
+#import "NSObject+Alchemic.h"
+
 #import "ALCDependency.h"
 #import "ALCException.h"
 #import "ALCInstantiation.h"
@@ -19,7 +20,6 @@
 #import "ALCResolvable.h"
 #import "ALCRuntime.h"
 #import "NSArray+Alchemic.h"
-#import "NSObject+Alchemic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

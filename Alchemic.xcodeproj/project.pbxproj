@@ -219,8 +219,8 @@
 		6CCBF46F1D22903600211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CCBF4711D2293D100211F08 /* ALCContextImplTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */; };
 		6CCFA8DA1CD8EA960013BF71 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D91CD8EA960013BF71 /* Database.m */; };
-		6CD8EB881D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; };
-		6CD8EB891D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; };
+		6CD8EB881D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CD8EB891D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CD8EB8A1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */; };
 		6CD8EB8B1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */; };
 		6CD8EB911D68602600A0FCB5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD8EB901D68602600A0FCB5 /* UIKit.framework */; };
@@ -398,9 +398,9 @@
 		6CCFA8D81CD8EA960013BF71 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
 		6CCFA8D91CD8EA960013BF71 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
 		6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+Alchemic.h"; sourceTree = "<group>"; };
+		6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+Alchemic.m"; sourceTree = "<group>"; };
 		6CD8EB901D68602600A0FCB5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		6CD8EB961D68607300A0FCB5 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/tvOS/PEGKit.framework; sourceTree = "<group>"; };
-		6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+Alchemic.m"; sourceTree = "<group>"; };
 		6CD8EB971D68607300A0FCB5 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/tvOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6CD8EB9A1D68608400A0FCB5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS10.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		6CDF43071CCE3E3700F132AE /* HTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPServer.h; sourceTree = "<group>"; };
@@ -1035,7 +1035,7 @@
 				6C66DC351A8B82C3009F9D94 /* Sources */,
 				6C66DC361A8B82C3009F9D94 /* Frameworks */,
 				6C019F1B1D352834005C7D7D /* Resources */,
-				6C58302C1D6869CE00297AF8 /* ShellScript */,
+				6C58302C1D6869CE00297AF8 /* Copy frameworks */,
 			);
 			buildRules = (
 			);
@@ -1157,7 +1157,7 @@
 			shellScript = "exit 0\n\n# Not sure why, but the latest versions of appledoc seem to be\n# fullof bugs and mess up the results quite badly.\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--templates \"$PROJECT_DIR/External/appledoc/templates\" \\\n--clean-output \\\n--create-docset \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--verbose 6 \\\n--logformat 3 \\\n--keep-intermediate-files \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n#--ignore ALCMacros.h \\\n";
 			showEnvVarsInLog = 0;
 		};
-		6C58302C1D6869CE00297AF8 /* ShellScript */ = {
+		6C58302C1D6869CE00297AF8 /* Copy frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1167,6 +1167,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/PEGKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/StoryTeller.framework",
 			);
+			name = "Copy frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1640,7 +1641,6 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1656,7 +1656,6 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

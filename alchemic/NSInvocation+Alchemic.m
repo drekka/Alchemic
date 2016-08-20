@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (finalValue) {
         [self setArgument:&finalValue atIndex:idx + 2];
     }
-    return !error;
+    return !*error;
 }
 
 @end

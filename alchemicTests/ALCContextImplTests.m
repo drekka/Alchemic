@@ -17,7 +17,7 @@
 @end
 
 @implementation ALCContextImplTests {
-    id<ALCContext> _context;
+    NSObject<ALCContext> *_context;
     id _mockModel;
 }
 
@@ -25,7 +25,14 @@
     _context = [[ALCContextImpl alloc] init];
     Ivar modelVar = [ALCRuntime class:[ALCContextImpl class] variableForInjectionPoint:@"_model"];
     _mockModel = OCMClassMock([ALCModelImpl class]);
-    [ALCRuntime setObject:_context variable:modelVar ofType:[ALCModelImpl class] allowNils:NO value:(NSObject *)_mockModel];
+    NSError *error;
+    BOOL set = [_context setVariable:modelVar
+                              ofType:[ALCModelImpl class]
+                           allowNils:NO
+                               value:(NSObject *)_mockModel
+                               error:&error];
+    XCTAssertTrue(set);
+    XCTAssertNil(error);
 }
 
 -(void) testStart {
