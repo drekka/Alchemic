@@ -27,8 +27,6 @@
 		6C24CCDE1CA42B0C0026D18C /* TopThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC301C96EB9F00B56578 /* TopThing.m */; };
 		6C24CCDF1CA42B0C0026D18C /* NestedThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC341C96EBBB00B56578 /* NestedThing.m */; };
 		6C24CCF11CA42BA80026D18C /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
-		6C24CCF61CA42BA80026D18C /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6C24CCF71CA42BA80026D18C /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C24CD031CA539D00026D18C /* ALCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C25D2751C566E2D00D982DC /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2741C566E2D00D982DC /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C25D2771C566E6A00D982DC /* ALCObjectFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2761C566E6A00D982DC /* ALCObjectFactory.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -71,8 +69,6 @@
 		6C34C9FA1D5D91C60080D428 /* ALCModelSearchCriteria.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBBB1C60D96400B4FCAA /* ALCModelSearchCriteria.m */; };
 		6C34C9FB1D5D91C60080D428 /* ALCModelClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE234EA1CEB4B9400728CBE /* ALCModelClassProcessor.m */; };
 		6C34C9FC1D5D91C60080D428 /* ALCMethodObjectFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4B56151C6E0AD10040AEC2 /* ALCMethodObjectFactory.m */; };
-		6C34C9FE1D5D91C60080D428 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
-		6C34C9FF1D5D91C60080D428 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
 		6C34CA021D5D91C60080D428 /* ALCResolvable.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C3AFBCA1C63794C00B4FCAA /* ALCResolvable.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C34CA031D5D91C60080D428 /* ALCInternalMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C34CA041D5D91C60080D428 /* ALCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C3AFBD01C638C7800B4FCAA /* ALCRuntime.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -148,6 +144,13 @@
 		6C4D85AD1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4D85AB1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C4D85AE1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4D85AC1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.m */; };
 		6C4D85B01C7F37400061CA84 /* ALCInstantiator.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4D85AF1C7F37400061CA84 /* ALCInstantiator.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6C5830241D68688A00297AF8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
+		6C5830251D6868BD00297AF8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
+		6C5830261D6868BF00297AF8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
+		6C5830271D6868C700297AF8 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
+		6C5830281D6868C800297AF8 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
+		6C5830291D6868CA00297AF8 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
+		6C58302F1D686BE300297AF8 /* ALCTypeDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C58302E1D686BE300297AF8 /* ALCTypeDataTests.m */; };
 		6C67FF291C6772A400ABEDDD /* ALCRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C67FF281C6772A400ABEDDD /* ALCRuntimeTests.m */; };
 		6C68CF7E1C64DB06003A7A54 /* ALCContextImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C68CF7F1C64DB06003A7A54 /* ALCContextImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */; };
@@ -185,8 +188,6 @@
 		6CB5CCE51CDB7AF700DC1052 /* NestedThing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C14FC341C96EBBB00B56578 /* NestedThing.m */; };
 		6CB5CCE81CDB7AF700DC1052 /* ClassFactories.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AFBD41C64CDEC00B4FCAA /* ClassFactories.m */; };
 		6CB5CCEA1CDB7AF700DC1052 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
-		6CB5CCEF1CDB7AF700DC1052 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6CB5CCF01CDB7AF700DC1052 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CB7C4341CC7BC1300C05B0B /* ALCFlagMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB7C4351CC7BC1300C05B0B /* ALCFlagMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */; };
 		6CBABD111D535B3A00E44EC4 /* ALCContextInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -216,11 +217,13 @@
 		6CC503DB1D1C2227004283DA /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; };
 		6CC503DC1D1C2228004283DA /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; };
 		6CC503DD1D1C2229004283DA /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; };
-		6CCBF46D1D228FBA00211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6CCBF46E1D22902B00211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CCBF46F1D22903600211F08 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CCBF4711D2293D100211F08 /* ALCContextImplTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */; };
 		6CCFA8DA1CD8EA960013BF71 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D91CD8EA960013BF71 /* Database.m */; };
+		6CD8EB911D68602600A0FCB5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD8EB901D68602600A0FCB5 /* UIKit.framework */; };
+		6CD8EB981D68607300A0FCB5 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD8EB961D68607300A0FCB5 /* PEGKit.framework */; };
+		6CD8EB991D68607300A0FCB5 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD8EB971D68607300A0FCB5 /* StoryTeller.framework */; };
+		6CD8EB9B1D68608400A0FCB5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD8EB9A1D68608400A0FCB5 /* UIKit.framework */; };
 		6CDF430B1CCE3FFB00F132AE /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF43081CCE3E3700F132AE /* HTTPServer.m */; };
 		6CE234E01CEB469900728CBE /* ALCClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CE234E31CEB489600728CBE /* ALCConfigClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CE234E11CEB489600728CBE /* ALCConfigClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -240,8 +243,6 @@
 		F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C041CE988F100AEC0E5 /* ALCInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F408073F1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */; };
 		F41108A51CF408B600EEBFF7 /* ALCStringMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F41108A41CF408B600EEBFF7 /* ALCStringMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F41108AC1CF4411D00EEBFF7 /* PEGKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F41108AD1CF4411D00EEBFF7 /* StoryTeller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F420FA771CF28B6A0032C212 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		F425AEA01CEEA215002D91B1 /* FakeUIApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */; };
 		F4325ED41CEEAC41001A9FD6 /* ALCTypeDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = F4325ED31CEEAC3B001A9FD6 /* ALCTypeDefs.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -257,32 +258,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				6CCBF46F1D22903600211F08 /* OCMock.framework in CopyFiles */,
-				6C24CCF61CA42BA80026D18C /* PEGKit.framework in CopyFiles */,
-				6C24CCF71CA42BA80026D18C /* StoryTeller.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6CB5CCED1CDB7AF700DC1052 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				6CCBF46E1D22902B00211F08 /* OCMock.framework in CopyFiles */,
-				6CB5CCEF1CDB7AF700DC1052 /* PEGKit.framework in CopyFiles */,
-				6CB5CCF01CDB7AF700DC1052 /* StoryTeller.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F41108AB1CF4410D00EEBFF7 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				6CCBF46D1D228FBA00211F08 /* OCMock.framework in CopyFiles */,
-				F41108AC1CF4411D00EEBFF7 /* PEGKit.framework in CopyFiles */,
-				F41108AD1CF4411D00EEBFF7 /* StoryTeller.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,6 +326,7 @@
 		6C4D85AB1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCClassObjectFactoryInitializer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C4D85AC1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCClassObjectFactoryInitializer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C4D85AF1C7F37400061CA84 /* ALCInstantiator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInstantiator.h; sourceTree = "<group>"; };
+		6C58302E1D686BE300297AF8 /* ALCTypeDataTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCTypeDataTests.m; sourceTree = "<group>"; };
 		6C66DC391A8B82C3009F9D94 /* Unit tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C66DC3F1A8B82C3009F9D94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C67FF281C6772A400ABEDDD /* ALCRuntimeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCRuntimeTests.m; sourceTree = "<group>"; };
@@ -419,6 +395,10 @@
 		6CCFA8D61CD78E940013BF71 /* ClassInitializers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassInitializers.m; sourceTree = "<group>"; };
 		6CCFA8D81CD8EA960013BF71 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
 		6CCFA8D91CD8EA960013BF71 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
+		6CD8EB901D68602600A0FCB5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		6CD8EB961D68607300A0FCB5 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/tvOS/PEGKit.framework; sourceTree = "<group>"; };
+		6CD8EB971D68607300A0FCB5 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/tvOS/StoryTeller.framework; sourceTree = "<group>"; };
+		6CD8EB9A1D68608400A0FCB5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS10.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		6CDF43071CCE3E3700F132AE /* HTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPServer.h; sourceTree = "<group>"; };
 		6CDF43081CCE3E3700F132AE /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassProcessor.h; sourceTree = "<group>"; };
@@ -440,7 +420,6 @@
 		F4023C041CE988F100AEC0E5 /* ALCInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInjector.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		F408073E1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConfigClassProcessorTests.m; sourceTree = "<group>"; };
 		F41108A41CF408B600EEBFF7 /* ALCStringMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCStringMacros.h; sourceTree = "<group>"; };
-		F41108A61CF435D000EEBFF7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F41DE2D31CEAFD2E00CD7688 /* FakeUIApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeUIApplicationDelegate.h; sourceTree = "<group>"; };
 		F41DE2D41CEAFD2E00CD7688 /* FakeUIApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeUIApplicationDelegate.m; sourceTree = "<group>"; };
 		F421B7D21CEE9A1E008CB8E3 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
@@ -456,7 +435,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C5830291D6868CA00297AF8 /* PEGKit.framework in Frameworks */,
 				6CC503DD1D1C2229004283DA /* OCMock.framework in Frameworks */,
+				6C5830261D6868BF00297AF8 /* StoryTeller.framework in Frameworks */,
 				6C24CCF11CA42BA80026D18C /* Alchemic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -465,8 +446,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C34C9FE1D5D91C60080D428 /* PEGKit.framework in Frameworks */,
-				6C34C9FF1D5D91C60080D428 /* StoryTeller.framework in Frameworks */,
+				6CD8EB9B1D68608400A0FCB5 /* UIKit.framework in Frameworks */,
+				6CD8EB981D68607300A0FCB5 /* PEGKit.framework in Frameworks */,
+				6CD8EB991D68607300A0FCB5 /* StoryTeller.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +456,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CD8EB911D68602600A0FCB5 /* UIKit.framework in Frameworks */,
 				6CED05781BCB548700B6C55B /* PEGKit.framework in Frameworks */,
 				6CED05761BCB545800B6C55B /* StoryTeller.framework in Frameworks */,
 			);
@@ -483,7 +466,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C5830271D6868C700297AF8 /* PEGKit.framework in Frameworks */,
 				6CC503DB1D1C2227004283DA /* OCMock.framework in Frameworks */,
+				6C5830241D68688A00297AF8 /* StoryTeller.framework in Frameworks */,
 				F420FA771CF28B6A0032C212 /* Alchemic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -492,7 +477,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C5830281D6868C800297AF8 /* PEGKit.framework in Frameworks */,
 				6CC503DC1D1C2228004283DA /* OCMock.framework in Frameworks */,
+				6C5830251D6868BD00297AF8 /* StoryTeller.framework in Frameworks */,
 				6CB5CCEA1CDB7AF700DC1052 /* Alchemic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -596,10 +583,8 @@
 		6C469BB61BB0210A00CD2286 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6CC503D91D1C21FB004283DA /* OCMock.framework */,
-				F41108A61CF435D000EEBFF7 /* UIKit.framework */,
-				6CED05771BCB548700B6C55B /* PEGKit.framework */,
-				6CED05751BCB545800B6C55B /* StoryTeller.framework */,
+				6CD8EB8F1D685F9200A0FCB5 /* tvOS */,
+				6CD8EB8E1D685F8A00A0FCB5 /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -674,9 +659,9 @@
 			isa = PBXGroup;
 			children = (
 				6C7837231C5BAD8A004BE670 /* ALCContext.h */,
-				6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */,
 				6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */,
 				6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */,
+				6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */,
 				6CB5CCD41CDB6F8C00DC1052 /* ALCDefs.h */,
 				6CB5CCD61CDB70C800DC1052 /* ALCDefs.m */,
 				6CC2847A1CB29A7C006B613F /* ALCException.h */,
@@ -692,6 +677,7 @@
 				F4325ED31CEEAC3B001A9FD6 /* ALCTypeDefs.h */,
 				6C68CF861C660869003A7A54 /* Dependencies */,
 				6C25D2841C58E14D00D982DC /* Factories */,
+				6CD8EB9C1D6863EF00A0FCB5 /* Features */,
 				6C25D2731C566E0A00D982DC /* Model */,
 				6C3AFBCF1C638C2700B4FCAA /* Runtime */,
 			);
@@ -798,6 +784,34 @@
 				6CC503D71D1ACE67004283DA /* ALCObjectFactoryTypeTemplateTests.m */,
 			);
 			name = Types;
+			sourceTree = "<group>";
+		};
+		6CD8EB8E1D685F8A00A0FCB5 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				6CD8EB901D68602600A0FCB5 /* UIKit.framework */,
+				6CC503D91D1C21FB004283DA /* OCMock.framework */,
+				6CED05771BCB548700B6C55B /* PEGKit.framework */,
+				6CED05751BCB545800B6C55B /* StoryTeller.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		6CD8EB8F1D685F9200A0FCB5 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				6CD8EB9A1D68608400A0FCB5 /* UIKit.framework */,
+				6CD8EB961D68607300A0FCB5 /* PEGKit.framework */,
+				6CD8EB971D68607300A0FCB5 /* StoryTeller.framework */,
+			);
+			name = tvOS;
+			sourceTree = "<group>";
+		};
+		6CD8EB9C1D6863EF00A0FCB5 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Features;
 			sourceTree = "<group>";
 		};
 		6CE7F68C1D41021A005DEE2C /* Model */ = {
@@ -1012,8 +1026,8 @@
 			buildPhases = (
 				6C66DC351A8B82C3009F9D94 /* Sources */,
 				6C66DC361A8B82C3009F9D94 /* Frameworks */,
-				F41108AB1CF4410D00EEBFF7 /* CopyFiles */,
 				6C019F1B1D352834005C7D7D /* Resources */,
+				6C58302C1D6869CE00297AF8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1031,7 +1045,7 @@
 				6CB5CCDC1CDB7AF700DC1052 /* Sources */,
 				6CB5CCE91CDB7AF700DC1052 /* Frameworks */,
 				6CB5CCEC1CDB7AF700DC1052 /* Resources */,
-				6CB5CCED1CDB7AF700DC1052 /* CopyFiles */,
+				6C58302D1D686A4700297AF8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1133,6 +1147,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "exit 0\n\n# Not sure why, but the latest versions of appledoc seem to be\n# fullof bugs and mess up the results quite badly.\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--templates \"$PROJECT_DIR/External/appledoc/templates\" \\\n--clean-output \\\n--create-docset \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--verbose 6 \\\n--logformat 3 \\\n--keep-intermediate-files \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n#--ignore ALCMacros.h \\\n";
+			showEnvVarsInLog = 0;
+		};
+		6C58302C1D6869CE00297AF8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/OCMock.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/PEGKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/StoryTeller.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "carthage copy-frameworks";
+			showEnvVarsInLog = 0;
+		};
+		6C58302D1D686A4700297AF8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/OCMock.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/PEGKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/StoryTeller.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "carthage copy-frameworks";
 			showEnvVarsInLog = 0;
 		};
 		6CFF3BD41B709F8800538BA1 /* Appledoc */ = {
@@ -1263,6 +1311,7 @@
 				6CE7F6911D410BB4005DEE2C /* ALCModelImplTests.m in Sources */,
 				6CE7F68F1D410269005DEE2C /* ALCMOdelSearchCriteriaTests.m in Sources */,
 				6C4D85AA1C7DB7460061CA84 /* ALCConstantInjectorsTests.m in Sources */,
+				6C58302F1D686BE300297AF8 /* ALCTypeDataTests.m in Sources */,
 				6CB57E9C1D43C66B00CFE4DF /* ALCClassObjectFactoryTests.m in Sources */,
 				6C7DE1781D313C4700FAC6A0 /* NSArray+AlchemicTests.m in Sources */,
 				6CB57E9A1D43C53900CFE4DF /* ALCMethodObjectFactoryTests.m in Sources */,
@@ -1314,9 +1363,12 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -1325,15 +1377,19 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
 		6C34CA351D5D91C60080D428 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_CURRENT_VERSION = 2.0;
@@ -1359,6 +1415,7 @@
 		6C34CA361D5D91C60080D428 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_CURRENT_VERSION = 2.0;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1397,6 +1454,7 @@
 				MODULEMAP_PRIVATE_FILE = module.private.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = Alchemic;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1420,6 +1478,7 @@
 				MODULEMAP_PRIVATE_FILE = module.private.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = Alchemic;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1449,6 +1508,7 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
@@ -1456,6 +1516,7 @@
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -1489,7 +1550,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1517,6 +1578,7 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
@@ -1524,6 +1586,7 @@
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -1551,7 +1614,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -1563,9 +1626,15 @@
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -1573,9 +1642,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEFINES_MODULE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
@@ -1584,9 +1659,14 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -1595,9 +1675,14 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
