@@ -7,9 +7,9 @@
 //
 
 @import XCTest;
+@import OCMock;
 @import Alchemic;
 @import Alchemic.Private;
-@import OCMock;
 
 @interface ALCMethodObjectFactoryTests : XCTestCase
 

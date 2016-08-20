@@ -9,8 +9,7 @@
 @import XCTest;
 @import Alchemic;
 @import Alchemic.Private;
-
-#import <OCMock/OCMock.h>
+@import OCMock;
 
 #pragma mark - Dummy classes
 
