@@ -34,10 +34,6 @@
     return NO;
 }
 
--(ALCSimpleBlock) injectObject:(id)object {
-    methodReturningBlockNotImplemented;
-}
-
 -(ALCSimpleBlock) setObject:(id) object variable:(Ivar) variable error:(NSError **) error {
     methodReturningBlockNotImplemented;
 }
