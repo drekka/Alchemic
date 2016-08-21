@@ -12,4 +12,6 @@
 
 -(id) getVariable:(NSString *) variable fromObject:(id) obj;
 
+-(void) setVariable:(NSString *) variable inObject:(id) obj value:(id) value;
+
 @end

@@ -47,7 +47,7 @@
     return [self.injector referencesObjectFactory:objectFactory];
 }
 
--(NSString *)resolvingDescription {
+-(NSString *) resolvingDescription {
     methodNotImplemented;
     return @"";
 }

@@ -17,4 +17,10 @@
     return object_getIvar(obj, ivar);
 }
 
+-(void) setVariable:(NSString *) variable inObject:(id) obj value:(id) value {
+    Ivar ivar = class_getInstanceVariable([obj class], variable.UTF8String);
+    object_setIvar(obj, ivar, value);
+}
+
+
 @end
