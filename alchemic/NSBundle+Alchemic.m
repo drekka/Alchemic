@@ -17,7 +17,7 @@
 
 @implementation NSBundle (Alchemic)
 
--(void) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context model:(id<ALCModel>) model {
+-(void) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
     
     unsigned int count = 0;
     const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &count);
@@ -28,7 +28,7 @@
         Class nextClass = objc_getClass(classes[i]);
         for (id<ALCClassProcessor> classProcessor in processors) {
             if ([classProcessor canProcessClass:nextClass]) {
-                [classProcessor processClass:nextClass withContext:context model:model];
+                [classProcessor processClass:nextClass withContext:context];
             }
         }
     }

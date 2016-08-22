@@ -14,6 +14,7 @@
 @class ALCClassObjectFactory;
 @class ALCMethodObjectFactory;
 @protocol ALCContext;
+@protocol ALCResolveAspect;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -41,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param block A simple block.
  */
 -(void) executeBlockWhenStarted:(void (^)()) block;
+
+-(void) addResolveAspect:(id<ALCResolveAspect>) resolveAspect;
 
 #pragma mark - Registering
 

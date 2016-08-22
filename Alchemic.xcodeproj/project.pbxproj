@@ -153,6 +153,12 @@
 		6C5BC1B81D689DED009592EB /* ALCAbstractConstantInjectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5BC1B71D689DED009592EB /* ALCAbstractConstantInjectorTests.m */; };
 		6C5BC1BA1D68A6E1009592EB /* AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5BC1B91D68A6E1009592EB /* AlchemicTests.m */; };
 		6C5BC1BC1D68ACB4009592EB /* ALCAbstractDependencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5BC1BB1D68ACB4009592EB /* ALCAbstractDependencyTests.m */; };
+		6C5BC1BF1D6B2ED8009592EB /* OCMock.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757A91D6ACF6D00BCAF6B /* OCMock.framework.dSYM */; };
+		6C5BC1C01D6B2ED8009592EB /* PEGKit.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757AA1D6ACF6D00BCAF6B /* PEGKit.framework.dSYM */; };
+		6C5BC1C11D6B2ED8009592EB /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757AB1D6ACF6D00BCAF6B /* StoryTeller.framework.dSYM */; };
+		6C5BC1C21D6B2EDA009592EB /* OCMock.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757A91D6ACF6D00BCAF6B /* OCMock.framework.dSYM */; };
+		6C5BC1C31D6B2EDA009592EB /* PEGKit.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757AA1D6ACF6D00BCAF6B /* PEGKit.framework.dSYM */; };
+		6C5BC1C41D6B2EDA009592EB /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757AB1D6ACF6D00BCAF6B /* StoryTeller.framework.dSYM */; };
 		6C67FF291C6772A400ABEDDD /* ALCRuntimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C67FF281C6772A400ABEDDD /* ALCRuntimeTests.m */; };
 		6C68CF7E1C64DB06003A7A54 /* ALCContextImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C68CF7F1C64DB06003A7A54 /* ALCContextImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */; };
@@ -558,6 +564,8 @@
 		6C25D2731C566E0A00D982DC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6C8757C11D6ADCD000BCAF6B /* ALCAspectClassProcessor.h */,
+				6C8757C21D6ADCD000BCAF6B /* ALCAspectClassProcessor.m */,
 				6C25D27A1C57563200D982DC /* ALCModelImpl.h */,
 				6C25D27B1C57563200D982DC /* ALCModelImpl.m */,
 				6C25D2741C566E2D00D982DC /* ALCModel.h */,
@@ -596,8 +604,6 @@
 		6C3AFBCF1C638C2700B4FCAA /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
-				6C8757C11D6ADCD000BCAF6B /* ALCAspectClassProcessor.h */,
-				6C8757C21D6ADCD000BCAF6B /* ALCAspectClassProcessor.m */,
 				6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */,
 				6CE234E11CEB489600728CBE /* ALCConfigClassProcessor.h */,
 				6CE234E21CEB489600728CBE /* ALCConfigClassProcessor.m */,
@@ -1088,8 +1094,8 @@
 			buildPhases = (
 				6C66DC351A8B82C3009F9D94 /* Sources */,
 				6C66DC361A8B82C3009F9D94 /* Frameworks */,
-				6C019F1B1D352834005C7D7D /* Resources */,
 				6C58302C1D6869CE00297AF8 /* Copy frameworks */,
+				6C019F1B1D352834005C7D7D /* Resources */,
 			);
 			buildRules = (
 			);
@@ -1106,8 +1112,8 @@
 			buildPhases = (
 				6CB5CCDC1CDB7AF700DC1052 /* Sources */,
 				6CB5CCE91CDB7AF700DC1052 /* Frameworks */,
+				6C58302D1D686A4700297AF8 /* Copy frameworks */,
 				6CB5CCEC1CDB7AF700DC1052 /* Resources */,
-				6C58302D1D686A4700297AF8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1184,7 +1190,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C5BC1C21D6B2EDA009592EB /* OCMock.framework.dSYM in Resources */,
 				6CC2849B1CB69EE6006B613F /* StoryTellerConfig.json in Resources */,
+				6C5BC1C41D6B2EDA009592EB /* StoryTeller.framework.dSYM in Resources */,
+				6C5BC1C31D6B2EDA009592EB /* PEGKit.framework.dSYM in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1192,7 +1201,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C5BC1BF1D6B2ED8009592EB /* OCMock.framework.dSYM in Resources */,
 				6C019F1A1D3527F9005C7D7D /* StoryTellerConfig.json in Resources */,
+				6C5BC1C11D6B2ED8009592EB /* StoryTeller.framework.dSYM in Resources */,
+				6C5BC1C01D6B2ED8009592EB /* PEGKit.framework.dSYM in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1232,7 +1244,7 @@
 			shellScript = "carthage copy-frameworks";
 			showEnvVarsInLog = 0;
 		};
-		6C58302D1D686A4700297AF8 /* ShellScript */ = {
+		6C58302D1D686A4700297AF8 /* Copy frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1242,6 +1254,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/PEGKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/StoryTeller.framework",
 			);
+			name = "Copy frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

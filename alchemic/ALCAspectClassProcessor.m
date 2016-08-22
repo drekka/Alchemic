@@ -8,6 +8,7 @@
 
 #import "ALCAspectClassProcessor.h"
 #import <Alchemic/ALCResolveAspect.h>
+#import <Alchemic/ALCContext.h>
 
 @implementation ALCAspectClassProcessor
 
@@ -15,13 +16,9 @@
     return [aClass conformsToProtocol:@protocol(ALCResolveAspect)];
 }
 
--(void) processClass:(Class) aClass withContext:(id<ALCContext>) context model:(id<ALCModel>) model {
-    
-    
-    if ([aClass respondsToSelector:@selector(configureAlchemic:)]) {
-        STLog(self, @"Executing +[%@ configureAlchemic:]", NSStringFromClass(aClass));
-        [(Class<AlchemicConfig>)aClass configureAlchemic:context];
-    }
+-(void) processClass:(Class) aClass withContext:(id<ALCContext>) context {
+    id<ALCResolveAspect> aspect = [[aClass alloc] init];
+    [context addResolveAspect:aspect];
 }
 
 @end

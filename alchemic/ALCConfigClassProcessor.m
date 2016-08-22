@@ -17,7 +17,7 @@
     return [aClass conformsToProtocol:@protocol(AlchemicConfig)];
 }
 
--(void) processClass:(Class) aClass withContext:(id<ALCContext>) context model:(id<ALCModel>) model {
+-(void) processClass:(Class) aClass withContext:(id<ALCContext>) context {
     if ([aClass respondsToSelector:@selector(configureAlchemic:)]) {
         STLog(self, @"Executing +[%@ configureAlchemic:]", NSStringFromClass(aClass));
         [(Class<AlchemicConfig>)aClass configureAlchemic:context];

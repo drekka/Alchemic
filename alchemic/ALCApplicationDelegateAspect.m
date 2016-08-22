@@ -20,6 +20,7 @@
 }
 
 -(void) modelWillResolve:(id<ALCModel>) model {
+    // Locate and store a reference to the UIApplicationDelegate if it exists.
     [model.classObjectFactories enumerateObjectsUsingBlock:^(ALCClassObjectFactory *objectFactory, NSUInteger idx, BOOL *stop) {
         if ([objectFactory.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
             self->_appDelegateFactory = objectFactory;

@@ -158,11 +158,11 @@
 
     [self setVariable:@"_resolvedFactories" inObject:_injector value:@[mockFactory]];
 
-    NSMethodSignature *sig = [NSMethodSignature methodSignatureForSelector:@selector(setSomeString:)];
+    NSMethodSignature *sig = [self methodSignatureForSelector:@selector(setSomeString:)];
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
 
     NSError *error;
-    BOOL injected = [_injector setInvocation:inv argumentIndex:2 error:&error];
+    BOOL injected = [_injector setInvocation:inv argumentIndex:0 error:&error];
 
     XCTAssertTrue(injected);
     XCTAssertTrue(completionCalled);

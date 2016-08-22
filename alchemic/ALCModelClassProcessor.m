@@ -22,7 +22,7 @@
     return YES;
 }
 
--(void) processClass:(Class) aClass withContext:(id<ALCContext>) context model:(id<ALCModel>) model {
+-(void) processClass:(Class) aClass withContext:(id<ALCContext>) context {
     
     AcIgnoreSelectorWarnings(
                              SEL alchemicFunctionSelector = @selector(alchemic:);
