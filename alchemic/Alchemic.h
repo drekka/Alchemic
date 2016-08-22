@@ -20,6 +20,7 @@
 #import <Alchemic/ALCMethodArgumentDependency.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
 #import <Alchemic/ALCResolveAspect.h>
+#import <Alchemic/ALCUserDefaults.h>
 
 //! Project version number for alchemic.
 FOUNDATION_EXPORT double alchemicVersionNumber;
