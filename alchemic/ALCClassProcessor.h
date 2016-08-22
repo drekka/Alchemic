@@ -9,6 +9,7 @@
 @import Foundation;
 
 @protocol ALCContext;
+@protocol ALCModel;
 
 /**
  *  Protocol which defines classes which can process the runtime for registrations. Each processor is called in turn to process every class in the runtime.
@@ -33,6 +34,6 @@
  @param context A reference to the Alchemic context.
  
  */
--(void) processClass:(Class) aClass withContext:(id<ALCContext>) context;
+-(void) processClass:(Class) aClass withContext:(id<ALCContext>) context model:(id<ALCModel>) model;
 
 @end

@@ -15,8 +15,7 @@
     //return [aClass conformsToProtocol:@protocol(ALCResourceLocator)];
 }
 
--(void) processClass:(Class) aClass
-                        withContext:(id<ALCContext>) context {
+-(void) processClass:(Class) aClass withContext:(id<ALCContext>) context model:(id<ALCModel>) model {
     //ALCBuilder *classBuilder = [context.model createClassBuilderForClass:class inContext:context];
     //classBuilder.value = [[aClass alloc] init];
 }
