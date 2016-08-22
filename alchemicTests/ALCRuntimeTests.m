@@ -8,6 +8,7 @@
 
 @import XCTest;
 @import ObjectiveC;
+@import OCMock;
 
 @import Alchemic;
 @import Alchemic.Private;
@@ -309,7 +310,7 @@
     [ALCRuntime executeBlock:NULL withObject:@"abc"];
 }
 
-#pragma mark - Empty implementations
+#pragma mark - Empty test implementations
 
 +(void) classMethod {}
 -(void) instanceMethod {}

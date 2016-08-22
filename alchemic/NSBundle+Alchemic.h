@@ -17,6 +17,8 @@
  */
 @interface NSBundle (Alchemic)
 
++(NSSet *) scannableBundles;
+
 /**
  Scans a bundle with a variety of ALCClassProcessor instances for Alchemic registrations.
  

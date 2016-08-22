@@ -45,6 +45,18 @@
     [_model addObjectFactory:_methodFactory withName:@"abc"];
 }
 
+-(void) testAspectGetsCalled {
+    id mockAspect = OCMProtocolMock(@protocol(ALCResolveAspect));
+    [_model addResolveAspect:mockAspect];
+
+    OCMExpect([mockAspect modelWillResolve:_model]);
+    OCMExpect([mockAspect modelDidResolve:_model]);
+
+    [_model resolveDependencies];
+
+    OCMVerifyAll(mockAspect);
+}
+
 -(void) testObjectFactories {
     NSArray<id<ALCObjectFactory>> *factories = _model.objectFactories;
     XCTAssertEqual(3u, factories.count);

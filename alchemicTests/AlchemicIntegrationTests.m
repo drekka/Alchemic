@@ -12,6 +12,7 @@
 @import StoryTeller;
 
 #import "Networking.h"
+#import "FakeUIApplicationDelegate.h"
 #import "UserInterface.h"
 #import "Database.h"
 #import "RequestEngine.h"
@@ -44,6 +45,12 @@
     
     XCTAssertEqual(networking.ui, ui);
     XCTAssertEqual(ui.networking, networking);
+}
+
+-(void) testStartUpLoadsApplicationDelegate {
+    id appDelegate = AcGet(NSObject, AcProtocol(UIApplicationDelegate));
+    XCTAssertNotNil(appDelegate);
+    XCTAssertTrue([appDelegate isKindOfClass:[FakeUIApplicationDelegate class]]);
 }
 
 -(void) testSingletonViaName {
