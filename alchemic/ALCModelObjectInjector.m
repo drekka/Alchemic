@@ -84,12 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {
-    for (id<ALCObjectFactory> resolvedObjectFactory in _resolvedFactories) {
-        if (resolvedObjectFactory == objectFactory) {
-            return YES;
-        }
-    }
-    return NO;
+    return [_resolvedFactories containsObject:objectFactory];
 }
 
 
