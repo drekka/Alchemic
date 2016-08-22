@@ -726,13 +726,13 @@
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;
 			children = (
-				6CB595CB1D6B439C006BC061 /* Features */,
 				6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */,
+				6C5BC1B91D68A6E1009592EB /* AlchemicTests.m */,
 				6C4D85A81C7DB6A80061CA84 /* Dependencies */,
 				6C0076901D17D5EC00E88987 /* Factories */,
+				6CB595CB1D6B439C006BC061 /* Features */,
 				6CE7F68C1D41021A005DEE2C /* Model */,
 				6C67FF271C67728800ABEDDD /* Runtime */,
-				6C5BC1B91D68A6E1009592EB /* AlchemicTests.m */,
 			);
 			name = "Unit tests";
 			path = alchemicTests;

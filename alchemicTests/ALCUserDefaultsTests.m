@@ -17,8 +17,9 @@
 @implementation ALCUserDefaultsTests
 
 -(void) testReadingString {
-    ALCUserDefaults *defaults = [ALCUserDefaults standardUserDefaults];
-
+    ALCUserDefaults *defaults = [[ALCUserDefaults alloc] init];
+    [defaults alchemicDidInjectDependencies];
+    XCTAssertEqualObjects(@"abc", [defaults valueForKey:@"name_preference"]);
 }
 
 @end

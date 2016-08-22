@@ -20,7 +20,7 @@
 			<key>Key</key>
 			<string>name_preference</string>
 			<key>DefaultValue</key>
-			<string></string>
+			<string>abc</string>
 			<key>IsSecure</key>
 			<false/>
 			<key>KeyboardType</key>
