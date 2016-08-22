@@ -10,6 +10,7 @@
 
 @protocol ALCClassProcessor;
 @protocol ALCContext;
+@protocol ALCModel;
 
 /**
  NSBundle extensions.

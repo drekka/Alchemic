@@ -13,6 +13,7 @@
 @protocol ALCObjectFactory;
 @protocol ALCResolvable;
 @protocol ALCContext;
+@protocol ALCResolveAspect;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -84,6 +85,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Lifecycle
 /// @name Lifecycle
+
+-(void) addResolveAspect:(id<ALCResolveAspect>) resolveAspect;
 
 /**
  Resolve all object factories and dependencies.

@@ -20,18 +20,21 @@
 #import "ALCModelImpl.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCObjectFactory.h"
+#import "ALCResolveAspect.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCModelImpl {
     NSMutableDictionary<NSString *, id<ALCObjectFactory>> *_objectFactories;
     ALCClassObjectFactory *_uiAppDelegateFactory;
+    NSMutableSet<id<ALCResolveAspect>> *_resolveAspects;
 }
 
 -(instancetype) init {
     self = [super init];
     if (self) {
         _objectFactories = [[NSMutableDictionary alloc] init];
+        _resolveAspects = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -99,6 +102,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Life cycle
 
+-(void) addResolveAspect:(id<ALCResolveAspect>) resolveAspect {
+    [_resolveAspects addObject:resolveAspect];
+}
+
 -(void) resolveDependencies {
     
     [self modelWillResolve];
@@ -108,24 +115,27 @@ NS_ASSUME_NONNULL_BEGIN
         STLog(self, @"--- Initiating resolve for %@ factory ----", key);
         [objectFactory resolveWithStack:[NSMutableArray array] model:self];
     }];
+
+    [self modelDidResolve];
 }
 
 -(void) modelWillResolve {
-    
-    // Locate special factories and configure them.
-    [self.classObjectFactories enumerateObjectsUsingBlock:^(ALCClassObjectFactory *objectFactory, NSUInteger idx, BOOL *stop) {
-        
-        // UIApplicationDelegate
-        if ([objectFactory.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
-            self->_uiAppDelegateFactory = objectFactory;
-            [objectFactory configureWithOptions:@[AcReference] model:self];
-            *stop = YES;
+    for (NSObject<ALCResolveAspect> *aspect in _resolveAspects) {
+        if ([aspect respondsToSelector:@selector(modelWillResolve:)]) {
+            [aspect modelWillResolve:self];
         }
-    }];
+    }
+}
+
+-(void) modelDidResolve {
+    for (NSObject<ALCResolveAspect> *aspect in _resolveAspects) {
+        if ([aspect respondsToSelector:@selector(modelDidResolve:)]) {
+            [aspect modelDidResolve:self];
+        }
+    }
 }
 
 -(void) startSingletons {
-    
     STLog(self, @"Instantiating singletons ...");
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         if (objectFactory.factoryType == ALCFactoryTypeSingleton
@@ -136,18 +146,6 @@ NS_ASSUME_NONNULL_BEGIN
             [instantiation complete];
         }
     }];
-    
-    [self modelDidInstantiate];
-}
-
--(void) modelDidInstantiate {
-    if (_uiAppDelegateFactory) {
-        id delegate = [UIApplication sharedApplication].delegate;
-        if (delegate) {
-            STLog(self, @"Injecting UIApplicationDelegate instance into model");
-            [_uiAppDelegateFactory setObject:delegate];
-        }
-    }
 }
 
 #pragma mark - Logging

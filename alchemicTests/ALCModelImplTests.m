@@ -114,25 +114,6 @@
     OCMVerifyAll(classFactoryMock);
 }
 
--(void) testResolveDependenciesWhenUIApplicationDelegate {
-    
-    _model = [[ALCModelImpl alloc] init];
-    id classFactoryMock = OCMClassMock([ALCClassObjectFactory class]);
-    [_model addObjectFactory:classFactoryMock withName:@"abc"];
-    
-    OCMStub([classFactoryMock objectClass]).andReturn([FakeUIDelegate class]);
-    OCMExpect([classFactoryMock configureWithOptions:[OCMArg checkWithBlock:^BOOL(NSArray *options) {
-        return [options containsObject:AcReference];
-    }]
-                                                                      model:_model]);
-    
-    OCMExpect([classFactoryMock resolveWithStack:[OCMArg isKindOfClass:[NSMutableArray class]] model:_model]);
-    
-    [_model resolveDependencies];
-    
-    OCMVerifyAll(classFactoryMock);
-}
-
 -(void) testStartSingletons {
 
     _model = [[ALCModelImpl alloc] init];

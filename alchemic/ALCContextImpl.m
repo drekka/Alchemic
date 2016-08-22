@@ -80,6 +80,10 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+-(void) addResolveAspect:(id<ALCResolveAspect>) resolveAspect {
+    [_model addResolveAspect:resolveAspect];
+}
+
 #pragma mark - Registration
 
 -(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz {

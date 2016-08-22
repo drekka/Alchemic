@@ -9,6 +9,7 @@
 @import Foundation;
 
 @protocol ALCContext;
+@protocol ALCModel;
 
 /**
  *  Protocol which defines classes which can process the runtime for registrations. Each processor is called in turn to process every class in the runtime.
