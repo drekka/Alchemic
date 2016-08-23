@@ -7,5 +7,6 @@ injections: ./injections.html
 installation: ./installation.html
 object-factories: ./object-factories.html
 runtime: ./runtime.html
+special-features: ./special-features.html
 injection-values: ./injection-values.html
 ref: ./ref.html
