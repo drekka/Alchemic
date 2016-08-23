@@ -11,6 +11,33 @@
 @import Alchemic.Private;
 @import OCMock;
 
+@interface FakeAspect:NSObject<ALCResolveAspect>
+@property (nonatomic, assign, readonly) BOOL willCalled;
+@property (nonatomic, assign, readonly) BOOL didCalled;
+@end
+
+@implementation FakeAspect
+
+static BOOL _enabled;
+
++(void) setEnabled:(BOOL) enabled {
+    _enabled = enabled;
+}
+
++(BOOL) enabled {
+    return _enabled;
+}
+
+-(void) modelWillResolve:(id<ALCModel>) model {
+    _willCalled = YES;
+}
+
+-(void) modelDidResolve:(id<ALCModel>) model {
+    _didCalled = YES;
+}
+
+@end
+
 @interface FakeUIDelegate: NSObject<UIApplicationDelegate>
 @end
 @implementation FakeUIDelegate
@@ -45,16 +72,43 @@
     [_model addObjectFactory:_methodFactory withName:@"abc"];
 }
 
--(void) testAspectGetsCalled {
-    id mockAspect = OCMProtocolMock(@protocol(ALCResolveAspect));
-    [_model addResolveAspect:mockAspect];
+-(void) testAspectGetsCalledWhenCreatedFirst {
+    
+    FakeAspect *aspect = [[FakeAspect alloc] init];
 
-    OCMExpect([mockAspect modelWillResolve:_model]);
-    OCMExpect([mockAspect modelDidResolve:_model]);
-
+    [FakeAspect setEnabled:YES];
+    
+    [_model addResolveAspect:aspect];
     [_model resolveDependencies];
 
-    OCMVerifyAll(mockAspect);
+    XCTAssertTrue(aspect.willCalled);
+    XCTAssertTrue(aspect.didCalled);
+}
+
+-(void) testAspectGetsCalledWhenCreatedLast {
+
+    [FakeAspect setEnabled:YES];
+
+    FakeAspect *aspect = [[FakeAspect alloc] init];
+    
+    [_model addResolveAspect:aspect];
+    [_model resolveDependencies];
+    
+    XCTAssertTrue(aspect.willCalled);
+    XCTAssertTrue(aspect.didCalled);
+}
+
+-(void) testAspectNotCalledWhenDisabled {
+    
+    FakeAspect *aspect = [[FakeAspect alloc] init];
+
+    [FakeAspect setEnabled:NO];
+    
+    [_model addResolveAspect:aspect];
+    [_model resolveDependencies];
+    
+    XCTAssertFalse(aspect.willCalled);
+    XCTAssertFalse(aspect.didCalled);
 }
 
 -(void) testObjectFactories {

@@ -15,6 +15,9 @@
  */
 @protocol ALCResolveAspect <NSObject>
 
++(void) setEnabled:(BOOL) enabled;
++(BOOL) enabled;
+
 @optional
 
 -(void) modelWillResolve:(id<ALCModel>) model;

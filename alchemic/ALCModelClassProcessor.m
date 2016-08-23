@@ -28,7 +28,8 @@
                              SEL alchemicFunctionSelector = @selector(alchemic:);
                              )
     
-    // Get the class methods. Using class methods means we are likely to have to scan fewer methods than if we scanning instance methods. Also means we don't have to instantiate the class to do registrations. Note: we need to get the class of the class to list them.
+    // Get this class's class methods. Means we don't have to instantiate the class to do registrations.
+    // Note: we need to get the class of the class to list them.
     unsigned int methodCount;
     Method *classMethods = class_copyMethodList(object_getClass(aClass), &methodCount);
     
@@ -38,23 +39,37 @@
         
         // If the method is not an alchemic one, then ignore it.
         SEL nextSelector = method_getName(classMethods[idx]);
-        if (AcStrHasPrefix(sel_getName(nextSelector), alc_toCString(ALCHEMIC_PREFIX))
-            || nextSelector == alchemicFunctionSelector) {
-            
-            // If we are here then we have an alchemic method to process, so create an object factory.
-            if (!factory) {
-                STLog(aClass, @"Class %@ has alchemic methods, creating factory", NSStringFromClass(aClass));
-                factory = [context registerObjectFactoryForClass:aClass];
-            }
-            
-            // Call the method, passing it the current class builder.
-            ((void (*)(id, SEL, ALCClassObjectFactory *))objc_msgSend)(aClass, nextSelector, factory);
-        }
+        const char *nextSelectorName = sel_getName(nextSelector);
         
+        if (nextSelector == alchemicFunctionSelector
+            || AcStrHasPrefix(nextSelectorName, alc_toCString(ALCHEMIC_MODEL_PREFIX))) {
+            [self processRegistrationSelector:nextSelector inClass:aClass forClassFactory:&factory inContext:context];
+        } else if (AcStrHasPrefix(nextSelectorName, alc_toCString(ALCHEMIC_FEATURE_PREFIX))) {
+            [self processFeatureSelector:nextSelector inClass:aClass];
+        }
     }
     
     free(classMethods);
 }
 
+-(void) processRegistrationSelector:(SEL) selector
+                            inClass:(Class) aClass
+                    forClassFactory:(ALCClassObjectFactory **) classFactory
+                          inContext:(id<ALCContext>) context {
+    
+    // If we are here then we have an alchemic method to process,
+    // so create an object factory if we don't aready have one.
+    if (!*classFactory) {
+        STLog(aClass, @"Class %@ has alchemic methods, creating factory", NSStringFromClass(aClass));
+        *classFactory = [context registerObjectFactoryForClass:aClass];
+    }
+    
+    // Call the method, passing it the current class builder.
+    ( (void (*)(id, SEL, ALCClassObjectFactory *)) objc_msgSend)(aClass, selector, *classFactory);
+}
+
+-(void) processFeatureSelector:(SEL) selector inClass:(Class) aClass {
+    ( (void (*)(id, SEL)) objc_msgSend)(aClass, selector);
+}
 
 @end

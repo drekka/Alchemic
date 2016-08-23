@@ -14,6 +14,7 @@
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCContext.h>
 #import <Alchemic/ALCStringMacros.h>
+#import <Alchemic/ALCUserDefaultsAspect.h>
 
 #pragma mark - registration
 
@@ -23,7 +24,7 @@
  @param ... A list of configuration items.
  */
 #define AcRegister(...) \
-+(void) alc_methodName(configureClassObjectFactory_, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
++(void) alc_modelMethodName(configureClassObjectFactory_, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
 [[Alchemic mainContext] objectFactoryConfig:classObjectFactory, ## __VA_ARGS__, nil]; \
 }
 
@@ -34,7 +35,7 @@
  @param ...                 Arguments for the initializer, if any.
  */
 #define AcInitializer(initializerSelector, ...) \
-+(void) alc_methodName(registerObjectFactoryInitializer, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
++(void) alc_modelMethodName(registerObjectFactoryInitializer, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
 [[Alchemic mainContext] objectFactory:classObjectFactory initializer:@selector(initializerSelector), ## __VA_ARGS__, nil]; \
 }
 
@@ -46,7 +47,7 @@
  @param ...                 Arguments for the method, if any.
  */
 #define AcMethod(methodType, methodSelector, ...) \
-+(void) alc_methodName(registerMethodObjectFactory, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
++(void) alc_modelMethodName(registerMethodObjectFactory, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
 [[Alchemic mainContext] objectFactory:classObjectFactory \
 registerFactoryMethod:@selector(methodSelector) \
 returnType:[methodType class], ## __VA_ARGS__, nil]; \
@@ -59,7 +60,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @param ...          Option list of arguments that define the injection.
  */
 #define AcInject(variableName, ...) \
-+(void) alc_methodName(registerObjectFactoryDependency, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
++(void) alc_modelMethodName(registerObjectFactoryDependency, __LINE__):(ALCClassObjectFactory *) classObjectFactory { \
 [[Alchemic mainContext] objectFactory:classObjectFactory registerInjection:alc_toNSString(variableName), ## __VA_ARGS__, nil]; \
 }
 
@@ -171,6 +172,13 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @param objectName The factory name.
  */
 #define AcName(objectName) [ALCModelSearchCriteria searchCriteriaForName:objectName]
+
+#pragma mark - Special features
+
+#define AcEnableUserDefaults \
++(void) alc_featureMethodName(enableUserDefaults, __LINE__) { \
+[ALCUserDefaultsAspect setEnabled:YES]; \
+}
 
 #pragma mark - Misc
 

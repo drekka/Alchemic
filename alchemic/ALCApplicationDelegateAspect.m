@@ -19,6 +19,13 @@
     ALCClassObjectFactory *_appDelegateFactory;
 }
 
++(void) setEnabled:(BOOL) enabled {}
+
++(BOOL) enabled {
+    // Aspect is always active.
+    return YES;
+}
+
 -(void) modelWillResolve:(id<ALCModel>) model {
     // Locate and store a reference to the UIApplicationDelegate if it exists.
     [model.classObjectFactories enumerateObjectsUsingBlock:^(ALCClassObjectFactory *objectFactory, NSUInteger idx, BOOL *stop) {

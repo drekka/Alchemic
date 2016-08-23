@@ -34,7 +34,7 @@ static ALCClassObjectFactory *_of;
 +(ALCClassObjectFactory *) of {
     return _of;
 }
-+(void) _alc_register:(ALCClassObjectFactory *) objectFactory {
++(void) _alc_model_registerFactory:(ALCClassObjectFactory *) objectFactory {
     _of = objectFactory;
 }
 @end

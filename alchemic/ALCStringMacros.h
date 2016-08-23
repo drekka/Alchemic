@@ -6,7 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#define ALCHEMIC_PREFIX _alc_
+#define ALCHEMIC_MODEL_PREFIX _alc_model_
+#define ALCHEMIC_FEATURE_PREFIX _alc_feature_
 
 #define str(template, ...) [NSString stringWithFormat:template, ## __VA_ARGS__ ]
 
@@ -21,4 +22,5 @@
 #define alc_toNSString(chars) _alc_toNSString(chars)
 #define _alc_toNSString(chars) @#chars
 
-#define alc_methodName(name, line) alc_concat(alc_concat(ALCHEMIC_PREFIX, name), line)
+#define alc_modelMethodName(name, line) alc_concat(alc_concat(ALCHEMIC_MODEL_PREFIX, name), line)
+#define alc_featureMethodName(name, line) alc_concat(alc_concat(ALCHEMIC_FEATURE_PREFIX, name), line)
