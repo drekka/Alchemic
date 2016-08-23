@@ -28,6 +28,5 @@ Alchemic will automatically start itself when your application loads. It follows
 2. _Registration phase:_ Scans all classes in your app for dependency injection declarations and executes them to setup the model.
 3. _Resolving phase:_ Resolves all references and configures the internal model based on the found declarations.
 3. _Singletons phase:_ Instantiates any classes declared as Singletons and wires up their dependencies.  
-4. Check for a UIApplicationDelegate and if found, injection any dependencies it has declared.
-5. Post the ["AlchemicFinishedLoading"](#finished-loading) notification.
+4. Post the ["AlchemicFinishedLoading"](#finished-loading) notification.
 
