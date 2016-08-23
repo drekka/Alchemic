@@ -84,14 +84,14 @@ NS_ASSUME_NONNULL_BEGIN
               value:(nullable id) value
               error:(NSError * _Nullable *) error {
 
-    STLog([self class], @"Variable %@ type: %@", [ALCRuntime class:[self class] variableDescription:variable], NSStringFromClass(type));
+    STLog([self class], @"Variable %@ type: %@", [ALCRuntime forClass:[self class] variableDescription:variable], NSStringFromClass(type));
 
     id finalValue = [ALCRuntime mapValue:value allowNils:allowNil type:type error:error];
     if (!finalValue && *error) {
         return NO;
     }
 
-    STLog([self class], @"Injecting %@ with a %@", [ALCRuntime class:[self class] variableDescription:variable], [finalValue class]);
+    STLog([self class], @"Injecting %@ with a %@", [ALCRuntime forClass:[self class] variableDescription:variable], [finalValue class]);
 
     // Patch for Swift Ivars not being retained.
     const char *encoding = ivar_getTypeEncoding(variable);
@@ -110,18 +110,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(id) object:(id) object invokeSelector:(SEL) selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
 
-    STLog(self, @"Executing %@", [ALCRuntime class:[self class] selectorDescription:selector]);
+    STLog(self, @"Executing %@", [ALCRuntime forClass:[self class] selectorDescription:selector]);
 
     // Get an invocation ready.
     NSMethodSignature *sig = [object methodSignatureForSelector:selector];
 
     // Error checks
     if (!sig) {
-        throwException(MethodNotFound, @"Method %@ not found", [ALCRuntime class:[self class] selectorDescription:selector]);
+        throwException(MethodNotFound, @"Method %@ not found", [ALCRuntime forClass:[self class] selectorDescription:selector]);
     }
 
     if (strcmp(sig.methodReturnType, "@") != 0) {
-        throwException(IllegalArgument, @"Method %@ does not return an object", [ALCRuntime class:[self class] selectorDescription:selector]);
+        throwException(IllegalArgument, @"Method %@ does not return an object", [ALCRuntime forClass:[self class] selectorDescription:selector]);
     }
 
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];

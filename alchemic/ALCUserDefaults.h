@@ -15,4 +15,10 @@
  */
 @interface ALCUserDefaults : NSObject<AlchemicAware>
 
+#pragma mark - Subscripting services.
+
+-(id) objectForKeyedSubscript:(NSString *) key;
+
+-(void) setObject:(id) obj forKeyedSubscript:(NSString<NSCopying> *) key;
+
 @end

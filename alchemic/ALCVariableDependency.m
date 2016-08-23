@@ -59,7 +59,7 @@
     NSError *error;
     ALCSimpleBlock completionBlock = [self.injector setObject:object variable:_ivar error:&error];
     if (!completionBlock && error) {
-        throwException(Injection, @"Error injecting %@: %@", [ALCRuntime class:[object class] variableDescription:_ivar], error.localizedDescription);
+        throwException(Injection, @"Error injecting %@: %@", [ALCRuntime forClass:[object class] variableDescription:_ivar], error.localizedDescription);
         return nil;
     }
     return completionBlock;

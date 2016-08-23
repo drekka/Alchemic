@@ -16,7 +16,7 @@
 #import "XCTestCase+Alchemic.h"
 
 @interface ALCRuntimeTests : XCTestCase
-@property(nonatomic, strong) NSString *aStringProperty;
+@property(nonatomic, strong, readonly) NSString *aStringProperty; // Readonly for properties test.
 @property(nonatomic, strong) id aIdProperty;
 @property(nonatomic, assign) int aIntProperty;
 @property(nonatomic, strong) id<NSCopying> aProtocolProperty;
@@ -39,31 +39,31 @@
 
 -(void) testVariableForInjectionPointProperty {
     Ivar expectedIvar = class_getInstanceVariable([self class], "__weirdInternalPropertyVariable");
-    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aStringProperty"];
+    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aStringProperty"];
     XCTAssertEqual(expectedIvar, var);
 }
 
 -(void) testVariableForInjectionPointPrivateVariable {
     Ivar expectedIvar = class_getInstanceVariable([self class], "_privateVariable");
-    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"_privateVariable"];
+    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"_privateVariable"];
     XCTAssertEqual(expectedIvar, var);
 }
 
 -(void) testVariableForInjectionPointNotFound {
-    XCTAssertThrowsSpecific([ALCRuntime class:[self class] variableForInjectionPoint:@"_X_"], AlchemicInjectionNotFoundException);
+    XCTAssertThrowsSpecific([ALCRuntime forClass:[self class] variableForInjectionPoint:@"_X_"], AlchemicInjectionNotFoundException);
 }
 
 #pragma mark - TypeDataForIVar:
 
 -(void) testTypeDataForIVarString {
-    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aStringProperty"];
+    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aStringProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
     XCTAssertEqual([NSString class], ivarData.objcClass);
 }
 
 -(void) testTypeDataForIVarId {
 
-    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIdProperty"];
+    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aIdProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertEqual([NSObject class], ivarData.objcClass);
@@ -73,7 +73,7 @@
 
 -(void) testTypeDataForIVarProtocol {
 
-    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aProtocolProperty"];
+    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertEqual([NSObject class], ivarData.objcClass);
@@ -83,7 +83,7 @@
 
 -(void) testTypeDataForIVarClassNSStringProtocol {
 
-    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
+    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertEqual([NSString class], ivarData.objcClass);
@@ -93,7 +93,7 @@
 
 -(void) testTypeDataForIVarInt {
 
-    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"aIntProperty"];
+    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aIntProperty"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertNil(ivarData.objcClass);
@@ -103,12 +103,24 @@
 
 -(void) testTypeDataForIVarCGRect {
 
-    Ivar var = [ALCRuntime class:[self class] variableForInjectionPoint:@"_aRect"];
+    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"_aRect"];
     ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
     XCTAssertEqual(0, strcmp("{CGRect=\"origin\"{CGPoint=\"x\"d\"y\"d}\"size\"{CGSize=\"width\"d\"height\"d}}", ivarData.scalarType));
+}
+
+#pragma mark - Porperty list
+
+-(void) testPropertiesForClass {
+    NSArray *props = [ALCRuntime writeablePropertiesForClass:[self class]];
+    XCTAssertEqual(4u, props.count);
+    //XCTAssertTrue([props containsObject:@"aStringProperty"]); Readonly.
+    XCTAssertTrue([props containsObject:@"aIdProperty"]);
+    XCTAssertTrue([props containsObject:@"aIntProperty"]);
+    XCTAssertTrue([props containsObject:@"aProtocolProperty"]);
+    XCTAssertTrue([props containsObject:@"aClassProtocolProperty"]);
 }
 
 #pragma mark - Mapping values
@@ -251,29 +263,29 @@
 #pragma mark - Descriptions
 
 -(void) testSelectorDescriptionForClassMethod {
-    NSString *desc = [ALCRuntime class:[NSString class] selectorDescription:@selector(stringWithFormat:)];
+    NSString *desc = [ALCRuntime forClass:[NSString class] selectorDescription:@selector(stringWithFormat:)];
     XCTAssertEqualObjects(@"+[NSString stringWithFormat:]", desc);
 }
 
 -(void) testSelectorDescriptionForInstanceMethod {
-    NSString *desc = [ALCRuntime class:[NSString class] selectorDescription:@selector(initWithCharacters:length:)];
+    NSString *desc = [ALCRuntime forClass:[NSString class] selectorDescription:@selector(initWithCharacters:length:)];
     XCTAssertEqualObjects(@"-[NSString initWithCharacters:length:]", desc);
 }
 
 -(void) testSelectorDescriptionForInit {
-    NSString *desc = [ALCRuntime class:[NSObject class] selectorDescription:@selector(init)];
+    NSString *desc = [ALCRuntime forClass:[NSObject class] selectorDescription:@selector(init)];
     // Note classes have a +init method according to the runtime.
     XCTAssertEqualObjects(@"+[NSObject init]", desc);
 }
 
 -(void) testPropertyDescription {
-    NSString *desc = [ALCRuntime class:[self class] propertyDescription:@"aStringProperty"];
+    NSString *desc = [ALCRuntime forClass:[self class] propertyDescription:@"aStringProperty"];
     XCTAssertEqualObjects(@"ALCRuntimeTests.aStringProperty", desc);
 }
 
 -(void) testVariableDescription {
     Ivar pv = class_getInstanceVariable([self class], "_privateVariable");
-    NSString *desc = [ALCRuntime class:[self class] variableDescription:pv];
+    NSString *desc = [ALCRuntime forClass:[self class] variableDescription:pv];
     XCTAssertEqualObjects(@"ALCRuntimeTests._privateVariable", desc);
 }
 

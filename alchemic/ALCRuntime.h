@@ -49,7 +49,7 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 
  @return An ivar representing the variable.
  */
-+(Ivar) class:(Class) aClass variableForInjectionPoint:(NSString *) inj;
++(Ivar) forClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
 /**
  Returns an instance of ALCTypeData containing information about the type of the ivar.
@@ -59,6 +59,16 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
  @return An instance of ALCTypeData containing the type information.
  */
 +(ALCTypeData *) typeDataForIVar:(Ivar) iVar;
+
+/**
+ Returns a list of all the writable properties in the specified class. 
+ 
+ @discussion Only includes properties defined in that class.
+ 
+ @param aClass The class to examine for the variable.
+ @return a list of the available properties.
+ */
++(NSArray<NSString*> *) writeablePropertiesForClass:(Class) aClass;
 
 #pragma mark - Seting variables
 
@@ -102,14 +112,14 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 /**
  Returns a NSString description of a class and selector.
 
- @discussion This internally works out whether the method is a class or instance method and then calls class:selectorDescription:static:
+ @discussion This internally works out whether the method is a class or instance method and then calls forClass:selectorDescription:static:
  
  @param aClass   The class.
  @param selector The selector to describe.
 
  @return A string which describes the class and selector.
  */
-+(NSString *) class:(Class) aClass selectorDescription:(SEL)selector;
++(NSString *) forClass:(Class) aClass selectorDescription:(SEL)selector;
 
 /**
  Returns a NSString description of a class and selector.
@@ -120,7 +130,7 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
  
  @return A string which describes the class and selector.
  */
-+(NSString *) class:(Class) aClass selectorDescription:(SEL)selector static:(BOOL) isStatic;
++(NSString *) forClass:(Class) aClass selectorDescription:(SEL)selector static:(BOOL) isStatic;
 
 /**
  Returns a NSString description of a class and property.
@@ -130,7 +140,7 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 
  @return A string which describes the class and property.
  */
-+(NSString *) class:(Class) aClass propertyDescription:(NSString *)property;
++(NSString *) forClass:(Class) aClass propertyDescription:(NSString *)property;
 
 /**
  Returns a NSString description of a class and ivar.
@@ -140,7 +150,7 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 
  @return A string which describes the class and ivar.
  */
-+(NSString *) class:(Class) aClass variableDescription:(Ivar) variable;
++(NSString *) forClass:(Class) aClass variableDescription:(Ivar) variable;
 
 #pragma mark - Scanning
 

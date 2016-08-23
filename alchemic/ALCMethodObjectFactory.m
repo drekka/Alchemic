@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) defaultModelName {
-    return [ALCRuntime class:_parentObjectFactory.objectClass selectorDescription:_selector];
+    return [ALCRuntime forClass:_parentObjectFactory.objectClass selectorDescription:_selector];
 }
 
 -(void)configureWithOption:(id)option model:(id<ALCModel>) model {

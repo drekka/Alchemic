@@ -39,7 +39,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - Querying things
 
-+(Ivar) class:(Class) aClass variableForInjectionPoint:(NSString *) inj {
++(Ivar) forClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
 
     // First attempt to get an instance variable with the passed name
     const char * charName = [inj UTF8String];
@@ -102,6 +102,28 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return typeData;
 }
 
++(NSArray<NSString*> *) writeablePropertiesForClass:(Class) aClass {
+    unsigned int count = 0;
+    objc_property_t *props = class_copyPropertyList(aClass, &count);
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:count];
+    for(unsigned int i = 0;i < count;i++) {
+        
+        // Find out if the property is a readonly. We only want writables.
+        objc_property_t prop = props[i];
+        char *readonlyChar = property_copyAttributeValue(prop, "R");
+        BOOL readonly = readonlyChar != NULL;
+        free(readonlyChar);
+        if (readonly) {
+            continue;
+        }
+        
+        NSString *propName = [NSString stringWithUTF8String:property_getName(prop)];
+        [results addObject:propName];
+    }
+    free(props);
+    return results;
+}
+
 #pragma mark - Setting variables
 
 +(nullable id) mapValue:(nullable id) value
@@ -158,30 +180,30 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
     // Not found.
     if (!sig) {
-        throwException(SelectorNotFound, @"Failed to find selector %@", [self class:aClass selectorDescription:selector]);
+        throwException(SelectorNotFound, @"Failed to find selector %@", [self forClass:aClass selectorDescription:selector]);
     }
 
     // Incorrect number of arguments. Allow for runtime in arguments.
     if (sig.numberOfArguments - 2 != (arguments ? arguments.count : 0)) {
-        throwException(IncorrectNumberOfArguments, @"%@ expected %lu arguments, got %lu", [self class:aClass selectorDescription:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
+        throwException(IncorrectNumberOfArguments, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
     }
 }
 
 #pragma mark - Describing things
 
-+(NSString *) class:(Class) aClass selectorDescription:(SEL)selector {
-    return [self class:aClass selectorDescription:selector static:[aClass respondsToSelector:selector]];
++(NSString *) forClass:(Class) aClass selectorDescription:(SEL)selector {
+    return [self forClass:aClass selectorDescription:selector static:[aClass respondsToSelector:selector]];
 }
 
-+(NSString *) class:(Class) aClass propertyDescription:(NSString *)property {
++(NSString *) forClass:(Class) aClass propertyDescription:(NSString *)property {
     return str(@"%@.%@", NSStringFromClass(aClass), property);
 }
 
-+(NSString *) class:(Class) aClass variableDescription:(Ivar) variable {
++(NSString *) forClass:(Class) aClass variableDescription:(Ivar) variable {
     return str(@"%@.%s", NSStringFromClass(aClass), ivar_getName(variable));
 }
 
-+(NSString *) class:(Class) aClass selectorDescription:(SEL)selector static:(BOOL) isStatic {
++(NSString *) forClass:(Class) aClass selectorDescription:(SEL)selector static:(BOOL) isStatic {
     return str(@"%@[%@ %@]", isStatic ? @"+" : @"-", NSStringFromClass(aClass), NSStringFromSelector(selector));
 }
 

@@ -23,7 +23,7 @@
 
 - (void)setUp {
     _context = [[ALCContextImpl alloc] init];
-    Ivar modelVar = [ALCRuntime class:[ALCContextImpl class] variableForInjectionPoint:@"_model"];
+    Ivar modelVar = [ALCRuntime forClass:[ALCContextImpl class] variableForInjectionPoint:@"_model"];
     _mockModel = OCMClassMock([ALCModelImpl class]);
     NSError *error;
     BOOL set = [_context setVariable:modelVar

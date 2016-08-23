@@ -33,7 +33,7 @@
 #define testScalar(name, macro, setter, assert) \
 -(void) testALC ## name ## VariableInjection { \
     id<ALCInjector> inj = macro; \
-    Ivar ivar = [ALCRuntime class:[self class] variableForInjectionPoint:alc_toNSString(x ## name)]; \
+    Ivar ivar = [ALCRuntime forClass:[self class] variableForInjectionPoint:alc_toNSString(x ## name)]; \
     NSError *error; \
     [inj setObject:self variable:ivar error:&error]; \
     XCTAssertNil(error); \

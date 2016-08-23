@@ -149,7 +149,7 @@ registerFactoryMethod:(SEL) selector
         throwException(IllegalArgument, @"Reference factories cannot have initializers");
     }
 
-    STLog(objectFactory.objectClass, @"Register object factory initializer %@", [ALCRuntime class:objectFactory.objectClass selectorDescription:initializer]);
+    STLog(objectFactory.objectClass, @"Register object factory initializer %@", [ALCRuntime forClass:objectFactory.objectClass selectorDescription:initializer]);
 
     NSArray<id<ALCDependency>> *arguments = [args methodArgumentsWithUnknownArgumentHandler:^(id argument) {
         throwException(IllegalArgument, @"Expected a argument definition, search criteria or constant. Got: %@", argument);
@@ -163,7 +163,7 @@ registerFactoryMethod:(SEL) selector
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerInjection:(NSString *) variable, ... {
     alc_loadVarArgsAfterVariableIntoArray(variable, config);
-    Ivar ivar = [ALCRuntime class:objectFactory.objectClass variableForInjectionPoint:variable];
+    Ivar ivar = [ALCRuntime forClass:objectFactory.objectClass variableForInjectionPoint:variable];
     Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
     [self objectFactory:objectFactory
       registerInjection:ivar
