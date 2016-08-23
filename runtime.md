@@ -8,8 +8,6 @@ title: Runtime
     * [Setting objects](#setting-objects)
     * [Invoking methods](#invoking-methods)
   * [Callbacks and notifications](#callbacks-and-notifications)
-    * [Dependencies injected](#dependencies-injected)
-    * [Alchemic finished starting](#alchemic-finished-starting)
 
 # Interfacing with Alchemic
 
@@ -155,26 +153,33 @@ Also note in the above example, we are using the default name for the method gen
 
 # Callbacks and notifications
 
-## Alchemic finished starting
+## AlchemicAware protocol
 
-Once all singletons have been loaded and injected, Alchemic sends out a notification through the default `NSNotificationCenter`. There is a constant called `AlchemicFinishedLoading` in the `ALCAlchemic` class which can be used like this:
+The protocol `AlchemicAware` contains several callback methods you can implement in your classes. These methods are executed at specific times to allow your code to respond if you need it. To use them, just create the method in your code. Adding the `AlchemicAware` protocol is optional. Alchemic will automatically look for these methods regardless.
 
-{{ site.lang-title-objc }}
 ```objc
-[[NSNotificationCenter defaultCenter] 
-    addObserverForName:AlchemicFinishedLoading
-                object:nil
-                 queue:[NSOperationQueue mainQueue]
-            usingBlock:^(NSNotification *notification) {
-    // .. do stuff
-}];
+-(void) alchemicDidInjectVariable:(NSString *) variable { 
+    // ... 
+}
 ```
 
-{{ site.lang-title-swift }}
-```swift
--- need example here --
+Called after Alchemic has injected a variable. The variable name is passed as an argument. This is similar to the way KVO calls after a property has been set.
+
+```objc
+-(void) alchemicDidInjectDependencies {
+    // ...
+}
 ```
 
-This is most useful for classes which are not managed by Alchemic but still need to know when Alchemic has finished loading.
+Called after all injections for an object have been done. This is the ideal place to perform further configuration. 
 
+## Alchemic notifications
+
+The following is a list of notifications that Alchemic sends out.
+
+Notification | Description
+--- | ---
+AlchemicDidCreateObject | Sent after Alchemic has finished instantiating an object.
+AlchemicDidFinishStarting | Sent after Alchemic has finished it's startup. At this point the model will have been populated and resolved, and all singletons will have been instantiated. This notification is a good way to know when you can run code that needs to execute as soon as Alchemic is ready to serve objects.
+AlchemicDidStoreObject | Sent after an object has been stored in the model. This is mainly used internally so that Alchemic can trigger fresh injections based on the new value.
 

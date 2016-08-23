@@ -12,7 +12,7 @@ Add this to your __Cartfile__:
 github "drekka/alchemic" > 2.0
 ```
 
-Then run either the __bootstrap__ or __update__ carthage commands to download Alchemic and it's dependencies into the  __<project-dir>/Carthage/Checkouts/__ directory and then build them as iOS frameworks into the __<project-dir>/Carthage/Build/iOS/__ directory. 
+Then run either the __bootstrap__ or __update__ carthage commands to download Alchemic and it's dependencies into the __&lt;project-dir&gt;/Carthage/Checkouts/__ directory and then build them as iOS frameworks into the __&lt;project-dir&gt;/Carthage/Build/iOS/__ directory. 
 
 Once built, You can add following frameworks into your project the same way you would add any other external framework.
 

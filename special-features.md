@@ -4,6 +4,7 @@ title: Runtime
 
  * [Managing the UIApplicationDelegate instance](#managing-the-uiapplicationdelegate-instance)
  * [UIViewControllers and Story Boards](#uiviewcontrollers-and-story-boards)
+ * [NSUserDefaults](#nsuserdefaults)
 
 # Managing the UIApplicationDelegate instance
 
@@ -28,4 +29,81 @@ func viewDidLoad() {
     AcInjectDependencies(self)
 }
 ```
+
+# NSUserDefaults
+
+Alchemic provides a set of tools for automatically managing data which you want stored in the user defaults area. Alchemics user defaults management feature is activated by adding the `AcEnabledUserDefaults` macro. This can be on any class in your app. Alchemic will automatically find it. For example:
+
+```objc
+@implementation MyClass
+AcEnabledUserDefaults
+@end
+```
+
+Once enabled, Alchemic will automatically add user defaults support to the model by adding a singleton factory to the model which instantiates an instance of `ALCUserDefaults` on startup. `ALCUserDefaults` provides the following features:
+
+ * Automatically locates the `Root.plist` file in the main bundle if it exists and loads it's contents into the user defaults.
+ * Allows user defaults to be read or written by either KVC or subscipted code. 
+ * Supports developers writing classes that extend `ALCUserDefaults` and implement properties for the user default settings.
+
+Here's a more complete example of accessing the user defaults: 
+
+{{ site.lang-title-objc }}
+```objc
+@implementation MyClass {
+    ALCUserDefaults *_defaults;
+}
+
+AcEnabledUserDefaults
+AcInject(_defaults)
+
+-(void) someMethod {
+    NSString *name = _defaults["username"];
+    _defaults["username"] = "derek";
+}
+
+@end
+```
+
+Setting a value automatically saves it to user defaults.
+
+## Custom user defaults
+
+By extending `ALCUserDefaults` to create your own class you can add properties to match the user defaults. You then declare the class as a singleton in Alchemic's model. With user defaults enabled, Alchemic will see your custom user defaults in the model and not add it's own.
+
+When instantiated, the code inside the parent `ALCUserDefaults` will first load all user defaults into the properties, then locate all the writeable properties and KVO watch them. When you set a new value, the KVO watch will automatically forward it to the user defaults system. 
+
+The up shot of this is that a fully Alchemic integrated user defaults with code completable properties, defaults sourced from a `Roots.plist` file, and backed by `[NSUserDefaults standardUserDefaults]` is a simple as this:
+
+{{ site.lang-title-objc }}
+```objc
+@interface MyUserDefaults: ALCUserDefaults
+@property (nonatomic, strong) NSString *username;
+@property (nonatomic, assign) int nbrLogins;
+@end
+```
+
+{{ site.lang-title-objc }}
+```objc
+@implementation MyUserDefaults
+AcEnableUserDefaults
+@end
+```
+
+{{ site.lang-title-objc }}
+```objc
+@implementation MyClass {
+    MyUserDefaults *_defaults;
+}
+
+AcInject(_defaults)
+
+-(void) someMethod {
+    NSString *name = _defaults.username;
+    _defaults.username = "derek";
+}
+
+@end
+```
+
 

@@ -4,7 +4,9 @@ title: Alchemic {{ site.alchemic-version }}
 
 Alchemic {{ site.alchemic-version }} is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS. 
 
-It's job is to help simplify your applications code by creating and managing your applications objects, and the dependencies they need. Alchemic's goal is to do this as simply as possible. 
+*Note: the documentation on this site is based on the coming v2.1 of Alchemic currently under construction in the develop branch.*
+
+Alchemic helps simplify your application's code by creating and managing your applications objects, and the dependencies they need. Alchemic's goal is to do this as simply as possible. 
 
 ## Features
 
