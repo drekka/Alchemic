@@ -155,7 +155,7 @@
     // Notify of injection completion.
     if ([object respondsToSelector:@selector(alchemicDidInjectDependencies)]) {
         STLog(self, @"Telling %@ it's injections are done", object);
-        [(id<AlchemicAware>)self alchemicDidInjectDependencies];
+        [(id<AlchemicAware>) object alchemicDidInjectDependencies];
     }
 }
 
@@ -163,7 +163,7 @@
     STLog(self, @"Starting injection of variable %@", dependency.name);
     [ALCRuntime executeSimpleBlock:[dependency injectObject:object]];
     if ([object respondsToSelector:@selector(alchemicDidInjectVariable:)]) {
-        [(id<AlchemicAware>)self alchemicDidInjectVariable:dependency.name];
+        [(id<AlchemicAware>) object alchemicDidInjectVariable:dependency.name];
     }
 }
 

@@ -13,9 +13,6 @@
 @import Alchemic;
 @import Alchemic.Private;
 
-//#import <Alchemic/ALCContextImpl.h>
-//#import <Alchemic/ALCClassObjectFactory.h>
-
 #import "TopThing.h"
 #import "NestedThing.h"
 

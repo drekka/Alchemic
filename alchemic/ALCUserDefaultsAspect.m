@@ -6,6 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import StoryTeller;
+
 #import "ALCUserDefaultsAspect.h"
 
 #import <Alchemic/ALCModel.h>
@@ -36,6 +38,7 @@ static BOOL _enabled;
     }
 
     // No user defined defaults so set up ALCUserDefaults in the model.
+    STLog(self, @"Adding default user defaults handling");
     ALCClassObjectFactory *defaultsFactory = [[ALCClassObjectFactory alloc] initWithClass:[ALCUserDefaults class]];
     [model addObjectFactory:defaultsFactory withName:@"userDefaults"];
 }
