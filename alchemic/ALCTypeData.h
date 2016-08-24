@@ -8,6 +8,32 @@
 
 @import Foundation;
 
+typedef NS_ENUM(NSUInteger, ALCTypeMapping) {
+    ALCTypeMappingScalarToScalar,
+    ALCTypeMappingScalarToObject,
+    ALCTypeMappingObjectToScalar,
+    ALCTypeMappingObjectToObject
+};
+
+typedef NS_ENUM(NSUInteger, ALCType) {
+    ALCTypeBool,
+    ALCTypeChar,
+    ALCTypeCharPointer,
+    ALCTypeDouble,
+    ALCTypeFloat,
+    ALCTypeInt,
+    ALCTypeLong,
+    ALCTypeLongLong,
+    ALCTypeShort,
+    ALCTypeUnsignedChar,
+    ALCTypeUnsignedInt,
+    ALCTypeUnsignedLong,
+    ALCTypeUnsignedLongLong,
+    ALCTypeUnsignedShort
+};
+
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Simple class containing information about a type.
  */
@@ -28,4 +54,10 @@
  */
 @property (nonatomic, strong, nullable) NSArray<Protocol *> *objcProtocols;
 
+-(instancetype) initWithEncoding:(const char *) encoding;
+
+-(BOOL) canMapToTypeData:(ALCTypeData *) otherTypeData;
+
 @end
+
+NS_ASSUME_NONNULL_END
