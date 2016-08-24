@@ -16,36 +16,43 @@
 
 @implementation NSBundle_AlchemicTests
 
+-(void) testScannableBundles {
+
+}
+
 -(void) testScanWithProcessors {
     
     NSBundle *thisBundle = [NSBundle bundleForClass:[self class]];
-    id contextMock = OCMProtocolMock(@protocol(ALCContext));
+    id mockContext = OCMProtocolMock(@protocol(ALCContext));
     
-    id canProcessMock = OCMProtocolMock(@protocol(ALCClassProcessor));
-    OCMStub([canProcessMock canProcessClass:OCMOCK_ANY]).andReturn(YES);
-    OCMExpect([canProcessMock processClass:OCMOCK_ANY withContext:contextMock]);
+    id mockClassProcessor1 = OCMProtocolMock(@protocol(ALCClassProcessor));
+    OCMStub([mockClassProcessor1 canProcessClass:OCMOCK_ANY]).andReturn(YES);
+    OCMExpect([mockClassProcessor1 processClass:OCMOCK_ANY withContext:mockContext]);
     
-    id cantProcessMock = OCMProtocolMock(@protocol(ALCClassProcessor));
+    id mockClassProcessor2 = OCMProtocolMock(@protocol(ALCClassProcessor));
     
-    __block unsigned int foundClasses = 0;
-    OCMStub([cantProcessMock canProcessClass:[OCMArg checkWithBlock:^BOOL(id obj) {
-        foundClasses++;
+    __block unsigned int checkedClasses = 0;
+    OCMStub([mockClassProcessor2 canProcessClass:[OCMArg checkWithBlock:^BOOL(id obj) {
+        checkedClasses++;
         return YES;
     }]]).andReturn(NO);
-    
-    
+
     [thisBundle scanWithProcessors:@[
-                                     canProcessMock,
-                                     cantProcessMock
+                                     mockClassProcessor1,
+                                     mockClassProcessor2
                                      ]
-                           context:contextMock];
+                           context:mockContext];
+
+    OCMVerifyAll(mockClassProcessor1);
+    XCTAssertEqual([self nbrClassesInBundle:thisBundle], checkedClasses);
     
+}
+
+-(unsigned int) nbrClassesInBundle:(NSBundle *) bundle {
     unsigned int nbrClasses = 0;
-    __unused const char** classes = objc_copyClassNamesForImage([[thisBundle executablePath] UTF8String], &nbrClasses);
-    
-    OCMVerifyAll(canProcessMock);
-    XCTAssertEqual(nbrClasses, foundClasses);
-    
+    const char** classes = objc_copyClassNamesForImage([[bundle executablePath] UTF8String], &nbrClasses);
+    free(classes);
+    return nbrClasses;
 }
 
 @end
