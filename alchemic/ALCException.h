@@ -21,8 +21,7 @@
 declareException(Resolving)
 declareException(Injection)
 declareException(MappingValue)
-
-declareException(CircularReference)
+declareException(TooManyResults)
 declareException(IllegalArgument)
 declareException(ReferenceObjectNotSet)
 declareException(NoDependenciesFound)

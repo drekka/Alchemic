@@ -126,13 +126,17 @@ static BOOL _enabled;
     XCTAssertTrue([factories containsObject:_referenceFactory]);
 }
 
--(void) testClassObjectFactoryForClass {
-    id<ALCObjectFactory> of = [_model classObjectFactoryForClass:[NSString class]];
+-(void) testClassObjectFactoryMatchingCriteria {
+    id<ALCObjectFactory> of = [_model classObjectFactoryMatchingCriteria:AcName(@"NSString")];
     XCTAssertEqual(_classFactory, of);
 }
 
--(void) testClassObjectFactoryForClassWhenNotFound {
-    XCTAssertNil([_model classObjectFactoryForClass:[NSDate class]]);
+-(void) testClassObjectFactoryMatchingCriteriaWhenNotFound {
+    XCTAssertNil([_model classObjectFactoryMatchingCriteria:AcClass(NSDate)]);
+}
+
+-(void) testClassObjectFactoryMatchingCriteriaWhenTooManyThrows {
+    XCTAssertThrowsSpecific([_model classObjectFactoryMatchingCriteria:AcClass(NSString)], AlchemicTooManyResultsException);
 }
 
 -(void) testObjectFactoriesMatchingCriteria {

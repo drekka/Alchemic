@@ -101,13 +101,12 @@ registerFactoryMethod:(SEL) selector
 /// @name Other functions
 
 /**
- Access point for objects which need to have dependencies injected.
- 
- @discussion This checks the model against the model. If a class builder is found which matches the class and protocols of the passed object, it is used to inject any listed dependencies into the object.
+ Access point for injecting dependencies into an object without having to store it in the model.
  
  @param object the object which needs dependencies injected.
+ @param ... An optional list of search criteria for finding the class build to handle the dependency injections.
  */
--(void) injectDependencies:(id) object;
+-(void) injectDependencies:(id) object, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  returns an object by seaching the model for matching factories and accessing the objects they manage.

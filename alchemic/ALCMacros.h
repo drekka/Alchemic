@@ -150,6 +150,8 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  */
 #define AcSet(value, ...)  [[Alchemic mainContext] setObject:value, ## __VA_ARGS__, nil]
 
+#define AcInjectDependencies(object, ...) [[Alchemic mainContext] injectDependencies:object, ## __VA_ARGS__, nil]
+
 #pragma mark - Search criteria
 
 /**

@@ -195,24 +195,7 @@ registerFactoryMethod:(SEL) selector
     [dependency configureWithOptions:dependencyConfig];
 }
 
-#pragma mark - Dependencies
-
-- (void)injectDependencies:(id)object {
-
-    STStartScope(object);
-
-    // We are only interested in class factories.
-    ALCClassObjectFactory *classFactory = [_model classObjectFactoryForClass:[object class]];
-
-    if (classFactory) {
-        STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
-        [classFactory injectDependencies:object];
-    } else {
-        STLog(object, @"No class factory found for a %@", NSStringFromClass([object class]));
-    }
-}
-
-#pragma mark - Accessing objects
+#pragma mark - Getting, setting and injecting
 
 -(id) objectWithClass:(Class) returnType, ... {
     alc_loadVarArgsAfterVariableIntoArray(returnType, criteria);
@@ -221,18 +204,13 @@ registerFactoryMethod:(SEL) selector
 
 -(id) objectWithClass:(Class) returnType searchCriteria:(NSArray *) criteria {
 
-    // Throw an error if this is called to early.
+    // Throw an error if this is called too early.
     if (_postStartBlocks) {
         throwException(Lifecycle, @"AcGet called before Alchemic is ready to serve objects.");
     }
 
     STLog(returnType, @"Manual retrieving an instance of %@", NSStringFromClass([returnType class]));
-    NSArray *finalCriteria = criteria;
-    if (finalCriteria.count == 0) {
-        finalCriteria = [finalCriteria arrayByAddingObject:[ALCModelSearchCriteria searchCriteriaForClass:[returnType class]]];
-    }
-
-    ALCModelObjectInjector *injection = (ALCModelObjectInjector *)[finalCriteria injectorForClass:returnType
+    ALCModelObjectInjector *injection = (ALCModelObjectInjector *)[criteria injectorForClass:returnType
                                                                                    allowConstants:NO
                                                                            unknownArgumentHandler:NULL];
     [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];
@@ -244,8 +222,6 @@ registerFactoryMethod:(SEL) selector
     }
     return value;
 }
-
-#pragma mark - Storing objects
 
 -(void) setObject:(id) object, ... {
     alc_loadVarArgsAfterVariableIntoArray(object, criteria);
@@ -261,16 +237,7 @@ registerFactoryMethod:(SEL) selector
 
     ALCSimpleBlock setBlock = ^{
 
-        NSArray *finalCriteria = criteria;
-        if (finalCriteria.count == 0) {
-            if (!finalObject) {
-                throwException(IncorrectNumberOfArguments, @"When setting nil, at least one search criteria is needed to find the relevant object factory");
-            } else {
-                finalCriteria = [finalCriteria arrayByAddingObject:[ALCModelSearchCriteria searchCriteriaForClass:objClass]];
-            }
-        }
-
-        ALCModelSearchCriteria *searchCriteria = [finalCriteria modelSearchCriteriaForClass:objClass];
+        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:objClass];
         NSArray<id<ALCObjectFactory>> *factories = [self->_model settableObjectFactoriesMatchingCriteria:searchCriteria];
 
         // Error if we do not find one factory.
@@ -285,6 +252,29 @@ registerFactoryMethod:(SEL) selector
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.
     [self executeBlockWhenStarted:setBlock];
 }
+
+-(void) injectDependencies:(id) object, ... {
+
+    STStartScope(object);
+
+    alc_loadVarArgsAfterVariableIntoArray(object, criteria);
+    
+    // Throw an error if this is called too early.
+    if (_postStartBlocks) {
+        throwException(Lifecycle, @"AcInjectDependencies called before Alchemic is ready.");
+    }
+    
+    // We are only interested in class factories.
+    ALCClassObjectFactory *classFactory = [_model classObjectFactoryMatchingCriteria:[criteria modelSearchCriteriaForClass:[object class]]];
+    
+    if (classFactory) {
+        STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
+        [classFactory injectDependencies:object];
+    } else {
+        STLog(object, @"No class factory found for a %@", NSStringFromClass([object class]));
+    }
+}
+
 
 @end
 

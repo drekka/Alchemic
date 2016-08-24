@@ -46,19 +46,23 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSArray<ALCClassObjectFactory *> *) classObjectFactories {
-    return [self.objectFactories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id<ALCObjectFactory> objectFactory, NSDictionary<NSString *, id> *bindings) {
-        return [objectFactory isKindOfClass:[ALCClassObjectFactory class]];
+    return [self.objectFactories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id<ALCObjectFactory> factory, NSDictionary<NSString *, id> *bindings) {
+        return [factory isKindOfClass:[ALCClassObjectFactory class]];
     }]];
 }
 
--(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass {
-    for (id<ALCObjectFactory> objectFactory in self.objectFactories) {
-        if ([objectFactory isKindOfClass:[ALCClassObjectFactory class]]
-            && objectFactory.objectClass == aClass) {
-            return objectFactory;
-        }
+-(nullable ALCClassObjectFactory *) classObjectFactoryMatchingCriteria:(ALCModelSearchCriteria *) criteria {
+    NSArray<id<ALCObjectFactory>> *factories = [self objectFactoriesMatchingCriteria:criteria];
+    factories = [factories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id<ALCObjectFactory> factory, NSDictionary<NSString *,id> *bindings) {
+        return [factory isKindOfClass:[ALCClassObjectFactory class]];
+    }]];
+    if (factories.count > 1) {
+        throwException(TooManyResults, @"Exepcted 1 object factory for critieria '%@', but found %lu.", criteria, (unsigned long) factories.count);
+    } else if (factories.count == 0) {
+        return nil;
+    } else {
+        return factories[0];
     }
-    return nil;
 }
 
 -(NSArray<id<ALCObjectFactory>> *) objectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
@@ -72,15 +76,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSArray<id<ALCObjectFactory>> *) settableObjectFactoriesMatchingCriteria:(ALCModelSearchCriteria *) criteria {
-    NSMutableArray<id<ALCObjectFactory>> *results = [[NSMutableArray alloc] init];
-    [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *name, id<ALCObjectFactory> objectFactory, BOOL *stop) {
-        if ((objectFactory.factoryType == ALCFactoryTypeSingleton
-             || objectFactory.factoryType == ALCFactoryTypeReference)
-            && [criteria acceptsObjectFactory:objectFactory name:name]) {
-            [results addObject:objectFactory];
-        }
-    }];
-    return results;
+    NSArray<id<ALCObjectFactory>> *factories = [self objectFactoriesMatchingCriteria:criteria];
+    return [factories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id<ALCObjectFactory> factory, NSDictionary<NSString *,id> *bindings) {
+        return factory.factoryType == ALCFactoryTypeSingleton || factory.factoryType == ALCFactoryTypeReference;
+    }]];
 }
 
 #pragma mark - The model

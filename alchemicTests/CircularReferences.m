@@ -1,5 +1,4 @@
 //
-//  SingletonCircularReferences.m
 //  Alchemic
 //
 //  Created by Derek Clarkson on 9/02/2016.

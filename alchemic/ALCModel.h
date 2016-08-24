@@ -36,13 +36,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, strong) NSArray<ALCClassObjectFactory *> *classObjectFactories;
 
 /**
- Returns the matching ALCClassObjectFactory for a specific class.
+ Returns the matching ALCClassObjectFactory which matches a passed criteria.
  
- @param aClass The class to search for.
- 
- @return The matching object factory or nil if none can be found.
+ @return The matching object factory.
+ @throws AN exception if too many factories are found.
  */
--(nullable ALCClassObjectFactory *) classObjectFactoryForClass:(Class) aClass;
+-(nullable ALCClassObjectFactory *) classObjectFactoryMatchingCriteria:(ALCModelSearchCriteria *) criteria;
 
 /**
  Searches the model and returns a list of match ALCObjectFactory instances.

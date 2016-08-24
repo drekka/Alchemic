@@ -19,6 +19,6 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(DYLIB_CURRENT_VERSION)</string>
+	<string>$BUILD_NUMBER</string>
 </dict>
 </plist>

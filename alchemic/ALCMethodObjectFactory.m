@@ -94,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCBlockWithObject) objectCompletion {
     return ^(ALCBlockWithObjectArgs){
-        [[Alchemic mainContext] injectDependencies:object];
+        [[Alchemic mainContext] injectDependencies:object, nil];
     };
 }
 
