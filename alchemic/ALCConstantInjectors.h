@@ -25,7 +25,7 @@ id<ALCInjector> Ac ## name(type value); \
 @interface ALCConstant ## name : ALCAbstractConstantInjector \
 /** Unavailable initializer. */ \
 -(instancetype) init NS_UNAVAILABLE; \
-/** \
+/**
 Factory method for creating instances. 
 @param value the value to be stored as the constant.
 */ \
