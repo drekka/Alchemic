@@ -1,5 +1,5 @@
 //
-//  ALCMapper.h
+//  ALCInjectorFactory.h
 //  Alchemic
 //
 //  Created by Derek Clarkson on 25/8/16.
@@ -7,17 +7,16 @@
 //
 
 @import Foundation;
-
-@class ALCTypeData;
-
 #import <Alchemic/ALCTypeDefs.h>
+@class ALCTypeData;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCMapper : NSObject
+@interface ALCInjectorFactory : NSObject
 
--(nullable ALCMapBlock) mapFromType:(ALCTypeData *) fromType toType:(ALCTypeData *) toType;
+-(nullable ALCInjectorBlock) injectorForIvar:(Ivar) ivar type:(ALCTypeData *) type;
 
 @end
 
 NS_ASSUME_NONNULL_END
+

@@ -62,16 +62,16 @@
 -(void) testBlockConvert {
     NSNumber *number = @(5);
     Ivar ivar = class_getInstanceVariable([self class], "_aInt");
-    [self convertToIntBlock](number, [self injectIntIntoIVarBlock:ivar]);
+    [self convertToIntBlock]((void *) CFBridgingRetain(number), [self injectIntIntoIVarBlock:ivar]);
     XCTAssertEqual(5, _aInt);
 }
 
 #pragma mark - Experimental code
 
 // Converts NSNumber in an id to an int in a void *
--(void (^)(id origValue, void (^injectBlock)(id obj, void *value))) convertToIntBlock {
-    return ^(id origValue, void (^injectBlock)(id obj, void *value)) {
-        NSNumber *nbr = origValue;
+-(void (^)(void *origValue, void (^injectBlock)(id obj, void *value))) convertToIntBlock {
+    return ^(void *origValue, void (^injectBlock)(id obj, void *value)) {
+        NSNumber *nbr = CFBridgingRelease(origValue);
         int intNbr = nbr.intValue;
         injectBlock(self, &intNbr);
     };
@@ -90,15 +90,45 @@
         int *ivarPtr = (int *) ((uint8_t *) objRef + ivar_getOffset(ivar));
         *ivarPtr = intValue;
         CFBridgingRelease(objRef);
-        
     };
 }
 
--(void) testVoidPtrToObj {
-    int five = 5;
-    void *ptr = &five;
-    NSNumber *number = @(*ptr);
+#pragma mark - NSValue based
+
+-(void) testNSValueBlockConvert {
+    NSNumber *number = @(5);
+    Ivar ivar = class_getInstanceVariable([self class], "_aInt");
+    NSValue *origValue = [NSValue valueWithNonretainedObject:number];
+    [self convertToNSValueIntBlock](origValue, [self injectNSValueIntIntoIVarBlock:ivar]);
+    XCTAssertEqual(5, _aInt);
 }
 
+// Converts NSNumber in a NSValue containing an int
+-(void (^)(NSValue *origValue, void (^injectBlock)(id obj, NSValue *value))) convertToNSValueIntBlock {
+    return ^(NSValue *origValue, void (^injectBlock)(id obj, NSValue *value)) {
+
+        NSNumber *numberValue = origValue.nonretainedObjectValue;
+        int value = numberValue.intValue;
+        NSValue *intValue = [NSValue value:&value withObjCType:"i"];
+        injectBlock(self, intValue);
+    };
+}
+
+-(void (^)(id obj, NSValue *value)) injectNSValueIntIntoIVarBlock:(Ivar) ivar {
+
+    return ^(id obj, NSValue *value) {
+
+        // Convert back to an int.
+        int intValue;
+        [value getValue:&intValue];
+
+        // Set the variable.
+        CFTypeRef objRef = CFBridgingRetain(obj);
+        int *ivarPtr = (int *) ((uint8_t *) objRef + ivar_getOffset(ivar));
+        *ivarPtr = intValue;
+        CFBridgingRelease(objRef);
+
+    };
+}
 
 @end

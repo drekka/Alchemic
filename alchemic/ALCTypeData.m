@@ -86,6 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL) setScalarType:(const char *) scalarType encoding:(const char *) encoding type:(ALCType) type desc:(NSString *) desc {
     if (strcmp(encoding, scalarType) == 0) {
+        _scalarType = scalarType;
         _type = type;
         _scalarDesc = desc;
         return YES;

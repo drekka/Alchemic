@@ -69,37 +69,38 @@ static NSCharacterSet *__typeEncodingDelimiters;
 +(ALCTypeData *) typeDataForEncoding:(const char *) encoding {
 
     // Get the type.
-    ALCTypeData *typeData = [[ALCTypeData alloc] init];
-    if (AcStrHasPrefix(encoding, "@")) {
-
-        // Start with a result that indicates an Id. We map Ids as NSObjects.
-        typeData.objcClass = [NSObject class];
-
-        // Object type.
-
-        NSArray<NSString *> *defs = [[NSString stringWithUTF8String:encoding] componentsSeparatedByCharactersInSet:__typeEncodingDelimiters];
-
-        // If there is no more than 2 in the array then the dependency is an id.
-        // Position 3 will be a class name, positions beyond that will be protocols.
-        for (NSUInteger i = 2; i < [defs count]; i ++) {
-            if ([defs[i] length] > 0) {
-                if (i == 2) {
-                    // Update the class.
-                    typeData.objcClass = objc_lookUpClass(defs[2].UTF8String);
-                } else {
-                    if (!typeData.objcProtocols) {
-                        typeData.objcProtocols = [[NSMutableArray alloc] init];
-                    }
-                    [(NSMutableArray *)typeData.objcProtocols addObject:objc_getProtocol(defs[i].UTF8String)];
-                }
-            }
-        }
-        return typeData;
-    }
-
-    // Not an object type.
-    typeData.scalarType = encoding;
-    return typeData;
+//    ALCTypeData *typeData = [[ALCTypeData alloc] init];
+//    if (AcStrHasPrefix(encoding, "@")) {
+//
+//        // Start with a result that indicates an Id. We map Ids as NSObjects.
+//        typeData.objcClass = [NSObject class];
+//
+//        // Object type.
+//
+//        NSArray<NSString *> *defs = [[NSString stringWithUTF8String:encoding] componentsSeparatedByCharactersInSet:__typeEncodingDelimiters];
+//
+//        // If there is no more than 2 in the array then the dependency is an id.
+//        // Position 3 will be a class name, positions beyond that will be protocols.
+//        for (NSUInteger i = 2; i < [defs count]; i ++) {
+//            if ([defs[i] length] > 0) {
+//                if (i == 2) {
+//                    // Update the class.
+//                    typeData.objcClass = objc_lookUpClass(defs[2].UTF8String);
+//                } else {
+//                    if (!typeData.objcProtocols) {
+//                        typeData.objcProtocols = [[NSMutableArray alloc] init];
+//                    }
+//                    [(NSMutableArray *)typeData.objcProtocols addObject:objc_getProtocol(defs[i].UTF8String)];
+//                }
+//            }
+//        }
+//        return typeData;
+//    }
+//
+//    // Not an object type.
+//    typeData.scalarType = encoding;
+//    return typeData;
+    return nil;
 }
 
 +(NSArray<NSString*> *) writeablePropertiesForClass:(Class) aClass {

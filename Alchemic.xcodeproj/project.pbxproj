@@ -232,8 +232,8 @@
 		6CBABD181D577A5F00E44EC4 /* SwiftEquivalentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD171D577A5F00E44EC4 /* SwiftEquivalentTests.m */; };
 		6CBABD1B1D577CE600E44EC4 /* Template.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD1A1D577CE600E44EC4 /* Template.m */; };
 		6CBABD1E1D577F0E00E44EC4 /* Reference.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD1D1D577F0E00E44EC4 /* Reference.m */; };
-		6CBC3A461D6EDA790003018C /* ALCMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBC3A441D6EDA790003018C /* ALCMapper.h */; };
-		6CBC3A471D6EDA790003018C /* ALCMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBC3A441D6EDA790003018C /* ALCMapper.h */; };
+		6CBC3A461D6EDA790003018C /* ALCMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBC3A441D6EDA790003018C /* ALCMapper.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CBC3A471D6EDA790003018C /* ALCMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBC3A441D6EDA790003018C /* ALCMapper.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CBC3A481D6EDA790003018C /* ALCMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC3A451D6EDA790003018C /* ALCMapper.m */; };
 		6CBC3A491D6EDA790003018C /* ALCMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC3A451D6EDA790003018C /* ALCMapper.m */; };
 		6CC2847C1CB29A7C006B613F /* ALCException.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC2847A1CB29A7C006B613F /* ALCException.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -257,6 +257,7 @@
 		6CC503DB1D1C2227004283DA /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; };
 		6CC503DC1D1C2228004283DA /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; };
 		6CCBF4711D2293D100211F08 /* ALCContextImplTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */; };
+		6CCD95241D6F38F0002AF9C5 /* ALCInjectorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFF38A41D6F2DFE00629210 /* ALCInjectorFactory.m */; };
 		6CCFA8DA1CD8EA960013BF71 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCFA8D91CD8EA960013BF71 /* Database.m */; };
 		6CD8EB881D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CD8EB891D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -280,14 +281,14 @@
 		6CE7F6911D410BB4005DEE2C /* ALCModelImplTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE7F6901D410BB4005DEE2C /* ALCModelImplTests.m */; };
 		6CED05761BCB545800B6C55B /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
 		6CED05781BCB548700B6C55B /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
-		6CFF38991D6DD3E500629210 /* ALCIntInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFF38971D6DD3E500629210 /* ALCIntInjector.h */; };
-		6CFF389A1D6DD3E500629210 /* ALCIntInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFF38971D6DD3E500629210 /* ALCIntInjector.h */; };
+		6CFF38991D6DD3E500629210 /* ALCIntInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFF38971D6DD3E500629210 /* ALCIntInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CFF389A1D6DD3E500629210 /* ALCIntInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFF38971D6DD3E500629210 /* ALCIntInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CFF389B1D6DD3E500629210 /* ALCIntInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFF38981D6DD3E500629210 /* ALCIntInjector.m */; };
 		6CFF389C1D6DD3E500629210 /* ALCIntInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFF38981D6DD3E500629210 /* ALCIntInjector.m */; };
-		6CFF389F1D6DDCCE00629210 /* ALCVariableInjectorFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFF389D1D6DDCCE00629210 /* ALCVariableInjectorFactory.h */; };
-		6CFF38A01D6DDCCE00629210 /* ALCVariableInjectorFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFF389D1D6DDCCE00629210 /* ALCVariableInjectorFactory.h */; };
-		6CFF38A11D6DDCCE00629210 /* ALCVariableInjectorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFF389E1D6DDCCE00629210 /* ALCVariableInjectorFactory.m */; };
-		6CFF38A21D6DDCCE00629210 /* ALCVariableInjectorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFF389E1D6DDCCE00629210 /* ALCVariableInjectorFactory.m */; };
+		6CFF38A51D6F2DFE00629210 /* ALCInjectorFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFF38A31D6F2DFE00629210 /* ALCInjectorFactory.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CFF38A61D6F2DFE00629210 /* ALCInjectorFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFF38A31D6F2DFE00629210 /* ALCInjectorFactory.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CFF38A81D6F2DFE00629210 /* ALCInjectorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFF38A41D6F2DFE00629210 /* ALCInjectorFactory.m */; };
+		6CFF38AA1D6F32E900629210 /* Injections.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFF38A91D6F32E900629210 /* Injections.m */; };
 		F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F4023C031CE9827A00AEC0E5 /* ALCAbstractDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */; };
 		F4023C051CE988F100AEC0E5 /* ALCInjector.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C041CE988F100AEC0E5 /* ALCInjector.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -479,8 +480,9 @@
 		6CED05771BCB548700B6C55B /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
 		6CFF38971D6DD3E500629210 /* ALCIntInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCIntInjector.h; sourceTree = "<group>"; };
 		6CFF38981D6DD3E500629210 /* ALCIntInjector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCIntInjector.m; sourceTree = "<group>"; };
-		6CFF389D1D6DDCCE00629210 /* ALCVariableInjectorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALCVariableInjectorFactory.h; path = alchemic/ALCVariableInjectorFactory.h; sourceTree = "<group>"; };
-		6CFF389E1D6DDCCE00629210 /* ALCVariableInjectorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCVariableInjectorFactory.m; path = alchemic/ALCVariableInjectorFactory.m; sourceTree = "<group>"; };
+		6CFF38A31D6F2DFE00629210 /* ALCInjectorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCInjectorFactory.h; sourceTree = "<group>"; };
+		6CFF38A41D6F2DFE00629210 /* ALCInjectorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCInjectorFactory.m; sourceTree = "<group>"; };
+		6CFF38A91D6F32E900629210 /* Injections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Injections.m; sourceTree = "<group>"; };
 		F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractDependency.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractDependency.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		F4023C041CE988F100AEC0E5 /* ALCInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInjector.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -686,6 +688,7 @@
 				6CB7C4191CC3BFF500C05B0B /* AccessingObjects.m */,
 				6CCFA8D61CD78E940013BF71 /* ClassInitializers.m */,
 				6C04EE6C1D6C2F1F004F32F8 /* Features.m */,
+				6CFF38A91D6F32E900629210 /* Injections.m */,
 			);
 			name = "Functional tests";
 			path = alchemicTests;
@@ -827,12 +830,12 @@
 		6CBC3A4A1D6EDA8A0003018C /* Mapping */ = {
 			isa = PBXGroup;
 			children = (
-				6CFF389D1D6DDCCE00629210 /* ALCVariableInjectorFactory.h */,
-				6CFF389E1D6DDCCE00629210 /* ALCVariableInjectorFactory.m */,
 				6C71D5491CA1747200D25AC0 /* ALCTypeData.h */,
 				6C71D54A1CA1747200D25AC0 /* ALCTypeData.m */,
 				6CBC3A441D6EDA790003018C /* ALCMapper.h */,
 				6CBC3A451D6EDA790003018C /* ALCMapper.m */,
+				6CFF38A31D6F2DFE00629210 /* ALCInjectorFactory.h */,
+				6CFF38A41D6F2DFE00629210 /* ALCInjectorFactory.m */,
 			);
 			name = Mapping;
 			path = ..;
@@ -993,9 +996,7 @@
 				6C34CA1A1D5D91C60080D428 /* ALCContextInternal.h in Headers */,
 				6C34CA1B1D5D91C60080D428 /* NSSet+Alchemic.h in Headers */,
 				6C34CA1C1D5D91C60080D428 /* NSBundle+Alchemic.h in Headers */,
-				6CFF38A01D6DDCCE00629210 /* ALCVariableInjectorFactory.h in Headers */,
 				6C8757BA1D6AD65500BCAF6B /* ALCResolveAspect.h in Headers */,
-				6CBC3A471D6EDA790003018C /* ALCMapper.h in Headers */,
 				6C34CA1D1D5D91C60080D428 /* ALCModelImpl.h in Headers */,
 				6C34CA1E1D5D91C60080D428 /* ALCModel.h in Headers */,
 				6C34CA1F1D5D91C60080D428 /* ALCModelObjectInjector.h in Headers */,
@@ -1005,7 +1006,6 @@
 				6C34CA231D5D91C60080D428 /* ALCMethodArgumentDependency.h in Headers */,
 				6C34CA241D5D91C60080D428 /* ALCDependency.h in Headers */,
 				6C34CA251D5D91C60080D428 /* ALCInstantiator.h in Headers */,
-				6CFF389A1D6DD3E500629210 /* ALCIntInjector.h in Headers */,
 				6C34CA261D5D91C60080D428 /* ALCModelSearchCriteria.h in Headers */,
 				6C34CA271D5D91C60080D428 /* ALCObjectFactory.h in Headers */,
 				6C34CA281D5D91C60080D428 /* ALCStringMacros.h in Headers */,
@@ -1018,6 +1018,9 @@
 				6C8757B51D6AD1AF00BCAF6B /* ALCUserDefaults.h in Headers */,
 				6C8757C41D6ADCD000BCAF6B /* ALCAspectClassProcessor.h in Headers */,
 				6C34CA2E1D5D91C60080D428 /* ALCModelClassProcessor.h in Headers */,
+				6CFF38A61D6F2DFE00629210 /* ALCInjectorFactory.h in Headers */,
+				6CBC3A471D6EDA790003018C /* ALCMapper.h in Headers */,
+				6CFF389A1D6DD3E500629210 /* ALCIntInjector.h in Headers */,
 				6C34CA2F1D5D91C60080D428 /* ALCDefs.h in Headers */,
 				6C34CA301D5D91C60080D428 /* ALCFactoryName.h in Headers */,
 				6C34CA311D5D91C60080D428 /* Alchemic.h in Headers */,
@@ -1059,9 +1062,7 @@
 				6CBABD111D535B3A00E44EC4 /* ALCContextInternal.h in Headers */,
 				6CC2848D1CB671D5006B613F /* NSSet+Alchemic.h in Headers */,
 				6CC284891CB53F03006B613F /* NSBundle+Alchemic.h in Headers */,
-				6CFF389F1D6DDCCE00629210 /* ALCVariableInjectorFactory.h in Headers */,
 				6C8757B91D6AD65500BCAF6B /* ALCResolveAspect.h in Headers */,
-				6CBC3A461D6EDA790003018C /* ALCMapper.h in Headers */,
 				6C25D27C1C57563200D982DC /* ALCModelImpl.h in Headers */,
 				6C25D2751C566E2D00D982DC /* ALCModel.h in Headers */,
 				6C3AFBC81C636DC500B4FCAA /* ALCModelObjectInjector.h in Headers */,
@@ -1071,7 +1072,6 @@
 				6C71D5431CA161A200D25AC0 /* ALCMethodArgumentDependency.h in Headers */,
 				6CC464221C7986D500B20A95 /* ALCDependency.h in Headers */,
 				6C4D85B01C7F37400061CA84 /* ALCInstantiator.h in Headers */,
-				6CFF38991D6DD3E500629210 /* ALCIntInjector.h in Headers */,
 				6C3AFBBC1C60D96400B4FCAA /* ALCModelSearchCriteria.h in Headers */,
 				6C25D2771C566E6A00D982DC /* ALCObjectFactory.h in Headers */,
 				F41108A51CF408B600EEBFF7 /* ALCStringMacros.h in Headers */,
@@ -1084,6 +1084,9 @@
 				6C8757BD1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.h in Headers */,
 				6C8757B41D6AD1AF00BCAF6B /* ALCUserDefaults.h in Headers */,
 				6C8757C31D6ADCD000BCAF6B /* ALCAspectClassProcessor.h in Headers */,
+				6CFF38A51D6F2DFE00629210 /* ALCInjectorFactory.h in Headers */,
+				6CBC3A461D6EDA790003018C /* ALCMapper.h in Headers */,
+				6CFF38991D6DD3E500629210 /* ALCIntInjector.h in Headers */,
 				6CB5CCD51CDB6F9100DC1052 /* ALCDefs.h in Headers */,
 				6C237CD71CCA74CE00B8F551 /* ALCFactoryName.h in Headers */,
 				6C25D2791C566F7900D982DC /* Alchemic.h in Headers */,
@@ -1398,10 +1401,10 @@
 				6C34C9E51D5D91C60080D428 /* ALCModelObjectInjector.m in Sources */,
 				6C34C9E61D5D91C60080D428 /* ALCConstantInjectors.m in Sources */,
 				6C8757B71D6AD1AF00BCAF6B /* ALCUserDefaults.m in Sources */,
+				6CFF38A81D6F2DFE00629210 /* ALCInjectorFactory.m in Sources */,
 				6C34C9E71D5D91C60080D428 /* ALCInstantiation.m in Sources */,
 				6C34C9E81D5D91C60080D428 /* ALCObjectFactoryTypeTemplate.m in Sources */,
 				6C34C9E91D5D91C60080D428 /* NSBundle+Alchemic.m in Sources */,
-				6CFF38A21D6DDCCE00629210 /* ALCVariableInjectorFactory.m in Sources */,
 				6C34C9EA1D5D91C60080D428 /* ALCVariableDependency.m in Sources */,
 				6C34C9EB1D5D91C60080D428 /* ALCAbstractObjectFactoryType.m in Sources */,
 				6C34C9EC1D5D91C60080D428 /* ALCFactoryName.m in Sources */,
@@ -1444,11 +1447,11 @@
 				6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */,
 				6C3AFBC91C636DC500B4FCAA /* ALCModelObjectInjector.m in Sources */,
 				6C68CF851C64E430003A7A54 /* ALCConstantInjectors.m in Sources */,
+				6CCD95241D6F38F0002AF9C5 /* ALCInjectorFactory.m in Sources */,
 				6C8757B61D6AD1AF00BCAF6B /* ALCUserDefaults.m in Sources */,
 				6C1ADB051C9050FB00267E77 /* ALCInstantiation.m in Sources */,
 				6C3AFBB11C5E0CB800B4FCAA /* ALCObjectFactoryTypeTemplate.m in Sources */,
 				6CC2848A1CB53F03006B613F /* NSBundle+Alchemic.m in Sources */,
-				6CFF38A11D6DDCCE00629210 /* ALCVariableInjectorFactory.m in Sources */,
 				6C4B561B1C6E0BF10040AEC2 /* ALCVariableDependency.m in Sources */,
 				6CC503CE1D182A78004283DA /* ALCAbstractObjectFactoryType.m in Sources */,
 				6C237CD61CCA74C700B8F551 /* ALCFactoryName.m in Sources */,
@@ -1527,6 +1530,7 @@
 				6CB5CCDF1CDB7AF700DC1052 /* CircularReferences.m in Sources */,
 				6CB5CCE01CDB7AF700DC1052 /* MethodFactories.m in Sources */,
 				6C04EE6D1D6C2F1F004F32F8 /* Features.m in Sources */,
+				6CFF38AA1D6F32E900629210 /* Injections.m in Sources */,
 				6C7DE1771D313C2700FAC6A0 /* XCTestCase+Alchemic.m in Sources */,
 				6CB5CCE11CDB7AF700DC1052 /* AnotherThing.m in Sources */,
 				6CB5CCE21CDB7AF700DC1052 /* AccessingObjects.m in Sources */,
