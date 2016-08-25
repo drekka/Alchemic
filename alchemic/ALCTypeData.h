@@ -16,6 +16,7 @@ typedef NS_ENUM(NSUInteger, ALCTypeMapping) {
 };
 
 typedef NS_ENUM(NSUInteger, ALCType) {
+    ALCTypeUnknown,
     ALCTypeBool,
     ALCTypeChar,
     ALCTypeCharPointer,
@@ -29,7 +30,9 @@ typedef NS_ENUM(NSUInteger, ALCType) {
     ALCTypeUnsignedInt,
     ALCTypeUnsignedLong,
     ALCTypeUnsignedLongLong,
-    ALCTypeUnsignedShort
+    ALCTypeUnsignedShort,
+    ALCTypeStruct,
+    ALCTypeObject
 };
 
 NS_ASSUME_NONNULL_BEGIN
@@ -42,19 +45,31 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  A string containing the type data for scalar types.
  */
-@property (nonatomic, assign, nullable) const char *scalarType;
+@property (nonatomic, assign, readonly) ALCType type;
+
+/**
+ The name of a struct. ie. CGRect, CGSize, etc.
+ */
+@property (nonatomic, assign, nullable, readonly) NSString *structType;
 
 /**
  The class if the type is an object type.
  */
-@property (nonatomic, assign, nullable) Class objcClass;
+@property (nonatomic, assign, nullable, readonly) Class objcClass;
 
 /**
  Any protocols that the class implements.
  */
-@property (nonatomic, strong, nullable) NSArray<Protocol *> *objcProtocols;
+@property (nonatomic, strong, nullable, readonly) NSArray<Protocol *> *objcProtocols;
 
--(instancetype) initWithEncoding:(const char *) encoding;
+/**
+ Factory method for analysing a passed encoding.
+ 
+ @param encoding The encoding to analyse.
+ */
++(instancetype) typeForEncoding:(const char *) encoding;
+
+-(instancetype) init NS_UNAVAILABLE;
 
 -(BOOL) canMapToTypeData:(ALCTypeData *) otherTypeData;
 
