@@ -9,6 +9,8 @@
 @import Foundation;
 @import ObjectiveC;
 
+#import <Alchemic/ALCType.h>
+
 /**
  Enum of types for comparing when mapping.
  */
@@ -37,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Simple class containing information about a type.
  */
-@interface ALCValue : NSObject
+@interface ALCValue : ALCType
 
 @property (nonatomic, strong) NSValue *value;
 
