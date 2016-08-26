@@ -164,25 +164,25 @@ registerFactoryMethod:(SEL) selector
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerInjection:(NSString *) variable, ... {
     alc_loadVarArgsAfterVariableIntoArray(variable, config);
     Ivar ivar = [ALCRuntime forClass:objectFactory.objectClass variableForInjectionPoint:variable];
-    Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
+    ALCType *type = [ALCType typeForIvar:ivar];
     [self objectFactory:objectFactory
       registerInjection:ivar
                withName:variable
-                 ofType:varClass
+                 ofType:type
                  config:config];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
     registerInjection:(Ivar) variable
              withName:(NSString *) name
-                 type:(ALCValue *) type
+               ofType:(ALCType *) type
                config:(NSArray *) config {
 
     STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), name);
 
     NSMutableArray *dependencyConfig = [[NSMutableArray alloc] init];
     __block BOOL allowNils = NO;
-    id<ALCInjector> injector = [config injectorForClass:type
+    id<ALCInjector> injector = [config injectorForClass:type.objcClass
                                          allowConstants:YES
                                  unknownArgumentHandler:^(id argument) {
                                      [dependencyConfig addObject:argument];

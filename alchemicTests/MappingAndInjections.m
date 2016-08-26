@@ -21,17 +21,16 @@
 
 -(void) testNSNumberToInt {
 
+    ALCType *type = [ALCType typeWithEncoding:@encode(NSNumber *)];
+    ALCValue *fromValue = [ALCValue valueWithType:type value:[NSValue valueWithNonretainedObject:@5]];
+
     Ivar intVar = class_getInstanceVariable([self class], "_aInt");
-
-    ALCValue *fromValue = [ALCValue value:[NSValue valueWithNonretainedObject:@5] withEncoding:@encode(NSNumber *)];
-    ALCValue *toValue = [ALCValue valueWithEncoding:ivar_getTypeEncoding(intVar)];
-
     NSError *error;
-    XCTAssertTrue([fromValue mapInTo:toValue error:&error]);
+    ALCValue *toValue = [fromValue mapTo:[ALCType typeForIvar:intVar] error:&error];
+    XCTAssertNotNil(toValue);
     XCTAssertNil(error);
 
     [toValue variableInjector](self, intVar);
-
     XCTAssertEqual(5, _aInt);
 }
 

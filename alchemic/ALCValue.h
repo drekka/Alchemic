@@ -18,14 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCValue : ALCType
 
-@property (nonatomic, strong) NSValue *value;
+@property (nonatomic, strong, readonly) NSValue *value;
 
-/**
- Factory method for analysing a passed encoding.
- 
- @param encoding The encoding to analyse.
- */
-+(instancetype) value:(nullable NSValue *) value withEncoding:(const char *) encoding;
++(nullable ALCValue *) valueWithType:(ALCType *) type value:(NSValue *) value;
 
 @end
 

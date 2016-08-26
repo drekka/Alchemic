@@ -9,6 +9,8 @@
 @import Foundation;
 @import ObjectiveC;
 
+@class ALCValue;
+
 /**
  Enum of types for comparing when mapping.
  */
@@ -35,11 +37,9 @@ typedef NS_ENUM(NSUInteger, ALCValueType) {
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Simple class containing information about a type.
+ Contains type information about an injection.
  */
-@interface ALCValue : ALCValueType
-
-@property (nonatomic, strong) NSValue *value;
+@interface ALCType : NSObject
 
 /**
  A string containing the type data for scalar types.
@@ -65,30 +65,33 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, nullable, readonly) NSArray<Protocol *> *objcProtocols;
 
+#pragma mark - Initiailizers
+
+-(instancetype) init NS_UNAVAILABLE;
+
+-(instancetype) initWithType:(ALCValueType) type
+             typeDescription:(NSString *) typeDescription
+                  scalarType:(nullable const char *) scalarType
+                   objcClass:(nullable Class) objcClass
+               objcProtocols:(nullable NSArray<Protocol *> *) objcProtocols;
+
+#pragma mark - Factory methods
+
 /**
- Returns an instance of ALCValue containing information about the type of the ivar.
+ Returns an instance of ALCType containing information about the type of the ivar.
  
  @param iVar The ivar to examine.
  
  @return An instance of ALCValue containing the type information.
  */
-+(ALCValue *) valueForIvar:(Ivar) ivar;
++(ALCType *) typeForIvar:(Ivar) ivar;
 
 /**
  Factory method for analysing a passed encoding.
  
  @param encoding The encoding to analyse.
  */
-+(instancetype) valueWithEncoding:(const char *) encoding;
-
-/**
- Factory method for analysing a passed encoding.
- 
- @param encoding The encoding to analyse.
- */
-+(instancetype) value:(nullable NSValue *) value withEncoding:(const char *) encoding;
-
--(instancetype) init NS_UNAVAILABLE;
++(instancetype) typeWithEncoding:(const char *) encoding;
 
 @end
 

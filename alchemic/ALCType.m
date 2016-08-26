@@ -6,9 +6,10 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCValue.h"
+#import "ALCType.h"
 
 #import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCValue.h>
 #import <Alchemic/ALCInternalMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -23,40 +24,47 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-+(ALCValue *) valueForIvar:(Ivar) ivar {
-    return [self valueWithEncoding:ivar_getTypeEncoding(ivar)];
+-(instancetype) initWithType:(ALCValueType) type
+             typeDescription:(NSString *) typeDescription
+                  scalarType:(nullable const char *) scalarType
+                   objcClass:(nullable Class) objcClass
+               objcProtocols:(nullable NSArray<Protocol *> *) objcProtocols {
+    self = [super init];
+    if (self) {
+        _type = type;
+        _typeDescription = typeDescription;
+        _scalarType = scalarType;
+        _objcClass = objcClass;
+        _objcProtocols = objcProtocols;
+    }
+    return self;
 }
 
-+(instancetype) valueWithEncoding:(const char *) encoding {
-    return [self value:nil withEncoding:encoding];
++(ALCValue *) typeForIvar:(Ivar) ivar {
+    return [self typeWithEncoding:ivar_getTypeEncoding(ivar)];
 }
 
-+(instancetype) value:(nullable NSValue *) value withEncoding:(const char *) encoding {
-    
-    ALCValue *typeData = [[ALCValue alloc] initPrivate];
-    typeData.value = value;
-    
-    [typeData setObjectType:encoding]
-    ||[typeData setScalarType:encoding];
-    
++(instancetype) typeWithEncoding:(const char *) encoding {
+    ALCType *typeData = [[ALCType alloc] initPrivate];
+    [typeData setObjectType:encoding] || [typeData setScalarType:encoding];
     return typeData;
 }
 
 -(BOOL) setObjectType:(const char *) encoding {
-    
+
     if (! AcStrHasPrefix(encoding, "@")) {
         return NO;
     }
-    
+
     // Start with a result that indicates an Id. We map Ids as NSObjects.
     _type = ALCValueTypeObject;
     _objcClass = [NSObject class];
     _typeDescription = @"Object";
-    
+
     // Object type.
     NSCharacterSet *typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
     NSArray<NSString *> *defs = [[NSString stringWithUTF8String:encoding] componentsSeparatedByCharactersInSet:typeEncodingDelimiters];
-    
+
     // If there is no more than 2 in the array then the dependency is an id.
     // Position 3 will be a class name, positions beyond that will be protocols.
     for (NSUInteger i = 2; i < [defs count]; i ++) {
@@ -114,20 +122,20 @@ NS_ASSUME_NONNULL_BEGIN
         return [NSString stringWithFormat:@"Scalar %@", _typeDescription];
     } else {
         NSString *className = self.objcClass ? NSStringFromClass((Class) self.objcClass) : @"";
-        
+
         if (self.objcProtocols.count > 0) {
-            
+
             NSMutableArray<NSString *> *protocols = [[NSMutableArray alloc] init];
             for (Protocol *protocol in self.objcProtocols) {
                 [protocols addObject:NSStringFromProtocol(protocol)];
             }
-            
+
             if (self.objcClass) {
                 return [NSString stringWithFormat:@"Class %@<%@>", className, [protocols componentsJoinedByString:@","]];
             } else {
                 return [NSString stringWithFormat:@"Protocols <%@>", [protocols componentsJoinedByString:@","]];
             }
-            
+
         } else {
             return [NSString stringWithFormat:@"Class %@", className];
         }

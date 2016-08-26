@@ -8,7 +8,7 @@
 
 #import <Alchemic/ALCValue.h>
 
-//[orig mapInTo:nextType](nextBlock(type))(lastBlock(type));
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param error A pointer to a NSError variable which will be populated if a mapping cannot be done.
  @return YES if a mapping occured.
  */
--(BOOL) mapInTo:(ALCValue *) toValue error:(NSError **) error;
+-(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError **) error;
 
 @end
 

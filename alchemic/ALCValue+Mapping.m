@@ -13,42 +13,41 @@
 
 @implementation ALCValue (Mapping)
 
--(BOOL) mapInTo:(ALCValue *) toValue error:(NSError **) error {
-    
+-(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError **) error {
+
     // Use the runtime to build a reference to the method.
     Method method;
-    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"convert%@To%@:error:", self.methodNamePart, toValue.methodNamePart]);
+    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"convert%@To%@:error:", self.methodNamePart, toType.methodNamePart]);
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
             // Dynamically call the selector method to do the converstion.
-            return ((BOOL (*)(id, Method, ALCValue *, NSError **)) method_invoke)(self, method, toValue, error);
+            return ((ALCValue * (*)(id, Method, ALCType *, NSError **)) method_invoke)(self, method, toType, error);
         }
     }
-    setError(@"Unable to convert a %@ to a %@", self, toValue);
-    return NO;
+    setError(@"Unable to convert a %@ to a %@", self, toType);
+    return nil;
 }
 
--(BOOL) convertObjectToInt:(ALCValue *) toValue error:(NSError **) error {
-    return [self setToValue:toValue error:error withScalar:^NSValue *(NSNumber *number) {
+-(nullable ALCValue *) convertObjectToInt:(ALCType *) toType error:(NSError **) error {
+    return [self valueOfType:toType error:error withNumberConversion:^NSValue *(NSNumber *number) {
         int scalar = number.intValue;
-        return [NSValue value:&scalar withObjCType:toValue.scalarType];
+        return [NSValue value:&scalar withObjCType:toType.scalarType];
     }];
 }
 
--(BOOL) setToValue:(ALCValue *) toValue
+-(nullable ALCValue *) valueOfType:(ALCType *) type
              error:(NSError **) error
-        withScalar:(NSValue * (^)(NSNumber *result)) getScalar {
+        withNumberConversion:(NSValue * (^)(NSNumber *result)) numberConversion {
     
     id obj = self.value.nonretainedObjectValue;
     
     if ([obj isKindOfClass:[NSNumber class]]) {
-        toValue.value = getScalar(obj);
-        return YES;
+        return [ALCValue valueWithType:type value:numberConversion(obj)];
     }
     
     setError(@"Cannot convert source %@ to NSNumber *", NSStringFromClass([obj class]));
-    return NO;
+    return nil;
 }
 
 @end

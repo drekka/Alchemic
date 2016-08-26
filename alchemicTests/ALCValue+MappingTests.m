@@ -17,18 +17,23 @@
 @implementation ALCValue_MappingTests
 
 -(void) testNSNumberToInt {
-    ALCValue *number = [ALCValue value:[NSValue valueWithNonretainedObject:@5] withEncoding:"@"];
-    ALCValue *toInt = [ALCValue valueWithEncoding:"i"];
-    [self performMapping:number toValue:toInt];
+
+    ALCType *type = [ALCType typeWithEncoding:@encode(NSNumber *)];
+    ALCValue *fromValue = [ALCValue valueWithType:type value:[NSValue valueWithNonretainedObject:@5]];
+
+    ALCValue *toValue = [self map:fromValue toType:[ALCType typeWithEncoding:"i"]];
+    XCTAssertNotNil(toValue);
+
     int result;
-    [toInt.value getValue:&result];
+    [toValue.value getValue:&result];
     XCTAssertEqual(5, result);
 }
 
--(void) performMapping:(ALCValue *) fromValue toValue:(ALCValue *) toValue {
+-(ALCValue *) map:(ALCValue *) fromValue toType:(ALCType *) toType {
     NSError *error;
-    [fromValue mapInTo:toValue error:&error];
+    ALCValue *value = [fromValue mapTo:toType error:&error];
     XCTAssertNil(error);
+    return value;
 }
 
 

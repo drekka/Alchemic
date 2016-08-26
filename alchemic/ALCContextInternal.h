@@ -10,6 +10,7 @@
 @import ObjectiveC;
 
 @class ALCClassObjectFactory;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,7 +31,7 @@ registerFactoryMethod:(SEL) selector
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
     registerInjection:(Ivar) variable
              withName:(NSString *) name
-               ofType:(Class) type
+               ofType:(ALCType *) type
                config:(NSArray *) config;
 
 -(id) objectWithClass:(Class) returnType
