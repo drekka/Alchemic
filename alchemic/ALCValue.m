@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) initPrivate {
     self = [super init];
     if (self) {
-        _type = ALCTypeUnknown;
+        _type = ALCValueTypeUnknown;
     }
     return self;
 }
@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
     
     // Start with a result that indicates an Id. We map Ids as NSObjects.
-    _type = ALCTypeObject;
+    _type = ALCValueTypeObject;
     _objcClass = [NSObject class];
     _typeDescription = @"Object";
     
@@ -76,25 +76,25 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL) setScalarType:(const char *) encoding {
-    return [self setScalarType:"c" encoding:encoding type:ALCTypeChar desc:@"char"]
-    || [self setScalarType:"i" encoding:encoding type:ALCTypeInt desc:@"int"]
-    || [self setScalarType:"s" encoding:encoding type:ALCTypeShort desc:@"short"]
-    || [self setScalarType:"l" encoding:encoding type:ALCTypeLong desc:@"long"]
-    || [self setScalarType:"q" encoding:encoding type:ALCTypeLongLong desc:@"long long"]
-    || [self setScalarType:"C" encoding:encoding type:ALCTypeUnsignedChar desc:@"unsigned char"]
-    || [self setScalarType:"I" encoding:encoding type:ALCTypeUnsignedInt desc:@"unsigned int"]
-    || [self setScalarType:"S" encoding:encoding type:ALCTypeUnsignedShort desc:@"unsigned short"]
-    || [self setScalarType:"L" encoding:encoding type:ALCTypeUnsignedLong desc:@"unsigned long"]
-    || [self setScalarType:"Q" encoding:encoding type:ALCTypeUnsignedLongLong desc:@"unsigned long long"]
-    || [self setScalarType:"f" encoding:encoding type:ALCTypeFloat desc:@"float"]
-    || [self setScalarType:"d" encoding:encoding type:ALCTypeDouble desc:@"double"]
-    || [self setScalarType:"B" encoding:encoding type:ALCTypeBool desc:@"boolean"]
-    || [self setScalarType:"*" encoding:encoding type:ALCTypeCharPointer desc:@"char array"];
+    return [self setScalarType:"c" encoding:encoding type:ALCValueTypeChar desc:@"char"]
+    || [self setScalarType:"i" encoding:encoding type:ALCValueTypeInt desc:@"int"]
+    || [self setScalarType:"s" encoding:encoding type:ALCValueTypeShort desc:@"short"]
+    || [self setScalarType:"l" encoding:encoding type:ALCValueTypeLong desc:@"long"]
+    || [self setScalarType:"q" encoding:encoding type:ALCValueTypeLongLong desc:@"long long"]
+    || [self setScalarType:"C" encoding:encoding type:ALCValueTypeUnsignedChar desc:@"unsigned char"]
+    || [self setScalarType:"I" encoding:encoding type:ALCValueTypeUnsignedInt desc:@"unsigned int"]
+    || [self setScalarType:"S" encoding:encoding type:ALCValueTypeUnsignedShort desc:@"unsigned short"]
+    || [self setScalarType:"L" encoding:encoding type:ALCValueTypeUnsignedLong desc:@"unsigned long"]
+    || [self setScalarType:"Q" encoding:encoding type:ALCValueTypeUnsignedLongLong desc:@"unsigned long long"]
+    || [self setScalarType:"f" encoding:encoding type:ALCValueTypeFloat desc:@"float"]
+    || [self setScalarType:"d" encoding:encoding type:ALCValueTypeDouble desc:@"double"]
+    || [self setScalarType:"B" encoding:encoding type:ALCValueTypeBool desc:@"boolean"]
+    || [self setScalarType:"*" encoding:encoding type:ALCValueTypeCharPointer desc:@"char array"];
 }
 
 -(BOOL) setScalarType:(const char *) scalarType
              encoding:(const char *) encoding
-                 type:(ALCType) type
+                 type:(ALCValueType) type
                  desc:(NSString *) desc {
     if (strcmp(encoding, scalarType) == 0) {
         _scalarType = scalarType;
@@ -110,7 +110,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-    if (self.type != ALCTypeObject) {
+    if (self.type != ALCValueTypeObject) {
         return [NSString stringWithFormat:@"Scalar %@", _typeDescription];
     } else {
         NSString *className = self.objcClass ? NSStringFromClass((Class) self.objcClass) : @"";
