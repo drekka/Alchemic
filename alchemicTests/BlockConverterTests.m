@@ -62,18 +62,18 @@
 -(void) testBlockConvert {
     NSNumber *number = @(5);
     Ivar ivar = class_getInstanceVariable([self class], "_aInt");
-    [self convertToIntBlock]((void *) CFBridgingRetain(number), [self injectIntIntoIVarBlock:ivar]);
+    [self convertToIntBlock](self, (void *) CFBridgingRetain(number), [self injectIntIntoIVarBlock:ivar]);
     XCTAssertEqual(5, _aInt);
 }
 
 #pragma mark - Experimental code
 
 // Converts NSNumber in an id to an int in a void *
--(void (^)(void *origValue, void (^injectBlock)(id obj, void *value))) convertToIntBlock {
-    return ^(void *origValue, void (^injectBlock)(id obj, void *value)) {
+-(void (^)(id obj, void *origValue, void (^injectBlock)(id obj, void *value))) convertToIntBlock {
+    return ^(id obj, void *origValue, void (^injectBlock)(id obj, void *value)) {
         NSNumber *nbr = CFBridgingRelease(origValue);
         int intNbr = nbr.intValue;
-        injectBlock(self, &intNbr);
+        injectBlock(obj, &intNbr);
     };
 }
 
@@ -99,18 +99,18 @@
     NSNumber *number = @(5);
     Ivar ivar = class_getInstanceVariable([self class], "_aInt");
     NSValue *origValue = [NSValue valueWithNonretainedObject:number];
-    [self convertToNSValueIntBlock](origValue, [self injectNSValueIntIntoIVarBlock:ivar]);
+    [self convertToNSValueIntBlock](self, origValue, [self injectNSValueIntIntoIVarBlock:ivar]);
     XCTAssertEqual(5, _aInt);
 }
 
 // Converts NSNumber in a NSValue containing an int
--(void (^)(NSValue *origValue, void (^injectBlock)(id obj, NSValue *value))) convertToNSValueIntBlock {
-    return ^(NSValue *origValue, void (^injectBlock)(id obj, NSValue *value)) {
+-(void (^)(id obj, NSValue *origValue, void (^injectBlock)(id obj, NSValue *value))) convertToNSValueIntBlock {
+    return ^(id obj, NSValue *origValue, void (^injectBlock)(id obj, NSValue *value)) {
 
         NSNumber *numberValue = origValue.nonretainedObjectValue;
         int value = numberValue.intValue;
         NSValue *intValue = [NSValue value:&value withObjCType:"i"];
-        injectBlock(self, intValue);
+        injectBlock(obj, intValue);
     };
 }
 
@@ -130,5 +130,6 @@
 
     };
 }
+
 
 @end

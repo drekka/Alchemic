@@ -11,7 +11,7 @@
 
 #import <Alchemic/ALCTypeDefs.h>
 
-@class ALCTypeData;
+@class ALCValue;
 @class ALCInstantiation;
 @protocol ALCContext;
 @protocol ALCDependency;
@@ -51,14 +51,6 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
  */
 +(Ivar) forClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
-/**
- Returns an instance of ALCTypeData containing information about the type of the ivar.
-
- @param iVar The ivar to examine.
-
- @return An instance of ALCTypeData containing the type information.
- */
-+(ALCTypeData *) typeDataForIVar:(Ivar) iVar;
 
 /**
  Returns a list of all the writable properties in the specified class. 

@@ -10,7 +10,7 @@
 #import "NSObject+Alchemic.h"
 #import "ALCRuntime.h"
 #import "ALCInternalMacros.h"
-#import "ALCTypeData.h"
+#import "ALCValue.h"
 #import "ALCModel.h"
 
 NS_ASSUME_NONNULL_BEGIN

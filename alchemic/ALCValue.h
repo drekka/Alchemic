@@ -1,5 +1,5 @@
 //
-//  ALCTypeData.h
+//  ALCValue.h
 //  Alchemic
 //
 //  Created by Derek Clarkson on 22/03/2016.
@@ -7,14 +7,11 @@
 //
 
 @import Foundation;
+@import ObjectiveC;
 
-typedef NS_ENUM(NSUInteger, ALCTypeMapping) {
-    ALCTypeMappingScalarToScalar,
-    ALCTypeMappingScalarToObject,
-    ALCTypeMappingObjectToScalar,
-    ALCTypeMappingObjectToObject
-};
-
+/**
+ Enum of types for comparing when mapping.
+ */
 typedef NS_ENUM(NSUInteger, ALCType) {
     ALCTypeUnknown,
     ALCTypeBool,
@@ -40,12 +37,18 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Simple class containing information about a type.
  */
-@interface ALCTypeData : NSObject
+@interface ALCValue : NSObject
+
+@property (nonatomic, strong) NSValue *value;
 
 /**
  A string containing the type data for scalar types.
  */
 @property (nonatomic, assign, readonly) ALCType type;
+
+@property (nonatomic, strong, readonly) NSString *typeDescription;
+
+@property (nonatomic, strong, readonly) NSString *methodNamePart;
 
 /**
  The name of a struct. ie. CGRect, CGSize, etc.
@@ -63,15 +66,29 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable, readonly) NSArray<Protocol *> *objcProtocols;
 
 /**
+ Returns an instance of ALCValue containing information about the type of the ivar.
+ 
+ @param iVar The ivar to examine.
+ 
+ @return An instance of ALCValue containing the type information.
+ */
++(ALCValue *) valueForIvar:(Ivar) ivar;
+
+/**
  Factory method for analysing a passed encoding.
  
  @param encoding The encoding to analyse.
  */
-+(instancetype) typeForEncoding:(const char *) encoding;
++(instancetype) valueWithEncoding:(const char *) encoding;
+
+/**
+ Factory method for analysing a passed encoding.
+ 
+ @param encoding The encoding to analyse.
+ */
++(instancetype) value:(nullable NSValue *) value withEncoding:(const char *) encoding;
 
 -(instancetype) init NS_UNAVAILABLE;
-
--(BOOL) canMapToTypeData:(ALCTypeData *) otherTypeData;
 
 @end
 

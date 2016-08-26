@@ -1,21 +1,19 @@
 //
-//  ALCTypeData.m
+//  ALCValue.m
 //  Alchemic
 //
 //  Created by Derek Clarkson on 22/03/2016.
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCTypeData.h"
+#import "ALCValue.h"
 
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCInternalMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCTypeData {
-    NSString *_scalarDesc;
-}
+@implementation ALCValue
 
 -(instancetype) initPrivate {
     self = [super init];
@@ -25,9 +23,18 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-+(instancetype) typeForEncoding:(const char *) encoding {
-    
-    ALCTypeData *typeData = [[ALCTypeData alloc] initPrivate];
++(ALCValue *) valueForIvar:(Ivar) ivar {
+    return [self valueWithEncoding:ivar_getTypeEncoding(ivar)];
+}
+
++(instancetype) valueWithEncoding:(const char *) encoding {
+    return [self value:nil withEncoding:encoding];
+}
+
++(instancetype) value:(nullable NSValue *) value withEncoding:(const char *) encoding {
+
+    ALCValue *typeData = [[ALCValue alloc] initPrivate];
+    typeData.value = value;
     
     [typeData setObjectType:encoding]
     ||[typeData setScalarType:encoding];
@@ -44,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
     // Start with a result that indicates an Id. We map Ids as NSObjects.
     _type = ALCTypeObject;
     _objcClass = [NSObject class];
+    _typeDescription = @"Object";
     
     // Object type.
     NSCharacterSet *typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
@@ -81,42 +89,47 @@ NS_ASSUME_NONNULL_BEGIN
     || [self setScalarType:"f" encoding:encoding type:ALCTypeFloat desc:@"float"]
     || [self setScalarType:"d" encoding:encoding type:ALCTypeDouble desc:@"double"]
     || [self setScalarType:"B" encoding:encoding type:ALCTypeBool desc:@"boolean"]
-    || [self setScalarType:"*" encoding:encoding type:ALCTypeCharPointer desc:@"char *"];
+    || [self setScalarType:"*" encoding:encoding type:ALCTypeCharPointer desc:@"char array"];
 }
 
--(BOOL) setScalarType:(const char *) scalarType encoding:(const char *) encoding type:(ALCType) type desc:(NSString *) desc {
+-(BOOL) setScalarType:(const char *) scalarType
+             encoding:(const char *) encoding
+                 type:(ALCType) type
+                 desc:(NSString *) desc {
     if (strcmp(encoding, scalarType) == 0) {
         _scalarType = scalarType;
         _type = type;
-        _scalarDesc = desc;
+        _typeDescription = desc;
         return YES;
     }
     return NO;
 }
 
--(BOOL) canMapToTypeData:(ALCTypeData *) otherTypeData {
-    //    if (otherTypeData.scalarType) {
-    //    }
-    return NO;
+-(NSString *)methodNamePart {
+    return [self.typeDescription.capitalizedString stringByReplacingOccurrencesOfString:@" " withString:@""];
 }
 
 -(NSString *) description {
     if (self.type != ALCTypeObject) {
-        return [NSString stringWithFormat:@"Scalar %@", _scalarDesc];
+        return [NSString stringWithFormat:@"Scalar %@", _typeDescription];
     } else {
         NSString *className = self.objcClass ? NSStringFromClass((Class) self.objcClass) : @"";
-        NSMutableArray<NSString *> *protocols = [[NSMutableArray alloc] init];
-        for (Protocol *protocol in self.objcProtocols) {
-            [protocols addObject:NSStringFromProtocol(protocol)];
-        }
+
         if (self.objcProtocols.count > 0) {
-            if (self.objcClass) {
-                return [NSString stringWithFormat:@"%@<%@>", className, [protocols componentsJoinedByString:@","]];
-            } else {
-                return [NSString stringWithFormat:@"<%@>", [protocols componentsJoinedByString:@","]];
+        
+            NSMutableArray<NSString *> *protocols = [[NSMutableArray alloc] init];
+            for (Protocol *protocol in self.objcProtocols) {
+                [protocols addObject:NSStringFromProtocol(protocol)];
             }
+            
+            if (self.objcClass) {
+                return [NSString stringWithFormat:@"Class %@<%@>", className, [protocols componentsJoinedByString:@","]];
+            } else {
+                return [NSString stringWithFormat:@"Protocols <%@>", [protocols componentsJoinedByString:@","]];
+            }
+        
         } else {
-            return [NSString stringWithFormat:@"%@", className];
+            return [NSString stringWithFormat:@"Class %@", className];
         }
     }
 }

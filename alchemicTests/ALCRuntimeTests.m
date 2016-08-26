@@ -57,14 +57,14 @@
 
 -(void) testTypeDataForIVarString {
     Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aStringProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    ALCValue *ivarData = [ALCRuntime typeDataForIVar:var];
     XCTAssertEqual([NSString class], ivarData.objcClass);
 }
 
 -(void) testTypeDataForIVarId {
 
     Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aIdProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    ALCValue *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertEqual([NSObject class], ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
@@ -74,7 +74,7 @@
 -(void) testTypeDataForIVarProtocol {
 
     Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aProtocolProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    ALCValue *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertEqual([NSObject class], ivarData.objcClass);
     XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSCopying)]);
@@ -84,7 +84,7 @@
 -(void) testTypeDataForIVarClassNSStringProtocol {
 
     Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    ALCValue *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertEqual([NSString class], ivarData.objcClass);
     XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSFastEnumeration)]);
@@ -94,7 +94,7 @@
 -(void) testTypeDataForIVarInt {
 
     Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aIntProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    ALCValue *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);
@@ -104,7 +104,7 @@
 -(void) testTypeDataForIVarCGRect {
 
     Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"_aRect"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
+    ALCValue *ivarData = [ALCRuntime typeDataForIVar:var];
 
     XCTAssertNil(ivarData.objcClass);
     XCTAssertNil(ivarData.objcProtocols);

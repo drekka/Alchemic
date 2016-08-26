@@ -24,7 +24,7 @@
 #import "ALCModelSearchCriteria.h"
 #import "ALCObjectFactory.h"
 #import "ALCRuntime.h"
-#import "ALCTypeData.h"
+#import "ALCValue.h"
 #import "NSArray+Alchemic.h"
 #import "NSObject+Alchemic.h"
 #import "ALCVariableDependency.h"
@@ -175,7 +175,7 @@ registerFactoryMethod:(SEL) selector
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
     registerInjection:(Ivar) variable
              withName:(NSString *) name
-               ofType:(Class) type
+                 type:(ALCValue *) type
                config:(NSArray *) config {
 
     STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), name);
