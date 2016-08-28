@@ -11,10 +11,33 @@
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCValue.h>
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCModelSearchCriteria.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCType
+
+#pragma mark - Factory methods
+
++(ALCValue *) typeForIvar:(Ivar) ivar {
+    return [self typeWithEncoding:ivar_getTypeEncoding(ivar)];
+}
+
++(instancetype) typeWithEncoding:(const char *) encoding {
+    ALCType *typeData = [[ALCType alloc] initPrivate];
+    [typeData setObjectType:encoding] || [typeData setScalarType:encoding];
+    return typeData;
+}
+
++(instancetype) typeWithClass:(Class) aClass {
+    return [[ALCType alloc] initWithType:ALCValueTypeObject
+                         typeDescription:@"Object"
+                              scalarType:nil
+                               objcClass:aClass
+                           objcProtocols:nil];
+}
+
+#pragma mark - Initializers
 
 -(instancetype) initPrivate {
     self = [super init];
@@ -38,16 +61,6 @@ NS_ASSUME_NONNULL_BEGIN
         _objcProtocols = objcProtocols;
     }
     return self;
-}
-
-+(ALCValue *) typeForIvar:(Ivar) ivar {
-    return [self typeWithEncoding:ivar_getTypeEncoding(ivar)];
-}
-
-+(instancetype) typeWithEncoding:(const char *) encoding {
-    ALCType *typeData = [[ALCType alloc] initPrivate];
-    [typeData setObjectType:encoding] || [typeData setScalarType:encoding];
-    return typeData;
 }
 
 -(BOOL) setObjectType:(const char *) encoding {

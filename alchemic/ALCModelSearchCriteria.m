@@ -12,6 +12,7 @@
 #import "ALCInternalMacros.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCObjectFactory.h"
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,11 +29,11 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 
 #pragma mark - Factory methods
 
-+(ALCModelSearchCriteria *) searchCriteriaForClass:(Class) clazz {
-    return [[ALCModelSearchCriteria alloc] initWithDesc:str(@"class %@", NSStringFromClass(clazz))
++(ALCModelSearchCriteria *) searchCriteriaForClass:(Class) aClass {
+    return [[ALCModelSearchCriteria alloc] initWithDesc:str(@"class %@", NSStringFromClass(aClass))
                                           acceptorBlock:^(NSString *objectFactoryName,
                                                           id<ALCObjectFactory> objectFactory) {
-                                              return [objectFactory.objectClass isSubclassOfClass:clazz];
+                                              return [objectFactory.type.objcClass isSubclassOfClass:aClass];
                                           }];
 }
 
@@ -40,7 +41,7 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
     return [[ALCModelSearchCriteria alloc] initWithDesc:str(@"protocol %@", NSStringFromProtocol(protocol))
                                           acceptorBlock:^(NSString *objectFactoryName,
                                                           id<ALCObjectFactory> objectFactory) {
-                                              return [objectFactory.objectClass conformsToProtocol:protocol];
+                                              return [objectFactory.type.objcClass conformsToProtocol:protocol];
                                           }];
 }
 
@@ -69,7 +70,8 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
     }
 }
 
--(instancetype) initWithDesc:(NSString *) desc acceptorBlock:(Criteria) criteriaBlock {
+-(instancetype) initWithDesc:(NSString *) desc
+               acceptorBlock:(Criteria) criteriaBlock {
     self = [super init];
     if (self) {
         _desc = desc;

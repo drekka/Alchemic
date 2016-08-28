@@ -15,6 +15,7 @@
 @class ALCInstantiation;
 @protocol ALCContext;
 @protocol ALCDependency;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,6 +52,7 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
  */
 +(Ivar) forClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
++(NSArray<ALCType *> *) forClass:(Class) aClass methodArgumentTypes:(SEL) methodSelector;
 
 /**
  Returns a list of all the writable properties in the specified class. 
@@ -78,10 +80,7 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 
  @return A new value matching the passed type.
  */
-+(nullable id) mapValue:(nullable id) value
-              allowNils:(BOOL) allowNil
-                   type:(Class) type
-                  error:(NSError * _Nullable *) error;
++(nullable id) mapValue:(nullable id) value allowNils:(BOOL) allowNil type:(Class) type error:(NSError * _Nullable *) error;
 
 #pragma mark - Validating
 
@@ -92,10 +91,10 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 
  @param aClass The class to be used to check the selector again.
  @param selector The selector to check.
- @param arguments The arguments to validate against.
+ @param nbrArguments The expected number of arguments.
  @exception ALCException If there is a problem.
  */
-+(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments;
++(void) validateClass:(Class) aClass selector:(SEL)selector numberOfArguments:(NSUInteger) nbrArguments;
 
 #pragma mark - Describing things
 

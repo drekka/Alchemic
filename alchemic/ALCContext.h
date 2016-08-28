@@ -52,11 +52,11 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Registers a class factory in the model.
  
- @param clazz The class to create the factory for.
+ @param aClass The class to create the factory for.
  
  @return An instance of ALCClassObjectFactory setup to create a a singleton instance using the default init constructor.
  */
--(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz;
+-(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) aClass;
 
 /**
  Configures a class object factory,

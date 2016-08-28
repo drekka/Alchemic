@@ -11,6 +11,7 @@
 #import <Alchemic/ALCAbstractObjectFactory.h>
 
 @protocol ALCInjector;
+@protocol ALCValueSource;
 @class ALCClassObjectFactoryInitializer;
 @class ALCVariableDependency;
 
@@ -29,14 +30,14 @@
  
  After instantiating an instance using this factory, the completion block will perform all the injections registered via this method.
  
- @param injector    The injector to use to perform the variable injection.
  @param variable     The variable to inject.
  @param variableName The original name of the varibable as specified during registration.
  
  @return The new variable injection object.
  */
 -(ALCVariableDependency *) registerVariableDependency:(Ivar) variable
-                                             injector:(id<ALCInjector>) injector
+                                                 type:(ALCType *) type
+                                          valueSource:(id<ALCValueSource>) valueSource
                                              withName:(NSString *) variableName;
 
 /**

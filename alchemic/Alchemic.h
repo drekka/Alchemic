@@ -10,7 +10,6 @@
 
 #import <Alchemic/AlchemicAware.h>
 #import <Alchemic/AlchemicConfig.h>
-#import <Alchemic/ALCConstantInjectors.h>
 #import <Alchemic/ALCContext.h>
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCException.h>

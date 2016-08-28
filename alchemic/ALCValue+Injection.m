@@ -10,39 +10,41 @@
 
 #import "ALCValue+Injection.h"
 
+#import <Alchemic/ALCRuntime.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCValue (Injection)
 
--(nullable VariableInjectorBlock) variableInjector {
+-(nullable ALCVariableInjectorBlock) variableInjector {
     Method method;
     SEL selector = NSSelectorFromString([NSString stringWithFormat:@"variableInjectorFor%@", self.methodNamePart]);
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
             // Dynamically call the selector method to do the converstion.
-            return ((VariableInjectorBlock (*)(id, Method)) method_invoke)(self, method);
+            return ((ALCVariableInjectorBlock (*)(id, Method)) method_invoke)(self, method);
         }
     }
     return NULL;
 }
 
--(nullable InvocationInjectorBlock) invocationInjector {
+-(nullable ALCInvocationInjectorBlock) invocationInjector {
     Method method;
     SEL selector = NSSelectorFromString([NSString stringWithFormat:@"invocationInjectorFor%@", self.methodNamePart]);
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
             // Dynamically call the selector method to do the converstion.
-            return ((InvocationInjectorBlock (*)(id, Method)) method_invoke)(self, method);
+            return ((ALCInvocationInjectorBlock (*)(id, Method)) method_invoke)(self, method);
         }
     }
     return NULL;
 }
 
 
--(VariableInjectorBlock) variableInjectorForInt {
-    return ^(VariableInjectorBlockArgs) {
+-(ALCVariableInjectorBlock) variableInjectorForInt {
+    return ^(ALCVariableInjectorBlockArgs) {
         
         // Convert back to an int.
         int intValue;
@@ -53,17 +55,19 @@ NS_ASSUME_NONNULL_BEGIN
         int *ivarPtr = (int *) ((uint8_t *) objRef + ivar_getOffset(ivar));
         *ivarPtr = intValue;
         CFBridgingRelease(objRef);
+        [ALCRuntime executeSimpleBlock:self.completion];
     };
 }
 
--(InvocationInjectorBlock) invocationInjectorForInt {
-    return ^(InvocationInjectorBlockArgs) {
+-(ALCInvocationInjectorBlock) invocationInjectorForInt {
+    return ^(ALCInvocationInjectorBlockArgs) {
         
         // Convert back to an int.
         int intValue;
         [self.value getValue:&intValue];
         
         // Set the variable.
+        [ALCRuntime executeSimpleBlock:self.completion];
         [inv setArgument:&intValue atIndex:idx + 2];
     };
 }

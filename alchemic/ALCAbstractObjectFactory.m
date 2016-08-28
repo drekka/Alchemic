@@ -24,6 +24,7 @@
 #import "ALCObjectFactoryTypeReference.h"
 #import "ALCObjectFactoryTypeSingleton.h"
 #import "ALCRuntime.h"
+#import "ALCType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -33,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
     id _dependencyChangedObserver;
 }
 
-@synthesize objectClass = _objectClass;
+@synthesize type = _type;
 @synthesize primary = _primary;
 @dynamic weak;
 @dynamic ready;
@@ -57,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) defaultModelName {
-    return NSStringFromClass(self.objectClass);
+    return NSStringFromClass(_type.objcClass);
 }
 
 #pragma mark - Lifecycle
@@ -66,10 +67,10 @@ NS_ASSUME_NONNULL_BEGIN
     methodReturningObjectNotImplemented;
 }
 
--(instancetype) initWithClass:(Class) objectClass {
+-(instancetype) initWithType:(ALCType *) type {
     self = [super init];
     if (self) {
-        _objectClass = objectClass;
+        _type = type;
         _typeStrategy = [[ALCObjectFactoryTypeSingleton alloc] init];
     }
     return self;
@@ -117,7 +118,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {}
 
 -(void) setDependencyUpdateObserverWithBlock:(void (^) (NSNotification *)) watchBlock {
-    STLog(self.objectClass, @"Watch for dependency changes");
+    STLog(_type, @"Watch for dependency changes");
     self->_dependencyChangedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AlchemicDidStoreObject
                                                                                          object:nil
                                                                                           queue:nil
@@ -187,7 +188,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     [description appendString:_typeStrategy.description];
     
-    if ([_objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
+    if ([_type.objcClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
         [description appendString:@" (App delegate)"];
     }
     

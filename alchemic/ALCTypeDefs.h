@@ -22,3 +22,4 @@ typedef void (^ALCSimpleBlock) (void);
  */
 #define ALCBlockWithObjectArgs id object
 typedef void (^ALCBlockWithObject) (ALCBlockWithObjectArgs);
+

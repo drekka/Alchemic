@@ -76,7 +76,7 @@
 
 -(void) testInjectorForClassWithConstant {
     NSArray *criteria = @[AcString(@"abc")];
-    ALCModelObjectInjector *injector = [criteria injectorForClass:[NSString class]
+    ALCModelValueSource *injector = [criteria injectorForClass:[NSString class]
                                                    allowConstants:YES
                                            unknownArgumentHandler:NULL];
     XCTAssertNotNil(injector);
@@ -241,7 +241,7 @@
 }
 
 -(void) runInjectorForClassWithModelSearchCriteria:(NSArray *) criteria expectedDescription:(NSString *) description {
-    ALCModelObjectInjector *injector = [criteria injectorForClass:[NSString class]
+    ALCModelValueSource *injector = [criteria injectorForClass:[NSString class]
                                                    allowConstants:NO
                                            unknownArgumentHandler:NULL];
     XCTAssertNotNil(injector);

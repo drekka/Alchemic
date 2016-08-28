@@ -15,6 +15,7 @@
 @protocol ALCModel;
 @protocol ALCResolvable;
 @class ALCModelSearchCriteria;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,24 +27,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// @name Analysing array contents
 
 /**
-Scans a list of seach criteria or constants to define an injection.
-
-@param injectionClass The class of the target injection. Used to provide default search criteria when there is none in the list.
-@param allowConstants If YES, allows constants to be defined for the injection. If this block is NULL or returns a nil, then an exception is thrown.
-@param unknownArgumentHandler A block which is called if an unknown type of argument is encountered. If it returns a YES then the argument was handled. Otherwise it should return NO which will trigger an exception.
-*/
--(id<ALCInjector>) injectorForClass:(Class) injectionClass
-                     allowConstants:(BOOL) allowConstants
-             unknownArgumentHandler:(nullable void (^)(id argument)) unknownArgumentHandler;
-
-/**
  Converts a list of arguments for methods into a set of dependencies, ready for use by a method factory.
  
  @param unknownArgumentHandler A block that is called if the current argumet is unknown.
  
  @return A list of ALCDependencies, one per argument.
  */
--(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
+-(NSArray<id<ALCDependency>> *) methodArgumentsWithTypes:(NSArray<ALCType *> *) types
+                                  unknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
 
 -(ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass;
 

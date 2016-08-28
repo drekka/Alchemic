@@ -62,6 +62,27 @@ static NSCharacterSet *__typeEncodingDelimiters;
     throwException(InjectionNotFound, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
 }
 
++(NSArray<ALCType *> *) forClass:(Class) aClass methodArgumentTypes:(SEL) methodSelector {
+
+    Method method = class_getClassMethod(aClass, methodSelector);
+    if (!method) {
+        method = class_getInstanceMethod(aClass, methodSelector);
+        if (!method) {
+            unsigned int numberArguments = method_getNumberOfArguments(method);
+            NSMutableArray *argumentTypes = [[NSMutableArray alloc] initWithCapacity:numberArguments];
+            for (unsigned int i = 0; i < numberArguments; i++) {
+                char *argumenType = method_copyArgumentType(method, i);
+                ALCType *type = [ALCType typeWithEncoding:argumenType];
+                [argumentTypes addObject:type];
+                free(argumenType);
+            }
+            return argumentTypes;
+        }
+    }
+
+    throwException(SelectorNotFound, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
+}
+
 +(NSArray<NSString*> *) writeablePropertiesForClass:(Class) aClass {
     unsigned int count = 0;
     objc_property_t *props = class_copyPropertyList(aClass, &count);
@@ -129,12 +150,11 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 #pragma mark - Validating
 
-+(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
++(void) validateClass:(Class) aClass selector:(SEL)selector numberOfArguments:(NSUInteger) nbrArguments {
 
     // Get an instance method.
     NSMethodSignature *sig = [aClass instanceMethodSignatureForSelector:selector];
     if (!sig) {
-        // Or try for a class method.
         sig = [aClass methodSignatureForSelector:selector];
     }
 
@@ -144,8 +164,8 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 
     // Incorrect number of arguments. Allow for runtime in arguments.
-    if (sig.numberOfArguments - 2 != (arguments ? arguments.count : 0)) {
-        throwException(IncorrectNumberOfArguments, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
+    if (sig.numberOfArguments - 2 != nbrArguments) {
+        throwException(IncorrectNumberOfArguments, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector],  nbrArguments, (unsigned long) sig.numberOfArguments);
     }
 }
 

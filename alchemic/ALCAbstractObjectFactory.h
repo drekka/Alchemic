@@ -13,6 +13,7 @@
 
 @class ALCInstantiation;
 @protocol ALCModel;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return An instance of the factory with default settings.
  */
--(instancetype) initWithClass:(Class) objectClass NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithType:(ALCType *) type NS_DESIGNATED_INITIALIZER;
 
 /**
  Called to configure the factory beyond default settings.

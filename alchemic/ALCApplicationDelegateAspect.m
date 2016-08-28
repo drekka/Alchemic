@@ -14,6 +14,7 @@
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCType.h>
 
 @implementation ALCApplicationDelegateAspect {
     ALCClassObjectFactory *_appDelegateFactory;
@@ -29,7 +30,7 @@
 -(void) modelWillResolve:(id<ALCModel>) model {
     // Locate and store a reference to the UIApplicationDelegate if it exists.
     [model.classObjectFactories enumerateObjectsUsingBlock:^(ALCClassObjectFactory *objectFactory, NSUInteger idx, BOOL *stop) {
-        if ([objectFactory.objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
+        if ([objectFactory.type.objcClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
             self->_appDelegateFactory = objectFactory;
             [objectFactory configureWithOptions:@[AcReference] model:model];
             *stop = YES;

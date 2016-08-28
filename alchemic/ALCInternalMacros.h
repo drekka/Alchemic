@@ -28,6 +28,10 @@ if (error) { \
 methodNotImplemented; \
 return nil
 
+#define methodReturningStringNotImplemented \
+methodNotImplemented; \
+return @""
+
 #define methodReturningIntNotImplemented \
 methodNotImplemented; \
 return 0

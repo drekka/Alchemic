@@ -14,7 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize type = _type;
 
--(instancetype) initWithType:(ALCType *) type value:(NSValue *) value {
+-(instancetype) initWithType:(ALCType *) type
+                       value:(NSValue *) value
+                  completion:(nullable ALCSimpleBlock) completion {
     self = [super initWithType:type.type
                typeDescription:type.typeDescription
                     scalarType:type.scalarType
@@ -22,12 +24,15 @@ NS_ASSUME_NONNULL_BEGIN
                  objcProtocols:type.objcProtocols];
     if (self) {
         _value = value;
+        _completion = completion;
     }
     return self;
 }
 
-+(nullable ALCValue *) valueWithType:(ALCType *) type value:(NSValue *) value {
-    return [[ALCValue alloc] initWithType:type value:value];
++(ALCValue *) valueWithType:(ALCType *) type
+                      value:(NSValue *) value
+                 completion:(nullable ALCSimpleBlock) completion {
+    return [[ALCValue alloc] initWithType:type value:value completion:completion];
 }
 
 @end

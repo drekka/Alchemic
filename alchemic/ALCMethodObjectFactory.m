@@ -19,6 +19,7 @@
 #import "ALCInstantiation.h"
 #import "Alchemic.h"
 #import "ALCRuntime.h"
+#import "ALCType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,17 +31,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Life cycle
 
--(instancetype) initWithClass:(Class)objectClass {
+-(instancetype) initWithType:(ALCType *) type {
     methodReturningObjectNotImplemented;
 }
 
--(instancetype) initWithClass:(Class)objectClass
-          parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                     selector:(SEL) selector
-                         args:(nullable NSArray<id<ALCDependency>> *) arguments {
-    self = [super initWithClass:objectClass];
+-(instancetype) initWithType:(ALCType *) type
+         parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
+                    selector:(SEL) selector
+                        args:(nullable NSArray<id<ALCDependency>> *) arguments {
+    self = [super initWithType:type];
     if (self) {
-        [ALCRuntime validateClass:parentObjectFactory.objectClass selector:selector arguments:arguments];
+        [ALCRuntime validateClass:parentObjectFactory.type.objcClass selector:selector numberOfArguments:arguments.count];
         _parentObjectFactory = parentObjectFactory;
         _selector = selector;
         _arguments = arguments;
@@ -49,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) defaultModelName {
-    return [ALCRuntime forClass:_parentObjectFactory.objectClass selectorDescription:_selector];
+    return [ALCRuntime forClass:_parentObjectFactory.type.objcClass selectorDescription:_selector];
 }
 
 -(void)configureWithOption:(id)option model:(id<ALCModel>) model {
@@ -61,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) resolveDependenciesWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
-    STStartScope(self.objectClass);
+    STStartScope(self.type);
     AcWeakSelf;
     [self resolveWithStack:resolvingStack
               resolvedFlag:&_resolved
@@ -81,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id) createObject {
 
-    STStartScope(self.objectClass);
+    STStartScope(self.type);
 
     ALCInstantiation *parentGeneration = _parentObjectFactory.instantiation;
     if (!parentGeneration.object) {
@@ -101,7 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Descriptions
 
 -(NSString *) description {
-    return str(@"%@ method %@ -> %@", super.description, self.defaultModelName, NSStringFromClass(self.objectClass));
+    return str(@"%@ method %@ -> %@", super.description, self.defaultModelName, NSStringFromClass(self.type.objcClass));
 }
 
 -(NSString *)resolvingDescription {

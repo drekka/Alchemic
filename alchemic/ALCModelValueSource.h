@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCInjector.h>
+#import <Alchemic/ALCValueSource.h>
 
 @class ALCModelSearchCriteria;
 @class ALCInstantiation;
@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  An ALCInjector that sources values from the model using a variety of criteria.
  */
-@interface ALCModelObjectInjector : NSObject<ALCInjector>
+@interface ALCModelValueSource : NSObject<ALCValueSource>
 
 /// The search criteria that will be used to find the object.
 @property (nonatomic, strong, readonly) ALCModelSearchCriteria *criteria;
@@ -30,14 +30,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Default initializer.
- 
- @param objectClass The class of the value to be injected.
+
+ @param type The type of the value to be injected.
  @param criteria    The ALCModelSearchCriteria to used when searching the model.
- 
+
  @return The results of the search, mapped to the objectClass type.
  */
--(instancetype) initWithObjectClass:(Class) objectClass
-                           criteria:(ALCModelSearchCriteria *) criteria NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithType:(ALCType *) type
+                    criteria:(ALCModelSearchCriteria *) criteria NS_DESIGNATED_INITIALIZER;
 
 /**
  Executes a model search and return the results.

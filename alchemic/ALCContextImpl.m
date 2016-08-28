@@ -20,7 +20,7 @@
 #import "ALCMethodObjectFactory.h"
 #import "ALCModel.h"
 #import "ALCModelImpl.h"
-#import "ALCModelObjectInjector.h"
+#import "ALCModelValueSource.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCObjectFactory.h"
 #import "ALCRuntime.h"
@@ -86,9 +86,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Registration
 
--(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz {
-    STLog(clazz, @"Register object factory for %@", NSStringFromClass(clazz));
-    ALCClassObjectFactory *objectFactory = [[ALCClassObjectFactory alloc] initWithClass:clazz];
+-(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) aClass {
+    STLog(aClass, @"Register object factory for %@", NSStringFromClass(aClass));
+    ALCClassObjectFactory *objectFactory = [[ALCClassObjectFactory alloc] initWithType:[ALCType typeWithClass:aClass]];
     [_model addObjectFactory:objectFactory withName:nil];
     return objectFactory;
 }
@@ -115,22 +115,23 @@ registerFactoryMethod:(SEL) selector
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
 registerFactoryMethod:(SEL) selector
-           returnType:(Class) returnType
+           returnType:(ALCType *) returnType
         configAndArgs:(NSArray *) configAndArgs {
 
     // Read in the arguments and sort them into factory config and method arguments.
 
     NSMutableArray *factoryOptions = [[NSMutableArray alloc] init];
-    NSArray<id<ALCDependency>> *methodArguments = [configAndArgs methodArgumentsWithUnknownArgumentHandler:^(id argument) {
+    NSArray<ALCType *> *methodTypes = [ALCRuntime forClass:objectFactory.type.objcClass methodArgumentTypes:selector];
+    NSArray<id<ALCDependency>> *methodArguments = [configAndArgs methodArgumentsWithTypes:methodTypes
+                                                   unknownArgumentHandler:^(id argument) {
         [factoryOptions addObject:argument];
     }];
 
     // Build the factory.
-    ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:returnType
+    ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithType:returnType
                                                                       parentObjectFactory:objectFactory
                                                                                  selector:selector
                                                                                      args:methodArguments];
-
     [_model addObjectFactory:methodFactory withName:nil];
     [methodFactory configureWithOptions:factoryOptions model:_model];
 }
@@ -149,9 +150,12 @@ registerFactoryMethod:(SEL) selector
         throwException(IllegalArgument, @"Reference factories cannot have initializers");
     }
 
-    STLog(objectFactory.objectClass, @"Register object factory initializer %@", [ALCRuntime forClass:objectFactory.objectClass selectorDescription:initializer]);
+    STLog(objectFactory.type.objcClass, @"Register object factory initializer %@", [ALCRuntime forClass:objectFactory.type.objcClass selectorDescription:initializer]);
 
-    NSArray<id<ALCDependency>> *arguments = [args methodArgumentsWithUnknownArgumentHandler:^(id argument) {
+
+    NSArray<ALCType *> *methodTypes = [ALCRuntime forClass:objectFactory.type.objcClass methodArgumentTypes:initializer];
+    NSArray<id<ALCDependency>> *arguments = [args methodArgumentsWithTypes:methodTypes
+                                             unknownArgumentHandler:^(id argument) {
         throwException(IllegalArgument, @"Expected a argument definition, search criteria or constant. Got: %@", argument);
     }];
 
@@ -163,7 +167,7 @@ registerFactoryMethod:(SEL) selector
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerInjection:(NSString *) variable, ... {
     alc_loadVarArgsAfterVariableIntoArray(variable, config);
-    Ivar ivar = [ALCRuntime forClass:objectFactory.objectClass variableForInjectionPoint:variable];
+    Ivar ivar = [ALCRuntime forClass:objectFactory.type.objcClass variableForInjectionPoint:variable];
     ALCType *type = [ALCType typeForIvar:ivar];
     [self objectFactory:objectFactory
       registerInjection:ivar
@@ -178,7 +182,7 @@ registerFactoryMethod:(SEL) selector
                ofType:(ALCType *) type
                config:(NSArray *) config {
 
-    STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), name);
+    STLog(objectFactory.type.objcClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.type.objcClass), name);
 
     NSMutableArray *dependencyConfig = [[NSMutableArray alloc] init];
     __block BOOL allowNils = NO;
@@ -210,7 +214,7 @@ registerFactoryMethod:(SEL) selector
     }
 
     STLog(returnType, @"Manual retrieving an instance of %@", NSStringFromClass([returnType class]));
-    ALCModelObjectInjector *injection = (ALCModelObjectInjector *)[criteria injectorForClass:returnType
+    ALCModelValueSource *injection = (ALCModelValueSource *)[criteria injectorForClass:returnType
                                                                                    allowConstants:NO
                                                                            unknownArgumentHandler:NULL];
     [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];

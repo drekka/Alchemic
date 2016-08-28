@@ -10,7 +10,8 @@
 
 #import <Alchemic/ALCDependency.h>
 
-@protocol ALCInjector;
+@class ALCType;
+@protocol ALCValueSource;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,10 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCAbstractDependency : NSObject<ALCDependency>
 
-/**
- The ALCInjector instance that will be used by the dependency.
- */
-@property(nonatomic, strong, readonly) id<ALCInjector> injector;
+@property (nonatomic, strong, readonly) id<ALCValueSource> valueSource;
 
 /**
  Unavailable initializer.
@@ -34,13 +32,16 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Default initializer.
  
- Takes and injector which will be used by the dependency to source the value to be injected.
- 
- @param injector The injector to be used by the dependency.
+ @param type The type to beinjected.
+ @param dataSource Where the value for the injection is to come from.
  
  @return An instance of this class.
  */
--(instancetype) initWithInjector:(id<ALCInjector>) injector NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithType:(ALCType *) type
+                 valueSource:(id<ALCValueSource>) valueSource;
+
++(instancetype) argumentWithType:(ALCType *) type
+                     valueSource:(id<ALCValueSource>) valueSource;
 
 @end
 

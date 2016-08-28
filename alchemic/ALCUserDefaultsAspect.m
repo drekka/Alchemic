@@ -13,6 +13,7 @@
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCObjectFactory.h>
 #import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCType.h>
 #import <Alchemic/ALCUserDefaults.h>
 
 @implementation ALCUserDefaultsAspect
@@ -31,7 +32,7 @@ static BOOL _enabled;
     
     // First look for a user defined user defaults.
     for (id<ALCObjectFactory> objectFactory in model.objectFactories) {
-        if ([objectFactory.objectClass isSubclassOfClass:[ALCUserDefaults class]]) {
+        if ([objectFactory.type.objcClass isSubclassOfClass:[ALCUserDefaults class]]) {
             // Nothing more to do.
             return;
         }
@@ -39,7 +40,8 @@ static BOOL _enabled;
 
     // No user defined defaults so set up ALCUserDefaults in the model.
     STLog(self, @"Adding default user defaults handling");
-    ALCClassObjectFactory *defaultsFactory = [[ALCClassObjectFactory alloc] initWithClass:[ALCUserDefaults class]];
+    ALCType *type = [ALCType typeWithClass:[ALCUserDefaults class]];
+    ALCClassObjectFactory *defaultsFactory = [[ALCClassObjectFactory alloc] initWithType:type];
     [model addObjectFactory:defaultsFactory withName:@"userDefaults"];
 }
 

@@ -10,17 +10,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define VariableInjectorBlockArgs id obj, Ivar ivar
-typedef void (^VariableInjectorBlock)(VariableInjectorBlockArgs);
+#define ALCVariableInjectorBlockArgs id obj, Ivar ivar
+typedef void (^ALCVariableInjectorBlock)(ALCVariableInjectorBlockArgs);
 
-#define InvocationInjectorBlockArgs NSInvocation *inv, NSInteger idx
-typedef void (^InvocationInjectorBlock)(InvocationInjectorBlockArgs);
+#define ALCInvocationInjectorBlockArgs NSInvocation *inv, NSInteger idx
+typedef void (^ALCInvocationInjectorBlock)(ALCInvocationInjectorBlockArgs);
 
 @interface ALCValue (Injection)
 
--(nullable VariableInjectorBlock) variableInjector;
+-(nullable ALCVariableInjectorBlock) variableInjector;
 
--(nullable InvocationInjectorBlock) invocationInjector;
+-(nullable ALCInvocationInjectorBlock) invocationInjector;
 
 @end
 

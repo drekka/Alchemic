@@ -9,6 +9,7 @@
 @import Foundation;
 
 @protocol ALCModel;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,9 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly, getter = isReady) BOOL ready;
 
 /**
- The class that the resolvable represents. This is used when the model is being serached.
+ The type that the resolvable represents. This is used when the model is being serached.
  */
-@property (nonatomic, assign, readonly) Class objectClass;
+@property (nonatomic, assign, readonly) ALCType *type;
 
 /**
  A decription of the resolvable used when reporting resolving stack information. Normally when debugging.

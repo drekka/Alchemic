@@ -8,47 +8,39 @@
 
 #import "ALCMethodArgumentDependency.h"
 
-#import "ALCInternalMacros.h"
-#import "ALCStringMacros.h"
-#import "NSArray+Alchemic.h"
-#import "ALCInjector.h"
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCStringMacros.h>
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/ALCValue+Mapping.h>
+#import <Alchemic/ALCValue+Injection.h>
+#import <Alchemic/ALCValueSource.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodArgumentDependency
 
-+(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... {
-    alc_loadVarArgsIntoArray(firstCriteria, criteriaDefs);
-    return [[ALCMethodArgumentDependency alloc] initWithArgumentClass:argumentClass criteria:criteriaDefs];
-}
-
--(instancetype) initWithArgumentClass:(Class) aClass criteria:(NSArray *) criteria {
-    id<ALCInjector> injector = [criteria injectorForClass:aClass allowConstants:YES unknownArgumentHandler:NULL];
-    self = [super initWithInjector:injector];
-    if (self) {
-    }
-    return self;
-}
-
--(instancetype) initWithInjector:(id<ALCInjector>) injector {
-    methodReturningObjectNotImplemented;
-}
-
 -(NSString *) stackName {
-    return str(@"arg %i", self.index);
+    return str(@"arg %lu", _index);
 }
 
--(ALCSimpleBlock) injectObject:(id) object {
+-(void) injectObject:(id) object {
+
     NSError *error;
-    if (![self.injector setInvocation:object argumentIndex:self.index error:&error]) {
-        throwException(Injection, @"Error injecting argument %i: %@", self.index, error.localizedDescription);
+    ALCValue *value = [self.valueSource valueWithError:&error];
+    if (value) {
+
+        ALCValue *finalValue = [value mapTo:self.type error:&error];
+        if (finalValue) {
+            ALCInvocationInjectorBlock injector = [finalValue invocationInjector];
+            injector(object, (NSInteger) _index);
+        }
     }
-    
-    return NULL;
+
+    throwException(Injection, @"Error injecting argument %lu: %@", _index, error.localizedDescription);
 }
 
 -(NSString *)resolvingDescription {
-    return str(@"Argument %i", self.index);
+    return str(@"Argument %lu", _index);
 }
 
 @end

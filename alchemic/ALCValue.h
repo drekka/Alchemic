@@ -10,6 +10,7 @@
 @import ObjectiveC;
 
 #import <Alchemic/ALCType.h>
+#import <Alchemic/ALCTypeDefs.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,8 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCValue : ALCType
 
 @property (nonatomic, strong, readonly) NSValue *value;
+@property (nonatomic, strong, nullable, readonly) ALCSimpleBlock completion;
 
-+(nullable ALCValue *) valueWithType:(ALCType *) type value:(NSValue *) value;
++(instancetype) valueWithType:(ALCType *) type
+                        value:(NSValue *) value
+                   completion:(nullable ALCSimpleBlock) completion;
 
 @end
 

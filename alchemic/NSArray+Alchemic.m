@@ -11,11 +11,13 @@
 #import "ALCDependency.h"
 #import "ALCModelSearchCriteria.h"
 #import "ALCConstant.h"
-#import "ALCModelObjectInjector.h"
+#import "ALCModelValueSource.h"
 #import "ALCMethodArgumentDependency.h"
 #import "ALCMacros.h"
 #import "ALCInternalMacros.h"
 #import "ALCException.h"
+#import <Alchemic/ALCType.h>
+#import <Alchemic/ALCValueSource.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,102 +25,60 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Argument scanning
 
--(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
-    
-    NSMutableArray<id<ALCDependency>> *arguments = [[NSMutableArray alloc] initWithCapacity:self.count];
-    
-    [self enumerateObjectsUsingBlock:^(id nextArgument, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        ALCMethodArgumentDependency *methodArgument = nil;
-        
-        // Method arguments are passed through.
+-(NSArray<id<ALCDependency>> *) methodArgumentsWithTypes:(NSArray<ALCType *> *) types
+                                  unknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
+
+    NSMutableArray<id<ALCDependency>> *arguments = [[NSMutableArray alloc] init];
+
+    NSUInteger nextIdx = 0;
+    for (id nextArgument in self) {
+
+        // Already built method arguments are added as is.
+        ALCMethodArgumentDependency *dependency;
         if ([nextArgument isKindOfClass:[ALCMethodArgumentDependency class]]) {
-            methodArgument = (ALCMethodArgumentDependency *) nextArgument;
-            
-            // Search criteria are assumed to return a NSObject
-        } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]
-                   || [nextArgument conformsToProtocol:@protocol(ALCConstant)]) {
-            methodArgument = [ALCMethodArgumentDependency argumentWithClass:[NSObject class] criteria:nextArgument, nil];
+            dependency = nextArgument;
+
+            // Search criteria and constants are assumed to return a NSObject
+        } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]) {
+            ALCType *modelSearchType = [ALCType typeWithClass:[NSObject class]];
+            id<ALCValueSource> source = [[ALCModelValueSource alloc] initWithType:modelSearchType criteria:nextArgument];
+            dependency = [ALCMethodArgumentDependency argumentWithType:types[nextIdx] valueSource:source];
+
+        } else if ([nextArgument conformsToProtocol:@protocol(ALCValueSource)]) {
+            id<ALCValueSource> source = nextArgument;
+            dependency = [ALCMethodArgumentDependency argumentWithType:source.type valueSource:source];
         }
-        
-        if (methodArgument) {
-            methodArgument.index = (int) idx;
-            [arguments addObject:methodArgument];
+
+        if (dependency) {
+            dependency.index = nextIdx++;
+            [arguments addObject:dependency];
         } else {
             unknownArgumentHandler(nextArgument);
         }
-    }];
-    
+    };
+
     return arguments;
 }
 
--(id<ALCInjector>) injectorForClass:(Class) injectionClass
-                     allowConstants:(BOOL) allowConstants
-             unknownArgumentHandler:(nullable void (^)(id argument)) unknownArgumentHandler {
-    
-    id<ALCInjector> constantInjector;
-    NSMutableArray<ALCModelSearchCriteria *> *searchCriteria = [[NSMutableArray alloc] init];
-    
-    for (id criteria in self) {
-        
-        if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
-            
-            if (constantInjector) {
-                throwException(IllegalArgument, @"Cannot use constants and model search criteria together");
-            } else {
-                [searchCriteria addObject:criteria];
-            }
-            
-        } else if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
-            
-            if (!allowConstants) {
-                throwException(IllegalArgument, @"Constants cannot be used in this criteria");
-            } else if (searchCriteria.count > 0) {
-                    throwException(IllegalArgument, @"Cannot use constants and model search criteria together");
-            } else if (constantInjector) {
-                throwException(IllegalArgument, @"Only a single constant value is allowed");
-            } else {
-                constantInjector = criteria;
-            }
-            
-        } else {
-            if (unknownArgumentHandler) {
-                unknownArgumentHandler(criteria);
-            } else {
-                throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
-            }
-        }
-    }
-    
-    // Default to the dependency class if no constant or criteria provided.
-    if (constantInjector) {
-        return constantInjector;
-    }
-    
-    // Default to the dependency class if no constant or criteria provided.
-    return [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
-                                                      criteria:[searchCriteria modelSearchCriteriaForClass:injectionClass]];
-}
-
 -(ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass {
-    
+
     ALCModelSearchCriteria *searchCriteria;
     for (id criteria in self) {
-        
+
         if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
-            
+
             if (searchCriteria) {
                 [searchCriteria appendSearchCriteria:criteria];
             } else {
                 searchCriteria = criteria;
             }
-            
+
         } else {
             throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
         }
-        
+
     }
-    
+
     return searchCriteria ? searchCriteria: [ALCModelSearchCriteria searchCriteriaForClass:aClass];
 }
 
@@ -133,15 +93,15 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL) dependenciesReadyWithCheckingFlag:(BOOL *) checkingFlag {
-    
+
     // If this flag is set then we have looped back to the original variable. So consider everything to be good.
     if (*checkingFlag) {
         return YES;
     }
-    
+
     // Set the checking flag so that we can detect loops.
     *checkingFlag = YES;
-    
+
     for (id<ALCResolvable> resolvable in self) {
         // If a dependency is not ready then we stop checking and return a failure.
         if (!resolvable.isReady) {

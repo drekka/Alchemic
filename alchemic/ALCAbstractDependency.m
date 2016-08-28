@@ -10,57 +10,61 @@
 
 #import "ALCAbstractDependency.h"
 
-#import "ALCInternalMacros.h"
-#import "ALCInjector.h"
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCValueSource.h>
 
 @implementation ALCAbstractDependency
+
+@synthesize type = _type;
+@synthesize valueSource = _valueSource;
 
 -(instancetype) init {
     methodReturningObjectNotImplemented;
 }
 
--(instancetype) initWithInjector:(id<ALCInjector>) injector {
+-(instancetype) initWithType:(ALCType *) type
+                 valueSource:(id<ALCValueSource>) valueSource {
     self = [super init];
     if (self) {
-        _injector = injector;
+        _type = type;
+        _valueSource = valueSource;
     }
     return self;
+}
+
++(instancetype) argumentWithType:(ALCType *) type
+                     valueSource:(id<ALCValueSource>) valueSource {
+    return [[self alloc] initWithType:type valueSource:valueSource];
 }
 
 #pragma mark - ALCResolvable
 
 -(BOOL) isReady {
-    return _injector.isReady;
-}
-
--(Class)objectClass {
-    return _injector.objectClass;
+    return YES;
 }
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                    model:(id<ALCModel>)model {
     STLog(self, @"Resolving %@", self.resolvingDescription);
-    [_injector resolveWithStack:resolvingStack model:model];
+    [_valueSource resolveWithStack:resolvingStack model:model];
 }
 
 -(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {
-    return [self.injector referencesObjectFactory:objectFactory];
+    return [_valueSource referencesObjectFactory:objectFactory];
 }
 
 -(NSString *) resolvingDescription {
-    methodNotImplemented;
-    return @"";
+    methodReturningStringNotImplemented;
 }
 
 #pragma mark - ALCDependency
 
 -(NSString *)stackName {
-    methodNotImplemented;
-    return @"";
+    methodReturningStringNotImplemented;
 }
 
--(ALCSimpleBlock)injectObject:(id)object {
-    methodReturningBlockNotImplemented;
+-(void) injectObject:(id)object {
+    methodNotImplemented;
 }
 
 @end

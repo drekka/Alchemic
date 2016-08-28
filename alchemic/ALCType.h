@@ -10,6 +10,7 @@
 @import ObjectiveC;
 
 @class ALCValue;
+@class ALCModelSearchCriteria;
 
 /**
  Enum of types for comparing when mapping.
@@ -92,6 +93,13 @@ NS_ASSUME_NONNULL_BEGIN
  @param encoding The encoding to analyse.
  */
 +(instancetype) typeWithEncoding:(const char *) encoding;
+
+/**
+ Factory method which takes a class.
+
+ @param aClass The class to base the type on.
+ */
++(instancetype) typeWithClass:(Class) aClass;
 
 @end
 

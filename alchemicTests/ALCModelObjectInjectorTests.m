@@ -1,5 +1,5 @@
 //
-//  ALCModelObjectInjectorTests.m
+//  ALCModelValueSourceTests.m
 //  Alchemic
 //
 //  Created by Derek Clarkson on 15/8/16.
@@ -13,19 +13,19 @@
 
 #import "XCTestCase+Alchemic.h"
 
-@interface ALCModelObjectInjectorTests : XCTestCase
+@interface ALCModelValueSourceTests : XCTestCase
 
 @end
 
-@implementation ALCModelObjectInjectorTests {
-    ALCModelObjectInjector *_injector;
+@implementation ALCModelValueSourceTests {
+    ALCModelValueSource *_injector;
     ALCModelSearchCriteria *_criteria;
     NSString *_injectedValue;
 }
 
 -(void)setUp {
     _criteria = AcClass(NSString);
-    _injector = [[ALCModelObjectInjector alloc] initWithObjectClass:[NSString class] criteria:_criteria];
+    _injector = [[ALCModelValueSource alloc] initWithObjectClass:[NSString class] criteria:_criteria];
 }
 
 -(void) testInitWithObjectClassCriteria {

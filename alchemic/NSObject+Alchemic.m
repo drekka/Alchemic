@@ -20,6 +20,7 @@
 #import "ALCResolvable.h"
 #import "ALCRuntime.h"
 #import "NSArray+Alchemic.h"
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -68,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
 
         // We are enumerating dependencies then we have looped back through a property injection so return.
-        STLog(resolvableSelf.objectClass, @"%@ already resolved", NSStringFromClass(resolvableSelf.objectClass));
+        STLog(resolvableSelf.type, @"%@ already resolved", NSStringFromClass(resolvableSelf.type.objcClass));
         return;
     }
 
