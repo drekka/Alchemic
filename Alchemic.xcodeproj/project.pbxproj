@@ -21,6 +21,18 @@
 		6C04EE7E1D6D8AB5004F32F8 /* ALCAspectClassProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C04EE7D1D6D8AB5004F32F8 /* ALCAspectClassProcessorTests.m */; };
 		6C0D87831D40876600FEC25A /* NSBundle+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D87821D40876600FEC25A /* NSBundle+AlchemicTests.m */; };
 		6C0D87851D40A4B900FEC25A /* ALCVariableDependencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D87841D40A4B900FEC25A /* ALCVariableDependencyTests.m */; };
+		6C150B531D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C150B511D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C150B541D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C150B511D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C150B551D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C150B521D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.m */; };
+		6C150B561D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C150B521D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.m */; };
+		6C150B591D73CB9D0060CA08 /* ALCCloudKeyValueStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C150B571D73CB9D0060CA08 /* ALCCloudKeyValueStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C150B5A1D73CB9D0060CA08 /* ALCCloudKeyValueStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C150B571D73CB9D0060CA08 /* ALCCloudKeyValueStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C150B5B1D73CB9D0060CA08 /* ALCCloudKeyValueStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C150B581D73CB9D0060CA08 /* ALCCloudKeyValueStore.m */; };
+		6C150B5C1D73CB9D0060CA08 /* ALCCloudKeyValueStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C150B581D73CB9D0060CA08 /* ALCCloudKeyValueStore.m */; };
+		6C150B5F1D73CF170060CA08 /* ALCAbstractValueStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C150B5D1D73CF170060CA08 /* ALCAbstractValueStore.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6C150B601D73CF170060CA08 /* ALCAbstractValueStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C150B5D1D73CF170060CA08 /* ALCAbstractValueStore.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6C150B611D73CF170060CA08 /* ALCAbstractValueStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C150B5E1D73CF170060CA08 /* ALCAbstractValueStore.m */; };
+		6C150B621D73CF170060CA08 /* ALCAbstractValueStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C150B5E1D73CF170060CA08 /* ALCAbstractValueStore.m */; };
 		6C1ADAFF1C8DB28400267E77 /* AlchemicAware.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB001C8DB88C00267E77 /* Alchemic.m */; };
 		6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -304,6 +316,12 @@
 		6C14FC331C96EBBB00B56578 /* NestedThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NestedThing.h; sourceTree = "<group>"; };
 		6C14FC341C96EBBB00B56578 /* NestedThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NestedThing.m; sourceTree = "<group>"; };
 		6C14FC381C9839DB00B56578 /* NestedProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NestedProtocol.h; sourceTree = "<group>"; };
+		6C150B511D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCCloudKeyValueStoreAspect.h; sourceTree = "<group>"; };
+		6C150B521D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCCloudKeyValueStoreAspect.m; sourceTree = "<group>"; };
+		6C150B571D73CB9D0060CA08 /* ALCCloudKeyValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCCloudKeyValueStore.h; sourceTree = "<group>"; };
+		6C150B581D73CB9D0060CA08 /* ALCCloudKeyValueStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCCloudKeyValueStore.m; sourceTree = "<group>"; };
+		6C150B5D1D73CF170060CA08 /* ALCAbstractValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractValueStore.h; sourceTree = "<group>"; };
+		6C150B5E1D73CF170060CA08 /* ALCAbstractValueStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractValueStore.m; sourceTree = "<group>"; };
 		6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlchemicAware.h; sourceTree = "<group>"; };
 		6C1ADB001C8DB88C00267E77 /* Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alchemic.m; sourceTree = "<group>"; };
 		6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInstantiation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -884,6 +902,12 @@
 				6C8757B31D6AD1AF00BCAF6B /* ALCUserDefaults.m */,
 				6C04EE5D1D6C184C004F32F8 /* ALCUserDefaultsAspect.h */,
 				6C04EE5E1D6C184C004F32F8 /* ALCUserDefaultsAspect.m */,
+				6C150B511D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.h */,
+				6C150B521D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.m */,
+				6C150B571D73CB9D0060CA08 /* ALCCloudKeyValueStore.h */,
+				6C150B581D73CB9D0060CA08 /* ALCCloudKeyValueStore.m */,
+				6C150B5D1D73CF170060CA08 /* ALCAbstractValueStore.h */,
+				6C150B5E1D73CF170060CA08 /* ALCAbstractValueStore.m */,
 			);
 			name = Features;
 			sourceTree = "<group>";
@@ -943,6 +967,7 @@
 				6C34CA0D1D5D91C60080D428 /* ALCAbstractObjectFactory.h in Headers */,
 				6C34CA0E1D5D91C60080D428 /* ALCObjectFactoryTypeSingleton.h in Headers */,
 				6C04EE601D6C184C004F32F8 /* ALCUserDefaultsAspect.h in Headers */,
+				6C150B601D73CF170060CA08 /* ALCAbstractValueStore.h in Headers */,
 				6C34CA0F1D5D91C60080D428 /* ALCMethodObjectFactory.h in Headers */,
 				6C34CA101D5D91C60080D428 /* ALCClassObjectFactory.h in Headers */,
 				6C34CA111D5D91C60080D428 /* NSObject+Alchemic.h in Headers */,
@@ -980,6 +1005,8 @@
 				6C8757C41D6ADCD000BCAF6B /* ALCAspectClassProcessor.h in Headers */,
 				6C34CA2E1D5D91C60080D428 /* ALCModelClassProcessor.h in Headers */,
 				6C34CA2F1D5D91C60080D428 /* ALCDefs.h in Headers */,
+				6C150B5A1D73CB9D0060CA08 /* ALCCloudKeyValueStore.h in Headers */,
+				6C150B541D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.h in Headers */,
 				6C34CA301D5D91C60080D428 /* ALCFactoryName.h in Headers */,
 				6C34CA311D5D91C60080D428 /* Alchemic.h in Headers */,
 				6CD8EB891D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */,
@@ -1006,6 +1033,7 @@
 				6C25D2801C5760FF00D982DC /* ALCAbstractObjectFactory.h in Headers */,
 				6C3AFBAC1C5CEB1100B4FCAA /* ALCObjectFactoryTypeSingleton.h in Headers */,
 				6C04EE5F1D6C184C004F32F8 /* ALCUserDefaultsAspect.h in Headers */,
+				6C150B5F1D73CF170060CA08 /* ALCAbstractValueStore.h in Headers */,
 				6C4B56161C6E0AD10040AEC2 /* ALCMethodObjectFactory.h in Headers */,
 				6C4B56121C6E0A390040AEC2 /* ALCClassObjectFactory.h in Headers */,
 				6C68CF891C6636D6003A7A54 /* NSObject+Alchemic.h in Headers */,
@@ -1043,6 +1071,8 @@
 				6C8757B41D6AD1AF00BCAF6B /* ALCUserDefaults.h in Headers */,
 				6C8757C31D6ADCD000BCAF6B /* ALCAspectClassProcessor.h in Headers */,
 				6CB5CCD51CDB6F9100DC1052 /* ALCDefs.h in Headers */,
+				6C150B591D73CB9D0060CA08 /* ALCCloudKeyValueStore.h in Headers */,
+				6C150B531D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.h in Headers */,
 				6C237CD71CCA74CE00B8F551 /* ALCFactoryName.h in Headers */,
 				6C25D2791C566F7900D982DC /* Alchemic.h in Headers */,
 				6CD8EB881D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */,
@@ -1371,14 +1401,17 @@
 				6C34C9F31D5D91C60080D428 /* ALCException.m in Sources */,
 				6C34C9F41D5D91C60080D428 /* ALCMethodArgumentDependency.m in Sources */,
 				6C34C9F51D5D91C60080D428 /* ALCDefs.m in Sources */,
+				6C150B621D73CF170060CA08 /* ALCAbstractValueStore.m in Sources */,
 				6C34C9F61D5D91C60080D428 /* ALCClassObjectFactory.m in Sources */,
 				6C34C9F71D5D91C60080D428 /* ALCTypeData.m in Sources */,
 				6C34C9F81D5D91C60080D428 /* ALCConfigClassProcessor.m in Sources */,
 				6C34C9F91D5D91C60080D428 /* ALCModelImpl.m in Sources */,
 				6C34C9FA1D5D91C60080D428 /* ALCModelSearchCriteria.m in Sources */,
 				6C34C9FB1D5D91C60080D428 /* ALCModelClassProcessor.m in Sources */,
+				6C150B561D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.m in Sources */,
 				6C8757C61D6ADCD000BCAF6B /* ALCAspectClassProcessor.m in Sources */,
 				6C34C9FC1D5D91C60080D428 /* ALCMethodObjectFactory.m in Sources */,
+				6C150B5C1D73CB9D0060CA08 /* ALCCloudKeyValueStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1415,14 +1448,17 @@
 				6CC2847D1CB29A7C006B613F /* ALCException.m in Sources */,
 				6C71D5441CA161A200D25AC0 /* ALCMethodArgumentDependency.m in Sources */,
 				6CB5CCD71CDB70C800DC1052 /* ALCDefs.m in Sources */,
+				6C150B611D73CF170060CA08 /* ALCAbstractValueStore.m in Sources */,
 				6C4B56131C6E0A390040AEC2 /* ALCClassObjectFactory.m in Sources */,
 				6C71D54C1CA1747200D25AC0 /* ALCTypeData.m in Sources */,
 				6CE234E41CEB489600728CBE /* ALCConfigClassProcessor.m in Sources */,
 				6C25D27D1C57563200D982DC /* ALCModelImpl.m in Sources */,
 				6C3AFBBD1C60D96400B4FCAA /* ALCModelSearchCriteria.m in Sources */,
 				6CE234EC1CEB4B9400728CBE /* ALCModelClassProcessor.m in Sources */,
+				6C150B551D73CA630060CA08 /* ALCCloudKeyValueStoreAspect.m in Sources */,
 				6C8757C51D6ADCD000BCAF6B /* ALCAspectClassProcessor.m in Sources */,
 				6C4B56171C6E0AD10040AEC2 /* ALCMethodObjectFactory.m in Sources */,
+				6C150B5B1D73CB9D0060CA08 /* ALCCloudKeyValueStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
