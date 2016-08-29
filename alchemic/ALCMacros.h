@@ -182,6 +182,11 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 [ALCUserDefaultsAspect setEnabled:YES]; \
 }
 
+#define AcEnableCloudKeyValueStore \
++(void) alc_featureMethodName(enableCloudKeyValueStore, __LINE__) { \
+[ALCCloudKeyValueStoreAspect setEnabled:YES]; \
+}
+
 #pragma mark - Misc
 
 /**

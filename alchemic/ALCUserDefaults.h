@@ -6,19 +6,16 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-@import Foundation;
-#import <Alchemic/AlchemicAware.h>
+#import <Alchemic/ALCAbstractValueStore.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
- The idea behind Alchemic's user default is to implement the reading of Root.plist files and redirect data to and from the standard user defaults. 
+ The idea behind Alchemic's user defaults mechanism is to implement the reading of Root.plist files and redirect data to and from the standard user defaults.
  
  */
-@interface ALCUserDefaults : NSObject<AlchemicAware>
-
-#pragma mark - Subscripting services.
-
--(id) objectForKeyedSubscript:(NSString *) key;
-
--(void) setObject:(id) obj forKeyedSubscript:(NSString<NSCopying> *) key;
+@interface ALCUserDefaults : ALCAbstractValueStore
 
 @end
+
+NS_ASSUME_NONNULL_END
