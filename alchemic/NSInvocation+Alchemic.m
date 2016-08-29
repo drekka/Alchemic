@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
              ofType:(Class) type
           allowNils:(BOOL) allowNil
               value:(nullable id) value
-              error:(NSError * _Nullable *) error {
+              error:(NSError * __autoreleasing _Nullable *) error {
     id finalValue = [ALCRuntime mapValue:value allowNils:allowNil type:(Class) type error:error];
     if (finalValue) {
         [self setArgument:&finalValue atIndex:idx + 2];

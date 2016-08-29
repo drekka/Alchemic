@@ -28,6 +28,7 @@
 #import "NSArray+Alchemic.h"
 #import "NSObject+Alchemic.h"
 #import "ALCVariableDependency.h"
+#import "ALCArrayValueSource.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -184,10 +185,8 @@ registerFactoryMethod:(SEL) selector
 
     STLog(objectFactory.type.objcClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.type.objcClass), name);
 
-    NSMutableArray *dependencyConfig = [[NSMutableArray alloc] init];
-    
     NSMutableArray<id<ALCValueSource>> *constantValues = [NSMutableArray array];
-    NSMutableArray *configOptions = [NSMutableArray array];
+    NSMutableArray *dependencyConfig = [[NSMutableArray alloc] init];
     ALCModelSearchCriteria *modelSearchCriteria = [config modelSearchCriteriaWithUnknownArgumentHandler:^(id  _Nonnull argument) {
         if ([argument conformsToProtocol:@protocol(ALCValueSource)]) {
             if (![type.objcClass isKindOfClass:[NSArray class]] && constantValues.count > 0) {
@@ -196,7 +195,7 @@ registerFactoryMethod:(SEL) selector
                 [constantValues addObject:argument];
             }
         } else {
-            [configOptions addObject:argument];
+            [dependencyConfig addObject:argument];
         }
     }];
 
@@ -211,7 +210,7 @@ registerFactoryMethod:(SEL) selector
         if (constantValues.count == 1) {
             source = constantValues[0];
         } else {
-            source = [[ALCArraySource alloc] initWithSources:constantValues];
+            source = [[ALCArrayValueSource alloc] initWithValueSources:constantValues];
         }
     }
     
@@ -237,14 +236,16 @@ registerFactoryMethod:(SEL) selector
     }
 
     STLog(returnType, @"Manual retrieving an instance of %@", NSStringFromClass([returnType class]));
-    ALCModelValueSource *injection = (ALCModelValueSource *)[criteria injectorForClass:returnType
-                                                                                   allowConstants:NO
-                                                                           unknownArgumentHandler:NULL];
-    [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];
+    ALCModelSearchCriteria *modelSearchCriteria = [criteria modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
+        throwException(IllegalArgument, @"Unexpected argument %@", argument);
+    }];
+    ALCType *type = [ALCType typeWithClass:returnType];
+    ALCModelValueSource *source = [[ALCModelValueSource alloc] initWithType:type criteria:modelSearchCriteria];
+    [source resolveWithStack:[[NSMutableArray alloc] init] model:_model];
 
     NSError *error;
-    id value = [injection searchResultWithError:&error];
-    if (!value && error) {
+    id value = [source searchResultWithError:&error];
+    if (!value) {
         throwException(MappingValue, @"Mapping error: %@", error.localizedDescription);
     }
     return value;

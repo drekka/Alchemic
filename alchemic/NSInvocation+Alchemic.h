@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
              ofType:(Class) type
           allowNils:(BOOL) allowNil
               value:(nullable id) value
-              error:(NSError * _Nullable *) error;
+              error:(NSError * __autoreleasing _Nullable *) error;
 
 @end
 

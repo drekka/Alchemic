@@ -12,7 +12,6 @@
 
 @import StoryTeller;
 
-#import "NSSet+Alchemic.h"
 #import "ALCClassProcessor.h"
 
 @implementation NSBundle (Alchemic)

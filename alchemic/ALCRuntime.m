@@ -110,7 +110,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
 +(nullable id) mapValue:(nullable id) value
               allowNils:(BOOL) allowNil
                    type:(Class) type
-                  error:(NSError * _Nullable *) error {
+                  error:(NSError * __autoreleasing _Nullable *) error {
 
     // If the passed value is nil or an empty array.
     if (!value) {

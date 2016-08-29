@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCValueSource <ALCResolvable>
 
--(ALCValue *) valueWithError:(NSError * _Nullable *) error;
+-(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error;
 
 /**
  Returns YES if the passed object factory is referenced by this injector.

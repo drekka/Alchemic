@@ -80,7 +80,7 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 
  @return A new value matching the passed type.
  */
-+(nullable id) mapValue:(nullable id) value allowNils:(BOOL) allowNil type:(Class) type error:(NSError * _Nullable *) error;
++(nullable id) mapValue:(nullable id) value allowNils:(BOOL) allowNil type:(Class) type error:(NSError * __autoreleasing _Nullable *) error;
 
 #pragma mark - Validating
 

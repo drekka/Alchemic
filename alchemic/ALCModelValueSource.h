@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param error A pointer to a NSError variable that will be populated if there is an error.
  All returned objects will be fully completed.
  */
--(nullable id) searchResultWithError:(NSError * _Nullable *) error;
+-(nullable id) searchResultWithError:(NSError * __autoreleasing _Nullable *) error;
 
 @end
 

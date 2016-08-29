@@ -94,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Retrieving results.
 
--(ALCValue *) valueWithError:(NSError * _Nullable *) error {
+-(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
     return [ALCValue valueWithType:self.type
@@ -104,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Retrieving results
 
--(nullable id) searchResultWithError:(NSError * _Nullable *) error {
+-(nullable id) searchResultWithError:(NSError * __autoreleasing _Nullable *) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
     [self completionForInstantiations:instantations]();

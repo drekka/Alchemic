@@ -79,34 +79,6 @@ NS_ASSUME_NONNULL_BEGIN
     [resolvingStack removeLastObject];
 }
 
--(BOOL) setVariable:(Ivar) variable
-             ofType:(Class) type
-          allowNils:(BOOL) allowNil
-              value:(nullable id) value
-              error:(NSError * _Nullable *) error {
-
-    STLog([self class], @"Variable %@ type: %@", [ALCRuntime forClass:[self class] variableDescription:variable], NSStringFromClass(type));
-
-    id finalValue = [ALCRuntime mapValue:value allowNils:allowNil type:type error:error];
-    if (!finalValue && *error) {
-        return NO;
-    }
-
-    STLog([self class], @"Injecting %@ with a %@", [ALCRuntime forClass:[self class] variableDescription:variable], [finalValue class]);
-
-    // Patch for Swift Ivars not being retained.
-    const char *encoding = ivar_getTypeEncoding(variable);
-    if (strlen(encoding) == 0) {
-        // Swift ivar? Currently returning no encoding.
-        // Fixing bug with missing retain when addressing Swift ivars which causes EXC BAD ACCESS
-        const void * ptr = CFBridgingRetain(value);
-        finalValue = CFBridgingRelease(ptr);
-    }
-
-    object_setIvar(self, variable, finalValue);
-    return YES;
-}
-
 #pragma mark - Internal
 
 +(id) object:(id) object invokeSelector:(SEL) selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {

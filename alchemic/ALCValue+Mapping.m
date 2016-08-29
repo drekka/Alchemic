@@ -13,7 +13,7 @@
 
 @implementation ALCValue (Mapping)
 
--(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError * _Nullable *) error {
+-(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
 
     // Use the runtime to build a reference to the method.
     Method method;
@@ -22,14 +22,14 @@
         method = class_getInstanceMethod([self class], selector);
         if (method) {
             // Dynamically call the selector method to do the converstion.
-            return ((ALCValue * (*)(id, Method, ALCType *, NSError * _Nullable *)) method_invoke)(self, method, toType, error);
+            return ((ALCValue * (*)(id, Method, ALCType *, NSError * __autoreleasing _Nullable *)) method_invoke)(self, method, toType, error);
         }
     }
     setError(@"Unable to convert a %@ to a %@", self, toType);
     return nil;
 }
 
--(nullable ALCValue *) convertObjectToInt:(ALCType *) toType error:(NSError * _Nullable *) error {
+-(nullable ALCValue *) convertObjectToInt:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
     return [self valueOfType:toType error:error withNumberConversion:^NSValue *(NSNumber *number) {
         int scalar = number.intValue;
         return [NSValue value:&scalar withObjCType:toType.scalarType];
@@ -39,7 +39,7 @@
 #pragma mark - Internal
 
 -(nullable ALCValue *) valueOfType:(ALCType *) type
-                             error:(NSError * _Nullable *) error
+                             error:(NSError * __autoreleasing _Nullable *) error
               withNumberConversion:(NSValue * (^)(NSNumber *result)) numberConversion {
 
     id obj = self.value.nonretainedObjectValue;

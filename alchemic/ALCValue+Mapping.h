@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param error A pointer to a NSError variable which will be populated if a mapping cannot be done.
  @return YES if a mapping occured.
  */
--(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError * _Nullable *) error;
+-(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error;
 
 @end
 
