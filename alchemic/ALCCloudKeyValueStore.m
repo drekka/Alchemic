@@ -44,11 +44,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key {
-    [[NSUbiquitousKeyValueStore defaultStore] setValue:value forKey:key];
+    [[NSUbiquitousKeyValueStore defaultStore] setObject:value forKey:key];
 }
 
 -(nullable id) valueStoreValueForKey:(id) key {
-    return [[NSUbiquitousKeyValueStore defaultStore] valueForKey:key];
+    return [[NSUbiquitousKeyValueStore defaultStore] objectForKey:key];
 }
 
 @end
