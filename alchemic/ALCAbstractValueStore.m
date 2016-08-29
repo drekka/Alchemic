@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
                       context:(nullable void *)context {
 
     // Derived class property setters will trigger the KVO watch.
-    STLog(self, @"Value set for key: %@", keyPath);
+    STLog(self, @"Value set for key: %@: %@", keyPath, change[NSKeyValueChangeNewKey]);
     
     // Only pass to the store if we are not just updating the local value.
     if (!_settingLocalValueOnly) {
