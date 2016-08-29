@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractValueStore {
     NSArray *_watchedProperties;
+    BOOL _settingLocalValueOnly;
 }
 
 -(void)dealloc {
@@ -40,6 +41,12 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+-(void) updateLocalValue:(id) value forKey:(NSString *) key {
+    _settingLocalValueOnly = YES;
+    [super setValue:value forKey:key];
+    _settingLocalValueOnly = NO;
+}
+
 #pragma mark - Override points
 
 -(nullable NSDictionary<NSString *, id> *) loadDefaults {
@@ -54,13 +61,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - KVO
 
+// Triggered when setting properties.
 -(void)observeValueForKeyPath:(nullable NSString *)keyPath
                      ofObject:(nullable id)object
                        change:(nullable NSDictionary<NSKeyValueChangeKey,id> *)change
                       context:(nullable void *)context {
+
     // Derived class property setters will trigger the KVO watch.
     STLog(self, @"Value set for key: %@", keyPath);
-    [self valueStoreSetValue:change[NSKeyValueChangeNewKey] forKey:keyPath];
+    
+    // Only pass to the store if we are not just updating the local value.
+    if (!_settingLocalValueOnly) {
+        [self valueStoreSetValue:change[NSKeyValueChangeNewKey] forKey:keyPath];
+    }
 }
 
 #pragma mark - KVC
@@ -74,17 +87,16 @@ NS_ASSUME_NONNULL_BEGIN
     return [self valueStoreValueForKey:key];
 }
 
+// KVC method called by subscripting.
 -(void) setValue:(nullable id) value forKey:(NSString *)key {
     
     STLog(self, @"Setting new value for key %@", key);
     
-    // If the key is not in the watched properties list then KVO will not trigger to set user default.
-    if (![_watchedProperties containsObject:key]) {
-        [self valueStoreSetValue:value forKey:key];
-    }
+    // Pass the value to the store.
+    [self valueStoreSetValue:value forKey:key];
     
-    // Call super to ensure value is set on any declared properties. Also triggers KVO calls.
-    [super setValue:value forKey:key];
+    // Call super to ensure value is set on any declared properties. Also triggers KVO watch above if the key is being watched.
+    [self updateLocalValue:value forKey:key];
 }
 
 #pragma mark - Subscripting.
