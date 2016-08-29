@@ -25,7 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable NSDictionary<NSString *, id> *) loadDefaults {
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull notification) {
+        self 
     }];
     
     // get changes that might have happened while this instance of your app wasn't running
