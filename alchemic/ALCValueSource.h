@@ -11,6 +11,7 @@
 #import <Alchemic/ALCResolvable.h>
 
 @class ALCValue;
+@protocol ALCObjectFactory;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -32,6 +32,10 @@
 		6C8757BF1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8757BC1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.m */; };
 		6C8757C01D6AD74600BCAF6B /* ALCApplicationDelegateAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8757BC1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.m */; };
 		6C04EE7C1D6D83C1004F32F8 /* ALCApplicationDelegateAspectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C04EE7B1D6D83C1004F32F8 /* ALCApplicationDelegateAspectTests.m */; };
+		6C150B7B1D7424700060CA08 /* ALCArrayValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C150B791D7424700060CA08 /* ALCArrayValueSource.h */; };
+		6C150B7C1D7424700060CA08 /* ALCArrayValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C150B791D7424700060CA08 /* ALCArrayValueSource.h */; };
+		6C150B7D1D7424700060CA08 /* ALCArrayValueSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C150B7A1D7424700060CA08 /* ALCArrayValueSource.m */; };
+		6C150B7E1D7424700060CA08 /* ALCArrayValueSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C150B7A1D7424700060CA08 /* ALCArrayValueSource.m */; };
 		6C8757C31D6ADCD000BCAF6B /* ALCAspectClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C8757C11D6ADCD000BCAF6B /* ALCAspectClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C8757C41D6ADCD000BCAF6B /* ALCAspectClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C8757C11D6ADCD000BCAF6B /* ALCAspectClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C8757C51D6ADCD000BCAF6B /* ALCAspectClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8757C21D6ADCD000BCAF6B /* ALCAspectClassProcessor.m */; };
@@ -320,6 +324,8 @@
 		6C8757BB1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCApplicationDelegateAspect.h; sourceTree = "<group>"; };
 		6C8757BC1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCApplicationDelegateAspect.m; sourceTree = "<group>"; };
 		6C04EE7B1D6D83C1004F32F8 /* ALCApplicationDelegateAspectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCApplicationDelegateAspectTests.m; sourceTree = "<group>"; };
+		6C150B791D7424700060CA08 /* ALCArrayValueSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALCArrayValueSource.h; path = ../ALCArrayValueSource.h; sourceTree = "<group>"; };
+		6C150B7A1D7424700060CA08 /* ALCArrayValueSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCArrayValueSource.m; path = ../ALCArrayValueSource.m; sourceTree = "<group>"; };
 		6C8757C11D6ADCD000BCAF6B /* ALCAspectClassProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAspectClassProcessor.h; sourceTree = "<group>"; };
 		6C8757C21D6ADCD000BCAF6B /* ALCAspectClassProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAspectClassProcessor.m; sourceTree = "<group>"; };
 		6C04EE7D1D6D8AB5004F32F8 /* ALCAspectClassProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAspectClassProcessorTests.m; sourceTree = "<group>"; };
@@ -620,6 +626,8 @@
 			children = (
 				F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */,
 				F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */,
+				6C150B791D7424700060CA08 /* ALCArrayValueSource.h */,
+				6C150B7A1D7424700060CA08 /* ALCArrayValueSource.m */,
 				6C71D53F1CA0198800D25AC0 /* ALCConstant.h */,
 				6CC464211C7986D500B20A95 /* ALCDependency.h */,
 				6C71D5411CA161A200D25AC0 /* ALCMethodArgumentDependency.h */,
@@ -988,6 +996,7 @@
 				6C34CA211D5D91C60080D428 /* ALCAbstractObjectFactoryType.h in Headers */,
 				6C150B6F1D73E9A80060CA08 /* ALCAbstractValueStore.h in Headers */,
 				6C8757BE1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.h in Headers */,
+				6C150B7C1D7424700060CA08 /* ALCArrayValueSource.h in Headers */,
 				6C8757C41D6ADCD000BCAF6B /* ALCAspectClassProcessor.h in Headers */,
 				6C34CA101D5D91C60080D428 /* ALCClassObjectFactory.h in Headers */,
 				6C34CA181D5D91C60080D428 /* ALCClassObjectFactoryInitializer.h in Headers */,
@@ -1054,6 +1063,7 @@
 				6CC503CD1D182A78004283DA /* ALCAbstractObjectFactoryType.h in Headers */,
 				6C150B691D73E97F0060CA08 /* ALCAbstractValueStore.h in Headers */,
 				6C8757BD1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.h in Headers */,
+				6C150B7B1D7424700060CA08 /* ALCArrayValueSource.h in Headers */,
 				6C8757C31D6ADCD000BCAF6B /* ALCAspectClassProcessor.h in Headers */,
 				6C4B56121C6E0A390040AEC2 /* ALCClassObjectFactory.h in Headers */,
 				6C4D85AD1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h in Headers */,
@@ -1408,6 +1418,7 @@
 				6C34C9EB1D5D91C60080D428 /* ALCAbstractObjectFactoryType.m in Sources */,
 				6C150B721D73E9BE0060CA08 /* ALCAbstractValueStore.m in Sources */,
 				6C8757C01D6AD74600BCAF6B /* ALCApplicationDelegateAspect.m in Sources */,
+				6C150B7E1D7424700060CA08 /* ALCArrayValueSource.m in Sources */,
 				6C8757C61D6ADCD000BCAF6B /* ALCAspectClassProcessor.m in Sources */,
 				6C34C9F61D5D91C60080D428 /* ALCClassObjectFactory.m in Sources */,
 				6C34C9F11D5D91C60080D428 /* ALCClassObjectFactoryInitializer.m in Sources */,
@@ -1456,6 +1467,7 @@
 				6CC503CE1D182A78004283DA /* ALCAbstractObjectFactoryType.m in Sources */,
 				6C150B6A1D73E97F0060CA08 /* ALCAbstractValueStore.m in Sources */,
 				6C8757BF1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.m in Sources */,
+				6C150B7D1D7424700060CA08 /* ALCArrayValueSource.m in Sources */,
 				6C8757C51D6ADCD000BCAF6B /* ALCAspectClassProcessor.m in Sources */,
 				6C4B56131C6E0A390040AEC2 /* ALCClassObjectFactory.m in Sources */,
 				6C4D85AE1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.m in Sources */,

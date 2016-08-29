@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSArray<id<ALCDependency>> *) methodArgumentsWithTypes:(NSArray<ALCType *> *) types
                                   unknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
 
--(ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass;
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
 
 /// @name Resolving
 

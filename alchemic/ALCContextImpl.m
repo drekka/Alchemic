@@ -185,16 +185,39 @@ registerFactoryMethod:(SEL) selector
     STLog(objectFactory.type.objcClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.type.objcClass), name);
 
     NSMutableArray *dependencyConfig = [[NSMutableArray alloc] init];
-    __block BOOL allowNils = NO;
-    id<ALCInjector> injector = [config injectorForClass:type.objcClass
-                                         allowConstants:YES
-                                 unknownArgumentHandler:^(id argument) {
-                                     [dependencyConfig addObject:argument];
-                                 }];
-    injector.allowNilValues = allowNils;
+    
+    NSMutableArray<id<ALCValueSource>> *constantValues = [NSMutableArray array];
+    NSMutableArray *configOptions = [NSMutableArray array];
+    ALCModelSearchCriteria *modelSearchCriteria = [config modelSearchCriteriaWithUnknownArgumentHandler:^(id  _Nonnull argument) {
+        if ([argument conformsToProtocol:@protocol(ALCValueSource)]) {
+            if (![type.objcClass isKindOfClass:[NSArray class]] && constantValues.count > 0) {
+                throwException(IllegalArgument, @"More than one constant value found for %@", [ALCRuntime forClass:objectFactory.type.objcClass propertyDescription:name]);
+            } else {
+                [constantValues addObject:argument];
+            }
+        } else {
+            [configOptions addObject:argument];
+        }
+    }];
 
+    if (modelSearchCriteria && constantValues) {
+        throwException(IllegalArgument, @"Cannot specify both constant values and model search criteria for %@", [ALCRuntime forClass:objectFactory.type.objcClass propertyDescription:name]);
+    }
+
+    id<ALCValueSource> source;
+    if (modelSearchCriteria) {
+        source = [[ALCModelValueSource alloc] initWithType:type criteria:modelSearchCriteria];
+    } else {
+        if (constantValues.count == 1) {
+            source = constantValues[0];
+        } else {
+            source = [[ALCArraySource alloc] initWithSources:constantValues];
+        }
+    }
+    
     ALCVariableDependency *dependency = [objectFactory registerVariableDependency:variable
-                                                                         injector:injector
+                                                                             type:type
+                                                                      valueSource:source
                                                                          withName:name];
     [dependency configureWithOptions:dependencyConfig];
 }

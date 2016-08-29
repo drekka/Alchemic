@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
     return arguments;
 }
 
--(ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass {
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
 
     ALCModelSearchCriteria *searchCriteria;
     for (id criteria in self) {
@@ -74,12 +74,11 @@ NS_ASSUME_NONNULL_BEGIN
             }
 
         } else {
-            throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
+            unknownArgumentHandler(criteria);
         }
-
     }
 
-    return searchCriteria ? searchCriteria: [ALCModelSearchCriteria searchCriteriaForClass:aClass];
+    return searchCriteria;
 }
 
 #pragma mark - Resolving
