@@ -5,6 +5,7 @@ title: Runtime
  * [Managing the UIApplicationDelegate instance](#managing-the-uiapplicationdelegate-instance)
  * [UIViewControllers and Story Boards](#uiviewcontrollers-and-story-boards)
  * [NSUserDefaults](#nsuserdefaults)
+* [Cloud based key value storage](#cloud-based-key-value-storage)
 
 # Managing the UIApplicationDelegate instance
 
@@ -78,8 +79,8 @@ The up shot of this is that a fully Alchemic integrated user defaults with code 
 {{ site.lang-title-objc }}
 ```objc
 @interface MyUserDefaults: ALCUserDefaults
-@property (nonatomic, strong) NSString *username;
-@property (nonatomic, assign) int nbrLogins;
+    @property (nonatomic, strong) NSString *username;
+    @property (nonatomic, assign) int nbrLogins;
 @end
 ```
 
@@ -101,6 +102,47 @@ AcInject(_defaults)
 -(void) someMethod {
     NSString *name = _defaults.username;
     _defaults.username = "derek";
+}
+
+@end
+```
+
+
+# Cloud based key value storage
+
+Apple provides a [cloud base key value storage](https://developer.apple.com/library/prerelease/content/documentation/General/Conceptual/iCloudDesignGuide/Chapters/DesigningForKey-ValueDataIniCloud.html) facility which you can use in your apps. Essentially this works exactly the same was as `NSUserDefaults` except the data is stored in the cloud rather than on the device. This enables a simple mechanism which can synchronize your data (within certain limits) between your devices.
+
+To access the cloud store you need to switch on the iCloud and Key Value Storage in your apps capabilities like this:
+
+![](./Key value storage.png)
+
+Then you need to enabled Alchemic's Cloud Key Value Storage feature like this: 
+
+{{ site.lang-title-objc }}
+```objc
+@implementation MyClass
+AcEnabledUserDefaults
+@end
+```
+
+Alchemic's cloud key value storage feature works exactly like it's `ALCUserDefaults` counterpart and has the same functionality. It's based around the `ALCCloudKeyValueStore` class and included the ability to be extended if you want to create a custom class to access the data.
+
+Here's the basic method for accessing cloud based values:
+
+Here's a more complete example of accessing the user defaults: 
+
+{{ site.lang-title-objc }}
+```objc
+@implementation MyClass {
+    ALCCloudKeyValueStore *_ckvs;
+}
+
+AcEnableCloudKeyValueStore
+AcInject(_ckvs)
+
+-(void) someMethod {
+NSString *name = _defaults["username"];
+_ckvs["username"] = "derek";
 }
 
 @end
