@@ -61,7 +61,9 @@ NS_ASSUME_NONNULL_BEGIN
     _postStartBlocks = nil;
     // Now execute any stored blocks.
     [blocks enumerateObjectsUsingBlock:^(ALCSimpleBlock postStartBlock, BOOL *stop) {
-        postStartBlock();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            postStartBlock();
+        });
     }];
 
     STLog(self, @"Alchemic started.\n\n%@\n", _model);
@@ -74,6 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
     @synchronized (_postStartBlocks) {
         if (_postStartBlocks) {
             [_postStartBlocks addObject:block];
+
         } else {
             block();
         }
