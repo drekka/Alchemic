@@ -26,7 +26,16 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable NSDictionary<NSString *, id> *) loadDefaults {
     
     [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull notification) {
-        self 
+        
+        // If the store has changed, update the local properties with the passed keys.
+        NSUInteger reason = ((NSNumber *)notification.userInfo[NSUbiquitousKeyValueStoreChangeReasonKey]).unsignedIntegerValue;
+        if (reason == NSUbiquitousKeyValueStoreServerChange) {
+            NSArray<NSString *> *keys = notification.userInfo[NSUbiquitousKeyValueStoreChangedKeysKey];
+            for (NSString *key in keys) {
+                STLog(self, @"Cloud updated value for %@", key);
+                [self updateLocalValue:[self valueStoreValueForKey:key] forKey:key];
+            }
+        }
     }];
     
     // get changes that might have happened while this instance of your app wasn't running
