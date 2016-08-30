@@ -60,7 +60,8 @@
     __block BOOL resolved = NO;
     __block BOOL blockCalled = NO;
     // Must be an object factory.
-    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithType:type];
 
     [factory resolveWithStack:stack
                  resolvedFlag:&resolved
@@ -80,7 +81,8 @@
     __block BOOL resolved = YES;
 
     // Must be an object factory.
-    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithType:type];
 
     [factory resolveWithStack:stack
                  resolvedFlag:&resolved
@@ -95,7 +97,8 @@
     __block BOOL resolved = YES;
 
     // Must be an object factory.
-    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithType:type];
 
     [stack addObject:factory];
 
@@ -112,9 +115,10 @@
     __block BOOL resolved = YES;
 
     // Must be an object factory.
-    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    ALCClassObjectFactory *factory = [[ALCClassObjectFactory alloc] initWithType:type];
 
-    ALCMethodArgumentDependency *methodArgDep = [ALCMethodArgumentDependency argumentWithClass:[NSString class] criteria:AcClass(NSString), nil];
+    ALCMethodArgumentDependency *methodArgDep = [ALCMethodArgumentDependency methodArgumentWithType:[ALCType typeWithClass:[NSString class]] criteria:AcClass(NSString), nil];
 
     [stack addObject:factory];
     [stack addObject:methodArgDep];

@@ -16,6 +16,7 @@
 @protocol ALCResolvable;
 @class ALCModelSearchCriteria;
 @class ALCType;
+@protocol ALCValueSource;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,19 +25,19 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface NSArray (Alchemic)
 
-/// @name Analysing array contents
+#pragma mark - Extracting arguments
 
-/**
- Converts a list of arguments for methods into a set of dependencies, ready for use by a method factory.
- 
- @param unknownArgumentHandler A block that is called if the current argumet is unknown.
- 
- @return A list of ALCDependencies, one per argument.
- */
--(NSArray<id<ALCDependency>> *) methodArgumentsWithTypes:(NSArray<ALCType *> *) types
-                                  unknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
+-(NSArray<id<ALCDependency>> *) methodArgumentsWithExpectedTypes:(NSArray<ALCType *> *) types
+                                                 unknownArgument:(void (^)(id argument)) otherArgumentHandler;
+
+-(nullable id<ALCValueSource>) valueSourceForType:(ALCType *) type
+                                 constantsAllowed:(BOOL) constantsAllowed
+                                            error:(NSError **) error
+                                  unknownArgument:(nullable void (^)(id argument)) otherArgumentHandler;
 
 -(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
+
+#pragma mark - Resolving
 
 /// @name Resolving
 

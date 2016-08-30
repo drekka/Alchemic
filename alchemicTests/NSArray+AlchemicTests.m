@@ -22,17 +22,17 @@
 -(void) testMethodArgumentsWithUnknownArgumentHandlerWithMethodArgument {
     ALCMethodArgumentDependency *argument = AcArg(NSString, AcString(@"abc"));
     NSArray *args = @[argument];
-    [self runMethodArgumentsTestWithValidArguments:args];
+    [self runMethodArgumentsTestWithValidArguments:args types:@[[ALCType typeWithClass:[NSString class]]]];
 }
 
 -(void) testMethodArgumentsWithUnknownArgumentHandlerWithSearchCriteria {
     NSArray *args = @[AcClass(NSString)];
-    [self runMethodArgumentsTestWithValidArguments:args];
+    [self runMethodArgumentsTestWithValidArguments:args types:@[[ALCType typeWithClass:[NSString class]]]];
 }
 
 -(void) testMethodArgumentsWithUnknownArgumentHandlerWithConstant {
     NSArray *args = @[AcInt(5)];
-    [self runMethodArgumentsTestWithValidArguments:args];
+    [self runMethodArgumentsTestWithValidArguments:args types:@[[ALCType typeWithEncoding:"i"]]];
 }
 
 -(void) testMethodArgumentsWithUnknownArgumentHandlerWithUnknownArgumentCallsHandler {
@@ -40,10 +40,11 @@
     NSArray *args = @[@"abc"];
     
     __block BOOL handlerCalled = NO;
-    __unused NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithUnknownArgumentHandler:^(id passedArgument){
-        handlerCalled = YES;
-        XCTAssertEqualObjects(@"abc", passedArgument);
-    }];
+    __unused NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithExpectedTypes:@[[ALCType typeWithClass:[NSString class]]]
+                                                                             unknownArgument:^(id passedArgument){
+                                                                                 handlerCalled = YES;
+                                                                                 XCTAssertEqualObjects(@"abc", passedArgument);
+                                                                             }];
     
     XCTAssertTrue(handlerCalled);
 }
@@ -52,87 +53,13 @@
     
     NSArray *args = @[];
     
-    NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithUnknownArgumentHandler:^(id passedArgument){
+    NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithExpectedTypes:@[]
+                                                                    unknownArgument:^(id passedArgument){
         XCTFail(@"Nothing to call block with");
     }];
     
     XCTAssertNotNil(methodArgs);
     XCTAssertEqual(0u, methodArgs.count);
-}
-
-#pragma mark - Injector for class
-
--(void) testInjectorForClassWithNoCriteria {
-    [self runInjectorForClassWithModelSearchCriteria:@[] expectedDescription:@"class NSString"];
-}
-
--(void) testInjectorForClassWithClassCriteria {
-    [self runInjectorForClassWithModelSearchCriteria:@[AcClass(NSObject)] expectedDescription:@"class NSObject"];
-}
-
--(void) testInjectorForClassWithClassAndProtocolCriteria {
-    [self runInjectorForClassWithModelSearchCriteria:@[AcClass(NSObject), AcProtocol(NSCopying)] expectedDescription:@"class NSObject and protocol NSCopying"];
-}
-
--(void) testInjectorForClassWithConstant {
-    NSArray *criteria = @[AcString(@"abc")];
-    ALCModelValueSource *injector = [criteria injectorForClass:[NSString class]
-                                                   allowConstants:YES
-                                           unknownArgumentHandler:NULL];
-    XCTAssertNotNil(injector);
-    XCTAssertEqual(criteria[0], injector);
-}
-
--(void) testInjectorForClassWithConstantWhenNotAllowedThrows {
-    NSArray *criteria = @[AcString(@"abc")];
-    XCTAssertThrowsSpecific(([criteria injectorForClass:[NSString class]
-                                         allowConstants:NO
-                                 unknownArgumentHandler:NULL]),
-                            AlchemicIllegalArgumentException);
-}
-
--(void) testInjectorForClassWithSearchCriteriaThenConstantThrows {
-    NSArray *criteria = @[AcClass(NSString), AcString(@"abc")];
-    XCTAssertThrowsSpecific(([criteria injectorForClass:[NSString class]
-                                         allowConstants:YES
-                                 unknownArgumentHandler:NULL]),
-                            AlchemicIllegalArgumentException);
-}
-
--(void) testInjectorForClassWithConstantThenSearchCriteriaThrows {
-    NSArray *criteria = @[AcClass(NSString), AcString(@"abc")];
-    XCTAssertThrowsSpecific(([criteria injectorForClass:[NSString class]
-                                         allowConstants:YES
-                                 unknownArgumentHandler:NULL]),
-                            AlchemicIllegalArgumentException);
-}
-
--(void) testInjectorForClassWithMultipleConstantsThrows {
-    NSArray *criteria = @[AcInt(5), AcString(@"abc")];
-    XCTAssertThrowsSpecific(([criteria injectorForClass:[NSString class]
-                                         allowConstants:YES
-                                 unknownArgumentHandler:NULL]),
-                            AlchemicIllegalArgumentException);
-}
-
--(void) testInjectorForClassWithUnknownCriteriaObject {
-    NSArray *criteria = @[@"abc"];
-    XCTAssertThrowsSpecific(([criteria injectorForClass:[NSString class]
-                                         allowConstants:NO
-                                 unknownArgumentHandler:NULL]),
-                            AlchemicIllegalArgumentException);
-}
-
--(void) testInjectorForClassWithUnknownCriteriaObjectAndHandler {
-    NSArray *criteria = @[@"abc"];
-    __block BOOL blockCalled = NO;
-    [criteria injectorForClass:[NSString class]
-                allowConstants:NO
-        unknownArgumentHandler:^(id criteriaObject){
-            XCTAssertEqualObjects(@"abc", criteriaObject);
-            blockCalled = YES;
-        }];
-    XCTAssertTrue(blockCalled);
 }
 
 #pragma mark - Model search criteria
@@ -147,10 +74,6 @@
 
 -(void) testModelSerchCriteriaWithClassAndProtocol {
     [self runModelSearchCriteria:@[AcClass(NSString), AcProtocol(NSCopying)] expectedDescription:@"class NSString and protocol NSCopying"];
-}
-
--(void) testModelSerchCriteriaWithSomethingElseThrows {
-    XCTAssertThrowsSpecific(([@[@"abc"] modelSearchCriteriaForClass:[NSString class]]), AlchemicIllegalArgumentException);
 }
 
 #pragma mark - resolving
@@ -224,35 +147,26 @@
 
 #pragma mark - Internal
 
--(void) runMethodArgumentsTestWithValidArguments:(NSArray *) args {
+-(void) runMethodArgumentsTestWithValidArguments:(NSArray *) args
+                                           types:(NSArray<ALCType *> *) types {
     
     __block BOOL handlerCalled = NO;
-    NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithUnknownArgumentHandler:^(id passedArgument) {
+    NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithExpectedTypes:types
+                                                                    unknownArgument:^(id passedArgument) {
         handlerCalled = YES;
     }];
     
     XCTAssertFalse(handlerCalled);
     XCTAssertEqual(1u, methodArgs.count);
     ALCMethodArgumentDependency *returnedArg = (ALCMethodArgumentDependency *) methodArgs[0];
-    XCTAssertEqual(0, returnedArg.index);
+    XCTAssertEqual(0u, returnedArg.index);
     
-    id<ALCInjector> injector = returnedArg.injector;
-    XCTAssertNotNil(injector);
-}
-
--(void) runInjectorForClassWithModelSearchCriteria:(NSArray *) criteria expectedDescription:(NSString *) description {
-    ALCModelValueSource *injector = [criteria injectorForClass:[NSString class]
-                                                   allowConstants:NO
-                                           unknownArgumentHandler:NULL];
-    XCTAssertNotNil(injector);
-    XCTAssertEqual([NSString class], injector.type.objcClass);
-    ALCModelSearchCriteria *searchCriteria = injector.criteria;
-    XCTAssertNotNil(searchCriteria);
-    XCTAssertEqualObjects(description, searchCriteria.description);
 }
 
 -(void) runModelSearchCriteria:(NSArray *) criteria expectedDescription:(NSString *) description {
-    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:[NSString class]];
+    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
+        XCTFail(@"Argument not found");
+    }];
     XCTAssertNotNil(searchCriteria);
     XCTAssertEqualObjects(description, searchCriteria.description);
 }

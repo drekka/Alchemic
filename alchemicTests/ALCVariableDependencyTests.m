@@ -29,7 +29,7 @@
     _dependency = [ALCVariableDependency variableDependencyWithType:type
                                                         valueSource:source
                                                            intoIvar:_ivar
-                                                               name:@"abc"];
+                                                           withName:@"abc"];
 }
 
 -(void) testFactoryMethod {
