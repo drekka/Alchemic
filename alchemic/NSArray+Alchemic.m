@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
             setError(@"Constant values not allowed");
             return nil;
         }
-        if (![type.objcClass isKindOfClass:[NSArray class]] && constantValues.count > 0) {
+        if (![type.objcClass isKindOfClass:[NSArray class]] && constantValues.count > 1) {
             setError(@"Multiple constants found");
             return nil;
         }

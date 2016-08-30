@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) typeWithClass:(Class) aClass {
     return [[ALCType alloc] initWithType:ALCValueTypeObject
-                         typeDescription:str(@"class %@",NSStringFromClass(aClass))
+                         typeDescription:str(@"object")
                               scalarType:nil
                                objcClass:aClass
                            objcProtocols:nil];

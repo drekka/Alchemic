@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCValue
 
-@synthesize type = _type;
-
 -(instancetype) initWithType:(ALCType *) type
                        value:(NSValue *) value
                   completion:(nullable ALCSimpleBlock) completion {

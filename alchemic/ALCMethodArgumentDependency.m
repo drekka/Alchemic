@@ -6,6 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import StoryTeller;
+
 #import "ALCMethodArgumentDependency.h"
 
 #import <Alchemic/ALCInternalMacros.h>
@@ -47,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (finalValue) {
             ALCInvocationInjectorBlock injector = [finalValue invocationInjector];
             injector(object, (NSInteger) _index);
+            return;
         }
     }
     

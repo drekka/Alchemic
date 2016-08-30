@@ -15,6 +15,10 @@
 
 -(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
 
+    if (self.type == toType.type) {
+        return self;
+    }
+
     // Use the runtime to build a reference to the method.
     Method method;
     SEL selector = NSSelectorFromString(str(@"convert%@To%@:error:", self.methodNamePart, toType.methodNamePart));

@@ -17,18 +17,17 @@
 @end
 
 @implementation ALCVariableDependencyTests {
-    id aIvar;
+    int aIvar;
     ALCVariableDependency *_dependency;
-    Ivar _ivar;
 }
 
 -(void)setUp {
-    _ivar = class_getInstanceVariable([self class], "aIvar");
+    Ivar ivar = class_getInstanceVariable([self class], "aIvar");
     ALCType *type = [ALCType typeWithEncoding:"i"];
     id<ALCValueSource> source = [ALCConstantValueSource valueSourceWithInt:5];
     _dependency = [ALCVariableDependency variableDependencyWithType:type
                                                         valueSource:source
-                                                           intoIvar:_ivar
+                                                           intoIvar:ivar
                                                            withName:@"abc"];
 }
 
@@ -65,7 +64,8 @@
 #pragma mark - Injecting
 
 -(void) testInjecting {
-    [_dependency injectObject:@"abc"];
+    [_dependency injectObject:self];
+    XCTAssertEqual(5, aIvar);
 }
 
 @end
