@@ -258,14 +258,26 @@ registerFactoryMethod:(SEL) selector
 
 -(void) setObject:(id) object searchCriteria:(NSArray *) criteria {
 
+    // Check for an Alchemic value.
+    id finalObject = object;
+    if ([object conformsToProtocol:@protocol(ALCValueSource)]) {
+        NSError *error;
+        finalObject = [(id<ALCValueSource>)object valueWithError:&error];
+        if (error) {
+            throwException(Resolving, @"Unexpected error accessing value: %@", error);
+        }
+    }
+    
     // Setup a block we want to execute.
-    id finalObject = [object isKindOfClass:[ALCConstantNil class]] ? nil : object;
     Class objClass = [object class];
     STLog(objClass, @"Storing reference for a %@", NSStringFromClass(objClass));
 
     ALCSimpleBlock setBlock = ^{
 
-        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:objClass];
+        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
+            throwException(IllegalArgument, @"Unexpected criteria: %@", argument);
+        }];
+        
         NSArray<id<ALCObjectFactory>> *factories = [self->_model settableObjectFactoriesMatchingCriteria:searchCriteria];
 
         // Error if we do not find one factory.
@@ -293,7 +305,11 @@ registerFactoryMethod:(SEL) selector
     }
     
     // We are only interested in class factories.
-    ALCClassObjectFactory *classFactory = [_model classObjectFactoryMatchingCriteria:[criteria modelSearchCriteriaForClass:[object class]]];
+    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
+        throwException(IllegalArgument, @"Unexpected criteria: %@", argument);
+    }];
+
+    ALCClassObjectFactory *classFactory = [_model classObjectFactoryMatchingCriteria:searchCriteria];
     
     if (classFactory) {
         STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
