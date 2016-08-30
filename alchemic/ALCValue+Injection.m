@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
             return ((ALCVariableInjectorBlock (*)(id, Method)) method_invoke)(self, method);
         }
     }
-    throwException(Injection, @"Unable to find variable injector for type: %@", self.typeDescription);
+    throwException(SelectorNotFound, @"Unable to find variable injector for type: %@", self.typeDescription);
     return NULL;
 }
 
@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
 
-    throwException(Injection, @"Unable to find invocation injector for type: %@", self.typeDescription);
+    throwException(SelectorNotFound, @"Unable to find invocation injector for type: %@", self.typeDescription);
     return NULL;
 }
 

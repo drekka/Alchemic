@@ -112,7 +112,8 @@ NS_ASSUME_NONNULL_BEGIN
     return [ALCModelValueSource valueSourceWithType:type criteria:modelSearchCriteria];
 }
 
--(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithDefaultClass:(Class) defaultClass
+                                                  unknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
     
     ALCModelSearchCriteria *searchCriteria;
     for (id criteria in self) {

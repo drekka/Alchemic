@@ -67,19 +67,19 @@ static NSCharacterSet *__typeEncodingDelimiters;
     if (!method) {
         method = class_getInstanceMethod(aClass, methodSelector);
         if (!method) {
-            unsigned int numberArguments = method_getNumberOfArguments(method);
-            NSMutableArray *argumentTypes = [[NSMutableArray alloc] initWithCapacity:numberArguments];
-            for (unsigned int i = 0; i < numberArguments; i++) {
-                char *argumenType = method_copyArgumentType(method, i);
-                ALCType *type = [ALCType typeWithEncoding:argumenType];
-                [argumentTypes addObject:type];
-                free(argumenType);
-            }
-            return argumentTypes;
+            throwException(SelectorNotFound, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
         }
     }
 
-    throwException(SelectorNotFound, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
+    unsigned int numberArguments = method_getNumberOfArguments(method);
+    NSMutableArray *argumentTypes = [[NSMutableArray alloc] initWithCapacity:numberArguments];
+    for (unsigned int i = 0; i < numberArguments; i++) {
+        char *argumenType = method_copyArgumentType(method, i);
+        ALCType *type = [ALCType typeWithEncoding:argumenType];
+        [argumentTypes addObject:type];
+        free(argumenType);
+    }
+    return argumentTypes;
 }
 
 +(NSArray<NSString*> *) writeablePropertiesForClass:(Class) aClass {
@@ -87,7 +87,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     objc_property_t *props = class_copyPropertyList(aClass, &count);
     NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:count];
     for(unsigned int i = 0;i < count;i++) {
-        
+
         // Find out if the property is a readonly. We only want writables.
         objc_property_t prop = props[i];
         char *readonlyChar = property_copyAttributeValue(prop, "R");
@@ -96,7 +96,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
         if (readonly) {
             continue;
         }
-        
+
         NSString *propName = [NSString stringWithUTF8String:property_getName(prop)];
         [results addObject:propName];
     }
