@@ -6,6 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import StoryTeller;
+
 #import "ALCMethodArgumentDependency.h"
 
 #import <Alchemic/ALCInternalMacros.h>

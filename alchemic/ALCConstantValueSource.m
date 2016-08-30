@@ -11,7 +11,6 @@
 #import <Alchemic/ALCInternalMacros.h>
 
 @implementation ALCConstantValueSource {
-    NSString *_desc;
     NSValue *_value;
     id _retainedValue; // Used when [NSValue valueWithNonretainedObject:] is used.
 }
@@ -57,7 +56,7 @@
 }
 
 -(NSString *)resolvingDescription {
-    return _desc;
+    return self.type.typeDescription;
 }
 
 @end

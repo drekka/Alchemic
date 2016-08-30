@@ -12,6 +12,7 @@
 
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCValueSource.h>
+#import <Alchemic/ALCType.h>
 
 @implementation ALCAbstractDependency
 
