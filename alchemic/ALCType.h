@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The class if the type is an object type.
  */
-@property (nonatomic, assign, nullable, readonly) Class objcClass;
+@property (nonatomic, strong, nullable, readonly) Class objcClass;
 
 /**
  Any protocols that the class implements.

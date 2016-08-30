@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The type that the resolvable represents. This is used when the model is being serached.
  */
-@property (nonatomic, assign, readonly) ALCType *type;
+@property (nonatomic, strong, readonly) ALCType *type;
 
 /**
  A decription of the resolvable used when reporting resolving stack information. Normally when debugging.
