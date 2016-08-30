@@ -39,14 +39,14 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Querying things
 
 +(Ivar) forClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
-
+    
     // First attempt to get an instance variable with the passed name
     const char * charName = [inj UTF8String];
     Ivar instanceVar = class_getInstanceVariable(aClass, charName);
     if (instanceVar) {
         return instanceVar;
     }
-
+    
     // Not found, so try for a property based on the passed name.
     // The property's internal variable may have a completely different variable name so we have to dig that out and return it.
     objc_property_t prop = class_getProperty(aClass, charName);
@@ -57,28 +57,29 @@ static NSCharacterSet *__typeEncodingDelimiters;
         free((void *) propVarName);
         return propertyVar;
     }
-
+    
     throwException(InjectionNotFound, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
 }
 
 +(NSArray<ALCType *> *) forClass:(Class) aClass methodArgumentTypes:(SEL) methodSelector {
-
+    
     Method method = class_getClassMethod(aClass, methodSelector);
     if (!method) {
         method = class_getInstanceMethod(aClass, methodSelector);
-        if (!method) {
-            unsigned int numberArguments = method_getNumberOfArguments(method);
-            NSMutableArray *argumentTypes = [[NSMutableArray alloc] initWithCapacity:numberArguments];
-            for (unsigned int i = 0; i < numberArguments; i++) {
-                char *argumenType = method_copyArgumentType(method, i);
-                ALCType *type = [ALCType typeWithEncoding:argumenType];
-                [argumentTypes addObject:type];
-                free(argumenType);
-            }
-            return argumentTypes;
-        }
     }
-
+    
+    if (method) {
+        unsigned int numberArguments = method_getNumberOfArguments(method);
+        NSMutableArray *argumentTypes = [[NSMutableArray alloc] initWithCapacity:numberArguments];
+        for (unsigned int i = 0; i < numberArguments; i++) {
+            char *argumenType = method_copyArgumentType(method, i);
+            ALCType *type = [ALCType typeWithEncoding:argumenType];
+            [argumentTypes addObject:type];
+            free(argumenType);
+        }
+        return argumentTypes;
+    }
+    
     throwException(SelectorNotFound, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
 }
 
@@ -110,7 +111,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
               allowNils:(BOOL) allowNil
                    type:(Class) type
                   error:(NSError * __autoreleasing _Nullable *) error {
-
+    
     // If the passed value is nil or an empty array.
     if (!value) {
         if (!allowNil) {
@@ -118,14 +119,14 @@ static NSCharacterSet *__typeEncodingDelimiters;
         }
         return nil;
     }
-
+    
     // If the target value is an array wrap up the value and return.
     if ([type isSubclassOfClass:[NSArray class]]) {
         return [value isKindOfClass:[NSArray class]] ? value : @[value];
     }
-
+    
     // Target is not an array
-
+    
     // Throw an error if the source value is an array and we have too many or too few results.
     id finalValue = value;
     if ([finalValue isKindOfClass:[NSArray class]]) {
@@ -138,11 +139,11 @@ static NSCharacterSet *__typeEncodingDelimiters;
         }
         finalValue = values[0];
     }
-
+    
     if ([finalValue isKindOfClass:type]) {
         return finalValue;
     }
-
+    
     setError(@"Value of type %@ cannot be cast to a %@", NSStringFromClass([finalValue class]), NSStringFromClass(type));
     return nil;
 }
@@ -150,18 +151,18 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Validating
 
 +(void) validateClass:(Class) aClass selector:(SEL)selector numberOfArguments:(NSUInteger) nbrArguments {
-
+    
     // Get an instance method.
     NSMethodSignature *sig = [aClass instanceMethodSignatureForSelector:selector];
     if (!sig) {
         sig = [aClass methodSignatureForSelector:selector];
     }
-
+    
     // Not found.
     if (!sig) {
         throwException(SelectorNotFound, @"Failed to find selector %@", [self forClass:aClass selectorDescription:selector]);
     }
-
+    
     // Incorrect number of arguments. Allow for runtime in arguments.
     if (sig.numberOfArguments - 2 != nbrArguments) {
         throwException(IncorrectNumberOfArguments, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector],  nbrArguments, (unsigned long) sig.numberOfArguments);
@@ -189,10 +190,10 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Scanning
 
 +(void) scanRuntimeWithContext:(id<ALCContext>) context {
-
+    
     // Get a list of all the scannable bundles.
     NSSet<NSBundle *> *appBundles = [NSBundle scannableBundles];
-
+    
     // Scan the bundles, checking each class in each one.
     NSArray<id<ALCClassProcessor>> *processors = @[
                                                    [[ALCConfigClassProcessor alloc] init],

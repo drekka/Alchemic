@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (finalValue) {
             ALCInvocationInjectorBlock injector = [finalValue invocationInjector];
             injector(object, (NSInteger) _index);
+            return;
         }
     }
     

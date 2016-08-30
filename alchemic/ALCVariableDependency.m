@@ -74,6 +74,7 @@
         if (finalValue) {
             ALCVariableInjectorBlock injector = [finalValue variableInjector];
             injector(object, _ivar);
+            return;
         }
     }
 

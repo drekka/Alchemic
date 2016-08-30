@@ -100,7 +100,7 @@
 -(void) testObjectFactoryRegisterFactoryMethodReturnType {
 
     id mockParentObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
-    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSObject class]];
     OCMStub([(id<ALCObjectFactory>) mockParentObjectFactory type]).andReturn(type);
 
     __block ALCMethodObjectFactory *internalMethodFactory;

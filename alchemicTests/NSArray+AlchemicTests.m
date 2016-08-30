@@ -65,7 +65,10 @@
 #pragma mark - Model search criteria
 
 -(void) testModelSerchCriteriaWithNoCriteria {
-    [self runModelSearchCriteria:@[] expectedDescription:@"class NSString"];
+    ALCModelSearchCriteria *searchCriteria = [@[] modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
+        XCTFail(@"Argument not found");
+    }];
+    XCTAssertNil(searchCriteria);
 }
 
 -(void) testModelSerchCriteriaWithClass {
