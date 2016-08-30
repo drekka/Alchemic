@@ -10,6 +10,7 @@
 
 #import "ALCValue+Injection.h"
 
+#import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCRuntime.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable ALCVariableInjectorBlock) variableInjector {
     Method method;
-    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"variableInjectorFor%@", self.methodNamePart]);
+    SEL selector = NSSelectorFromString(str(@"variableInjectorFor%@", self.methodNamePart));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
@@ -31,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable ALCInvocationInjectorBlock) invocationInjector {
     Method method;
-    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"invocationInjectorFor%@", self.methodNamePart]);
+    SEL selector = NSSelectorFromString(str(@"invocationInjectorFor%@", self.methodNamePart));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {

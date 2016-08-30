@@ -245,7 +245,7 @@
                                                    allowConstants:NO
                                            unknownArgumentHandler:NULL];
     XCTAssertNotNil(injector);
-    XCTAssertEqual([NSString class], injector.objectClass);
+    XCTAssertEqual([NSString class], injector.type.objcClass);
     ALCModelSearchCriteria *searchCriteria = injector.criteria;
     XCTAssertNotNil(searchCriteria);
     XCTAssertEqualObjects(description, searchCriteria.description);

@@ -41,12 +41,12 @@ NS_ASSUME_NONNULL_BEGIN
             // Search criteria and constants are assumed to return a NSObject
         } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]) {
             ALCType *modelSearchType = [ALCType typeWithClass:[NSObject class]];
-            id<ALCValueSource> source = [[ALCModelValueSource alloc] initWithType:modelSearchType criteria:nextArgument];
-            dependency = [ALCMethodArgumentDependency argumentWithType:types[nextIdx] valueSource:source];
+            id<ALCValueSource> source = [ALCModelValueSource valueSourceWithType:modelSearchType criteria:nextArgument];
+            dependency = [ALCMethodArgumentDependency dependencyWithType:types[nextIdx] valueSource:source];
 
         } else if ([nextArgument conformsToProtocol:@protocol(ALCValueSource)]) {
             id<ALCValueSource> source = nextArgument;
-            dependency = [ALCMethodArgumentDependency argumentWithType:source.type valueSource:source];
+            dependency = [ALCMethodArgumentDependency dependencyWithType:source.type valueSource:source];
         }
 
         if (dependency) {

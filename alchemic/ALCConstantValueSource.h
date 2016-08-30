@@ -9,10 +9,18 @@
 @import Foundation;
 #import <Alchemic/ALCAbstractValueSource.h>
 
+#define AcString(value) [ALCConstantValueSource valueSourceWithObject:value]
+#define AcInt(value) [ALCConstantValueSource valueSourceWithInt:value]
+
 @interface ALCConstantValueSource : ALCAbstractValueSource
 
 -(instancetype) initWithType:(ALCType *) type NS_UNAVAILABLE;
 
 +(instancetype) valueSourceWithNil;
+
++(instancetype) valueSourceWithObject:(id) object;
+
++(instancetype) valueSourceWithInt:(int) value;
+
 
 @end

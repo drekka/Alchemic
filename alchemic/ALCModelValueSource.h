@@ -29,19 +29,18 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) init NS_UNAVAILABLE;
 
 /**
- Default initializer.
-
+ 
  @param type The type of the value to be injected.
  @param criteria    The ALCModelSearchCriteria to used when searching the model.
-
+ 
  @return The results of the search, mapped to the objectClass type.
  */
--(instancetype) initWithType:(ALCType *) type
-                    criteria:(ALCModelSearchCriteria *) criteria NS_DESIGNATED_INITIALIZER;
++(instancetype) valueSourceWithType:(ALCType *) type
+                           criteria:(ALCModelSearchCriteria *) criteria;
 
 /**
  Executes a model search and return the results.
-
+ 
  @param error A pointer to a NSError variable that will be populated if there is an error.
  All returned objects will be fully completed.
  */

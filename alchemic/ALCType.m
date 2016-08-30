@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) typeWithClass:(Class) aClass {
     return [[ALCType alloc] initWithType:ALCValueTypeObject
-                         typeDescription:@"Object"
+                         typeDescription:str(@"class %@",NSStringFromClass(aClass))
                               scalarType:nil
                                objcClass:aClass
                            objcProtocols:nil];
@@ -132,7 +132,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSString *) description {
     if (self.type != ALCValueTypeObject) {
-        return [NSString stringWithFormat:@"Scalar %@", _typeDescription];
+        return str(@"Scalar %@", _typeDescription);
     } else {
         NSString *className = self.objcClass ? NSStringFromClass((Class) self.objcClass) : @"";
 
@@ -144,13 +144,13 @@ NS_ASSUME_NONNULL_BEGIN
             }
 
             if (self.objcClass) {
-                return [NSString stringWithFormat:@"Class %@<%@>", className, [protocols componentsJoinedByString:@","]];
+                return str(@"Class %@<%@>", className, [protocols componentsJoinedByString:@","]);
             } else {
-                return [NSString stringWithFormat:@"Protocols <%@>", [protocols componentsJoinedByString:@","]];
+                return str(@"Protocols <%@>", [protocols componentsJoinedByString:@","]);
             }
 
         } else {
-            return [NSString stringWithFormat:@"Class %@", className];
+            return str(@"Class %@", className);
         }
     }
 }

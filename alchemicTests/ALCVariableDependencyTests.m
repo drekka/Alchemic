@@ -19,36 +19,32 @@
 @implementation ALCVariableDependencyTests {
     id aIvar;
     ALCVariableDependency *_dependency;
-    id _injectorMock;
     Ivar _ivar;
 }
 
 -(void)setUp {
     _ivar = class_getInstanceVariable([self class], "aIvar");
-    _injectorMock = OCMProtocolMock(@protocol(ALCInjector));
-    _dependency = [ALCVariableDependency variableDependencyWithInjector:_injectorMock
-                                                               intoIvar:_ivar
-                                                                   name:@"abc"];
+    ALCType *type = [ALCType typeWithEncoding:"i"];
+    id<ALCValueSource> source = [ALCConstantValueSource valueSourceWithInt:5];
+    _dependency = [ALCVariableDependency variableDependencyWithType:type
+                                                        valueSource:source
+                                                           intoIvar:_ivar
+                                                               name:@"abc"];
 }
 
 -(void) testFactoryMethod {
     XCTAssertNotNil(_dependency);
-    XCTAssertEqual(_injectorMock, _dependency.injector);
     XCTAssertEqualObjects(@"abc", _dependency.name);
 }
 
 #pragma mark - Configuring
 
 -(void) testConfigureWithOptionsNillable {
-    OCMExpect([_injectorMock setAllowNilValues:YES]);
     [_dependency configureWithOptions:@[AcNillable]];
-    OCMVerifyAll(_injectorMock);
 }
 
 -(void) testConfigureWithOptionsTransient {
-    OCMExpect([_injectorMock setAllowNilValues:YES]);
     [_dependency configureWithOptions:@[AcTransient]];
-    OCMVerifyAll(_injectorMock);
     XCTAssertTrue(_dependency.transient);
 }
 
@@ -69,9 +65,7 @@
 #pragma mark - Injecting
 
 -(void) testInjecting {
-    OCMExpect([_injectorMock setObject:@"abc" variable:_ivar error:[OCMArg setTo:nil]]);
     [_dependency injectObject:@"abc"];
-    OCMVerifyAll(_injectorMock);
 }
 
 @end

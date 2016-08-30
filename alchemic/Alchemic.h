@@ -24,6 +24,7 @@
 #import <Alchemic/ALCUserDefaultsAspect.h>
 #import <Alchemic/ALCCloudKeyValueStore.h>
 #import <Alchemic/ALCCloudKeyValueStoreAspect.h>
+#import <Alchemic/ALCConstantValueSource.h>
 
 //! Project version number for alchemic.
 FOUNDATION_EXPORT double alchemicVersionNumber;

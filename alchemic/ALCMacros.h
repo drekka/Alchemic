@@ -15,6 +15,7 @@
 #import <Alchemic/ALCContext.h>
 #import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCUserDefaultsAspect.h>
+#import <Alchemic/ALCValue.h>
 
 #pragma mark - registration
 

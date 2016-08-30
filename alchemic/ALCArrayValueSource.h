@@ -14,6 +14,6 @@
 
 -(instancetype)initWithType:(ALCType *)type NS_UNAVAILABLE;
 
--(instancetype) initWithValueSources:(NSArray<id<ALCValueSource>> *) sources NS_DESIGNATED_INITIALIZER;
++(instancetype) valueSourceWithValueSources:(NSArray<id<ALCValueSource>> *) sources;
 
 @end

@@ -32,8 +32,8 @@
     return self;
 }
 
-+(instancetype) argumentWithType:(ALCType *) type
-                     valueSource:(id<ALCValueSource>) valueSource {
++(instancetype) dependencyWithType:(ALCType *) type
+                       valueSource:(id<ALCValueSource>) valueSource {
     return [[self alloc] initWithType:type valueSource:valueSource];
 }
 

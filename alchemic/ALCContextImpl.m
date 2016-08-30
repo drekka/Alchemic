@@ -205,12 +205,12 @@ registerFactoryMethod:(SEL) selector
 
     id<ALCValueSource> source;
     if (modelSearchCriteria) {
-        source = [[ALCModelValueSource alloc] initWithType:type criteria:modelSearchCriteria];
+        source = [ALCModelValueSource valueSourceWithType:type criteria:modelSearchCriteria];
     } else {
         if (constantValues.count == 1) {
             source = constantValues[0];
         } else {
-            source = [[ALCArrayValueSource alloc] initWithValueSources:constantValues];
+            source = [ALCArrayValueSource valueSourceWithValueSources:constantValues];
         }
     }
     
@@ -240,7 +240,7 @@ registerFactoryMethod:(SEL) selector
         throwException(IllegalArgument, @"Unexpected argument %@", argument);
     }];
     ALCType *type = [ALCType typeWithClass:returnType];
-    ALCModelValueSource *source = [[ALCModelValueSource alloc] initWithType:type criteria:modelSearchCriteria];
+    ALCModelValueSource *source = [ALCModelValueSource valueSourceWithType:type criteria:modelSearchCriteria];
     [source resolveWithStack:[[NSMutableArray alloc] init] model:_model];
 
     NSError *error;

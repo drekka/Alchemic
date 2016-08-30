@@ -35,7 +35,7 @@
     
     OCMExpect([mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(id obj) {
         return [obj isKindOfClass:[ALCClassObjectFactory class]]
-        && ((ALCClassObjectFactory *)obj).objectClass == [ALCUserDefaults class];
+        && ((ALCClassObjectFactory *)obj).type.objcClass == [ALCUserDefaults class];
     }] withName:@"userDefaults"]);
     
     [_aspect modelWillResolve:mockModel];
@@ -48,11 +48,12 @@
     id mockModel = OCMProtocolMock(@protocol(ALCModel));
     id mockFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
     OCMStub([mockModel objectFactories]).andReturn(@[mockFactory]);
-    OCMStub([mockFactory objectClass]).andReturn([NSObject class]);
+    ALCType *type = [ALCType typeWithClass:[NSObject class]];
+    OCMStub([(id<ALCObjectFactory>) mockFactory type]).andReturn(type);
     
     OCMExpect([mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(id obj) {
         return [obj isKindOfClass:[ALCClassObjectFactory class]]
-        && ((ALCClassObjectFactory *)obj).objectClass == [ALCUserDefaults class];
+        && ((ALCClassObjectFactory *)obj).type.objcClass == [ALCUserDefaults class];
     }] withName:@"userDefaults"]);
     
     [_aspect modelWillResolve:mockModel];
@@ -68,7 +69,8 @@
     id mockModel = OCMProtocolMock(@protocol(ALCModel));
     id mockFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
     OCMStub([mockModel objectFactories]).andReturn(@[mockFactory]);
-    OCMStub([mockFactory objectClass]).andReturn(customDefaults);
+    ALCType *type = [ALCType typeWithClass:customDefaults];
+    OCMStub([(id<ALCObjectFactory>) mockFactory type]).andReturn(type);
     
     [_aspect modelWillResolve:mockModel];
     

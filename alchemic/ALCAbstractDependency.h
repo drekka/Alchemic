@@ -40,8 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype) initWithType:(ALCType *) type
                  valueSource:(id<ALCValueSource>) valueSource;
 
-+(instancetype) argumentWithType:(ALCType *) type
-                     valueSource:(id<ALCValueSource>) valueSource;
++(instancetype) dependencyWithType:(ALCType *) type
+                       valueSource:(id<ALCValueSource>) valueSource;
 
 @end
 

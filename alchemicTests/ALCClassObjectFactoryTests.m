@@ -21,7 +21,8 @@
 }
 
 -(void)setUp {
-    _factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    _factory = [[ALCClassObjectFactory alloc] initWithType:type];
     _mockModel = OCMProtocolMock(@protocol(ALCModel));
 }
 
@@ -61,17 +62,18 @@
 -(void) testResolveWithStackModelResolvesDependencies {
 
     NSMutableArray *stack = [[NSMutableArray alloc] init];
-    id mockInjector = OCMProtocolMock(@protocol(ALCInjector));
-    OCMExpect([mockInjector resolveWithStack:stack model:_mockModel]);
+    id mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
+    OCMExpect([mockValueSource resolveWithStack:stack model:_mockModel]);
 
     Ivar ivar = class_getInstanceVariable([self class], "_mockModel");
     __unused id _ = [_factory registerVariableDependency:ivar
-                                                injector:mockInjector
+                                                    type:[ALCType typeWithClass:[ALCModelImpl class]]
+                                                valueSource:mockValueSource
                                                 withName:@"mockModel"];
 
     [_factory resolveWithStack:stack model:_mockModel];
 
-    OCMVerifyAll(mockInjector);
+    OCMVerifyAll(mockValueSource);
 }
 
 @end

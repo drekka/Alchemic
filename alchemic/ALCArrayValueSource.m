@@ -15,6 +15,10 @@
     NSArray<id<ALCValueSource>> *_sources;
 }
 
++(instancetype) valueSourceWithValueSources:(NSArray<id<ALCValueSource>> *) sources {
+    return [[self alloc] initWithValueSources:sources];
+}
+
 -(instancetype) initWithType:(ALCType *) type {
     methodReturningObjectNotImplemented;
 }

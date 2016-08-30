@@ -17,7 +17,7 @@
 
     // Use the runtime to build a reference to the method.
     Method method;
-    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"convert%@To%@:error:", self.methodNamePart, toType.methodNamePart]);
+    SEL selector = NSSelectorFromString(str(@"convert%@To%@:error:", self.methodNamePart, toType.methodNamePart));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {

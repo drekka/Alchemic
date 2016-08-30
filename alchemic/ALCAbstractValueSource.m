@@ -9,6 +9,7 @@
 #import "ALCAbstractValueSource.h"
 
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCType.h>
 
 @implementation ALCAbstractValueSource
 
@@ -37,7 +38,7 @@
 }
 
 -(NSString *)resolvingDescription {
-    methodReturningStringNotImplemented;
+    return _type.typeDescription;
 }
 
 @end

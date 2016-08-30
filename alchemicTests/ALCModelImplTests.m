@@ -54,20 +54,21 @@ static BOOL _enabled;
 }
 
 -(void)setUp {
-
+    
     _model = [[ALCModelImpl alloc] init];
     
-    _classFactory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    _classFactory = [[ALCClassObjectFactory alloc] initWithType:type];
     [_model addObjectFactory:_classFactory withName:nil];
     
-    _referenceFactory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    _referenceFactory = [[ALCClassObjectFactory alloc] initWithType:type];
     [_methodFactory configureWithOptions:@[AcReference] model:_model];
     [_model addObjectFactory:_referenceFactory withName:@"ref"];
     
-    _methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:[NSString class]
-                                               parentObjectFactory:_classFactory
-                                                          selector:@selector(description)
-                                                              args:nil];
+    _methodFactory = [[ALCMethodObjectFactory alloc] initWithType:type
+                                              parentObjectFactory:_classFactory
+                                                         selector:@selector(description)
+                                                             args:nil];
     [_methodFactory configureWithOptions:@[AcTemplate] model:_model];
     [_model addObjectFactory:_methodFactory withName:@"abc"];
 }
@@ -75,20 +76,20 @@ static BOOL _enabled;
 -(void) testAspectGetsCalledWhenCreatedFirst {
     
     FakeAspect *aspect = [[FakeAspect alloc] init];
-
+    
     [FakeAspect setEnabled:YES];
     
     [_model addResolveAspect:aspect];
     [_model resolveDependencies];
-
+    
     XCTAssertTrue(aspect.willCalled);
     XCTAssertTrue(aspect.didCalled);
 }
 
 -(void) testAspectGetsCalledWhenCreatedLast {
-
+    
     [FakeAspect setEnabled:YES];
-
+    
     FakeAspect *aspect = [[FakeAspect alloc] init];
     
     [_model addResolveAspect:aspect];
@@ -101,7 +102,7 @@ static BOOL _enabled;
 -(void) testAspectNotCalledWhenDisabled {
     
     FakeAspect *aspect = [[FakeAspect alloc] init];
-
+    
     [FakeAspect setEnabled:NO];
     
     [_model addResolveAspect:aspect];
@@ -160,7 +161,9 @@ static BOOL _enabled;
 
 -(void) testAddObjectFactoryWithNameThrowsOnDuplicateName {
     // Happy path already tested in setup.
-    XCTAssertThrowsSpecific(([_model addObjectFactory:[[ALCClassObjectFactory alloc] initWithClass:[NSString class]] withName:@"abc"]), AlchemicDuplicateNameException);
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    id<ALCObjectFactory> factory = [[ALCClassObjectFactory alloc] initWithType:type];
+    XCTAssertThrowsSpecific(([_model addObjectFactory:factory withName:@"abc"]), AlchemicDuplicateNameException);
 }
 
 -(void) testReindexObjectFactoryOldNameNewName {
@@ -171,11 +174,11 @@ static BOOL _enabled;
 }
 
 -(void) testResolveDependencies {
-
+    
     _model = [[ALCModelImpl alloc] init];
     id classFactoryMock = OCMClassMock([ALCClassObjectFactory class]);
     [_model addObjectFactory:classFactoryMock withName:@"abc"];
-
+    
     OCMStub([classFactoryMock conformsToProtocol:@protocol(UIApplicationDelegate)]).andReturn(NO);
     OCMExpect([classFactoryMock resolveWithStack:[OCMArg isKindOfClass:[NSMutableArray class]] model:_model]);
     
@@ -185,16 +188,17 @@ static BOOL _enabled;
 }
 
 -(void) testStartSingletons {
-
+    
     _model = [[ALCModelImpl alloc] init];
     id classFactoryMock = OCMClassMock([ALCClassObjectFactory class]);
     [_model addObjectFactory:classFactoryMock withName:@"abc"];
     
     OCMExpect([classFactoryMock factoryType]).andReturn(ALCFactoryTypeSingleton);
     OCMExpect([classFactoryMock isReady]).andReturn(YES);
-    OCMStub([classFactoryMock objectClass]).andReturn([NSObject class]);
+    ALCType *type = [ALCType typeWithClass:[NSObject class]];
+    OCMStub([(id<ALCObjectFactory>) classFactoryMock type]).andReturn(type);
     OCMStub([classFactoryMock description]).andReturn(@"singelton abc");
-
+    
     id instantiationMock = OCMClassMock([ALCInstantiation class]);
     OCMExpect([classFactoryMock instantiation]).andReturn(instantiationMock);
     OCMExpect([instantiationMock object]).andReturn(@"xyz");

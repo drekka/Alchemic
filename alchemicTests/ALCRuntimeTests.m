@@ -135,46 +135,35 @@
     XCTAssertNil(error);
 }
 
--(void) testSetObjectVariableWithValue {
-    Ivar ivar = class_getInstanceVariable([self class], "_privateVariable");
-    NSError *error;
-    [self setVariable:ivar ofType:[NSString class] allowNils:NO value:@"abc" error:&error];
-    XCTAssertEqualObjects(@"abc", _privateVariable);
-    XCTAssertNil(error);
-}
-
 #pragma mark - Validating
 
 -(void) testValidateClassSelectorArgumentsInheritedMethod {
-    [ALCRuntime validateClass:[self class] selector:@selector(copy) arguments:nil];
+    [ALCRuntime validateClass:[self class] selector:@selector(copy) numberOfArguments:0];
 }
 
 -(void) testValidateClassSelectorArgumentsInheritedProperty {
-    [ALCRuntime validateClass:[self class] selector:@selector(description) arguments:nil];
+    [ALCRuntime validateClass:[self class] selector:@selector(description) numberOfArguments:0];
 }
 
 -(void) testValidateClassSelectorArgumentsClassMethod {
-    [ALCRuntime validateClass:[self class] selector:@selector(classMethod) arguments:nil];
+    [ALCRuntime validateClass:[self class] selector:@selector(classMethod) numberOfArguments:0];
 }
 
 -(void) testValidateClassSelectorArgumentsInstanceMethod {
-    [ALCRuntime validateClass:[self class] selector:@selector(instanceMethod) arguments:nil];
+    [ALCRuntime validateClass:[self class] selector:@selector(instanceMethod) numberOfArguments:0];
 }
 
 -(void) testValidateClassSelectorArgumentsWithArgs {
-    id<ALCDependency> arg1 = AcArg(NSString, AcString(@"abc"));
-    id<ALCDependency> arg2 = AcArg(NSNumber, AcInt(5));
-    [ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) arguments:@[arg1, arg2]];
+    [ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) numberOfArguments:2];
 }
 
 -(void) testValidateClassSelectorArgumentsIncorrectNumberArguments {
-    id<ALCDependency> arg1 = AcArg(NSString, AcString(@"abc"));
-    XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) arguments:@[arg1]]), AlchemicIncorrectNumberOfArgumentsException, @"AlchemicIncorrectNumberOfArgumentsException");
+    XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) numberOfArguments:1]), AlchemicIncorrectNumberOfArgumentsException, @"AlchemicIncorrectNumberOfArgumentsException");
 }
 
 -(void) testValidateClassSelectorArgumentsSelectorNotFound {
     AcIgnoreSelectorWarnings(
-                             XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(xxxx) arguments:nil]), AlchemicSelectorNotFoundException, @"AlchemicSelectorNotFoundException");
+                             XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(xxxx) numberOfArguments:0]), AlchemicSelectorNotFoundException, @"AlchemicSelectorNotFoundException");
                              );
 }
 

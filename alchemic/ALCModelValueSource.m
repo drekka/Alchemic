@@ -29,6 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize type = _type;
 
++(instancetype) valueSourceWithType:(ALCType *) type
+                           criteria:(ALCModelSearchCriteria *) criteria {
+    return [[self alloc] initWithType:type criteria:criteria];
+}
+
 #pragma mark - Lifecycle
 
 -(instancetype) init {

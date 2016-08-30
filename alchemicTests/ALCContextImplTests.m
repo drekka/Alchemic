@@ -25,14 +25,7 @@
     _context = [[ALCContextImpl alloc] init];
     Ivar modelVar = [ALCRuntime forClass:[ALCContextImpl class] variableForInjectionPoint:@"_model"];
     _mockModel = OCMClassMock([ALCModelImpl class]);
-    NSError *error;
-    BOOL set = [_context setVariable:modelVar
-                              ofType:[ALCModelImpl class]
-                           allowNils:NO
-                               value:(NSObject *)_mockModel
-                               error:&error];
-    XCTAssertTrue(set);
-    XCTAssertNil(error);
+    object_setIvar(_context, modelVar, _mockModel);
 }
 
 -(void) testStart {
@@ -91,7 +84,7 @@
     }]
                                   withName:nil]);
     id<ALCObjectFactory> objF = [_context registerObjectFactoryForClass:[NSString class]];
-    XCTAssertEqual([NSString class], objF.objectClass);
+    XCTAssertEqual([NSString class], objF.type.objcClass);
     OCMVerifyAll(_mockModel);
 }
 
@@ -107,7 +100,8 @@
 -(void) testObjectFactoryRegisterFactoryMethodReturnType {
 
     id mockParentObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
-    OCMStub([mockParentObjectFactory objectClass]).andReturn([NSString class]);
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    OCMStub([(id<ALCObjectFactory>) mockParentObjectFactory type]).andReturn(type);
 
     __block ALCMethodObjectFactory *internalMethodFactory;
     OCMExpect([_mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(ALCMethodObjectFactory *methodFactory) {
@@ -135,7 +129,8 @@
 -(void) testObjectFactoryRegisterFactoryMethodReturnTypeWithConfig {
 
     id mockParentObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
-    OCMStub([mockParentObjectFactory objectClass]).andReturn([NSString class]);
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    OCMStub([(id<ALCObjectFactory>) mockParentObjectFactory type]).andReturn(type);
 
     __block ALCMethodObjectFactory *internalMethodFactory;
     OCMExpect([_mockModel addObjectFactory:[OCMArg checkWithBlock:^BOOL(ALCMethodObjectFactory *methodFactory) {
@@ -163,7 +158,8 @@
 -(void) testObjectFactoryRegisterFactoryMethodThrowsOnReferenceType {
 
     id mockParentObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
-    OCMStub([mockParentObjectFactory objectClass]).andReturn([NSString class]);
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    OCMStub([(id<ALCObjectFactory>) mockParentObjectFactory type]).andReturn(type);
 
     XCTAssertThrowsSpecific(
                             ([_context objectFactory:mockParentObjectFactory registerFactoryMethod:@selector(description) returnType:[NSString class], AcReference, nil]),
