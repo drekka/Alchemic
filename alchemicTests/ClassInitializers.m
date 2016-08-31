@@ -63,8 +63,7 @@
     AcIgnoreSelectorWarnings(
                              SEL selector = @selector(initWithString:andInt:);
                              )
-    [_context objectFactory:_topThingFactory
-             initializer:selector, AcString(@"abc"), AcInt(5), nil];
+    [_context objectFactory:_topThingFactory initializer:selector, AcString(@"abc"), AcInt(5), nil];
     [_context start];
     
     XCTAssertTrue(_topThingFactory.isReady);

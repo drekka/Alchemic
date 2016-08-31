@@ -122,6 +122,7 @@ type value = self.value; \
 
 scalarMethodArgumentInjector(int, Int)
 methodArgumentInjector(id, Object)
+methodArgumentInjector(NSArray *, Array)
 
 @end
 

@@ -74,7 +74,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     if (method) {
         unsigned int numberArguments = method_getNumberOfArguments(method);
         NSMutableArray *argumentTypes = [[NSMutableArray alloc] initWithCapacity:numberArguments];
-        for (unsigned int i = 0; i < numberArguments; i++) {
+        for (unsigned int i = 2; i < numberArguments; i++) {
             char *argumenType = method_copyArgumentType(method, i);
             ALCType *type = [ALCType typeWithEncoding:argumenType];
             [argumentTypes addObject:type];

@@ -117,7 +117,7 @@ registerFactoryMethod:(SEL) selector
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
 registerFactoryMethod:(SEL) selector
-           returnType:(ALCType *) returnType
+           returnType:(Class) returnType
         configAndArgs:(NSArray *) configAndArgs {
     
     // Read in the arguments and sort them into factory config and method arguments.
@@ -130,7 +130,7 @@ registerFactoryMethod:(SEL) selector
                                                                                   }];
     
     // Build the factory.
-    ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithType:returnType
+    ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithType:[ALCType typeWithClass:returnType]
                                                                      parentObjectFactory:objectFactory
                                                                                 selector:selector
                                                                                     args:methodArguments];
