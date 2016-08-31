@@ -103,15 +103,6 @@ NS_ASSUME_NONNULL_BEGIN
                      completion:[self completionForInstantiations:instantations]];
 }
 
-#pragma mark - Retrieving results
-
--(nullable id) searchResultWithError:(NSError * __autoreleasing _Nullable *) error {
-    NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
-    NSArray *values = [self valuesFromInstantiations:instantations];
-    [self completionForInstantiations:instantations]();
-    return values;
-}
-
 #pragma mark - Internal
 
 -(NSArray<ALCInstantiation *> *) retrieveInstantiations {

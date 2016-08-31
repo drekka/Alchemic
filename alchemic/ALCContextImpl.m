@@ -29,6 +29,7 @@
 #import "NSObject+Alchemic.h"
 #import "ALCVariableDependency.h"
 #import "ALCArrayValueSource.h"
+#import "ALCValue+Mapping.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -227,11 +228,12 @@ registerFactoryMethod:(SEL) selector
     [source resolveWithStack:[[NSMutableArray alloc] init] model:_model];
     
     NSError *error;
-    id value = [source searchResultWithError:&error];
+    ALCValue *value = [[source valueWithError:&error] mapTo:[ALCType typeWithClass:returnType] error:&error];
     if (!value) {
         throwException(AlchemicMappingValueException, @"Mapping error: %@", error.localizedDescription);
     }
-    return value;
+    [ALCRuntime executeSimpleBlock:value.completion];
+    return value.value;
 }
 
 -(void) setObject:(id) object, ... {

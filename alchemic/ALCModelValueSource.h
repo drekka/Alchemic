@@ -36,14 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 +(instancetype) valueSourceWithCriteria:(ALCModelSearchCriteria *) criteria;
 
-/**
- Executes a model search and return the results.
- 
- @param error A pointer to a NSError variable that will be populated if there is an error.
- All returned objects will be fully completed.
- */
--(nullable id) searchResultWithError:(NSError * __autoreleasing _Nullable *) error;
-
 @end
 
 NS_ASSUME_NONNULL_END
