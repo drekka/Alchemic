@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCValue
 
--(void) setValue:(NSValue *) value completion:(nullable ALCSimpleBlock) completion {
+-(void) setValue:(id) value completion:(nullable ALCSimpleBlock) completion {
     _value = value;
     _completion = completion;
 }

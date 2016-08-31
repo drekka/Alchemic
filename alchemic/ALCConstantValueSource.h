@@ -16,8 +16,6 @@
 
 -(instancetype) initWithType:(ALCType *) type NS_UNAVAILABLE;
 
-+(instancetype) valueSourceWithNil;
-
 +(instancetype) valueSourceWithObject:(id) object;
 
 +(instancetype) valueSourceWithInt:(int) value;

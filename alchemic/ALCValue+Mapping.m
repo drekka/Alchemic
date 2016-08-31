@@ -10,12 +10,14 @@
 
 #import <Alchemic/ALCInternalMacros.h>
 @import ObjectiveC;
+@import StoryTeller;
 
 @implementation ALCValue (Mapping)
 
 -(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
     
     if (self.type == toType.type) {
+        STLog(self, @"No mapping required for final value");
         return self;
     }
     
@@ -26,6 +28,7 @@
         method = class_getInstanceMethod([self class], selector);
         if (method) {
             // Dynamically call the selector method to do the converstion.
+            STLog(self, @"Calling selector %@", NSStringFromSelector(selector));
             return ((ALCValue * (*)(id, Method, ALCType *, NSError * __autoreleasing _Nullable *)) method_invoke)(self, method, toType, error);
         }
     }
@@ -42,7 +45,7 @@
 
 -(nullable ALCValue *) convertArrayToObject:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
     
-    NSArray *objs = self.value.nonretainedObjectValue;
+    NSArray *objs = self.value;
     
     if (objs.count > 1) {
         setError(@"Too many values. Expected 1 %@ value.", NSStringFromClass(toType.objcClass));
@@ -51,12 +54,12 @@
     
     if (objs.count == 0) {
         // Return a nil value.
-        return [toType withValue:[NSValue valueWithNonretainedObject:nil] completion:NULL];
+        return [toType withValue:[NSNull null] completion:NULL];
     }
     
     id obj = objs[0];
     if ([obj isKindOfClass:toType.objcClass]) {
-        return [toType withValue:[NSValue valueWithNonretainedObject:obj] completion:self.completion];
+        return [toType withValue:obj completion:self.completion];
     } else {
         setError(@"Cannot covert a %@ to a %@", NSStringFromClass([obj class]), NSStringFromClass(toType.objcClass));
         return nil;
@@ -69,13 +72,11 @@
                              error:(NSError * __autoreleasing _Nullable *) error
               withNumberConversion:(NSValue * (^)(NSNumber *result)) numberConversion {
     
-    id obj = self.value.nonretainedObjectValue;
-    
-    if ([obj isKindOfClass:[NSNumber class]]) {
-        return [type withValue:numberConversion(obj) completion:self.completion];
+    if ([self.value isKindOfClass:[NSNumber class]]) {
+        return [type withValue:numberConversion(self.value) completion:self.completion];
     }
     
-    setError(@"Cannot convert source %@ to NSNumber *", NSStringFromClass([obj class]));
+    setError(@"Cannot convert source %@ to NSNumber *", NSStringFromClass([self.value class]));
     return nil;
 }
 

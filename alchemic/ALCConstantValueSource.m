@@ -11,22 +11,12 @@
 #import <Alchemic/ALCInternalMacros.h>
 
 @implementation ALCConstantValueSource {
-    NSValue *_value;
-    id _retainedValue; // Used when [NSValue valueWithNonretainedObject:] is used.
-}
-
-+(instancetype) valueSourceWithNil {
-    ALCType *type = [ALCType typeWithClass:[NSObject class]];
-    NSValue *value = [NSValue valueWithNonretainedObject:nil];
-    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:type value:value];
-    return source;
+    id _value;
 }
 
 +(instancetype) valueSourceWithObject:(id) object {
     ALCType *type = [ALCType typeWithClass:[object class]];
-    NSValue *value = [NSValue valueWithNonretainedObject:object];
-    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:type value:value];
-    source->_retainedValue = object;
+    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:type value:object];
     return source;
 }
 

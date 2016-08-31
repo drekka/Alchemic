@@ -98,16 +98,15 @@
 -(void) testNSValueBlockConvert {
     NSNumber *number = @(5);
     Ivar ivar = class_getInstanceVariable([self class], "_aInt");
-    NSValue *origValue = [NSValue valueWithNonretainedObject:number];
-    [self convertToNSValueIntBlock](self, origValue, [self injectNSValueIntIntoIVarBlock:ivar]);
+    [self convertToNSValueIntBlock](self, number, [self injectNSValueIntIntoIVarBlock:ivar]);
     XCTAssertEqual(5, _aInt);
 }
 
 // Converts NSNumber in a NSValue containing an int
--(void (^)(id obj, NSValue *origValue, void (^injectBlock)(id obj, NSValue *value))) convertToNSValueIntBlock {
-    return ^(id obj, NSValue *origValue, void (^injectBlock)(id obj, NSValue *value)) {
+-(void (^)(id obj, id origValue, void (^injectBlock)(id obj, NSValue *value))) convertToNSValueIntBlock {
+    return ^(id obj, id origValue, void (^injectBlock)(id obj, NSValue *value)) {
 
-        NSNumber *numberValue = origValue.nonretainedObjectValue;
+        NSNumber *numberValue = origValue;
         int value = numberValue.intValue;
         NSValue *intValue = [NSValue value:&value withObjCType:"i"];
         injectBlock(obj, intValue);

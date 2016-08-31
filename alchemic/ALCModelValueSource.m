@@ -99,7 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
-    return [self.type withValue:[NSValue valueWithNonretainedObject:values]
+    return [self.type withValue:values
                      completion:[self completionForInstantiations:instantations]];
 }
 

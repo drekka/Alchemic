@@ -15,14 +15,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ALCType (copying)
--(ALCValue *) withValue:(NSValue *) value completion:(nullable ALCSimpleBlock) completion;
+-(ALCValue *) withValue:(id) value completion:(nullable ALCSimpleBlock) completion;
 @end
 
 /**
  Simple class containing information about a type.
  */
 @interface ALCValue : ALCType
-@property (nonatomic, strong, readonly) NSValue *value;
+@property (nonatomic, strong, readonly) id value;
 @property (nonatomic, strong, nullable, readonly) ALCSimpleBlock completion;
 @end
 

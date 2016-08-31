@@ -64,7 +64,7 @@
         }
     };
 
-    return [[ALCType typeWithClass:[NSArray class]] withValue:[NSValue valueWithNonretainedObject:results]
+    return [[ALCType typeWithClass:[NSArray class]] withValue:results
                                                    completion:allCompletions];
 }
 
