@@ -80,7 +80,7 @@
                              SEL selector = @selector(initWithNestedThings:);
                              )
     ALCType *type = [ALCType typeWithClass:[NSArray class]];
-    id<ALCValueSource> source = [ALCModelValueSource valueSourceWithType:[ALCType typeWithClass:[NestedThing class]] criteria:AcClass(NestedThing)];
+    id<ALCValueSource> source = [ALCModelValueSource valueSourceWithCriteria:AcClass(NestedThing)];
     ALCMethodArgumentDependency *arg = [ALCMethodArgumentDependency dependencyWithType:type valueSource:source];
     [_context objectFactory:_topThingFactory initializer:selector, arg, nil];
     [_context start];

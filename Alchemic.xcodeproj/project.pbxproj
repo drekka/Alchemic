@@ -253,10 +253,6 @@
 		6C34C9E91D5D91C60080D428 /* NSBundle+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC284881CB53F03006B613F /* NSBundle+Alchemic.m */; };
 		6CC2848A1CB53F03006B613F /* NSBundle+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC284881CB53F03006B613F /* NSBundle+Alchemic.m */; };
 		6C0D87831D40876600FEC25A /* NSBundle+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D87821D40876600FEC25A /* NSBundle+AlchemicTests.m */; };
-		6CD8EB881D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6CD8EB891D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6CD8EB8A1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */; };
-		6CD8EB8B1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */; };
 		6C34CA111D5D91C60080D428 /* NSObject+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C68CF871C6636D6003A7A54 /* NSObject+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C68CF891C6636D6003A7A54 /* NSObject+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C68CF871C6636D6003A7A54 /* NSObject+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C34C9E11D5D91C60080D428 /* NSObject+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68CF881C6636D6003A7A54 /* NSObject+Alchemic.m */; };
@@ -460,8 +456,6 @@
 		6CC284871CB53F03006B613F /* NSBundle+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Alchemic.h"; sourceTree = "<group>"; };
 		6CC284881CB53F03006B613F /* NSBundle+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSBundle+Alchemic.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C0D87821D40876600FEC25A /* NSBundle+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+AlchemicTests.m"; sourceTree = "<group>"; };
-		6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+Alchemic.h"; sourceTree = "<group>"; };
-		6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+Alchemic.m"; sourceTree = "<group>"; };
 		6C68CF871C6636D6003A7A54 /* NSObject+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Alchemic.h"; sourceTree = "<group>"; };
 		6C68CF881C6636D6003A7A54 /* NSObject+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSObject+Alchemic.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C1C10381CF496F700ED1A20 /* NSObject+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+AlchemicTests.m"; sourceTree = "<group>"; };
@@ -871,8 +865,6 @@
 				6C71D5461CA16BE600D25AC0 /* NSArray+Alchemic.m */,
 				6CC284871CB53F03006B613F /* NSBundle+Alchemic.h */,
 				6CC284881CB53F03006B613F /* NSBundle+Alchemic.m */,
-				6CD8EB861D64B0A400A0FCB5 /* NSInvocation+Alchemic.h */,
-				6CD8EB871D64B0A400A0FCB5 /* NSInvocation+Alchemic.m */,
 				6C68CF871C6636D6003A7A54 /* NSObject+Alchemic.h */,
 				6C68CF881C6636D6003A7A54 /* NSObject+Alchemic.m */,
 			);
@@ -1043,7 +1035,6 @@
 				6C34CA0B1D5D91C60080D428 /* AlchemicConfig.h in Headers */,
 				6C34CA171D5D91C60080D428 /* NSArray+Alchemic.h in Headers */,
 				6C34CA1C1D5D91C60080D428 /* NSBundle+Alchemic.h in Headers */,
-				6CD8EB891D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */,
 				6C34CA111D5D91C60080D428 /* NSObject+Alchemic.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1111,7 +1102,6 @@
 				6CB5CCD81CDB792100DC1052 /* AlchemicConfig.h in Headers */,
 				6C71D5471CA16BE600D25AC0 /* NSArray+Alchemic.h in Headers */,
 				6CC284891CB53F03006B613F /* NSBundle+Alchemic.h in Headers */,
-				6CD8EB881D64B0A400A0FCB5 /* NSInvocation+Alchemic.h in Headers */,
 				6C68CF891C6636D6003A7A54 /* NSObject+Alchemic.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1452,7 +1442,6 @@
 				6C34C9E41D5D91C60080D428 /* Alchemic.m in Sources */,
 				6C34C9ED1D5D91C60080D428 /* NSArray+Alchemic.m in Sources */,
 				6C34C9E91D5D91C60080D428 /* NSBundle+Alchemic.m in Sources */,
-				6CD8EB8B1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */,
 				6C34C9E11D5D91C60080D428 /* NSObject+Alchemic.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1502,7 +1491,6 @@
 				6C1ADB011C8DB88C00267E77 /* Alchemic.m in Sources */,
 				6C71D5481CA16BE600D25AC0 /* NSArray+Alchemic.m in Sources */,
 				6CC2848A1CB53F03006B613F /* NSBundle+Alchemic.m in Sources */,
-				6CD8EB8A1D64B0A400A0FCB5 /* NSInvocation+Alchemic.m in Sources */,
 				6C68CF8A1C6636D6003A7A54 /* NSObject+Alchemic.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

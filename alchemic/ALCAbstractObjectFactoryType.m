@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setObject:(nullable id) object {
     
     if (!object && !_nillable) {
-        throwException(NilValue, @"Cannot set a nil value.");
+        throwException(AlchemicNilValueException, @"Cannot set a nil value.");
     }
     
     if (_weak) {

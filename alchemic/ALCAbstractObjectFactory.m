@@ -110,7 +110,7 @@ NS_ASSUME_NONNULL_BEGIN
         _typeStrategy.nillable = YES;
         
     } else {
-        throwException(IllegalArgument, @"Unknown factory configuration option: %@", option);
+        throwException(AlchemicIllegalArgumentException, @"Unknown factory configuration option: %@", option);
     }
     
 }

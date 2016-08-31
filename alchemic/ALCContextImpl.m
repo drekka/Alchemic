@@ -148,7 +148,7 @@ registerFactoryMethod:(SEL) selector
     
     // Throw an exception if the factory is already set to a reference type.
     if (objectFactory.factoryType == ALCFactoryTypeReference) {
-        throwException(IllegalArgument, @"Reference factories cannot have initializers");
+        throwException(AlchemicIllegalArgumentException, @"Reference factories cannot have initializers");
     }
     
     STLog(objectFactory.type.objcClass, @"Register object factory initializer %@", [ALCRuntime forClass:objectFactory.type.objcClass selectorDescription:initializer]);
@@ -157,7 +157,7 @@ registerFactoryMethod:(SEL) selector
     NSArray<ALCType *> *methodTypes = [ALCRuntime forClass:objectFactory.type.objcClass methodArgumentTypes:initializer];
     NSArray<id<ALCDependency>> *arguments = [args methodArgumentsWithExpectedTypes:methodTypes
                                                                    unknownArgument:^(id argument) {
-                                                                       throwException(IllegalArgument, @"Initializers do not support %@ arguments", argument);
+                                                                       throwException(AlchemicIllegalArgumentException, @"Initializers do not support %@ arguments", argument);
                                                                    }];
     
     __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:objectFactory
@@ -194,7 +194,7 @@ registerFactoryMethod:(SEL) selector
                                                [dependencyConfig addObject:argument];
                                            }];
     if (!source) {
-        throwException(IllegalArgument, @"Error processing criteria for %@: %@", [ALCRuntime forClass:objectFactory.type.objcClass propertyDescription:name], error.localizedDescription);
+        throwException(AlchemicIllegalArgumentException, @"Error processing criteria for %@: %@", [ALCRuntime forClass:objectFactory.type.objcClass propertyDescription:name], error.localizedDescription);
     }
     
     ALCVariableDependency *dependency = [objectFactory registerVariableDependency:variable
@@ -215,21 +215,21 @@ registerFactoryMethod:(SEL) selector
     
     // Throw an error if this is called too early.
     if (_postStartBlocks) {
-        throwException(Lifecycle, @"AcGet called before Alchemic is ready to serve objects.");
+        throwException(AlchemicLifecycleException, @"AcGet called before Alchemic is ready to serve objects.");
     }
     
     STLog(returnType, @"Manual retrieving an instance of %@", NSStringFromClass([returnType class]));
-    ALCModelSearchCriteria *modelSearchCriteria = [criteria modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
-        throwException(IllegalArgument, @"Unexpected argument %@", argument);
+    ALCModelSearchCriteria *modelSearchCriteria = [criteria modelSearchCriteriaWithDefaultClass:returnType
+                                                                         unknownArgumentHandler:^(id argument) {
+        throwException(AlchemicIllegalArgumentException, @"Unexpected argument %@", argument);
     }];
-    ALCType *type = [ALCType typeWithClass:returnType];
-    ALCModelValueSource *source = [ALCModelValueSource valueSourceWithType:type criteria:modelSearchCriteria];
+    ALCModelValueSource *source = [ALCModelValueSource valueSourceWithCriteria:modelSearchCriteria];
     [source resolveWithStack:[[NSMutableArray alloc] init] model:_model];
     
     NSError *error;
     id value = [source searchResultWithError:&error];
     if (!value) {
-        throwException(MappingValue, @"Mapping error: %@", error.localizedDescription);
+        throwException(AlchemicMappingValueException, @"Mapping error: %@", error.localizedDescription);
     }
     return value;
 }
@@ -247,7 +247,7 @@ registerFactoryMethod:(SEL) selector
         NSError *error;
         finalObject = [(id<ALCValueSource>)object valueWithError:&error];
         if (error) {
-            throwException(Resolving, @"Unexpected error accessing value: %@", error);
+            throwException(AlchemicResolvingException, @"Unexpected error accessing value: %@", error);
         }
     }
     
@@ -257,15 +257,16 @@ registerFactoryMethod:(SEL) selector
     
     ALCSimpleBlock setBlock = ^{
         
-        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
-            throwException(IllegalArgument, @"Unexpected criteria: %@", argument);
+        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithDefaultClass:objClass
+                                                                        unknownArgumentHandler:^(id argument) {
+            throwException(AlchemicIllegalArgumentException, @"Unexpected criteria: %@", argument);
         }];
         
         NSArray<id<ALCObjectFactory>> *factories = [self->_model settableObjectFactoriesMatchingCriteria:searchCriteria];
         
         // Error if we do not find one factory.
         if (factories.count != 1) {
-            throwException(UnableToSetReference, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, (unsigned long) factories.count);
+            throwException(AlchemicUnableToSetReferenceException, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, (unsigned long) factories.count);
         }
         
         // Set the object and call the returned completion.
@@ -284,12 +285,13 @@ registerFactoryMethod:(SEL) selector
     
     // Throw an error if this is called too early.
     if (_postStartBlocks) {
-        throwException(Lifecycle, @"AcInjectDependencies called before Alchemic is ready.");
+        throwException(AlchemicLifecycleException, @"AcInjectDependencies called before Alchemic is ready.");
     }
     
     // We are only interested in class factories.
-    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
-        throwException(IllegalArgument, @"Unexpected criteria: %@", argument);
+    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithDefaultClass:[object class]
+                                                                    unknownArgumentHandler:^(id argument) {
+        throwException(AlchemicIllegalArgumentException, @"Unexpected criteria: %@", argument);
     }];
     
     ALCClassObjectFactory *classFactory = [_model classObjectFactoryMatchingCriteria:searchCriteria];

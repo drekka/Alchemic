@@ -60,7 +60,7 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 -(void) appendSearchCriteria:(ALCModelSearchCriteria *) criteria {
     
     if (_unique || criteria->_unique) {
-        throwException(IllegalArgument, @"Name criteria must be the only criteria.");
+        throwException(AlchemicIllegalArgumentException, @"Name criteria must be the only criteria.");
     }
     
     if (_nextModelSearchCriteria) {

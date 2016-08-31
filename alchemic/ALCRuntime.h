@@ -64,24 +64,6 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
  */
 +(NSArray<NSString*> *) writeablePropertiesForClass:(Class) aClass;
 
-#pragma mark - Seting variables
-
-/// @name Setting values
-
-/**
- Maps a value to a type.
-
- This basically means that the value is assessed to see if it can be converted to the target type. This also takes into account such things as the target being an array and possibly needing to wrap the passed value in an array.
-
- @param value The value to check.
- @param type  The type it needs to be.
- @param allowNil If YES, allows nil values to be passed and set. Otherwise throws an error if nil values or empty arrays are encountered when there should be values.
- @param error a pointer to a NSError vaiable which will be populated if an error occurs.
-
- @return A new value matching the passed type.
- */
-+(nullable id) mapValue:(nullable id) value allowNils:(BOOL) allowNil type:(Class) type error:(NSError * __autoreleasing _Nullable *) error;
-
 #pragma mark - Validating
 
 /// @name Validating

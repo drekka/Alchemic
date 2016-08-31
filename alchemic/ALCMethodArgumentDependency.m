@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
                                             constantsAllowed:YES
                                                        error:&error
                                              unknownArgument:^(id argument) {
-                                                 throwException(IllegalArgument, @"Unexpected argument %@", argument);
+                                                 throwException(AlchemicIllegalArgumentException, @"Unexpected argument %@", argument);
                                              }];
     return [[ALCMethodArgumentDependency alloc] initWithType:type valueSource:source];
 }
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
     
-    throwException(Injection, @"Error injecting argument %lu: %@", _index, error.localizedDescription);
+    throwException(AlchemicInjectionException, @"Error injecting argument %lu: %@", _index, error.localizedDescription);
 }
 
 -(NSString *)resolvingDescription {

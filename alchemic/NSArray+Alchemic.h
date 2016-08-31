@@ -35,7 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
                                             error:(NSError **) error
                                   unknownArgument:(nullable void (^)(id argument)) otherArgumentHandler;
 
--(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithDefaultClass:(nullable Class) defaultClass
+                                                  unknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
 
 #pragma mark - Resolving
 

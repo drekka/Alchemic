@@ -68,7 +68,7 @@
 
     // Validate we are not trying to specify an intializer for a reference factory.
     if (_initializer && self.factoryType == ALCFactoryTypeReference) {
-        throwException(IllegalArgument, @"Reference factories cannot have initializers");
+        throwException(AlchemicIllegalArgumentException, @"Reference factories cannot have initializers");
     }
 
     AcWeakSelf;

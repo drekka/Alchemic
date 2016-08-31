@@ -55,8 +55,8 @@
     
     NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithExpectedTypes:@[]
                                                                     unknownArgument:^(id passedArgument){
-        XCTFail(@"Nothing to call block with");
-    }];
+                                                                        XCTFail(@"Nothing to call block with");
+                                                                    }];
     
     XCTAssertNotNil(methodArgs);
     XCTAssertEqual(0u, methodArgs.count);
@@ -65,9 +65,10 @@
 #pragma mark - Model search criteria
 
 -(void) testModelSerchCriteriaWithNoCriteria {
-    ALCModelSearchCriteria *searchCriteria = [@[] modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
-        XCTFail(@"Argument not found");
-    }];
+    ALCModelSearchCriteria *searchCriteria = [@[] modelSearchCriteriaWithDefaultClass:NULL
+                                                               unknownArgumentHandler:^(id argument) {
+                                                                   XCTFail(@"Argument not found");
+                                                               }];
     XCTAssertNil(searchCriteria);
 }
 
@@ -156,8 +157,8 @@
     __block BOOL handlerCalled = NO;
     NSArray<id<ALCDependency>> *methodArgs = [args methodArgumentsWithExpectedTypes:types
                                                                     unknownArgument:^(id passedArgument) {
-        handlerCalled = YES;
-    }];
+                                                                        handlerCalled = YES;
+                                                                    }];
     
     XCTAssertFalse(handlerCalled);
     XCTAssertEqual(1u, methodArgs.count);
@@ -167,9 +168,10 @@
 }
 
 -(void) runModelSearchCriteria:(NSArray *) criteria expectedDescription:(NSString *) description {
-    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
-        XCTFail(@"Argument not found");
-    }];
+    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithDefaultClass:NULL
+                                                                    unknownArgumentHandler:^(id argument) {
+                                                                        XCTFail(@"Argument not found");
+                                                                    }];
     XCTAssertNotNil(searchCriteria);
     XCTAssertEqualObjects(description, searchCriteria.description);
 }

@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
         if ([defs[i] length] > 0) {
             if (i == 2) {
                 // Update the class.
-                _objcClass = objc_lookUpClass(defs[2].UTF8String);
+                [self setClass:objc_lookUpClass(defs[2].UTF8String)];
             } else {
                 if (!_objcProtocols) {
                     _objcProtocols = [[NSMutableArray alloc] init];
@@ -125,9 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-    if (self.type != ALCValueTypeObject) {
-        return str(@"Scalar %@", _typeDesc);
-    } else {
+    if (self.objcClass) {
         NSString *className = self.objcClass ? NSStringFromClass((Class) self.objcClass) : @"";
 
         if (self.objcProtocols.count > 0) {
@@ -138,21 +136,29 @@ NS_ASSUME_NONNULL_BEGIN
             }
 
             if (self.objcClass) {
-                return str(@"Class %@<%@>", className, [protocols componentsJoinedByString:@","]);
+                return str(@"plass %@<%@>", className, [protocols componentsJoinedByString:@","]);
             } else {
-                return str(@"Protocols <%@>", [protocols componentsJoinedByString:@","]);
+                return str(@"protocols <%@>", [protocols componentsJoinedByString:@","]);
             }
 
         } else {
             return str(@"Class %@", className);
         }
     }
+
+    return str(@"scalar %@", _typeDesc);
 }
 
 -(void) setClass:(Class) aClass {
-    _type = ALCValueTypeObject;
-    _typeDesc = @"Object";
-    _methodNameFragment = @"Object";
+    if ([aClass isSubclassOfClass:[NSArray class]]) {
+        _type = ALCValueTypeArray;
+        _typeDesc = @"Array";
+        _methodNameFragment = @"Array";
+    } else {
+        _type = ALCValueTypeObject;
+        _typeDesc = @"Object";
+        _methodNameFragment = @"Object";
+    }
     _objcClass = aClass;
 }
 

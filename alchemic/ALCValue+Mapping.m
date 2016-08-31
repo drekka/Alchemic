@@ -14,7 +14,7 @@
 @implementation ALCValue (Mapping)
 
 -(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-
+    
     if (self.type == toType.type) {
         return self;
     }
@@ -40,18 +40,41 @@
     }];
 }
 
+-(nullable ALCValue *) convertArrayToObject:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
+    
+    NSArray *objs = self.value.nonretainedObjectValue;
+    
+    if (objs.count > 1) {
+        setError(@"Too many values. Expected 1 %@ value.", NSStringFromClass(toType.objcClass));
+        return nil;
+    }
+    
+    if (objs.count == 0) {
+        // Return a nil value.
+        return [toType withValue:[NSValue valueWithNonretainedObject:nil] completion:NULL];
+    }
+    
+    id obj = objs[0];
+    if ([obj isKindOfClass:toType.objcClass]) {
+        return [toType withValue:[NSValue valueWithNonretainedObject:obj] completion:self.completion];
+    } else {
+        setError(@"Cannot covert a %@ to a %@", NSStringFromClass([obj class]), NSStringFromClass(toType.objcClass));
+        return nil;
+    }
+}
+
 #pragma mark - Internal
 
 -(nullable ALCValue *) valueOfType:(ALCType *) type
                              error:(NSError * __autoreleasing _Nullable *) error
               withNumberConversion:(NSValue * (^)(NSNumber *result)) numberConversion {
-
+    
     id obj = self.value.nonretainedObjectValue;
-
+    
     if ([obj isKindOfClass:[NSNumber class]]) {
         return [type withValue:numberConversion(obj) completion:self.completion];
     }
-
+    
     setError(@"Cannot convert source %@ to NSNumber *", NSStringFromClass([obj class]));
     return nil;
 }

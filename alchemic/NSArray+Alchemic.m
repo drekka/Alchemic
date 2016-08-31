@@ -42,8 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
         } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]) {
             
             // Raw search criteria are expected to represent a single argument.
-            ALCType *modelSearchType = [ALCType typeWithClass:[NSObject class]];
-            id<ALCValueSource> source = [ALCModelValueSource valueSourceWithType:modelSearchType criteria:nextArgument];
+            id<ALCValueSource> source = [ALCModelValueSource valueSourceWithCriteria:nextArgument];
             dependency = [ALCMethodArgumentDependency dependencyWithType:types[nextIdx] valueSource:source];
             
         } else if ([nextArgument conformsToProtocol:@protocol(ALCValueSource)]) {
@@ -73,7 +72,8 @@ NS_ASSUME_NONNULL_BEGIN
                                   unknownArgument:(nullable void (^)(id argument)) otherArgumentHandler {
     
     __block NSMutableArray<id<ALCValueSource>> *constantValues;
-    ALCModelSearchCriteria *modelSearchCriteria = [self modelSearchCriteriaWithUnknownArgumentHandler:^(id argument) {
+    ALCModelSearchCriteria *modelSearchCriteria = [self modelSearchCriteriaWithDefaultClass:NULL
+                                                                     unknownArgumentHandler:^(id argument) {
         
         // If the arg is a value source then check if we can accept multiple constants and add to array of constant values.
         if ([argument conformsToProtocol:@protocol(ALCValueSource)]) {
@@ -109,10 +109,16 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
     
-    return [ALCModelValueSource valueSourceWithType:type criteria:modelSearchCriteria];
+    // No constant value so default the model search criteria if none was passed.
+    if (!modelSearchCriteria) {
+        modelSearchCriteria = [ALCModelSearchCriteria searchCriteriaForClass:type.objcClass];
+    }
+    
+    return [ALCModelValueSource valueSourceWithCriteria:modelSearchCriteria];
 }
 
--(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithDefaultClass:(nullable Class) defaultClass
+                                                  unknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
     
     ALCModelSearchCriteria *searchCriteria;
     for (id criteria in self) {
@@ -130,7 +136,11 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
     
-    return searchCriteria;
+    if (searchCriteria) {
+        return searchCriteria;
+    }
+    
+    return defaultClass ? [ALCModelSearchCriteria searchCriteriaForClass:defaultClass] : nil;
 }
 
 #pragma mark - Resolving

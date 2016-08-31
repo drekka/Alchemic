@@ -18,7 +18,6 @@
 #import "ALCRuntime.h"
 #import "NSArray+Alchemic.h"
 #import "NSObject+Alchemic.h"
-#import "NSInvocation+Alchemic.h"
 #import "ALCValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -29,9 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize type = _type;
 
-+(instancetype) valueSourceWithType:(ALCType *) type
-                           criteria:(ALCModelSearchCriteria *) criteria {
-    return [[self alloc] initWithType:type criteria:criteria];
++(instancetype) valueSourceWithCriteria:(ALCModelSearchCriteria *) criteria {
+    return [[self alloc] initWithCriteria:criteria];
 }
 
 #pragma mark - Lifecycle
@@ -40,11 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
     methodReturningObjectNotImplemented;
 }
 
--(instancetype) initWithType:(ALCType *) type
-                    criteria:(ALCModelSearchCriteria *) criteria {
+-(instancetype) initWithCriteria:(ALCModelSearchCriteria *) criteria {
     self = [super init];
     if (self) {
-        _type = type;
+        _type = [ALCType typeWithClass:[NSArray class]];
         _criteria = criteria;
     }
     return self;
@@ -62,12 +59,12 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack
                    model:(id<ALCModel>) model {
     
-    STLog(_type, @"Searching model using %@", _criteria);
+    STLog(self, @"Searching model using %@", _criteria);
     
     // Find dependencies
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];
     if ([_resolvedFactories count] == 0) {
-        throwException(NoDependenciesFound, @"No object factories found for criteria %@", _criteria);
+        throwException(AlchemicNoDependenciesFoundException, @"No object factories found for criteria %@", _criteria);
     }
     
     // Filter for primary factories and replace if there are any present.
@@ -75,14 +72,14 @@ NS_ASSUME_NONNULL_BEGIN
         return objectFactory.isPrimary;
     }]];
     if (primaryFactories.count > 0) {
-        STLog(_type, @"%lu primary factories found.", (unsigned long) primaryFactories.count);
+        STLog(self, @"%lu primary factories found.", (unsigned long) primaryFactories.count);
         _resolvedFactories = primaryFactories;
     }
     
     // Resolve dependencies.
-    STLog(_type, @"Found %i object factories", _resolvedFactories.count);
+    STLog(self, @"Found %i object factories", _resolvedFactories.count);
     for (id<ALCResolvable> objectFactory in _resolvedFactories) {
-        STLog(_type, @"Resolving dependency %@", objectFactory);
+        STLog(self, @"Resolving dependency %@", objectFactory);
         [objectFactory resolveWithStack:resolvingStack model:model];
     }
 }

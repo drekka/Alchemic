@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
                         [names addObject:stackResolvable.resolvingDescription];
                     }];
 
-                    throwException(Resolving, @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
+                    throwException(AlchemicResolvingException, @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
                 }
             } while (i > stackIndex);
         }
@@ -90,11 +90,11 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Error checks
     if (!sig) {
-        throwException(MethodNotFound, @"Method %@ not found", [ALCRuntime forClass:[self class] selectorDescription:selector]);
+        throwException(AlchemicMethodNotFoundException, @"Method %@ not found", [ALCRuntime forClass:[self class] selectorDescription:selector]);
     }
 
     if (strcmp(sig.methodReturnType, "@") != 0) {
-        throwException(IllegalArgument, @"Method %@ does not return an object", [ALCRuntime forClass:[self class] selectorDescription:selector]);
+        throwException(AlchemicIllegalArgumentException, @"Method %@ does not return an object", [ALCRuntime forClass:[self class] selectorDescription:selector]);
     }
 
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];

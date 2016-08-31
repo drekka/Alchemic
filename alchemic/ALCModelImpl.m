@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
         return [factory isKindOfClass:[ALCClassObjectFactory class]];
     }]];
     if (factories.count > 1) {
-        throwException(TooManyResults, @"Exepcted 1 object factory for critieria '%@', but found %lu.", criteria, (unsigned long) factories.count);
+        throwException(AlchemicTooManyResultsException, @"Exepcted 1 object factory for critieria '%@', but found %lu.", criteria, (unsigned long) factories.count);
     } else if (factories.count == 0) {
         return nil;
     } else {
@@ -87,7 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) addObjectFactory:(id<ALCObjectFactory>) objectFactory withName:(nullable NSString *) name {
     NSString *finalName = name ? name : objectFactory.defaultModelName;
     if (_objectFactories[finalName]) {
-        throwException(DuplicateName, @"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[finalName]);
+        throwException(AlchemicDuplicateNameException, @"Object factory names must be unique. Duplicate name: %@ used for %@ and %@", name, objectFactory, _objectFactories[finalName]);
     }
     _objectFactories[finalName] = objectFactory;
 }

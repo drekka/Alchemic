@@ -55,7 +55,7 @@
             _allowNil = YES;
 
         } else {
-            throwException(IllegalArgument, @"Unknown variable dependency option: %@", option);
+            throwException(AlchemicIllegalArgumentException, @"Unknown variable dependency option: %@", option);
         }
     }
 }
@@ -78,7 +78,7 @@
         }
     }
 
-    throwException(Injection, @"Error injecting %@: %@", [ALCRuntime forClass:[object class] variableDescription:_ivar], error.localizedDescription);
+    throwException(AlchemicInjectionException, @"Error injecting %@: %@", [ALCRuntime forClass:[object class] variableDescription:_ivar], error.localizedDescription);
 }
 
 -(NSString *)resolvingDescription {

@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)configureWithOption:(id)option model:(id<ALCModel>) model {
     if ([option isKindOfClass:[ALCIsReference class]]) {
-        throwException(IllegalArgument, @"Method based factories cannot be set to reference external objects");
+        throwException(AlchemicIllegalArgumentException, @"Method based factories cannot be set to reference external objects");
     } else {
         [super configureWithOption:option model:model];
     }
@@ -86,7 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     ALCInstantiation *parentGeneration = _parentObjectFactory.instantiation;
     if (!parentGeneration.object) {
-        throwException(NilParentObject, @"Parent object of method is nil.");
+        throwException(AlchemicNilParentObjectException, @"Parent object of method is nil.");
     }
 
     [parentGeneration complete];

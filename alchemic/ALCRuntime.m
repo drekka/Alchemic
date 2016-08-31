@@ -58,7 +58,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
         return propertyVar;
     }
     
-    throwException(InjectionNotFound, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
+    throwException(AlchemicInjectionNotFoundException, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
 }
 
 +(NSArray<ALCType *> *) forClass:(Class) aClass methodArgumentTypes:(SEL) methodSelector {
@@ -67,7 +67,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     if (!method) {
         method = class_getInstanceMethod(aClass, methodSelector);
         if (!method) {
-            throwException(SelectorNotFound, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
+            throwException(AlchemicSelectorNotFoundException, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
         }
     }
     
@@ -83,7 +83,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
         return argumentTypes;
     }
     
-    throwException(SelectorNotFound, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
+    throwException(AlchemicSelectorNotFoundException, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
 }
 
 +(NSArray<NSString*> *) writeablePropertiesForClass:(Class) aClass {
@@ -108,49 +108,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return results;
 }
 
-#pragma mark - Setting variables
-
-+(nullable id) mapValue:(nullable id) value
-              allowNils:(BOOL) allowNil
-                   type:(Class) type
-                  error:(NSError * __autoreleasing _Nullable *) error {
-    
-    // If the passed value is nil or an empty array.
-    if (!value) {
-        if (!allowNil) {
-            setError(@"Nil value encountered where a value was expected")
-        }
-        return nil;
-    }
-    
-    // If the target value is an array wrap up the value and return.
-    if ([type isSubclassOfClass:[NSArray class]]) {
-        return [value isKindOfClass:[NSArray class]] ? value : @[value];
-    }
-    
-    // Target is not an array
-    
-    // Throw an error if the source value is an array and we have too many or too few results.
-    id finalValue = value;
-    if ([finalValue isKindOfClass:[NSArray class]]) {
-        NSArray *values = (NSArray *) finalValue;
-        if (values.count == 0 && allowNil) {
-            return nil;
-        } else if (values.count != 1) {
-            setError(@"Expected 1 value, got %lu", (unsigned long) values.count);
-            return nil;
-        }
-        finalValue = values[0];
-    }
-    
-    if ([finalValue isKindOfClass:type]) {
-        return finalValue;
-    }
-    
-    setError(@"Value of type %@ cannot be cast to a %@", NSStringFromClass([finalValue class]), NSStringFromClass(type));
-    return nil;
-}
-
 #pragma mark - Validating
 
 +(void) validateClass:(Class) aClass selector:(SEL)selector numberOfArguments:(NSUInteger) nbrArguments {
@@ -163,12 +120,12 @@ static NSCharacterSet *__typeEncodingDelimiters;
     
     // Not found.
     if (!sig) {
-        throwException(SelectorNotFound, @"Failed to find selector %@", [self forClass:aClass selectorDescription:selector]);
+        throwException(AlchemicSelectorNotFoundException, @"Failed to find selector %@", [self forClass:aClass selectorDescription:selector]);
     }
     
     // Incorrect number of arguments. Allow for runtime in arguments.
     if (sig.numberOfArguments - 2 != nbrArguments) {
-        throwException(IncorrectNumberOfArguments, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector],  nbrArguments, (unsigned long) sig.numberOfArguments);
+        throwException(AlchemicIncorrectNumberOfArgumentsException, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector],  nbrArguments, (unsigned long) sig.numberOfArguments);
     }
 }
 

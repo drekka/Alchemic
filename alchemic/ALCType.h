@@ -17,7 +17,11 @@
  Enum of types for comparing when mapping.
  */
 typedef NS_ENUM(NSUInteger, ALCValueType) {
+    
+    // Base unknown type
     ALCValueTypeUnknown,
+    
+    // Scalar types.
     ALCValueTypeBool,
     ALCValueTypeChar,
     ALCValueTypeCharPointer,
@@ -33,7 +37,10 @@ typedef NS_ENUM(NSUInteger, ALCValueType) {
     ALCValueTypeUnsignedLongLong,
     ALCValueTypeUnsignedShort,
     ALCValueTypeStruct,
-    ALCValueTypeObject
+    
+    // Object types.
+    ALCValueTypeObject,
+    ALCValueTypeArray
 };
 
 NS_ASSUME_NONNULL_BEGIN
