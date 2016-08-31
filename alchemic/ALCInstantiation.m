@@ -8,12 +8,12 @@
 
 @import StoryTeller;
 
-#import "ALCInstantiation.h"
-#import "AlchemicAware.h"
-#import "ALCDefs.h"
-#import "ALCTypeDefs.h"
-#import "NSObject+Alchemic.h"
-#import "ALCRuntime.h"
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/AlchemicAware.h>
+#import <Alchemic/ALCDefs.h>
+#import <Alchemic/ALCTypeDefs.h>
+#import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCRuntime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

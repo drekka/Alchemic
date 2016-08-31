@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCValue+Mapping.h"
+#import <Alchemic/ALCValue+Mapping.h>
 
 #import <Alchemic/ALCInternalMacros.h>
 @import ObjectiveC;

@@ -6,7 +6,7 @@
 //  Copyright © 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCFlagMacros.h"
+#import <Alchemic/ALCFlagMacros.h>
 
 #define ALCFlagMacroImplementation(name) \
 @implementation ALCIs ## name \

@@ -9,7 +9,7 @@
 @import UIKit;
 @import StoryTeller;
 
-#import "ALCApplicationDelegateAspect.h"
+#import <Alchemic/ALCApplicationDelegateAspect.h>
 
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCMacros.h>

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCVariableDependency.h"
+#import <Alchemic/ALCVariableDependency.h>
 
 #import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCFlagMacros.h>

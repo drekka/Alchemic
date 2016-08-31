@@ -8,7 +8,7 @@
 
 @import StoryTeller;
 
-#import "ALCMethodArgumentDependency.h"
+#import <Alchemic/ALCMethodArgumentDependency.h>
 
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCStringMacros.h>

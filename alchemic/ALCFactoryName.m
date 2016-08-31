@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCFactoryName.h"
+#import <Alchemic/ALCFactoryName.h>
 
 @implementation ALCFactoryName
 

@@ -10,21 +10,21 @@
 @import UIKit;
 @import StoryTeller;
 
-#import "ALCAbstractObjectFactory.h"
-#import "ALCInstantiation.h"
-#import "ALCInternalMacros.h"
-#import "ALCDefs.h"
-#import "ALCFactoryName.h"
-#import "ALCFlagMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCException.h"
-#import "ALCModel.h"
-#import "ALCObjectFactoryType.h"
-#import "ALCObjectFactoryTypeTemplate.h"
-#import "ALCObjectFactoryTypeReference.h"
-#import "ALCObjectFactoryTypeSingleton.h"
-#import "ALCRuntime.h"
-#import "ALCType.h"
+#import <Alchemic/ALCAbstractObjectFactory.h>
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCDefs.h>
+#import <Alchemic/ALCFactoryName.h>
+#import <Alchemic/ALCFlagMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCModel.h>
+#import <Alchemic/ALCObjectFactoryType.h>
+#import <Alchemic/ALCObjectFactoryTypeTemplate.h>
+#import <Alchemic/ALCObjectFactoryTypeReference.h>
+#import <Alchemic/ALCObjectFactoryTypeSingleton.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

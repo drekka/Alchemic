@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCType.h"
+#import <Alchemic/ALCType.h>
 
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCValue.h>

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCArrayValueSource.h"
+#import <Alchemic/ALCArrayValueSource.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCValue.h>
 #import <Alchemic/ALCTypeDefs.h>

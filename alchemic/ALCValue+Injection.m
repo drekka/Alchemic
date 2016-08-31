@@ -9,7 +9,7 @@
 @import ObjectiveC;
 @import StoryTeller;
 
-#import "ALCValue+Injection.h"
+#import <Alchemic/ALCValue+Injection.h>
 
 #import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCRuntime.h>

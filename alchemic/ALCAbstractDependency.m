@@ -8,7 +8,7 @@
 
 @import StoryTeller;
 
-#import "ALCAbstractDependency.h"
+#import <Alchemic/ALCAbstractDependency.h>
 
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCValueSource.h>
