@@ -280,6 +280,7 @@
 		6CE234EC1CEB4B9400728CBE /* ALCModelClassProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE234EA1CEB4B9400728CBE /* ALCModelClassProcessor.m */; };
 		6CE6FFF71D2A9B2100D61613 /* ALCFactoryNameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE6FFF61D2A9B2100D61613 /* ALCFactoryNameTests.m */; };
 		6CE6FFFB1D2AA59A00D61613 /* ALCClassObjectFactoryInitializerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE6FFFA1D2AA59A00D61613 /* ALCClassObjectFactoryInitializerTests.m */; };
+		6CE7848E1D771A7E008A6C4D /* ALCArrayValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE7848D1D771A7E008A6C4D /* ALCArrayValueSourceTests.m */; };
 		6CE7F68F1D410269005DEE2C /* ALCMOdelSearchCriteriaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE7F68E1D410269005DEE2C /* ALCMOdelSearchCriteriaTests.m */; };
 		6CE7F6911D410BB4005DEE2C /* ALCModelImplTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE7F6901D410BB4005DEE2C /* ALCModelImplTests.m */; };
 		6CED05761BCB545800B6C55B /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
@@ -470,6 +471,7 @@
 		6CE6FFF61D2A9B2100D61613 /* ALCFactoryNameTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCFactoryNameTests.m; path = alchemicTests/ALCFactoryNameTests.m; sourceTree = "<group>"; };
 		6CE6FFF81D2A9CAD00D61613 /* NSArray+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+AlchemicTests.m"; sourceTree = "<group>"; };
 		6CE6FFFA1D2AA59A00D61613 /* ALCClassObjectFactoryInitializerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCClassObjectFactoryInitializerTests.m; path = alchemicTests/ALCClassObjectFactoryInitializerTests.m; sourceTree = "<group>"; };
+		6CE7848D1D771A7E008A6C4D /* ALCArrayValueSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCArrayValueSourceTests.m; sourceTree = "<group>"; };
 		6CE7F68E1D410269005DEE2C /* ALCMOdelSearchCriteriaTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCMOdelSearchCriteriaTests.m; sourceTree = "<group>"; };
 		6CE7F6901D410BB4005DEE2C /* ALCModelImplTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelImplTests.m; sourceTree = "<group>"; };
 		6CED05751BCB545800B6C55B /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
@@ -682,6 +684,7 @@
 			children = (
 				6C5BC1BB1D68ACB4009592EB /* ALCAbstractDependencyTests.m */,
 				6C0D87841D40A4B900FEC25A /* ALCVariableDependencyTests.m */,
+				6CE7848D1D771A7E008A6C4D /* ALCArrayValueSourceTests.m */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -1502,6 +1505,7 @@
 				6CC503D81D1ACE67004283DA /* ALCObjectFactoryTypeTemplateTests.m in Sources */,
 				6C67FF291C6772A400ABEDDD /* ALCRuntimeTests.m in Sources */,
 				6C5830301D686CF800297AF8 /* ALCTypeDataTests.m in Sources */,
+				6CE7848E1D771A7E008A6C4D /* ALCArrayValueSourceTests.m in Sources */,
 				6C04EE6F1D6C3477004F32F8 /* ALCUserDefaultsAspectTests.m in Sources */,
 				6CB595CD1D6B43C0006BC061 /* ALCUserDefaultsTests.m in Sources */,
 				6CF814A11D7001D2001B1402 /* ALCValue+MappingTests.m in Sources */,
