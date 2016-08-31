@@ -12,7 +12,6 @@
 #import <Alchemic/AlchemicAware.h>
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCTypeDefs.h>
-#import <Alchemic/NSObject+Alchemic.h>
 #import <Alchemic/ALCRuntime.h>
 
 NS_ASSUME_NONNULL_BEGIN

@@ -9,6 +9,7 @@
 @import Foundation;
 
 @protocol ALCModel;
+@protocol ALCResolvable;
 @class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN

@@ -8,7 +8,6 @@
 
 #import <Alchemic/ALCVariableDependency.h>
 
-#import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCException.h>

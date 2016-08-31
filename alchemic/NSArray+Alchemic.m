@@ -10,7 +10,6 @@
 
 #import <Alchemic/ALCDependency.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
-#import <Alchemic/ALCConstant.h>
 #import <Alchemic/ALCModelValueSource.h>
 #import <Alchemic/ALCMethodArgumentDependency.h>
 #import <Alchemic/ALCMacros.h>

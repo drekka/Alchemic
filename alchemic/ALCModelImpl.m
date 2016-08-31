@@ -9,18 +9,11 @@
 @import UIKit;
 @import StoryTeller;
 
-// :: Framework ::
-#import <Alchemic/ALCAbstractObjectFactory.h>
-#import <Alchemic/ALCClassObjectFactory.h>
-#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCModelImpl.h>
+
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCFlagMacros.h>
-#import <Alchemic/ALCModelImpl.h>
-#import <Alchemic/ALCModelSearchCriteria.h>
-#import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCResolveAspect.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

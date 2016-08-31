@@ -10,6 +10,9 @@
 
 #import <Alchemic/ALCAbstractValueSource.h>
 
+@class ALCType;
+@protocol ALCValueSource;
+
 @interface ALCArrayValueSource : ALCAbstractValueSource
 
 -(instancetype)initWithType:(ALCType *)type NS_UNAVAILABLE;

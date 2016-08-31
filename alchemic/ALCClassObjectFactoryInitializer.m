@@ -13,12 +13,9 @@
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCDependency.h>
 #import <Alchemic/NSObject+Alchemic.h>
-#import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/ALCType.h>
 
 @implementation ALCClassObjectFactoryInitializer {
     NSArray<id<ALCDependency>> *_arguments;

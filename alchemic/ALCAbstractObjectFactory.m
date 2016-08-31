@@ -11,15 +11,12 @@
 @import StoryTeller;
 
 #import <Alchemic/ALCAbstractObjectFactory.h>
+
 #import <Alchemic/ALCInstantiation.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCException.h>
 #import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCObjectFactoryType.h>
 #import <Alchemic/ALCObjectFactoryTypeTemplate.h>
 #import <Alchemic/ALCObjectFactoryTypeReference.h>
 #import <Alchemic/ALCObjectFactoryTypeSingleton.h>

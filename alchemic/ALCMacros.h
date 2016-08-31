@@ -6,7 +6,6 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCMethodArgumentDependency.h>
@@ -16,6 +15,7 @@
 #import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCUserDefaultsAspect.h>
 #import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCDefs.h>
 
 #pragma mark - registration
 

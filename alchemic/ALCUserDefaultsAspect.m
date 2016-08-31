@@ -11,7 +11,6 @@
 #import <Alchemic/ALCUserDefaultsAspect.h>
 
 #import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCObjectFactory.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCType.h>
 #import <Alchemic/ALCUserDefaults.h>

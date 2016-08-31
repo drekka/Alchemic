@@ -11,7 +11,6 @@
 #import <Alchemic/ALCValueSource.h>
 
 @class ALCModelSearchCriteria;
-@class ALCInstantiation;
 
 NS_ASSUME_NONNULL_BEGIN
 

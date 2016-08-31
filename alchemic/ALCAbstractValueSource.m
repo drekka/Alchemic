@@ -9,6 +9,9 @@
 #import <Alchemic/ALCAbstractValueSource.h>
 
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCResolvable.h>
+#import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCType.h>
 
 @implementation ALCAbstractValueSource

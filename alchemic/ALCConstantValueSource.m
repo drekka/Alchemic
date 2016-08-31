@@ -7,6 +7,7 @@
 //
 
 #import <Alchemic/ALCConstantValueSource.h>
+#import <Alchemic/ALCType.h>
 #import <Alchemic/ALCValue.h>
 #import <Alchemic/ALCInternalMacros.h>
 

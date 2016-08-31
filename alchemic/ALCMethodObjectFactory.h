@@ -7,6 +7,7 @@
 //
 
 #import <Alchemic/ALCAbstractObjectFactory.h>
+
 @class ALCClassObjectFactory;
 @protocol ALCDependency;
 @class ALCType;

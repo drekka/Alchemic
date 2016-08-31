@@ -9,20 +9,15 @@
 @import StoryTeller;
 
 #import <Alchemic/ALCClassObjectFactory.h>
+
 #import <Alchemic/ALCClassObjectFactoryInitializer.h>
-#import <Alchemic/ALCDependency.h>
-#import <Alchemic/ALCException.h>
-#import <Alchemic/ALCFlagMacros.h>
-#import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCRuntime.h>
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCVariableDependency.h>
 #import <Alchemic/NSArray+Alchemic.h>
 #import <Alchemic/NSObject+Alchemic.h>
-
+#import <Alchemic/AlchemicAware.h>
+#import <Alchemic/ALCType.h>
 
 @implementation ALCClassObjectFactory {
 

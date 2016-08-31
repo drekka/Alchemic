@@ -12,6 +12,8 @@
 #import <Alchemic/ALCAbstractDependency.h>
 
 @protocol ALCInjector;
+@protocol ALCValueSource;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 

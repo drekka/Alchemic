@@ -9,11 +9,9 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCTypeDefs.h>
 #import <Alchemic/ALCResolvable.h>
 
 @protocol ALCObjectFactory;
-@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 

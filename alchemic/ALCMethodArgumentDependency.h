@@ -10,9 +10,7 @@
 
 #import <Alchemic/ALCAbstractDependency.h>
 
-@protocol ALCDependency;
-@protocol ALCModel;
-@class ALCMethodArgumentDependency;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 

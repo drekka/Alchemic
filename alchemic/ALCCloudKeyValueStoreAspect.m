@@ -13,7 +13,6 @@
 
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCType.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCCloudKeyValueStore.h>
 

@@ -9,6 +9,8 @@
 @import Foundation;
 #import <Alchemic/ALCAbstractValueSource.h>
 
+@class ALCType;
+
 #define AcString(value) [ALCConstantValueSource valueSourceWithObject:value]
 #define AcInt(value) [ALCConstantValueSource valueSourceWithInt:value]
 

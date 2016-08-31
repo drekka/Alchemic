@@ -14,6 +14,7 @@
 @protocol ALCValueSource;
 @class ALCClassObjectFactoryInitializer;
 @class ALCVariableDependency;
+@class ALCType;
 
 /**
  Object factory that can instantiate classes. Can also optionally take a ALCClassObjectFactoryInitializer to define the initializer to use when instantiating an instance.
