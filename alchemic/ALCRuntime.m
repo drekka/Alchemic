@@ -13,7 +13,6 @@
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCModelClassProcessor.h>
-#import <Alchemic/ALCResourceLocatorClassProcessor.h>
 #import <Alchemic/ALCAspectClassProcessor.h>
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCValue.h>
@@ -158,7 +157,6 @@ static NSCharacterSet *__typeEncodingDelimiters;
     NSArray<id<ALCClassProcessor>> *processors = @[
                                                    [[ALCConfigClassProcessor alloc] init],
                                                    [[ALCModelClassProcessor alloc] init],
-                                                   [[ALCResourceLocatorClassProcessor alloc] init],
                                                    [[ALCAspectClassProcessor alloc] init]
                                                    ];
     [appBundles enumerateObjectsUsingBlock:^(NSBundle *bundle, BOOL *stop) {
