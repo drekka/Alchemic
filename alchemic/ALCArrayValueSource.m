@@ -64,9 +64,8 @@
         }
     };
 
-    return [ALCValue valueWithType:[ALCType typeWithClass:[NSArray class]]
-                             value:[NSValue valueWithNonretainedObject:results]
-                        completion:allCompletions];
+    return [[ALCType typeWithClass:[NSArray class]] withValue:[NSValue valueWithNonretainedObject:results]
+                                                   completion:allCompletions];
 }
 
 -(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {

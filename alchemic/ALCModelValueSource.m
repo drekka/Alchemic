@@ -61,15 +61,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack
                    model:(id<ALCModel>) model {
-
+    
     STLog(_type, @"Searching model using %@", _criteria);
-
+    
     // Find dependencies
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];
     if ([_resolvedFactories count] == 0) {
         throwException(NoDependenciesFound, @"No object factories found for criteria %@", _criteria);
     }
-
+    
     // Filter for primary factories and replace if there are any present.
     NSArray<id<ALCObjectFactory>> *primaryFactories = [_resolvedFactories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id<ALCObjectFactory> objectFactory, NSDictionary<NSString *,id> *bindings) {
         return objectFactory.isPrimary;
@@ -78,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
         STLog(_type, @"%lu primary factories found.", (unsigned long) primaryFactories.count);
         _resolvedFactories = primaryFactories;
     }
-
+    
     // Resolve dependencies.
     STLog(_type, @"Found %i object factories", _resolvedFactories.count);
     for (id<ALCResolvable> objectFactory in _resolvedFactories) {
@@ -102,9 +102,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
-    return [ALCValue valueWithType:self.type
-                             value:[NSValue valueWithNonretainedObject:values]
-                        completion:[self completionForInstantiations:instantations]];
+    return [self.type withValue:[NSValue valueWithNonretainedObject:values]
+                     completion:[self completionForInstantiations:instantations]];
 }
 
 #pragma mark - Retrieving results

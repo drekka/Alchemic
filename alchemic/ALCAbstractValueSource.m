@@ -38,7 +38,7 @@
 }
 
 -(NSString *)resolvingDescription {
-    return _type.typeDescription;
+    return _type.description;
 }
 
 @end

@@ -10,7 +10,8 @@
 @import ObjectiveC;
 
 @class ALCValue;
-@class ALCModelSearchCriteria;
+
+#import <Alchemic/ALCTypeDefs.h>
 
 /**
  Enum of types for comparing when mapping.
@@ -47,12 +48,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly) ALCValueType type;
 
-@property (nonatomic, strong, readonly) NSString *typeDescription;
-
-@property (nonatomic, strong, readonly) NSString *methodNamePart;
+@property (nonatomic, strong, readonly) NSString *methodNameFragment;
 
 /**
- The name of a struct. ie. CGRect, CGSize, etc.
+ The name of a scalar type. ie. int, unsigned int, CGRect, CGSize, etc.
  */
 @property (nonatomic, assign, nullable, readonly) const char *scalarType;
 
@@ -69,12 +68,6 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Initiailizers
 
 -(instancetype) init NS_UNAVAILABLE;
-
--(instancetype) initWithType:(ALCValueType) type
-             typeDescription:(NSString *) typeDescription
-                  scalarType:(nullable const char *) scalarType
-                   objcClass:(nullable Class) objcClass
-               objcProtocols:(nullable NSArray<Protocol *> *) objcProtocols;
 
 #pragma mark - Factory methods
 

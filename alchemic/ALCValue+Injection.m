@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable ALCVariableInjectorBlock) variableInjector {
     Method method;
-    SEL selector = NSSelectorFromString(str(@"variableInjectorFor%@", self.methodNamePart));
+    SEL selector = NSSelectorFromString(str(@"variableInjectorFor%@", self.methodNameFragment));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
@@ -32,13 +32,13 @@ NS_ASSUME_NONNULL_BEGIN
             return ((ALCVariableInjectorBlock (*)(id, Method)) method_invoke)(self, method);
         }
     }
-    throwException(SelectorNotFound, @"Unable to find variable injector for type: %@", self.typeDescription);
+    throwException(SelectorNotFound, @"Unable to find variable injector for type: %@", self.description);
     return NULL;
 }
 
 -(nullable ALCInvocationInjectorBlock) invocationInjector {
     Method method;
-    SEL selector = NSSelectorFromString(str(@"invocationInjectorFor%@", self.methodNamePart));
+    SEL selector = NSSelectorFromString(str(@"invocationInjectorFor%@", self.methodNameFragment));
     STLog(self, @"Calling selector %@ to get injector", NSStringFromSelector(selector));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
 
-    throwException(SelectorNotFound, @"Unable to find invocation injector for type: %@", self.typeDescription);
+    throwException(SelectorNotFound, @"Unable to find invocation injector for type: %@", self.description);
     return NULL;
 }
 

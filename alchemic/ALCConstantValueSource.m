@@ -52,11 +52,11 @@
 
 
 -(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
-    return [ALCValue valueWithType:self.type value:_value completion:NULL];
+    return [self.type withValue:_value completion:NULL];
 }
 
 -(NSString *)resolvingDescription {
-    return self.type.typeDescription;
+    return self.type.description;
 }
 
 @end

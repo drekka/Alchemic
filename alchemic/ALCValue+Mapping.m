@@ -21,7 +21,7 @@
     
     // Use the runtime to build a reference to the method.
     Method method;
-    SEL selector = NSSelectorFromString(str(@"convert%@To%@:error:", self.methodNamePart, toType.methodNamePart));
+    SEL selector = NSSelectorFromString(str(@"convert%@To%@:error:", self.methodNameFragment, toType.methodNameFragment));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
@@ -49,7 +49,7 @@
     id obj = self.value.nonretainedObjectValue;
 
     if ([obj isKindOfClass:[NSNumber class]]) {
-        return [ALCValue valueWithType:type value:numberConversion(obj) completion:self.completion];
+        return [type withValue:numberConversion(obj) completion:self.completion];
     }
 
     setError(@"Cannot convert source %@ to NSNumber *", NSStringFromClass([obj class]));

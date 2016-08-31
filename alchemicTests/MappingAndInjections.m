@@ -22,9 +22,7 @@
 -(void) testNSNumberToInt {
 
     ALCType *type = [ALCType typeWithEncoding:@encode(NSNumber *)];
-    ALCValue *fromValue = [ALCValue valueWithType:type
-                                            value:[NSValue valueWithNonretainedObject:@5]
-                                       completion:NULL];
+    ALCValue *fromValue = [type withValue:[NSValue valueWithNonretainedObject:@5] completion:NULL];
 
     Ivar intVar = class_getInstanceVariable([self class], "_aInt");
     NSError *error;

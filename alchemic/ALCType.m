@@ -15,7 +15,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCType
+@interface ALCValue (copying)
+-(void) setValue:(NSValue *) value completion:(nullable ALCSimpleBlock) completion;
+@end
+
+@implementation ALCType {
+    NSString *_typeDesc;
+}
 
 #pragma mark - Factory methods
 
@@ -30,11 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 +(instancetype) typeWithClass:(Class) aClass {
-    return [[ALCType alloc] initWithType:ALCValueTypeObject
-                         typeDescription:str(@"object")
-                              scalarType:nil
-                               objcClass:aClass
-                           objcProtocols:nil];
+    ALCType *type = [[ALCType alloc] initPrivate];
+    [type setClass:aClass];
+    return type;
 }
 
 #pragma mark - Initializers
@@ -47,22 +51,6 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
--(instancetype) initWithType:(ALCValueType) type
-             typeDescription:(NSString *) typeDescription
-                  scalarType:(nullable const char *) scalarType
-                   objcClass:(nullable Class) objcClass
-               objcProtocols:(nullable NSArray<Protocol *> *) objcProtocols {
-    self = [super init];
-    if (self) {
-        _type = type;
-        _typeDescription = typeDescription;
-        _scalarType = scalarType;
-        _objcClass = objcClass;
-        _objcProtocols = objcProtocols;
-    }
-    return self;
-}
-
 -(BOOL) setObjectType:(const char *) encoding {
 
     if (! AcStrHasPrefix(encoding, "@")) {
@@ -70,9 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     // Start with a result that indicates an Id. We map Ids as NSObjects.
-    _type = ALCValueTypeObject;
-    _objcClass = [NSObject class];
-    _typeDescription = @"Object";
+    [self setClass:[NSObject class]];
 
     // Object type.
     NSCharacterSet *typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
@@ -113,26 +99,34 @@ NS_ASSUME_NONNULL_BEGIN
     || [self setScalarType:"*" encoding:encoding type:ALCValueTypeCharPointer desc:@"char array"];
 }
 
--(BOOL) setScalarType:(const char *) scalarType
-             encoding:(const char *) encoding
-                 type:(ALCValueType) type
-                 desc:(NSString *) desc {
+-(BOOL) setScalarType:(const char *) scalarType encoding:(const char *) encoding type:(ALCValueType) type desc:(NSString *) desc {
     if (strcmp(encoding, scalarType) == 0) {
         _scalarType = scalarType;
         _type = type;
-        _typeDescription = desc;
+        _typeDesc = desc;
+        _methodNameFragment = [desc.capitalizedString stringByReplacingOccurrencesOfString:@" " withString:@""];
         return YES;
     }
     return NO;
 }
 
--(NSString *)methodNamePart {
-    return [self.typeDescription.capitalizedString stringByReplacingOccurrencesOfString:@" " withString:@""];
+#pragma mark - Other methods
+
+-(ALCValue *) withValue:(NSValue *) value completion:(nullable ALCSimpleBlock) completion {
+    ALCType *valueObj = [[ALCValue alloc] initPrivate];
+    valueObj->_type = _type;
+    valueObj->_typeDesc = _typeDesc;
+    valueObj->_methodNameFragment = _methodNameFragment;
+    valueObj->_scalarType = _scalarType;
+    valueObj->_objcClass = _objcClass;
+    valueObj->_objcProtocols = _objcProtocols;
+    [(ALCValue *)valueObj setValue:value completion:completion];
+    return (ALCValue *) valueObj;
 }
 
 -(NSString *) description {
     if (self.type != ALCValueTypeObject) {
-        return str(@"Scalar %@", _typeDescription);
+        return str(@"Scalar %@", _typeDesc);
     } else {
         NSString *className = self.objcClass ? NSStringFromClass((Class) self.objcClass) : @"";
 
@@ -155,6 +149,15 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
-NS_ASSUME_NONNULL_END
+-(void) setClass:(Class) aClass {
+    _type = ALCValueTypeObject;
+    _typeDesc = @"Object";
+    _methodNameFragment = @"Object";
+    _objcClass = aClass;
+}
+
+
 
 @end
+
+NS_ASSUME_NONNULL_END
