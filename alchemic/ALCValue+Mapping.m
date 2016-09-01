@@ -24,6 +24,7 @@
     // Use the runtime to build a reference to the method.
     Method method;
     SEL selector = NSSelectorFromString(str(@"convert%@To%@:error:", self.methodNameFragment, toType.methodNameFragment));
+    STLog(self, @"Looking for selector %@", NSStringFromSelector(selector));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
@@ -36,12 +37,31 @@
     return nil;
 }
 
--(nullable ALCValue *) convertObjectToInt:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-    return [self valueOfType:toType error:error withNumberConversion:^NSValue *(NSNumber *number) {
-        int scalar = number.intValue;
-        return [NSValue value:&scalar withObjCType:toType.scalarType.UTF8String];
-    }];
+#pragma mark - Mapping routines
+
+-(nullable ALCValue *) convertObjectToArray:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
+    if (self.)
 }
+
+#define convertObjectToNumber(toTypeName, scalarTypeDef, numberFuction) \
+-(nullable ALCValue *) convertObjectTo ## toTypeName:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error { \
+    return [self valueOfType:toType error:error withNumberConversion:^NSValue *(NSNumber *number) { \
+        scalarTypeDef scalar = number.numberFuction; \
+        return [NSValue value:&scalar withObjCType:toType.scalarType.UTF8String]; \
+    }]; \
+}
+
+convertObjectToNumber(Bool, BOOL, boolValue)
+convertObjectToNumber(Int, int, intValue)
+convertObjectToNumber(Double, double, doubleValue)
+convertObjectToNumber(Float, float, floatValue)
+convertObjectToNumber(Short, short, shortValue)
+convertObjectToNumber(Long, long, longValue)
+convertObjectToNumber(LongLong, long long, longLongValue)
+convertObjectToNumber(UnsignedInt, unsigned int, unsignedIntValue)
+convertObjectToNumber(UnsignedLong, unsigned long, unsignedLongValue)
+convertObjectToNumber(UnsignedLongLong, unsigned long long, unsignedLongLongValue)
+convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
 
 -(nullable ALCValue *) convertArrayToObject:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
     
