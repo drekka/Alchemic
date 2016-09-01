@@ -52,9 +52,10 @@
     for (id<ALCValueSource> source in _sources) {
         ALCValue *value = [source valueWithError:error];
         if (!value) {
+            // Theres an error.
             return nil;
         }
-        [results addObject:value];
+        [results addObject:value.value];
         ALCSimpleBlock completion = value.completion;
         if (completion) {
             [completions addObject:completion];

@@ -16,33 +16,93 @@
 
 @implementation ALCArrayValueSourceTests {
     ALCArrayValueSource *_source;
-    id _mockValueSource;
+    id _mockOtherValueSource;
 }
 
 -(void)setUp {
-    _mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
-    _source = [ALCArrayValueSource valueSourceWithValueSources:@[_mockValueSource]];
+    _mockOtherValueSource = OCMProtocolMock(@protocol(ALCValueSource));
+    _source = [ALCArrayValueSource valueSourceWithValueSources:@[_mockOtherValueSource]];
 }
 
 -(void) testResolveWithStackModel {
     NSMutableArray *stack = [NSMutableArray array];
     id mockModel = OCMProtocolMock(@protocol(ALCModel));
-    OCMExpect([_mockValueSource resolveWithStack:stack model:mockModel]);
+    OCMExpect([_mockOtherValueSource resolveWithStack:stack model:mockModel]);
 
     [_source resolveWithStack:stack model:mockModel];
 
-    OCMVerifyAll(_mockValueSource);
+    OCMVerifyAll(_mockOtherValueSource);
 }
 
 -(void) testValueWithErrorReturnsValue {
 
+    // Mock out a ALCValue.
     id mockValue = OCMClassMock([ALCValue class]);
-    NSError *error;
-    OCMStub([_mockValueSource valueWithError:[OCMArg anyObjectRef]]).andReturn(mockValue);
+    OCMStub([(ALCValue *) mockValue value]).andReturn(@"abc");
+    __block BOOL completionCalled;
+    ALCSimpleBlock completion = ^{
+        completionCalled = YES;
+    };
+    OCMStub([mockValue completion]).andReturn(completion);
+    
+    // Have the other data source return the value.
+    OCMStub([_mockOtherValueSource valueWithError:[OCMArg anyObjectRef]]).andReturn(mockValue);
 
+    // Call the method.
+    NSError *error;
     id result = [_source valueWithError:&error];
 
-    XCTAssertEqual(mockValue, result);
+    // Assert we have been given back the value.
+    XCTAssertTrue([result isKindOfClass:[ALCValue class]]);
+    ALCValue *value = result;
+    XCTAssertEqual(ALCValueTypeArray, value.type);
+    
+    NSArray *actualResults = value.value;
+    XCTAssertEqual(1u, actualResults.count);
+    XCTAssertEqualObjects(@"abc", actualResults[0]);
+    
+    // And that the completions have been assembled.
+    value.completion();
+    XCTAssertTrue(completionCalled);
+}
+
+-(void) testValueWithErrorReturnsNestedError {
+    
+    OCMStub([_mockOtherValueSource valueWithError:[OCMArg setTo:[NSError errorWithDomain:@"abc" code:1 userInfo:nil]]]).andReturn(nil);
+    
+    NSError *error;
+    id result = [_source valueWithError:&error];
+    
+    XCTAssertNil(result);
+    XCTAssertNotNil(error);
+}
+
+-(void) testReferencesObjectFactoryPassesRequestToSources {
+    id mockOf = OCMProtocolMock(@protocol(ALCObjectFactory));
+    OCMStub([_mockOtherValueSource referencesObjectFactory:mockOf]).andReturn(YES);
+
+    XCTAssertTrue([_source referencesObjectFactory:mockOf]);
+}
+
+-(void) testReferencesObjectFactoryDefaultsToFalse {
+    id mockOf = OCMProtocolMock(@protocol(ALCObjectFactory));
+    OCMStub([_mockOtherValueSource referencesObjectFactory:mockOf]).andReturn(NO);
+    
+    XCTAssertFalse([_source referencesObjectFactory:mockOf]);
+}
+
+-(void) testIsReadyWhenSourcesAreReady {
+    OCMStub([_mockOtherValueSource isReady]).andReturn(YES);
+    XCTAssertTrue(_source.isReady);
+}
+
+-(void) testIsReadyWhenSourcesAreNotReady {
+    OCMStub([_mockOtherValueSource isReady]).andReturn(NO);
+    XCTAssertFalse(_source.isReady);
+}
+
+-(void) testResolvingDescription {
+    XCTAssertEqualObjects(@"array of value sources", _source.resolvingDescription);
 }
 
 @end

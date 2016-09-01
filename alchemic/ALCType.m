@@ -29,8 +29,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) typeWithEncoding:(const char *) encoding {
     ALCType *typeData = [[ALCType alloc] initPrivate];
-    [typeData setObjectType:encoding] || [typeData setScalarType:encoding];
-    return typeData;
+    if ([typeData setObjectType:encoding]
+    || [typeData setScalarType:encoding]
+        || [typeData setStructType:encoding]) {
+        return typeData;
+    }
+    throwException(AlchemicTypeMissMatchException, @"Encoding %s describes an unknown type", encoding);
 }
 
 +(instancetype) typeWithClass:(Class) aClass {
@@ -95,6 +99,25 @@ NS_ASSUME_NONNULL_BEGIN
     || [self setScalarType:"d" encoding:encoding type:ALCValueTypeDouble]
     || [self setScalarType:"B" encoding:encoding type:ALCValueTypeBool]
     || [self setScalarType:"*" encoding:encoding type:ALCValueTypeCharPointer];
+}
+
+-(BOOL) setStructType:(const char *) encoding {
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{(\\w+)=.*"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:NULL];
+    NSString *strEncoding = [NSString stringWithUTF8String:encoding];
+    NSTextCheckingResult *result = [regex firstMatchInString:strEncoding
+                                                     options:NSMatchingReportProgress
+                                                       range:NSMakeRange(0, strEncoding.length)];
+    if (result) {
+        NSRange nameRange = [result rangeAtIndex:1];
+        _type = ALCValueTypeStruct;
+        _scalarType = [[strEncoding substringWithRange:nameRange] UTF8String];
+        return YES;
+    }
+
+    return NO;
 }
 
 -(BOOL) setScalarType:(const char *) scalarType encoding:(const char *) encoding type:(ALCValueType) type {
@@ -176,8 +199,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSString *) methodNameFragment {
     switch (_type) {
             
-        case ALCValueTypeUnknown: return @"[unknown type]";
-            
             // Scalar types.
         case ALCValueTypeBool: return @"Bool";
         case ALCValueTypeChar: return @"Char";
@@ -198,6 +219,9 @@ NS_ASSUME_NONNULL_BEGIN
             // Object types.
         case ALCValueTypeObject:return @"Object";
         case ALCValueTypeArray: return @"Array";
+            
+        default:
+            throwException(AlchemicIllegalArgumentException, @"Cannot deduce a method name when type is unknown");
     }
 }
 

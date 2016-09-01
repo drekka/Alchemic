@@ -8,6 +8,7 @@
 
 @import ObjectiveC;
 @import StoryTeller;
+@import CoreGraphics;
 
 #import <Alchemic/ALCValue+Injection.h>
 
@@ -40,15 +41,15 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ALCInvocationInjectorBlock) invocationInjector {
     Method method;
     SEL selector = NSSelectorFromString(str(@"invocationInjectorFor%@", self.methodNameFragment));
-    STLog(self, @"Calling selector %@ to get injector", NSStringFromSelector(selector));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
             // Dynamically call the selector method to do the converstion.
+            STLog(self, @"Calling selector %@ to get injector", NSStringFromSelector(selector));
             return ((ALCInvocationInjectorBlock (*)(id, Method)) method_invoke)(self, method);
         }
     }
-
+    
     throwException(AlchemicSelectorNotFoundException, @"Unable to find invocation injector for type: %@", self.description);
     return NULL;
 }
@@ -57,15 +58,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define scalarVariableInjector(type, typeName) \
 -(ALCVariableInjectorBlock) variableInjectorFor ## typeName { \
-    return ^(ALCVariableInjectorBlockArgs) { \
-        type value; \
-        [self.value getValue:&value]; \
-        CFTypeRef objRef = CFBridgingRetain(obj); \
-        type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(ivar)); \
-        *ivarPtr = value; \
-        CFBridgingRelease(objRef); \
-        [ALCRuntime executeSimpleBlock:self.completion]; \
-    }; \
+return ^(ALCVariableInjectorBlockArgs) { \
+type value; \
+[self.value getValue:&value]; \
+CFTypeRef objRef = CFBridgingRetain(obj); \
+type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(ivar)); \
+*ivarPtr = value; \
+CFBridgingRelease(objRef); \
+[ALCRuntime executeSimpleBlock:self.completion]; \
+}; \
 }
 
 scalarVariableInjector(int, Int)
@@ -76,7 +77,7 @@ scalarVariableInjector(int, Int)
 
 -(ALCVariableInjectorBlock) variableInjectorForObject {
     return ^(ALCVariableInjectorBlockArgs) {
-
+        
         id value = self.value;
         
         // Check for setting a nil.
@@ -103,12 +104,12 @@ scalarVariableInjector(int, Int)
 
 #define scalarMethodArgumentInjector(type, typeName) \
 -(ALCInvocationInjectorBlock) invocationInjectorFor ## typeName { \
-    return ^(ALCInvocationInjectorBlockArgs) { \
-        type value; \
-        [self.value getValue:&value]; \
-        [ALCRuntime executeSimpleBlock:self.completion]; \
-        [inv setArgument:&value atIndex:idx + 2]; \
-    }; \
+return ^(ALCInvocationInjectorBlockArgs) { \
+type value; \
+[self.value getValue:&value]; \
+[ALCRuntime executeSimpleBlock:self.completion]; \
+[inv setArgument:&value atIndex:idx + 2]; \
+}; \
 }
 
 #define methodArgumentInjector(type, typeName) \
@@ -120,7 +121,23 @@ type value = self.value; \
 }; \
 }
 
+scalarMethodArgumentInjector(BOOL, Bool)
+scalarMethodArgumentInjector(char, Char)
+scalarMethodArgumentInjector(char *, CharPointer)
+scalarMethodArgumentInjector(double, Double)
+scalarMethodArgumentInjector(float, Float)
 scalarMethodArgumentInjector(int, Int)
+scalarMethodArgumentInjector(double, Long)
+scalarMethodArgumentInjector(long long, LongLong)
+scalarMethodArgumentInjector(short, Short)
+scalarMethodArgumentInjector(unsigned char, UnsignedChar)
+scalarMethodArgumentInjector(unsigned int, UnsignedInt)
+scalarMethodArgumentInjector(unsigned long, UnsignedLong)
+scalarMethodArgumentInjector(unsigned long long, UnsignedLongLong)
+scalarMethodArgumentInjector(short, UnsignedShort)
+
+scalarMethodArgumentInjector(CGRect, Struct)
+
 methodArgumentInjector(id, Object)
 methodArgumentInjector(NSArray *, Array)
 
