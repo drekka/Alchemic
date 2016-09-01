@@ -39,7 +39,7 @@
 -(nullable ALCValue *) convertObjectToInt:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
     return [self valueOfType:toType error:error withNumberConversion:^NSValue *(NSNumber *number) {
         int scalar = number.intValue;
-        return [NSValue value:&scalar withObjCType:toType.scalarType];
+        return [NSValue value:&scalar withObjCType:toType.scalarType.UTF8String];
     }];
 }
 

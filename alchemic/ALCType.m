@@ -113,7 +113,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (result) {
         NSRange nameRange = [result rangeAtIndex:1];
         _type = ALCValueTypeStruct;
-        _scalarType = [[strEncoding substringWithRange:nameRange] UTF8String];
+        _scalarType = [strEncoding substringWithRange:nameRange];
         return YES;
     }
 
@@ -122,7 +122,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL) setScalarType:(const char *) scalarType encoding:(const char *) encoding type:(ALCValueType) type {
     if (strcmp(encoding, scalarType) == 0) {
-        _scalarType = scalarType;
+        _scalarType = [NSString stringWithUTF8String:scalarType];
         _type = type;
         return YES;
     }
@@ -162,7 +162,7 @@ NS_ASSUME_NONNULL_BEGIN
         case ALCValueTypeUnsignedLong: return @"scalar unsigned long";
         case ALCValueTypeUnsignedLongLong: return @"scalar unsigned long long";
         case ALCValueTypeUnsignedShort: return @"scalar unsigned short";
-        case ALCValueTypeStruct: return str(@"scalar %s", _scalarType);
+        case ALCValueTypeStruct: return str(@"scalar %@", _scalarType);
             
             // Object types.
         case ALCValueTypeObject: {
@@ -212,7 +212,7 @@ NS_ASSUME_NONNULL_BEGIN
         case ALCValueTypeUnsignedLong: return @"UnsignedLong";
         case ALCValueTypeUnsignedLongLong: return @"UnsignedLongLong";
         case ALCValueTypeUnsignedShort: return @"UnsignedShort";
-        case ALCValueTypeStruct: return @"Struct";
+        case ALCValueTypeStruct: return _scalarType;
             
             // Object types.
         case ALCValueTypeObject:return @"Object";

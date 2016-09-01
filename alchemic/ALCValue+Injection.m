@@ -69,7 +69,23 @@ CFBridgingRelease(objRef); \
 }; \
 }
 
+scalarVariableInjector(BOOL, Bool)
+scalarVariableInjector(char, Char)
+scalarVariableInjector(char *, CharPointer)
+scalarVariableInjector(double, Double)
+scalarVariableInjector(float, Float)
 scalarVariableInjector(int, Int)
+scalarVariableInjector(long, Long)
+scalarVariableInjector(long long, LongLong)
+scalarVariableInjector(short, Short)
+scalarVariableInjector(unsigned char, UnsignedChar)
+scalarVariableInjector(unsigned int, UnsignedInt)
+scalarVariableInjector(unsigned long, UnsignedLong)
+scalarVariableInjector(unsigned long long, UnsignedLongLong)
+scalarVariableInjector(unsigned short, UnsignedShort)
+scalarVariableInjector(CGSize, CGSize)
+scalarVariableInjector(CGPoint, CGPoint)
+scalarVariableInjector(CGRect, CGRect)
 
 -(ALCVariableInjectorBlock) variableInjectorForArray {
     return [self variableInjectorForObject];

@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The name of a scalar type. ie. int, unsigned int, CGRect, CGSize, etc.
  */
-@property (nonatomic, assign, nullable, readonly) const char *scalarType;
+@property (nonatomic, assign, nullable, readonly) NSString *scalarType;
 
 /**
  The class if the type is an object type.

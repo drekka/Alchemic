@@ -196,6 +196,7 @@
 		6C2AC8621D7024AB002E8E5D /* ALCValue+Injection.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C2AC85F1D7024AB002E8E5D /* ALCValue+Injection.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C2AC8631D7024AB002E8E5D /* ALCValue+Injection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2AC8601D7024AB002E8E5D /* ALCValue+Injection.m */; };
 		6C2AC8641D7024AB002E8E5D /* ALCValue+Injection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2AC8601D7024AB002E8E5D /* ALCValue+Injection.m */; };
+		6CB92CC91D77FBE80073A34C /* ALCValue+InjectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB92CC81D77FBE80073A34C /* ALCValue+InjectionTests.m */; };
 		6C2AC85B1D7005DC002E8E5D /* ALCValue+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C2AC8531D7005DC002E8E5D /* ALCValue+Mapping.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C2AC85C1D7005DC002E8E5D /* ALCValue+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C2AC8531D7005DC002E8E5D /* ALCValue+Mapping.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C2AC85D1D7005DC002E8E5D /* ALCValue+Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2AC8541D7005DC002E8E5D /* ALCValue+Mapping.m */; };
@@ -407,6 +408,7 @@
 		6CB595CC1D6B43C0006BC061 /* ALCUserDefaultsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCUserDefaultsTests.m; sourceTree = "<group>"; };
 		6C2AC85F1D7024AB002E8E5D /* ALCValue+Injection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ALCValue+Injection.h"; path = "alchemic/ALCValue+Injection.h"; sourceTree = "<group>"; };
 		6C2AC8601D7024AB002E8E5D /* ALCValue+Injection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "ALCValue+Injection.m"; path = "alchemic/ALCValue+Injection.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6CB92CC81D77FBE80073A34C /* ALCValue+InjectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALCValue+InjectionTests.m"; sourceTree = "<group>"; };
 		6C2AC8531D7005DC002E8E5D /* ALCValue+Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ALCValue+Mapping.h"; path = "alchemic/ALCValue+Mapping.h"; sourceTree = "<group>"; };
 		6C2AC8541D7005DC002E8E5D /* ALCValue+Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "ALCValue+Mapping.m"; path = "alchemic/ALCValue+Mapping.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CF814A01D7001D2001B1402 /* ALCValue+MappingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALCValue+MappingTests.m"; sourceTree = "<group>"; };
@@ -753,6 +755,7 @@
 			isa = PBXGroup;
 			children = (
 				6C56A52E1D77BF3000B609FD /* ALCTypeTests.m */,
+				6CB92CC81D77FBE80073A34C /* ALCValue+InjectionTests.m */,
 				6CF814A01D7001D2001B1402 /* ALCValue+MappingTests.m */,
 			);
 			name = "Mapping and Injection";
@@ -1512,6 +1515,7 @@
 				6C56A52F1D77BF3000B609FD /* ALCTypeTests.m in Sources */,
 				6C04EE6F1D6C3477004F32F8 /* ALCUserDefaultsAspectTests.m in Sources */,
 				6CB595CD1D6B43C0006BC061 /* ALCUserDefaultsTests.m in Sources */,
+				6CB92CC91D77FBE80073A34C /* ALCValue+InjectionTests.m in Sources */,
 				6CF814A11D7001D2001B1402 /* ALCValue+MappingTests.m in Sources */,
 				6C0D87851D40A4B900FEC25A /* ALCVariableDependencyTests.m in Sources */,
 				6C5BC1BA1D68A6E1009592EB /* AlchemicTests.m in Sources */,

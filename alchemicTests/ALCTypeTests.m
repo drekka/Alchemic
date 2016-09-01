@@ -59,7 +59,7 @@ Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 const char *ivarEncoding = ivar_getTypeEncoding(ivar); \
 ALCType *type = [ALCType typeWithEncoding:ivarEncoding]; \
 XCTAssertEqual(valueType, type.type, @"Types don't match"); \
-XCTAssertTrue(strcmp(encoding, type.scalarType) == 0, @"Expected %s != %s", encoding, type.scalarType); \
+XCTAssertTrue(strcmp(encoding, type.scalarType.UTF8String) == 0, @"Expected %s != %@", encoding, type.scalarType); \
 }
 
 // Scalars
