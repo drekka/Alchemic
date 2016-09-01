@@ -144,4 +144,16 @@ testScalarInvocationInjectionTest(aUShort, unsigned short, setAUShort:, 5u)
     XCTAssertTrue(strcmp(_aCharPointer, "abc") == 0);
 }
 
+-(void) testInvocationInjection_aNumber {
+    Method method = class_getInstanceMethod([self class], @selector(setANumber:));
+    NSMethodSignature *sig = [NSMethodSignature signatureWithObjCTypes:method_getTypeEncoding(method)];
+    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+    inv.selector = @selector(setANumber:);
+    ALCValue *alcValue = [[ALCType typeWithClass:[NSNumber class]] withValue:@5 completion:NULL];
+    ALCInvocationInjectorBlock inj = [alcValue invocationInjector];
+    inj(inv, 0);
+    [inv invokeWithTarget:self];
+    XCTAssertEqualObjects(@5, _aNumber);
+}
+
 @end
