@@ -59,8 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
         return NO;
     }
     
-    // Start with a result that indicates an Id. We map Ids as NSObjects.
-    [self setClass:[NSObject class]];
+    // Start with a result that indicates an Id.
+    [self setClass:nil];
     
     // Object type.
     NSCharacterSet *typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
@@ -162,12 +162,10 @@ NS_ASSUME_NONNULL_BEGIN
         case ALCValueTypeUnsignedLong: return @"scalar unsigned long";
         case ALCValueTypeUnsignedLongLong: return @"scalar unsigned long long";
         case ALCValueTypeUnsignedShort: return @"scalar unsigned short";
-        case ALCValueTypeStruct: return @"scalar struct";
+        case ALCValueTypeStruct: return str(@"scalar %s", _scalarType);
             
             // Object types.
         case ALCValueTypeObject: {
-            
-            NSString *className = self.objcClass ? NSStringFromClass((Class) self.objcClass) : @"id";
             
             if (self.objcProtocols.count > 0) {
                 
@@ -177,21 +175,21 @@ NS_ASSUME_NONNULL_BEGIN
                 }
                 
                 if (self.objcClass) {
-                    return str(@"class %@<%@>", className, [protocols componentsJoinedByString:@","]);
+                    return str(@"class %@<%@> *", NSStringFromClass(self.objcClass), [protocols componentsJoinedByString:@","]);
                 } else {
-                    return str(@"protocols <%@>", [protocols componentsJoinedByString:@","]);
+                    return str(@"id<%@>", [protocols componentsJoinedByString:@","]);
                 }
                 
             } else {
-                return str(@"class %@", className);
+                return self.objcClass ? str(@"class %@ *", NSStringFromClass(self.objcClass)) : @"id";
             }
         }
             
-        case ALCValueTypeArray: return @"NSArray *";
+        case ALCValueTypeArray: return @"class NSArray *";
     }
 }
 
--(void) setClass:(Class) aClass {
+-(void) setClass:(nullable Class) aClass {
     _type = [aClass isSubclassOfClass:[NSArray class]] ? ALCValueTypeArray : ALCValueTypeObject;
     _objcClass = aClass;
 }
