@@ -33,11 +33,17 @@
     NSNumber *aNumber;
     NSArray<NSNumber *> *aArray;
     
+    id idOnly;
+    id<NSCopying> idWithProtocol;
+    NSNumber<AlchemicAware> *classAndProtocol;
+    
     CGSize size;
     CGPoint point;
     CGRect rect;
     
 }
+
+#pragma mark - Type with encoding
 
 #define testScalarTypeWithEncoding(ivarName, encoding, valueType, methodName) \
 -(void) testTypeWithEncoding ## methodName { \
@@ -70,18 +76,26 @@ testScalarTypeWithEncoding("size", "CGSize", ALCValueTypeStruct, CGSize)
 testScalarTypeWithEncoding("point", "CGPoint", ALCValueTypeStruct, CGPoint)
 testScalarTypeWithEncoding("rect", "CGRect", ALCValueTypeStruct, CGRect)
 
-#define testObjectTypeWithEncoding(ivarName, className, valueType, methodName) \
+#define testObjectTypeWithEncoding(ivarName, className, protocolArray, valueType, methodName) \
 -(void) testTypeWithEncoding ## methodName { \
 Ivar ivar = class_getInstanceVariable([self class], ivarName); \
 const char *ivarEncoding = ivar_getTypeEncoding(ivar); \
 ALCType *type = [ALCType typeWithEncoding:ivarEncoding]; \
 XCTAssertEqual(valueType, type.type, @"Types don't match"); \
 XCTAssertEqual([className class], type.objcClass, @"Expected %@ != %@", NSStringFromClass([className class]), NSStringFromClass(type.objcClass)); \
+XCTAssertEqual(protocolArray.count, type.objcProtocols.count, @"Exepcted %lu protocols, found %lu", protocolArray.count, type.objcProtocols.count); \
+for (NSString *protocolName in protocolArray) { \
+XCTAssertTrue([type.objcProtocols containsObject:NSProtocolFromString(protocolName)], @"Protocol not in type data: %@", protocolName); \
+} \
 }
 
 // Object types.
-testObjectTypeWithEncoding("aNumber", NSNumber, ALCValueTypeObject, NSNumber)
-testObjectTypeWithEncoding("aArray", NSArray, ALCValueTypeArray, NSArray)
+testObjectTypeWithEncoding("aNumber", NSNumber, @[], ALCValueTypeObject, NSNumber)
+testObjectTypeWithEncoding("aArray", NSArray, (@[]), ALCValueTypeArray, NSArray)
+testObjectTypeWithEncoding("idOnly", NSObject, @[], ALCValueTypeObject, IdOnly)
+testObjectTypeWithEncoding("idWithProtocol", NSObject, @[@"NSCopying"], ALCValueTypeObject, IdWithProtocol)
+testObjectTypeWithEncoding("classAndProtocol", NSNumber, @[@"AlchemicAware"], ALCValueTypeObject, ClassAndProtocol)
+
 
 -(void) testTypeWithEncodingWhenUnknownType {
     const char *ivarEncoding = "j832h2i f2o 2o f2 hof e2o";
