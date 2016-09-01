@@ -148,9 +148,9 @@ testMethodNameFragment(aULongLong, UnsignedLongLong)
 testMethodNameFragment(aUShort, UnsignedShort)
 
 // Structs
-testMethodNameFragment(size, Struct)
-testMethodNameFragment(point, Struct)
-testMethodNameFragment(rect, Struct)
+testMethodNameFragment(size, CGSize)
+testMethodNameFragment(point, CGPoint)
+testMethodNameFragment(rect, CGRect)
 
 // Classes
 testMethodNameFragment(aNumber, Object)

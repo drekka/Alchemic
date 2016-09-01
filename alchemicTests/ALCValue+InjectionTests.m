@@ -95,4 +95,12 @@ testScalarStructVariableInjectionTest(size, CGSize, CGSizeMake(1.0f, 2.0f), CGSi
 testScalarStructVariableInjectionTest(point, CGPoint, CGPointMake(1.0f, 2.0f), CGPointEqualToPoint)
 testScalarStructVariableInjectionTest(rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.0f), CGRectEqualToRect)
 
+-(void) testVariableInjection_aNumber {
+    Ivar ivar = class_getInstanceVariable([self class], "aNumber");
+    ALCValue *alcValue = [[ALCType typeForIvar:ivar] withValue:@5 completion:NULL];
+    ALCVariableInjectorBlock inj = [alcValue variableInjector];
+    inj(self, ivar);
+    XCTAssertEqualObjects(@5, aNumber);
+}
+
 @end
