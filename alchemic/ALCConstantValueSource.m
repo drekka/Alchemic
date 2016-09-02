@@ -22,12 +22,22 @@
 }
 
 +(instancetype) valueSourceWithInt:(int) value {
-    ALCType *type = [ALCType typeWithEncoding:"i"];
-    int localValue = value;
-    NSValue *wrappedValue = [NSValue valueWithBytes:&localValue objCType:"i"];
-    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:type value:wrappedValue];
-    return source;
+    return [self scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
 }
+
++(instancetype) valueSourceWithScalar:(void *) value {
+    return [self scalarValueSourceWithValue:[NSValue valueWithBytes:value objCType:@encode(__typeof(* value))]];
+}
+
+#pragma mark - Internal factory methods
+
++(instancetype) scalarValueSourceWithValue:(NSValue *) value {
+    ALCType *type = [ALCType typeWithEncoding:value.objCType];
+    return [[ALCConstantValueSource alloc] initWithType:type value:value];
+}
+
+
+#pragma mark - Value source methods
 
 -(instancetype) initWithType:(ALCType *) type {
     methodReturningObjectNotImplemented;
@@ -40,7 +50,6 @@
     }
     return self;
 }
-
 
 -(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
     return [self.type withValue:_value completion:NULL];
