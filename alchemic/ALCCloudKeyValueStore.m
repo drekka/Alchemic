@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable NSDictionary<NSString *, id> *) loadDefaults {
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull notification) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil queue:nil usingBlock:^(NSNotification *notification) {
         
         // If the store has changed, update the local properties with the passed keys.
         NSUInteger reason = ((NSNumber *)notification.userInfo[NSUbiquitousKeyValueStoreChangeReasonKey]).unsignedIntegerValue;

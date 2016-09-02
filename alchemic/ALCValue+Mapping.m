@@ -40,7 +40,8 @@
 #pragma mark - Mapping routines
 
 -(nullable ALCValue *) convertObjectToArray:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-    if (self.)
+    ALCType *type = [ALCType typeWithClass:[NSArray class]];
+    return [type withValue:@[self.value] completion:self.completion];
 }
 
 #define convertObjectToNumber(toTypeName, scalarTypeDef, numberFuction) \
