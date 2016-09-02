@@ -158,7 +158,6 @@ registerFactoryMethod:(SEL) selector
                                                                                args:arguments];
 }
 
-
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerInjection:(NSString *) variable, ... {
     alc_loadVarArgsAfterVariableIntoArray(variable, config);
     Ivar ivar = [ALCRuntime forClass:objectFactory.type.objcClass variableForInjectionPoint:variable];
