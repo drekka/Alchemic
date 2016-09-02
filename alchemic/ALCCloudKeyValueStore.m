@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
             NSArray<NSString *> *keys = notification.userInfo[NSUbiquitousKeyValueStoreChangedKeysKey];
             for (NSString *key in keys) {
                 STLog(self, @"Cloud updated value for %@", key);
-                [self updateLocalValue:[self valueStoreValueForKey:key] forKey:key];
+                [self valueStoreDidUpdateValue:[self valueStoreValueForKey:key] forKey:key];
             }
         }
     }];
@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key {
+    STLog(self, @"Sending value to cloud key %@: %@", key, value);
     [[NSUbiquitousKeyValueStore defaultStore] setObject:value forKey:key];
 }
 

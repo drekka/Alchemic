@@ -27,6 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable NSDictionary<NSString *, id> *) loadDefaults;
 
 /**
+ Call when your backing store updates a value independantly of this store.
+ */
+-(void)valueStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key;
+
+/**
  Override to save a new value to the backing store.
  
  @param value The value to be saved.
@@ -42,16 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable id) valueStoreValueForKey:(id) key;
 
 #pragma mark - Updating local values
-
-/**
- Similar to KVC's setValue:forKey: except that it does not transfer the value through to the backing store.
- 
- Mainly useful when you have received a notification of a changed value in the backing store and need to update the local property without sending the data back to the backing store.
-
- @param value The value to be saved.
- @param key The local property key to save under.
- */
--(void) updateLocalValue:(id) value forKey:(NSString *) key;
 
 #pragma mark - Subscripting services.
 
