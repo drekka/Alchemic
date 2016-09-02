@@ -6,27 +6,101 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import CoreGraphics;
+
 #import <Alchemic/ALCConstantValueSource.h>
 #import <Alchemic/ALCType.h>
 #import <Alchemic/ALCValue.h>
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCAbstractValueSource.h>
+
+@interface ALCConstantValueSource : ALCAbstractValueSource
+-(instancetype) initWithType:(ALCType *) type NS_UNAVAILABLE;
+@end
 
 @implementation ALCConstantValueSource {
     id _value;
 }
 
-+(instancetype) valueSourceWithObject:(id) object {
-    ALCType *type = [ALCType typeWithClass:[object class]];
-    ALCConstantValueSource *source = [[ALCConstantValueSource alloc] initWithType:type value:object];
-    return source;
+id<ALCValueSource> AcString(NSString *value) {
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    return [[ALCConstantValueSource alloc] initWithType:type value:value];
 }
 
-+(instancetype) valueSourceWithInt:(int) value {
-    return [self scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+id<ALCValueSource> AcBool(BOOL value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
 }
 
-+(instancetype) valueSourceWithScalar:(void *) value {
-    return [self scalarValueSourceWithValue:[NSValue valueWithBytes:value objCType:@encode(__typeof(* value))]];
+id<ALCValueSource> AcChar(char value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcCString(char * value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcDouble(double value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcFloat(float value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcInt(int value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+id<ALCValueSource> AcLong(long value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcLongLong(long long value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcShort(short value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcUnsignedChar(unsigned char value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcUnsignedInt(unsigned int value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcUnsignedLong(unsigned long value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcUnsignedLongLong(unsigned long long value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcUnsignedShort(unsigned short value) {
+    return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
+}
+
+id<ALCValueSource> AcSize(float width, float height) {
+    CGSize value = CGSizeMake(width, height);
+    NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(__typeof(value))];
+    ALCType *type = [ALCType typeWithEncoding:nsValue.objCType];
+    return [[ALCConstantValueSource alloc] initWithType:type value:nsValue];
+}
+
+id<ALCValueSource> AcPoint(float x, float y) {
+    CGPoint value = CGPointMake(x, y);
+    NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(__typeof(value))];
+    ALCType *type = [ALCType typeWithEncoding:nsValue.objCType];
+    return [[ALCConstantValueSource alloc] initWithType:type value:nsValue];
+}
+
+id<ALCValueSource> AcRect(float x, float y, float width, float height) {
+    CGRect value = CGRectMake(x, y, width, height);
+    NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(__typeof(value))];
+    ALCType *type = [ALCType typeWithEncoding:nsValue.objCType];
+    return [[ALCConstantValueSource alloc] initWithType:type value:nsValue];
 }
 
 #pragma mark - Internal factory methods
@@ -36,14 +110,13 @@
     return [[ALCConstantValueSource alloc] initWithType:type value:value];
 }
 
-
 #pragma mark - Value source methods
 
 -(instancetype) initWithType:(ALCType *) type {
     methodReturningObjectNotImplemented;
 }
 
--(instancetype) initWithType:(ALCType *) type value:(NSValue *) value {
+-(instancetype) initWithType:(ALCType *) type value:(id) value {
     self = [super initWithType:type];
     if (self) {
         _value = value;

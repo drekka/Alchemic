@@ -7,20 +7,25 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCAbstractValueSource.h>
 
-@class ALCType;
+@protocol ALCValueSource;
 
-#define AcString(value) [ALCConstantValueSource valueSourceWithObject:value]
-#define AcInt(value) [ALCConstantValueSource valueSourceWithInt:value]
+id<ALCValueSource> AcString(NSString *value);
+id<ALCValueSource> AcBool(BOOL value);
+id<ALCValueSource> AcChar(char value);
+id<ALCValueSource> AcCString(char * value);
+id<ALCValueSource> AcDouble(double value);
+id<ALCValueSource> AcFloat(float value);
+id<ALCValueSource> AcInt(int value);
+id<ALCValueSource> AcLong(long value);
+id<ALCValueSource> AcLongLong(long long value);
+id<ALCValueSource> AcShort(short value);
+id<ALCValueSource> AcUnsignedChar(unsigned char value);
+id<ALCValueSource> AcUnsignedInt(unsigned int value);
+id<ALCValueSource> AcUnsignedLong(unsigned long value);
+id<ALCValueSource> AcUnsignedLongLong(unsigned long long value);
+id<ALCValueSource> AcUnsignedShort(unsigned short value);
+id<ALCValueSource> AcSize(float width, float height);
+id<ALCValueSource> AcPoint(float x, float y);
+id<ALCValueSource> AcRect(float x, float y, float width, float height);
 
-@interface ALCConstantValueSource : ALCAbstractValueSource
-
--(instancetype) initWithType:(ALCType *) type NS_UNAVAILABLE;
-
-+(instancetype) valueSourceWithObject:(id) object;
-
-+(instancetype) valueSourceWithInt:(int) value;
-
-
-@end
