@@ -37,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) kvoWatchProperties {
     _watchedProperties = [ALCRuntime writeablePropertiesForClass:[self class]];
     for (NSString *prop in _watchedProperties) {
+        STLog(self, @"Watching property %@", prop);
         [self addObserver:self forKeyPath:prop options:NSKeyValueObservingOptionNew context:nil];
     }
 }
