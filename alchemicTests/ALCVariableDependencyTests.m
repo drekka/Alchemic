@@ -24,7 +24,7 @@
 -(void)setUp {
     Ivar ivar = class_getInstanceVariable([self class], "aIvar");
     ALCType *type = [ALCType typeWithEncoding:"i"];
-    id<ALCValueSource> source = [ALCConstantValueSource valueSourceWithInt:5];
+    id<ALCValueSource> source = AcInt(5);
     _dependency = [ALCVariableDependency variableDependencyWithType:type
                                                         valueSource:source
                                                            intoIvar:ivar
