@@ -13,6 +13,7 @@
 @import ObjectiveC;
 
 #import "TopThing.h"
+#import "XCTestCase+Alchemic.h"
 
 @interface ALCContextImplTests : XCTestCase
 
@@ -25,9 +26,8 @@
 
 - (void)setUp {
     _context = [[ALCContextImpl alloc] init];
-    Ivar modelVar = [ALCRuntime forClass:[ALCContextImpl class] variableForInjectionPoint:@"_model"];
     _mockModel = OCMClassMock([ALCModelImpl class]);
-    object_setIvar(_context, modelVar, _mockModel);
+    [self setVariable:@"_model" inObject:_context value:_mockModel];
 }
 
 #pragma mark - Startup
@@ -262,6 +262,29 @@
 }
 
 #pragma mark - Getting and setting
+
+-(void) testObjectWithClassSearchCriteriaThrowsWhenAlchemicNotReady {
+    XCTAssertThrowsSpecific(([_context objectWithClass:[NSString class], nil]), AlchemicLifecycleException);
+}
+
+-(void) testObjectWithClassSearchCriteriaThrowsWhenIllegalArgument {
+
+    // Tell the context it's started
+    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+
+    XCTAssertThrowsSpecific(([_context objectWithClass:[NSString class], @"abc", nil]), AlchemicIllegalArgumentException);
+}
+
+-(void) testObjectWithClassSearchCriteriaThrowsMappingException {
+
+    // Tell the context it's started
+    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+
+OCMStub(_mockModel)
+
+    XCTAssertThrowsSpecific(([_context objectWithClass:[NSString class], nil]), AlchemicIllegalArgumentException);
+
+}
 
 #pragma mark - Internal
 

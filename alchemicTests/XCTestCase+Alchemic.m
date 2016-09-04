@@ -10,17 +10,20 @@
 
 @import ObjectiveC;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation XCTestCase (Alchemic)
 
--(id) getVariable:(NSString *) variable fromObject:(id) obj {
+-(nullable id) getVariable:(NSString *) variable fromObject:(id) obj {
     Ivar ivar = class_getInstanceVariable([obj class], variable.UTF8String);
     return object_getIvar(obj, ivar);
 }
 
--(void) setVariable:(NSString *) variable inObject:(id) obj value:(id) value {
+-(void) setVariable:(NSString *) variable inObject:(id) obj value:(nullable id) value {
     Ivar ivar = class_getInstanceVariable([obj class], variable.UTF8String);
     object_setIvar(obj, ivar, value);
 }
 
-
 @end
+
+NS_ASSUME_NONNULL_END
