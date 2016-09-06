@@ -17,6 +17,15 @@
 -(nullable ALCValue *) mapTo:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
     
     if (self.type == toType.type) {
+        if (self.type == ALCValueTypeObject) {
+            if (!toType.objcClass || [[self.value class] isSubclassOfClass:toType.objcClass]) {
+                // Ok to map. No to class is id type.
+            } else {
+                setError(@"Cannot convert a %@ to a %@", NSStringFromClass([self.value class]), NSStringFromClass([toType.objcClass class]));
+                return nil;
+            }
+        }
+
         STLog(self, @"No mapping required for final value");
         return self;
     }

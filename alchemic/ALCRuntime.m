@@ -62,9 +62,9 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(NSArray<ALCType *> *) forClass:(Class) aClass methodArgumentTypes:(SEL) methodSelector {
     
-    Method method = class_getClassMethod(aClass, methodSelector);
+    Method method = class_getInstanceMethod(aClass, methodSelector);
     if (!method) {
-        method = class_getInstanceMethod(aClass, methodSelector);
+        method = class_getClassMethod(aClass, methodSelector);
         if (!method) {
             throwException(AlchemicSelectorNotFoundException, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
         }

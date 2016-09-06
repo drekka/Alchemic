@@ -280,10 +280,40 @@
     // Tell the context it's started
     [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
 
-OCMStub(_mockModel)
+    // Mock out value source creation.
+    id mockValueSource = OCMClassMock([ALCModelValueSource class]);
+    OCMStub(ClassMethod([mockValueSource valueSourceWithCriteria:OCMOCK_ANY])).andReturn(mockValueSource);
 
-    XCTAssertThrowsSpecific(([_context objectWithClass:[NSString class], nil]), AlchemicIllegalArgumentException);
+    // Mock resolving the model.
+    id mockFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
+    OCMStub([_mockModel objectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
 
+    // ANd return a non-matching value.
+    ALCValue *value = [[ALCType typeWithClass:[NSString class]] withValue:@"abc" completion:NULL];
+    OCMStub([mockValueSource valueWithError:[OCMArg anyObjectRef]]).andReturn(value);
+
+    XCTAssertThrowsSpecific(([_context objectWithClass:[NSNumber class], nil]), AlchemicMappingValueException);
+}
+
+-(void) testObjectWithClassSearchCriteria {
+
+    // Tell the context it's started
+    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+
+    // Mock out value source creation.
+    id mockValueSource = OCMClassMock([ALCModelValueSource class]);
+    OCMStub(ClassMethod([mockValueSource valueSourceWithCriteria:OCMOCK_ANY])).andReturn(mockValueSource);
+
+    // Mock resolving the model.
+    id mockFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
+    OCMStub([_mockModel objectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
+
+    // ANd return a non-matching value.
+    ALCValue *value = [[ALCType typeWithClass:[NSNumber class]] withValue:@5 completion:NULL];
+    OCMStub([mockValueSource valueWithError:[OCMArg anyObjectRef]]).andReturn(value);
+
+    NSNumber *result = [_context objectWithClass:[NSNumber class], nil];
+    XCTAssertEqualObjects(@5, result);
 }
 
 #pragma mark - Internal

@@ -216,8 +216,11 @@ registerFactoryMethod:(SEL) selector
         throwException(AlchemicIllegalArgumentException, @"Unexpected argument %@", argument);
     }];
     ALCModelValueSource *source = [ALCModelValueSource valueSourceWithCriteria:modelSearchCriteria];
+
+    // Resolve to find the factories.
     [source resolveWithStack:[[NSMutableArray alloc] init] model:_model];
-    
+
+    // Get the value.
     NSError *error;
     ALCValue *value = [[source valueWithError:&error] mapTo:[ALCType typeWithClass:returnType] error:&error];
     if (!value) {
