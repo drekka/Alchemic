@@ -266,7 +266,7 @@ registerFactoryMethod:(SEL) selector
         }
         
         // Set the object and call the returned completion.
-        [((ALCAbstractObjectFactory *)factories[0]) setObject:finalObject];
+        [((ALCAbstractObjectFactory *) factories[0]) setObject:finalObject];
     };
     
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.

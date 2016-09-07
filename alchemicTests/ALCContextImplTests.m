@@ -316,6 +316,93 @@
     XCTAssertEqualObjects(@5, result);
 }
 
+-(void) testSetObjectWithSearchCriteriaThrowsIfValueReturnsError {
+
+    id mockValue = OCMProtocolMock(@protocol(ALCValueSource));
+    NSError *error = [NSError errorWithDomain:@"abc" code:1 userInfo:nil];
+    OCMStub([mockValue valueWithError:[OCMArg setTo:error]]).andReturn(nil);
+
+    XCTAssertThrowsSpecific(([_context setObject:mockValue, AcClass(NSString), nil]), AlchemicResolvingException);
+}
+
+-(void) testSetObjectWithSearchCriteria {
+
+    // Tell the context it's started
+    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+
+    // Stub getting the factory.
+    id mockFactory = OCMClassMock([ALCAbstractObjectFactory class]);
+    OCMStub([_mockModel settableObjectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
+
+    OCMExpect([(ALCAbstractObjectFactory *) mockFactory setObject:@"abc"]);
+
+    [_context setObject:@"abc", AcClass(NSString), nil];
+
+    OCMVerifyAll(mockFactory);
+}
+
+-(void) testSetObjectWithSearchCriteriaThrowsWhenNoFactoryFound {
+
+    // Tell the context it's started
+    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+
+    // Stub getting the factory.
+    OCMStub([_mockModel settableObjectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[]);
+
+    XCTAssertThrowsSpecific(([_context setObject:@"abc", nil]), AlchemicUnableToSetReferenceException);
+}
+
+-(void) testSetObjectWithSearchCriteriaThrowsWhenTooManyFactoriesFound {
+
+    // Tell the context it's started
+    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+
+    // Stub getting the factory.
+    id mockFactory1 = OCMClassMock([ALCAbstractObjectFactory class]);
+    id mockFactory2 = OCMClassMock([ALCAbstractObjectFactory class]);
+    OCMStub([_mockModel settableObjectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn((@[mockFactory1, mockFactory2]));
+
+    XCTAssertThrowsSpecific(([_context setObject:@"abc", nil]), AlchemicUnableToSetReferenceException);
+}
+
+-(void) testInjectDependencies {
+
+    id obj = [[NSObject alloc] init];
+
+    // Tell the context it's started
+    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+
+    // Stub getting the factory.
+    id mockFactory = OCMClassMock([ALCClassObjectFactory class]);
+    OCMStub([_mockModel classObjectFactoryMatchingCriteria:OCMOCK_ANY]).andReturn(mockFactory);
+
+    OCMExpect([(ALCClassObjectFactory *) mockFactory injectDependencies:obj]);
+
+    [_context injectDependencies:obj, nil];
+
+    OCMVerifyAll(mockFactory);
+}
+
+-(void) testInjectDependenciesDoesNothingWhenNotFactoryFound {
+
+    id mockObj = OCMStrictClassMock([NSObject class]);
+
+    // Tell the context it's started
+    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+
+    // Stub getting the factory.
+    OCMStub([_mockModel classObjectFactoryMatchingCriteria:OCMOCK_ANY]).andReturn(nil);
+
+    [_context injectDependencies:mockObj, nil];
+
+    OCMVerifyAll(mockObj);
+}
+
+-(void) testInjectDependenciesThrowsWhenAlchemicNotStarted {
+    id obj = [[NSObject alloc] init];
+    XCTAssertThrowsSpecific(([_context injectDependencies:obj, nil]), AlchemicLifecycleException);
+}
+
 #pragma mark - Internal
 
 -(id) mockParentObjectFactoryOfType:(ALCFactoryType) type forClass:(Class) forClass {
