@@ -15,7 +15,7 @@
 
 @implementation ALCValue_MappingTests
 
-#pragma mark - NSNumber ->
+#pragma mark - NSNumber -> scalars
 
 #define testMapping(testName, fromTestType, fromTestValue, toTestType, toTestValue) \
 -(void) test ## testName { \
@@ -25,6 +25,16 @@ ALCValue *toValue = [self map:fromValue toType:[ALCType typeWithEncoding:@encode
 toTestType result; \
 [toValue.value getValue:&result]; \
 XCTAssertEqual(toTestValue, result); \
+}
+
+#define testDecimalMapping(testName, fromTestType, fromTestValue, toTestType, toTestValue, accuracy) \
+-(void) test ## testName { \
+ALCType *type = [ALCType typeWithEncoding:@encode(fromTestType)]; \
+ALCValue *fromValue = [type withValue:fromTestValue completion:NULL]; \
+ALCValue *toValue = [self map:fromValue toType:[ALCType typeWithEncoding:@encode(toTestType)]]; \
+toTestType result; \
+[toValue.value getValue:&result]; \
+XCTAssertEqualWithAccuracy(toTestValue, result, accuracy); \
 }
 
 testMapping(NSNumberToBool, NSNumber *, [NSNumber numberWithBool:YES], BOOL, YES)
@@ -37,15 +47,10 @@ testMapping(NSNumberToUnsignedLongLong, NSNumber *, @5, unsigned long long, 5u)
 testMapping(NSNumberToShort, NSNumber *, @5, short, 5)
 testMapping(NSNumberToUnsignedShort, NSNumber *, @5,unsigned short, 5u)
 
-#define testDecimalMapping(testName, fromTestType, fromTestValue, toTestType, toTestValue, accuracy) \
--(void) test ## testName { \
-ALCType *type = [ALCType typeWithEncoding:@encode(fromTestType)]; \
-ALCValue *fromValue = [type withValue:fromTestValue completion:NULL]; \
-ALCValue *toValue = [self map:fromValue toType:[ALCType typeWithEncoding:@encode(toTestType)]]; \
-toTestType result; \
-[toValue.value getValue:&result]; \
-XCTAssertEqualWithAccuracy(toTestValue, result, accuracy); \
-}
+testDecimalMapping(NSNumberToDouble, NSNumber *, @5.12345678, double, 5.12345678, 0.00000001)
+testDecimalMapping(NSNumberToFloat, NSNumber *, @5.1234, float, 5.1234, 0.0001)
+
+#pragma mark - Arrays
 
 -(void) testArrayToObject {
     ALCType *arrayType = [ALCType typeWithClass:[NSArray class]];
@@ -59,13 +64,11 @@ XCTAssertEqualWithAccuracy(toTestValue, result, accuracy); \
 -(void) testArrayToObjectWhenZeroValues {
     ALCType *arrayType = [ALCType typeWithClass:[NSArray class]];
     ALCValue *fromValue = [arrayType withValue:@[] completion:NULL];
-    NSError *error;
-    ALCValue *toValue = [fromValue mapTo:[ALCType typeWithClass:[NSString class]] error:&error];
+    ALCValue *toValue = [self map:fromValue toType:[ALCType typeWithClass:[NSString class]]];
     XCTAssertEqual([NSNull null], toValue.value);
-    XCTAssertNil(error);
 }
 
--(void) testArrayToObjectWhenTooManyValues {
+-(void) testArrayToObjectWhenTooManyValuesError {
     ALCType *arrayType = [ALCType typeWithClass:[NSArray class]];
     ALCValue *fromValue = [arrayType withValue:@[@"abc", @"def", @"ghi"] completion:NULL];
     NSError *error;
@@ -74,8 +77,27 @@ XCTAssertEqualWithAccuracy(toTestValue, result, accuracy); \
     XCTAssertEqualObjects(@"Too many values. Expected 1 NSString value.", error.localizedDescription);
 }
 
-testDecimalMapping(NSNumberToDouble, NSNumber *, @5.12345678, double, 5.12345678, 0.00000001)
-testDecimalMapping(NSNumberToFloat, NSNumber *, @5.1234, float, 5.1234, 0.0001)
+#pragma mark - Object -> Object
+
+-(void) testObjectToObjectWhenSameType {
+    ALCType *toType = [ALCType typeWithClass:[NSNumber class]];
+    ALCValue *fromValue = [toType withValue:@5 completion:NULL];
+    ALCValue *value = [self map:fromValue toType:toType];
+    XCTAssertEqual(fromValue, value);
+}
+
+-(void) testObjectToObjectWhenMappingToSubclassIfActuallySameClass {
+    ALCType *toType = [ALCType typeWithClass:[NSMutableString class]];
+    ALCValue *fromValue = [[ALCType typeWithClass:[NSString class]] withValue:[@"abc" mutableCopy] completion:NULL];
+    ALCValue *value = [self map:fromValue toType:toType];
+    XCTAssertEqualObjects(@"abc", value.value);
+}
+
+-(void) testObjectToObjectWhenMappingToSubclass {
+    ALCType *toType = [ALCType typeWithClass:[NSMutableString class]];
+    ALCValue *fromValue = [[ALCType typeWithClass:[NSString class]] withValue:@"abc" completion:NULL];
+    [self map:fromValue toType:toType withError:@""];
+}
 
 #pragma mark - Internal
 
@@ -85,6 +107,13 @@ testDecimalMapping(NSNumberToFloat, NSNumber *, @5.1234, float, 5.1234, 0.0001)
     XCTAssertNotNil(value);
     XCTAssertNil(error);
     return value;
+}
+
+-(void) map:(ALCValue *) fromValue toType:(ALCType *) toType withError:(NSString *) errorMsg {
+    NSError *error;
+    ALCValue *value = [fromValue mapTo:toType error:&error];
+    XCTAssertNil(value);
+    XCTAssertEqualObjects(errorMsg, error.localizedDescription);
 }
 
 @end
