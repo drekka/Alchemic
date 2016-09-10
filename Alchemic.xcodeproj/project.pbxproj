@@ -200,8 +200,8 @@
 		6C68CF7F1C64DB06003A7A54 /* ALCContextImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */; };
 		6C68CF891C6636D6003A7A54 /* NSObject+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C68CF871C6636D6003A7A54 /* NSObject+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C68CF8A1C6636D6003A7A54 /* NSObject+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68CF881C6636D6003A7A54 /* NSObject+Alchemic.m */; };
-		6C6F3F6E1D83035D00AB9767 /* ALCAbstractType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C6F3F6C1D83035D00AB9767 /* ALCAbstractType.h */; };
-		6C6F3F6F1D83035D00AB9767 /* ALCAbstractType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C6F3F6C1D83035D00AB9767 /* ALCAbstractType.h */; };
+		6C6F3F6E1D83035D00AB9767 /* ALCAbstractType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C6F3F6C1D83035D00AB9767 /* ALCAbstractType.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6C6F3F6F1D83035D00AB9767 /* ALCAbstractType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C6F3F6C1D83035D00AB9767 /* ALCAbstractType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C6F3F701D83035D00AB9767 /* ALCAbstractType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6F3F6D1D83035D00AB9767 /* ALCAbstractType.m */; };
 		6C6F3F711D83035D00AB9767 /* ALCAbstractType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6F3F6D1D83035D00AB9767 /* ALCAbstractType.m */; };
 		6C71D5431CA161A200D25AC0 /* ALCMethodArgumentDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C71D5411CA161A200D25AC0 /* ALCMethodArgumentDependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -414,7 +414,7 @@
 		6C71D5451CA16BE600D25AC0 /* NSArray+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Alchemic.h"; sourceTree = "<group>"; };
 		6C71D5461CA16BE600D25AC0 /* NSArray+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSArray+Alchemic.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C71D5491CA1747200D25AC0 /* ALCValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ALCValue.h; path = alchemic/ALCValue.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		6C71D54A1CA1747200D25AC0 /* ALCValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCValue.m; path = alchemic/ALCValue.m; sourceTree = "<group>"; };
+		6C71D54A1CA1747200D25AC0 /* ALCValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ALCValue.m; path = alchemic/ALCValue.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C7837231C5BAD8A004BE670 /* ALCContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCContext.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C7837251C5BB116004BE670 /* BasicDependencies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BasicDependencies.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C83CCAE1D02A6F900D7F0BC /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -443,7 +443,7 @@
 		6CB7C4191CC3BFF500C05B0B /* AccessingObjects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccessingObjects.m; sourceTree = "<group>"; };
 		6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCFlagMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCFlagMacros.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		6CB92CC81D77FBE80073A34C /* ALCValue+InjectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALCValue+InjectionTests.m"; sourceTree = "<group>"; };
+		6CB92CC81D77FBE80073A34C /* ALCValue+InjectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "ALCValue+InjectionTests.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCContextInternal.h; sourceTree = "<group>"; };
 		6CBABD141D577A3B00E44EC4 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		6CBABD151D577A3B00E44EC4 /* Singleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Singleton.m; sourceTree = "<group>"; };
@@ -492,7 +492,7 @@
 		6CE7F6901D410BB4005DEE2C /* ALCModelImplTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelImplTests.m; sourceTree = "<group>"; };
 		6CED05751BCB545800B6C55B /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6CED05771BCB548700B6C55B /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
-		6CF814A01D7001D2001B1402 /* ALCValue+MappingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALCValue+MappingTests.m"; sourceTree = "<group>"; };
+		6CF814A01D7001D2001B1402 /* ALCValue+MappingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "ALCValue+MappingTests.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CFF38A91D6F32E900629210 /* MappingAndInjections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MappingAndInjections.m; sourceTree = "<group>"; };
 		F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractDependency.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractDependency.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };

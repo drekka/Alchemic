@@ -69,7 +69,7 @@
         }
     };
 
-    return [ALCValue withType:ALCValueTypeArray value:results completion:allCompletions];
+    return [ALCValue withValueType:ALCValueTypeArray value:results completion:allCompletions];
 }
 
 -(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {

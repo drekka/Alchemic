@@ -194,9 +194,8 @@ testDescription(classAndProtocol, @"class NSNumber<AlchemicAware> *")
 #pragma mark - Generating ALCValue instances
 
 -(void) testWithValueCompletion {
-    ALCType *type = [ALCType typeWithClass:[NSString class]];
     __block BOOL completionCalled;
-    ALCValue *value = [type withValue:@"abc" completion:^{
+    ALCValue *value = [ALCValue withValueType:ALCValueTypeObject value:@"abc" completion:^{
         completionCalled = YES;
     }];
     XCTAssertEqualObjects(@"abc", value.value);

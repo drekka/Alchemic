@@ -54,7 +54,7 @@
 }
 
 -(nullable ALCValue *) convertObjectToArray:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-    return [ALCValue withType:ALCValueTypeArray value:@[self.value] completion:self.completion];
+    return [ALCValue withValueType:ALCValueTypeArray value:@[self.value] completion:self.completion];
 }
 
 #define convertObjectToNumber(toTypeName, scalarTypeDef, numberFuction) \
@@ -88,12 +88,12 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
     
     if (objs.count == 0) {
         // Return a nil value.
-        return [ALCValue withType:ALCValueTypeObject value:[NSNull null] completion:NULL];
+        return [ALCValue withValueType:ALCValueTypeObject value:[NSNull null] completion:NULL];
     }
     
     id obj = objs[0];
     if ([obj isKindOfClass:toType.objcClass]) {
-        return [ALCValue withType:toType.type value:obj completion:self.completion];
+        return [ALCValue withType:toType value:obj completion:self.completion];
     } else {
         setError(@"Cannot covert a %@ to a %@", NSStringFromClass([obj class]), NSStringFromClass(toType.objcClass));
         return nil;
@@ -107,7 +107,7 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
               withNumberConversion:(NSValue * (^)(NSNumber *result)) numberConversion {
     
     if ([self.value isKindOfClass:[NSNumber class]]) {
-        return [ALCValue withType:type.type value:numberConversion(self.value) completion:self.completion];
+        return [ALCValue withType:type value:numberConversion(self.value) completion:self.completion];
     }
     
     setError(@"Cannot convert source %@ to NSNumber *", NSStringFromClass([self.value class]));

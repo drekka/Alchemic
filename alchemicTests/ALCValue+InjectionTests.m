@@ -46,7 +46,8 @@ Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 const char *encoding = ivar_getTypeEncoding(ivar); \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:encoding]; \
-ALCValue *alcValue = [[ALCType typeForIvar:ivar] withValue:nsValue completion:NULL]; \
+ALCType *type = [ALCType typeForIvar:ivar]; \
+ALCValue *alcValue = [ALCValue withType:type value:nsValue completion:NULL]; \
 ALCVariableInjectorBlock inj = [alcValue variableInjector]; \
 inj(self, ivar); \
 XCTAssertEqual(ivarName, expectedValue); \
@@ -70,7 +71,8 @@ testScalarVariableInjectionTest(_aUShort, unsigned short, 5u)
     const char *encoding = ivar_getTypeEncoding(ivar);
     char *value = "abc";
     NSValue *nsValue = [NSValue valueWithBytes:&value objCType:encoding];
-    ALCValue *alcValue = [[ALCType typeForIvar:ivar] withValue:nsValue completion:NULL];
+    ALCType *type = [ALCType typeForIvar:ivar];
+    ALCValue *alcValue = [ALCValue withType:type value:nsValue completion:NULL];
     ALCVariableInjectorBlock inj = [alcValue variableInjector];
     inj(self, ivar);
     XCTAssertTrue(strcmp("abc", _aCharPointer) == 0);
@@ -82,7 +84,8 @@ Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 const char *encoding = ivar_getTypeEncoding(ivar); \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:encoding]; \
-ALCValue *alcValue = [[ALCType typeForIvar:ivar] withValue:nsValue completion:NULL]; \
+ALCType *type = [ALCType typeForIvar:ivar]; \
+ALCValue *alcValue = [ALCValue withType:type value:nsValue completion:NULL]; \
 ALCVariableInjectorBlock inj = [alcValue variableInjector]; \
 inj(self, ivar); \
 XCTAssertTrue(compareFunction(ivarName, expectedValue)); \
@@ -94,7 +97,8 @@ testScalarStructVariableInjectionTest(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f
 
 -(void) testVariableInjection_aNumber {
     Ivar ivar = class_getInstanceVariable([self class], "_aNumber");
-    ALCValue *alcValue = [[ALCType typeForIvar:ivar] withValue:@5 completion:NULL];
+    ALCType *type = [ALCType typeForIvar:ivar];
+    ALCValue *alcValue = [ALCValue withType:type value:@5 completion:NULL];
     ALCVariableInjectorBlock inj = [alcValue variableInjector];
     inj(self, ivar);
     XCTAssertEqualObjects(@5, _aNumber);
@@ -110,7 +114,8 @@ NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig]; \
 inv.selector = @selector(methodSelector); \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(ivarType)]; \
-ALCValue *alcValue = [[ALCType typeWithEncoding:@encode(ivarType)] withValue:nsValue completion:NULL]; \
+ALCType *type = [ALCType typeWithEncoding:@encode(ivarType)]; \
+ALCValue *alcValue = [ALCValue withType:type value:nsValue completion:NULL]; \
 ALCInvocationInjectorBlock inj = [alcValue invocationInjector]; \
 inj(inv, 0); \
 [inv invokeWithTarget:self]; \
@@ -137,7 +142,8 @@ testScalarInvocationInjectionTest(aUShort, unsigned short, setAUShort:, 5u)
     inv.selector = @selector(setACharPointer:);
     char *value = "abc";
     NSValue *nsValue = [NSValue valueWithBytes:&value objCType:"*"];
-    ALCValue *alcValue = [[ALCType typeWithEncoding:"*"] withValue:nsValue completion:NULL];
+    ALCType *type = [ALCType typeWithEncoding:"*"];
+    ALCValue *alcValue = [ALCValue withType:type value:nsValue completion:NULL];
     ALCInvocationInjectorBlock inj = [alcValue invocationInjector];
     inj(inv, 0);
     [inv invokeWithTarget:self];
@@ -149,7 +155,8 @@ testScalarInvocationInjectionTest(aUShort, unsigned short, setAUShort:, 5u)
     NSMethodSignature *sig = [NSMethodSignature signatureWithObjCTypes:method_getTypeEncoding(method)];
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
     inv.selector = @selector(setANumber:);
-    ALCValue *alcValue = [[ALCType typeWithClass:[NSNumber class]] withValue:@5 completion:NULL];
+    ALCType *type = [ALCType typeWithClass:[NSNumber class]];
+    ALCValue *alcValue = [ALCValue withType:type value:@5 completion:NULL];
     ALCInvocationInjectorBlock inj = [alcValue invocationInjector];
     inj(inv, 0);
     [inv invokeWithTarget:self];
