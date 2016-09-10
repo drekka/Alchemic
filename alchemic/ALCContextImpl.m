@@ -16,6 +16,7 @@
 #import <Alchemic/ALCModelImpl.h>
 #import <Alchemic/ALCModelValueSource.h>
 #import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCType.h>
 #import <Alchemic/NSArray+Alchemic.h>
 #import <Alchemic/ALCVariableDependency.h>
 #import <Alchemic/ALCValue+Mapping.h>

@@ -9,53 +9,14 @@
 @import Foundation;
 @import ObjectiveC;
 
-@class ALCValue;
-
-#import <Alchemic/ALCTypeDefs.h>
-
-/**
- Enum of types for comparing when mapping.
- */
-typedef NS_ENUM(NSUInteger, ALCValueType) {
-    
-    // Base unknown type
-    ALCValueTypeUnknown,
-    
-    // Scalar types.
-    ALCValueTypeBool,
-    ALCValueTypeChar,
-    ALCValueTypeCharPointer,
-    ALCValueTypeDouble,
-    ALCValueTypeFloat,
-    ALCValueTypeInt,
-    ALCValueTypeLong,
-    ALCValueTypeLongLong,
-    ALCValueTypeShort,
-    ALCValueTypeUnsignedChar,
-    ALCValueTypeUnsignedInt,
-    ALCValueTypeUnsignedLong,
-    ALCValueTypeUnsignedLongLong,
-    ALCValueTypeUnsignedShort,
-    ALCValueTypeStruct,
-    
-    // Object types.
-    ALCValueTypeObject,
-    ALCValueTypeArray
-};
+#import <Alchemic/ALCAbstractType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Contains type information about an injection.
  */
-@interface ALCType : NSObject
-
-/**
- A string containing the type data for scalar types.
- */
-@property (nonatomic, assign, readonly) ALCValueType type;
-
-@property (nonatomic, strong, readonly) NSString *methodNameFragment;
+@interface ALCType : ALCAbstractType
 
 /**
  The name of a scalar type. ie. int, unsigned int, CGRect, CGSize, etc.
@@ -71,10 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
  Any protocols that the class implements.
  */
 @property (nonatomic, strong, nullable, readonly) NSArray<Protocol *> *objcProtocols;
-
-#pragma mark - Initiailizers
-
--(instancetype) init NS_UNAVAILABLE;
 
 #pragma mark - Factory methods
 

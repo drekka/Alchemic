@@ -6,11 +6,13 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import ObjectiveC;
+@import StoryTeller;
+
 #import <Alchemic/ALCValue+Mapping.h>
 
 #import <Alchemic/ALCInternalMacros.h>
-@import ObjectiveC;
-@import StoryTeller;
+#import <Alchemic/ALCType.h>
 
 @implementation ALCValue (Mapping)
 
@@ -48,11 +50,11 @@
         setError(@"Cannot convert a %@ to a %@", NSStringFromClass([self.value class]), NSStringFromClass([toType.objcClass class]));
         return nil;
     }
+    return nil;
 }
 
 -(nullable ALCValue *) convertObjectToArray:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-    ALCType *type = [ALCType typeWithClass:[NSArray class]];
-    return [type withValue:@[self.value] completion:self.completion];
+    return [ALCValue withType:ALCValueTypeArray value:@[self.value] completion:self.completion];
 }
 
 #define convertObjectToNumber(toTypeName, scalarTypeDef, numberFuction) \
@@ -86,12 +88,12 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
     
     if (objs.count == 0) {
         // Return a nil value.
-        return [toType withValue:[NSNull null] completion:NULL];
+        return [ALCValue withType:ALCValueTypeObject value:[NSNull null] completion:NULL];
     }
     
     id obj = objs[0];
     if ([obj isKindOfClass:toType.objcClass]) {
-        return [toType withValue:obj completion:self.completion];
+        return [ALCValue withType:toType.type value:obj completion:self.completion];
     } else {
         setError(@"Cannot covert a %@ to a %@", NSStringFromClass([obj class]), NSStringFromClass(toType.objcClass));
         return nil;
@@ -105,7 +107,7 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
               withNumberConversion:(NSValue * (^)(NSNumber *result)) numberConversion {
     
     if ([self.value isKindOfClass:[NSNumber class]]) {
-        return [type withValue:numberConversion(self.value) completion:self.completion];
+        return [ALCValue withType:type.type value:numberConversion(self.value) completion:self.completion];
     }
     
     setError(@"Cannot convert source %@ to NSNumber *", NSStringFromClass([self.value class]));

@@ -16,6 +16,7 @@
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/Alchemic.h>
+#import <Alchemic/ALCType.h>
 #import <Alchemic/ALCRuntime.h>
 
 NS_ASSUME_NONNULL_BEGIN

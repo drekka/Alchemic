@@ -15,6 +15,7 @@
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCObjectFactory.h>
 #import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -54,15 +55,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack
                    model:(id<ALCModel>) model {
-    
+
     STLog(self, @"Searching model using %@", _criteria);
-    
+
     // Find dependencies
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];
     if ([_resolvedFactories count] == 0) {
         throwException(AlchemicNoDependenciesFoundException, @"No object factories found for criteria %@", _criteria);
     }
-    
+
     // Filter for primary factories and replace if there are any present.
     NSArray<id<ALCObjectFactory>> *primaryFactories = [_resolvedFactories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id<ALCObjectFactory> objectFactory, NSDictionary<NSString *,id> *bindings) {
         return objectFactory.isPrimary;
@@ -71,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
         STLog(self, @"%lu primary factories found.", (unsigned long) primaryFactories.count);
         _resolvedFactories = primaryFactories;
     }
-    
+
     // Resolve dependencies.
     STLog(self, @"Found %i object factories", _resolvedFactories.count);
     for (id<ALCResolvable> objectFactory in _resolvedFactories) {
@@ -95,8 +96,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
-    return [self.type withValue:values
-                     completion:[self completionForInstantiations:instantations]];
+    return [ALCValue withType:ALCValueTypeArray
+                        value:values
+                   completion:[self completionForInstantiations:instantations]];
 }
 
 #pragma mark - Internal

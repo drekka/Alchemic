@@ -69,8 +69,7 @@
         }
     };
 
-    return [[ALCType typeWithClass:[NSArray class]] withValue:results
-                                                   completion:allCompletions];
+    return [ALCValue withType:ALCValueTypeArray value:results completion:allCompletions];
 }
 
 -(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {

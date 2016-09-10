@@ -16,6 +16,7 @@
 #import <Alchemic/ALCAspectClassProcessor.h>
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCType.h>
 #import <Alchemic/NSBundle+Alchemic.h>
 #import <Alchemic/ALCException.h>
 

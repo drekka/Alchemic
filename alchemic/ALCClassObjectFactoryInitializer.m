@@ -15,6 +15,7 @@
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/NSObject+Alchemic.h>
 #import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCType.h>
 #import <Alchemic/NSArray+Alchemic.h>
 
 @implementation ALCClassObjectFactoryInitializer {

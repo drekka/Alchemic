@@ -13,6 +13,7 @@
 
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCType.h>
 
 @implementation ALCApplicationDelegateAspect {
     ALCClassObjectFactory *_appDelegateFactory;

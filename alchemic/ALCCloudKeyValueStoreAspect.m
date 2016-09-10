@@ -15,6 +15,7 @@
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCCloudKeyValueStore.h>
+#import <Alchemic/ALCType.h>
 
 @implementation ALCCloudKeyValueStoreAspect
 

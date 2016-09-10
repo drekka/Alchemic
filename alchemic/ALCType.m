@@ -15,10 +15,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCValue (copying)
--(void) setValue:(NSValue *) value completion:(nullable ALCSimpleBlock) completion;
-@end
-
 @implementation ALCType
 
 #pragma mark - Factory methods
@@ -27,45 +23,33 @@ NS_ASSUME_NONNULL_BEGIN
     return [self typeWithEncoding:ivar_getTypeEncoding(ivar)];
 }
 
-+(instancetype) typeWithEncoding:(const char *) encoding {
-    ALCType *typeData = [[ALCType alloc] initPrivate];
-    if ([typeData setObjectType:encoding]
-    || [typeData setScalarType:encoding]
-        || [typeData setStructType:encoding]) {
-        return typeData;
-    }
-    throwException(AlchemicTypeMissMatchException, @"Encoding %s describes an unknown type", encoding);
-}
-
 +(instancetype) typeWithClass:(Class) aClass {
-    ALCType *type = [[ALCType alloc] initPrivate];
+    ALCType *type = [[ALCType alloc] init];
+    type.type = ALCValueTypeObject;
     [type setClass:aClass];
     return type;
 }
 
-#pragma mark - Initializers
-
--(instancetype) initPrivate {
-    self = [super init];
-    if (self) {
-        _type = ALCValueTypeUnknown;
++(instancetype) typeWithEncoding:(const char *) encoding {
+    ALCType *type = [[ALCType alloc] init];
+    if ([type setObjectType:encoding]
+        || [type setScalarType:encoding]
+        || [type setStructType:encoding]) {
+        return type;
     }
-    return self;
+    throwException(AlchemicTypeMissMatchException, @"Encoding %s describes an unknown type", encoding);
 }
 
 -(BOOL) setObjectType:(const char *) encoding {
-    
+
     if (! AcStrHasPrefix(encoding, "@")) {
         return NO;
     }
-    
-    // Start with a result that indicates an Id.
-    [self setClass:nil];
-    
+
     // Object type.
     NSCharacterSet *typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
     NSArray<NSString *> *defs = [[NSString stringWithUTF8String:encoding] componentsSeparatedByCharactersInSet:typeEncodingDelimiters];
-    
+
     // If there is no more than 2 in the array then the dependency is an id.
     // Position 3 will be a class name, positions beyond that will be protocols.
     for (NSUInteger i = 2; i < [defs count]; i ++) {
@@ -102,7 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL) setStructType:(const char *) encoding {
-    
+
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{(\\w+)=.*"
                                                                            options:NSRegularExpressionCaseInsensitive
                                                                              error:NULL];
@@ -112,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                        range:NSMakeRange(0, strEncoding.length)];
     if (result) {
         NSRange nameRange = [result rangeAtIndex:1];
-        _type = ALCValueTypeStruct;
+        self.type = ALCValueTypeStruct;
         _scalarType = [strEncoding substringWithRange:nameRange];
         return YES;
     }
@@ -123,7 +107,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(BOOL) setScalarType:(const char *) scalarType encoding:(const char *) encoding type:(ALCValueType) type {
     if (strcmp(encoding, scalarType) == 0) {
         _scalarType = [NSString stringWithUTF8String:scalarType];
-        _type = type;
+        self.type = type;
         return YES;
     }
     return NO;
@@ -131,95 +115,39 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Other methods
 
--(ALCValue *) withValue:(NSValue *) value completion:(nullable ALCSimpleBlock) completion {
-    ALCType *valueObj = [[ALCValue alloc] initPrivate];
-    valueObj->_type = _type;
-    valueObj->_scalarType = _scalarType;
-    valueObj->_objcClass = _objcClass;
-    valueObj->_objcProtocols = _objcProtocols;
-    [(ALCValue *)valueObj setValue:value completion:completion];
-    return (ALCValue *) valueObj;
+-(void) setClass:(Class) aClass {
+    self.type = [aClass isSubclassOfClass:[NSArray class]] ? ALCValueTypeArray : ALCValueTypeObject;
+    self->_objcClass = aClass;
 }
 
 -(NSString *) description {
-    
-    switch (_type) {
-            
-        case ALCValueTypeUnknown: return @"[unknown type]";
-            
-            // Scalar types.
-        case ALCValueTypeBool: return @"scalar BOOL";
-        case ALCValueTypeChar: return @"scalar char";
-        case ALCValueTypeCharPointer: return @"scalar char *";
-        case ALCValueTypeDouble: return @"scalar double";
-        case ALCValueTypeFloat: return @"scalar float";
-        case ALCValueTypeInt: return @"scalar int";
-        case ALCValueTypeLong: return @"scalar long";
-        case ALCValueTypeLongLong: return @"scalar long long";
-        case ALCValueTypeShort: return @"scalar short";
-        case ALCValueTypeUnsignedChar: return @"scalar unsigned char";
-        case ALCValueTypeUnsignedInt: return @"scalar unsigned int";
-        case ALCValueTypeUnsignedLong: return @"scalar unsigned long";
-        case ALCValueTypeUnsignedLongLong: return @"scalar unsigned long long";
-        case ALCValueTypeUnsignedShort: return @"scalar unsigned short";
-        case ALCValueTypeStruct: return str(@"scalar %@", _scalarType);
-            
+
+    switch (self.type) {
+        case ALCValueTypeStruct: return str(@"struct %@", _scalarType);
+
             // Object types.
         case ALCValueTypeObject: {
-            
+
             if (self.objcProtocols.count > 0) {
-                
+
                 NSMutableArray<NSString *> *protocols = [[NSMutableArray alloc] init];
                 for (Protocol *protocol in self.objcProtocols) {
                     [protocols addObject:NSStringFromProtocol(protocol)];
                 }
-                
+
                 if (self.objcClass) {
                     return str(@"class %@<%@> *", NSStringFromClass(self.objcClass), [protocols componentsJoinedByString:@","]);
                 } else {
                     return str(@"id<%@>", [protocols componentsJoinedByString:@","]);
                 }
-                
+
             } else {
                 return self.objcClass ? str(@"class %@ *", NSStringFromClass(self.objcClass)) : @"id";
             }
         }
-            
-        case ALCValueTypeArray: return @"class NSArray *";
-    }
-}
 
--(void) setClass:(nullable Class) aClass {
-    _type = [aClass isSubclassOfClass:[NSArray class]] ? ALCValueTypeArray : ALCValueTypeObject;
-    _objcClass = aClass;
-}
-
--(NSString *) methodNameFragment {
-    switch (_type) {
-            
-            // Scalar types.
-        case ALCValueTypeBool: return @"Bool";
-        case ALCValueTypeChar: return @"Char";
-        case ALCValueTypeCharPointer: return @"CharPointer";
-        case ALCValueTypeDouble: return @"Double";
-        case ALCValueTypeFloat: return @"Float";
-        case ALCValueTypeInt: return @"Int";
-        case ALCValueTypeLong: return @"Long";
-        case ALCValueTypeLongLong: return @"LongLong";
-        case ALCValueTypeShort: return @"Short";
-        case ALCValueTypeUnsignedChar: return @"UnsignedChar";
-        case ALCValueTypeUnsignedInt: return @"UnsignedInt";
-        case ALCValueTypeUnsignedLong: return @"UnsignedLong";
-        case ALCValueTypeUnsignedLongLong: return @"UnsignedLongLong";
-        case ALCValueTypeUnsignedShort: return @"UnsignedShort";
-        case ALCValueTypeStruct: return _scalarType;
-            
-            // Object types.
-        case ALCValueTypeObject:return @"Object";
-        case ALCValueTypeArray: return @"Array";
-            
         default:
-            throwException(AlchemicIllegalArgumentException, @"Cannot deduce a method name when type is unknown");
+            return super.description;
     }
 }
 

@@ -9,21 +9,25 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCTypeDefs.h>
+#import <Alchemic/ALCAbstractType.h>
+
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCtypeDefs.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface ALCType (copying)
--(ALCValue *) withValue:(id) value completion:(nullable ALCSimpleBlock) completion;
-@end
 
 /**
  Simple class containing information about a type.
  */
-@interface ALCValue : ALCType
+@interface ALCValue : ALCAbstractType
+
 @property (nonatomic, strong, readonly) id value;
 @property (nonatomic, strong, nullable, readonly) ALCSimpleBlock completion;
+
++(ALCValue *) withType:(ALCValueType) type
+                 value:(id) value
+            completion:(nullable ALCSimpleBlock) completion;
+
 @end
 
 NS_ASSUME_NONNULL_END
