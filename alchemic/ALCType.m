@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     // Object type.
+    self.type = ALCValueTypeObject;
     NSCharacterSet *typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
     NSArray<NSString *> *defs = [[NSString stringWithUTF8String:encoding] componentsSeparatedByCharactersInSet:typeEncodingDelimiters];
 

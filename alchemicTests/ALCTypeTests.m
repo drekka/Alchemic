@@ -129,32 +129,32 @@ testObjectTypeWithEncoding(classAndProtocol, NSNumber, @[@"AlchemicAware"], ALCV
 #define testMethodNameFragment(ivarName, expectedName) \
 -(void) testMethodNameFragment_ ## ivarName { \
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
-XCTAssertEqualObjects(alc_toNSString(expectedName), [[ALCType typeForIvar:ivar] methodNameFragment]); \
+XCTAssertEqualObjects(expectedName, [[ALCType typeForIvar:ivar] methodNameFragment]); \
 }
 
-testMethodNameFragment(aBool, Bool)
-testMethodNameFragment(aChar, Char)
-testMethodNameFragment(aCharPointer, CharPointer)
-testMethodNameFragment(aDouble, Double)
-testMethodNameFragment(aFloat, Float)
-testMethodNameFragment(aInt, Int)
-testMethodNameFragment(aLong, LongLong) // in 64Bit, shows as a long long
-testMethodNameFragment(aLongLong, LongLong)
-testMethodNameFragment(aShort, Short)
-testMethodNameFragment(aUChar, UnsignedChar)
-testMethodNameFragment(aUInt, UnsignedInt)
-testMethodNameFragment(aULong, UnsignedLongLong) // in 64Bit, shows as a long long
-testMethodNameFragment(aULongLong, UnsignedLongLong)
-testMethodNameFragment(aUShort, UnsignedShort)
+testMethodNameFragment(aBool, @"Bool")
+testMethodNameFragment(aChar, @"Char")
+testMethodNameFragment(aCharPointer, @"CharPointer")
+testMethodNameFragment(aDouble, @"Double")
+testMethodNameFragment(aFloat, @"Float")
+testMethodNameFragment(aInt, @"Int")
+testMethodNameFragment(aLong, @"LongLong") // in 64Bit, shows as a long long
+testMethodNameFragment(aLongLong, @"LongLong")
+testMethodNameFragment(aShort, @"Short")
+testMethodNameFragment(aUChar, @"UnsignedChar")
+testMethodNameFragment(aUInt, @"UnsignedInt")
+testMethodNameFragment(aULong, @"UnsignedLongLong") // in 64Bit, shows as a long long
+testMethodNameFragment(aULongLong, @"UnsignedLongLong")
+testMethodNameFragment(aUShort, @"UnsignedShort")
 
 // Structs
-testMethodNameFragment(size, CGSize)
-testMethodNameFragment(point, CGPoint)
-testMethodNameFragment(rect, CGRect)
+testMethodNameFragment(size, @"Struct")
+testMethodNameFragment(point, @"Struct")
+testMethodNameFragment(rect, @"Struct")
 
 // Classes
-testMethodNameFragment(aNumber, Object)
-testMethodNameFragment(aArray, Array)
+testMethodNameFragment(aNumber, @"Object")
+testMethodNameFragment(aArray, @"Array")
 
 #pragma mark - Type descriptions
 
