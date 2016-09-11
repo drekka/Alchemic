@@ -29,6 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
     return [self withValueType:type.type value:value completion:completion];
 }
 
+-(NSString *) methodNameFragment {
+    if (self.type == ALCValueTypeStruct) {
+        return [self structNameFromEncoding:((NSValue *)self.value).objCType];
+    }
+    return super.methodNameFragment;
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

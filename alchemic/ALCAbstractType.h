@@ -49,6 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) NSString *methodNameFragment;
 
+-(nullable NSString *) structNameFromEncoding:(const char *) encoding;
+
 @end
 
 NS_ASSUME_NONNULL_END

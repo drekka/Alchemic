@@ -40,7 +40,7 @@
 
 #pragma mark - Variable injections
 
-#define testScalarVariableInjectionTest(ivarName, ivarType, expectedValue) \
+#define  testScalarVariableInjection(ivarName, ivarType, expectedValue) \
 -(void) testVariableInjection_ ## ivarName { \
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 const char *encoding = ivar_getTypeEncoding(ivar); \
@@ -53,18 +53,18 @@ inj(self, ivar); \
 XCTAssertEqual(ivarName, expectedValue); \
 }
 
-testScalarVariableInjectionTest(_aBool, BOOL, YES)
-testScalarVariableInjectionTest(_aDouble, double, 5.12345678)
-testScalarVariableInjectionTest(_aFloat, float, 1.2f)
-testScalarVariableInjectionTest(_aInt, int, 5)
-testScalarVariableInjectionTest(_aLong, long, 5)
-testScalarVariableInjectionTest(_aLongLong, long long, 5)
-testScalarVariableInjectionTest(_aShort, short, 5)
-testScalarVariableInjectionTest(_aUChar, unsigned char, 'c')
-testScalarVariableInjectionTest(_aUInt, unsigned int, 5u)
-testScalarVariableInjectionTest(_aULong, unsigned long, 5u)
-testScalarVariableInjectionTest(_aULongLong, unsigned long long, 5u)
-testScalarVariableInjectionTest(_aUShort, unsigned short, 5u)
+ testScalarVariableInjection(_aBool, BOOL, YES)
+ testScalarVariableInjection(_aDouble, double, 5.12345678)
+ testScalarVariableInjection(_aFloat, float, 1.2f)
+ testScalarVariableInjection(_aInt, int, 5)
+ testScalarVariableInjection(_aLong, long, 5)
+ testScalarVariableInjection(_aLongLong, long long, 5)
+ testScalarVariableInjection(_aShort, short, 5)
+ testScalarVariableInjection(_aUChar, unsigned char, 'c')
+ testScalarVariableInjection(_aUInt, unsigned int, 5u)
+ testScalarVariableInjection(_aULong, unsigned long, 5u)
+ testScalarVariableInjection(_aULongLong, unsigned long long, 5u)
+ testScalarVariableInjection(_aUShort, unsigned short, 5u)
 
 -(void) testVariableInjection_aCharPointer {
     Ivar ivar = class_getInstanceVariable([self class], "_aCharPointer");
@@ -78,7 +78,7 @@ testScalarVariableInjectionTest(_aUShort, unsigned short, 5u)
     XCTAssertTrue(strcmp("abc", _aCharPointer) == 0);
 }
 
-#define testScalarStructVariableInjectionTest(ivarName, ivarType, expectedValue, compareFunction) \
+#define testScalarStructVariableInjection(ivarName, ivarType, expectedValue, compareFunction) \
 -(void) testVariableInjection_ ## ivarName { \
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 const char *encoding = ivar_getTypeEncoding(ivar); \
@@ -91,9 +91,9 @@ inj(self, ivar); \
 XCTAssertTrue(compareFunction(ivarName, expectedValue)); \
 }
 
-testScalarStructVariableInjectionTest(_size, CGSize, CGSizeMake(1.0f, 2.0f), CGSizeEqualToSize)
-testScalarStructVariableInjectionTest(_point, CGPoint, CGPointMake(1.0f, 2.0f), CGPointEqualToPoint)
-testScalarStructVariableInjectionTest(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.0f), CGRectEqualToRect)
+testScalarStructVariableInjection(_size, CGSize, CGSizeMake(1.0f, 2.0f), CGSizeEqualToSize)
+testScalarStructVariableInjection(_point, CGPoint, CGPointMake(1.0f, 2.0f), CGPointEqualToPoint)
+testScalarStructVariableInjection(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.0f), CGRectEqualToRect)
 
 -(void) testVariableInjection_aNumber {
     Ivar ivar = class_getInstanceVariable([self class], "_aNumber");

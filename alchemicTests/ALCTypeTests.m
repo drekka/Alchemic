@@ -148,9 +148,9 @@ testMethodNameFragment(aULongLong, @"UnsignedLongLong")
 testMethodNameFragment(aUShort, @"UnsignedShort")
 
 // Structs
-testMethodNameFragment(size, @"Struct")
-testMethodNameFragment(point, @"Struct")
-testMethodNameFragment(rect, @"Struct")
+testMethodNameFragment(size, @"CGSize")
+testMethodNameFragment(point, @"CGPoint")
+testMethodNameFragment(rect, @"CGRect")
 
 // Classes
 testMethodNameFragment(aNumber, @"Object")
@@ -180,9 +180,9 @@ testDescription(aULongLong, @"scalar unsigned long long")
 testDescription(aUShort, @"scalar unsigned short")
 
 // Structs
-testDescription(size, @"scalar CGSize")
-testDescription(point, @"scalar CGPoint")
-testDescription(rect, @"scalar CGRect")
+testDescription(size, @"struct CGSize")
+testDescription(point, @"struct CGPoint")
+testDescription(rect, @"struct CGRect")
 
 // Classes
 testDescription(aNumber, @"class NSNumber *")

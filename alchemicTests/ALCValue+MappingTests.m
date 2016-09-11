@@ -81,24 +81,23 @@ testDecimalMapping(NSNumberToFloat, NSNumber *, @5.1234, float, 5.1234, 0.0001)
 
 -(void) testObjectToObjectWhenSameType {
     ALCType *toType = [ALCType typeWithClass:[NSNumber class]];
-    ALCValue *fromValue = [ALCValue withType:toType value:@5 completion:NULL];
+    ALCValue *fromValue = [ALCValue withValueType:ALCValueTypeObject value:@5 completion:NULL];
     ALCValue *value = [self map:fromValue toType:toType];
     XCTAssertEqual(fromValue, value);
 }
 
 -(void) testObjectToObjectWhenMappingToSubclassIfActuallySameClass {
     ALCType *toType = [ALCType typeWithClass:[NSMutableString class]];
-    ALCType *fromType = [ALCType typeWithClass:[NSString class]];
-    ALCValue *fromValue = [ALCValue withType:fromType value:[@"abc" mutableCopy] completion:NULL];
+    ALCValue *fromValue = [ALCValue withValueType:ALCValueTypeObject value:[@"abc" mutableCopy] completion:NULL];
     ALCValue *value = [self map:fromValue toType:toType];
     XCTAssertEqualObjects(@"abc", value.value);
 }
 
 -(void) testObjectToObjectWhenMappingToSubclass {
     ALCType *toType = [ALCType typeWithClass:[NSMutableString class]];
-    ALCType *fromType = [ALCType typeWithClass:[NSString class]];
-    ALCValue *fromValue = [ALCValue withType:fromType value:@"abc" completion:NULL];
-    [self map:fromValue toType:toType withError:@""];
+    NSString *abc = [NSString stringWithCString:"abc" encoding:NSUTF8StringEncoding]; // Constants are decended from mutables. So use this instead.
+    ALCValue *fromValue = [ALCValue withValueType:ALCValueTypeObject value:abc completion:NULL];
+    [self map:fromValue toType:toType withError:@"Cannot convert a NSTaggedPointerString to a NSMutableString"];
 }
 
 #pragma mark - Internal

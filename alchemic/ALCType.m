@@ -87,22 +87,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL) setStructType:(const char *) encoding {
-
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{(\\w+)=.*"
-                                                                           options:NSRegularExpressionCaseInsensitive
-                                                                             error:NULL];
-    NSString *strEncoding = [NSString stringWithUTF8String:encoding];
-    NSTextCheckingResult *result = [regex firstMatchInString:strEncoding
-                                                     options:NSMatchingReportProgress
-                                                       range:NSMakeRange(0, strEncoding.length)];
-    if (result) {
-        NSRange nameRange = [result rangeAtIndex:1];
-        self.type = ALCValueTypeStruct;
-        _scalarType = [strEncoding substringWithRange:nameRange];
-        return YES;
-    }
-
-    return NO;
+    _scalarType = [self structNameFromEncoding:encoding];
+    return _scalarType != NULL;
 }
 
 -(BOOL) setScalarType:(const char *) scalarType encoding:(const char *) encoding type:(ALCValueType) type {
@@ -150,6 +136,13 @@ NS_ASSUME_NONNULL_BEGIN
         default:
             return super.description;
     }
+}
+
+-(NSString *) methodNameFragment {
+    if (self.type == ALCValueTypeStruct) {
+        return _scalarType;
+    }
+    return super.methodNameFragment;
 }
 
 @end

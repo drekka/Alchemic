@@ -22,6 +22,24 @@
     return self;
 }
 
+-(nullable NSString *) structNameFromEncoding:(const char *) encoding {
+
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{(\\w+)=.*"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:NULL];
+    NSString *strEncoding = [NSString stringWithUTF8String:encoding];
+    NSTextCheckingResult *result = [regex firstMatchInString:strEncoding
+                                                     options:NSMatchingReportProgress
+                                                       range:NSMakeRange(0, strEncoding.length)];
+    if (result) {
+        NSRange nameRange = [result rangeAtIndex:1];
+        self.type = ALCValueTypeStruct;
+        return [strEncoding substringWithRange:nameRange];
+    }
+    
+    return nil;
+}
+
 -(NSString *) methodNameFragment {
 
     switch (_type) {
