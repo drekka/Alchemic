@@ -45,6 +45,12 @@
 
 #pragma mark - Type with class
 
+-(void) testTypeWithIvar {
+    Ivar ivar = class_getInstanceVariable([self class], "aNumber");
+    ALCType *type = [ALCType typeForIvar:ivar];
+    XCTAssertEqual([NSNumber class], type.objcClass);
+}
+
 -(void) testTypeWithClass {
     ALCType *type = [ALCType typeWithClass:[NSNumber class]];
     XCTAssertEqual(ALCValueTypeObject, type.type);
@@ -56,8 +62,7 @@
 #define testScalarTypeWithEncoding(ivarName, encoding, valueType, methodName) \
 -(void) testTypeWithEncoding_ ## ivarName { \
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
-const char *ivarEncoding = ivar_getTypeEncoding(ivar); \
-ALCType *type = [ALCType typeWithEncoding:ivarEncoding]; \
+ALCType *type = [ALCType typeForIvar:ivar]; \
 XCTAssertEqual(valueType, type.type, @"Types don't match"); \
 XCTAssertTrue(strcmp(encoding, type.scalarType.UTF8String) == 0, @"Expected %s != %@", encoding, type.scalarType); \
 }
@@ -78,7 +83,6 @@ testScalarTypeWithEncoding(aULong, "Q", ALCValueTypeUnsignedLongLong, ULong) // 
 testScalarTypeWithEncoding(aULongLong, "Q", ALCValueTypeUnsignedLongLong, ULongLong)
 testScalarTypeWithEncoding(aUShort, "S", ALCValueTypeUnsignedShort, UShort)
 
-
 // Structs
 testScalarTypeWithEncoding(size, "CGSize", ALCValueTypeStruct, CGSize)
 testScalarTypeWithEncoding(point, "CGPoint", ALCValueTypeStruct, CGPoint)
@@ -87,8 +91,7 @@ testScalarTypeWithEncoding(rect, "CGRect", ALCValueTypeStruct, CGRect)
 #define testObjectTypeWithEncoding(ivarName, className, protocolArray, valueType, methodName) \
 -(void) testTypeWithEncoding_ ## ivarName { \
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
-const char *ivarEncoding = ivar_getTypeEncoding(ivar); \
-ALCType *type = [ALCType typeWithEncoding:ivarEncoding]; \
+ALCType *type = [ALCType typeForIvar:ivar]; \
 XCTAssertEqual(valueType, type.type, @"Types don't match"); \
 XCTAssertEqual([className class], type.objcClass, @"Expected %@ != %@", NSStringFromClass([className class]), NSStringFromClass(type.objcClass)); \
 XCTAssertEqual(protocolArray.count, type.objcProtocols.count, @"Exepcted %lu protocols, found %lu", protocolArray.count, type.objcProtocols.count); \
@@ -100,8 +103,7 @@ XCTAssertTrue([type.objcProtocols containsObject:NSProtocolFromString(protocolNa
 #define testIdTypeWithEncoding(ivarName, protocolArray, valueType, methodName) \
 -(void) testTypeWithEncoding_ ## ivarName { \
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
-const char *ivarEncoding = ivar_getTypeEncoding(ivar); \
-ALCType *type = [ALCType typeWithEncoding:ivarEncoding]; \
+ALCType *type = [ALCType typeForIvar:ivar]; \
 XCTAssertEqual(valueType, type.type, @"Types don't match"); \
 XCTAssertNil(type.objcClass, @"Expected a nil class, found %@", NSStringFromClass(type.objcClass)); \
 XCTAssertEqual(protocolArray.count, type.objcProtocols.count, @"Exepcted %lu protocols, found %lu", protocolArray.count, type.objcProtocols.count); \
@@ -110,7 +112,6 @@ XCTAssertTrue([type.objcProtocols containsObject:NSProtocolFromString(protocolNa
 } \
 }
 
-
 // Object types.
 testObjectTypeWithEncoding(aNumber, NSNumber, @[], ALCValueTypeObject, NSNumber)
 testObjectTypeWithEncoding(aArray, NSArray, (@[]), ALCValueTypeArray, NSArray)
@@ -118,78 +119,50 @@ testIdTypeWithEncoding(idOnly, @[], ALCValueTypeObject, IdOnly)
 testIdTypeWithEncoding(idWithProtocol, @[@"NSCopying"], ALCValueTypeObject, IdWithProtocol)
 testObjectTypeWithEncoding(classAndProtocol, NSNumber, @[@"AlchemicAware"], ALCValueTypeObject, ClassAndProtocol)
 
-
 -(void) testTypeWithEncodingWhenUnknownType {
     const char *ivarEncoding = "j832h2i f2o 2o f2 hof e2o";
     XCTAssertThrowsSpecific([ALCType typeWithEncoding:ivarEncoding], AlchemicTypeMissMatchException);
 }
 
-#pragma mark - Fragment names
+#pragma mark - Description
 
-#define testMethodNameFragment(ivarName, expectedName) \
--(void) testMethodNameFragment_ ## ivarName { \
-Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
-XCTAssertEqualObjects(expectedName, [[ALCType typeForIvar:ivar] methodNameFragment]); \
+-(void) testDescriptionWithStruct {
+    Ivar ivar = class_getInstanceVariable([self class], "size");
+    ALCType *type = [ALCType typeForIvar:ivar];
+    XCTAssertEqualObjects(@"struct CGSize", type.description);
 }
 
-testMethodNameFragment(aBool, @"Bool")
-testMethodNameFragment(aChar, @"Char")
-testMethodNameFragment(aCharPointer, @"CharPointer")
-testMethodNameFragment(aDouble, @"Double")
-testMethodNameFragment(aFloat, @"Float")
-testMethodNameFragment(aInt, @"Int")
-testMethodNameFragment(aLong, @"LongLong") // in 64Bit, shows as a long long
-testMethodNameFragment(aLongLong, @"LongLong")
-testMethodNameFragment(aShort, @"Short")
-testMethodNameFragment(aUChar, @"UnsignedChar")
-testMethodNameFragment(aUInt, @"UnsignedInt")
-testMethodNameFragment(aULong, @"UnsignedLongLong") // in 64Bit, shows as a long long
-testMethodNameFragment(aULongLong, @"UnsignedLongLong")
-testMethodNameFragment(aUShort, @"UnsignedShort")
-
-// Structs
-testMethodNameFragment(size, @"CGSize")
-testMethodNameFragment(point, @"CGPoint")
-testMethodNameFragment(rect, @"CGRect")
-
-// Classes
-testMethodNameFragment(aNumber, @"Object")
-testMethodNameFragment(aArray, @"Array")
-
-#pragma mark - Type descriptions
-
-#define testDescription(ivarName, expectedDescription) \
--(void) testDescription_ ## ivarName { \
-Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
-XCTAssertEqualObjects(expectedDescription, [ALCType typeForIvar:ivar].description); \
+-(void) testDescriptionWithClass {
+    Ivar ivar = class_getInstanceVariable([self class], "aNumber");
+    ALCType *type = [ALCType typeForIvar:ivar];
+    XCTAssertEqualObjects(@"class NSNumber *", type.description);
 }
 
-testDescription(aBool, @"scalar BOOL")
-testDescription(aChar, @"scalar char")
-testDescription(aCharPointer, @"scalar char *")
-testDescription(aDouble, @"scalar double")
-testDescription(aFloat, @"scalar float")
-testDescription(aInt, @"scalar int")
-testDescription(aLong, @"scalar long long") // in 64Bit, shows as a long long
-testDescription(aLongLong, @"scalar long long")
-testDescription(aShort, @"scalar short")
-testDescription(aUChar, @"scalar unsigned char")
-testDescription(aUInt, @"scalar unsigned int")
-testDescription(aULong, @"scalar unsigned long long") // in 64Bit, shows as a long long
-testDescription(aULongLong, @"scalar unsigned long long")
-testDescription(aUShort, @"scalar unsigned short")
+-(void) testDescriptionWithIdOnly {
+    Ivar ivar = class_getInstanceVariable([self class], "idOnly");
+    ALCType *type = [ALCType typeForIvar:ivar];
+    XCTAssertEqualObjects(@"id", type.description);
+}
 
-// Structs
-testDescription(size, @"struct CGSize")
-testDescription(point, @"struct CGPoint")
-testDescription(rect, @"struct CGRect")
+-(void) testDescriptionWithProtocols {
+    Ivar ivar = class_getInstanceVariable([self class], "idWithProtocol");
+    ALCType *type = [ALCType typeForIvar:ivar];
+    XCTAssertEqualObjects(@"id<NSCopying>", type.description);
+}
 
-// Classes
-testDescription(aNumber, @"class NSNumber *")
-testDescription(aArray, @"class NSArray *")
-testDescription(idOnly, @"id")
-testDescription(idWithProtocol, @"id<NSCopying>")
-testDescription(classAndProtocol, @"class NSNumber<AlchemicAware> *")
+-(void) testDescriptionWithClassAndProtocols {
+    Ivar ivar = class_getInstanceVariable([self class], "classAndProtocol");
+    ALCType *type = [ALCType typeForIvar:ivar];
+    XCTAssertEqualObjects(@"class NSNumber<AlchemicAware> *", type.description);
+}
+
+#pragma mark - Method name fragment
+
+-(void) testMethodNameFragmentReturnsStructName {
+    Ivar ivar = class_getInstanceVariable([self class], "size");
+    ALCType *type = [ALCType typeForIvar:ivar];
+    XCTAssertEqualObjects(@"CGSize", type.methodNameFragment);
+}
 
 #pragma mark - Generating ALCValue instances
 

@@ -48,6 +48,7 @@
 		6C1ADB051C9050FB00267E77 /* ALCInstantiation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */; };
 		6C1C10351CF475C900ED1A20 /* ALCModelClassProcessorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1C10341CF475C900ED1A20 /* ALCModelClassProcessorTests.m */; };
 		6C1C10391CF496F700ED1A20 /* NSObject+AlchemicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1C10381CF496F700ED1A20 /* NSObject+AlchemicTests.m */; };
+		6C1F48451D86C4FE0091009D /* ALCAbtractTypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1F48441D86C4FE0091009D /* ALCAbtractTypeTests.m */; };
 		6C22EA6B1D75155900E0FDC0 /* ALCConstantValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C22EA691D75155900E0FDC0 /* ALCConstantValueSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C22EA6C1D75155900E0FDC0 /* ALCConstantValueSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C22EA691D75155900E0FDC0 /* ALCConstantValueSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C22EA6D1D75155900E0FDC0 /* ALCConstantValueSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C22EA6A1D75155900E0FDC0 /* ALCConstantValueSource.m */; };
@@ -340,6 +341,7 @@
 		6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCInstantiation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C1C10341CF475C900ED1A20 /* ALCModelClassProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCModelClassProcessorTests.m; sourceTree = "<group>"; };
 		6C1C10381CF496F700ED1A20 /* NSObject+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+AlchemicTests.m"; sourceTree = "<group>"; };
+		6C1F48441D86C4FE0091009D /* ALCAbtractTypeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbtractTypeTests.m; sourceTree = "<group>"; };
 		6C22EA691D75155900E0FDC0 /* ALCConstantValueSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCConstantValueSource.h; sourceTree = "<group>"; };
 		6C22EA6A1D75155900E0FDC0 /* ALCConstantValueSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConstantValueSource.m; sourceTree = "<group>"; };
 		6C237CD01CCA6EEF00B8F551 /* RequestEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestEngine.h; sourceTree = "<group>"; };
@@ -952,6 +954,7 @@
 				6C56A52E1D77BF3000B609FD /* ALCTypeTests.m */,
 				6CB92CC81D77FBE80073A34C /* ALCValue+InjectionTests.m */,
 				6CF814A01D7001D2001B1402 /* ALCValue+MappingTests.m */,
+				6C1F48441D86C4FE0091009D /* ALCAbtractTypeTests.m */,
 			);
 			name = "Mapping and Injection";
 			sourceTree = "<group>";
@@ -1517,6 +1520,7 @@
 				6C04EE7C1D6D83C1004F32F8 /* ALCApplicationDelegateAspectTests.m in Sources */,
 				6CE7848E1D771A7E008A6C4D /* ALCArrayValueSourceTests.m in Sources */,
 				6C04EE7E1D6D8AB5004F32F8 /* ALCAspectClassProcessorTests.m in Sources */,
+				6C1F48451D86C4FE0091009D /* ALCAbtractTypeTests.m in Sources */,
 				6CE6FFFB1D2AA59A00D61613 /* ALCClassObjectFactoryInitializerTests.m in Sources */,
 				6CB57E9C1D43C66B00CFE4DF /* ALCClassObjectFactoryTests.m in Sources */,
 				6C62030D1D78FC99005355E8 /* ALCCloudKeyValueStoreTests.m in Sources */,
