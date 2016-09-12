@@ -83,6 +83,7 @@ scalarVariableInjector(unsigned int, UnsignedInt)
 scalarVariableInjector(unsigned long, UnsignedLong)
 scalarVariableInjector(unsigned long long, UnsignedLongLong)
 scalarVariableInjector(unsigned short, UnsignedShort)
+
 scalarVariableInjector(CGSize, CGSize)
 scalarVariableInjector(CGPoint, CGPoint)
 scalarVariableInjector(CGRect, CGRect)
@@ -128,15 +129,6 @@ type value; \
 }; \
 }
 
-#define methodArgumentInjector(type, typeName) \
--(ALCInvocationInjectorBlock) invocationInjectorFor ## typeName { \
-return ^(ALCInvocationInjectorBlockArgs) { \
-type value = self.value; \
-[ALCRuntime executeSimpleBlock:self.completion]; \
-[inv setArgument:&value atIndex:idx + 2]; \
-}; \
-}
-
 scalarMethodArgumentInjector(BOOL, Bool)
 scalarMethodArgumentInjector(char, Char)
 scalarMethodArgumentInjector(char *, CharPointer)
@@ -152,10 +144,25 @@ scalarMethodArgumentInjector(unsigned long, UnsignedLong)
 scalarMethodArgumentInjector(unsigned long long, UnsignedLongLong)
 scalarMethodArgumentInjector(short, UnsignedShort)
 
-scalarMethodArgumentInjector(CGRect, Struct)
+scalarMethodArgumentInjector(CGSize, CGSize)
+scalarMethodArgumentInjector(CGPoint, CGPoint)
+scalarMethodArgumentInjector(CGRect, CGRect)
 
-methodArgumentInjector(id, Object)
-methodArgumentInjector(NSArray *, Array)
+-(ALCInvocationInjectorBlock) invocationInjectorForObject {
+    return ^(ALCInvocationInjectorBlockArgs) {
+        id value = self.value;
+        [ALCRuntime executeSimpleBlock:self.completion];
+        [inv setArgument:&value atIndex:idx + 2];
+    };
+}
+
+-(ALCInvocationInjectorBlock) invocationInjectorForArray {
+    return ^(ALCInvocationInjectorBlockArgs) {
+        NSArray *value = self.value;
+        [ALCRuntime executeSimpleBlock:self.completion];
+        [inv setArgument:&value atIndex:idx + 2];
+    };
+}
 
 @end
 

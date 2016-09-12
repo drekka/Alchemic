@@ -40,7 +40,6 @@
     CGSize size;
     CGPoint point;
     CGRect rect;
-    
 }
 
 #pragma mark - Type with class
