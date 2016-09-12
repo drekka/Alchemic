@@ -93,7 +93,7 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
     }
 
     id obj = objs[0];
-    if ([obj isKindOfClass:toType.objcClass]) {
+    if (!toType.objcClass || [obj isKindOfClass:toType.objcClass]) {
         return [ALCValue withType:toType value:obj completion:self.completion];
     } else {
         setError(@"Cannot covert a %@ to a %@", NSStringFromClass([obj class]), NSStringFromClass(toType.objcClass));
@@ -102,6 +102,10 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
 }
 
 #pragma mark - Scalar ->
+
+-(nullable ALCValue *) convertBoolToBool:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
+    return self;
+}
 
 -(nullable ALCValue *) convertIntToInt:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
     return self;
