@@ -19,9 +19,9 @@
 
 #define testNSNumberMapping(testName, fromTestValue, toTestType, expectedValue) \
 -(void) test ## testName { \
-ALCValue *toValue = [self valueFromValueOfType:ALCValueTypeObject value:fromTestValue encoding:@encode(toTestType)]; \
+ALCValue *toValue = [self mapValue:fromTestValue toEncoding:@encode(toTestType)]; \
 toTestType result; \
-[toValue.value getValue:&result]; \
+[(NSValue *) toValue.value getValue:&result]; \
 XCTAssertEqual(expectedValue, result); \
 }
 
@@ -37,7 +37,7 @@ testNSNumberMapping(NSNumberToUnsignedShort, @5,unsigned short, 5u)
 
 #define testDecimalNSNumberMapping(testName, fromTestValue, toTestType, expectedValue, accuracy) \
 -(void) test ## testName { \
-ALCValue *toValue = [self valueFromValueOfType:ALCValueTypeObject value:fromTestValue encoding:@encode(toTestType)]; \
+ALCValue *toValue = [self mapValue:fromTestValue toEncoding:@encode(toTestType)]; \
 toTestType result; \
 [toValue.value getValue:&result]; \
 XCTAssertEqualWithAccuracy(expectedValue, result, accuracy); \
@@ -50,8 +50,8 @@ testDecimalNSNumberMapping(NSNumberToFloat, @5.1234, float, 5.1234, 0.0001)
 
 -(void) testBoolToBool {
     BOOL value = YES;
-    NSValue *nsValue = [NSValue value:&value withObjCType:@encode(BOOL)];
-    ALCValue *toValue = [self mapValue:nsValue encoding:@encode(BOOL) toEncoding:@encode(BOOL)];
+    NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(BOOL)];
+    ALCValue *toValue = [self mapValue:nsValue toEncoding:@encode(BOOL)];
     BOOL resultValue;
     [(NSValue *) toValue.value getValue:&resultValue];
     XCTAssertTrue(resultValue);
@@ -59,8 +59,8 @@ testDecimalNSNumberMapping(NSNumberToFloat, @5.1234, float, 5.1234, 0.0001)
 
 -(void) testIntToInt {
     int value = 5;
-    NSValue *nsValue = [NSValue value:&value withObjCType:@encode(int)];
-    ALCValue *toValue = [self mapValue:nsValue encoding:@encode(int) toEncoding:@encode(int)];
+    NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(int)];
+    ALCValue *toValue = [self mapValue:nsValue toEncoding:@encode(int)];
     int resultValue;
     [(NSValue *) toValue.value getValue:&resultValue];
     XCTAssertEqual(resultValue, 5);
@@ -69,31 +69,27 @@ testDecimalNSNumberMapping(NSNumberToFloat, @5.1234, float, 5.1234, 0.0001)
 #pragma mark - From arrays
 
 -(void) testArrayToObjectWithoutClass {
-    ALCType *arrayType = [ALCType typeWithClass:[NSArray class]];
-    ALCValue *fromValue = [ALCValue withType:arrayType value:@[@"abc"] completion:NULL];
+    ALCValue *fromValue = [ALCValue withValue:@[@"abc"] completion:NULL];
     NSError *error;
     ALCValue *toValue = [fromValue mapTo:[ALCType typeWithEncoding:@encode(NSString *)] error:&error];
     XCTAssertEqualObjects(@"abc", toValue.value);
 }
 
 -(void) testArrayToObjectWithClass {
-    ALCType *arrayType = [ALCType typeWithClass:[NSArray class]];
-    ALCValue *fromValue = [ALCValue withType:arrayType value:@[@"abc"] completion:NULL];
+    ALCValue *fromValue = [ALCValue withValue:@[@"abc"] completion:NULL];
     NSError *error;
     ALCValue *toValue = [fromValue mapTo:[ALCType typeWithClass:[NSString class]] error:&error];
     XCTAssertEqualObjects(@"abc", toValue.value);
 }
 
 -(void) testArrayToObjectWhenZeroValues {
-    ALCType *arrayType = [ALCType typeWithClass:[NSArray class]];
-    ALCValue *fromValue = [ALCValue withType:arrayType value:@[] completion:NULL];
+    ALCValue *fromValue = [ALCValue withValue:@[] completion:NULL];
     ALCValue *toValue = [self map:fromValue toType:[ALCType typeWithClass:[NSString class]]];
     XCTAssertEqual([NSNull null], toValue.value);
 }
 
 -(void) testArrayToObjectWhenTooManyValuesError {
-    ALCType *arrayType = [ALCType typeWithClass:[NSArray class]];
-    ALCValue *fromValue = [ALCValue withType:arrayType value:@[@"abc", @"def", @"ghi"] completion:NULL];
+    ALCValue *fromValue = [ALCValue withValue:@[@"abc", @"def", @"ghi"] completion:NULL];
     NSError *error;
     ALCValue *toValue = [fromValue mapTo:[ALCType typeWithClass:[NSString class]] error:&error];
     XCTAssertNil(toValue);
@@ -103,38 +99,30 @@ testDecimalNSNumberMapping(NSNumberToFloat, @5.1234, float, 5.1234, 0.0001)
 #pragma mark - Object -> Object
 
 -(void) testObjectToObjectWhenSameType {
-    ALCType *toType = [ALCType typeWithClass:[NSNumber class]];
-    ALCValue *fromValue = [ALCValue withValueType:ALCValueTypeObject value:@5 completion:NULL];
-    ALCValue *value = [self map:fromValue toType:toType];
+    ALCValue *fromValue = [ALCValue withValue:@5 completion:NULL];
+    ALCValue *value = [self map:fromValue toType:[ALCType typeWithClass:[NSNumber class]]];
     XCTAssertEqual(fromValue, value);
 }
 
 -(void) testObjectToObjectWhenMappingToSubclassIfActuallySameClass {
-    ALCType *toType = [ALCType typeWithClass:[NSMutableString class]];
-    ALCValue *fromValue = [ALCValue withValueType:ALCValueTypeObject value:[@"abc" mutableCopy] completion:NULL];
-    ALCValue *value = [self map:fromValue toType:toType];
+    ALCValue *fromValue = [ALCValue withValue:[@"abc" mutableCopy] completion:NULL];
+    ALCValue *value = [self map:fromValue toType:[ALCType typeWithClass:[NSMutableString class]]];
     XCTAssertEqualObjects(@"abc", value.value);
 }
 
 -(void) testObjectToObjectWhenMappingToSubclass {
     ALCType *toType = [ALCType typeWithClass:[NSMutableString class]];
     NSString *abc = [NSString stringWithCString:"abc" encoding:NSUTF8StringEncoding]; // Constants are decended from mutables. So use this instead.
-    ALCValue *fromValue = [ALCValue withValueType:ALCValueTypeObject value:abc completion:NULL];
+    ALCValue *fromValue = [ALCValue withValue:abc completion:NULL];
     [self map:fromValue toType:toType withError:@"Cannot convert a NSTaggedPointerString to a NSMutableString"];
 }
 
 #pragma mark - Internal
 
--(ALCValue *) mapValue:(id) value encoding:(const char *) fromEncoding toEncoding:(const char *) toEncoding {
-    ALCType *fromType = [ALCType typeWithEncoding:fromEncoding];
-    ALCValue *fromValue = [ALCValue withType:fromType value:value completion:NULL];
+-(ALCValue *) mapValue:(id) value toEncoding:(const char *) toEncoding {
+    ALCValue *fromValue = [ALCValue withValue:value completion:NULL];
     ALCType *toType = [ALCType typeWithEncoding:toEncoding];
     return [self map:fromValue toType:toType];
-}
-
--(ALCValue *) valueFromValueOfType:(ALCValueType) type value:(id) value encoding:(const char *) encoding {
-    ALCValue *fromValue = [ALCValue withValueType:type value:value completion:NULL];
-    return [self map:fromValue toType:[ALCType typeWithEncoding:encoding]];
 }
 
 -(ALCValue *) map:(ALCValue *) fromValue toType:(ALCType *) toType {

@@ -108,7 +108,7 @@
 
         NSNumber *numberValue = origValue;
         int value = numberValue.intValue;
-        NSValue *intValue = [NSValue value:&value withObjCType:"i"];
+        NSValue *intValue = [NSValue valueWithBytes:&value objCType:"i"];
         injectBlock(obj, intValue);
     };
 }

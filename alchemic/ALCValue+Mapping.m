@@ -49,14 +49,14 @@
 }
 
 -(nullable ALCValue *) convertObjectToArray:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-    return [ALCValue withValueType:ALCValueTypeArray value:@[self.value] completion:self.completion];
+    return [ALCValue withValue:@[self.value] completion:self.completion];
 }
 
 #define convertObjectToNumber(toTypeName, scalarTypeDef, numberFuction) \
 -(nullable ALCValue *) convertObjectTo ## toTypeName:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error { \
-return [self valueOfType:toType error:error withNumberConversion:^NSValue *(NSNumber *number) { \
+return [self valueWithError:error fromNumberConversion:^NSValue *(NSNumber *number) { \
 scalarTypeDef scalar = number.numberFuction; \
-return [NSValue value:&scalar withObjCType:toType.scalarType.UTF8String]; \
+return [NSValue valueWithBytes:&scalar objCType:toType.scalarType.UTF8String]; \
 }]; \
 }
 
@@ -89,12 +89,12 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
 
     if (objs.count == 0) {
         // Return a nil value.
-        return [ALCValue withValueType:ALCValueTypeObject value:[NSNull null] completion:NULL];
+        return [ALCValue withValue:[NSNull null] completion:NULL];
     }
 
     id obj = objs[0];
     if (!toType.objcClass || [obj isKindOfClass:toType.objcClass]) {
-        return [ALCValue withType:toType value:obj completion:self.completion];
+        return [ALCValue withValue:obj completion:self.completion];
     } else {
         setError(@"Cannot covert a %@ to a %@", NSStringFromClass([obj class]), NSStringFromClass(toType.objcClass));
         return nil;
@@ -113,12 +113,11 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
 
 #pragma mark - Internal
 
--(nullable ALCValue *) valueOfType:(ALCType *) type
-                             error:(NSError * __autoreleasing _Nullable *) error
-              withNumberConversion:(NSValue * (^)(NSNumber *result)) numberConversion {
+-(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error
+                 fromNumberConversion:(NSValue * (^)(NSNumber *result)) numberConversion {
 
     if ([self.value isKindOfClass:[NSNumber class]]) {
-        return [ALCValue withType:type value:numberConversion(self.value) completion:self.completion];
+        return [ALCValue withValue:numberConversion(self.value) completion:self.completion];
     }
 
     setError(@"Cannot convert source %@ to NSNumber *", NSStringFromClass([self.value class]));

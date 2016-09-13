@@ -21,7 +21,7 @@
 
 -(void) testNSNumberToInt {
 
-    ALCValue *fromValue = [ALCValue withValueType:ALCValueTypeObject value:@5 completion:NULL];
+    ALCValue *fromValue = [ALCValue withValue:@5 completion:NULL];
 
     Ivar intVar = class_getInstanceVariable([self class], "_aInt");
     NSError *error;

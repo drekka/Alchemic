@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
             return ((ALCInvocationInjectorBlock (*)(id, Method)) method_invoke)(self, method);
         }
     }
-    
+
     throwException(AlchemicSelectorNotFoundException, @"Unable to find invocation injector for type: %@", self.description);
     return NULL;
 }
@@ -94,14 +94,14 @@ scalarVariableInjector(CGRect, CGRect)
 
 -(ALCVariableInjectorBlock) variableInjectorForObject {
     return ^(ALCVariableInjectorBlockArgs) {
-        
+
         id value = self.value;
-        
+
         // Check for setting a nil.
         if (value == [NSNull null]) {
             value = nil;
         }
-        
+
         // Patch for Swift Ivars not being retained.
         const char *encoding = ivar_getTypeEncoding(ivar);
         if (value && strlen(encoding) == 0) {
@@ -111,7 +111,7 @@ scalarVariableInjector(CGRect, CGRect)
             const void * ptr = CFBridgingRetain(value);
             value = CFBridgingRelease(ptr);
         }
-        
+
         object_setIvar(obj, ivar, value);
         [ALCRuntime executeSimpleBlock:self.completion];
     };
@@ -119,11 +119,11 @@ scalarVariableInjector(CGRect, CGRect)
 
 #pragma mark - Method argument injectors
 
-#define scalarMethodArgumentInjector(type, typeName) \
+#define scalarMethodArgumentInjector(scalarType, typeName) \
 -(ALCInvocationInjectorBlock) invocationInjectorFor ## typeName { \
 return ^(ALCInvocationInjectorBlockArgs) { \
-type value; \
-[self.value getValue:&value]; \
+scalarType value; \
+[(NSValue *)self.value getValue:&value]; \
 [ALCRuntime executeSimpleBlock:self.completion]; \
 [inv setArgument:&value atIndex:idx + 2]; \
 }; \

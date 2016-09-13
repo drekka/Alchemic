@@ -26,13 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) id value;
 @property (nonatomic, strong, nullable, readonly) ALCSimpleBlock completion;
 
-+(ALCValue *) withValueType:(ALCValueType) valueType
-                      value:(id) value
-                 completion:(nullable ALCSimpleBlock) completion;
-
-+(ALCValue *) withType:(ALCType *) type
-                 value:(id) value
-            completion:(nullable ALCSimpleBlock) completion;
++(ALCValue *) withValue:(id) value
+             completion:(nullable ALCSimpleBlock) completion;
 
 @end
 

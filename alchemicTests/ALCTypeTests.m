@@ -167,7 +167,7 @@ testObjectTypeWithEncoding(classAndProtocol, NSNumber, @[@"AlchemicAware"], ALCV
 
 -(void) testWithValueCompletion {
     __block BOOL completionCalled;
-    ALCValue *value = [ALCValue withValueType:ALCValueTypeObject value:@"abc" completion:^{
+    ALCValue *value = [ALCValue withValue:@"abc" completion:^{
         completionCalled = YES;
     }];
     XCTAssertEqualObjects(@"abc", value.value);

@@ -289,7 +289,7 @@
     OCMStub([_mockModel objectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
 
     // ANd return a non-matching value.
-    ALCValue *value = [ALCValue withValueType:ALCValueTypeObject value:@"abc" completion:NULL];
+    ALCValue *value = [ALCValue withValue:@"abc" completion:NULL];
     OCMStub([mockValueSource valueWithError:[OCMArg anyObjectRef]]).andReturn(value);
 
     XCTAssertThrowsSpecific(([_context objectWithClass:[NSNumber class], nil]), AlchemicMappingValueException);
@@ -309,7 +309,7 @@
     OCMStub([_mockModel objectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
 
     // ANd return a non-matching value.
-    ALCValue *value = [ALCValue withValueType:ALCValueTypeObject value:@5 completion:NULL];
+    ALCValue *value = [ALCValue withValue:@5 completion:NULL];
     OCMStub([mockValueSource valueWithError:[OCMArg anyObjectRef]]).andReturn(value);
 
     NSNumber *result = [_context objectWithClass:[NSNumber class], nil];

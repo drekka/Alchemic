@@ -96,9 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
-    return [ALCValue withValueType:ALCValueTypeArray
-                        value:values
-                   completion:[self completionForInstantiations:instantations]];
+    return [ALCValue withValue:values completion:[self completionForInstantiations:instantations]];
 }
 
 #pragma mark - Internal
