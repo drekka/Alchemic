@@ -111,6 +111,20 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
     return self;
 }
 
+-(nullable ALCValue *) convertIntToLong:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
+    int value;
+    [(NSValue *) self.value getValue:&value];
+    long newValue = value;
+    return [ALCValue withValue:[NSValue valueWithBytes:&newValue objCType:@encode(long)] completion:NULL];
+}
+
+-(nullable ALCValue *) convertIntToLongLong:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
+    int value;
+    [(NSValue *) self.value getValue:&value];
+    long long newValue = value;
+    return [ALCValue withValue:[NSValue valueWithBytes:&newValue objCType:@encode(long long)] completion:NULL];
+}
+
 #pragma mark - Internal
 
 -(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error

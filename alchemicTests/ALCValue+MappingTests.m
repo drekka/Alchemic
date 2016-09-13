@@ -48,23 +48,38 @@ testDecimalNSNumberMapping(NSNumberToFloat, @5.1234, float, 5.1234, 0.0001)
 
 #pragma mark - From scalars
 
--(void) testBoolToBool {
-    BOOL value = YES;
-    NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(BOOL)];
-    ALCValue *toValue = [self mapValue:nsValue toEncoding:@encode(BOOL)];
-    BOOL resultValue;
-    [(NSValue *) toValue.value getValue:&resultValue];
-    XCTAssertTrue(resultValue);
+#define testScalarMapping(fromName, fromType, toName, toType, scalarValue, assertion) \
+-(void) test ## fromName ## To ## toName { \
+    fromType value = scalarValue; \
+    NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(fromType)]; \
+    ALCValue *toValue = [self mapValue:nsValue toEncoding:@encode(toType)]; \
+    toType resultValue; \
+    [(NSValue *) toValue.value getValue:&resultValue]; \
+    assertion; \
 }
 
--(void) testIntToInt {
-    int value = 5;
-    NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(int)];
-    ALCValue *toValue = [self mapValue:nsValue toEncoding:@encode(int)];
-    int resultValue;
-    [(NSValue *) toValue.value getValue:&resultValue];
-    XCTAssertEqual(resultValue, 5);
+#define testScalarMappingFailure(fromName, fromType, toName, toType, scalarValue, msg) \
+-(void) test ## fromName ## To ## toName { \
+fromType value = scalarValue; \
+NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(fromType)]; \
+[self mapValue:nsValue toEncoding:@encode(toType) withError:msg]; \
 }
+
+testScalarMapping(Bool, BOOL, Bool, BOOL, YES, XCTAssertTrue(resultValue))
+testScalarMappingFailure(Bool, BOOL, Int, int, YES, @"Unable to convert a scalar BOOL to a scalar int")
+testScalarMappingFailure(Bool, BOOL, Long, long, YES, @"Unable to convert a scalar BOOL to a scalar long long")
+
+testScalarMapping(Int, int, Int, int, 5, XCTAssertEqual(5, resultValue))
+testScalarMapping(Int, int, Long, long, 5, XCTAssertEqual(5l, resultValue))
+testScalarMapping(Int, int, LongLong, long long, 5, XCTAssertEqual(5ll, resultValue))
+testScalarMapping(Int, int, Float, float, 5, XCTAssertEqual(5.0f, resultValue))
+testScalarMapping(Int, int, Double, double, 5, XCTAssertEqual(5.0, resultValue))
+testScalarMapping(Int, int, Short, short, 5, XCTAssertEqual(5, resultValue))
+testScalarMappingFailure(Int, int, Char, char, 5, @"Unable to convert a scalar int to a scalar char")
+testScalarMapping(Int, int, UnsignedInt, unsigned int, 5, XCTAssertEqual(5u, resultValue))
+testScalarMapping(Int, int, UnsignedLong, unsigned long, 5, XCTAssertEqual(5lu, resultValue))
+testScalarMapping(Int, int, UnsignedLongLong, unsigned long long, 5, XCTAssertEqual(5llu, resultValue))
+testScalarMapping(Int, int, UnsignedShort, unsigned short, 5, XCTAssertEqual(5, resultValue))
 
 #pragma mark - From arrays
 
@@ -123,6 +138,12 @@ testDecimalNSNumberMapping(NSNumberToFloat, @5.1234, float, 5.1234, 0.0001)
     ALCValue *fromValue = [ALCValue withValue:value completion:NULL];
     ALCType *toType = [ALCType typeWithEncoding:toEncoding];
     return [self map:fromValue toType:toType];
+}
+
+-(void) mapValue:(id) value toEncoding:(const char *) toEncoding withError:(NSString *) errorMsg {
+    ALCValue *fromValue = [ALCValue withValue:value completion:NULL];
+    ALCType *toType = [ALCType typeWithEncoding:toEncoding];
+    return [self map:fromValue toType:toType withError:errorMsg];
 }
 
 -(ALCValue *) map:(ALCValue *) fromValue toType:(ALCType *) toType {
