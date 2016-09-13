@@ -32,7 +32,7 @@ Alchemic supports classes written in Swift with some caveats. Objective-C is una
 # Credits
 
 * Thanks to Adam and Vitaly at [Odecee](http://odecee.com.au) who helped me with getting my head around some of the Swift code.
-* Big Thanks to the guys behind [Carthage](https://github.com/Carthage/Carthage) for writing a dependency tool that actual works well with XCode and Git.
+* Big Thanks to the guys behind [Carthage](https://github.com/Carthage/Carthage) for writing a dependency tool that actual works well with Xcode and Git.
 * Thanks to the guys behind the [Spring Framework](https://spring.io). The work you have done has made my life so much easier on so many Java projects and inspired a lot of what I've done with Alchemic.
 * Thanks to Mulle Cybernetik for [OCMock](ocmock.org) for an outstanding mocking framework unit testing that regularly enabled me to test the un-testable.
 * Thanks to Todd Ditchendorf for the [PEGKit](https://github.com/itod/pegkit) text parsing API. I've learned a lot from working with it on [Story Teller](https://github.com/drekka/StoryTeller).
