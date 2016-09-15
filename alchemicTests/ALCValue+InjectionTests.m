@@ -79,7 +79,7 @@ testScalarVariableInjection(_aUShort, unsigned short, 5u)
 }
 
 #define testScalarStructVariableInjection(ivarName, ivarType, expectedValue, compareFunction) \
--(void) testVariableInjection_ ## ivarName { \
+-(void) testVariableInjection ## ivarName { \
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 const char *encoding = ivar_getTypeEncoding(ivar); \
 ivarType value = expectedValue; \

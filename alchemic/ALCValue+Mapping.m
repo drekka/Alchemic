@@ -34,7 +34,7 @@
     return nil;
 }
 
-#pragma mark - Object ->
+#pragma mark - Objects
 
 -(nullable ALCValue *) convertObjectToObject:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
 
@@ -52,27 +52,27 @@
     return [ALCValue withValue:@[self.value] completion:self.completion];
 }
 
-#define convertObjectToNumber(toTypeName, scalarTypeDef, numberFuction) \
+#define defineConvertObjectToScalarMethod(toTypeName, scalarVarType, numberFuction) \
 -(nullable ALCValue *) convertObjectTo ## toTypeName:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error { \
-return [self valueWithError:error fromNumberConversion:^NSValue *(NSNumber *number) { \
-scalarTypeDef scalar = number.numberFuction; \
+return [self convertNSNumberToValueWithError:error usingConverter:^NSValue *(NSNumber *number) { \
+scalarVarType scalar = number.numberFuction; \
 return [NSValue valueWithBytes:&scalar objCType:toType.scalarType.UTF8String]; \
 }]; \
 }
 
-convertObjectToNumber(Bool, BOOL, boolValue)
-convertObjectToNumber(Int, int, intValue)
-convertObjectToNumber(Double, double, doubleValue)
-convertObjectToNumber(Float, float, floatValue)
-convertObjectToNumber(Short, short, shortValue)
-convertObjectToNumber(Long, long, longValue)
-convertObjectToNumber(LongLong, long long, longLongValue)
-convertObjectToNumber(UnsignedInt, unsigned int, unsignedIntValue)
-convertObjectToNumber(UnsignedLong, unsigned long, unsignedLongValue)
-convertObjectToNumber(UnsignedLongLong, unsigned long long, unsignedLongLongValue)
-convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
+defineConvertObjectToScalarMethod(Bool, BOOL, boolValue)
+defineConvertObjectToScalarMethod(Int, int, intValue)
+defineConvertObjectToScalarMethod(Double, double, doubleValue)
+defineConvertObjectToScalarMethod(Float, float, floatValue)
+defineConvertObjectToScalarMethod(Short, short, shortValue)
+defineConvertObjectToScalarMethod(Long, long, longValue)
+defineConvertObjectToScalarMethod(LongLong, long long, longLongValue)
+defineConvertObjectToScalarMethod(UnsignedInt, unsigned int, unsignedIntValue)
+defineConvertObjectToScalarMethod(UnsignedLong, unsigned long, unsignedLongValue)
+defineConvertObjectToScalarMethod(UnsignedLongLong, unsigned long long, unsignedLongLongValue)
+defineConvertObjectToScalarMethod(UnsignedShort, unsigned short, unsignedShortValue)
 
-#pragma mark - Array ->
+#pragma mark - Arrays
 
 -(nullable ALCValue *) convertArrayToArray:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
     return self;
@@ -101,37 +101,105 @@ convertObjectToNumber(UnsignedShort, unsigned short, unsignedShortValue)
     }
 }
 
-#pragma mark - Scalar ->
+#pragma mark - Scalars
 
--(nullable ALCValue *) convertBoolToBool:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-    return self;
+#define defineConvertScalarToSameMethod(typeName) \
+-(nullable ALCValue *) convert ## typeName ## To ## typeName:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error { \
+return self; \
 }
 
--(nullable ALCValue *) convertIntToInt:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-    return self;
+#define defineConvertScalarToScalarMethod(fromName, fromScalarType, toName, toScalarType) \
+-(nullable ALCValue *) convert ## fromName ## To ## toName:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error { \
+fromScalarType value; \
+[(NSValue *) self.value getValue:&value]; \
+toScalarType newValue = (toScalarType) value; \
+return [ALCValue withValue:[NSValue valueWithBytes:&newValue objCType:@encode(toScalarType)] completion:NULL]; \
 }
 
--(nullable ALCValue *) convertIntToLong:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-    int value;
-    [(NSValue *) self.value getValue:&value];
-    long newValue = value;
-    return [ALCValue withValue:[NSValue valueWithBytes:&newValue objCType:@encode(long)] completion:NULL];
+#define defineConvertScalarToObjectMethod(fromName, fromScalarType) \
+-(nullable ALCValue *) convert ## fromName ## ToObject:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error { \
+fromScalarType value; \
+[(NSValue *) self.value getValue:&value]; \
+return [ALCValue withValue:@(value) completion:NULL]; \
 }
 
--(nullable ALCValue *) convertIntToLongLong:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error {
-    int value;
-    [(NSValue *) self.value getValue:&value];
-    long long newValue = value;
-    return [ALCValue withValue:[NSValue valueWithBytes:&newValue objCType:@encode(long long)] completion:NULL];
+#define defineConvertScalarToArrayMethod(fromName, fromScalarType) \
+-(nullable ALCValue *) convert ## fromName ## ToArray:(ALCType *) toType error:(NSError * __autoreleasing _Nullable *) error { \
+fromScalarType value; \
+[(NSValue *) self.value getValue:&value]; \
+return [ALCValue withValue:@[@(value)] completion:NULL]; \
 }
 
-#pragma mark - Internal
+defineConvertScalarToSameMethod(Bool)
+defineConvertScalarToSameMethod(Char)
+defineConvertScalarToSameMethod(CharPointer)
+defineConvertScalarToSameMethod(Float)
+defineConvertScalarToSameMethod(Short)
+defineConvertScalarToSameMethod(UnsignedChar)
+defineConvertScalarToSameMethod(UnsignedInt)
+defineConvertScalarToSameMethod(UnsignedLong)
+defineConvertScalarToSameMethod(UnsignedLongLong)
+defineConvertScalarToSameMethod(UnsignedShort)
 
--(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error
-                 fromNumberConversion:(NSValue * (^)(NSNumber *result)) numberConversion {
+defineConvertScalarToSameMethod(Int)
+defineConvertScalarToScalarMethod(Int, int, Double, double)
+defineConvertScalarToScalarMethod(Int, int, Float, float)
+defineConvertScalarToScalarMethod(Int, int, Long, signed long)
+defineConvertScalarToScalarMethod(Int, int, LongLong, signed long long)
+defineConvertScalarToScalarMethod(Int, int, Short, short)
+defineConvertScalarToScalarMethod(Int, int, UnsignedInt, unsigned int)
+defineConvertScalarToScalarMethod(Int, int, UnsignedLong, unsigned long)
+defineConvertScalarToScalarMethod(Int, int, UnsignedLongLong, unsigned long long)
+defineConvertScalarToScalarMethod(Int, int, UnsignedShort, unsigned short)
+defineConvertScalarToObjectMethod(Int, int)
+defineConvertScalarToArrayMethod(Int, int)
+
+defineConvertScalarToSameMethod(Double)
+defineConvertScalarToScalarMethod(Double, double, Int, int)
+defineConvertScalarToScalarMethod(Double, double, Float, float)
+defineConvertScalarToScalarMethod(Double, double, Long, signed long)
+defineConvertScalarToScalarMethod(Double, double, LongLong, signed long long)
+defineConvertScalarToScalarMethod(Double, double, Short, short)
+defineConvertScalarToScalarMethod(Double, double, UnsignedInt, unsigned int)
+defineConvertScalarToScalarMethod(Double, double, UnsignedLong, unsigned long)
+defineConvertScalarToScalarMethod(Double, double, UnsignedLongLong, unsigned long long)
+defineConvertScalarToScalarMethod(Double, double, UnsignedShort, unsigned short)
+defineConvertScalarToObjectMethod(Double, double)
+defineConvertScalarToArrayMethod(Double, double)
+
+defineConvertScalarToSameMethod(Long)
+defineConvertScalarToScalarMethod(Long, long, Double, double)
+defineConvertScalarToScalarMethod(Long, long, Float, float)
+defineConvertScalarToScalarMethod(Long, long, Int, signed int)
+defineConvertScalarToScalarMethod(Long, long, LongLong, signed long long)
+defineConvertScalarToScalarMethod(Long, long, Short, short)
+defineConvertScalarToScalarMethod(Long, long, UnsignedInt, unsigned int)
+defineConvertScalarToScalarMethod(Long, long, UnsignedLong, unsigned long)
+defineConvertScalarToScalarMethod(Long, long, UnsignedLongLong, unsigned long long)
+defineConvertScalarToScalarMethod(Long, long, UnsignedShort, unsigned short)
+defineConvertScalarToObjectMethod(Long, long)
+defineConvertScalarToArrayMethod(Long, long)
+
+defineConvertScalarToSameMethod(LongLong)
+defineConvertScalarToScalarMethod(LongLong, long long, Double, double)
+defineConvertScalarToScalarMethod(LongLong, long long, Float, float)
+defineConvertScalarToScalarMethod(LongLong, long long, Int, signed int)
+defineConvertScalarToScalarMethod(LongLong, long long, Long, signed long)
+defineConvertScalarToScalarMethod(LongLong, long long, Short, short)
+defineConvertScalarToScalarMethod(LongLong, long long, UnsignedInt, unsigned int)
+defineConvertScalarToScalarMethod(LongLong, long long, UnsignedLong, unsigned long)
+defineConvertScalarToScalarMethod(LongLong, long long, UnsignedLongLong, unsigned long long)
+defineConvertScalarToScalarMethod(LongLong, long long, UnsignedShort, unsigned short)
+defineConvertScalarToObjectMethod(LongLong, long long)
+defineConvertScalarToArrayMethod(LongLong, long long)
+
+#pragma mark - Internal helpers
+
+-(nullable ALCValue *) convertNSNumberToValueWithError:(NSError * __autoreleasing _Nullable *) error
+                                        usingConverter:(NSValue * (^)(NSNumber *result)) converter {
 
     if ([self.value isKindOfClass:[NSNumber class]]) {
-        return [ALCValue withValue:numberConversion(self.value) completion:self.completion];
+        return [ALCValue withValue:converter(self.value) completion:NULL];
     }
 
     setError(@"Cannot convert source %@ to NSNumber *", NSStringFromClass([self.value class]));
