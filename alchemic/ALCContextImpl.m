@@ -19,7 +19,6 @@
 #import <Alchemic/ALCType.h>
 #import <Alchemic/NSArray+Alchemic.h>
 #import <Alchemic/ALCVariableDependency.h>
-#import <Alchemic/ALCValue+Mapping.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -221,14 +220,20 @@ registerFactoryMethod:(SEL) selector
     // Resolve to find the factories.
     [source resolveWithStack:[[NSMutableArray alloc] init] model:_model];
 
-    // Get the value.
-    NSError *error;
-    ALCValue *value = [[source valueWithError:&error] mapTo:[ALCType typeWithClass:returnType] error:&error];
-    if (!value) {
-        throwException(AlchemicMappingValueException, @"Mapping error: %@", error.localizedDescription);
+    ALCValue *alcValue = source.value;
+    [ALCRuntime executeSimpleBlock:alcValue.completion];
+
+    // Get the value which will be an array of objects.
+    NSArray *values = alcValue.value;
+    switch (values.count) {
+        case 0:
+            throwException(AlchemicIncorrectNumberOfValuesException, @"No value found");
+        case 1:
+            return values[0];
+        default:
+            throwException(AlchemicIncorrectNumberOfValuesException, @"Expected 1, got %lu", values.count);
     }
-    [ALCRuntime executeSimpleBlock:value.completion];
-    return value.value;
+
 }
 
 -(void) setObject:(id) object, ... {
@@ -241,11 +246,7 @@ registerFactoryMethod:(SEL) selector
     // Check for an Alchemic value.
     id finalObject = object;
     if ([object conformsToProtocol:@protocol(ALCValueSource)]) {
-        NSError *error;
-        finalObject = [(id<ALCValueSource>)object valueWithError:&error];
-        if (error) {
-            throwException(AlchemicResolvingException, @"Unexpected error accessing value: %@", error);
-        }
+        finalObject = ((id<ALCValueSource>)object).value;
     }
     
     // Setup a block we want to execute.

@@ -23,7 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCValue : ALCAbstractType
 
-@property (nonatomic, strong, readonly) id value;
+@property (nonatomic, strong, readonly) id valueAsObject;
+@property (nonatomic, strong, readonly) NSArray *valueAsArray;
+@property (nonatomic, strong, readonly) NSValue *valueAsScalar;
 @property (nonatomic, strong, nullable, readonly) ALCSimpleBlock completion;
 
 +(ALCValue *) withValue:(id) value

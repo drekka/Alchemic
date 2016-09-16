@@ -12,7 +12,6 @@
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCRuntime.h>
-#import <Alchemic/ALCValue+Mapping.h>
 #import <Alchemic/ALCValue+Injection.h>
 #import <Alchemic/ALCValueSource.h>
 
@@ -64,20 +63,12 @@
 }
 
 -(void) injectObject:(id)object {
-
-    NSError *error;
-    ALCValue *value = [self.valueSource valueWithError:&error];
+    ALCValue *value = self.valueSource.value;
     if (value) {
-
-        ALCValue *finalValue = [value mapTo:self.type error:&error];
-        if (finalValue) {
-            ALCVariableInjectorBlock injector = [finalValue variableInjector];
-            injector(object, _ivar);
-            return;
-        }
+        ALCVariableInjectorBlock injector = [value variableInjector];
+        injector(object, _ivar);
+        return;
     }
-
-    throwException(AlchemicInjectionException, @"Error injecting %@: %@", [ALCRuntime forClass:[object class] variableDescription:_ivar], error.localizedDescription);
 }
 
 -(NSString *)resolvingDescription {

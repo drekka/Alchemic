@@ -43,14 +43,14 @@
     }
 }
 
--(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
+-(nullable ALCValue *) value {
 
     NSMutableArray *results = [NSMutableArray arrayWithCapacity:_sources.count];
     NSMutableArray *completions = [NSMutableArray arrayWithCapacity:_sources.count];
 
     // Retrieve all values and completion blocks.
     for (id<ALCValueSource> source in _sources) {
-        ALCValue *value = [source valueWithError:error];
+        ALCValue *value = source.value;
         if (!value) {
             // Theres an error.
             return nil;

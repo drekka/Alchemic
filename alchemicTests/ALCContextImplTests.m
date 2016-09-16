@@ -275,26 +275,6 @@
     XCTAssertThrowsSpecific(([_context objectWithClass:[NSString class], @"abc", nil]), AlchemicIllegalArgumentException);
 }
 
--(void) testObjectWithClassSearchCriteriaThrowsMappingException {
-
-    // Tell the context it's started
-    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
-
-    // Mock out value source creation.
-    id mockValueSource = OCMClassMock([ALCModelValueSource class]);
-    OCMStub(ClassMethod([mockValueSource valueSourceWithCriteria:OCMOCK_ANY])).andReturn(mockValueSource);
-
-    // Mock resolving the model.
-    id mockFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
-    OCMStub([_mockModel objectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
-
-    // ANd return a non-matching value.
-    ALCValue *value = [ALCValue withValue:@"abc" completion:NULL];
-    OCMStub([mockValueSource valueWithError:[OCMArg anyObjectRef]]).andReturn(value);
-
-    XCTAssertThrowsSpecific(([_context objectWithClass:[NSNumber class], nil]), AlchemicMappingValueException);
-}
-
 -(void) testObjectWithClassSearchCriteria {
 
     // Tell the context it's started
@@ -308,21 +288,12 @@
     id mockFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
     OCMStub([_mockModel objectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
 
-    // ANd return a non-matching value.
-    ALCValue *value = [ALCValue withValue:@5 completion:NULL];
-    OCMStub([mockValueSource valueWithError:[OCMArg anyObjectRef]]).andReturn(value);
+    // ANd return a matching value.
+    ALCValue *value = [ALCValue withValue:@[@5] completion:NULL];
+    OCMStub([(id<ALCValueSource>) mockValueSource value]).andReturn(value);
 
     NSNumber *result = [_context objectWithClass:[NSNumber class], nil];
     XCTAssertEqualObjects(@5, result);
-}
-
--(void) testSetObjectWithSearchCriteriaThrowsIfValueReturnsError {
-
-    id mockValue = OCMProtocolMock(@protocol(ALCValueSource));
-    NSError *error = [NSError errorWithDomain:@"abc" code:1 userInfo:nil];
-    OCMStub([mockValue valueWithError:[OCMArg setTo:error]]).andReturn(nil);
-
-    XCTAssertThrowsSpecific(([_context setObject:mockValue, AcClass(NSString), nil]), AlchemicResolvingException);
 }
 
 -(void) testSetObjectWithSearchCriteria {

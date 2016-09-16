@@ -17,7 +17,6 @@
 
 declareExceptionImpl(Resolving)
 declareExceptionImpl(Injection)
-declareExceptionImpl(MappingValue)
 declareExceptionImpl(TooManyResults)
 declareExceptionImpl(IllegalArgument)
 declareExceptionImpl(ReferenceObjectNotSet)

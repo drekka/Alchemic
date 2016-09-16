@@ -19,10 +19,8 @@
 #define testScalar(methodName, function, type, validate) \
 -(void) testConstant ## methodName { \
 id<ALCValueSource> source = function; \
-NSError *error; \
-ALCValue *alcValue = [source valueWithError:&error]; \
+ALCValue *alcValue = source.value; \
 XCTAssertNotNil(alcValue); \
-XCTAssertNil(error); \
 NSValue *nsValue = alcValue.value; \
 type result; \
 [nsValue getValue:&result]; \
@@ -49,10 +47,8 @@ testScalar(Rect, AcRect(1.0f,2.0f,3.0f,4.0f), CGRect, XCTAssertTrue(CGRectEqualT
 
 -(void) testConstantString {
     id<ALCValueSource> source = AcString(@"abc");
-    NSError *error;
-    ALCValue *alcValue = [source valueWithError:&error];
+    ALCValue *alcValue = source.value;
     XCTAssertNotNil(alcValue);
-    XCTAssertNil(error);
     XCTAssertEqualObjects(@"abc", alcValue.value);
 }
 

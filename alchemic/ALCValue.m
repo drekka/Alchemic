@@ -11,12 +11,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCValue
+@implementation ALCValue {
+    id _rawValue;
+}
 
 +(ALCValue *) withValue:(id) value
              completion:(nullable ALCSimpleBlock) completion {
 
-    // Check both NSValue and NSNumebr because NSNumber is decended from NSValue.
+    // First look for NSValues: Check both NSValue and NSNumber because NSNumber is decended from NSValue.
     if ([value isKindOfClass:[NSValue class]] && ![value isKindOfClass:[NSNumber class]]) {
         ALCType *type = [ALCType typeWithEncoding:((NSValue *) value).objCType];
         return [self withValueType:type.type value:value completion:completion];
@@ -34,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
                  completion:(nullable ALCSimpleBlock) completion {
     ALCValue *alcValue = [[ALCValue alloc] init];
     alcValue.type = valueType;
-    alcValue->_value = value;
+    alcValue->_rawValue = value;
     alcValue->_completion = completion;
     return alcValue;
 }

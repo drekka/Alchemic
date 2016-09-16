@@ -15,7 +15,6 @@
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/ALCValue+Mapping.h>
 #import <Alchemic/ALCValue+Injection.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -23,9 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCMethodArgumentDependency
 
 +(instancetype) methodArgumentWithType:(ALCType *) type criteria:firstCritieria, ... {
-    
+
     alc_loadVarArgsIntoArray(firstCritieria, criteria);
-    
+
     NSError *error;
     id<ALCValueSource> source = [criteria valueSourceForType:type
                                             constantsAllowed:YES
@@ -41,20 +40,12 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) injectObject:(id) object {
-    
-    NSError *error;
-    ALCValue *value = [self.valueSource valueWithError:&error];
+    ALCValue *value = self.valueSource.value;
     if (value) {
-        
-        ALCValue *finalValue = [value mapTo:self.type error:&error];
-        if (finalValue) {
-            ALCInvocationInjectorBlock injector = [finalValue invocationInjector];
-            injector(object, (NSInteger) _index);
-            return;
-        }
+        ALCInvocationInjectorBlock injector = [value invocationInjector];
+        injector(object, (NSInteger) _index);
+        return;
     }
-    
-    throwException(AlchemicInjectionException, @"Error injecting argument %lu: %@", _index, error.localizedDescription);
 }
 
 -(NSString *)resolvingDescription {

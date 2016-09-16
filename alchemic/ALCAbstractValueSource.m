@@ -26,7 +26,7 @@
     return self;
 }
 
--(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
+-(nullable ALCValue *) value {
     methodReturningObjectNotImplemented;
 }
 

@@ -11,6 +11,7 @@
 #import <Alchemic/ALCDependency.h>
 
 @class ALCType;
+@class ALCValue;
 @protocol ALCValueSource;
 
 NS_ASSUME_NONNULL_BEGIN

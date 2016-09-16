@@ -17,7 +17,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ALCValueSource <ALCResolvable>
 
--(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error;
+/**
+ Returns the value source's value.
+ 
+ This can return an object, array of objects, or a NSValue containing a scalar value.
+ */
+@property (nonatomic, strong, nullable, readonly) ALCValue *value;
 
 /**
  Returns YES if the passed object factory is referenced by this injector.

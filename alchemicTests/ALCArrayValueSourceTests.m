@@ -46,11 +46,10 @@
     OCMStub([mockValue completion]).andReturn(completion);
     
     // Have the other data source return the value.
-    OCMStub([_mockOtherValueSource valueWithError:[OCMArg anyObjectRef]]).andReturn(mockValue);
+    OCMStub([(id<ALCValueSource>)_mockOtherValueSource value]).andReturn(mockValue);
 
     // Call the method.
-    NSError *error;
-    id result = [_source valueWithError:&error];
+    id result = _source.value;
 
     // Assert we have been given back the value.
     XCTAssertTrue([result isKindOfClass:[ALCValue class]]);
@@ -64,17 +63,6 @@
     // And that the completions have been assembled.
     value.completion();
     XCTAssertTrue(completionCalled);
-}
-
--(void) testValueWithErrorReturnsNestedError {
-    
-    OCMStub([_mockOtherValueSource valueWithError:[OCMArg setTo:[NSError errorWithDomain:@"abc" code:1 userInfo:nil]]]).andReturn(nil);
-    
-    NSError *error;
-    id result = [_source valueWithError:&error];
-    
-    XCTAssertNil(result);
-    XCTAssertNotNil(error);
 }
 
 -(void) testReferencesObjectFactoryPassesRequestToSources {

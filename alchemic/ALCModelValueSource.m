@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Retrieving results.
 
--(nullable ALCValue *) valueWithError:(NSError * __autoreleasing _Nullable *) error {
+-(nullable ALCValue *) value {
     NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
     NSArray *values = [self valuesFromInstantiations:instantations];
     return [ALCValue withValue:values completion:[self completionForInstantiations:instantations]];

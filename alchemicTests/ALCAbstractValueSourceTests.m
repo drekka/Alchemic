@@ -27,8 +27,8 @@
     XCTAssertEqual([NSString class], type.objcClass);
 }
 
--(void) testValueWithError {
-    XCTAssertThrows([_source valueWithError:NULL]);
+-(void) testValue {
+    XCTAssertThrows(_source.value);
 }
 
 -(void) testReferencesObjectFactory {

@@ -89,31 +89,18 @@ scalarVariableInjector(CGPoint, CGPoint)
 scalarVariableInjector(CGRect, CGRect)
 
 -(ALCVariableInjectorBlock) variableInjectorForArray {
-    return [self variableInjectorForObject];
+    return ^(ALCVariableInjectorBlockArgs) {
+        id value = self.value;
+        value = [self arrayFromValue:value];
+        [self injectObject:obj variable:ivar withValue:value];
+    };
 }
 
 -(ALCVariableInjectorBlock) variableInjectorForObject {
     return ^(ALCVariableInjectorBlockArgs) {
-
         id value = self.value;
-
-        // Check for setting a nil.
-        if (value == [NSNull null]) {
-            value = nil;
-        }
-
-        // Patch for Swift Ivars not being retained.
-        const char *encoding = ivar_getTypeEncoding(ivar);
-        if (value && strlen(encoding) == 0) {
-            // Swift ivar? Currently returning no encoding.
-            // Fixing bug with missing retain when setting Swift ivars via object_setVar(...) which causes EXC BAD ACCESS
-            // This code seems to fix the missing retain back in.
-            const void * ptr = CFBridgingRetain(value);
-            value = CFBridgingRelease(ptr);
-        }
-
-        object_setIvar(obj, ivar, value);
-        [ALCRuntime executeSimpleBlock:self.completion];
+        value = [self objectFromValue:value];
+        [self injectObject:obj variable:ivar withValue:value];
     };
 }
 
@@ -151,6 +138,7 @@ scalarMethodArgumentInjector(CGRect, CGRect)
 -(ALCInvocationInjectorBlock) invocationInjectorForObject {
     return ^(ALCInvocationInjectorBlockArgs) {
         id value = self.value;
+        value = [self objectFromValue:value];
         [ALCRuntime executeSimpleBlock:self.completion];
         [inv setArgument:&value atIndex:idx + 2];
     };
@@ -159,9 +147,67 @@ scalarMethodArgumentInjector(CGRect, CGRect)
 -(ALCInvocationInjectorBlock) invocationInjectorForArray {
     return ^(ALCInvocationInjectorBlockArgs) {
         NSArray *value = self.value;
+        value = [self arrayFromValue:value];
         [ALCRuntime executeSimpleBlock:self.completion];
         [inv setArgument:&value atIndex:idx + 2];
     };
+}
+
+#pragma mark - Internal
+
+-(void) injectObject:(id) obj variable:(Ivar) ivar withValue:(id) value {
+
+    // Patch for Swift Ivars not being retained.
+    const char *encoding = ivar_getTypeEncoding(ivar);
+    if (value && strlen(encoding) == 0) {
+        // Swift ivar? Currently returning no encoding.
+        // Fixing bug with missing retain when setting Swift ivars via object_setVar(...) which causes EXC BAD ACCESS
+        // This code seems to fix the missing retain back in.
+        const void * ptr = CFBridgingRetain(value);
+        value = CFBridgingRelease(ptr);
+    }
+
+    object_setIvar(obj, ivar, value);
+    [ALCRuntime executeSimpleBlock:self.completion];
+}
+
+-(nullable id) arrayFromValue:(id) value {
+
+    // Already an array.
+    if ([value isKindOfClass:[NSArray class]]) {
+        return value;
+    }
+
+    // Scalar types
+    if ([value isKindOfClass:[NSValue class]] && ![value isKindOfClass:[NSNumber class]]) {
+        throwException(AlchemicInjectionException, @"Expected an object, found a scalar value");
+    }
+
+    // Must be an object.
+    return @[value];
+}
+
+-(nullable id) objectFromValue:(id) value {
+
+    if ([value isKindOfClass:[NSArray class]]) {
+        NSArray *values = value;
+        switch (values.count) {
+            case 0:
+                return nil;
+            case 1:
+                return values[0];
+            default:
+                throwException(AlchemicIncorrectNumberOfValuesException, @"Expected 1, got %lu", values.count);
+        }
+    }
+
+    // Scalar types
+    if ([value isKindOfClass:[NSValue class]] && ![value isKindOfClass:[NSNumber class]]) {
+        throwException(AlchemicInjectionException, @"Expected an object, found a scalar value");
+    }
+    
+    // Must be an object.
+    return value;
 }
 
 @end
