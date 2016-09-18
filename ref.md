@@ -32,17 +32,28 @@ title: Tag reference
 
 ## Constants
 
-Constants macros are for setting contant values for method arguments, injections, etc.
+Constants are for setting contant values for method arguments, injections, etc.
 
-Macro example | Type
+Constant example | Type
 --- | ---
-{{ site.data.macros.bool }}(*YES/NO*) | BOOL
-{{ site.data.macros.int }}(*5*) | int
-{{ site.data.macros.float }}(*1.2*) | float
+{{ site.data.macros.bool }}(*YES*) | BOOL
+{{ site.data.macros.char }}(*'x'*) | char
+{{ site.data.macros.cString }}(*"abc"*) | char *
 {{ site.data.macros.double }}(*1.23456*) | double
-{{ site.data.macros.cgFloat }}(*1.23456*) | CGFloat
-{{ site.data.macros.cgSize }}(*CGSizeMake(1.0, 2.0)*) | CGSize
-{{ site.data.macros.cgRect }}(*CGRectMake(1.0, 2.0, 3.0, 4.0)*)  | CGRect
+{{ site.data.macros.float }}(*1.2f*) | float
+{{ site.data.macros.int }}(*5*) | int
+{{ site.data.macros.long }}(*5*) | long
+{{ site.data.macros.longLong }}(*5*) | long long
+{{ site.data.macros.short }}(*5*) | short
+{{ site.data.macros.uChar }}(*'x'*) | unsigned char
+{{ site.data.macros.uInt }}(*5*) | unsigned int
+{{ site.data.macros.uLong }}(*5*) | unsigned long
+{{ site.data.macros.uLongLong }}(*5*) | unsigned long long
+{{ site.data.macros.uShort }}(*5*) | unsigned short
+{{ site.data.macros.cgFloat }}(*1.23456f*) | CGFloat
+{{ site.data.macros.cgSize }}(*CGSizeMake(1.0f, 2.0f)*) | CGSize
+{{ site.data.macros.cgPoint }}(*1.0f, 2.0f*) | CGPoint
+{{ site.data.macros.cgRect }}(*1.0f, 2.0f, 3.0f, 4.0f*)  | CGRect
 {{ site.data.macros.string }}(*@"abc"*) | NSString *
 {{ site.data.macros.nil }} | nil
 

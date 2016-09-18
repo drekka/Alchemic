@@ -18,12 +18,27 @@ name: AcName
 weakSelf: AcWeakSelf
 strongSelf: AcStrongSelf
 ignoreSelector: AcIgnoreSelectorWarnings
-bool: AcBool
-int: AcInt
-float: AcFloat
-double: AcDouble
-cgFloat: AcCGFloat
-cgSize: AcCGSize
-cgRect: AcCGRect
+
 string: AcString
+bool: AcBool
+char: AcChar
+cString: AcCString
+double: AcDouble
+float: AcFloat
+int: AcInt
+long: AcLong
+longLong: AcLongLong
+short: AcShort
+uChar: AcUnsignedChar
+uInt: AcUnsignedInt
+uLong: AcUnsignedLong
+uLongLong: AcUnsignedLongLong
+uShort: AcUnsignedShort
+
+cgFloat: AcCGFloat
+
+cgSize: AcCGSize
+cgPoint: AcCGPoint
+cgRect: AcCGRect
+
 nil: AcNil
