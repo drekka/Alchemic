@@ -34,7 +34,7 @@
     OCMVerifyAll(_mockOtherValueSource);
 }
 
--(void) testValueWithErrorReturnsValue {
+-(void) testValueReturnsValue {
 
     // Mock out a ALCValue.
     id mockValue = OCMClassMock([ALCValue class]);
@@ -54,8 +54,7 @@
     // Assert we have been given back the value.
     XCTAssertTrue([result isKindOfClass:[ALCValue class]]);
     ALCValue *value = result;
-    XCTAssertEqual(ALCValueTypeArray, value.type);
-    
+
     NSArray *actualResults = value.value;
     XCTAssertEqual(1u, actualResults.count);
     XCTAssertEqualObjects(@"abc", actualResults[0]);

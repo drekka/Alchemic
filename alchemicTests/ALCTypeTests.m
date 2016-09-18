@@ -82,10 +82,17 @@ testScalarTypeWithEncoding(aULong, "Q", ALCValueTypeUnsignedLongLong, ULong) // 
 testScalarTypeWithEncoding(aULongLong, "Q", ALCValueTypeUnsignedLongLong, ULongLong)
 testScalarTypeWithEncoding(aUShort, "S", ALCValueTypeUnsignedShort, UShort)
 
+#define testStructTypeWithEncoding(ivarName, encoding, valueType, methodName) \
+-(void) testTypeWithEncoding_ ## ivarName { \
+Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
+ALCType *type = [ALCType typeForIvar:ivar]; \
+XCTAssertEqual(valueType, type.type, @"Types don't match"); \
+}
+
 // Structs
-testScalarTypeWithEncoding(size, "CGSize", ALCValueTypeStruct, CGSize)
-testScalarTypeWithEncoding(point, "CGPoint", ALCValueTypeStruct, CGPoint)
-testScalarTypeWithEncoding(rect, "CGRect", ALCValueTypeStruct, CGRect)
+testStructTypeWithEncoding(size, "CGSize", ALCValueTypeCGSize, CGSize)
+testStructTypeWithEncoding(point, "CGPoint", ALCValueTypeCGPoint, CGPoint)
+testStructTypeWithEncoding(rect, "CGRect", ALCValueTypeCGRect, CGRect)
 
 #define testObjectTypeWithEncoding(ivarName, className, protocolArray, valueType, methodName) \
 -(void) testTypeWithEncoding_ ## ivarName { \
@@ -123,45 +130,41 @@ testObjectTypeWithEncoding(classAndProtocol, NSNumber, @[@"AlchemicAware"], ALCV
     XCTAssertThrowsSpecific([ALCType typeWithEncoding:ivarEncoding], AlchemicTypeMissMatchException);
 }
 
-#pragma mark - Description
+#pragma mark - Descriptions
 
--(void) testDescriptionWithStruct {
-    Ivar ivar = class_getInstanceVariable([self class], "size");
-    ALCType *type = [ALCType typeForIvar:ivar];
-    XCTAssertEqualObjects(@"struct CGSize", type.description);
+#define testDescription(ivarName, expectedDescription) \
+-(void) testDescription_ ## ivarName { \
+Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
+ALCType *type = [ALCType typeForIvar:ivar]; \
+XCTAssertEqualObjects(expectedDescription, type.description); \
 }
 
--(void) testDescriptionWithClass {
-    Ivar ivar = class_getInstanceVariable([self class], "aNumber");
-    ALCType *type = [ALCType typeForIvar:ivar];
-    XCTAssertEqualObjects(@"class NSNumber *", type.description);
-}
+testDescription(aBool, @"scalar BOOL")
+testDescription(aChar, @"scalar char")
+testDescription(aCharPointer, @"scalar char *")
+testDescription(aDouble, @"scalar double")
+testDescription(aFloat, @"scalar float")
+testDescription(aInt, @"scalar int")
+testDescription(aLong, @"scalar long long") // in 64Bit, shows as a long long
+testDescription(aLongLong, @"scalar long long")
+testDescription(aShort, @"scalar short")
+testDescription(aUChar, @"scalar unsigned char")
+testDescription(aUInt, @"scalar unsigned int")
+testDescription(aULong, @"scalar unsigned long long") // in 64Bit, shows as a long long
+testDescription(aULongLong, @"scalar unsigned long long")
+testDescription(aUShort, @"scalar unsigned short")
 
--(void) testDescriptionWithIdOnly {
-    Ivar ivar = class_getInstanceVariable([self class], "idOnly");
-    ALCType *type = [ALCType typeForIvar:ivar];
-    XCTAssertEqualObjects(@"id", type.description);
-}
+// Structs
+testDescription(size, @"struct CGSize")
+testDescription(point, @"struct CGPoint")
+testDescription(rect, @"struct CGRect")
 
--(void) testDescriptionWithProtocols {
-    Ivar ivar = class_getInstanceVariable([self class], "idWithProtocol");
-    ALCType *type = [ALCType typeForIvar:ivar];
-    XCTAssertEqualObjects(@"id<NSCopying>", type.description);
-}
-
--(void) testDescriptionWithClassAndProtocols {
-    Ivar ivar = class_getInstanceVariable([self class], "classAndProtocol");
-    ALCType *type = [ALCType typeForIvar:ivar];
-    XCTAssertEqualObjects(@"class NSNumber<AlchemicAware> *", type.description);
-}
-
-#pragma mark - Method name fragment
-
--(void) testMethodNameFragmentReturnsStructName {
-    Ivar ivar = class_getInstanceVariable([self class], "size");
-    ALCType *type = [ALCType typeForIvar:ivar];
-    XCTAssertEqualObjects(@"CGSize", type.methodNameFragment);
-}
+// Classes
+testDescription(aNumber, @"class NSNumber *")
+testDescription(aArray, @"class NSArray *")
+testDescription(idOnly, @"id")
+testDescription(idWithProtocol, @"id<NSCopying>")
+testDescription(classAndProtocol, @"class NSNumber<AlchemicAware> *")
 
 #pragma mark - Generating ALCValue instances
 

@@ -19,13 +19,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface ALCValue(internal)
+@property (nonatomic, strong, readonly, nullable) id valueAsObject;
+@property (nonatomic, strong, readonly) NSArray *valueAsArray;
+@end
+
 @implementation ALCValue (Injection)
 
 #pragma mark - Access points
 
--(nullable ALCVariableInjectorBlock) variableInjector {
+-(nullable ALCVariableInjectorBlock) variableInjectorForType:(ALCValueType) type {
     Method method;
-    SEL selector = NSSelectorFromString(str(@"variableInjectorFor%@", self.methodNameFragment));
+    SEL selector = NSSelectorFromString(str(@"variableInjectorFor%@", [self methodNameFragmentForType:type]));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
@@ -38,9 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
     return NULL;
 }
 
--(nullable ALCInvocationInjectorBlock) invocationInjector {
+-(nullable ALCInvocationInjectorBlock) invocationInjectorForType:(ALCValueType) type {
     Method method;
-    SEL selector = NSSelectorFromString(str(@"invocationInjectorFor%@", self.methodNameFragment));
+    SEL selector = NSSelectorFromString(str(@"invocationInjectorFor%@", [self methodNameFragmentForType:type]));
     if (selector) {
         method = class_getInstanceMethod([self class], selector);
         if (method) {
@@ -90,17 +95,13 @@ scalarVariableInjector(CGRect, CGRect)
 
 -(ALCVariableInjectorBlock) variableInjectorForArray {
     return ^(ALCVariableInjectorBlockArgs) {
-        id value = self.value;
-        value = [self arrayFromValue:value];
-        [self injectObject:obj variable:ivar withValue:value];
+        [self injectObject:obj variable:ivar withValue:self.valueAsArray];
     };
 }
 
 -(ALCVariableInjectorBlock) variableInjectorForObject {
     return ^(ALCVariableInjectorBlockArgs) {
-        id value = self.value;
-        value = [self objectFromValue:value];
-        [self injectObject:obj variable:ivar withValue:value];
+        [self injectObject:obj variable:ivar withValue:self.valueAsObject];
     };
 }
 
@@ -137,8 +138,7 @@ scalarMethodArgumentInjector(CGRect, CGRect)
 
 -(ALCInvocationInjectorBlock) invocationInjectorForObject {
     return ^(ALCInvocationInjectorBlockArgs) {
-        id value = self.value;
-        value = [self objectFromValue:value];
+        id value = self.valueAsObject;
         [ALCRuntime executeSimpleBlock:self.completion];
         [inv setArgument:&value atIndex:idx + 2];
     };
@@ -146,14 +146,46 @@ scalarMethodArgumentInjector(CGRect, CGRect)
 
 -(ALCInvocationInjectorBlock) invocationInjectorForArray {
     return ^(ALCInvocationInjectorBlockArgs) {
-        NSArray *value = self.value;
-        value = [self arrayFromValue:value];
+        NSArray *value = self.valueAsArray;
         [ALCRuntime executeSimpleBlock:self.completion];
         [inv setArgument:&value atIndex:idx + 2];
     };
 }
 
 #pragma mark - Internal
+
+-(NSString *) methodNameFragmentForType:(ALCValueType) type {
+
+    switch (type) {
+
+            // Scalar types.
+        case ALCValueTypeBool: return @"Bool";
+        case ALCValueTypeChar: return @"Char";
+        case ALCValueTypeCharPointer: return @"CharPointer";
+        case ALCValueTypeDouble: return @"Double";
+        case ALCValueTypeFloat: return @"Float";
+        case ALCValueTypeInt: return @"Int";
+        case ALCValueTypeLong: return @"Long";
+        case ALCValueTypeLongLong: return @"LongLong";
+        case ALCValueTypeShort: return @"Short";
+        case ALCValueTypeUnsignedChar: return @"UnsignedChar";
+        case ALCValueTypeUnsignedInt: return @"UnsignedInt";
+        case ALCValueTypeUnsignedLong: return @"UnsignedLong";
+        case ALCValueTypeUnsignedLongLong: return @"UnsignedLongLong";
+        case ALCValueTypeUnsignedShort: return @"UnsignedShort";
+        case ALCValueTypeCGSize: return @"CGSize";
+        case ALCValueTypeCGPoint: return @"CGPoint";
+        case ALCValueTypeCGRect: return @"CGRect";
+
+            // Object types.
+        case ALCValueTypeObject:return @"Object";
+        case ALCValueTypeArray: return @"Array";
+
+        default:
+            throwException(AlchemicIllegalArgumentException, @"Cannot deduce a method name when type is unknown");
+    }
+}
+
 
 -(void) injectObject:(id) obj variable:(Ivar) ivar withValue:(id) value {
 
@@ -171,9 +203,10 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     [ALCRuntime executeSimpleBlock:self.completion];
 }
 
--(nullable id) arrayFromValue:(id) value {
+-(NSArray *) valueAsArray {
 
     // Already an array.
+    id value = self.value;
     if ([value isKindOfClass:[NSArray class]]) {
         return value;
     }
@@ -183,12 +216,13 @@ scalarMethodArgumentInjector(CGRect, CGRect)
         throwException(AlchemicInjectionException, @"Expected an object, found a scalar value");
     }
 
-    // Must be an object.
-    return @[value];
+    // Must be an object but check for null.
+    return value == [NSNull null] ? @[] : @[value];
 }
 
--(nullable id) objectFromValue:(id) value {
+-(nullable id) valueAsObject {
 
+    id value = self.value;
     if ([value isKindOfClass:[NSArray class]]) {
         NSArray *values = value;
         switch (values.count) {
@@ -206,8 +240,8 @@ scalarMethodArgumentInjector(CGRect, CGRect)
         throwException(AlchemicInjectionException, @"Expected an object, found a scalar value");
     }
     
-    // Must be an object.
-    return value;
+    // Must be an object but check for null.
+    return value == [NSNull null] ? nil : value;
 }
 
 @end

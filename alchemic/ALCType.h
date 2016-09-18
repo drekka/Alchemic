@@ -9,14 +9,49 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCAbstractType.h>
+/**
+ Enum of types for comparing when mapping.
+ */
+typedef NS_ENUM(NSUInteger, ALCValueType) {
+
+    // Base unknown type
+    ALCValueTypeUnknown,
+
+    // Scalar types.
+    ALCValueTypeBool,
+    ALCValueTypeChar,
+    ALCValueTypeCharPointer,
+    ALCValueTypeDouble,
+    ALCValueTypeFloat,
+    ALCValueTypeInt,
+    ALCValueTypeLong,
+    ALCValueTypeLongLong,
+    ALCValueTypeShort,
+    ALCValueTypeUnsignedChar,
+    ALCValueTypeUnsignedInt,
+    ALCValueTypeUnsignedLong,
+    ALCValueTypeUnsignedLongLong,
+    ALCValueTypeUnsignedShort,
+    ALCValueTypeCGSize,
+    ALCValueTypeCGPoint,
+    ALCValueTypeCGRect,
+
+    // Object types.
+    ALCValueTypeObject,
+    ALCValueTypeArray
+};
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Contains type information about an injection.
  */
-@interface ALCType : ALCAbstractType
+@interface ALCType : NSObject
+
+/**
+ A string containing the type data for scalar types.
+ */
+@property (nonatomic, assign, readonly) ALCValueType type;
 
 /**
  The name of a scalar type. ie. int, unsigned int, CGRect, CGSize, etc.
@@ -57,6 +92,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param aClass The class to base the type on.
  */
 +(instancetype) typeWithClass:(Class) aClass;
+
 
 @end
 

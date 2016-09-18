@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) injectObject:(id) object {
     ALCValue *value = self.valueSource.value;
     if (value) {
-        ALCInvocationInjectorBlock injector = [value invocationInjector];
+        ALCInvocationInjectorBlock injector = [value invocationInjectorForType:self.type.type];
         injector(object, (NSInteger) _index);
         return;
     }

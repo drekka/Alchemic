@@ -6,6 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+#import <Alchemic/ALCType.h>
 #import <Alchemic/ALCValue.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,9 +19,9 @@ typedef void (^ALCInvocationInjectorBlock)(ALCInvocationInjectorBlockArgs);
 
 @interface ALCValue (Injection)
 
--(nullable ALCVariableInjectorBlock) variableInjector;
+-(nullable ALCVariableInjectorBlock) variableInjectorForType:(ALCValueType) type;
 
--(nullable ALCInvocationInjectorBlock) invocationInjector;
+-(nullable ALCInvocationInjectorBlock) invocationInjectorForType:(ALCValueType) type;
 
 @end
 

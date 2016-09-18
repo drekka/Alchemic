@@ -9,8 +9,6 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCAbstractType.h>
-
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCtypeDefs.h>
 
@@ -21,11 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Simple class containing information about a type.
  */
-@interface ALCValue : ALCAbstractType
+@interface ALCValue : NSObject
 
-@property (nonatomic, strong, readonly) id valueAsObject;
-@property (nonatomic, strong, readonly) NSArray *valueAsArray;
-@property (nonatomic, strong, readonly) NSValue *valueAsScalar;
+@property (nonatomic, strong, readonly) id value;
 @property (nonatomic, strong, nullable, readonly) ALCSimpleBlock completion;
 
 +(ALCValue *) withValue:(id) value

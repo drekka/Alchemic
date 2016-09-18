@@ -17,6 +17,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCType
 
+-(instancetype) init {
+    self = [super init];
+    if (self) {
+        _type = ALCValueTypeUnknown;
+    }
+    return self;
+}
+
 #pragma mark - Factory methods
 
 +(ALCValue *) typeForIvar:(Ivar) ivar {
@@ -25,7 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) typeWithClass:(Class) aClass {
     ALCType *type = [[ALCType alloc] init];
-    type.type = ALCValueTypeObject;
     [type setClass:aClass];
     return type;
 }
@@ -47,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     // Object type.
-    self.type = ALCValueTypeObject;
+    _type = ALCValueTypeObject;
     NSCharacterSet *typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
     NSArray<NSString *> *defs = [[NSString stringWithUTF8String:encoding] componentsSeparatedByCharactersInSet:typeEncodingDelimiters];
 
@@ -87,30 +94,65 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(BOOL) setStructType:(const char *) encoding {
-    _scalarType = [self structNameFromEncoding:encoding];
-    return _scalarType != NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{(\\w+)=.*"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:NULL];
+    NSString *strEncoding = [NSString stringWithUTF8String:encoding];
+    NSTextCheckingResult *result = [regex firstMatchInString:strEncoding
+                                                     options:NSMatchingReportProgress
+                                                       range:NSMakeRange(0, strEncoding.length)];
+    if (result) {
+        NSRange nameRange = [result rangeAtIndex:1];
+        NSString *structName = [strEncoding substringWithRange:nameRange];
+        if ([structName isEqualToString:@"CGSize"]) {
+            _type = ALCValueTypeCGSize;
+        } else if ([structName isEqualToString:@"CGPoint"]) {
+            _type = ALCValueTypeCGPoint;
+        } else if ([structName isEqualToString:@"CGRect"]) {
+            _type = ALCValueTypeCGRect;
+        }
+    }
+    return _type != ALCValueTypeUnknown;
 }
 
 -(BOOL) setScalarType:(const char *) scalarType encoding:(const char *) encoding type:(ALCValueType) type {
     if (strcmp(encoding, scalarType) == 0) {
         _scalarType = [NSString stringWithUTF8String:scalarType];
-        self.type = type;
-        return YES;
+        _type = type;
     }
-    return NO;
+    return _type != ALCValueTypeUnknown;
 }
 
 #pragma mark - Other methods
 
 -(void) setClass:(Class) aClass {
-    self.type = [aClass isSubclassOfClass:[NSArray class]] ? ALCValueTypeArray : ALCValueTypeObject;
+    _type = [aClass isSubclassOfClass:[NSArray class]] ? ALCValueTypeArray : ALCValueTypeObject;
     self->_objcClass = aClass;
 }
 
 -(NSString *) description {
 
-    switch (self.type) {
-        case ALCValueTypeStruct: return str(@"struct %@", _scalarType);
+    switch (_type) {
+
+        case ALCValueTypeUnknown: return @"[unknown type]";
+        case ALCValueTypeBool: return @"scalar BOOL";
+        case ALCValueTypeChar: return @"scalar char";
+        case ALCValueTypeCharPointer: return @"scalar char *";
+        case ALCValueTypeDouble: return @"scalar double";
+        case ALCValueTypeFloat: return @"scalar float";
+        case ALCValueTypeInt: return @"scalar int";
+        case ALCValueTypeLong: return @"scalar long";
+        case ALCValueTypeLongLong: return @"scalar long long";
+        case ALCValueTypeShort: return @"scalar short";
+        case ALCValueTypeUnsignedChar: return @"scalar unsigned char";
+        case ALCValueTypeUnsignedInt: return @"scalar unsigned int";
+        case ALCValueTypeUnsignedLong: return @"scalar unsigned long";
+        case ALCValueTypeUnsignedLongLong: return @"scalar unsigned long long";
+        case ALCValueTypeUnsignedShort: return @"scalar unsigned short";
+        case ALCValueTypeCGSize: return str(@"struct CGSize");
+        case ALCValueTypeCGPoint: return str(@"struct CGPoint");
+        case ALCValueTypeCGRect: return str(@"struct CGRect");
+        case ALCValueTypeArray: return @"class NSArray *";
 
             // Object types.
         case ALCValueTypeObject: {
@@ -132,17 +174,8 @@ NS_ASSUME_NONNULL_BEGIN
                 return self.objcClass ? str(@"class %@ *", NSStringFromClass(self.objcClass)) : @"id";
             }
         }
-
-        default:
-            return super.description;
+            
     }
-}
-
--(NSString *) methodNameFragment {
-    if (self.type == ALCValueTypeStruct) {
-        return _scalarType;
-    }
-    return super.methodNameFragment;
 }
 
 @end
