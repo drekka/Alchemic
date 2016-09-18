@@ -11,10 +11,11 @@
 
 #import <Alchemic/ALCTypeDefs.h>
 
-@class ALCTypeData;
+@class ALCValue;
 @class ALCInstantiation;
 @protocol ALCContext;
 @protocol ALCDependency;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,14 +52,7 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
  */
 +(Ivar) forClass:(Class) aClass variableForInjectionPoint:(NSString *) inj;
 
-/**
- Returns an instance of ALCTypeData containing information about the type of the ivar.
-
- @param iVar The ivar to examine.
-
- @return An instance of ALCTypeData containing the type information.
- */
-+(ALCTypeData *) typeDataForIVar:(Ivar) iVar;
++(NSArray<ALCType *> *) forClass:(Class) aClass methodArgumentTypes:(SEL) methodSelector;
 
 /**
  Returns a list of all the writable properties in the specified class. 
@@ -70,27 +64,6 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
  */
 +(NSArray<NSString*> *) writeablePropertiesForClass:(Class) aClass;
 
-#pragma mark - Seting variables
-
-/// @name Setting values
-
-/**
- Maps a value to a type.
-
- This basically means that the value is assessed to see if it can be converted to the target type. This also takes into account such things as the target being an array and possibly needing to wrap the passed value in an array.
-
- @param value The value to check.
- @param type  The type it needs to be.
- @param allowNil If YES, allows nil values to be passed and set. Otherwise throws an error if nil values or empty arrays are encountered when there should be values.
- @param error a pointer to a NSError vaiable which will be populated if an error occurs.
-
- @return A new value matching the passed type.
- */
-+(nullable id) mapValue:(nullable id) value
-              allowNils:(BOOL) allowNil
-                   type:(Class) type
-                  error:(NSError * _Nullable *) error;
-
 #pragma mark - Validating
 
 /// @name Validating
@@ -100,10 +73,10 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
 
  @param aClass The class to be used to check the selector again.
  @param selector The selector to check.
- @param arguments The arguments to validate against.
+ @param nbrArguments The expected number of arguments.
  @exception ALCException If there is a problem.
  */
-+(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments;
++(void) validateClass:(Class) aClass selector:(SEL)selector numberOfArguments:(NSUInteger) nbrArguments;
 
 #pragma mark - Describing things
 

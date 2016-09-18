@@ -8,26 +8,18 @@
 
 @import StoryTeller;
 
-#import "ALCClassObjectFactory.h"
-#import "ALCClassObjectFactoryInitializer.h"
-#import "ALCConstant.h"
-#import "ALCContextImpl.h"
-#import "ALCDependency.h"
-#import "ALCException.h"
-#import "ALCFactoryName.h"
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCMethodObjectFactory.h"
-#import "ALCModel.h"
-#import "ALCModelImpl.h"
-#import "ALCModelObjectInjector.h"
-#import "ALCModelSearchCriteria.h"
-#import "ALCObjectFactory.h"
-#import "ALCRuntime.h"
-#import "ALCTypeData.h"
-#import "NSArray+Alchemic.h"
-#import "NSObject+Alchemic.h"
-#import "ALCVariableDependency.h"
+#import <Alchemic/ALCClassObjectFactoryInitializer.h>
+#import <Alchemic/ALCContextImpl.h>
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCMethodObjectFactory.h>
+#import <Alchemic/ALCModelImpl.h>
+#import <Alchemic/ALCModelValueSource.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCType.h>
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/ALCVariableDependency.h>
+#import <Alchemic/ALCContext+Internal.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -89,9 +81,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Registration
 
--(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) clazz {
-    STLog(clazz, @"Register object factory for %@", NSStringFromClass(clazz));
-    ALCClassObjectFactory *objectFactory = [[ALCClassObjectFactory alloc] initWithClass:clazz];
+-(ALCClassObjectFactory *) registerObjectFactoryForClass:(Class) aClass {
+    STLog(aClass, @"Register object factory for %@", NSStringFromClass(aClass));
+    ALCClassObjectFactory *objectFactory = [[ALCClassObjectFactory alloc] initWithType:[ALCType typeWithClass:aClass]];
     [_model addObjectFactory:objectFactory withName:nil];
     return objectFactory;
 }
@@ -123,17 +115,18 @@ registerFactoryMethod:(SEL) selector
 
     // Read in the arguments and sort them into factory config and method arguments.
 
-    NSMutableArray *factoryOptions = [[NSMutableArray alloc] init];
-    NSArray<id<ALCDependency>> *methodArguments = [configAndArgs methodArgumentsWithUnknownArgumentHandler:^(id argument) {
-        [factoryOptions addObject:argument];
-    }];
+    NSArray<ALCType *> *methodTypes = [ALCRuntime forClass:objectFactory.type.objcClass methodArgumentTypes:selector];
+    NSMutableArray *factoryOptions = [NSMutableArray array];
+    NSArray<id<ALCDependency>> *methodArguments = [configAndArgs methodArgumentsWithExpectedTypes:methodTypes
+                                                                                  unknownArgument:^(id argument) {
+                                                                                      [factoryOptions addObject:argument];
+                                                                                  }];
 
     // Build the factory.
-    ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithClass:returnType
-                                                                      parentObjectFactory:objectFactory
-                                                                                 selector:selector
-                                                                                     args:methodArguments];
-
+    ALCMethodObjectFactory *methodFactory = [[ALCMethodObjectFactory alloc] initWithType:[ALCType typeWithClass:returnType]
+                                                                     parentObjectFactory:objectFactory
+                                                                                selector:selector
+                                                                                    args:methodArguments];
     [_model addObjectFactory:methodFactory withName:nil];
     [methodFactory configureWithOptions:factoryOptions model:_model];
 }
@@ -149,51 +142,57 @@ registerFactoryMethod:(SEL) selector
 
     // Throw an exception if the factory is already set to a reference type.
     if (objectFactory.factoryType == ALCFactoryTypeReference) {
-        throwException(IllegalArgument, @"Reference factories cannot have initializers");
+        throwException(AlchemicIllegalArgumentException, @"Reference factories cannot have initializers");
     }
 
-    STLog(objectFactory.objectClass, @"Register object factory initializer %@", [ALCRuntime forClass:objectFactory.objectClass selectorDescription:initializer]);
+    STLog(objectFactory.type.objcClass, @"Register object factory initializer %@", [ALCRuntime forClass:objectFactory.type.objcClass selectorDescription:initializer]);
 
-    NSArray<id<ALCDependency>> *arguments = [args methodArgumentsWithUnknownArgumentHandler:^(id argument) {
-        throwException(IllegalArgument, @"Expected a argument definition, search criteria or constant. Got: %@", argument);
-    }];
+
+    NSArray<ALCType *> *methodTypes = [ALCRuntime forClass:objectFactory.type.objcClass methodArgumentTypes:initializer];
+    NSArray<id<ALCDependency>> *arguments = [args methodArgumentsWithExpectedTypes:methodTypes
+                                                                   unknownArgument:^(id argument) {
+                                                                       throwException(AlchemicIllegalArgumentException, @"Initializers do not support %@ arguments", argument);
+                                                                   }];
 
     __unused id _ = [[ALCClassObjectFactoryInitializer alloc] initWithObjectFactory:objectFactory
                                                                         initializer:initializer
                                                                                args:arguments];
 }
 
-
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory registerInjection:(NSString *) variable, ... {
     alc_loadVarArgsAfterVariableIntoArray(variable, config);
-    Ivar ivar = [ALCRuntime forClass:objectFactory.objectClass variableForInjectionPoint:variable];
-    Class varClass = [ALCRuntime typeDataForIVar:ivar].objcClass;
+    Ivar ivar = [ALCRuntime forClass:objectFactory.type.objcClass variableForInjectionPoint:variable];
+    ALCType *type = [ALCType typeForIvar:ivar];
     [self objectFactory:objectFactory
       registerInjection:ivar
                withName:variable
-                 ofType:varClass
+                 ofType:type
                  config:config];
 }
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
     registerInjection:(Ivar) variable
              withName:(NSString *) name
-               ofType:(Class) type
+               ofType:(ALCType *) type
                config:(NSArray *) config {
 
-    STLog(objectFactory.objectClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.objectClass), name);
+    STLog(objectFactory.type.objcClass, @"Register injection %@.%@", NSStringFromClass(objectFactory.type.objcClass), name);
 
+    NSError *error;
     NSMutableArray *dependencyConfig = [[NSMutableArray alloc] init];
-    __block BOOL allowNils = NO;
-    id<ALCInjector> injector = [config injectorForClass:type
-                                         allowConstants:YES
-                                 unknownArgumentHandler:^(id argument) {
-                                     [dependencyConfig addObject:argument];
-                                 }];
-    injector.allowNilValues = allowNils;
+    id<ALCValueSource> source = [config valueSourceForType:type
+                                          constantsAllowed:YES
+                                                     error:&error
+                                           unknownArgument:^(id  _Nonnull argument) {
+                                               [dependencyConfig addObject:argument];
+                                           }];
+    if (!source) {
+        throwException(AlchemicIllegalArgumentException, @"Error processing criteria for %@: %@", [ALCRuntime forClass:objectFactory.type.objcClass propertyDescription:name], error.localizedDescription);
+    }
 
     ALCVariableDependency *dependency = [objectFactory registerVariableDependency:variable
-                                                                         injector:injector
+                                                                             type:type
+                                                                      valueSource:source
                                                                          withName:name];
     [dependency configureWithOptions:dependencyConfig];
 }
@@ -209,21 +208,33 @@ registerFactoryMethod:(SEL) selector
 
     // Throw an error if this is called too early.
     if (_postStartBlocks) {
-        throwException(Lifecycle, @"AcGet called before Alchemic is ready to serve objects.");
+        throwException(AlchemicLifecycleException, @"AcGet called before Alchemic is ready to serve objects.");
     }
 
     STLog(returnType, @"Manual retrieving an instance of %@", NSStringFromClass([returnType class]));
-    ALCModelObjectInjector *injection = (ALCModelObjectInjector *)[criteria injectorForClass:returnType
-                                                                                   allowConstants:NO
-                                                                           unknownArgumentHandler:NULL];
-    [injection resolveWithStack:[[NSMutableArray alloc] init] model:_model];
+    ALCModelSearchCriteria *modelSearchCriteria = [criteria modelSearchCriteriaWithDefaultClass:returnType
+                                                                         unknownArgumentHandler:^(id argument) {
+                                                                             throwException(AlchemicIllegalArgumentException, @"Unexpected argument %@", argument);
+                                                                         }];
+    ALCModelValueSource *source = [ALCModelValueSource valueSourceWithCriteria:modelSearchCriteria];
 
-    NSError *error;
-    id value = [injection searchResultWithError:&error];
-    if (!value && error) {
-        throwException(MappingValue, @"Mapping error: %@", error.localizedDescription);
+    // Resolve to find the factories.
+    [source resolveWithStack:[[NSMutableArray alloc] init] model:_model];
+
+    ALCValue *alcValue = source.value;
+    [ALCRuntime executeSimpleBlock:alcValue.completion];
+
+    // Get the value which will be an array of objects.
+    NSArray *values = alcValue.value;
+    switch (values.count) {
+        case 0:
+            throwException(AlchemicIncorrectNumberOfValuesException, @"No value found");
+        case 1:
+            return values[0];
+        default:
+            throwException(AlchemicIncorrectNumberOfValuesException, @"Expected 1, got %lu", values.count);
     }
-    return value;
+
 }
 
 -(void) setObject:(id) object, ... {
@@ -233,23 +244,32 @@ registerFactoryMethod:(SEL) selector
 
 -(void) setObject:(id) object searchCriteria:(NSArray *) criteria {
 
+    // Check for an Alchemic value.
+    id finalObject = object;
+    if ([object conformsToProtocol:@protocol(ALCValueSource)]) {
+        finalObject = ((id<ALCValueSource>)object).value;
+    }
+
     // Setup a block we want to execute.
-    id finalObject = [object isKindOfClass:[ALCConstantNil class]] ? nil : object;
     Class objClass = [object class];
     STLog(objClass, @"Storing reference for a %@", NSStringFromClass(objClass));
 
     ALCSimpleBlock setBlock = ^{
 
-        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaForClass:objClass];
+        ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithDefaultClass:objClass
+                                                                        unknownArgumentHandler:^(id argument) {
+                                                                            throwException(AlchemicIllegalArgumentException, @"Unexpected criteria: %@", argument);
+                                                                        }];
+
         NSArray<id<ALCObjectFactory>> *factories = [self->_model settableObjectFactoriesMatchingCriteria:searchCriteria];
 
         // Error if we do not find one factory.
         if (factories.count != 1) {
-            throwException(UnableToSetReference, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, (unsigned long) factories.count);
+            throwException(AlchemicUnableToSetReferenceException, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, (unsigned long) factories.count);
         }
 
         // Set the object and call the returned completion.
-        [((ALCAbstractObjectFactory *)factories[0]) setObject:finalObject];
+        [((ALCAbstractObjectFactory *) factories[0]) setObject:finalObject];
     };
 
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.
@@ -261,14 +281,24 @@ registerFactoryMethod:(SEL) selector
     STStartScope(object);
 
     alc_loadVarArgsAfterVariableIntoArray(object, criteria);
-    
+
     // Throw an error if this is called too early.
     if (_postStartBlocks) {
-        throwException(Lifecycle, @"AcInjectDependencies called before Alchemic is ready.");
+        throwException(AlchemicLifecycleException, @"AcInjectDependencies called before Alchemic is ready.");
     }
-    
+
+    [self injectDependencies:object searchCriteria:criteria];
+}
+
+-(void) injectDependencies:(id) object searchCriteria:(NSArray *) criteria {
+
     // We are only interested in class factories.
-    ALCClassObjectFactory *classFactory = [_model classObjectFactoryMatchingCriteria:[criteria modelSearchCriteriaForClass:[object class]]];
+    ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithDefaultClass:[object class]
+                                                                    unknownArgumentHandler:^(id argument) {
+                                                                        throwException(AlchemicIllegalArgumentException, @"Unexpected criteria: %@", argument);
+                                                                    }];
+
+    ALCClassObjectFactory *classFactory = [_model classObjectFactoryMatchingCriteria:searchCriteria];
     
     if (classFactory) {
         STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));

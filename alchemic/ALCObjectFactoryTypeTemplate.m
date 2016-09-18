@@ -6,8 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCObjectFactoryTypeTemplate.h"
-#import "ALCInternalMacros.h"
+#import <Alchemic/ALCObjectFactoryTypeTemplate.h>
+#import <Alchemic/ALCInternalMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,13 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setWeak:(BOOL) weak {
     if (weak) {
-        throwException(IllegalArgument, @"Templates cannot be set as weak references.");
+        throwException(AlchemicIllegalArgumentException, @"Templates cannot be set as weak references.");
     }
 }
 
 -(void) setNillable:(BOOL) nillable {
     if (nillable) {
-        throwException(IllegalArgument, @"Templates cannot be set as nillable.");
+        throwException(AlchemicIllegalArgumentException, @"Templates cannot be set as nillable.");
     }
 }
 

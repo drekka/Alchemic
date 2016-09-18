@@ -8,17 +8,17 @@
 
 @import StoryTeller;
 
-// :: Framework ::
-#import "ALCMethodArgumentDependency.h"
-#import "ALCClassObjectFactory.h"
-#import "ALCMethodObjectFactory.h"
-#import "NSArray+Alchemic.h"
-#import "NSObject+Alchemic.h"
-#import "ALCInternalMacros.h"
-#import "ALCFlagMacros.h"
-#import "ALCInstantiation.h"
-#import "Alchemic.h"
-#import "ALCRuntime.h"
+
+#import <Alchemic/ALCMethodObjectFactory.h>
+
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/Alchemic.h>
+#import <Alchemic/ALCType.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCContext+Internal.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,17 +30,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Life cycle
 
--(instancetype) initWithClass:(Class)objectClass {
+-(instancetype) initWithType:(ALCType *) type {
     methodReturningObjectNotImplemented;
 }
 
--(instancetype) initWithClass:(Class)objectClass
-          parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
-                     selector:(SEL) selector
-                         args:(nullable NSArray<id<ALCDependency>> *) arguments {
-    self = [super initWithClass:objectClass];
+-(instancetype) initWithType:(ALCType *) type
+         parentObjectFactory:(ALCClassObjectFactory *) parentObjectFactory
+                    selector:(SEL) selector
+                        args:(nullable NSArray<id<ALCDependency>> *) arguments {
+    self = [super initWithType:type];
     if (self) {
-        [ALCRuntime validateClass:parentObjectFactory.objectClass selector:selector arguments:arguments];
+        [ALCRuntime validateClass:parentObjectFactory.type.objcClass selector:selector numberOfArguments:arguments.count];
         _parentObjectFactory = parentObjectFactory;
         _selector = selector;
         _arguments = arguments;
@@ -49,19 +49,19 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) defaultModelName {
-    return [ALCRuntime forClass:_parentObjectFactory.objectClass selectorDescription:_selector];
+    return [ALCRuntime forClass:_parentObjectFactory.type.objcClass selectorDescription:_selector];
 }
 
 -(void)configureWithOption:(id)option model:(id<ALCModel>) model {
     if ([option isKindOfClass:[ALCIsReference class]]) {
-        throwException(IllegalArgument, @"Method based factories cannot be set to reference external objects");
+        throwException(AlchemicIllegalArgumentException, @"Method based factories cannot be set to reference external objects");
     } else {
         [super configureWithOption:option model:model];
     }
 }
 
 -(void) resolveDependenciesWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>) model {
-    STStartScope(self.objectClass);
+    STStartScope(self.type);
     AcWeakSelf;
     [self resolveWithStack:resolvingStack
               resolvedFlag:&_resolved
@@ -81,11 +81,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(id) createObject {
 
-    STStartScope(self.objectClass);
+    STStartScope(self.type);
 
     ALCInstantiation *parentGeneration = _parentObjectFactory.instantiation;
     if (!parentGeneration.object) {
-        throwException(NilParentObject, @"Parent object of method is nil.");
+        throwException(AlchemicNilParentObjectException, @"Parent object of method is nil.");
     }
 
     [parentGeneration complete];
@@ -94,14 +94,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCBlockWithObject) objectCompletion {
     return ^(ALCBlockWithObjectArgs){
-        [[Alchemic mainContext] injectDependencies:object, nil];
+        [(ALCContextImpl *)[Alchemic mainContext] injectDependencies:object searchCriteria:@[]];
     };
 }
 
 #pragma mark - Descriptions
 
 -(NSString *) description {
-    return str(@"%@ method %@ -> %@", super.description, self.defaultModelName, NSStringFromClass(self.objectClass));
+    return str(@"%@ method %@ -> %@", super.description, self.defaultModelName, NSStringFromClass(self.type.objcClass));
 }
 
 -(NSString *)resolvingDescription {

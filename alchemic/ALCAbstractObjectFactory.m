@@ -10,20 +10,18 @@
 @import UIKit;
 @import StoryTeller;
 
-#import "ALCAbstractObjectFactory.h"
-#import "ALCInstantiation.h"
-#import "ALCInternalMacros.h"
-#import "ALCDefs.h"
-#import "ALCFactoryName.h"
-#import "ALCFlagMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCException.h"
-#import "ALCModel.h"
-#import "ALCObjectFactoryType.h"
-#import "ALCObjectFactoryTypeTemplate.h"
-#import "ALCObjectFactoryTypeReference.h"
-#import "ALCObjectFactoryTypeSingleton.h"
-#import "ALCRuntime.h"
+#import <Alchemic/ALCAbstractObjectFactory.h>
+
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCFactoryName.h>
+#import <Alchemic/ALCFlagMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCModel.h>
+#import <Alchemic/ALCObjectFactoryTypeTemplate.h>
+#import <Alchemic/ALCObjectFactoryTypeReference.h>
+#import <Alchemic/ALCObjectFactoryTypeSingleton.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -33,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
     id _dependencyChangedObserver;
 }
 
-@synthesize objectClass = _objectClass;
+@synthesize type = _type;
 @synthesize primary = _primary;
 @dynamic weak;
 @dynamic ready;
@@ -57,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) defaultModelName {
-    return NSStringFromClass(self.objectClass);
+    return NSStringFromClass(_type.objcClass);
 }
 
 #pragma mark - Lifecycle
@@ -66,10 +64,10 @@ NS_ASSUME_NONNULL_BEGIN
     methodReturningObjectNotImplemented;
 }
 
--(instancetype) initWithClass:(Class) objectClass {
+-(instancetype) initWithType:(ALCType *) type {
     self = [super init];
     if (self) {
-        _objectClass = objectClass;
+        _type = type;
         _typeStrategy = [[ALCObjectFactoryTypeSingleton alloc] init];
     }
     return self;
@@ -109,7 +107,7 @@ NS_ASSUME_NONNULL_BEGIN
         _typeStrategy.nillable = YES;
         
     } else {
-        throwException(IllegalArgument, @"Unknown factory configuration option: %@", option);
+        throwException(AlchemicIllegalArgumentException, @"Unknown factory configuration option: %@", option);
     }
     
 }
@@ -117,7 +115,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {}
 
 -(void) setDependencyUpdateObserverWithBlock:(void (^) (NSNotification *)) watchBlock {
-    STLog(self.objectClass, @"Watch for dependency changes");
+    STLog(_type, @"Watch for dependency changes");
     self->_dependencyChangedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AlchemicDidStoreObject
                                                                                          object:nil
                                                                                           queue:nil
@@ -187,7 +185,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     [description appendString:_typeStrategy.description];
     
-    if ([_objectClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
+    if ([_type.objcClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
         [description appendString:@" (App delegate)"];
     }
     

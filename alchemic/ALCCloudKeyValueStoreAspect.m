@@ -9,12 +9,13 @@
 @import UIKit;
 @import StoryTeller;
 
-#import "ALCCloudKeyValueStoreAspect.h"
+#import <Alchemic/ALCCloudKeyValueStoreAspect.h>
 
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCClassObjectFactory.h>
 #import <Alchemic/ALCCloudKeyValueStore.h>
+#import <Alchemic/ALCType.h>
 
 @implementation ALCCloudKeyValueStoreAspect
 
@@ -32,7 +33,7 @@ static BOOL _enabled;
     
     // First look for a user defined user defaults.
     for (id<ALCObjectFactory> objectFactory in model.objectFactories) {
-        if ([objectFactory.objectClass isSubclassOfClass:[ALCCloudKeyValueStore class]]) {
+        if ([objectFactory.type.objcClass isSubclassOfClass:[ALCCloudKeyValueStore class]]) {
             // Nothing more to do.
             return;
         }
@@ -40,7 +41,7 @@ static BOOL _enabled;
     
     // No user defined defaults so set up ALCUserDefaults in the model.
     STLog(self, @"Adding default cloud key value store");
-    ALCClassObjectFactory *defaultsFactory = [[ALCClassObjectFactory alloc] initWithClass:[ALCCloudKeyValueStore class]];
+    ALCClassObjectFactory *defaultsFactory = [[ALCClassObjectFactory alloc] initWithType:[ALCType typeWithClass:[ALCCloudKeyValueStore class]]];
     [model addObjectFactory:defaultsFactory withName:@"cloudKeyValueStore"];
 }
 

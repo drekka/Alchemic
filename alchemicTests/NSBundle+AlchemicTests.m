@@ -17,6 +17,29 @@
 @implementation NSBundle_AlchemicTests
 
 -(void) testScannableBundles {
+    
+    id mockBundle = OCMClassMock([NSBundle class]);
+    
+    OCMStub(ClassMethod([mockBundle allBundles])).andReturn(@[mockBundle]);
+
+    // Getting frameworks dir id.
+    id mockURL = OCMClassMock([NSURL class]);
+    OCMStub([mockBundle privateFrameworksURL]).andReturn(mockURL);
+    OCMStub([mockURL getResourceValue:[OCMArg setTo:@"abc"] forKey:NSURLFileResourceIdentifierKey error:nil]).andReturn(YES);
+
+    // Getting the ids of the directory of the framework.
+    OCMStub(ClassMethod([mockBundle allFrameworks])).andReturn(@[mockBundle]);
+    OCMStub([mockBundle bundleURL]).andReturn(mockURL);
+    OCMStub([mockURL getResourceValue:[OCMArg setTo:mockURL] forKey:NSURLParentDirectoryURLKey error:nil]).andReturn(YES);
+    
+    // Test
+    NSSet<NSBundle *> *bundles = [NSBundle scannableBundles];
+
+    // Stop mocking class methods.
+    [mockBundle stopMocking];
+
+    XCTAssertEqual(1u, bundles.count);
+    XCTAssertEqual(mockBundle, [bundles anyObject]);
 
 }
 

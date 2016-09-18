@@ -63,8 +63,7 @@
     AcIgnoreSelectorWarnings(
                              SEL selector = @selector(initWithString:andInt:);
                              )
-    [_context objectFactory:_topThingFactory
-             initializer:selector, AcString(@"abc"), AcInt(5), nil];
+    [_context objectFactory:_topThingFactory initializer:selector, AcString(@"abc"), AcInt(5), nil];
     [_context start];
     
     XCTAssertTrue(_topThingFactory.isReady);
@@ -79,7 +78,9 @@
     AcIgnoreSelectorWarnings(
                              SEL selector = @selector(initWithNestedThings:);
                              )
-    ALCMethodArgumentDependency *arg = [ALCMethodArgumentDependency argumentWithClass:[NSArray class] criteria:AcClass(NestedThing), nil];
+    ALCType *type = [ALCType typeWithClass:[NSArray class]];
+    id<ALCValueSource> source = [ALCModelValueSource valueSourceWithCriteria:AcClass(NestedThing)];
+    ALCMethodArgumentDependency *arg = [ALCMethodArgumentDependency dependencyWithType:type valueSource:source];
     [_context objectFactory:_topThingFactory initializer:selector, arg, nil];
     [_context start];
     

@@ -60,7 +60,8 @@
     OCMStub(ClassMethod([_appMock sharedApplication])).andReturn(_appMock);
     OCMStub([(UIApplication *)_appMock delegate]).andReturn(delegate);
     
-    OCMStub([mockFactory objectClass]).andReturn(_delegateClass);
+    ALCType *type = [ALCType typeWithClass:_delegateClass];
+    OCMStub([(id<ALCObjectFactory>)mockFactory type]).andReturn(type);
     
     OCMExpect([(id<ALCObjectFactory>) mockFactory setObject:delegate]);
     
@@ -81,7 +82,8 @@
     // Mock out the shared application.
     OCMStub(ClassMethod([_appMock sharedApplication])).andReturn(nil);
     
-    OCMStub([mockFactory objectClass]).andReturn(_delegateClass);
+    ALCType *type = [ALCType typeWithClass:_delegateClass];
+    OCMStub([(id<ALCObjectFactory>)mockFactory type]).andReturn(type);
     
     [_aspect modelWillResolve:mockModel];
     [_aspect modelDidResolve:mockModel];

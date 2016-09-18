@@ -12,6 +12,8 @@
 #import <Alchemic/ALCAbstractDependency.h>
 
 @protocol ALCInjector;
+@protocol ALCValueSource;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,32 +24,32 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCVariableDependency : ALCAbstractDependency
 
+@property (nonatomic, assign, readonly, getter = isTransient) BOOL transient;
+
 /// The name of the variable that will be injected.
 @property (nonatomic, strong, readonly) NSString *name;
-
-/// if set, the variable is regarded as transient and will be re-injected every time the injector detects a value change.
-@property (nonatomic, assign, readonly) BOOL transient;
 
 /**
  Unavailable initiailizer.
  @param injector -
  */
--(instancetype)initWithInjector:(id<ALCDependency>)injector NS_UNAVAILABLE;
+-(instancetype) initWithType:(ALCType *) type
+                 valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
 
 /**
- Factory method for creating instances of ALCVariableDependency. 
- 
+ Factory method for creating instances of ALCVariableDependency.
+
  This is the only way these instances can be created.
- 
- @param injector An ALCInjector that can be used to do the injection.
+
  @param ivar      The variable to inject.
  @param name      The originally requested variable name. Used for logging and messages.
- 
+
  @return An instance of ALCVariableDependency.
  */
-+(instancetype) variableDependencyWithInjector:(id<ALCInjector>) injector
-                                      intoIvar:(Ivar) ivar
-                                          name:(NSString *) name;
++(instancetype) variableDependencyWithType:(ALCType *) type
+                               valueSource:(id<ALCValueSource>) valueSource
+                                  intoIvar:(Ivar) ivar
+                                  withName:(NSString *) name;
 
 -(void) configureWithOptions:(NSArray *) options;
 

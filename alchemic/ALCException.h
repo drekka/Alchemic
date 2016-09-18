@@ -20,7 +20,6 @@
 
 declareException(Resolving)
 declareException(Injection)
-declareException(MappingValue)
 declareException(TooManyResults)
 declareException(IllegalArgument)
 declareException(ReferenceObjectNotSet)

@@ -19,7 +19,8 @@
 }
 
 -(void)setUp {
-    _factory = [[ALCClassObjectFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    _factory = [[ALCClassObjectFactory alloc] initWithType:type];
 }
 
 #pragma mark - Factories

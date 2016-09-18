@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAspectClassProcessor.h"
+#import <Alchemic/ALCAspectClassProcessor.h>
 #import <Alchemic/ALCResolveAspect.h>
 #import <Alchemic/ALCContext.h>
 

@@ -2,15 +2,15 @@
 @import StoryTeller;
 @import UIKit;
 
-#import "Alchemic.h"
-#import "ALCContextImpl.h"
-#import "ALCRuntime.h"
+#import <Alchemic/Alchemic.h>
+#import <Alchemic/ALCContextImpl.h>
+#import <Alchemic/ALCRuntime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation Alchemic
 
-static __strong id<ALCContext> __mainContext;
+static __nullable __strong id<ALCContext> __mainContext;
 
 +(id<ALCContext>) mainContext {
     return __mainContext;
@@ -27,6 +27,10 @@ static __strong id<ALCContext> __mainContext;
 
 +(void) initContext {
     __mainContext = [[ALCContextImpl alloc] init];
+}
+
++(void) dropContext {
+    __mainContext = nil;
 }
 
 +(void) load {

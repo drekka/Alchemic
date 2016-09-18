@@ -15,6 +15,8 @@
 @protocol ALCModel;
 @protocol ALCResolvable;
 @class ALCModelSearchCriteria;
+@class ALCType;
+@protocol ALCValueSource;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,29 +25,20 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface NSArray (Alchemic)
 
-/// @name Analysing array contents
+#pragma mark - Extracting arguments
 
-/**
-Scans a list of seach criteria or constants to define an injection.
+-(NSArray<id<ALCDependency>> *) methodArgumentsWithExpectedTypes:(NSArray<ALCType *> *) types
+                                                 unknownArgument:(void (^)(id argument)) otherArgumentHandler;
 
-@param injectionClass The class of the target injection. Used to provide default search criteria when there is none in the list.
-@param allowConstants If YES, allows constants to be defined for the injection. If this block is NULL or returns a nil, then an exception is thrown.
-@param unknownArgumentHandler A block which is called if an unknown type of argument is encountered. If it returns a YES then the argument was handled. Otherwise it should return NO which will trigger an exception.
-*/
--(id<ALCInjector>) injectorForClass:(Class) injectionClass
-                     allowConstants:(BOOL) allowConstants
-             unknownArgumentHandler:(nullable void (^)(id argument)) unknownArgumentHandler;
+-(nullable id<ALCValueSource>) valueSourceForType:(ALCType *) type
+                                 constantsAllowed:(BOOL) constantsAllowed
+                                            error:(NSError **) error
+                                  unknownArgument:(nullable void (^)(id argument)) otherArgumentHandler;
 
-/**
- Converts a list of arguments for methods into a set of dependencies, ready for use by a method factory.
- 
- @param unknownArgumentHandler A block that is called if the current argumet is unknown.
- 
- @return A list of ALCDependencies, one per argument.
- */
--(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithDefaultClass:(nullable Class) defaultClass
+                                                  unknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler;
 
--(ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass;
+#pragma mark - Resolving
 
 /// @name Resolving
 

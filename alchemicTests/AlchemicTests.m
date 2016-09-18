@@ -13,6 +13,7 @@
 
 @interface Alchemic (_hack)
 +(void) initContext;
++(void) dropContext;
 @end
 
 @interface AlchemicTests : XCTestCase
@@ -21,23 +22,22 @@
 
 @implementation AlchemicTests
 
+-(void) tearDown {
+    [Alchemic dropContext];
+}
+
 -(void) testInitializeCallsInitContext {
 
     id mockProcessInfo = OCMClassMock([NSProcessInfo class]);
     OCMStub(ClassMethod([mockProcessInfo processInfo])).andReturn(mockProcessInfo);
     OCMStub([(NSProcessInfo *)mockProcessInfo arguments]).andReturn(@[]);
 
-    id mockAlchemic = OCMClassMock([Alchemic class]);
-    OCMExpect(ClassMethod([mockAlchemic initContext]));
-
     [Alchemic initialize];
 
     [mockProcessInfo stopMocking];
-    [mockAlchemic stopMocking];
+
+    XCTAssertNotNil([Alchemic mainContext]);
 }
-
-
-
 
 
 @end

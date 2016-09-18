@@ -6,7 +6,6 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCMethodArgumentDependency.h>
@@ -15,6 +14,8 @@
 #import <Alchemic/ALCContext.h>
 #import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCUserDefaultsAspect.h>
+#import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCDefs.h>
 
 #pragma mark - registration
 
@@ -126,7 +127,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
  @param critieria The argument criteria or constant. If search criteria are being used to location model objects, then multiple can be specified.
  @param ...       further criteria.
  */
-#define AcArg(argClass, firstCritieria, ...) [ALCMethodArgumentDependency argumentWithClass:[argClass class] criteria:firstCritieria, ## __VA_ARGS__, nil]
+#define AcArg(argClass, firstCritieria, ...) [ALCMethodArgumentDependency methodArgumentWithType:[ALCType typeWithClass:[argClass class]] criteria:firstCritieria, ## __VA_ARGS__, nil]
 
 #pragma mark - Accessing the model
 

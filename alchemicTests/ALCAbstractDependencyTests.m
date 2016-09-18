@@ -17,22 +17,17 @@
 
 @implementation ALCAbstractDependencyTests {
     ALCAbstractDependency *_dep;
-    id<ALCInjector> _mockInjector;
+    id _mockValueSource;
 }
 
 -(void)setUp {
-    _mockInjector = OCMProtocolMock(@protocol(ALCInjector));
-    _dep = [[ALCAbstractDependency alloc] initWithInjector:_mockInjector];
+    _mockValueSource = OCMProtocolMock(@protocol(ALCValueSource));
+    _dep = [[ALCAbstractDependency alloc] initWithType:[ALCType typeWithClass:[NSString class]] valueSource:_mockValueSource];
 }
 
 -(void) testReady {
-    OCMStub([_mockInjector isReady]).andReturn(YES);
+    OCMStub([_mockValueSource isReady]).andReturn(YES);
     XCTAssertTrue(_dep.isReady);
-}
-
--(void) testObjectClass {
-    OCMStub([_mockInjector objectClass]).andReturn([NSObject class]);
-    XCTAssertEqual([NSObject class], _dep.objectClass);
 }
 
 -(void) testResolveWithStackModel {
@@ -40,7 +35,7 @@
     NSMutableArray *stack = [[NSMutableArray alloc] init];
     id mockModel = OCMProtocolMock(@protocol(ALCModel));
 
-    OCMExpect([_mockInjector resolveWithStack:stack model:mockModel]);
+    OCMExpect([_mockValueSource resolveWithStack:stack model:mockModel]);
 
     id partialAbstractDependency = OCMPartialMock(_dep);
     OCMStub([partialAbstractDependency resolvingDescription]).andReturn(@"abc");
@@ -50,7 +45,7 @@
 
 -(void) testReferencesobjectFactory {
     id mockFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
-    OCMStub([_mockInjector referencesObjectFactory:mockFactory]).andReturn(YES);
+    OCMStub([_mockValueSource referencesObjectFactory:mockFactory]).andReturn(YES);
     XCTAssertTrue([_dep referencesObjectFactory:mockFactory]);
 }
 

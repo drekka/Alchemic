@@ -8,12 +8,11 @@
 
 @import StoryTeller;
 
-#import "ALCInstantiation.h"
-#import "AlchemicAware.h"
-#import "ALCDefs.h"
-#import "ALCTypeDefs.h"
-#import "NSObject+Alchemic.h"
-#import "ALCRuntime.h"
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/AlchemicAware.h>
+#import <Alchemic/ALCDefs.h>
+#import <Alchemic/ALCTypeDefs.h>
+#import <Alchemic/ALCRuntime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,10 +33,10 @@ NS_ASSUME_NONNULL_BEGIN
         [ALCRuntime executeBlock:self->_completion withObject:object];
         
         // Now tell everyone the object has been instantiated.
-        STLog(self, @"Posting instantiation notification for %@", self);
+        STLog(self, @"Posting instantiation notification for a %@", NSStringFromClass([self.object class]));
         [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
                                                             object:self
-                                                          userInfo:@{AlchemicDidCreateObjectUserInfoObject: self}];
+                                                          userInfo:@{AlchemicDidCreateObjectUserInfoObject: object}];
     }
                   withObject:_object];
     

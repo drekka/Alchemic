@@ -6,49 +6,50 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCMethodArgumentDependency.h"
+@import StoryTeller;
 
-#import "ALCInternalMacros.h"
-#import "ALCStringMacros.h"
-#import "NSArray+Alchemic.h"
-#import "ALCInjector.h"
+#import <Alchemic/ALCMethodArgumentDependency.h>
+
+#import <Alchemic/ALCType.h>
+#import <Alchemic/ALCValueSource.h>
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/ALCValue+Injection.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCMethodArgumentDependency
 
-+(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... {
-    alc_loadVarArgsIntoArray(firstCriteria, criteriaDefs);
-    return [[ALCMethodArgumentDependency alloc] initWithArgumentClass:argumentClass criteria:criteriaDefs];
-}
++(instancetype) methodArgumentWithType:(ALCType *) type criteria:firstCritieria, ... {
 
--(instancetype) initWithArgumentClass:(Class) aClass criteria:(NSArray *) criteria {
-    id<ALCInjector> injector = [criteria injectorForClass:aClass allowConstants:YES unknownArgumentHandler:NULL];
-    self = [super initWithInjector:injector];
-    if (self) {
-    }
-    return self;
-}
+    alc_loadVarArgsIntoArray(firstCritieria, criteria);
 
--(instancetype) initWithInjector:(id<ALCInjector>) injector {
-    methodReturningObjectNotImplemented;
+    NSError *error;
+    id<ALCValueSource> source = [criteria valueSourceForType:type
+                                            constantsAllowed:YES
+                                                       error:&error
+                                             unknownArgument:^(id argument) {
+                                                 throwException(AlchemicIllegalArgumentException, @"Unexpected argument %@", argument);
+                                             }];
+    return [[ALCMethodArgumentDependency alloc] initWithType:type valueSource:source];
 }
 
 -(NSString *) stackName {
-    return str(@"arg %i", self.index);
+    return str(@"arg %lu", _index);
 }
 
--(ALCSimpleBlock) injectObject:(id) object {
-    NSError *error;
-    if (![self.injector setInvocation:object argumentIndex:self.index error:&error]) {
-        throwException(Injection, @"Error injecting argument %i: %@", self.index, error.localizedDescription);
+-(void) injectObject:(id) object {
+    ALCValue *value = self.valueSource.value;
+    if (value) {
+        ALCInvocationInjectorBlock injector = [value invocationInjectorForType:self.type.type];
+        injector(object, (NSInteger) _index);
+        return;
     }
-    
-    return NULL;
 }
 
 -(NSString *)resolvingDescription {
-    return str(@"Argument %i", self.index);
+    return str(@"Argument %lu", _index);
 }
 
 @end

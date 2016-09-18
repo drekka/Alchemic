@@ -33,9 +33,7 @@
     AcIgnoreSelectorWarnings(
                              SEL selector = @selector(nestedThingFactoryMethod);
                              )
-    [_context objectFactory:_topThingFactory
-      registerFactoryMethod:selector
-                 returnType:[NestedThing class], nil];
+    [_context objectFactory:_topThingFactory registerFactoryMethod:selector returnType:[NestedThing class], nil];
     [_context start];
     
     [self validateInstanceWithString:@"abc" int:5];

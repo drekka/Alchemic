@@ -23,11 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Builds a search criteria which finds factories which return instances of the specific class.
  
- @param clazz The class to search for.
+ @param aClass The class to search for.
  
  @return An instance of ALCModelSearchCriteria.
  */
-+(ALCModelSearchCriteria *) searchCriteriaForClass:(Class) clazz;
++(ALCModelSearchCriteria *) searchCriteriaForClass:(Class) aClass;
 
 /**
  Builds a search criteria which finds factories which return instances which conform to the specific protocol.

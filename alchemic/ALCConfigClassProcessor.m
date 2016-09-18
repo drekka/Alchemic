@@ -8,8 +8,8 @@
 
 @import StoryTeller;
 
-#import "ALCConfigClassProcessor.h"
-#import "AlchemicConfig.h"
+#import <Alchemic/ALCConfigClassProcessor.h>
+#import <Alchemic/AlchemicConfig.h>
 
 @implementation ALCConfigClassProcessor
 

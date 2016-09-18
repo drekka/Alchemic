@@ -6,11 +6,10 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCObjectFactoryTypeReference.h"
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCStringMacros.h"
-#import "ALCException.h"
+#import <Alchemic/ALCObjectFactoryTypeReference.h>
+
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCException.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable id) object {
     if (!self.isReady) {
-        throwException(ReferenceObjectNotSet, @"%@ is a reference factory which has not had a value set.", self);
+        throwException(AlchemicReferenceObjectNotSetException, @"%@ is a reference factory which has not had a value set.", self);
     }
     return super.object;
 }

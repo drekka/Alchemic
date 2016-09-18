@@ -17,10 +17,6 @@ static int counter;
 
 AcRegister(AcTemplate)
 
--(void) dealloc {
-    NSLog(@"Deallocing");
-}
-
 -(instancetype) init {
     self = [super init];
     if (self) {

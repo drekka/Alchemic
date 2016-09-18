@@ -11,7 +11,7 @@
 #import <Alchemic/ALCInstantiator.h>
 
 @class ALCInstantiation;
-@protocol ALCContext;
+@protocol ALCModel;
 
 NS_ASSUME_NONNULL_BEGIN
 

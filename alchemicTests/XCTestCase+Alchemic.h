@@ -8,10 +8,15 @@
 
 @import XCTest;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface XCTestCase (Alchemic)
 
--(id) getVariable:(NSString *) variable fromObject:(id) obj;
+-(nullable id) getVariable:(NSString *) variable fromObject:(id) obj;
 
--(void) setVariable:(NSString *) variable inObject:(id) obj value:(id) value;
+-(void) setVariable:(NSString *) variable inObject:(id) obj value:(nullable id) value;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

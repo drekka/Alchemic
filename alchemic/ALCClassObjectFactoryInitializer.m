@@ -8,16 +8,15 @@
 
 @import StoryTeller;
 
-#import "ALCClassObjectFactoryInitializer.h"
+#import <Alchemic/ALCClassObjectFactoryInitializer.h>
 
-#import "ALCClassObjectFactory.h"
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCDependency.h"
-#import "NSObject+Alchemic.h"
-#import "ALCInstantiation.h"
-#import "ALCRuntime.h"
-#import "NSArray+Alchemic.h"
+#import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCType.h>
+#import <Alchemic/NSArray+Alchemic.h>
 
 @implementation ALCClassObjectFactoryInitializer {
     NSArray<id<ALCDependency>> *_arguments;
@@ -25,7 +24,7 @@
     BOOL _checkingReadyStatus;
 }
 
-@synthesize objectClass = _objectClass;
+@synthesize type = _type;
 
 -(instancetype) init {
     methodReturningObjectNotImplemented;
@@ -36,17 +35,17 @@
                                  args:(nullable NSArray<id<ALCDependency>> *) arguments {
     self = [super init];
     if (self) {
-        [ALCRuntime validateClass:objectFactory.objectClass selector:initializer arguments:arguments];
         objectFactory.initializer = self;
-        _objectClass = objectFactory.objectClass;
+        _type = objectFactory.type;
         _initializer = initializer;
         _arguments = arguments.count == 0 ? nil : arguments;
+        [ALCRuntime validateClass:_type.objcClass selector:initializer numberOfArguments:arguments.count];
     }
     return self;
 }
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {
-    STLog(self.objectClass, @"Resolving initializer %@", [self defaultModelName]);
+    STLog(_type, @"Resolving initializer %@", [self defaultModelName]);
     AcWeakSelf;
     [self resolveWithStack:resolvingStack
               resolvedFlag:&_resolved
@@ -57,8 +56,8 @@
 }
 
 -(id) createObject {
-    STLog(self.objectClass, @"Instantiating a %@ using %@", NSStringFromClass(self.objectClass), [self defaultModelName]);
-    id obj = [self.objectClass alloc];
+    STLog(_type, @"Instantiating a %@ using %@", NSStringFromClass(_type.objcClass), [self defaultModelName]);
+    id obj = [_type.objcClass alloc];
     return [obj invokeSelector:_initializer arguments:_arguments];
 }
 
@@ -67,7 +66,7 @@
 }
 
 -(NSString *) defaultModelName {
-    return [ALCRuntime forClass: self.objectClass selectorDescription:_initializer];
+    return [ALCRuntime forClass: _type.objcClass selectorDescription:_initializer];
 }
 
 -(NSString *) description {

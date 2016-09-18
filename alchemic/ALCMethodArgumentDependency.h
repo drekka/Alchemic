@@ -9,40 +9,19 @@
 @import Foundation;
 
 #import <Alchemic/ALCAbstractDependency.h>
-#import <Alchemic/ALCMethodArgumentDependencyInternal.h>
 
-@protocol ALCDependency;
-@protocol ALCModel;
-@class ALCMethodArgumentDependency;
+@class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Defines an argument for a method. 
+ Defines an argument for a method.
  */
-@interface ALCMethodArgumentDependency : ALCAbstractDependency <ALCMethodArgumentDependencyInternal>
+@interface ALCMethodArgumentDependency : ALCAbstractDependency
 
-/**
- The index of the argument for injecting into the executing NSInvocation.
- */
-@property (nonatomic, assign) int index;
+@property (nonatomic, assign) NSUInteger index;
 
-/**
- Unused initializer.
- @param injector -
- */
--(instancetype) initWithInjector:(id<ALCInjector>) injector NS_UNAVAILABLE;
-
-/**
- Factory method for creating instances of ALCMethodArgumentDependency.
- 
- @param argumentClass The class of the argument.
- @param firstCriteria A var arg list of criteria that define the value for the argument.
- @param ... further criteria.
- 
- @return An instance of this class.
- */
-+(instancetype) argumentWithClass:(Class) argumentClass criteria:(id) firstCriteria, ... NS_REQUIRES_NIL_TERMINATION;
++(instancetype) methodArgumentWithType:(ALCType *) type criteria:firstCritieria, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end
 

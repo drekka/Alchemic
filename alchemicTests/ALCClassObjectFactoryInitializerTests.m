@@ -33,7 +33,8 @@
 
 -(void)setUp {
     id mockObjectFactory = OCMClassMock([ALCClassObjectFactory class]);
-    OCMStub([mockObjectFactory objectClass]).andReturn([ALCClassObjectFactoryInitializerTests class]);
+    ALCType *type = [ALCType typeWithClass:[ALCClassObjectFactoryInitializerTests class]];
+    OCMStub([(id<ALCObjectFactory>) mockObjectFactory type]).andReturn(type);
     OCMExpect([mockObjectFactory setInitializer:[OCMArg checkWithBlock:^BOOL(id obj) {
         return [obj isKindOfClass:[ALCClassObjectFactoryInitializer class]];
     }]]);
@@ -47,7 +48,7 @@
 
 -(void) testInitWithObjectInitializerArgs {
     [self setUpWithInitializer:@selector(init) args:nil];
-    XCTAssertEqual([ALCClassObjectFactoryInitializerTests class], _initializer.objectClass);
+    XCTAssertEqual([ALCClassObjectFactoryInitializerTests class], _initializer.type.objcClass);
     XCTAssertEqual(@selector(init), _initializer.initializer);
 }
 
@@ -120,7 +121,8 @@
 
 -(void) setUpWithInitializer:(SEL) initializer args:(NSArray *) args {
     id mockObjectFactory = OCMClassMock([ALCClassObjectFactory class]);
-    OCMStub([mockObjectFactory objectClass]).andReturn([ALCClassObjectFactoryInitializerTests class]);
+    ALCType *type = [ALCType typeWithClass:[ALCClassObjectFactoryInitializerTests class]];
+    OCMStub([(id<ALCObjectFactory>) mockObjectFactory type]).andReturn(type);
     OCMExpect([mockObjectFactory setInitializer:[OCMArg checkWithBlock:^BOOL(id obj) {
         return [obj isKindOfClass:[ALCClassObjectFactoryInitializer class]];
     }]]);

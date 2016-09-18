@@ -8,8 +8,6 @@
 
 @import Foundation;
 
-@protocol ALCContext;
-
 /**
  Notification psoted after an object's completion is executed.
  */

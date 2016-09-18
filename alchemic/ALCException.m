@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCException.h"
+#import <Alchemic/ALCException.h>
 
 @implementation ALCException
 @end
@@ -17,7 +17,6 @@
 
 declareExceptionImpl(Resolving)
 declareExceptionImpl(Injection)
-declareExceptionImpl(MappingValue)
 declareExceptionImpl(TooManyResults)
 declareExceptionImpl(IllegalArgument)
 declareExceptionImpl(ReferenceObjectNotSet)

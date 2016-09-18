@@ -9,10 +9,8 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCTypeDefs.h>
 #import <Alchemic/ALCResolvable.h>
 
-@protocol ALCModel;
 @protocol ALCObjectFactory;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -31,10 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
  Single access point for triggering injects.
  
  @param object The object to inject. Usually a object or NSInvocation.
- 
- @return A block which performs any required completions as a result of the injection.
  */
--(ALCSimpleBlock) injectObject:(id) object;
+-(void) injectObject:(id) object;
 
 /**
  Returns YES if the passed object factory is referenced by this injector.

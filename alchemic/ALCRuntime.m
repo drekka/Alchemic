@@ -7,19 +7,18 @@
 //
 @import StoryTeller;
 
-#import "ALCClassProcessor.h"
-#import "ALCConfigClassProcessor.h"
-#import "ALCContext.h"
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCModelClassProcessor.h"
-#import "ALCResourceLocatorClassProcessor.h"
-#import "ALCAspectClassProcessor.h"
-#import "ALCRuntime.h"
-#import "ALCTypeData.h"
-#import "NSSet+Alchemic.h"
-#import "NSBundle+Alchemic.h"
-#import "ALCException.h"
+#import <Alchemic/ALCClassProcessor.h>
+#import <Alchemic/ALCConfigClassProcessor.h>
+#import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCModelClassProcessor.h>
+#import <Alchemic/ALCAspectClassProcessor.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCType.h>
+#import <Alchemic/NSBundle+Alchemic.h>
+#import <Alchemic/ALCException.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,14 +39,14 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Querying things
 
 +(Ivar) forClass:(Class) aClass variableForInjectionPoint:(NSString *) inj {
-
+    
     // First attempt to get an instance variable with the passed name
     const char * charName = [inj UTF8String];
     Ivar instanceVar = class_getInstanceVariable(aClass, charName);
     if (instanceVar) {
         return instanceVar;
     }
-
+    
     // Not found, so try for a property based on the passed name.
     // The property's internal variable may have a completely different variable name so we have to dig that out and return it.
     objc_property_t prop = class_getProperty(aClass, charName);
@@ -58,48 +57,33 @@ static NSCharacterSet *__typeEncodingDelimiters;
         free((void *) propVarName);
         return propertyVar;
     }
-
-    throwException(InjectionNotFound, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
+    
+    throwException(AlchemicInjectionNotFoundException, @"Cannot find variable/property '%@' in class %s", inj, class_getName(aClass));
 }
 
-+(ALCTypeData *) typeDataForIVar:(Ivar) iVar {
-    return [self typeDataForEncoding:ivar_getTypeEncoding(iVar)];
-}
-
-+(ALCTypeData *) typeDataForEncoding:(const char *) encoding {
-
-    // Get the type.
-    ALCTypeData *typeData = [[ALCTypeData alloc] init];
-    if (AcStrHasPrefix(encoding, "@")) {
-
-        // Start with a result that indicates an Id. We map Ids as NSObjects.
-        typeData.objcClass = [NSObject class];
-
-        // Object type.
-
-        NSArray<NSString *> *defs = [[NSString stringWithUTF8String:encoding] componentsSeparatedByCharactersInSet:__typeEncodingDelimiters];
-
-        // If there is no more than 2 in the array then the dependency is an id.
-        // Position 3 will be a class name, positions beyond that will be protocols.
-        for (NSUInteger i = 2; i < [defs count]; i ++) {
-            if ([defs[i] length] > 0) {
-                if (i == 2) {
-                    // Update the class.
-                    typeData.objcClass = objc_lookUpClass(defs[2].UTF8String);
-                } else {
-                    if (!typeData.objcProtocols) {
-                        typeData.objcProtocols = [[NSMutableArray alloc] init];
-                    }
-                    [(NSMutableArray *)typeData.objcProtocols addObject:objc_getProtocol(defs[i].UTF8String)];
-                }
-            }
++(NSArray<ALCType *> *) forClass:(Class) aClass methodArgumentTypes:(SEL) methodSelector {
+    
+    Method method = class_getInstanceMethod(aClass, methodSelector);
+    if (!method) {
+        method = class_getClassMethod(aClass, methodSelector);
+        if (!method) {
+            throwException(AlchemicSelectorNotFoundException, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
         }
-        return typeData;
     }
-
-    // Not an object type.
-    typeData.scalarType = encoding;
-    return typeData;
+    
+    if (method) {
+        unsigned int numberArguments = method_getNumberOfArguments(method);
+        NSMutableArray *argumentTypes = [[NSMutableArray alloc] initWithCapacity:numberArguments];
+        for (unsigned int i = 2; i < numberArguments; i++) {
+            char *argumenType = method_copyArgumentType(method, i);
+            ALCType *type = [ALCType typeWithEncoding:argumenType];
+            [argumentTypes addObject:type];
+            free(argumenType);
+        }
+        return argumentTypes;
+    }
+    
+    throwException(AlchemicSelectorNotFoundException, @"Method not found %@", [self forClass:aClass selectorDescription:methodSelector]);
 }
 
 +(NSArray<NSString*> *) writeablePropertiesForClass:(Class) aClass {
@@ -107,7 +91,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     objc_property_t *props = class_copyPropertyList(aClass, &count);
     NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:count];
     for(unsigned int i = 0;i < count;i++) {
-        
+
         // Find out if the property is a readonly. We only want writables.
         objc_property_t prop = props[i];
         char *readonlyChar = property_copyAttributeValue(prop, "R");
@@ -116,7 +100,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
         if (readonly) {
             continue;
         }
-        
+
         NSString *propName = [NSString stringWithUTF8String:property_getName(prop)];
         [results addObject:propName];
     }
@@ -124,68 +108,24 @@ static NSCharacterSet *__typeEncodingDelimiters;
     return results;
 }
 
-#pragma mark - Setting variables
-
-+(nullable id) mapValue:(nullable id) value
-              allowNils:(BOOL) allowNil
-                   type:(Class) type
-                  error:(NSError * _Nullable *) error {
-
-    // If the passed value is nil or an empty array.
-    if (!value) {
-        if (!allowNil) {
-            setError(@"Nil value encountered where a value was expected")
-        }
-        return nil;
-    }
-
-    // If the target value is an array wrap up the value and return.
-    if ([type isSubclassOfClass:[NSArray class]]) {
-        return [value isKindOfClass:[NSArray class]] ? value : @[value];
-    }
-
-    // Target is not an array
-
-    // Throw an error if the source value is an array and we have too many or too few results.
-    id finalValue = value;
-    if ([finalValue isKindOfClass:[NSArray class]]) {
-        NSArray *values = (NSArray *) finalValue;
-        if (values.count == 0 && allowNil) {
-            return nil;
-        } else if (values.count != 1) {
-            setError(@"Expected 1 value, got %lu", (unsigned long) values.count);
-            return nil;
-        }
-        finalValue = values[0];
-    }
-
-    if ([finalValue isKindOfClass:type]) {
-        return finalValue;
-    }
-
-    setError(@"Value of type %@ cannot be cast to a %@", NSStringFromClass([finalValue class]), NSStringFromClass(type));
-    return nil;
-}
-
 #pragma mark - Validating
 
-+(void) validateClass:(Class) aClass selector:(SEL)selector arguments:(nullable NSArray<id<ALCDependency>> *) arguments {
-
++(void) validateClass:(Class) aClass selector:(SEL)selector numberOfArguments:(NSUInteger) nbrArguments {
+    
     // Get an instance method.
     NSMethodSignature *sig = [aClass instanceMethodSignatureForSelector:selector];
     if (!sig) {
-        // Or try for a class method.
         sig = [aClass methodSignatureForSelector:selector];
     }
-
+    
     // Not found.
     if (!sig) {
-        throwException(SelectorNotFound, @"Failed to find selector %@", [self forClass:aClass selectorDescription:selector]);
+        throwException(AlchemicSelectorNotFoundException, @"Failed to find selector %@", [self forClass:aClass selectorDescription:selector]);
     }
-
+    
     // Incorrect number of arguments. Allow for runtime in arguments.
-    if (sig.numberOfArguments - 2 != (arguments ? arguments.count : 0)) {
-        throwException(IncorrectNumberOfArguments, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector], (unsigned long) sig.numberOfArguments, (unsigned long) arguments.count);
+    if (sig.numberOfArguments - 2 != nbrArguments) {
+        throwException(AlchemicIncorrectNumberOfArgumentsException, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector],  nbrArguments, (unsigned long) sig.numberOfArguments);
     }
 }
 
@@ -210,15 +150,14 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Scanning
 
 +(void) scanRuntimeWithContext:(id<ALCContext>) context {
-
+    
     // Get a list of all the scannable bundles.
     NSSet<NSBundle *> *appBundles = [NSBundle scannableBundles];
-
+    
     // Scan the bundles, checking each class in each one.
     NSArray<id<ALCClassProcessor>> *processors = @[
                                                    [[ALCConfigClassProcessor alloc] init],
                                                    [[ALCModelClassProcessor alloc] init],
-                                                   [[ALCResourceLocatorClassProcessor alloc] init],
                                                    [[ALCAspectClassProcessor alloc] init]
                                                    ];
     [appBundles enumerateObjectsUsingBlock:^(NSBundle *bundle, BOOL *stop) {

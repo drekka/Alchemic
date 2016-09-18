@@ -7,11 +7,12 @@
 //
 
 // :: Framework ::
-#import "ALCException.h"
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCModelSearchCriteria.h"
-#import "ALCObjectFactory.h"
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCModelSearchCriteria.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,11 +29,11 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 
 #pragma mark - Factory methods
 
-+(ALCModelSearchCriteria *) searchCriteriaForClass:(Class) clazz {
-    return [[ALCModelSearchCriteria alloc] initWithDesc:str(@"class %@", NSStringFromClass(clazz))
++(ALCModelSearchCriteria *) searchCriteriaForClass:(Class) aClass {
+    return [[ALCModelSearchCriteria alloc] initWithDesc:str(@"class %@", NSStringFromClass(aClass))
                                           acceptorBlock:^(NSString *objectFactoryName,
                                                           id<ALCObjectFactory> objectFactory) {
-                                              return [objectFactory.objectClass isSubclassOfClass:clazz];
+                                              return [objectFactory.type.objcClass isSubclassOfClass:aClass];
                                           }];
 }
 
@@ -40,7 +41,7 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
     return [[ALCModelSearchCriteria alloc] initWithDesc:str(@"protocol %@", NSStringFromProtocol(protocol))
                                           acceptorBlock:^(NSString *objectFactoryName,
                                                           id<ALCObjectFactory> objectFactory) {
-                                              return [objectFactory.objectClass conformsToProtocol:protocol];
+                                              return [objectFactory.type.objcClass conformsToProtocol:protocol];
                                           }];
 }
 
@@ -59,7 +60,7 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
 -(void) appendSearchCriteria:(ALCModelSearchCriteria *) criteria {
     
     if (_unique || criteria->_unique) {
-        throwException(IllegalArgument, @"Name criteria must be the only criteria.");
+        throwException(AlchemicIllegalArgumentException, @"Name criteria must be the only criteria.");
     }
     
     if (_nextModelSearchCriteria) {
@@ -69,7 +70,8 @@ typedef BOOL (^Criteria) (NSString *name, id<ALCObjectFactory> objectFactory);
     }
 }
 
--(instancetype) initWithDesc:(NSString *) desc acceptorBlock:(Criteria) criteriaBlock {
+-(instancetype) initWithDesc:(NSString *) desc
+               acceptorBlock:(Criteria) criteriaBlock {
     self = [super init];
     if (self) {
         _desc = desc;

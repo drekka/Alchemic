@@ -7,7 +7,7 @@
 //
 
 @import StoryTeller;
-#import "ALCAbstractValueStore.h"
+#import <Alchemic/ALCAbstractValueStore.h>
 
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCInternalMacros.h>

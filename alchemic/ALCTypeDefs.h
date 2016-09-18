@@ -6,6 +6,10 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import Foundation;
+
+#pragma mark - Common blocks
+
 /**
  Typedef for the simplest form of block. no args and no return.
  */
@@ -18,3 +22,4 @@ typedef void (^ALCSimpleBlock) (void);
  */
 #define ALCBlockWithObjectArgs id object
 typedef void (^ALCBlockWithObject) (ALCBlockWithObjectArgs);
+

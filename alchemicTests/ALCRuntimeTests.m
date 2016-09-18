@@ -53,64 +53,6 @@
     XCTAssertThrowsSpecific([ALCRuntime forClass:[self class] variableForInjectionPoint:@"_X_"], AlchemicInjectionNotFoundException);
 }
 
-#pragma mark - TypeDataForIVar:
-
--(void) testTypeDataForIVarString {
-    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aStringProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-    XCTAssertEqual([NSString class], ivarData.objcClass);
-}
-
--(void) testTypeDataForIVarId {
-
-    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aIdProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
-    XCTAssertEqual([NSObject class], ivarData.objcClass);
-    XCTAssertNil(ivarData.objcProtocols);
-    XCTAssertEqual(NULL, ivarData.scalarType);
-}
-
--(void) testTypeDataForIVarProtocol {
-
-    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aProtocolProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
-    XCTAssertEqual([NSObject class], ivarData.objcClass);
-    XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSCopying)]);
-    XCTAssertEqual(NULL, ivarData.scalarType);
-}
-
--(void) testTypeDataForIVarClassNSStringProtocol {
-
-    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aClassProtocolProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
-    XCTAssertEqual([NSString class], ivarData.objcClass);
-    XCTAssertTrue([ivarData.objcProtocols containsObject:@protocol(NSFastEnumeration)]);
-    XCTAssertEqual(NULL, ivarData.scalarType);
-}
-
--(void) testTypeDataForIVarInt {
-
-    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"aIntProperty"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
-    XCTAssertNil(ivarData.objcClass);
-    XCTAssertNil(ivarData.objcProtocols);
-    XCTAssertEqual(0, strcmp("i", ivarData.scalarType));
-}
-
--(void) testTypeDataForIVarCGRect {
-
-    Ivar var = [ALCRuntime forClass:[self class] variableForInjectionPoint:@"_aRect"];
-    ALCTypeData *ivarData = [ALCRuntime typeDataForIVar:var];
-
-    XCTAssertNil(ivarData.objcClass);
-    XCTAssertNil(ivarData.objcProtocols);
-    XCTAssertEqual(0, strcmp("{CGRect=\"origin\"{CGPoint=\"x\"d\"y\"d}\"size\"{CGSize=\"width\"d\"height\"d}}", ivarData.scalarType));
-}
-
 #pragma mark - Porperty list
 
 -(void) testPropertiesForClass {
@@ -123,116 +65,35 @@
     XCTAssertTrue([props containsObject:@"aClassProtocolProperty"]);
 }
 
-#pragma mark - Mapping values
-
--(void) testMapValueToTypeObjectToArray {
-    NSError *error;
-    id result = [ALCRuntime mapValue:@"abc" allowNils:NO type:[NSArray class] error:&error];
-    XCTAssertTrue([result isKindOfClass:[NSArray class]]);
-    XCTAssertEqual(@"abc", result[0]);
-    XCTAssertNil(error);
-}
-
--(void) testMapValueToTypeArrayToArray {
-    NSError *error;
-    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSArray class] error:&error];
-    XCTAssertTrue([result isKindOfClass:[NSArray class]]);
-    XCTAssertEqual(@"abc", result[0]);
-    XCTAssertNil(error);
-}
-
--(void) testMapValueToTypeArrayOfOneToObject {
-    NSError *error;
-    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSString class] error:&error];
-    XCTAssertEqual(@"abc", result);
-    XCTAssertNil(error);
-}
-
--(void) testMapValueToTypeArrayOfManyToObjectThrows {
-    NSError *error;
-    id result = [ALCRuntime mapValue:@[@"abc", @"def"] allowNils:NO type:[NSString class] error:&error];
-    XCTAssertNil(result);
-    XCTAssertEqualObjects(@"Expected 1 value, got 2", error.localizedDescription);
-}
-
--(void) testMapValueToTypeTypeMissMatch {
-    NSError *error;
-    id result = [ALCRuntime mapValue:@[@"abc"] allowNils:NO type:[NSNumber class] error:&error];
-    XCTAssertNil(result);
-    XCTAssertEqualObjects(@"Value of type __NSCFConstantString cannot be cast to a NSNumber", error.localizedDescription);
-}
-
--(void) testMapValueToTypeUpCast {
-    NSError *error;
-    id value = [ALCRuntime mapValue:[@"abc" mutableCopy] allowNils:NO type:[NSString class] error:&error];
-    XCTAssertEqualObjects(@"abc", value);
-    XCTAssertNil(error);
-}
-
--(void) testMapValueToTypeDownCastThrows {
-    NSError *error;
-    id result = [ALCRuntime mapValue:@{} allowNils:NO type:[NSMutableDictionary class] error:&error];
-    XCTAssertNil(result);
-    XCTAssertEqualObjects(@"Value of type __NSDictionary0 cannot be cast to a NSMutableDictionary", error.localizedDescription);
-}
-
-#pragma mark - Setting values
-
--(void) testSetInvocationArgIndexWithValueOfClass {
-    NSMethodSignature *sig = [self methodSignatureForSelector:@selector(methodWithString:andInt:)];
-    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
-    NSError *error;
-    [inv setArgIndex:0
-              ofType:[NSString class]
-           allowNils:NO
-               value:@"abc"
-               error:&error];
-    NSString *storedArg;
-    [inv getArgument:&storedArg atIndex:2];
-    XCTAssertEqualObjects(@"abc", storedArg);
-    XCTAssertNil(error);
-}
-
--(void) testSetObjectVariableWithValue {
-    Ivar ivar = class_getInstanceVariable([self class], "_privateVariable");
-    NSError *error;
-    [self setVariable:ivar ofType:[NSString class] allowNils:NO value:@"abc" error:&error];
-    XCTAssertEqualObjects(@"abc", _privateVariable);
-    XCTAssertNil(error);
-}
-
 #pragma mark - Validating
 
 -(void) testValidateClassSelectorArgumentsInheritedMethod {
-    [ALCRuntime validateClass:[self class] selector:@selector(copy) arguments:nil];
+    [ALCRuntime validateClass:[self class] selector:@selector(copy) numberOfArguments:0];
 }
 
 -(void) testValidateClassSelectorArgumentsInheritedProperty {
-    [ALCRuntime validateClass:[self class] selector:@selector(description) arguments:nil];
+    [ALCRuntime validateClass:[self class] selector:@selector(description) numberOfArguments:0];
 }
 
 -(void) testValidateClassSelectorArgumentsClassMethod {
-    [ALCRuntime validateClass:[self class] selector:@selector(classMethod) arguments:nil];
+    [ALCRuntime validateClass:[self class] selector:@selector(classMethod) numberOfArguments:0];
 }
 
 -(void) testValidateClassSelectorArgumentsInstanceMethod {
-    [ALCRuntime validateClass:[self class] selector:@selector(instanceMethod) arguments:nil];
+    [ALCRuntime validateClass:[self class] selector:@selector(instanceMethod) numberOfArguments:0];
 }
 
 -(void) testValidateClassSelectorArgumentsWithArgs {
-    id<ALCDependency> arg1 = AcArg(NSString, AcString(@"abc"));
-    id<ALCDependency> arg2 = AcArg(NSNumber, AcInt(5));
-    [ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) arguments:@[arg1, arg2]];
+    [ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) numberOfArguments:2];
 }
 
 -(void) testValidateClassSelectorArgumentsIncorrectNumberArguments {
-    id<ALCDependency> arg1 = AcArg(NSString, AcString(@"abc"));
-    XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) arguments:@[arg1]]), AlchemicIncorrectNumberOfArgumentsException, @"AlchemicIncorrectNumberOfArgumentsException");
+    XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(methodWithString:andInt:) numberOfArguments:1]), AlchemicIncorrectNumberOfArgumentsException, @"AlchemicIncorrectNumberOfArgumentsException");
 }
 
 -(void) testValidateClassSelectorArgumentsSelectorNotFound {
     AcIgnoreSelectorWarnings(
-                             XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(xxxx) arguments:nil]), AlchemicSelectorNotFoundException, @"AlchemicSelectorNotFoundException");
+                             XCTAssertThrowsSpecificNamed(([ALCRuntime validateClass:[self class] selector:@selector(xxxx) numberOfArguments:0]), AlchemicSelectorNotFoundException, @"AlchemicSelectorNotFoundException");
                              );
 }
 

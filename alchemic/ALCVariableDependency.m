@@ -6,22 +6,25 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCVariableDependency.h"
-#import "ALCInjector.h"
-#import "ALCStringMacros.h"
-#import "ALCFlagMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCException.h"
-#import "ALCRuntime.h"
+#import <Alchemic/ALCVariableDependency.h>
+
+#import <Alchemic/ALCFlagMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCValue+Injection.h>
+#import <Alchemic/ALCValueSource.h>
 
 @implementation ALCVariableDependency {
     Ivar _ivar;
+    BOOL _allowNil;
 }
 
--(instancetype) initWithInjector:(id<ALCInjector>) injector
-                        intoIvar:(Ivar) ivar
-                            name:(NSString *) name {
-    self = [super initWithInjector:injector];
+-(instancetype) initWithType:(ALCType *) type
+                 valueSource:(id<ALCValueSource>) valueSource
+                    intoIvar:(Ivar) ivar
+                    withName:(NSString *) name {
+    self = [super initWithType:type valueSource:valueSource];
     if (self) {
         _ivar = ivar;
         _name = name;
@@ -29,24 +32,28 @@
     return self;
 }
 
-+(instancetype) variableDependencyWithInjector:(id<ALCInjector>) injector
-                                      intoIvar:(Ivar) ivar
-                                          name:(NSString *) name {
-    return [[ALCVariableDependency alloc] initWithInjector:injector intoIvar:ivar name:name];
++(instancetype) variableDependencyWithType:(ALCType *) type
+                               valueSource:(id<ALCValueSource>) valueSource
+                                  intoIvar:(Ivar) ivar
+                                  withName:(NSString *) name {
+    return [[ALCVariableDependency alloc] initWithType:type
+                                           valueSource:valueSource
+                                              intoIvar:ivar
+                                              withName:name];
 }
 
 -(void) configureWithOptions:(NSArray *) options {
     for (id option in options) {
 
         if ([option isKindOfClass:[ALCIsNillable class]]) {
-            self.injector.allowNilValues = YES;
-        
+            _allowNil = YES;
+
         } else if ([option isKindOfClass:[ALCIsTransient class]]) {
             _transient = YES;
-            self.injector.allowNilValues = YES;
-        
+            _allowNil = YES;
+
         } else {
-           throwException(IllegalArgument, @"Unknown variable dependency option: %@", option);
+            throwException(AlchemicIllegalArgumentException, @"Unknown variable dependency option: %@", option);
         }
     }
 }
@@ -55,14 +62,13 @@
     return _name;
 }
 
--(ALCSimpleBlock)injectObject:(id)object {
-    NSError *error;
-    ALCSimpleBlock completionBlock = [self.injector setObject:object variable:_ivar error:&error];
-    if (!completionBlock && error) {
-        throwException(Injection, @"Error injecting %@: %@", [ALCRuntime forClass:[object class] variableDescription:_ivar], error.localizedDescription);
-        return nil;
+-(void) injectObject:(id)object {
+    ALCValue *value = self.valueSource.value;
+    if (value) {
+        ALCVariableInjectorBlock injector = [value variableInjectorForType:self.type.type];
+        injector(object, _ivar);
+        return;
     }
-    return completionBlock;
 }
 
 -(NSString *)resolvingDescription {

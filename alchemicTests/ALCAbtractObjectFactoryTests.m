@@ -48,7 +48,7 @@
 
 -(void)setUp {
     _mockModel = OCMProtocolMock(@protocol(ALCModel));
-    _factory = [[ALCAbstractObjectFactory alloc] initWithClass:[NSString class]];
+    _factory = [[ALCAbstractObjectFactory alloc] initWithType:[ALCType typeWithClass:[NSString class]]];
 }
 
 -(void) testFactoryType {
@@ -65,7 +65,7 @@
 }
 
 -(void) testInitWithClass {
-    XCTAssertEqual([NSString class], _factory.objectClass);
+    XCTAssertEqual([NSString class], _factory.type.objcClass);
     XCTAssertEqual(ALCFactoryTypeSingleton, _factory.factoryType);
 }
 
@@ -136,7 +136,8 @@
 #pragma mark - Creating things
 
 -(void) testInstantiationWhenNoObject {
-    DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    DummyFactory *df = [[DummyFactory alloc] initWithType:type];
     ALCInstantiation *inst = df.instantiation;
     XCTAssertEqualObjects(@"abc", inst.object);
     [inst complete];
@@ -144,7 +145,8 @@
 }
 
 -(void) testInstantiationWhenObjectPresent {
-    DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    DummyFactory *df = [[DummyFactory alloc] initWithType:type];
     [df setObject:@"abc"];
     ALCInstantiation *inst = df.instantiation;
     XCTAssertEqualObjects(@"abc", inst.object);
@@ -155,19 +157,21 @@
 #pragma mark - Storing values
 
 -(void) testSetObject {
-    DummyFactory *dummyFactory = [[DummyFactory alloc] initWithClass:[NSString class]];
-    [dummyFactory setObject:@"abc"];
-    XCTAssertEqualObjects(@"abc", dummyFactory.instantiation.object);
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    DummyFactory *df = [[DummyFactory alloc] initWithType:type];
+    [df setObject:@"abc"];
+    XCTAssertEqualObjects(@"abc", df.instantiation.object);
 }
 
 -(void) testSetObjectPostNotification {
 
-    DummyFactory *dummyFactory = [[DummyFactory alloc] initWithClass:[NSString class]];
-
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    DummyFactory *df = [[DummyFactory alloc] initWithType:type];
+    
     [self expectationForNotification:AlchemicDidStoreObject
-                              object:dummyFactory
+                              object:df
                              handler:nil];
-    [dummyFactory setObject:@"abc"];
+    [df setObject:@"abc"];
 
     [self waitForExpectationsWithTimeout:0.3 handler:nil];
 
@@ -180,26 +184,30 @@
 }
 
 -(void) testDescriptionWhenSet {
-    DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    DummyFactory *df = [[DummyFactory alloc] initWithType:type];
     [df setObject:@"abc"];
     XCTAssertEqualObjects(@"* Singleton", [df description]);
 }
 
 -(void) testDescriptionWhenReferenceNotSet {
-    DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    DummyFactory *df = [[DummyFactory alloc] initWithType:type];
     [df configureWithOptions:@[AcReference] model:_mockModel];
     XCTAssertEqualObjects(@"  Reference", [df description]);
 }
 
 -(void) testDescriptionWhenReferenceSet {
-    DummyFactory *df = [[DummyFactory alloc] initWithClass:[NSString class]];
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
+    DummyFactory *df = [[DummyFactory alloc] initWithType:type];
     [df configureWithOptions:@[AcReference] model:_mockModel];
     [df setObject:@"abc"];
     XCTAssertEqualObjects(@"* Reference", [df description]);
 }
 
 -(void) testDescriptionWhenUIApplicationDelegate {
-    DummyFactory *df = [[DummyFactory alloc] initWithClass:[DummyAppDelegate class]];
+    ALCType *type = [ALCType typeWithClass:[DummyAppDelegate class]];
+    DummyFactory *df = [[DummyFactory alloc] initWithType:type];
     XCTAssertEqualObjects(@"  Singleton (App delegate)", [df description]);
 }
 

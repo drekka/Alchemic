@@ -8,18 +8,19 @@
 
 @import StoryTeller;
 
-#import "NSObject+Alchemic.h"
+#import <Alchemic/NSObject+Alchemic.h>
 
-#import "ALCDependency.h"
-#import "ALCException.h"
-#import "ALCInstantiation.h"
-#import "ALCInstantiator.h"
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCMethodArgumentDependency.h"
-#import "ALCResolvable.h"
-#import "ALCRuntime.h"
-#import "NSArray+Alchemic.h"
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCInstantiation.h>
+#import <Alchemic/ALCInstantiator.h>
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCMethodArgumentDependency.h>
+#import <Alchemic/ALCResolvable.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -62,13 +63,13 @@ NS_ASSUME_NONNULL_BEGIN
                         [names addObject:stackResolvable.resolvingDescription];
                     }];
 
-                    throwException(Resolving, @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
+                    throwException(AlchemicResolvingException, @"Circular dependency detected: %@", [names componentsJoinedByString:@" -> "]);
                 }
             } while (i > stackIndex);
         }
 
         // We are enumerating dependencies then we have looped back through a property injection so return.
-        STLog(resolvableSelf.objectClass, @"%@ already resolved", NSStringFromClass(resolvableSelf.objectClass));
+        STLog(resolvableSelf.type, @"%@ already resolved", NSStringFromClass(resolvableSelf.type.objcClass));
         return;
     }
 
@@ -76,34 +77,6 @@ NS_ASSUME_NONNULL_BEGIN
     [resolvingStack addObject:resolvableSelf];
     block();
     [resolvingStack removeLastObject];
-}
-
--(BOOL) setVariable:(Ivar) variable
-             ofType:(Class) type
-          allowNils:(BOOL) allowNil
-              value:(nullable id) value
-              error:(NSError * _Nullable *) error {
-
-    STLog([self class], @"Variable %@ type: %@", [ALCRuntime forClass:[self class] variableDescription:variable], NSStringFromClass(type));
-
-    id finalValue = [ALCRuntime mapValue:value allowNils:allowNil type:type error:error];
-    if (!finalValue && *error) {
-        return NO;
-    }
-
-    STLog([self class], @"Injecting %@ with a %@", [ALCRuntime forClass:[self class] variableDescription:variable], [finalValue class]);
-
-    // Patch for Swift Ivars not being retained.
-    const char *encoding = ivar_getTypeEncoding(variable);
-    if (strlen(encoding) == 0) {
-        // Swift ivar? Currently returning no encoding.
-        // Fixing bug with missing retain when addressing Swift ivars which causes EXC BAD ACCESS
-        const void * ptr = CFBridgingRetain(value);
-        finalValue = CFBridgingRelease(ptr);
-    }
-
-    object_setIvar(self, variable, finalValue);
-    return YES;
 }
 
 #pragma mark - Internal
@@ -117,11 +90,11 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Error checks
     if (!sig) {
-        throwException(MethodNotFound, @"Method %@ not found", [ALCRuntime forClass:[self class] selectorDescription:selector]);
+        throwException(AlchemicMethodNotFoundException, @"Method %@ not found", [ALCRuntime forClass:[self class] selectorDescription:selector]);
     }
 
     if (strcmp(sig.methodReturnType, "@") != 0) {
-        throwException(IllegalArgument, @"Method %@ does not return an object", [ALCRuntime forClass:[self class] selectorDescription:selector]);
+        throwException(AlchemicIllegalArgumentException, @"Method %@ does not return an object", [ALCRuntime forClass:[self class] selectorDescription:selector]);
     }
 
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];

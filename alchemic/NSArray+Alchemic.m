@@ -6,16 +6,18 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "NSArray+Alchemic.h"
+#import <Alchemic/NSArray+Alchemic.h>
 
-#import "ALCDependency.h"
-#import "ALCModelSearchCriteria.h"
-#import "ALCConstant.h"
-#import "ALCModelObjectInjector.h"
-#import "ALCMethodArgumentDependency.h"
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCException.h"
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/ALCModelSearchCriteria.h>
+#import <Alchemic/ALCModelValueSource.h>
+#import <Alchemic/ALCMethodArgumentDependency.h>
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCType.h>
+#import <Alchemic/ALCValueSource.h>
+#import <Alchemic/ALCArrayValueSource.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,84 +25,99 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Argument scanning
 
--(NSArray<id<ALCDependency>> *) methodArgumentsWithUnknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
+-(NSArray<id<ALCDependency>> *) methodArgumentsWithExpectedTypes:(NSArray<ALCType *> *) types
+                                                 unknownArgument:(void (^)(id argument)) otherArgumentHandler {
     
-    NSMutableArray<id<ALCDependency>> *arguments = [[NSMutableArray alloc] initWithCapacity:self.count];
+    NSMutableArray<id<ALCDependency>> *arguments = [[NSMutableArray alloc] init];
     
-    [self enumerateObjectsUsingBlock:^(id nextArgument, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSUInteger nextIdx = 0;
+    for (id nextArgument in self) {
         
-        ALCMethodArgumentDependency *methodArgument = nil;
-        
-        // Method arguments are passed through.
+        // Already built method arguments are added as is.
+        ALCMethodArgumentDependency *dependency;
         if ([nextArgument isKindOfClass:[ALCMethodArgumentDependency class]]) {
-            methodArgument = (ALCMethodArgumentDependency *) nextArgument;
+            dependency = nextArgument;
             
-            // Search criteria are assumed to return a NSObject
-        } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]
-                   || [nextArgument conformsToProtocol:@protocol(ALCConstant)]) {
-            methodArgument = [ALCMethodArgumentDependency argumentWithClass:[NSObject class] criteria:nextArgument, nil];
+        } else if ([nextArgument isKindOfClass:[ALCModelSearchCriteria class]]) {
+            
+            // Raw search criteria are expected to represent a single argument.
+            id<ALCValueSource> source = [ALCModelValueSource valueSourceWithCriteria:nextArgument];
+            dependency = [ALCMethodArgumentDependency dependencyWithType:types[nextIdx] valueSource:source];
+            
+        } else if ([nextArgument conformsToProtocol:@protocol(ALCValueSource)]) {
+            
+            // FInally check for a constant value which gets a similar treatment.
+            id<ALCValueSource> source = nextArgument;
+            dependency = [ALCMethodArgumentDependency dependencyWithType:types[nextIdx] valueSource:source];
         }
         
-        if (methodArgument) {
-            methodArgument.index = (int) idx;
-            [arguments addObject:methodArgument];
+        // If we have a dependency then add it to the results.
+        if (dependency) {
+            dependency.index = nextIdx++;
+            [arguments addObject:dependency];
+            
         } else {
-            unknownArgumentHandler(nextArgument);
+            // Otherwise add it to the config items.
+            otherArgumentHandler(nextArgument);
         }
-    }];
+    };
     
     return arguments;
 }
 
--(id<ALCInjector>) injectorForClass:(Class) injectionClass
-                     allowConstants:(BOOL) allowConstants
-             unknownArgumentHandler:(nullable void (^)(id argument)) unknownArgumentHandler {
+-(nullable id<ALCValueSource>) valueSourceForType:(ALCType *) type
+                                 constantsAllowed:(BOOL) constantsAllowed
+                                            error:(NSError **) error
+                                  unknownArgument:(nullable void (^)(id argument)) otherArgumentHandler {
     
-    id<ALCInjector> constantInjector;
-    NSMutableArray<ALCModelSearchCriteria *> *searchCriteria = [[NSMutableArray alloc] init];
-    
-    for (id criteria in self) {
+    __block NSMutableArray<id<ALCValueSource>> *constantValues;
+    ALCModelSearchCriteria *modelSearchCriteria = [self modelSearchCriteriaWithDefaultClass:NULL
+                                                                     unknownArgumentHandler:^(id argument) {
         
-        if ([criteria isKindOfClass:[ALCModelSearchCriteria class]]) {
-            
-            if (constantInjector) {
-                throwException(IllegalArgument, @"Cannot use constants and model search criteria together");
-            } else {
-                [searchCriteria addObject:criteria];
+        // If the arg is a value source then check if we can accept multiple constants and add to array of constant values.
+        if ([argument conformsToProtocol:@protocol(ALCValueSource)]) {
+            if (!constantValues) {
+                constantValues = [NSMutableArray array];
             }
-            
-        } else if ([criteria conformsToProtocol:@protocol(ALCConstant)]) {
-            
-            if (!allowConstants) {
-                throwException(IllegalArgument, @"Constants cannot be used in this criteria");
-            } else if (searchCriteria.count > 0) {
-                    throwException(IllegalArgument, @"Cannot use constants and model search criteria together");
-            } else if (constantInjector) {
-                throwException(IllegalArgument, @"Only a single constant value is allowed");
-            } else {
-                constantInjector = criteria;
-            }
-            
+            [constantValues addObject:argument];
         } else {
-            if (unknownArgumentHandler) {
-                unknownArgumentHandler(criteria);
-            } else {
-                throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
-            }
+            // Otherwise hand it to the handler
+            otherArgumentHandler(argument);
+        }
+    }];
+    
+    // process constants.
+    if (constantValues) {
+        if (!constantsAllowed) {
+            setError(@"Constant values not allowed");
+            return nil;
+        }
+        if (![type.objcClass isKindOfClass:[NSArray class]] && constantValues.count > 1) {
+            setError(@"Multiple constants found");
+            return nil;
+        }
+        if (modelSearchCriteria) {
+            setError(@"Cannot specify both constant values and model search criteria");
+            return nil;
+        }
+
+        if (constantValues.count == 1) {
+            return constantValues[0];
+        } else {
+            return [ALCArrayValueSource valueSourceWithValueSources:constantValues];
         }
     }
     
-    // Default to the dependency class if no constant or criteria provided.
-    if (constantInjector) {
-        return constantInjector;
+    // No constant value so default the model search criteria if none was passed.
+    if (!modelSearchCriteria) {
+        modelSearchCriteria = [ALCModelSearchCriteria searchCriteriaForClass:type.objcClass];
     }
     
-    // Default to the dependency class if no constant or criteria provided.
-    return [[ALCModelObjectInjector alloc] initWithObjectClass:injectionClass
-                                                      criteria:[searchCriteria modelSearchCriteriaForClass:injectionClass]];
+    return [ALCModelValueSource valueSourceWithCriteria:modelSearchCriteria];
 }
 
--(ALCModelSearchCriteria *) modelSearchCriteriaForClass:(Class) aClass {
+-(nullable ALCModelSearchCriteria *) modelSearchCriteriaWithDefaultClass:(nullable Class) defaultClass
+                                                  unknownArgumentHandler:(void (^)(id argument)) unknownArgumentHandler {
     
     ALCModelSearchCriteria *searchCriteria;
     for (id criteria in self) {
@@ -114,12 +131,15 @@ NS_ASSUME_NONNULL_BEGIN
             }
             
         } else {
-            throwException(IllegalArgument, @"Expected a search criteria or constant. Got: %@", criteria);
+            unknownArgumentHandler(criteria);
         }
-        
     }
     
-    return searchCriteria ? searchCriteria: [ALCModelSearchCriteria searchCriteriaForClass:aClass];
+    if (searchCriteria) {
+        return searchCriteria;
+    }
+    
+    return defaultClass ? [ALCModelSearchCriteria searchCriteriaForClass:defaultClass] : nil;
 }
 
 #pragma mark - Resolving
