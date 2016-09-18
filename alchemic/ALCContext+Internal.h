@@ -9,15 +9,16 @@
 @import Foundation;
 @import ObjectiveC;
 
+#import <Alchemic/ALCContextImpl.h>
+
 @class ALCClassObjectFactory;
 @class ALCType;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ALCContextInternal
+@interface ALCContextImpl(Internal)
 
--(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory
-                     config:(NSArray *) config;
+-(void) objectFactoryConfig:(ALCClassObjectFactory *) objectFactory config:(NSArray *) config;
 
 -(void) objectFactory:(ALCClassObjectFactory *) objectFactory
 registerFactoryMethod:(SEL) selector
@@ -34,11 +35,11 @@ registerFactoryMethod:(SEL) selector
                ofType:(ALCType *) type
                config:(NSArray *) config;
 
--(id) objectWithClass:(Class) returnType
-       searchCriteria:(NSArray *) criteria;
+-(id) objectWithClass:(Class) returnType searchCriteria:(NSArray *) criteria;
 
--(void) setObject:(id) object
-   searchCriteria:(NSArray *) criteria;
+-(void) setObject:(id) object searchCriteria:(NSArray *) criteria;
+
+-(void) injectDependencies:(id) object searchCriteria:(NSArray *) criteria;
 
 @end
 

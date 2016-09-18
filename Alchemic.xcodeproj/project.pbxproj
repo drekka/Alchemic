@@ -121,7 +121,7 @@
 		6C34CA171D5D91C60080D428 /* NSArray+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C71D5451CA16BE600D25AC0 /* NSArray+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C34CA181D5D91C60080D428 /* ALCClassObjectFactoryInitializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4D85AB1C7F31C70061CA84 /* ALCClassObjectFactoryInitializer.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C34CA191D5D91C60080D428 /* ALCValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C71D5491CA1747200D25AC0 /* ALCValue.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C34CA1A1D5D91C60080D428 /* ALCContextInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6C34CA1A1D5D91C60080D428 /* ALCContext+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD101D535B3A00E44EC4 /* ALCContext+Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C34CA1C1D5D91C60080D428 /* NSBundle+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC284871CB53F03006B613F /* NSBundle+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C34CA1D1D5D91C60080D428 /* ALCModelImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D27A1C57563200D982DC /* ALCModelImpl.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C34CA1E1D5D91C60080D428 /* ALCModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C25D2741C566E2D00D982DC /* ALCModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -248,7 +248,7 @@
 		6CB7C4341CC7BC1300C05B0B /* ALCFlagMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CB7C4351CC7BC1300C05B0B /* ALCFlagMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */; };
 		6CB92CC91D77FBE80073A34C /* ALCValue+InjectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB92CC81D77FBE80073A34C /* ALCValue+InjectionTests.m */; };
-		6CBABD111D535B3A00E44EC4 /* ALCContextInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CBABD111D535B3A00E44EC4 /* ALCContext+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBABD101D535B3A00E44EC4 /* ALCContext+Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CBABD161D577A3B00E44EC4 /* Singleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD151D577A3B00E44EC4 /* Singleton.m */; };
 		6CBABD181D577A5F00E44EC4 /* SwiftEquivalentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD171D577A5F00E44EC4 /* SwiftEquivalentTests.m */; };
 		6CBABD1B1D577CE600E44EC4 /* Template.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABD1A1D577CE600E44EC4 /* Template.m */; };
@@ -430,7 +430,7 @@
 		6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCFlagMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCFlagMacros.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CB92CC81D77FBE80073A34C /* ALCValue+InjectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "ALCValue+InjectionTests.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCContextInternal.h; sourceTree = "<group>"; };
+		6CBABD101D535B3A00E44EC4 /* ALCContext+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALCContext+Internal.h"; sourceTree = "<group>"; };
 		6CBABD141D577A3B00E44EC4 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		6CBABD151D577A3B00E44EC4 /* Singleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Singleton.m; sourceTree = "<group>"; };
 		6CBABD171D577A5F00E44EC4 /* SwiftEquivalentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftEquivalentTests.m; sourceTree = "<group>"; };
@@ -718,7 +718,7 @@
 				6C7837231C5BAD8A004BE670 /* ALCContext.h */,
 				6C68CF7C1C64DB06003A7A54 /* ALCContextImpl.h */,
 				6C68CF7D1C64DB06003A7A54 /* ALCContextImpl.m */,
-				6CBABD101D535B3A00E44EC4 /* ALCContextInternal.h */,
+				6CBABD101D535B3A00E44EC4 /* ALCContext+Internal.h */,
 				6CB5CCD41CDB6F8C00DC1052 /* ALCDefs.h */,
 				6CB5CCD61CDB70C800DC1052 /* ALCDefs.m */,
 				6CC2847A1CB29A7C006B613F /* ALCException.h */,
@@ -983,7 +983,7 @@
 				6C22EA6C1D75155900E0FDC0 /* ALCConstantValueSource.h in Headers */,
 				6C34CA321D5D91C60080D428 /* ALCContext.h in Headers */,
 				6C34CA0C1D5D91C60080D428 /* ALCContextImpl.h in Headers */,
-				6C34CA1A1D5D91C60080D428 /* ALCContextInternal.h in Headers */,
+				6C34CA1A1D5D91C60080D428 /* ALCContext+Internal.h in Headers */,
 				6C34CA2F1D5D91C60080D428 /* ALCDefs.h in Headers */,
 				6C34CA241D5D91C60080D428 /* ALCDependency.h in Headers */,
 				6C34CA051D5D91C60080D428 /* ALCException.h in Headers */,
@@ -1047,7 +1047,7 @@
 				6C22EA6B1D75155900E0FDC0 /* ALCConstantValueSource.h in Headers */,
 				6C7837241C5BAD8A004BE670 /* ALCContext.h in Headers */,
 				6C68CF7E1C64DB06003A7A54 /* ALCContextImpl.h in Headers */,
-				6CBABD111D535B3A00E44EC4 /* ALCContextInternal.h in Headers */,
+				6CBABD111D535B3A00E44EC4 /* ALCContext+Internal.h in Headers */,
 				6CB5CCD51CDB6F9100DC1052 /* ALCDefs.h in Headers */,
 				6CC464221C7986D500B20A95 /* ALCDependency.h in Headers */,
 				6CC2847C1CB29A7C006B613F /* ALCException.h in Headers */,

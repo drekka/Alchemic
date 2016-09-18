@@ -18,6 +18,7 @@
 #import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCType.h>
 #import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCContext+Internal.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -93,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCBlockWithObject) objectCompletion {
     return ^(ALCBlockWithObjectArgs){
-        [[Alchemic mainContext] injectDependencies:object, nil];
+        [(ALCContextImpl *)[Alchemic mainContext] injectDependencies:object searchCriteria:@[]];
     };
 }
 
