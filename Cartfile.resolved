@@ -1,3 +1,3 @@
 github "erikdoe/ocmock" "v3.3.1"
 github "drekka/pegkit" "b835d58ea6cd68e6b5e4097b42a5b2df8cbfef7f"
-github "drekka/StoryTeller" "v1.7"
+github "drekka/StoryTeller" "v1.7.1"
