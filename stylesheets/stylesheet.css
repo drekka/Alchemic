@@ -107,6 +107,12 @@ p {
     color: #ffffbb;
 }
 
+#languageSelector {
+    font-size:75%;
+    text-shadow: 2px 2px 3px black;
+    color: #ffffbb;
+}
+
 footer p {
   color: #f2f2f2;
 }
