@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
-
+    
     <head>
         <meta charset='utf-8'>
             <meta http-equiv="X-UA-Compatible" content="chrome=1">
                 <meta name="description" content="Alchemic : An Awesome DI framework for iOS">
                     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
                         <title>Alchemic {{ site.alchemic-version }}</title>
-                    </head>
-
+                        </head>
+    
     <body>
-
+        
         <!-- HEADER -->
         <div id="header_wrap" class="outer">
             <header class="inner">
@@ -19,8 +19,59 @@
                 <p id="project_tagline">A highly advanced iOS DI framework</p>
                 <p>
                 <a href="https://github.com/Carthage/Carthage"><img id="carthage-compatible"  src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
-                </p>
+                <div id="languageSelector">
+                    <input type="radio" id="objc" name="language" value="objc" onClick="javascript:setLanguage();">Objective-C</input>
+                    <input type="radio" id="swift" name="language" value="swift" onClick="javascript:setLanguage();">Swift</input>
+                </div>
+                
+                <script>
+                    // Script to tracks the current display language for examples.
+                    var objcRadio = document.getElementById("objc");
+                    var swiftRadio = document.getElementById("swift");
+                    
+                    // Set default if local storage has nothing.
+                    var language = localStorage.getItem("exampleLanguage");
+                    if (!language) {
+                        language = "objc";
+                        localStorage.setItem("exampleLanguage", "objc");
+                    }
+                
+                // Load out of storage.
+                if (language == "objc") {
+                    objcRadio.checked = true;
+                } else {
+                    swiftRadio.checked = true;
+                }
+                
+                setLanguage();
+                
+                function setLanguage() {
+                    
+                    
+                    localStorage.setItem("exampleLanguage", objcRadio.checked ? "objc" : "swift");
+                    
+                    // remove old sheet.
+                    var sheetToBeRemoved = document.getElementById("languageCSS");
+                    if (sheetToBeRemoved) {
+                        var sheetParent = sheetToBeRemoved.parentNode;
+                        sheetParent.removeChild(sheetToBeRemoved);
+                    }
 
+                    // Add the new sheet.
+                    var sheet = document.createElement('style');
+                    sheet.id = "languageCSS";
+                    if (objcRadio.checked) {
+                        sheet.innerHTML = ".language-swift {display:none;}"
+                    } else {
+                        sheet.innerHTML = ".language-objc {display:none;}"
+                    }
+                    document.body.appendChild(sheet);
+                }
+                
+                
+                    </script>
+                </p>
+                
                 <p id="toc">
                 <a href="{{ site.data.pages.home }}">Home</a>
                 &#8226; <a href="{{ site.data.pages.installation }}">Installation</a>
@@ -35,19 +86,19 @@
                 &#8226; <a href="{{ site.data.pages.errors }}">Error handling</a>
                 &#8226; <a href="{{ site.data.pages.ref }}">Reference</a>
                 </p>
-
+                
             </header>
         </div>
-
+        
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
-
+                
                 {{ content }}
-
+                
             </section>
         </div>
-
+        
         <!-- FOOTER  -->
         <div id="footer_wrap" class="outer">
             <footer class="inner">

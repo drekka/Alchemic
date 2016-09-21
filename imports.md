@@ -8,6 +8,12 @@ Adding Alchemic to your code is quite simple. There are no external configuratio
 
 First you need to import the framework: 
 
+{: .language-objc}
+Objc
+
+{: .language-swift}
+swift
+
 {{ site.lang-title-objc }}
 ```objc
 @import Alchemic;
