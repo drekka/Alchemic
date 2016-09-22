@@ -1,13 +1,18 @@
+---
+objc: "{: .language-objc}"
+swift: "{: .language-swift}"
+---
+
 <!DOCTYPE html>
 <html>
     
     <head>
-        <meta charset='utf-8'>
-            <meta http-equiv="X-UA-Compatible" content="chrome=1">
-                <meta name="description" content="Alchemic : An Awesome DI framework for iOS">
-                    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-                        <title>Alchemic {{ site.alchemic-version }}</title>
-                        </head>
+        <meta charset='utf-8' />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="description" content="Alchemic : An Awesome DI framework for iOS" />
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css" />
+        <title>Alchemic {{ site.alchemic-version }}</title>
+    </head>
     
     <body>
         
@@ -18,17 +23,15 @@
                 <h1 id="project_title">Alchemic {{ site.alchemic-version }}</h1>
                 <p id="project_tagline">A highly advanced iOS DI framework</p>
                 <p>
-                <a href="https://github.com/Carthage/Carthage"><img id="carthage-compatible"  src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
                 <div id="languageSelector">
-                    Documentation language:
-                    <input type="radio" id="objc" name="language" value="objc" onClick="javascript:setLanguage();">Objective-C</input>
-                    <input type="radio" id="swift" name="language" value="swift" onClick="javascript:setLanguage();">Swift</input>
+                    API:
+                    <a id="sel-lang-objc" href="javascript:setLanguage('objc');"> Objective-C</a>
+                    <a id="sel-lang-swift" href="javascript:setLanguage('swift');"> Swift 3</a>
                 </div>
+                <a href="https://github.com/Carthage/Carthage"><img id="carthage-compatible"  src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
+                </p>
                 
                 <script>
-                    // Script to tracks the current display language for examples.
-                    var objcRadio = document.getElementById("objc");
-                    var swiftRadio = document.getElementById("swift");
                     
                     // Set default if local storage has nothing.
                     var language = localStorage.getItem("exampleLanguage");
@@ -37,41 +40,39 @@
                         localStorage.setItem("exampleLanguage", "objc");
                     }
                 
-                // Load out of storage.
-                if (language == "objc") {
-                    objcRadio.checked = true;
-                } else {
-                    swiftRadio.checked = true;
-                }
+                setLanguage(language);
                 
-                setLanguage();
-                
-                function setLanguage() {
+                function setLanguage(newLanguage) {
                     
-                    
-                    localStorage.setItem("exampleLanguage", objcRadio.checked ? "objc" : "swift");
+                    localStorage.setItem("exampleLanguage", newLanguage);
+                    var objc = newLanguage == "objc";
+                    var objcSelector = document.getElementById("sel-lang-objc");
+                    var swiftSelector = document.getElementById("sel-lang-swift");
+                    var sheet = document.createElement('style');
+                    sheet.id = "languageCSS";
                     
                     // remove old sheet.
-                    var sheetToBeRemoved = document.getElementById("languageCSS");
+                    var sheetToBeRemoved = document.getElementById(sheet.id);
                     if (sheetToBeRemoved) {
                         var sheetParent = sheetToBeRemoved.parentNode;
                         sheetParent.removeChild(sheetToBeRemoved);
                     }
-
-                    // Add the new sheet.
-                    var sheet = document.createElement('style');
-                    sheet.id = "languageCSS";
-                    if (objcRadio.checked) {
+                    
+                    if (objc) {
                         sheet.innerHTML = ".language-swift {display:none;}"
+                        objcSelector.className = "selected";
+                        swiftSelector.className = "";
                     } else {
                         sheet.innerHTML = ".language-objc {display:none;}"
+                        objcSelector.className = "";
+                        swiftSelector.className = "selected";
                     }
+                    
                     document.body.appendChild(sheet);
                 }
                 
-                
                     </script>
-                </p>
+                
                 
                 <p id="toc">
                 <a href="{{ site.data.pages.home }}">Home</a>

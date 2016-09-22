@@ -8,21 +8,27 @@ Adding Alchemic to your code is quite simple. There are no external configuratio
 
 First you need to import the framework: 
 
-{: .language-objc}
+{{layout.objc}}
 Objc
 
-{: .language-swift}
+{{layout.swift}}
 swift
 
-{{ site.lang-title-objc }}
 ```objc
 @import Alchemic;
+
+@implementation MyClass
+// ...
+@end
 ```
 
-{{ site.lang-title-swift }}
 ```swift
 import Alchemic
 import AlchemicSwift
+
+class MyClass {
+   // ...
+}
 ```
 
 *__Why is Alchemic in my implementations ?__ - A lot of Alchemic's power comes from how it integrates with your code. By being included in your implementation code, it has the ability to access private initializers, methods and variables. This has the advantage of allowing you to keep your header files clean and simple.*

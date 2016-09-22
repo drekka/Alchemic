@@ -108,9 +108,22 @@ p {
 }
 
 #languageSelector {
+    float:right;
     font-size:75%;
     text-shadow: 2px 2px 3px black;
     color: #ffffbb;
+}
+
+#languageSelector a {
+    border: 1px solid #404000;
+    color: #ffffbb;
+    margin: 2px;
+    padding: 2px 10px;
+    border-radius:3px;
+}
+
+#languageSelector a.selected {
+    border: 1px solid #ffffbb;
 }
 
 footer p {
@@ -146,7 +159,6 @@ img {
   max-width: 739px;
   padding: 5px;
   margin: 10px 0 10px 0;
-  border: 1px solid #ebebeb;
 
   box-shadow: 0 0 5px #ebebeb;
   -webkit-box-shadow: 0 0 5px #ebebeb;
