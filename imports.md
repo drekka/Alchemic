@@ -4,15 +4,7 @@ title: Imports
 
 # Adding Alchemic to your code
 
-Adding Alchemic to your code is quite simple. There are no external configuration files or additional classes required. You simply add an import statement and various single lone macros to your class implementation files (_*.m_).
-
-First you need to import the framework: 
-
-{{layout.objc}}
-Objc
-
-{{layout.swift}}
-swift
+Adding Alchemic to your code is quite simple. There are no external configuration files or additional classes required. You start by importing the Alchemic framework like this:
 
 ```objc
 @import Alchemic;
@@ -23,7 +15,6 @@ swift
 ```
 
 ```swift
-import Alchemic
 import AlchemicSwift
 
 class MyClass {
@@ -31,29 +22,50 @@ class MyClass {
 }
 ```
 
-*__Why is Alchemic in my implementations ?__ - A lot of Alchemic's power comes from how it integrates with your code. By being included in your implementation code, it has the ability to access private initializers, methods and variables. This has the advantage of allowing you to keep your header files clean and simple.*
+{{layout.objc}}
+*__Why do I add Alchemic to my implementations ?__ By being added to your implementation code, Alchemic can access private initializers, methods and variables. It also keeps your header files simple clean.*
 
+{{layout.objc}}
 ## Objective-C macros
 
-Alchemic comes with a range of Objective-C pre-processor macros are designed to feel like a form of meta-data, similar to Java's annotations. These macros are generally quite simple and easy to remember. For example:
+{{layout.objc}}
+Alchemic makes use of Objective-C pre-processor macros so it can work like a form of meta-data, similar to Java's annotations. These macros are generally quite simple and easy to remember. For example:
 
-{{ site.lang-title-objc }}
 ```objc
 @implementation MyClass
 AcRegister
 @end
 ```
 
+{{layout.objc}}
 Yes ... *it's that simple to use!*
 
-*__Why are we using macros ? Macros are 'Evil' !__ I've seen comments like this in a number of circules and I disagree with it. Macros are just another tool. They can be helpful or abused like anything else. Alchemic makes us of them to dramatically reduce the amount of code required to use it. Something that becomes obvious when comparing the Objective-C code to the Swift equivalents (where macros are not available). It's also quite possible to avoid using macros completely when using Alchemic. Just write the Objective-C code in a similar fashion to the Swift code.*** 
+{{layout.objc}}
+*__Why are we using macros ? Macros are 'Evil' !__*
 
+{{layout.objc}}
+I've read comments like this online and I disagree with the idea. Macros are just another tool, they can be helpful or abused like anything else. Alchemic takes advantage of macros to dramatically reduce the amount of code you have to add. Here's what the above registration would look like without macros:
 
+```objc
+@implementation MyClass
++(void) _alc_model_configureClassObjectFactory_12:(ALCClassObjectFactory *) classObjectFactory {
+    [[Alchemic mainContext] objectFactoryConfig:classObjectFactory, nil];
+}
+@end
+```
+
+{{layout.objc}}
+As you can see, there is quite a bit of code being hidden by a very small macro. Most of Alchemic's macros manage similar or even more code.  
+
+{{layout.objc}}
+*Note: It's also possible to avoid using macros if you really don't like them. Take a look at how the Swift API works for examples and simply do the same thing in Objective-C.
+
+{{layout.swift}}
 ## Swift registration method
 
-In Swift, you cannot use macros so Alchemic automatically locates and excutes a specific method in any class you need to configure. Simple add the following method to your class and Alchemic with automatically find it:
+{{layout.swift}}
+To use Alchemic in Swift, you need to add a specific method to your class like this:
 
-{{ site.lang-title-swift }}
 ```swift
 {{ site.data.code.swift-class }} {
     {{ site.data.code.swift-alchemic-method }} {
@@ -62,9 +74,8 @@ In Swift, you cannot use macros so Alchemic automatically locates and excutes a 
 }
 ```
 
-Inside it you can use a variety of Swift functions which are very similar to their Objective-C macro counterparts. 
+{{layout.swift}}
+Inside this method you use a variety of Swift functions to setup Alchemic. 
 
 *Note the usage of the '_' as the external parameter name in the method signature. This is important as it ensures that Alchemic's Objective-C runtime scanning code can see the method as `alchemic:`. Otherwise it would see it as `alchemicOf:` and not recognise it.* 
-
-*Note: You can also declare the same method in Objective-C code and use it the same way.*  
 

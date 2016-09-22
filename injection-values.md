@@ -2,48 +2,32 @@
 title: Injection types
 ---
 
-  * [Injection types](#injection-types)
-    * [Constants](#constants)
-    * [Model objects](#model-objects)
-      * [By Class/Protocol](#by-classprotocol)
+* [Injection types](#injection-types)
+       * [Constants](#constants)
+     * [Model objects](#model-objects)
+        * [By Class/Protocol](#by-classprotocol)
       * [By Name](#by-name)
     * [Array injections](#array-injections)
-Model
+
 # Injection types
 
 Alchemic has a range of things it can inject into a method argument or variable injection.
 
 ## Constants
 
-Alchemic can inject constant values and has built in support for a number types:
+Alchemic can inject constant values and has built in support for injecting  constant values including scalar types. Most of these are fairly simple to understand.
 
-Function | Produces (Objective-C, Swift)
---- | ---
-AcBool(YES) | BOOL, Boolean
-AcInt(5) | int, Int
-AcLong(5) | long, Long
-AcFloat(2.1) | float, Float
-AcDouble(2.1) | double, Double
-AcString(@"abc"), AcString("abc") | NSString * , String
-AcObject([NSNumber numberWithInt:12]) | NSObject, Object
-AcCGFloat(12.0) | CGFloat, CGFloat
-AcSize(0, 0) | CGSize, CGSize
-AcRect(0, 0, 100, 100) | CGRect, CGRect
-AcNil | id
-
-Most of these functions are fairly simple to understand. __AcNil__ is a special case to be used when you want to set a nil value.
-
-{{ site.lang-title-objc }}
 ```objc
 AcInject(_message, AcString(@"hello world"))
+AcInject(_retries, AcInt(5))
 ```
 
-{{ site.lang-title-swift }}
 ```swift
 {{ site.data.code.swift-class }} {
     var message:NSString
     {{ site.data.code.swift-alchemic-method }} {
         AcInject(of, variable:"message", type:NSString.self, AcString("hello world"))
+        AcInject(of, variable:"retries", type:Int.self, AcInt(5))
     }
 }
 ```

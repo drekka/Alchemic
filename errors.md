@@ -15,7 +15,10 @@ This is in line with [Apple's recommendations](https://developer.apple.com/libra
 
 It's possible with dependencies to get into a situation where the dependencies of one object reference a second object which needs the first to resolve. In other words, a chicken and egg situation. 
 
-Alchemic attempts to detect these endless loops of dependencies when it starts up by checking through the references that have been created by the macros and looking for loop backs. If it detects one it will immediately throw a `ALCCircularReferenceException` exception. 
+Circular references through class variables are allowed by Alchemic as objects are instantiated before their dependencies are wired up. Circular dependencies involving arguments to methods are not allowed as the dependency has to be resolved before the method can be called. 
+
+Alchemic attempts to detect these endless loops of dependencies when it starts up by checking through the references that have been added to the model and looking for loops involving methods. If it detects one it will immediately throw a `ALCCircularReferenceException` exception. 
+
 
 
 

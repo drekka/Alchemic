@@ -1,8 +1,6 @@
 alchemic-version: v2.1
 Timezone: Australia/Melbourne
 author: Derek Clarkson
-lang-title-objc: <p class="language-title">Objective-C</p>
-lang-title-swift: <p class="language-title">Swift</p>
 
 defaults:
   -

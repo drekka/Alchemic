@@ -5,7 +5,7 @@ swift: "{: .language-swift}"
 
 <!DOCTYPE html>
 <html>
-    
+
     <head>
         <meta charset='utf-8' />
         <meta http-equiv="X-UA-Compatible" content="chrome=1" />
@@ -13,51 +13,58 @@ swift: "{: .language-swift}"
         <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css" />
         <title>Alchemic {{ site.alchemic-version }}</title>
     </head>
-    
+
     <body>
-        
+
         <!-- HEADER -->
         <div id="header_wrap" class="outer">
             <header class="inner">
+
                 <a id="forkme_banner" href="https://github.com/drekka/Alchemic">View on GitHub</a>
+
                 <h1 id="project_title">Alchemic {{ site.alchemic-version }}</h1>
+
                 <p id="project_tagline">A highly advanced iOS DI framework</p>
-                <p>
-                <div id="languageSelector">
-                    API:
-                    <a id="sel-lang-objc" href="javascript:setLanguage('objc');"> Objective-C</a>
-                    <a id="sel-lang-swift" href="javascript:setLanguage('swift');"> Swift 3</a>
-                </div>
-                <a href="https://github.com/Carthage/Carthage"><img id="carthage-compatible"  src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
+
+                <p id="carthage-compatible">
+                <a href="https://github.com/Carthage/Carthage">
+                    <img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible" />
+                </a>
                 </p>
-                
+
+                <p id="language-selector">
+                API:
+                <a id="sel-lang-objc" href="javascript:setLanguage('objc');"> Objective-C</a>
+                <a id="sel-lang-swift" href="javascript:setLanguage('swift');"> Swift 3</a>
+                </p>
+
                 <script>
-                    
+
                     // Set default if local storage has nothing.
                     var language = localStorage.getItem("exampleLanguage");
                     if (!language) {
                         language = "objc";
                         localStorage.setItem("exampleLanguage", "objc");
                     }
-                
+
                 setLanguage(language);
-                
+
                 function setLanguage(newLanguage) {
-                    
+
                     localStorage.setItem("exampleLanguage", newLanguage);
                     var objc = newLanguage == "objc";
                     var objcSelector = document.getElementById("sel-lang-objc");
                     var swiftSelector = document.getElementById("sel-lang-swift");
                     var sheet = document.createElement('style');
                     sheet.id = "languageCSS";
-                    
+
                     // remove old sheet.
                     var sheetToBeRemoved = document.getElementById(sheet.id);
                     if (sheetToBeRemoved) {
                         var sheetParent = sheetToBeRemoved.parentNode;
                         sheetParent.removeChild(sheetToBeRemoved);
                     }
-                    
+
                     if (objc) {
                         sheet.innerHTML = ".language-swift {display:none;}"
                         objcSelector.className = "selected";
@@ -67,13 +74,13 @@ swift: "{: .language-swift}"
                         objcSelector.className = "";
                         swiftSelector.className = "selected";
                     }
-                    
+
                     document.body.appendChild(sheet);
                 }
-                
+
                     </script>
-                
-                
+
+
                 <p id="toc">
                 <a href="{{ site.data.pages.home }}">Home</a>
                 &#8226; <a href="{{ site.data.pages.installation }}">Installation</a>
@@ -88,27 +95,25 @@ swift: "{: .language-swift}"
                 &#8226; <a href="{{ site.data.pages.errors }}">Error handling</a>
                 &#8226; <a href="{{ site.data.pages.ref }}">Reference</a>
                 </p>
-                
+
             </header>
         </div>
-        
+
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
-                
+
                 {{ content }}
-                
+
             </section>
         </div>
-        
+
         <!-- FOOTER  -->
         <div id="footer_wrap" class="outer">
             <footer class="inner">
                 <p class="copyright">Alchemic maintained by <a href="https://github.com/drekka">{{ site.author }}</a></p>
             </footer>
         </div>
-        
-        
         
     </body>
 </html>

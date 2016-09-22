@@ -8,7 +8,7 @@ Alchemic {{ site.alchemic-version }} is a [Dependency Injection](https://en.wiki
 
 Alchemic helps simplify your application's code by creating and managing your applications objects, and the dependencies they need. Alchemic's goal is to do this as simply as possible. 
 
-## Features
+# Features
 
 * [Configuration]({{ site.data.pages.object-factories }}) and injection declarations dynamically read from your app's classes.
 * Automatically starts on a background thread.
@@ -21,11 +21,18 @@ Alchemic helps simplify your application's code by creating and managing your ap
 * Automatic management of [UIApplicationDelegate]({{ site.data.pages.runtime }}#managing-the-uiapplicationdelegate-instance) instances.
 * Engineered in Objective-C, usable in Objective-C and Swift projects.
 
+{{layout.swift}}
 # Swift support
 
-Alchemic supports classes written in Swift with some caveats. Objective-C is unable to understand some Swift constructs such as structs and protocol extensions. 
+{{layout.swift}}
+Alchemic supports classes written in Swift with some caveats. 
 
- * Swift classes and methods that are to be used by Alchemic must be annotated with the `@objc` qualifier so Alchemic can see them. 
+{{layout.swift}}
+Alchemic is written using the Objective-C runtime because it can do things that Swift's runtime simply cannot do. As a result, Objective-C is unable to understand some Swift constructs such as structs and protocol extensions. So the following applies
+
+{{layout.swift}}
+ * Swift classes and methods that are to be used by Alchemic must be {{layout.swift}}
+annotated with the `@objc` qualifier so Alchemic can see them. 
  * When injecting values into properties, the type of the property must be an Objective-C type. 
  * Arguments passed to Alchemic must be resolvable to Objective-C types as per the Swift documentation. 
 
