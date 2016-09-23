@@ -100,7 +100,7 @@ Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 ALCType *type = [ALCType typeForIvar:ivar]; \
 XCTAssertEqual(valueType, type.type, @"Types don't match"); \
 XCTAssertEqual([className class], type.objcClass, @"Expected %@ != %@", NSStringFromClass([className class]), NSStringFromClass(type.objcClass)); \
-XCTAssertEqual(protocolArray.count, type.objcProtocols.count, @"Exepcted %lu protocols, found %lu", protocolArray.count, type.objcProtocols.count); \
+XCTAssertEqual(protocolArray.count, type.objcProtocols.count, @"Exepcted %lu protocols, found %lu",  (unsigned long) protocolArray.count, (unsigned long) type.objcProtocols.count); \
 for (NSString *protocolName in protocolArray) { \
 XCTAssertTrue([type.objcProtocols containsObject:NSProtocolFromString(protocolName)], @"Protocol not in type data: %@", protocolName); \
 } \
@@ -112,7 +112,7 @@ Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 ALCType *type = [ALCType typeForIvar:ivar]; \
 XCTAssertEqual(valueType, type.type, @"Types don't match"); \
 XCTAssertNil(type.objcClass, @"Expected a nil class, found %@", NSStringFromClass(type.objcClass)); \
-XCTAssertEqual(protocolArray.count, type.objcProtocols.count, @"Exepcted %lu protocols, found %lu", protocolArray.count, type.objcProtocols.count); \
+XCTAssertEqual(protocolArray.count, type.objcProtocols.count, @"Exepcted %lu protocols, found %lu", (unsigned long) protocolArray.count, (unsigned long) type.objcProtocols.count); \
 for (NSString *protocolName in protocolArray) { \
 XCTAssertTrue([type.objcProtocols containsObject:NSProtocolFromString(protocolName)], @"Protocol not in type data: %@", protocolName); \
 } \

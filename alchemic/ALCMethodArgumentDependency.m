@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) stackName {
-    return str(@"arg %lu", _index);
+    return str(@"arg %lu",  (unsigned long) _index);
 }
 
 -(void) injectObject:(id) object {
@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)resolvingDescription {
-    return str(@"Argument %lu", _index);
+    return str(@"Argument %lu",  (unsigned long) _index);
 }
 
 @end
