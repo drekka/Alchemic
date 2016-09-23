@@ -2,17 +2,17 @@
 title: Object Factories
 ---
 
-* [Class object factories](#class-object-factories)
-  * [Using initializers](#using-initializers)
-* [Method object factories](#method-object-factories)
-  * [Simple argument values](#simple-argument-values)
-  * [Complex arguments](#complex-arguments)
-* [Configuring Factories](#configuring-factories)
-  * [Template mode](#template-mode)
-  * [Reference mode](#reference-mode)
-  * [Custom names](#custom-names)
-  * [Primary object factories](#primary-object-factories)
-  * [Weak factories](#weak-factories)
+ * [Class object factories](#class-object-factories)
+    * [Using initializers](#using-initializers)
+ * [Method object factories](#method-object-factories)
+    * [Simple argument values](#simple-argument-values)
+    * [Complex arguments](#complex-arguments)
+ * [Configuring Factories](#configuring-factories)
+    * [Template mode](#template-mode)
+    * [Reference mode](#reference-mode)
+    * [Custom names](#custom-names)
+    * [Primary object factories](#primary-object-factories)
+    * [Weak factories](#weak-factories)
 
 
 # Object factories

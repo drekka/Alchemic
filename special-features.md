@@ -4,36 +4,74 @@ title: Runtime
 
  * [Managing the UIApplicationDelegate instance](#managing-the-uiapplicationdelegate-instance)
  * [UIViewControllers and Story Boards](#uiviewcontrollers-and-story-boards)
+     * [Initial controller](#initial-controllers)
  * [NSUserDefaults](#nsuserdefaults)
-* [Cloud based key value storage](#cloud-based-key-value-storage)
+ * [Cloud based key value storage](#cloud-based-key-value-storage)
 
 # Managing the UIApplicationDelegate instance
 
-Alchemic has some special processing for `UIApplicationDelegates`. After starting, Alchemic will automatically search for a `UIApplicationDelegate` and if it finds one, inject any dependencies it needs. So there is no need to add any __AcRegister__ calls to the app delegate class. By default, Alchemic will automatically add the application to its model and set it with your app's instance.
+Alchemic has some special processing for `UIApplicationDelegate` instances. After starting, Alchemic will automatically search for a `UIApplicationDelegate` instance and if it finds one, inject any dependencies it needs. So there is no need to add any __AcRegister__ declarations to the app delegate class. *Note: You can still use __AcRegister__ to give the application delegate a name if you like.*
 
-*Note: You can still use __AcRegister__ to give the application delegate a name if you like.*
+Alchemic will also automatically add an object factory for the delegate to its model and set it with your app's instance.
 
 # UIViewControllers and Story Boards ##
 
-Whilst I looked at several options for automatically injecting storyboard created instances of UIViewControllers, I did not find any technique that would work reliably and required less than a single line of code. So for the moment Alchemic does not inject dependencies into view controllers automatically. Instead, the simplest solution is to self inject in `awakeFromNib` or `viewDidLoad`.
+For the moment Alchemic does not do any automatic processing of `UIViewController` instances because it's so easy to set them up. Instead, the simplest solution is to self inject in `awakeFromNib` or `viewDidLoad` like this:
 
-{{ site.lang-title-objc }}
 ```objc
 -(void) viewDidLoad {
     AcInjectDependencies(self);
 }
 ```
 
-{{ site.lang-title-swift }}
 ```swift
 func viewDidLoad() {
     AcInjectDependencies(self)
 }
 ```
 
+*Note: that you can use __AcSet__ instead of __AcInjectDependencies__ if you also want Alchemic to inject the controller into other classes. 
+
+## A Common Setup ##
+
+Here's a typical `UIViewController` setup:
+
+```objc
+@implementation MyViewController 
+
+AcRegister(AcWeak, AcNillable)
+
+-(void) viewDidLoad {
+    [super viewDidLoad];
+    AcSet(self);
+}
+
+@end
+```
+
+The logic behind the __AcWeak__ and __AcNillable__ is to ensure that the object factory for it will not cause a retain cycle. Nillable means that if this controller is injected into something, a nil injection is allowed. This does depend on what the value is being injected into.
+
+## Main Controllers
+
+Often the main view controller of your app is instantiated from a story boards before Alchemic has had a chance to finish loaded and starting it's model. Therefore trying to get injections done on this view controller via __AcSet__ or __AcInjectDependencies__ will throw an error.
+
+In this case you need to wrap your code in __AcWhenReady__ function like this:
+
+```objc
+-(void) viewDidLoad {
+    AcWhenReady(^{
+        AcInjectDependencies(self);
+    });
+}
+```
+
+__AcWhenReady__ passes the block to Alchemic which doesn't execute it until after Alchemic has finished starting and can perform any injections that the block may require. 
+
+*Note: If Alchemic has managed to start before __AcWhenReady__  is called, then it will execute the block immediately.*
+
 # NSUserDefaults
 
-Alchemic provides a set of tools for automatically managing data which you want stored in the user defaults area. Alchemics user defaults management feature is activated by adding the `AcEnabledUserDefaults` macro. This can be on any class in your app. Alchemic will automatically find it. For example:
+Alchemic provides a set of tools for automatically managing data which you want stored in the user defaults area. Alchemics user defaults management feature is activated by adding the `AcEnabledUserDefaults` macro to any of your classes. You only need to add it once and Alchemic will automatically find it. For example:
 
 ```objc
 @implementation MyClass
@@ -41,15 +79,22 @@ AcEnabledUserDefaults
 @end
 ```
 
-Once enabled, Alchemic will automatically add user defaults support to the model by adding a singleton factory to the model which instantiates an instance of `ALCUserDefaults` on startup. `ALCUserDefaults` provides the following features:
+```swift
+{{ site.data.code.swift-class }} {
+    {{ site.data.code.swift-alchemic-method }} {
+        AcEnabledUserDefaults()
+    }
+}
+```
 
- * Automatically locates the `Root.plist` file in the main bundle if it exists and loads it's contents into the user defaults.
- * Allows user defaults to be read or written by either KVC or subscipted code. 
- * Supports developers writing classes that extend `ALCUserDefaults` and implement properties for the user default settings.
+When you add this, Alchemic will automatically add user defaults support to the model by adding a singleton factory to the model which instantiates an instance of `ALCUserDefaults` on startup. `ALCUserDefaults` provides the following features:
+
+ * Automatically locating the `Root.plist` file in the main bundle and if it exists, loading it's contents into the user defaults area.
+ * Allows user defaults to be read or written by either KVC or subscripted calls to `ALCUserDefaults`. 
+ * Supports you writing classes that extend `ALCUserDefaults` to implement properties for direct access to the settings. These properties will be automatically loaded with the current settings and have changed values saved.
 
 Here's a more complete example of accessing the user defaults: 
 
-{{ site.lang-title-objc }}
 ```objc
 @implementation MyClass {
     ALCUserDefaults *_defaults;
@@ -76,7 +121,6 @@ When instantiated, the code inside the parent `ALCUserDefaults` will first load 
 
 The up shot of this is that a fully Alchemic integrated user defaults with code completable properties, defaults sourced from a `Roots.plist` file, and backed by `[NSUserDefaults standardUserDefaults]` is a simple as this:
 
-{{ site.lang-title-objc }}
 ```objc
 @interface MyUserDefaults: ALCUserDefaults
     @property (nonatomic, strong) NSString *username;
@@ -84,14 +128,12 @@ The up shot of this is that a fully Alchemic integrated user defaults with code 
 @end
 ```
 
-{{ site.lang-title-objc }}
 ```objc
 @implementation MyUserDefaults
 AcEnableUserDefaults
 @end
 ```
 
-{{ site.lang-title-objc }}
 ```objc
 @implementation MyClass {
     MyUserDefaults *_defaults;
@@ -110,7 +152,7 @@ AcInject(_defaults)
 
 # Cloud based key value storage
 
-Apple provides a [cloud base key value storage](https://developer.apple.com/library/prerelease/content/documentation/General/Conceptual/iCloudDesignGuide/Chapters/DesigningForKey-ValueDataIniCloud.html) facility which you can use in your apps. Essentially this works exactly the same was as `NSUserDefaults` except the data is stored in the cloud rather than on the device. This enables a simple mechanism which can synchronize your data (within certain limits) between your devices.
+Apple provides a [cloud base key value storage](https://developer.apple.com/library/prerelease/content/documentation/General/Conceptual/iCloudDesignGuide/Chapters/DesigningForKey-ValueDataIniCloud.html) facility which you can use in your apps. Essentially this works exactly the same was as `NSUserDefaults` except the data is stored in the cloud rather than on the device. This enables a simple mechanism which can synchronise your data (within certain limits) between your devices.
 
 To access the cloud store you need to switch on the iCloud and Key Value Storage in your apps capabilities like this:
 
@@ -118,10 +160,9 @@ To access the cloud store you need to switch on the iCloud and Key Value Storage
 
 Then you need to enabled Alchemic's Cloud Key Value Storage feature like this: 
 
-{{ site.lang-title-objc }}
 ```objc
 @implementation MyClass
-AcEnabledUserDefaults
+AcEnabledCloudKeyValueStore
 @end
 ```
 
@@ -131,7 +172,6 @@ Here's the basic method for accessing cloud based values:
 
 Here's a more complete example of accessing the user defaults: 
 
-{{ site.lang-title-objc }}
 ```objc
 @implementation MyClass {
     ALCCloudKeyValueStore *_ckvs;
@@ -141,8 +181,8 @@ AcEnableCloudKeyValueStore
 AcInject(_ckvs)
 
 -(void) someMethod {
-NSString *name = _defaults["username"];
-_ckvs["username"] = "derek";
+    NSString *name = _defaults["username"];
+    _ckvs["username"] = "derek";
 }
 
 @end
