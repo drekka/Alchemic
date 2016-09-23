@@ -187,7 +187,7 @@ pre, code {
     background-color: #fff;
 
     font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-    font-size: 14px;
+    font-size: 12px;
 
     border-radius: 2px;
     -moz-border-radius: 2px;
@@ -196,6 +196,7 @@ pre, code {
 
 pre {
     width: 100%;
+    margin-bottom: 2em;
     padding: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,.1);
     overflow: auto;
