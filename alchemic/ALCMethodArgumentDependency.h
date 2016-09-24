@@ -23,6 +23,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) methodArgumentWithType:(ALCType *) type criteria:firstCritieria, ... NS_REQUIRES_NIL_TERMINATION;
 
+/**
+ Mainly for internal use. 
+ 
+ @param type     The type of the method's argument.
+ @param criteria An NSArray of passed value criteria.
+
+ @return <#return value description#>
+ */
++(instancetype) methodArgumentWithType:(ALCType *) type argumentCriteria:(NSArray *) criteria;
+
 @end
 
 NS_ASSUME_NONNULL_END

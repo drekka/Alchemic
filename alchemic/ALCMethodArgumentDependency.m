@@ -22,8 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCMethodArgumentDependency
 
 +(instancetype) methodArgumentWithType:(ALCType *) type criteria:firstCritieria, ... {
-
     alc_loadVarArgsIntoArray(firstCritieria, criteria);
+    return [self methodArgumentWithType:type argumentCriteria:criteria];
+}
+
++(instancetype) methodArgumentWithType:(ALCType *) type argumentCriteria:(NSArray *) criteria {
 
     NSError *error;
     id<ALCValueSource> source = [criteria valueSourceForType:type
