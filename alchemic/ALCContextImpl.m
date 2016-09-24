@@ -232,7 +232,7 @@ registerFactoryMethod:(SEL) selector
         case 1:
             return values[0];
         default:
-            throwException(AlchemicIncorrectNumberOfValuesException, @"Expected 1, got %lu", values.count);
+            throwException(AlchemicIncorrectNumberOfValuesException, @"Expected 1, got %lu", (unsigned long) values.count);
     }
 
 }

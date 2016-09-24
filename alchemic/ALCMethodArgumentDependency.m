@@ -22,8 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ALCMethodArgumentDependency
 
 +(instancetype) methodArgumentWithType:(ALCType *) type criteria:firstCritieria, ... {
-
     alc_loadVarArgsIntoArray(firstCritieria, criteria);
+    return [self methodArgumentWithType:type argumentCriteria:criteria];
+}
+
++(instancetype) methodArgumentWithType:(ALCType *) type argumentCriteria:(NSArray *) criteria {
 
     NSError *error;
     id<ALCValueSource> source = [criteria valueSourceForType:type
@@ -36,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) stackName {
-    return str(@"arg %lu", _index);
+    return str(@"arg %lu",  (unsigned long) _index);
 }
 
 -(void) injectObject:(id) object {
@@ -49,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *)resolvingDescription {
-    return str(@"Argument %lu", _index);
+    return str(@"Argument %lu",  (unsigned long) _index);
 }
 
 @end

@@ -125,7 +125,7 @@ static NSCharacterSet *__typeEncodingDelimiters;
     
     // Incorrect number of arguments. Allow for runtime in arguments.
     if (sig.numberOfArguments - 2 != nbrArguments) {
-        throwException(AlchemicIncorrectNumberOfArgumentsException, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector],  nbrArguments, (unsigned long) sig.numberOfArguments);
+        throwException(AlchemicIncorrectNumberOfArgumentsException, @"%@ expected %lu arguments, got %lu", [self forClass:aClass selectorDescription:selector], (unsigned long) nbrArguments, (unsigned long) sig.numberOfArguments);
     }
 }
 
