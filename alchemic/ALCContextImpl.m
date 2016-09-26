@@ -228,7 +228,7 @@ registerFactoryMethod:(SEL) selector
     NSArray *values = alcValue.value;
     switch (values.count) {
         case 0:
-            throwException(AlchemicIncorrectNumberOfValuesException, @"No value found");
+            return nil;
         case 1:
             return values[0];
         default:
