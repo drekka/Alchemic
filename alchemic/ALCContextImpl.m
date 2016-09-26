@@ -199,12 +199,12 @@ registerFactoryMethod:(SEL) selector
 
 #pragma mark - Getting, setting and injecting
 
--(id) objectWithClass:(Class) returnType, ... {
+-(nullable id) objectWithClass:(Class) returnType, ... {
     alc_loadVarArgsAfterVariableIntoArray(returnType, criteria);
     return [self objectWithClass:returnType searchCriteria:criteria];
 }
 
--(id) objectWithClass:(Class) returnType searchCriteria:(NSArray *) criteria {
+-(nullable id) objectWithClass:(Class) returnType searchCriteria:(NSArray *) criteria {
 
     // Throw an error if this is called too early.
     if (_postStartBlocks) {
@@ -228,7 +228,7 @@ registerFactoryMethod:(SEL) selector
     NSArray *values = alcValue.value;
     switch (values.count) {
         case 0:
-            throwException(AlchemicIncorrectNumberOfValuesException, @"No value found");
+            return nil;
         case 1:
             return values[0];
         default:

@@ -116,7 +116,7 @@ registerFactoryMethod:(SEL) selector
  
  @return An object of the appropriate type. All objects returned are fully resolved and completed.
  */
--(id) objectWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
+-(nullable id) objectWithClass:(Class) returnType, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  Sets a value on a factory.

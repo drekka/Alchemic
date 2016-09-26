@@ -35,7 +35,7 @@ registerFactoryMethod:(SEL) selector
                ofType:(ALCType *) type
                config:(NSArray *) config;
 
--(id) objectWithClass:(Class) returnType searchCriteria:(NSArray *) criteria;
+-(nullable id) objectWithClass:(Class) returnType searchCriteria:(NSArray *) criteria;
 
 -(void) setObject:(id) object searchCriteria:(NSArray *) criteria;
 
