@@ -21,9 +21,11 @@ static BOOL _enabled;
 
 +(void) setEnabled:(BOOL) enabled {
     _enabled = enabled;
+    STLog(self, @"Setting user defaults is %@", _enabled ? @"enabled" : @"disabled");
 }
 
 +(BOOL) enabled {
+    STLog(self, @"User defaults is %@", _enabled ? @"enabled" : @"disabled");
     return _enabled;
 }
 
