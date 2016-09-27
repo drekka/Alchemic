@@ -226,6 +226,13 @@ registerFactoryMethod:(SEL) selector
 
     // Get the value which will be an array of objects.
     NSArray *values = alcValue.value;
+
+    // Handle arrays.
+    if ([returnType isSubclassOfClass:[NSArray class]]) {
+        return values;
+    }
+
+    // Otherwise return the value.
     switch (values.count) {
         case 0:
             return nil;
