@@ -27,6 +27,7 @@
         id bundleFrameworksDirId = nil;
         [bundle.privateFrameworksURL getResourceValue:&bundleFrameworksDirId forKey:NSURLFileResourceIdentifierKey error:nil];
         if (bundleFrameworksDirId) {
+            STLog(self, @"Adding bundle id %@", bundleFrameworksDirId);
             [mainBundleResourceIds addObject:bundleFrameworksDirId];
         }
     }];
@@ -34,6 +35,7 @@
     // Loop through the app's frameworks and add those that are in the app bundle's frameworks directories.
     [[NSBundle allFrameworks] enumerateObjectsUsingBlock:^(NSBundle *framework, NSUInteger idx, BOOL *stop) {
 
+        STLog(self, @"Checking bundle %@", framework);
         NSURL *frameworkDirectoryURL = nil;
         [framework.bundleURL getResourceValue:&frameworkDirectoryURL forKey:NSURLParentDirectoryURLKey error:nil];
 
@@ -41,6 +43,7 @@
         [frameworkDirectoryURL getResourceValue:&frameworkDirectoryId forKey:NSURLFileResourceIdentifierKey error:nil];
 
         if ([mainBundleResourceIds containsObject:frameworkDirectoryId]) {
+            STLog(self, @"Adding to scannable bundles");
             [appBundles addObject:framework];
         }
     }];
