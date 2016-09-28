@@ -9,6 +9,7 @@
 @import ObjectiveC;
 
 #import <Alchemic/NSBundle+Alchemic.h>
+#import <Alchemic/Alchemic.h>
 
 @import StoryTeller;
 
@@ -21,21 +22,25 @@
     // Start with the main app bundles.
     NSMutableSet<NSBundle *> *appBundles = [NSMutableSet setWithArray:[NSBundle allBundles]];
 
-    // Get resource ids of the framework directories from each bundle
+    // Get filesystem resource id of the app's framework directory.
     NSMutableSet *mainBundleResourceIds = [[NSMutableSet alloc] init];
     [appBundles enumerateObjectsUsingBlock:^(NSBundle *bundle, BOOL *stop) {
         id bundleFrameworksDirId = nil;
         [bundle.privateFrameworksURL getResourceValue:&bundleFrameworksDirId forKey:NSURLFileResourceIdentifierKey error:nil];
         if (bundleFrameworksDirId) {
-            STLog(self, @"Adding bundle id %@", bundleFrameworksDirId);
             [mainBundleResourceIds addObject:bundleFrameworksDirId];
         }
     }];
 
+    // Check that Alchemic's own bundle is in the list. This can happen when testing the raw alchemic code.
+    NSBundle *alchemicBundle = [NSBundle bundleForClass:[Alchemic class]];
+    if (![appBundles containsObject:alchemicBundle]) {
+        [appBundles addObject:alchemicBundle];
+    }
+
     // Loop through the app's frameworks and add those that are in the app bundle's frameworks directories.
     [[NSBundle allFrameworks] enumerateObjectsUsingBlock:^(NSBundle *framework, NSUInteger idx, BOOL *stop) {
 
-        STLog(self, @"Checking bundle %@", framework);
         NSURL *frameworkDirectoryURL = nil;
         [framework.bundleURL getResourceValue:&frameworkDirectoryURL forKey:NSURLParentDirectoryURLKey error:nil];
 
@@ -43,7 +48,6 @@
         [frameworkDirectoryURL getResourceValue:&frameworkDirectoryId forKey:NSURLFileResourceIdentifierKey error:nil];
 
         if ([mainBundleResourceIds containsObject:frameworkDirectoryId]) {
-            STLog(self, @"Adding to scannable bundles");
             [appBundles addObject:framework];
         }
     }];

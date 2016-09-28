@@ -21,21 +21,17 @@ static BOOL _enabled;
 
 +(void) setEnabled:(BOOL) enabled {
     _enabled = enabled;
-    STLog(self, @"Setting user defaults is %@", _enabled ? @"enabled" : @"disabled");
 }
 
 +(BOOL) enabled {
-    STLog(self, @"User defaults is %@", _enabled ? @"enabled" : @"disabled");
     return _enabled;
 }
 
 -(void)modelWillResolve:(id<ALCModel>) model {
     
-    STLog(self, @"Resolving ...");
-    // First look for a user defined user defaults.
+    // First look for a user defined user defaults already present in the model.
     for (id<ALCObjectFactory> objectFactory in model.objectFactories) {
         if ([objectFactory.type.objcClass isSubclassOfClass:[ALCUserDefaults class]]) {
-            // Nothing more to do.
             return;
         }
     }
