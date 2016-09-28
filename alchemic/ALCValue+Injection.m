@@ -193,9 +193,10 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     const char *encoding = ivar_getTypeEncoding(ivar);
     if (value && strlen(encoding) == 0) {
         // Swift ivar? Currently returning no encoding.
-        // Fixing bug with missing retain when setting Swift ivars via object_setVar(...) which causes EXC BAD ACCESS
-        // This code seems to fix the missing retain back in.
-        const void * ptr = CFBridgingRetain(value);
+        // Fixing bug with missing retain when setting Swift ivars via object_setIvar(...) which causes EXC BAD ACCESS
+        // This code adds an extra retain.
+        CFTypeRef ptr = CFBridgingRetain(value);
+        CFRetain(ptr);
         value = CFBridgingRelease(ptr);
     }
 
