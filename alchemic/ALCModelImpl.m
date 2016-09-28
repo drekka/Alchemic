@@ -100,9 +100,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveDependencies {
     
+    STLog(self, @"Resolving model ...");
     [self modelWillResolve];
     
-    STLog(self, @"Resolving model ...");
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         STLog(self, @"--- Initiating resolve for %@ factory ----", key);
         [objectFactory resolveWithStack:[NSMutableArray array] model:self];
@@ -112,9 +112,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) modelWillResolve {
-    
     for (NSObject<ALCResolveAspect> *aspect in _resolveAspects) {
         if ([[aspect class] enabled] && [aspect respondsToSelector:@selector(modelWillResolve:)]) {
+            STLog(self, @"Calling aspect will resolve");
             [aspect modelWillResolve:self];
         }
     }
@@ -123,6 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) modelDidResolve {
     for (NSObject<ALCResolveAspect> *aspect in _resolveAspects) {
         if ([[aspect class] enabled] && [aspect respondsToSelector:@selector(modelDidResolve:)]) {
+            STLog(self, @"Calling aspect did resolve");
             [aspect modelDidResolve:self];
         }
     }

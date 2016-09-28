@@ -31,6 +31,7 @@ static BOOL _enabled;
 
 -(void)modelWillResolve:(id<ALCModel>) model {
     
+    STLog(self, @"Resolving ...");
     // First look for a user defined user defaults.
     for (id<ALCObjectFactory> objectFactory in model.objectFactories) {
         if ([objectFactory.type.objcClass isSubclassOfClass:[ALCUserDefaults class]]) {
