@@ -25,7 +25,15 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-#pragma mark - Factory methods
+-(instancetype) initWithValueType:(ALCValueType) valueType {
+    self = [super init];
+    if (self) {
+        _type = valueType;
+    }
+    return self;
+}
+
+#pragma mark - General factorie
 
 +(ALCValue *) typeForIvar:(Ivar) ivar {
     return [self typeWithEncoding:ivar_getTypeEncoding(ivar)];
@@ -38,23 +46,102 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 +(instancetype) typeWithEncoding:(const char *) encoding {
-    ALCType *type = [[ALCType alloc] init];
-    if ([type setObjectType:encoding]
-        || [type setScalarType:encoding]
-        || [type setStructType:encoding]) {
+
+    ALCType *type = [self objectTypeForEncoding:encoding];
+    if (!type) {
+        type = [self scalarTypeForEncoding:encoding];
+        if (!type) {
+            type = [self structTypeForEncoding:encoding];
+        }
+    }
+
+    if (type) {
         return type;
     }
+
     throwException(AlchemicTypeMissMatchException, @"Encoding %s describes an unknown type", encoding);
 }
 
--(BOOL) setObjectType:(const char *) encoding {
+#pragma mark - Type factories
+
++(instancetype) bool {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeBool];
+}
+
++(instancetype) char {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeChar];
+}
+
++(instancetype) charPointer {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeCharPointer];
+}
+
++(instancetype) double {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeDouble];
+}
+
++(instancetype) float {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeFloat];
+}
+
++(instancetype) int {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeInt];
+}
+
++(instancetype) long {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeLong];
+}
+
++(instancetype) longLong {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeLongLong];
+}
+
++(instancetype) short {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeShort];
+}
+
++(instancetype) unsignedChar {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedChar];
+}
+
++(instancetype) unsignedInt {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedInt];
+}
+
++(instancetype) unsignedLong {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedLong];
+}
+
++(instancetype) unsignedLongLong {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedLongLong];
+}
+
++(instancetype) unsignedShort {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedShort];
+}
+
++(instancetype) CGSize {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeCGSize];
+}
+
++(instancetype) CGPoint {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeCGPoint];
+}
+
++(instancetype) CGRect {
+    return [[ALCType alloc] initWithValueType:ALCValueTypeCGRect];
+}
+
+#pragma mark - Internal
+
++(nullable ALCType *) objectTypeForEncoding:(const char *) encoding {
 
     if (! AcStrHasPrefix(encoding, "@")) {
-        return NO;
+        return nil;
     }
 
     // Object type.
-    _type = ALCValueTypeObject;
+    ALCType *type = [[ALCType alloc] initWithValueType:ALCValueTypeObject];
     NSCharacterSet *typeEncodingDelimiters = [NSCharacterSet characterSetWithCharactersInString:@"@\",<>"];
     NSArray<NSString *> *defs = [[NSString stringWithUTF8String:encoding] componentsSeparatedByCharactersInSet:typeEncodingDelimiters];
 
@@ -64,36 +151,43 @@ NS_ASSUME_NONNULL_BEGIN
         if ([defs[i] length] > 0) {
             if (i == 2) {
                 // Update the class.
-                [self setClass:objc_lookUpClass(defs[2].UTF8String)];
+                [type setClass:objc_lookUpClass(defs[2].UTF8String)];
             } else {
-                if (!_objcProtocols) {
-                    _objcProtocols = [[NSMutableArray alloc] init];
+                if (!type->_objcProtocols) {
+                    type->_objcProtocols = [[NSMutableArray alloc] init];
                 }
-                [(NSMutableArray *)_objcProtocols addObject:objc_getProtocol(defs[i].UTF8String)];
+                [(NSMutableArray *)type->_objcProtocols addObject:objc_getProtocol(defs[i].UTF8String)];
             }
         }
     }
-    return YES;
+    return type;
 }
 
--(BOOL) setScalarType:(const char *) encoding {
-    return [self setScalarType:"c" encoding:encoding type:ALCValueTypeChar]
-    || [self setScalarType:"i" encoding:encoding type:ALCValueTypeInt]
-    || [self setScalarType:"s" encoding:encoding type:ALCValueTypeShort]
-    || [self setScalarType:"l" encoding:encoding type:ALCValueTypeLong]
-    || [self setScalarType:"q" encoding:encoding type:ALCValueTypeLongLong]
-    || [self setScalarType:"C" encoding:encoding type:ALCValueTypeUnsignedChar]
-    || [self setScalarType:"I" encoding:encoding type:ALCValueTypeUnsignedInt]
-    || [self setScalarType:"S" encoding:encoding type:ALCValueTypeUnsignedShort]
-    || [self setScalarType:"L" encoding:encoding type:ALCValueTypeUnsignedLong]
-    || [self setScalarType:"Q" encoding:encoding type:ALCValueTypeUnsignedLongLong]
-    || [self setScalarType:"f" encoding:encoding type:ALCValueTypeFloat]
-    || [self setScalarType:"d" encoding:encoding type:ALCValueTypeDouble]
-    || [self setScalarType:"B" encoding:encoding type:ALCValueTypeBool]
-    || [self setScalarType:"*" encoding:encoding type:ALCValueTypeCharPointer];
++(nullable ALCType *) scalarTypeForEncoding:(const char *) encoding {
+
+#define checkForScalarFromEncoding(scalarType, factoryMethod) \
+if (strcmp(encoding, scalarType) == 0) { \
+return [ALCType factoryMethod]; \
 }
 
--(BOOL) setStructType:(const char *) encoding {
+    checkForScalarFromEncoding("B", bool)
+    checkForScalarFromEncoding("c", char)
+    checkForScalarFromEncoding("*", charPointer)
+    checkForScalarFromEncoding("i", int)
+    checkForScalarFromEncoding("l", long)
+    checkForScalarFromEncoding("q", longLong)
+    checkForScalarFromEncoding("s", short)
+    checkForScalarFromEncoding("f", float)
+    checkForScalarFromEncoding("d", double)
+    checkForScalarFromEncoding("C", unsignedChar)
+    checkForScalarFromEncoding("I", unsignedInt)
+    checkForScalarFromEncoding("L", unsignedLong)
+    checkForScalarFromEncoding("Q", unsignedLongLong)
+    checkForScalarFromEncoding("S", unsignedShort)
+    return nil;
+}
+
++(nullable ALCType *) structTypeForEncoding:(const char *) encoding {
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{(\\w+)=.*"
                                                                            options:NSRegularExpressionCaseInsensitive
                                                                              error:NULL];
@@ -105,30 +199,22 @@ NS_ASSUME_NONNULL_BEGIN
         NSRange nameRange = [result rangeAtIndex:1];
         NSString *structName = [strEncoding substringWithRange:nameRange];
         if ([structName isEqualToString:@"CGSize"]) {
-            _type = ALCValueTypeCGSize;
+            return [self CGSize];
         } else if ([structName isEqualToString:@"CGPoint"]) {
-            _type = ALCValueTypeCGPoint;
+            return [self CGPoint];
         } else if ([structName isEqualToString:@"CGRect"]) {
-            _type = ALCValueTypeCGRect;
+            return [self CGRect];
         }
     }
-    return _type != ALCValueTypeUnknown;
+    return nil;
 }
-
--(BOOL) setScalarType:(const char *) scalarType encoding:(const char *) encoding type:(ALCValueType) type {
-    if (strcmp(encoding, scalarType) == 0) {
-        _scalarType = [NSString stringWithUTF8String:scalarType];
-        _type = type;
-    }
-    return _type != ALCValueTypeUnknown;
-}
-
-#pragma mark - Other methods
 
 -(void) setClass:(Class) aClass {
     _type = [aClass isSubclassOfClass:[NSArray class]] ? ALCValueTypeArray : ALCValueTypeObject;
     self->_objcClass = aClass;
 }
+
+#pragma mark - Other methods
 
 -(NSString *) description {
 

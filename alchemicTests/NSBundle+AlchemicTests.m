@@ -38,8 +38,11 @@
     // Stop mocking class methods.
     [mockBundle stopMocking];
 
-    XCTAssertEqual(1u, bundles.count);
-    XCTAssertEqual(mockBundle, [bundles anyObject]);
+    XCTAssertEqual(2u, bundles.count);
+
+    NSBundle *alchemicsBundle = [NSBundle bundleForClass:[Alchemic class]];
+    XCTAssertTrue([bundles containsObject:mockBundle]);
+    XCTAssertTrue([bundles containsObject:alchemicsBundle]);
 
 }
 

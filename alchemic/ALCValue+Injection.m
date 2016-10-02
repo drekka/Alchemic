@@ -190,18 +190,23 @@ scalarMethodArgumentInjector(CGRect, CGRect)
 -(void) injectObject:(id) obj variable:(Ivar) ivar withValue:(id) value {
 
     // Patch for Swift Ivars not being retained.
-    const char *encoding = ivar_getTypeEncoding(ivar);
-    if (value && strlen(encoding) == 0) {
-        // Swift ivar? Currently returning no encoding.
-        // Fixing bug with missing retain when setting Swift ivars via object_setIvar(...) which causes EXC BAD ACCESS
-        // This code adds an extra retain.
-        CFTypeRef ptr = CFBridgingRetain(value);
-        CFRetain(ptr);
-        value = CFBridgingRelease(ptr);
+    // Swift ivar? Currently returning no encoding.
+    if (value && strlen(ivar_getTypeEncoding(ivar)) == 0) {
+        value = [self copyValueWithRetain:value];
     }
 
     object_setIvar(obj, ivar, value);
     [ALCRuntime executeSimpleBlock:self.completion];
+}
+
+/** Swift ivar? Currently returning no encoding.
+ Fixing bug with missing retain when setting Swift ivars via object_setIvar(...) which causes EXC BAD ACCESS
+ This code adds an extra retain.
+ */
+-(id) copyValueWithRetain:(id) value {
+    CFTypeRef ptr = CFBridgingRetain(value);
+    CFRetain(ptr);
+    return CFBridgingRelease(ptr);
 }
 
 -(NSArray *) valueAsArray {
@@ -240,7 +245,7 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     if ([value isKindOfClass:[NSValue class]] && ![value isKindOfClass:[NSNumber class]]) {
         throwException(AlchemicInjectionException, @"Expected an object, found a scalar value");
     }
-    
+
     // Must be an object but check for null.
     return value == [NSNull null] ? nil : value;
 }

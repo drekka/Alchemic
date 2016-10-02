@@ -63,7 +63,6 @@
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 ALCType *type = [ALCType typeForIvar:ivar]; \
 XCTAssertEqual(valueType, type.type, @"Types don't match"); \
-XCTAssertTrue(strcmp(encoding, type.scalarType.UTF8String) == 0, @"Expected %s != %@", encoding, type.scalarType); \
 }
 
 // Scalars

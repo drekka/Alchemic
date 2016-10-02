@@ -54,11 +54,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) ALCValueType type;
 
 /**
- The name of a scalar type. ie. int, unsigned int, CGRect, CGSize, etc.
- */
-@property (nonatomic, assign, nullable, readonly) NSString *scalarType;
-
-/**
  The class if the type is an object type.
  */
 @property (nonatomic, strong, nullable, readonly) Class objcClass;
@@ -68,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, nullable, readonly) NSArray<Protocol *> *objcProtocols;
 
-#pragma mark - Factory methods
+#pragma mark - General factories
 
 /**
  Returns an instance of ALCType containing information about the type of the ivar.
@@ -93,6 +88,25 @@ NS_ASSUME_NONNULL_BEGIN
  */
 +(instancetype) typeWithClass:(Class) aClass;
 
+#pragma mark - Type factories
+
++(instancetype) bool;
++(instancetype) char;
++(instancetype) charPointer;
++(instancetype) double;
++(instancetype) float;
++(instancetype) int;
++(instancetype) long;
++(instancetype) longLong;
++(instancetype) short;
++(instancetype) unsignedChar;
++(instancetype) unsignedInt;
++(instancetype) unsignedLong;
++(instancetype) unsignedLongLong;
++(instancetype) unsignedShort;
++(instancetype) CGSize;
++(instancetype) CGPoint;
++(instancetype) CGRect;
 
 @end
 
