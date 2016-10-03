@@ -22,6 +22,11 @@
     id _value;
 }
 
+id<ALCValueSource> AcObject(id value) {
+    ALCType *type = [ALCType typeWithClass:[NSObject class]];
+    return [[ALCConstantValueSource alloc] initWithType:type value:value];
+}
+
 id<ALCValueSource> AcString(NSString *value) {
     ALCType *type = [ALCType typeWithClass:[NSString class]];
     return [[ALCConstantValueSource alloc] initWithType:type value:value];
@@ -35,7 +40,7 @@ id<ALCValueSource> AcChar(char value) {
     return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
 }
 
-id<ALCValueSource> AcCString(char * value) {
+id<ALCValueSource> AcCString(const char *value) {
     return [ALCConstantValueSource scalarValueSourceWithValue:[NSValue valueWithBytes:&value objCType:@encode(__typeof(value))]];
 }
 

@@ -49,6 +49,15 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ALCType : NSObject
 
 /**
+ <#Description#>
+
+ @param valueType <#valueType description#>
+
+ @return <#return value description#>
+ */
+-(instancetype) initWithValueType:(ALCValueType) valueType;
+
+/**
  A string containing the type data for scalar types.
  */
 @property (nonatomic, assign, readonly) ALCValueType type;
@@ -87,26 +96,6 @@ NS_ASSUME_NONNULL_BEGIN
  @param aClass The class to base the type on.
  */
 +(instancetype) typeWithClass:(Class) aClass;
-
-#pragma mark - Type factories
-
-+(instancetype) bool;
-+(instancetype) char;
-+(instancetype) charPointer;
-+(instancetype) double;
-+(instancetype) float;
-+(instancetype) int;
-+(instancetype) long;
-+(instancetype) longLong;
-+(instancetype) short;
-+(instancetype) unsignedChar;
-+(instancetype) unsignedInt;
-+(instancetype) unsignedLong;
-+(instancetype) unsignedLongLong;
-+(instancetype) unsignedShort;
-+(instancetype) CGSize;
-+(instancetype) CGPoint;
-+(instancetype) CGRect;
 
 @end
 

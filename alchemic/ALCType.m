@@ -64,73 +64,30 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Type factories
 
-+(instancetype) bool {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeBool];
+#define typeFactoryImpl(typeName) \
++(instancetype) type ## typeName { \
+    return [[ALCType alloc] initWithValueType:ALCValueType ## typeName]; \
 }
 
-+(instancetype) char {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeChar];
-}
+typeFactoryImpl(Bool)
+typeFactoryImpl(Char)
+typeFactoryImpl(CharPointer)
+typeFactoryImpl(Double)
+typeFactoryImpl(Float)
+typeFactoryImpl(Int)
+typeFactoryImpl(Long)
+typeFactoryImpl(LongLong)
+typeFactoryImpl(Short)
 
-+(instancetype) charPointer {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeCharPointer];
-}
+typeFactoryImpl(UnsignedChar)
+typeFactoryImpl(UnsignedInt)
+typeFactoryImpl(UnsignedLong)
+typeFactoryImpl(UnsignedLongLong)
+typeFactoryImpl(UnsignedShort)
 
-+(instancetype) double {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeDouble];
-}
-
-+(instancetype) float {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeFloat];
-}
-
-+(instancetype) int {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeInt];
-}
-
-+(instancetype) long {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeLong];
-}
-
-+(instancetype) longLong {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeLongLong];
-}
-
-+(instancetype) short {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeShort];
-}
-
-+(instancetype) unsignedChar {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedChar];
-}
-
-+(instancetype) unsignedInt {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedInt];
-}
-
-+(instancetype) unsignedLong {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedLong];
-}
-
-+(instancetype) unsignedLongLong {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedLongLong];
-}
-
-+(instancetype) unsignedShort {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeUnsignedShort];
-}
-
-+(instancetype) CGSize {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeCGSize];
-}
-
-+(instancetype) CGPoint {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeCGPoint];
-}
-
-+(instancetype) CGRect {
-    return [[ALCType alloc] initWithValueType:ALCValueTypeCGRect];
-}
+typeFactoryImpl(CGSize)
+typeFactoryImpl(CGPoint)
+typeFactoryImpl(CGRect)
 
 #pragma mark - Internal
 
@@ -165,25 +122,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(nullable ALCType *) scalarTypeForEncoding:(const char *) encoding {
 
-#define checkForScalarFromEncoding(scalarType, factoryMethod) \
+#define checkForScalarFromEncoding(scalarType, valueType) \
 if (strcmp(encoding, scalarType) == 0) { \
-return [ALCType factoryMethod]; \
+return [[ALCType alloc] initWithValueType:ALCValueType ## valueType]; \
 }
 
-    checkForScalarFromEncoding("B", bool)
-    checkForScalarFromEncoding("c", char)
-    checkForScalarFromEncoding("*", charPointer)
-    checkForScalarFromEncoding("i", int)
-    checkForScalarFromEncoding("l", long)
-    checkForScalarFromEncoding("q", longLong)
-    checkForScalarFromEncoding("s", short)
-    checkForScalarFromEncoding("f", float)
-    checkForScalarFromEncoding("d", double)
-    checkForScalarFromEncoding("C", unsignedChar)
-    checkForScalarFromEncoding("I", unsignedInt)
-    checkForScalarFromEncoding("L", unsignedLong)
-    checkForScalarFromEncoding("Q", unsignedLongLong)
-    checkForScalarFromEncoding("S", unsignedShort)
+    checkForScalarFromEncoding("B", Bool)
+    checkForScalarFromEncoding("c", Char)
+    checkForScalarFromEncoding("r*", CharPointer)
+    checkForScalarFromEncoding("*", CharPointer)
+    checkForScalarFromEncoding("i", Int)
+    checkForScalarFromEncoding("l", Long)
+    checkForScalarFromEncoding("q", LongLong)
+    checkForScalarFromEncoding("s", Short)
+    checkForScalarFromEncoding("f", Float)
+    checkForScalarFromEncoding("d", Double)
+    checkForScalarFromEncoding("C", UnsignedChar)
+    checkForScalarFromEncoding("I", UnsignedInt)
+    checkForScalarFromEncoding("L", UnsignedLong)
+    checkForScalarFromEncoding("Q", UnsignedLongLong)
+    checkForScalarFromEncoding("S", UnsignedShort)
     return nil;
 }
 
@@ -199,11 +157,11 @@ return [ALCType factoryMethod]; \
         NSRange nameRange = [result rangeAtIndex:1];
         NSString *structName = [strEncoding substringWithRange:nameRange];
         if ([structName isEqualToString:@"CGSize"]) {
-            return [self CGSize];
+            return [self typeCGSize];
         } else if ([structName isEqualToString:@"CGPoint"]) {
-            return [self CGPoint];
+            return [self typeCGPoint];
         } else if ([structName isEqualToString:@"CGRect"]) {
-            return [self CGRect];
+            return [self typeCGRect];
         }
     }
     return nil;
