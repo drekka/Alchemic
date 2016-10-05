@@ -14,12 +14,19 @@
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCAbstractValueSource.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ALCConstantValueSource : ALCAbstractValueSource
 -(instancetype) initWithType:(ALCType *) type NS_UNAVAILABLE;
 @end
 
 @implementation ALCConstantValueSource {
     id _value;
+}
+
+id<ALCValueSource> AcNil(void) {
+    ALCType *type = [ALCType typeWithClass:[NSObject class]];
+    return [[ALCConstantValueSource alloc] initWithType:type value:nil];
 }
 
 id<ALCValueSource> AcObject(id value) {
@@ -121,7 +128,7 @@ id<ALCValueSource> AcRect(float x, float y, float width, float height) {
     methodReturningObjectNotImplemented;
 }
 
--(instancetype) initWithType:(ALCType *) type value:(id) value {
+-(instancetype) initWithType:(ALCType *) type value:(nullable id) value {
     self = [super initWithType:type];
     if (self) {
         _value = value;
@@ -138,3 +145,5 @@ id<ALCValueSource> AcRect(float x, float y, float width, float height) {
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

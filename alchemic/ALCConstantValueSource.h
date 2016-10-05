@@ -8,7 +8,11 @@
 
 @import Foundation;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ALCValueSource;
+
+id<ALCValueSource> AcNil(void);
 
 id<ALCValueSource> AcString(NSString *value);
 id<ALCValueSource> AcObject(id value);
@@ -36,3 +40,4 @@ id<ALCValueSource> AcSize(float width, float height);
 id<ALCValueSource> AcPoint(float x, float y);
 id<ALCValueSource> AcRect(float x, float y, float width, float height);
 
+NS_ASSUME_NONNULL_END
