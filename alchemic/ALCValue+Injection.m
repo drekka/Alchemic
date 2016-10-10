@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
             return ((ALCInvocationInjectorBlock (*)(id, Method)) method_invoke)(self, method);
         }
     }
-
+    
     throwException(AlchemicSelectorNotFoundException, @"Unable to find invocation injector for type: %@", self.description);
     return NULL;
 }
@@ -155,9 +155,9 @@ scalarMethodArgumentInjector(CGRect, CGRect)
 #pragma mark - Internal
 
 -(NSString *) methodNameFragmentForType:(ALCValueType) type {
-
+    
     switch (type) {
-
+            
             // Scalar types.
         case ALCValueTypeBool: return @"Bool";
         case ALCValueTypeChar: return @"Char";
@@ -176,11 +176,11 @@ scalarMethodArgumentInjector(CGRect, CGRect)
         case ALCValueTypeCGSize: return @"CGSize";
         case ALCValueTypeCGPoint: return @"CGPoint";
         case ALCValueTypeCGRect: return @"CGRect";
-
+            
             // Object types.
         case ALCValueTypeObject:return @"Object";
         case ALCValueTypeArray: return @"Array";
-
+            
         default:
             throwException(AlchemicIllegalArgumentException, @"Cannot deduce a method name when type is unknown");
     }
@@ -188,13 +188,14 @@ scalarMethodArgumentInjector(CGRect, CGRect)
 
 
 -(void) injectObject:(id) obj variable:(Ivar) ivar withValue:(id) value {
-
+    
     // Patch for Swift Ivars not being retained.
-    // Swift ivar? Currently returning no encoding.
+    // Swift ivar? Currently we detect this via checking it's encoding. Swift returns a null string.
+    // This may be fragile, but appears to be the only choice at the moment.
     if (value && strlen(ivar_getTypeEncoding(ivar)) == 0) {
         value = [self copyValueWithRetain:value];
     }
-
+    
     object_setIvar(obj, ivar, value);
     [ALCRuntime executeSimpleBlock:self.completion];
 }
@@ -205,29 +206,31 @@ scalarMethodArgumentInjector(CGRect, CGRect)
  */
 -(id) copyValueWithRetain:(id) value {
     CFTypeRef ptr = CFBridgingRetain(value);
+#ifndef __clang_analyzer__ // Needed because we are violating ARC rules deliberately and need to hide the static analyzer    warnings.
     CFRetain(ptr);
+#endif
     return CFBridgingRelease(ptr);
 }
 
 -(NSArray *) valueAsArray {
-
+    
     // Already an array.
     id value = self.value;
     if ([value isKindOfClass:[NSArray class]]) {
         return value;
     }
-
+    
     // Scalar types
     if ([value isKindOfClass:[NSValue class]] && ![value isKindOfClass:[NSNumber class]]) {
         throwException(AlchemicInjectionException, @"Expected an object, found a scalar value");
     }
-
+    
     // Must be an object but check for null.
     return value == [NSNull null] ? @[] : @[value];
 }
 
 -(nullable id) valueAsObject {
-
+    
     id value = self.value;
     if ([value isKindOfClass:[NSArray class]]) {
         NSArray *values = value;
@@ -240,12 +243,12 @@ scalarMethodArgumentInjector(CGRect, CGRect)
                 throwException(AlchemicIncorrectNumberOfValuesException, @"Expected 1, got %lu", (unsigned long) values.count);
         }
     }
-
+    
     // Scalar types
     if ([value isKindOfClass:[NSValue class]] && ![value isKindOfClass:[NSNumber class]]) {
         throwException(AlchemicInjectionException, @"Expected an object, found a scalar value");
     }
-
+    
     // Must be an object but check for null.
     return value == [NSNull null] ? nil : value;
 }

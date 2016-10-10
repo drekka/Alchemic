@@ -42,6 +42,6 @@ FOUNDATION_EXPORT const unsigned char alchemicVersionString[];
  
  @return The current instance of ALCContext.
  */
-+(id<ALCContext>) mainContext;
++(id<ALCContext>) mainContext __attribute__((const));
 
 @end
