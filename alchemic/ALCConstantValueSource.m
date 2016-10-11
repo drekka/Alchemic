@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
     id _value;
 }
 
-id<ALCValueSource> AcNil(void) {
+id<ALCValueSource> AcNil() {
     ALCType *type = [ALCType typeWithClass:[NSObject class]];
     return [[ALCConstantValueSource alloc] initWithType:type value:nil];
 }
