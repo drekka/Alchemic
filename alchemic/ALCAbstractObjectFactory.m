@@ -133,8 +133,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) createObject {
-    methodNotImplemented;
-    return [NSNull null];
+    methodReturningObjectNotImplemented;
 }
 
 -(ALCBlockWithObject) objectCompletion {

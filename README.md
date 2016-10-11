@@ -17,5 +17,11 @@ ___Main features___
 * Works with implementation variables and methods, minimising public declarations.
 * Automatic array boxing for injection.
 * Automatic handling of UIApplicationDelegate instances.
+* Much, much more.
+
+# V2.1.1 #
+
+* Updated context description to print the current model. Useful for debugging.
+
 
 

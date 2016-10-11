@@ -315,6 +315,11 @@ registerFactoryMethod:(SEL) selector
     }
 }
 
+#pragma mark - Describing
+
+-(NSString *) description {
+    return _model.description;
+}
 
 @end
 
