@@ -4,8 +4,6 @@ title: Alchemic {{ site.alchemic-version }}
 
 Alchemic {{ site.alchemic-version }} is a [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) framework for iOS. 
 
-*Note: the documentation on this site is based on the coming v2.1 of Alchemic currently under construction in the develop branch.*
-
 Alchemic helps simplify your application's code by creating and managing your applications objects, and the dependencies they need. Alchemic's goal is to do this as simply as possible. 
 
 # Features
@@ -32,9 +30,9 @@ Alchemic is written using the Objective-C runtime because it can do things that 
 
 {{layout.swift}}
  * Swift classes and methods that are to be used by Alchemic must be {{layout.swift}}
-annotated with the `@objc` qualifier so Alchemic can see them. 
+annotated with the `@objc` qualifier or extend `NSObject`.
  * When injecting values into properties, the type of the property must be an Objective-C type. 
- * Arguments passed to Alchemic must be resolvable to Objective-C types as per the Swift documentation. 
+ * Arguments passed to Alchemic must be resolvable to Objective-C types. 
 
 # Credits
 

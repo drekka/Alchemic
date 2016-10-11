@@ -17,19 +17,37 @@ Alchemic can inject a range of different types of data into a method's argument 
 Firstly, Alchemic can inject constant values and has built in support for injecting constant values including scalar types. Check out the [Reference page](ref.html) for the full list and examples. Most of these are fairly simple to understand.
 
 ```objc
+NSString *_message;
+int _retries;
+
 AcInject(_message, AcString(@"hello world"))
 AcInject(_retries, AcInt(5))
 ```
 
 ```swift
 {{ site.data.code.swift-class }} {
-    var message:NSString
+    var message:NSString?
+    var retries:CInt = 0
+    
     {{ site.data.code.swift-alchemic-method }} {
         AcInject(of, variable:"message", type:NSString.self, AcString("hello world"))
-        AcInject(of, variable:"retries", type:Int.self, AcInt(5))
+        AcInject(of, variable:"retries", type:ALCType.int, AcInt(5))
     }
 }
 ```
+
+{{layout.swift}}
+When injecting variables into Swift classes there are a number of issues to be aware of. Alchemic is written in Objective-C and therefore uses the Objective-C runtime to handle low level stuff such as injecting variables. Because of this, Swift types which are not visible to Objective-C cannot be injected. 
+
+{{layout.swift}}
+So when dealing with strings, you need to declare your variable using the Objective-C `NSString` type. Numbers must use their equivalent Swift types - `CInt` for ints, `CDouble` for doubles, `CFloat` for floats etc. Also with numbers, you cannot declare them as optional. ie. No `!` or `?` modifiers. Objective-C does not understand Swift's optionals and will fail to inject them.
+
+{{layout.swift}}
+Finally note that in the above examples there is an extra argument to `AcInject`. The `type` argument is needed to tell Alchemic they type of the variable being injected. Unlike when looking at Objective-C classes, Alchemic cannot deduce from the runtime the types of Swift variables and needs to be explicitly told. This argument can take one of two types of data. First a `ALCType` which describes the type of the variable being injected. All the most popular solar types have static methods such as `ALCType.int` to generate this value. 
+
+{{layout.swift}}
+Secondly, it can take a `Class`. So if the target variable is (for example) an `NSArray`, then passing `NSArray.self` is valid.
+
 
 # Model objects
 

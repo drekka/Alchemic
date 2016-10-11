@@ -5,7 +5,9 @@ title: Tag reference
 # Alchemic reference
 
 ## Core
-	
+
+Function/Macro | Description
+--- | ---
 {{ site.data.macros.register }}(...) | Declares a class factory. Optional arguments can be used to further configure it.
 {{ site.data.macros.initialiser }}(*selector*, ...) | Specifies an initializer to be used when instantiating a class. Option arguments specify where to get the values from for any initializer arguments. 
 {{ site.data.macros.method }}(*return-type*, *selector*, ...) | Registers a method as an object factory. If the method is an instance method, then Alchemic will make sure the class is instantiated first. If the method is a class method then it is called directly. Also takes the same configuration arguments as `{{site.data.macros.register}}`. Optional arguments specify where to get the values from for any method arguments.
@@ -26,6 +28,8 @@ title: Tag reference
 
 ## Utility
 
+Function/Macro | Description
+--- | ---
 {{ site.data.macros.weakSelf }} | Useful macro for declaring a weak reference to `self`. Functionally equivalent to<br />```__weak __typeof(self) weakSelf = self```<br />Use before creting a block that will be executed outside of the current routine. Helps to stop circular retain cycles.
 {{ site.data.macros.strongSelf }} | Use within a block that will be executed out side the current scope. Declares a local strong reference to a previously declared weak reference. Use in tandom with `{{ site.data.macros.weakSelf }}` for best effect. Functionally equivalent to<br />```__typeof(self) strongSelf = weakSelf```
 {{ site.data.macros.ignoreSelector }}(*code*) | Mainly used when declaring selectors from other classes and selector warnings are turned on. Pushes a new clang diagnostic scope, turns off selector warnings, includes the passed code then pops the scope.  
@@ -34,28 +38,28 @@ title: Tag reference
 
 Constants are for setting contant values for method arguments, injections, etc.
 
-Constant example | Type
+Constant example | Swift ACLType | Type
 --- | ---
-{{ site.data.macros.bool }}(*YES*) | BOOL
-{{ site.data.macros.char }}(*'x'*) | char
-{{ site.data.macros.cString }}(*"abc"*) | char *
-{{ site.data.macros.double }}(*1.23456*) | double
-{{ site.data.macros.float }}(*1.2f*) | float
-{{ site.data.macros.int }}(*5*) | int
-{{ site.data.macros.long }}(*5*) | long
-{{ site.data.macros.longLong }}(*5*) | long long
-{{ site.data.macros.short }}(*5*) | short
-{{ site.data.macros.uChar }}(*'x'*) | unsigned char
-{{ site.data.macros.uInt }}(*5*) | unsigned int
-{{ site.data.macros.uLong }}(*5*) | unsigned long
-{{ site.data.macros.uLongLong }}(*5*) | unsigned long long
-{{ site.data.macros.uShort }}(*5*) | unsigned short
-{{ site.data.macros.cgFloat }}(*1.23456f*) | CGFloat
-{{ site.data.macros.cgSize }}(*CGSizeMake(1.0f, 2.0f)*) | CGSize
-{{ site.data.macros.cgPoint }}(*1.0f, 2.0f*) | CGPoint
-{{ site.data.macros.cgRect }}(*1.0f, 2.0f, 3.0f, 4.0f*)  | CGRect
-{{ site.data.macros.string }}(*@"abc"*) | NSString *
-{{ site.data.macros.nil }} | nil
+{{ site.data.macros.bool }}(*YES*) | ALCType.bool | BOOL
+{{ site.data.macros.char }}(*'x'*) || char
+{{ site.data.macros.cString }}(*"abc"*) || char *
+{{ site.data.macros.double }}(*1.23456*) || double
+{{ site.data.macros.float }}(*1.2f*) || float
+{{ site.data.macros.int }}(*5*) || int
+{{ site.data.macros.long }}(*5*) || long
+{{ site.data.macros.longLong }}(*5*) || long long
+{{ site.data.macros.short }}(*5*) || short
+{{ site.data.macros.uChar }}(*'x'*) || unsigned char
+{{ site.data.macros.uInt }}(*5*) || unsigned int
+{{ site.data.macros.uLong }}(*5*) || unsigned long
+{{ site.data.macros.uLongLong }}(*5*) || unsigned long long
+{{ site.data.macros.uShort }}(*5*) || unsigned short
+{{ site.data.macros.cgFloat }}(*1.23456f*) || CGFloat
+{{ site.data.macros.cgSize }}(*CGSizeMake(1.0f, 2.0f)*) || CGSize
+{{ site.data.macros.cgPoint }}(*1.0f, 2.0f*) || CGPoint
+{{ site.data.macros.cgRect }}(*1.0f, 2.0f, 3.0f, 4.0f*)  || CGRect
+{{ site.data.macros.string }}(*@"abc"*) || NSString *
+{{ site.data.macros.nil }} || nil
 
 
 

@@ -6,9 +6,9 @@ title: Advanced usage
 
 ## Config classes
 
-It's possible you may need to configure Alchemic outside of the class you want it to manage. You might not not have access to the source code or simply don't want to make it depend on Alchemic. For example, you might want to manage a service class from a framework that is not aware of Alchemic. 
+It's possible you may need to configure Alchemic outside of the class you want it to manage. You might not not have access to the source code or simply don't want to make it depend on Alchemic. 
 
-To get around this sort of problem, you can create a class and implement the `AlchemicConfig` protocol. On start-up, Alchemic will find these methods and execute them to handle the extra setup instructions. 
+To manage classes from other libraries like this, you can create a class and implement the `AlchemicConfig` protocol. In the `configureAlchemic:` method, you can use the context to define and setup external classes in the Alchemic model. 
 
 ```objc
 @interface MyAppConfig : NSObject<AlchemicConfig>
@@ -16,8 +16,8 @@ To get around this sort of problem, you can create a class and implement the `Al
 
 @implementation MyAppConfig
 +(void) configureAlchemic:(id<ALCContext>) context {
-    ALCClassObjectFactory of = [Context registerObjectFactoryForClass:[MyService class]];
-    [context objectFactoryConfig:of, AcFactoryName(@"myService"), nil];
+    ALCClassObjectFactory of = [Context registerObjectFactoryForClass:[SomeOtherClass class]];
+    [context objectFactoryConfig:of, AcFactoryName(@"otherService"), nil];
     [Context objectFactory:of registerVariableInjection:@"aVar", nil];
 }
 @end
@@ -26,8 +26,8 @@ To get around this sort of problem, you can create a class and implement the `Al
 ```swift
 class MyAppConfig:NSObject<AlchemicConfig>
     @objc static func configureAlchemic(context:ALCContext) {
-        let of = context.registerObjectFactoryForClass(MyService.class);
-        of.objectFactoryConfig:of, AcFactoryName("myService"), nil);
+        let of = context.registerObjectFactoryForClass(SomeOtherClass.class);
+        of.objectFactoryConfig:of, AcFactoryName("otherService"), nil);
         of.objectFactory(of registerVariableInjection:"aVar", nil);
     }
 }

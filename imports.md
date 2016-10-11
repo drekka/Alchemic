@@ -17,7 +17,7 @@ Adding Alchemic to your code is quite simple. There are no external configuratio
 ```swift
 import AlchemicSwift
 
-class MyClass {
+class MyClass:NSObject {
    // ...
 }
 ```
@@ -44,7 +44,7 @@ AcRegister
 *__Why are we using macros ? Macros are 'Evil' !__*
 
 {{layout.objc}}
-I've come across this sentiment in the past and I disagree with it. Macros are just another tool we can choose to use, and they can be helpful or abused like anything else. In Alchemic's case, it uses preprocessor macros to dramatically reduce the amount of code you have to type. 
+Macros are just another tool we can choose to use, and they can be helpful or abused like anything else. In Alchemic's case, it uses preprocessor macros to dramatically reduce the amount of code you have to type. 
 
 {{layout.objc}}
 For example Here's what the above registration would look like without using the `AcRegister` macro:
