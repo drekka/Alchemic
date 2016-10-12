@@ -36,13 +36,10 @@ static __nullable __strong id<ALCContext> __mainContext;
 +(void) load {
     // This will trigger the context instantiation unless nostart is specified.
     if ([self mainContext]) {
-        // Initiate on a background q.
-        dispatch_async(dispatch_queue_create("au.com.derekclarkson.Alchemic", DISPATCH_QUEUE_CONCURRENT), ^{
-            @autoreleasepool {
-                [ALCRuntime scanRuntimeWithContext:__mainContext];
-                [__mainContext start];
-            }
-        });
+        [[self mainContext] executeOnAlchemicThread:^{
+            [ALCRuntime scanRuntimeWithContext:__mainContext];
+            [__mainContext start];
+        }];
     }
 }
 

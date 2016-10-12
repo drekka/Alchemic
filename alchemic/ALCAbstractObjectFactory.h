@@ -46,11 +46,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) configureWithOption:(id) option model:(id<ALCModel>) model;
 
-/**
- Sets the observer to execute a block when a change to a dependency is detected.
- */
--(void) setDependencyUpdateObserverWithBlock:(void (^) (NSNotification *)) watchBlock;
-
 @end
 
 NS_ASSUME_NONNULL_END

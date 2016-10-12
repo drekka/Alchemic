@@ -27,8 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractObjectFactory {
     id<ALCObjectFactoryType> _typeStrategy;
-    // The notification observer listening to dependency updates. Currently only used by transient dependencies.
-    id _dependencyChangedObserver;
 }
 
 @synthesize type = _type;
@@ -114,14 +112,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {}
 
--(void) setDependencyUpdateObserverWithBlock:(void (^) (NSNotification *)) watchBlock {
-    STLog(_type, @"Watch for dependency changes");
-    self->_dependencyChangedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AlchemicDidStoreObject
-                                                                                         object:nil
-                                                                                          queue:nil
-                                                                                     usingBlock:watchBlock];
-}
-
 -(ALCInstantiation *) instantiation {
     id object = _typeStrategy.object;
     if (object || _typeStrategy.isNillable) {
@@ -144,17 +134,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setObject:(nullable id) object {
     
-    id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
 
     // forward to the storeObject: method.
     ALCBlockWithObject completion = [self storeObject:object];
     [ALCRuntime executeBlock:completion withObject:object];
 
     // Let other factories know we have updated.
-    NSDictionary *userInfo = @{
-                               AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],
-                               AlchemicDidStoreObjectUserInfoNewValue:object ? object : [NSNull null]
-                               };
+//    id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
+    NSDictionary *userInfo = nil;
+//  @{
+//                               AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],
+//                               AlchemicDidStoreObjectUserInfoNewValue:object ? object : [NSNull null]
+//                               };
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidStoreObject
                                                         object:self
                                                       userInfo:userInfo];
@@ -165,11 +156,7 @@ NS_ASSUME_NONNULL_BEGIN
     return object ? self.objectCompletion : NULL;
 }
 
--(void) unload {
-    if (_dependencyChangedObserver) {
-        [[NSNotificationCenter defaultCenter] removeObserver:_dependencyChangedObserver];
-    }
-}
+-(void) unload {}
 
 #pragma mark - Descriptions
 

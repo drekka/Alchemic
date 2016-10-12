@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) start;
 
+
+
 /**
  Mostly used internal and for testing, this registers a block that will be executed when Alchemic has finished starting. 
  
@@ -125,6 +127,8 @@ registerFactoryMethod:(SEL) selector
  @param object The object to set. If there are not criteria then the class of this object will be used to find the reference to set. To nil out a stored object, pass AcNil.
  */
 -(void) setObject:(id) object, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(void) executeOnAlchemicThread:(void (^)()) block;
 
 @end
 
