@@ -25,54 +25,83 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCContextImpl {
     id<ALCModel> _model;
-    NSMutableSet<ALCSimpleBlock> *_postStartBlocks;
+    NSOperationQueue *_alchemicQueue;
+    NSMutableArray<NSOperation *> *_postStartOperations;
+    NSOperation *_finishedStartingOp;
 }
+
+@synthesize started = _started;
 
 #pragma mark - Lifecycle
 
 -(instancetype)init {
+
     self = [super init];
     if (self) {
         _model = [[ALCModelImpl alloc] init];
-        _postStartBlocks = [[NSMutableSet alloc] init];
+        _postStartOperations = [[NSMutableArray alloc] init];
+        _alchemicQueue = [[NSOperationQueue alloc] init];
+        _alchemicQueue.name = @"Alchemic";
     }
     return self;
 }
 
 -(void) start {
+
     STStartScope(self);
     STLog(self, @"Starting Alchemic ...");
-    [_model resolveDependencies];
-    [_model startSingletons];
+    [self->_model resolveDependencies];
+    [self->_model startSingletons];
 
-    // Whilst not common, this executes certain functions which can be called before registrations have finished. ie AcSet()'s in initial view controllers, etc.
+    // Setup a startup finished op.
+    @synchronized (self) {
 
-    // Move the post startup blocks away so other threads think we are started.
-    STLog(self, @"Executing post startup blocks");
-    NSSet<ALCSimpleBlock> *blocks = _postStartBlocks;
-    _postStartBlocks = nil;
-    // Now execute any stored blocks.
-    [blocks enumerateObjectsUsingBlock:^(ALCSimpleBlock postStartBlock, BOOL *stop) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            postStartBlock();
-        });
-    }];
+        // Setup the finished loading op.
+        _finishedStartingOp = [NSBlockOperation blockOperationWithBlock:^{
+            STLog(self, @"Alchemic started.\n\n%@\n", self->_model);
+            [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
+            self->_postStartOperations = nil;
+            self->_finishedStartingOp = nil;
+            self->_started = YES;
+        }];
 
-    STLog(self, @"Alchemic started.\n\n%@\n", _model);
+        // Setup dependencies.
+        [_postStartOperations enumerateObjectsUsingBlock:^(NSOperation *op, NSUInteger idx, BOOL *stop) {
+            [self->_finishedStartingOp addDependency:op];
+        }];
 
-    // Post the finished notification.
-    [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
+        [_postStartOperations addObject:_finishedStartingOp];
+        [_alchemicQueue addOperations:_postStartOperations waitUntilFinished:NO];
+    }
 }
 
--(void) executeBlockWhenStarted:(void (^)()) block {
-    @synchronized (_postStartBlocks) {
-        if (_postStartBlocks) {
-            [_postStartBlocks addObject:block];
+-(void) executeWhenStarted:(void (^)()) block {
 
-        } else {
+    @synchronized (self) {
+
+        if (self.isStarted) {
             block();
+            return;
+        }
+
+        NSOperation *op = [NSBlockOperation blockOperationWithBlock:^{
+            STLog(self, @"Executing post start block");
+            block();
+        }];
+
+        // if the op has been created then the finishing sequence of ops is running.
+        // So add it as dependency for the new op.
+        if (_finishedStartingOp) {
+            [op addDependency:_finishedStartingOp];
+            [_alchemicQueue addOperation:op];
+        } else {
+            [_postStartOperations addObject:op];
         }
     }
+}
+
+-(void) executeInBackground:(void (^)()) block {
+    [_alchemicQueue addOperationWithBlock:block];
 }
 
 -(void) addResolveAspect:(id<ALCResolveAspect>) resolveAspect {
@@ -207,7 +236,7 @@ registerFactoryMethod:(SEL) selector
 -(nullable id) objectWithClass:(Class) returnType searchCriteria:(NSArray *) criteria {
 
     // Throw an error if this is called too early.
-    if (_postStartBlocks) {
+    if (!self.isStarted) {
         throwException(AlchemicLifecycleException, @"AcGet called before Alchemic is ready to serve objects.");
     }
 
@@ -251,18 +280,16 @@ registerFactoryMethod:(SEL) selector
 
 -(void) setObject:(id) object searchCriteria:(NSArray *) criteria {
 
-    // Check for an Alchemic value.
-    id finalObject = object;
-    if ([object conformsToProtocol:@protocol(ALCValueSource)]) {
-        finalObject = ((id<ALCValueSource>)object).value;
-    }
-
     // Setup a block we want to execute.
-    Class objClass = [object class];
-    STLog(objClass, @"Storing reference for a %@", NSStringFromClass(objClass));
-
     ALCSimpleBlock setBlock = ^{
 
+        // Check for an Alchemic value.
+        id finalObject = object;
+        if ([object conformsToProtocol:@protocol(ALCValueSource)]) {
+            finalObject = ((id<ALCValueSource>)object).value;
+        }
+
+        Class objClass = [finalObject class];
         ALCModelSearchCriteria *searchCriteria = [criteria modelSearchCriteriaWithDefaultClass:objClass
                                                                         unknownArgumentHandler:^(id argument) {
                                                                             throwException(AlchemicIllegalArgumentException, @"Unexpected criteria: %@", argument);
@@ -276,11 +303,12 @@ registerFactoryMethod:(SEL) selector
         }
 
         // Set the object and call the returned completion.
+        STLog(objClass, @"Storing reference %@ using criteria %@", objClass, searchCriteria);
         [((ALCAbstractObjectFactory *) factories[0]) setObject:finalObject];
     };
 
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.
-    [self executeBlockWhenStarted:setBlock];
+    [self executeWhenStarted:setBlock];
 }
 
 -(void) injectDependencies:(id) object, ... {
@@ -290,7 +318,7 @@ registerFactoryMethod:(SEL) selector
     alc_loadVarArgsAfterVariableIntoArray(object, criteria);
 
     // Throw an error if this is called too early.
-    if (_postStartBlocks) {
+    if (!self.isStarted) {
         throwException(AlchemicLifecycleException, @"AcInjectDependencies called before Alchemic is ready.");
     }
 
@@ -306,7 +334,7 @@ registerFactoryMethod:(SEL) selector
                                                                     }];
 
     ALCClassObjectFactory *classFactory = [_model classObjectFactoryMatchingCriteria:searchCriteria];
-    
+
     if (classFactory) {
         STLog(object, @"Starting dependency injection of a %@ ...", NSStringFromClass([object class]));
         [classFactory injectDependencies:object];

@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol ALCContext <NSObject>
 
+@property (nonatomic, assign, readonly, getter = isStarted) BOOL started;
+
 #pragma mark - Lifecycle
 
 /// @name Lifecycle
@@ -41,7 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param block A simple block.
  */
--(void) executeBlockWhenStarted:(void (^)()) block;
+-(void) executeWhenStarted:(void (^)()) block;
+
+-(void) executeInBackground:(void (^)()) block;
 
 -(void) addResolveAspect:(id<ALCResolveAspect>) resolveAspect;
 
