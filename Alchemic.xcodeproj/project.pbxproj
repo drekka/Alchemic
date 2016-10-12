@@ -263,6 +263,16 @@
 		F458283D1CEBFECE0074A844 /* XCTestCase+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = F458283C1CEBFECE0074A844 /* XCTestCase+Alchemic.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6C16AF691DAE73750003FCB2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6C66DC261A8B82C3009F9D94 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C36D74E1B3851680073C4FB;
+			remoteInfo = "Alchemic iOS";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		6C0076911D17D60500E88987 /* ALCFlagMacrosTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCFlagMacrosTests.m; path = alchemicTests/ALCFlagMacrosTests.m; sourceTree = "<group>"; };
 		6C02DE521D61FD7800F0D954 /* ALCTypeDataTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCTypeDataTests.m; sourceTree = "<group>"; };
@@ -963,6 +973,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6C16AF6A1DAE73750003FCB2 /* PBXTargetDependency */,
 			);
 			name = "Integration tests";
 			productName = alchemicTests;
@@ -1316,6 +1327,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6C16AF6A1DAE73750003FCB2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C36D74E1B3851680073C4FB /* Alchemic iOS */;
+			targetProxy = 6C16AF691DAE73750003FCB2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		6C24CCF91CA42BA80026D18C /* Debug */ = {
