@@ -12,7 +12,6 @@
 @import OCMock;
 @import ObjectiveC;
 
-#import "TopThing.h"
 #import "XCTestCase+Alchemic.h"
 
 @interface ALCContextImplTests : XCTestCase
@@ -237,8 +236,12 @@
 #pragma mark - Registering injections
 
 -(void) testObjectFactoryRegisterInjection {
-    
-    id mockParentObjectFactory = [self mockParentObjectFactoryOfType:ALCFactoryTypeSingleton forClass:[TopThing class]];
+
+    Class t241 = objc_allocateClassPair([NSObject class], "T141", 0);
+    class_addIvar(t241, "aInt", sizeof(int), 0, "i");
+    objc_registerClassPair(t241);
+
+    id mockParentObjectFactory = [self mockParentObjectFactoryOfType:ALCFactoryTypeSingleton forClass:t241];
     
     id<ALCValueSource> intValueSource = AcInt(5);
     id mockDependency = OCMClassMock([ALCVariableDependency class]);
