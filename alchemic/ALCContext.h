@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol ALCContext <NSObject>
 
+@property (nonatomic, assign, readonly, getter = isStarted) BOOL started;
+
 #pragma mark - Lifecycle
 
 /// @name Lifecycle
@@ -34,8 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) start;
 
-
-
 /**
  Mostly used internal and for testing, this registers a block that will be executed when Alchemic has finished starting. 
  
@@ -43,7 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param block A simple block.
  */
--(void) executeBlockWhenStarted:(void (^)()) block;
+-(void) executeWhenStarted:(void (^)()) block;
+
+-(void) executeInBackground:(void (^)()) block;
 
 -(void) addResolveAspect:(id<ALCResolveAspect>) resolveAspect;
 
@@ -127,8 +129,6 @@ registerFactoryMethod:(SEL) selector
  @param object The object to set. If there are not criteria then the class of this object will be used to find the reference to set. To nil out a stored object, pass AcNil.
  */
 -(void) setObject:(id) object, ... NS_REQUIRES_NIL_TERMINATION;
-
--(void) executeOnAlchemicThread:(void (^)()) block;
 
 @end
 

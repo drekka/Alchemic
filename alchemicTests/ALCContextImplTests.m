@@ -44,9 +44,9 @@
     OCMVerifyAll(_mockModel);
 }
 
-#pragma mark - ExecuteBlockWhenStarted
+#pragma mark - executeWhenStarted
 
--(void) testExecuteBlockWhenStartedBeforeStartupFinished {
+-(void) testexecuteWhenStartedBeforeStartupFinished {
     
     OCMExpect([_mockModel resolveDependencies]);
     OCMExpect([_mockModel startSingletons]);
@@ -54,7 +54,7 @@
     XCTestExpectation *blockExpectation = [self expectationWithDescription:@"blockFinished"];
     [self expectationForNotification:AlchemicDidFinishStarting object:_context handler:nil];
     
-    [_context executeBlockWhenStarted:^{
+    [_context executeWhenStarted:^{
         [blockExpectation fulfill];
     }];
     
@@ -65,7 +65,7 @@
     OCMVerifyAll(_mockModel);
 }
 
--(void) testExecuteBlockWhenStartedAfterStartupFinished {
+-(void) testexecuteWhenStartedAfterStartupFinished {
     
     OCMExpect([_mockModel resolveDependencies]);
     OCMExpect([_mockModel startSingletons]);
@@ -74,7 +74,7 @@
     
     [_context start];
     
-    [_context executeBlockWhenStarted:^{
+    [_context executeWhenStarted:^{
         [blockExpectation fulfill];
     }];
     
@@ -271,17 +271,14 @@
 }
 
 -(void) testObjectWithClassSearchCriteriaThrowsWhenIllegalArgument {
-
-    // Tell the context it's started
-    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
-
+    [_context setValue:@YES forKey:@"_started"];
     XCTAssertThrowsSpecific(([_context objectWithClass:[NSString class], @"abc", nil]), AlchemicIllegalArgumentException);
 }
 
 -(void) testObjectWithClassSearchCriteria {
 
     // Tell the context it's started
-    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+    [_context setValue:@YES forKey:@"_started"];
 
     // Mock out value source creation.
     id mockValueSource = OCMClassMock([ALCModelValueSource class]);
@@ -302,7 +299,7 @@
 -(void) testSetObjectWithSearchCriteria {
 
     // Tell the context it's started
-    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+    [_context setValue:@YES forKey:@"_started"];
 
     // Stub getting the factory.
     id mockFactory = OCMClassMock([ALCAbstractObjectFactory class]);
@@ -318,7 +315,7 @@
 -(void) testSetObjectWithSearchCriteriaThrowsWhenNoFactoryFound {
 
     // Tell the context it's started
-    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+    [_context setValue:@YES forKey:@"_started"];
 
     // Stub getting the factory.
     OCMStub([_mockModel settableObjectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[]);
@@ -329,7 +326,7 @@
 -(void) testSetObjectWithSearchCriteriaThrowsWhenTooManyFactoriesFound {
 
     // Tell the context it's started
-    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+    [_context setValue:@YES forKey:@"_started"];
 
     // Stub getting the factory.
     id mockFactory1 = OCMClassMock([ALCAbstractObjectFactory class]);
@@ -344,7 +341,7 @@
     id obj = [[NSObject alloc] init];
 
     // Tell the context it's started
-    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+    [_context setValue:@YES forKey:@"_started"];
 
     // Stub getting the factory.
     id mockFactory = OCMClassMock([ALCClassObjectFactory class]);
@@ -362,7 +359,7 @@
     id mockObj = OCMStrictClassMock([NSObject class]);
 
     // Tell the context it's started
-    [self setVariable:@"_postStartBlocks" inObject:_context value:nil];
+    [_context setValue:@YES forKey:@"_started"];
 
     // Stub getting the factory.
     OCMStub([_mockModel classObjectFactoryMatchingCriteria:OCMOCK_ANY]).andReturn(nil);

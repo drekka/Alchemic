@@ -36,7 +36,7 @@ static __nullable __strong id<ALCContext> __mainContext;
 +(void) load {
     // This will trigger the context instantiation unless nostart is specified.
     if ([self mainContext]) {
-        [[self mainContext] executeOnAlchemicThread:^{
+        [[self mainContext] executeInBackground:^{
             [ALCRuntime scanRuntimeWithContext:__mainContext];
             [__mainContext start];
         }];
