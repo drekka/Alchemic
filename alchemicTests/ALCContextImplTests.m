@@ -278,7 +278,7 @@
 -(void) testObjectWithClassSearchCriteria {
 
     // Tell the context it's started
-    [_context setValue:@YES forKey:@"_started"];
+    [_context setValue:@(ALCStatusStarted) forKey:@"_status"];
 
     // Mock out value source creation.
     id mockValueSource = OCMClassMock([ALCModelValueSource class]);
@@ -299,7 +299,7 @@
 -(void) testSetObjectWithSearchCriteria {
 
     // Tell the context it's started
-    [_context setValue:@YES forKey:@"_started"];
+    [_context setValue:@(ALCStatusStarted) forKey:@"_status"];
 
     // Stub getting the factory.
     id mockFactory = OCMClassMock([ALCAbstractObjectFactory class]);
@@ -315,7 +315,7 @@
 -(void) testSetObjectWithSearchCriteriaThrowsWhenNoFactoryFound {
 
     // Tell the context it's started
-    [_context setValue:@YES forKey:@"_started"];
+    [_context setValue:@(ALCStatusStarted) forKey:@"_status"];
 
     // Stub getting the factory.
     OCMStub([_mockModel settableObjectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[]);
@@ -326,7 +326,7 @@
 -(void) testSetObjectWithSearchCriteriaThrowsWhenTooManyFactoriesFound {
 
     // Tell the context it's started
-    [_context setValue:@YES forKey:@"_started"];
+    [_context setValue:@(ALCStatusStarted) forKey:@"_status"];
 
     // Stub getting the factory.
     id mockFactory1 = OCMClassMock([ALCAbstractObjectFactory class]);
@@ -341,7 +341,7 @@
     id obj = [[NSObject alloc] init];
 
     // Tell the context it's started
-    [_context setValue:@YES forKey:@"_started"];
+    [_context setValue:@(ALCStatusStarted) forKey:@"_status"];
 
     // Stub getting the factory.
     id mockFactory = OCMClassMock([ALCClassObjectFactory class]);
@@ -359,7 +359,7 @@
     id mockObj = OCMStrictClassMock([NSObject class]);
 
     // Tell the context it's started
-    [_context setValue:@YES forKey:@"_started"];
+    [_context setValue:@(ALCStatusStarted) forKey:@"_status"];
 
     // Stub getting the factory.
     OCMStub([_mockModel classObjectFactoryMatchingCriteria:OCMOCK_ANY]).andReturn(nil);
