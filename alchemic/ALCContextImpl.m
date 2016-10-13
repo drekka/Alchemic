@@ -63,11 +63,12 @@ NS_ASSUME_NONNULL_BEGIN
         
         // Setup the finished loading op.
         _finishedStartingOp = [NSBlockOperation blockOperationWithBlock:^{
+            STStartScope(self);
             self->_postStartOperations = nil;
             self->_finishedStartingOp = nil;
             self->_status = ALCStatusStarted;
             [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
-            STLog(@"LogModel", @"Alchemic started.%@", self);
+            STLog(@"LogInitialModel", @"Alchemic started.%@", self);
         }];
 
         // Setup dependencies.
