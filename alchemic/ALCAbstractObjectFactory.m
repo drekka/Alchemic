@@ -133,19 +133,17 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Updating
 
 -(void) setObject:(nullable id) object {
-    
 
-    // forward to the storeObject: method.
+    // forward to the storeObject: method in the strategy and execute the returned completio block.
     ALCBlockWithObject completion = [self storeObject:object];
     [ALCRuntime executeBlock:completion withObject:object];
 
     // Let other factories know we have updated.
-//    id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
-    NSDictionary *userInfo = nil;
-//  @{
-//                               AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],
-//                               AlchemicDidStoreObjectUserInfoNewValue:object ? object : [NSNull null]
-//                               };
+    id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
+    NSDictionary *userInfo = @{
+                               AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],
+                               AlchemicDidStoreObjectUserInfoNewValue:object ? object : [NSNull null]
+                               };
     [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidStoreObject
                                                         object:self
                                                       userInfo:userInfo];

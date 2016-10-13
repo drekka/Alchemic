@@ -23,8 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol ALCContext <NSObject>
 
-@property (nonatomic, assign, readonly, getter = isStarted) BOOL started;
-
 #pragma mark - Lifecycle
 
 /// @name Lifecycle

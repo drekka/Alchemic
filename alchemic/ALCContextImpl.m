@@ -21,6 +21,12 @@
 #import <Alchemic/ALCVariableDependency.h>
 #import <Alchemic/ALCContext+Internal.h>
 
+typedef NS_ENUM(NSUInteger, ALCStatus) {
+    ALCStatusNotStarted,
+    ALCStatusRunningPostStartupBlocks,
+    ALCStatusStarted
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCContextImpl {
@@ -28,9 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
     NSOperationQueue *_alchemicQueue;
     NSMutableArray<NSOperation *> *_postStartOperations;
     NSOperation *_finishedStartingOp;
+    ALCStatus _status;
 }
-
-@synthesize started = _started;
 
 #pragma mark - Lifecycle
 
@@ -55,14 +60,14 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Setup a startup finished op.
     @synchronized (self) {
-
+        
         // Setup the finished loading op.
         _finishedStartingOp = [NSBlockOperation blockOperationWithBlock:^{
-            STLog(self, @"Alchemic started.\n\n%@\n", self->_model);
-            [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
             self->_postStartOperations = nil;
             self->_finishedStartingOp = nil;
-            self->_started = YES;
+            self->_status = ALCStatusStarted;
+            [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
+            STLog(@"LogModel", @"Alchemic started.%@", self);
         }];
 
         // Setup dependencies.
@@ -71,6 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
         }];
 
         [_postStartOperations addObject:_finishedStartingOp];
+        _status = ALCStatusRunningPostStartupBlocks;
         [_alchemicQueue addOperations:_postStartOperations waitUntilFinished:NO];
     }
 }
@@ -79,7 +85,8 @@ NS_ASSUME_NONNULL_BEGIN
 
     @synchronized (self) {
 
-        if (self.isStarted) {
+        // If alchemic is started then it's ok to execute immediately.
+        if (_status == ALCStatusStarted) {
             block();
             return;
         }
@@ -236,7 +243,7 @@ registerFactoryMethod:(SEL) selector
 -(nullable id) objectWithClass:(Class) returnType searchCriteria:(NSArray *) criteria {
 
     // Throw an error if this is called too early.
-    if (!self.isStarted) {
+    if (_status == ALCStatusNotStarted) {
         throwException(AlchemicLifecycleException, @"AcGet called before Alchemic is ready to serve objects.");
     }
 
@@ -302,7 +309,7 @@ registerFactoryMethod:(SEL) selector
             throwException(AlchemicUnableToSetReferenceException, @"Expected 1 factory using criteria %@, found %lu", searchCriteria, (unsigned long) factories.count);
         }
 
-        // Set the object and call the returned completion.
+        // Pass the object to the factory.
         STLog(objClass, @"Storing reference %@ using criteria %@", objClass, searchCriteria);
         [((ALCAbstractObjectFactory *) factories[0]) setObject:finalObject];
     };
@@ -318,7 +325,7 @@ registerFactoryMethod:(SEL) selector
     alc_loadVarArgsAfterVariableIntoArray(object, criteria);
 
     // Throw an error if this is called too early.
-    if (!self.isStarted) {
+    if (_status == ALCStatusNotStarted) {
         throwException(AlchemicLifecycleException, @"AcInjectDependencies called before Alchemic is ready.");
     }
 

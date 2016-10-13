@@ -22,6 +22,9 @@ ___Main features___
 # V2.1.1 #
 
 * Updated context description to print the current model. Useful for debugging.
+* Fixed bug where post startup blocks could trigger a lifecycle failure if they called inject dependencies.
+* Refactored startup code with better threading.
+* 
 
 
 
