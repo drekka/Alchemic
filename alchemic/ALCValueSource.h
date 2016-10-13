@@ -25,6 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable, readonly) ALCValue *value;
 
 /**
+ Returns YES if the value source references at least one object factory that is set as transient.
+ */
+@property (nonatomic, assign, readonly) BOOL referencesTransients;
+
+/**
  Returns YES if the passed object factory is referenced by this injector.
 
  @discussion This is a facade method to provide access to the same method on the dependencies internal injector.

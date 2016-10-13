@@ -34,6 +34,10 @@
     return NO;
 }
 
+-(BOOL)referencesTransients {
+    return NO;
+}
+
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack model:(id<ALCModel>)model {}
 
 -(BOOL)isReady {

@@ -271,7 +271,7 @@
 }
 
 -(void) testObjectWithClassSearchCriteriaThrowsWhenIllegalArgument {
-    [_context setValue:@YES forKey:@"_started"];
+    [_context setValue:@(ALCStatusStarted) forKey:@"_status"];
     XCTAssertThrowsSpecific(([_context objectWithClass:[NSString class], @"abc", nil]), AlchemicIllegalArgumentException);
 }
 

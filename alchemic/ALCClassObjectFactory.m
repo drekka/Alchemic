@@ -82,7 +82,7 @@
     
     // Find the first transient dependency and setup watching notifications.
     for (ALCVariableDependency *dependency in _dependencies) {
-        if (dependency.isTransient) {
+        if (dependency.referencesTransients) {
             [self setUpTransientWatch];
             break;
         }
@@ -104,7 +104,8 @@
         
         // Loop through all dependencies and check to see if they are watching the factory that had it's value changed.
         for (ALCVariableDependency *variableDependency in strongSelf->_dependencies) {
-            if (variableDependency.transient && [variableDependency referencesObjectFactory:sourceObjectFactory]) {
+            if (variableDependency.referencesTransients
+                && [variableDependency referencesObjectFactory:sourceObjectFactory]) {
                 
                 // Loop through all the objects this factory has injected and update the dependency in them.
                 for (id object in strongSelf->_injectedObjectHistory) {

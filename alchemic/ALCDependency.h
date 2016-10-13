@@ -26,6 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *stackName;
 
 /**
+ Returns YES if the dependency references at least one object factory that is set as transient.
+ */
+@property (nonatomic, assign, readonly) BOOL referencesTransients;
+
+/**
  Single access point for triggering injects.
  
  @param object The object to inject. Usually a object or NSInvocation.

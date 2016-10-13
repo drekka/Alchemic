@@ -65,6 +65,10 @@
     methodReturningStringNotImplemented;
 }
 
+-(BOOL)referencesTransients {
+    return FALSE;
+}
+
 -(void) injectObject:(id)object {
     methodNotImplemented;
 }

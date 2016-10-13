@@ -21,12 +21,6 @@
 #import <Alchemic/ALCVariableDependency.h>
 #import <Alchemic/ALCContext+Internal.h>
 
-typedef NS_ENUM(NSUInteger, ALCStatus) {
-    ALCStatusNotStarted,
-    ALCStatusRunningPostStartupBlocks,
-    ALCStatusStarted
-};
-
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCContextImpl {
@@ -34,8 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
     NSOperationQueue *_alchemicQueue;
     NSMutableArray<NSOperation *> *_postStartOperations;
     NSOperation *_finishedStartingOp;
-    ALCStatus _status;
 }
+
+@synthesize status = _status;
 
 #pragma mark - Lifecycle
 

@@ -11,7 +11,7 @@
 #import <Alchemic/ALCContext.h>
 
 /**
- The defaul implementation of ALCContext.
+ The default implementation of ALCContext.
  */
 @interface ALCContextImpl : NSObject<ALCContext>
 

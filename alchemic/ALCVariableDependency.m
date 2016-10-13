@@ -48,10 +48,6 @@
         if ([option isKindOfClass:[ALCIsNillable class]]) {
             _allowNil = YES;
 
-        } else if ([option isKindOfClass:[ALCIsTransient class]]) {
-            _transient = YES;
-            _allowNil = YES;
-
         } else {
             throwException(AlchemicIllegalArgumentException, @"Unknown variable dependency option: %@", option);
         }

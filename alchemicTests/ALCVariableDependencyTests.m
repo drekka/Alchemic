@@ -42,11 +42,6 @@
     [_dependency configureWithOptions:@[AcNillable]];
 }
 
--(void) testConfigureWithOptionsTransient {
-    [_dependency configureWithOptions:@[AcTransient]];
-    XCTAssertTrue(_dependency.transient);
-}
-
 -(void) testConfigureWithOptionsUnknownOption {
     XCTAssertThrowsSpecific(([_dependency configureWithOptions:@[@"XXX"]]), AlchemicIllegalArgumentException);
 }
