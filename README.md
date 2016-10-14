@@ -19,12 +19,12 @@ ___Main features___
 * Automatic handling of UIApplicationDelegate instances.
 * Much, much more.
 
-# V2.1.1 #
+# v2.1.1 #
 
 * Updated context description to print the current model. Useful for debugging.
 * Fixed bug where post startup blocks could trigger a lifecycle failure if they called inject dependencies.
 * Refactored startup code with better threading.
-* 
+* AcTransient has been moved from injection declarations to factory declarations where it makes far more sense.
 
 
 
