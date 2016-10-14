@@ -63,6 +63,13 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 @property (nonatomic, assign, readonly, getter = isPrimary) BOOL primary;
 
 /**
+ Whether the factory is considered transient.
+
+ Only non-template factories can be transient. This is because templates never store values.
+ */
+@property (nonatomic, assign, readonly, getter = isTransient) BOOL transient;
+
+/**
  Tells the factory to instantiate an the represented object or return one if it already exists.
  */
 @property (nonatomic, strong, readonly) ALCInstantiation *instantiation;

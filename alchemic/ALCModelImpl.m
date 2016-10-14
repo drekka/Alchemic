@@ -147,10 +147,11 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Logging
 
 -(NSString *) description {
-    NSMutableString *desc = [NSMutableString stringWithString:@"Finished model (* - instantiated):"];
+    NSMutableString *desc = [NSMutableString stringWithString:@"\n\nAlchemic model (* - instantiated):"];
     [_objectFactories enumerateKeysAndObjectsUsingBlock:^(NSString *key, id<ALCObjectFactory> objectFactory, BOOL *stop) {
         [desc appendFormat:@"\n\t%@, as '%@'", [objectFactory description], key];
     }];
+    [desc appendString:@"\n"];
     return desc;
 }
 

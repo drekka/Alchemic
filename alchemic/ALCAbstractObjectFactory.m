@@ -27,12 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractObjectFactory {
     id<ALCObjectFactoryType> _typeStrategy;
-    // The notification observer listening to dependency updates. Currently only used by transient dependencies.
-    id _dependencyChangedObserver;
 }
 
 @synthesize type = _type;
 @synthesize primary = _primary;
+@synthesize transient = _transient;
 @dynamic weak;
 @dynamic ready;
 
@@ -81,17 +80,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) configureWithOption:(id) option model:(id<ALCModel>) model {
     
-    id<ALCObjectFactoryType> oldStrategy = _typeStrategy;
-    
     if ([option isKindOfClass:[ALCIsTemplate class]]) {
-        _typeStrategy = [[ALCObjectFactoryTypeTemplate alloc] init];
-        _typeStrategy.weak = oldStrategy.isWeak;
-        _typeStrategy.nillable = oldStrategy.isNillable;
-        
+        [self setNewStrategyType:[ALCObjectFactoryTypeTemplate class]];
+
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
-        _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
-        _typeStrategy.weak = oldStrategy.isWeak;
-        _typeStrategy.nillable = oldStrategy.isNillable;
+        [self setNewStrategyType:[ALCObjectFactoryTypeReference class]];
         
     } else if ([option isKindOfClass:[ALCIsPrimary class]]) {
         _primary = YES;
@@ -105,22 +98,30 @@ NS_ASSUME_NONNULL_BEGIN
         
     } else if ([option isKindOfClass:[ALCIsNillable class]]) {
         _typeStrategy.nillable = YES;
-        
+
+    } else if ([option isKindOfClass:[ALCIsTransient class]]) {
+        _typeStrategy.nillable = YES;
+        _transient = YES;
+
     } else {
         throwException(AlchemicIllegalArgumentException, @"Unknown factory configuration option: %@", option);
+    }
+
+    // Final validations
+    if (_transient && [_typeStrategy isKindOfClass:[ALCObjectFactoryTypeTemplate class]]) {
+        throwException(AlchemicIllegalArgumentException, @"Invalid configuration: Template factories cannot be transient.");
     }
     
 }
 
--(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {}
-
--(void) setDependencyUpdateObserverWithBlock:(void (^) (NSNotification *)) watchBlock {
-    STLog(_type, @"Watch for dependency changes");
-    self->_dependencyChangedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AlchemicDidStoreObject
-                                                                                         object:nil
-                                                                                          queue:nil
-                                                                                     usingBlock:watchBlock];
+-(void) setNewStrategyType:(Class) newStrategyClass {
+    id<ALCObjectFactoryType> oldStrategy = _typeStrategy;
+    _typeStrategy = [[newStrategyClass alloc] init];
+    _typeStrategy.weak = oldStrategy.isWeak;
+    _typeStrategy.nillable = oldStrategy.isNillable;
 }
+
+-(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {}
 
 -(ALCInstantiation *) instantiation {
     id object = _typeStrategy.object;
@@ -133,8 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(id) createObject {
-    methodNotImplemented;
-    return [NSNull null];
+    methodReturningStringNotImplemented;
 }
 
 -(ALCBlockWithObject) objectCompletion {
@@ -144,14 +144,13 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Updating
 
 -(void) setObject:(nullable id) object {
-    
-    id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
 
-    // forward to the storeObject: method.
+    // forward to the storeObject: method in the strategy and execute the returned completio block.
     ALCBlockWithObject completion = [self storeObject:object];
     [ALCRuntime executeBlock:completion withObject:object];
 
     // Let other factories know we have updated.
+    id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
     NSDictionary *userInfo = @{
                                AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],
                                AlchemicDidStoreObjectUserInfoNewValue:object ? object : [NSNull null]
@@ -166,11 +165,7 @@ NS_ASSUME_NONNULL_BEGIN
     return object ? self.objectCompletion : NULL;
 }
 
--(void) unload {
-    if (_dependencyChangedObserver) {
-        [[NSNotificationCenter defaultCenter] removeObserver:_dependencyChangedObserver];
-    }
-}
+-(void) unload {}
 
 #pragma mark - Descriptions
 

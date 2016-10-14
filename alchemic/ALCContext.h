@@ -18,10 +18,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, ALCStatus) {
+    ALCStatusNotStarted,
+    ALCStatusRunningPostStartupBlocks,
+    ALCStatusStarted
+};
+
 /**
  The main facade for interacting with the Alchemic model.
  */
 @protocol ALCContext <NSObject>
+
+@property (nonatomic, assign, readonly) ALCStatus status;
 
 #pragma mark - Lifecycle
 
@@ -41,7 +49,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param block A simple block.
  */
--(void) executeBlockWhenStarted:(void (^)()) block;
+-(void) executeWhenStarted:(void (^)()) block;
+
+-(void) executeInBackground:(void (^)()) block;
 
 -(void) addResolveAspect:(id<ALCResolveAspect>) resolveAspect;
 

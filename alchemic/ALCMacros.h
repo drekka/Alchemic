@@ -153,7 +153,7 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 
 #define AcInjectDependencies(object, ...) [[Alchemic mainContext] injectDependencies:object, ## __VA_ARGS__, nil]
 
-#define AcWhenReady(block) [[Alchemic mainContext] executeBlockWhenStarted:block]
+#define AcWhenReady(block) [[Alchemic mainContext] executeWhenStarted:block]
 
 #pragma mark - Search criteria
 

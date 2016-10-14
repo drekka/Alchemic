@@ -24,8 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCVariableDependency : ALCAbstractDependency
 
-@property (nonatomic, assign, readonly, getter = isTransient) BOOL transient;
-
 /// The name of the variable that will be injected.
 @property (nonatomic, strong, readonly) NSString *name;
 

@@ -85,6 +85,14 @@ NS_ASSUME_NONNULL_BEGIN
     return [_resolvedFactories containsObject:objectFactory];
 }
 
+-(BOOL) referencesTransients {
+    for (id<ALCObjectFactory> factory in _resolvedFactories) {
+        if (factory.isTransient) {
+            return YES;
+        }
+    }
+    return NO;
+}
 
 -(NSString *)resolvingDescription {
     methodNotImplemented;

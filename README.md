@@ -17,5 +17,14 @@ ___Main features___
 * Works with implementation variables and methods, minimising public declarations.
 * Automatic array boxing for injection.
 * Automatic handling of UIApplicationDelegate instances.
+* Much, much more.
+
+# v2.1.1 #
+
+* Updated context description to print the current model. Useful for debugging.
+* Fixed bug where post startup blocks could trigger a lifecycle failure if they called inject dependencies.
+* Refactored startup code with better threading.
+* AcTransient has been moved from injection declarations to factory declarations where it makes far more sense.
+
 
 

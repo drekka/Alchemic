@@ -10,6 +10,10 @@
 
 #import <Alchemic/AlchemicAware.h>
 #import <Alchemic/AlchemicConfig.h>
+#import <Alchemic/ALCClassObjectFactory.h>
+#import <Alchemic/ALCCloudKeyValueStore.h>
+#import <Alchemic/ALCCloudKeyValueStoreAspect.h>
+#import <Alchemic/ALCConstantValueSource.h>
 #import <Alchemic/ALCContext.h>
 #import <Alchemic/ALCDefs.h>
 #import <Alchemic/ALCException.h>
@@ -18,13 +22,11 @@
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCMethodArgumentDependency.h>
 #import <Alchemic/ALCModelSearchCriteria.h>
+#import <Alchemic/ALCObjectFactory.h>
 #import <Alchemic/ALCResolveAspect.h>
 #import <Alchemic/ALCStringMacros.h>
 #import <Alchemic/ALCUserDefaults.h>
 #import <Alchemic/ALCUserDefaultsAspect.h>
-#import <Alchemic/ALCCloudKeyValueStore.h>
-#import <Alchemic/ALCCloudKeyValueStoreAspect.h>
-#import <Alchemic/ALCConstantValueSource.h>
 
 //! Project version number for alchemic.
 FOUNDATION_EXPORT double alchemicVersionNumber;
