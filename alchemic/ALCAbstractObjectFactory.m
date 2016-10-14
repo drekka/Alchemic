@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize type = _type;
 @synthesize primary = _primary;
+@synthesize transient = _transient;
 @dynamic weak;
 @dynamic ready;
 
@@ -79,17 +80,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) configureWithOption:(id) option model:(id<ALCModel>) model {
     
-    id<ALCObjectFactoryType> oldStrategy = _typeStrategy;
-    
     if ([option isKindOfClass:[ALCIsTemplate class]]) {
-        _typeStrategy = [[ALCObjectFactoryTypeTemplate alloc] init];
-        _typeStrategy.weak = oldStrategy.isWeak;
-        _typeStrategy.nillable = oldStrategy.isNillable;
-        
+        [self setNewStrategyType:[ALCObjectFactoryTypeTemplate class]];
+
     } else if ([option isKindOfClass:[ALCIsReference class]]) {
-        _typeStrategy = [[ALCObjectFactoryTypeReference alloc] init];
-        _typeStrategy.weak = oldStrategy.isWeak;
-        _typeStrategy.nillable = oldStrategy.isNillable;
+        [self setNewStrategyType:[ALCObjectFactoryTypeReference class]];
         
     } else if ([option isKindOfClass:[ALCIsPrimary class]]) {
         _primary = YES;
@@ -103,11 +98,27 @@ NS_ASSUME_NONNULL_BEGIN
         
     } else if ([option isKindOfClass:[ALCIsNillable class]]) {
         _typeStrategy.nillable = YES;
-        
+
+    } else if ([option isKindOfClass:[ALCIsTransient class]]) {
+        _typeStrategy.nillable = YES;
+        _transient = YES;
+
     } else {
         throwException(AlchemicIllegalArgumentException, @"Unknown factory configuration option: %@", option);
     }
+
+    // Final validations
+    if (_transient && [_typeStrategy isKindOfClass:[ALCObjectFactoryTypeTemplate class]]) {
+        throwException(AlchemicIllegalArgumentException, @"Invalid configuration: Template factories cannot be transient.");
+    }
     
+}
+
+-(void) setNewStrategyType:(Class) newStrategyClass {
+    id<ALCObjectFactoryType> oldStrategy = _typeStrategy;
+    _typeStrategy = [[newStrategyClass alloc] init];
+    _typeStrategy.weak = oldStrategy.isWeak;
+    _typeStrategy.nillable = oldStrategy.isNillable;
 }
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {}
