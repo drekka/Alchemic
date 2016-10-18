@@ -19,51 +19,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ALCValue(internal)
-@property (nonatomic, strong, readonly, nullable) id valueAsObject;
-@property (nonatomic, strong, readonly) NSArray *valueAsArray;
-@end
-
 @implementation ALCValue (Injection)
 
 #pragma mark - Access points
 
--(nullable ALCVariableInjectorBlock) variableInjectorForType:(ALCValueType) type {
-    Method method;
-    SEL selector = NSSelectorFromString(str(@"variableInjectorFor%@", [self methodNameFragmentForType:type]));
-    if (selector) {
-        method = class_getInstanceMethod([self class], selector);
-        if (method) {
-            // Dynamically call the selector method to do the converstion.
-            STLog(self, @"Calling selector %@ to get injector", NSStringFromSelector(selector));
-            return ((ALCVariableInjectorBlock (*)(id, Method)) method_invoke)(self, method);
-        }
-    }
-    throwException(AlchemicSelectorNotFoundException, @"Unable to find variable injector for type: %@", self.description);
-    return NULL;
+-(nullable ALCVariableInjectorBlock) variableInjectorForType:(ALCType *) type {
+    Method method = [self methodWithPrefix:@"variableInjectorFor" forType:type];
+    return ((ALCVariableInjectorBlock (*)(id, Method)) method_invoke)(self, method);
 }
 
--(nullable ALCInvocationInjectorBlock) invocationInjectorForType:(ALCValueType) type {
-    Method method;
-    SEL selector = NSSelectorFromString(str(@"invocationInjectorFor%@", [self methodNameFragmentForType:type]));
-    if (selector) {
-        method = class_getInstanceMethod([self class], selector);
-        if (method) {
-            // Dynamically call the selector method to do the converstion.
-            STLog(self, @"Calling selector %@ to get injector", NSStringFromSelector(selector));
-            return ((ALCInvocationInjectorBlock (*)(id, Method)) method_invoke)(self, method);
-        }
-    }
-    
-    throwException(AlchemicSelectorNotFoundException, @"Unable to find invocation injector for type: %@", self.description);
-    return NULL;
+-(nullable ALCInvocationInjectorBlock) invocationInjectorForType:(ALCType *) type {
+    Method method = [self methodWithPrefix:@"invocationInjectorFor" forType:type];
+    return ((ALCInvocationInjectorBlock (*)(id, Method)) method_invoke)(self, method);
 }
 
 #pragma mark - Variable injectors
 
 #define scalarVariableInjector(type, typeName) \
 -(ALCVariableInjectorBlock) variableInjectorFor ## typeName { \
-return ^(ALCVariableInjectorBlockArgs) { \
+return ^BOOL(ALCVariableInjectorBlockArgs) { \
 type value; \
 [self.value getValue:&value]; \
 CFTypeRef objRef = CFBridgingRetain(obj); \
@@ -71,6 +45,7 @@ type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(ivar)); \
 *ivarPtr = value; \
 CFBridgingRelease(objRef); \
 [ALCRuntime executeSimpleBlock:self.completion]; \
+return YES; \
 }; \
 }
 
@@ -94,14 +69,22 @@ scalarVariableInjector(CGPoint, CGPoint)
 scalarVariableInjector(CGRect, CGRect)
 
 -(ALCVariableInjectorBlock) variableInjectorForArray {
-    return ^(ALCVariableInjectorBlockArgs) {
-        [self injectObject:obj variable:ivar withValue:self.valueAsArray];
+    return ^BOOL(ALCVariableInjectorBlockArgs) {
+        id value = [self valueAsArrayError:error];
+        if (!value && *error) {
+            return NO;
+        }
+        return [self injectValue:value ofType:type intoObject:obj variable:ivar error:error];
     };
 }
 
 -(ALCVariableInjectorBlock) variableInjectorForObject {
-    return ^(ALCVariableInjectorBlockArgs) {
-        [self injectObject:obj variable:ivar withValue:self.valueAsObject];
+    return ^BOOL(ALCVariableInjectorBlockArgs) {
+        id value = [self valueAsObjectError:error];
+        if (!value && *error) {
+            return NO;
+        }
+        return [self injectValue:value ofType:type intoObject:obj variable:ivar error:error];
     };
 }
 
@@ -109,11 +92,12 @@ scalarVariableInjector(CGRect, CGRect)
 
 #define scalarMethodArgumentInjector(scalarType, typeName) \
 -(ALCInvocationInjectorBlock) invocationInjectorFor ## typeName { \
-return ^(ALCInvocationInjectorBlockArgs) { \
+return ^BOOL(ALCInvocationInjectorBlockArgs) { \
 scalarType value; \
 [(NSValue *)self.value getValue:&value]; \
 [ALCRuntime executeSimpleBlock:self.completion]; \
 [inv setArgument:&value atIndex:idx + 2]; \
+return YES; \
 }; \
 }
 
@@ -137,22 +121,26 @@ scalarMethodArgumentInjector(CGPoint, CGPoint)
 scalarMethodArgumentInjector(CGRect, CGRect)
 
 -(ALCInvocationInjectorBlock) invocationInjectorForObject {
-    return ^(ALCInvocationInjectorBlockArgs) {
-        id value = self.valueAsObject;
-        [ALCRuntime executeSimpleBlock:self.completion];
-        [inv setArgument:&value atIndex:idx + 2];
+    return ^BOOL(ALCInvocationInjectorBlockArgs) {
+        id value = [self valueAsObjectError:error];
+        if (!value && *error) {
+            return NO;
+        }
+        return [self injectValue:value ofType:type intoInvocation:inv atIndex:idx error:error];
     };
 }
 
 -(ALCInvocationInjectorBlock) invocationInjectorForArray {
-    return ^(ALCInvocationInjectorBlockArgs) {
-        NSArray *value = self.valueAsArray;
-        [ALCRuntime executeSimpleBlock:self.completion];
-        [inv setArgument:&value atIndex:idx + 2];
+    return ^BOOL(ALCInvocationInjectorBlockArgs) {
+        id value = [self valueAsArrayError:error];
+        if (!value && *error) {
+            return NO;
+        }
+        return [self injectValue:value ofType:type intoInvocation:inv atIndex:idx error:error];
     };
 }
 
-#pragma mark - Internal
+#pragma mark - Locating methods
 
 -(NSString *) methodNameFragmentForType:(ALCValueType) type {
     
@@ -186,19 +174,21 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     }
 }
 
-
--(void) injectObject:(id) obj variable:(Ivar) ivar withValue:(id) value {
+-(nullable Method) methodWithPrefix:(NSString *) prefix forType:(ALCType *) type {
     
-    // Patch for Swift Ivars not being retained.
-    // Swift ivar? Currently we detect this via checking it's encoding. Swift returns a null string.
-    // This may be fragile, but appears to be the only choice at the moment.
-    if (value && strlen(ivar_getTypeEncoding(ivar)) == 0) {
-        value = [self copyValueWithRetain:value];
+    SEL selector = NSSelectorFromString([prefix stringByAppendingString:[self methodNameFragmentForType:type.type]]);
+    if (selector) {
+        Method method = class_getInstanceMethod([self class], selector);
+        if (method) {
+            return method;
+        }
     }
     
-    object_setIvar(obj, ivar, value);
-    [ALCRuntime executeSimpleBlock:self.completion];
+    throwException(AlchemicSelectorNotFoundException, @"Unable to find injector method: '%@' for %@", (selector ? NSStringFromSelector(selector) : @"<null>"), self);
+    return NULL;
 }
+
+#pragma mark - Object value injections
 
 /** Swift ivar? Currently returning no encoding.
  Fixing bug with missing retain when setting Swift ivars via object_setIvar(...) which causes EXC BAD ACCESS
@@ -212,7 +202,7 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     return CFBridgingRelease(ptr);
 }
 
--(NSArray *) valueAsArray {
+-(nullable NSArray *) valueAsArrayError:(NSError **) error {
     
     // Already an array.
     id value = self.value;
@@ -222,14 +212,15 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     
     // Scalar types
     if ([value isKindOfClass:[NSValue class]] && ![value isKindOfClass:[NSNumber class]]) {
-        throwException(AlchemicInjectionException, @"Expected an object, found a scalar value");
+        setError(@"Expected an object, found a scalar value");
+        return nil;
     }
     
     // Must be an object but check for null.
     return value == [NSNull null] ? @[] : @[value];
 }
 
--(nullable id) valueAsObject {
+-(nullable id) valueAsObjectError:(NSError **) error {
     
     id value = self.value;
     if ([value isKindOfClass:[NSArray class]]) {
@@ -240,17 +231,53 @@ scalarMethodArgumentInjector(CGRect, CGRect)
             case 1:
                 return values[0];
             default:
-                throwException(AlchemicIncorrectNumberOfValuesException, @"Expected 1, got %lu", (unsigned long) values.count);
+                setError(@"Expected 1, got %lu", (unsigned long) values.count);
+                return nil;
         }
     }
     
     // Scalar types
     if ([value isKindOfClass:[NSValue class]] && ![value isKindOfClass:[NSNumber class]]) {
-        throwException(AlchemicInjectionException, @"Expected an object, found a scalar value");
+        setError(@"Expected an object, found a scalar value");
+        return nil;
     }
     
     // Must be an object but check for null.
     return value == [NSNull null] ? nil : value;
+}
+
+-(BOOL) injectValue:(nullable id) value ofType:(ALCType *) type intoObject:(id) obj variable:(Ivar) ivar error:(NSError **) error {
+    
+    if (!value && !type.isNillable) {
+        setError(@"Nil value not allowed in this injection");
+        return NO;
+    }
+    
+    // Patch for Swift Ivars not being retained.
+    // Swift ivar? Currently we detect this via checking it's encoding. Swift returns a null string.
+    // This may be fragile, but appears to be the only choice at the moment.
+    if (value && strlen(ivar_getTypeEncoding(ivar)) == 0) {
+        value = [self copyValueWithRetain:value];
+    }
+    
+    object_setIvar(obj, ivar, value);
+    [ALCRuntime executeSimpleBlock:self.completion];
+    return YES;
+}
+
+-(BOOL) injectValue:(nullable id) value ofType:(ALCType *) type intoInvocation:(NSInvocation *) inv atIndex:(NSInteger) index error:(NSError **) error {
+    
+    if (!value && !type.isNillable) {
+        setError(@"Nil value not allowed at method argument");
+        return NO;
+    }
+    
+    if (value) {
+        [ALCRuntime executeSimpleBlock:self.completion];
+        id localValue = value;
+        [inv setArgument:&localValue atIndex:index + 2];
+    }
+    return YES;
 }
 
 @end

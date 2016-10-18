@@ -72,6 +72,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, nullable, readonly) NSArray<Protocol *> *objcProtocols;
 
+/**
+ If YES, the the type can also be a nil.
+ 
+ Not relevant when scalars are involved, but when obtaining an injector for an object type, if this is nil and the value to be injected is nil then an error will be thrown.
+ */
+@property (nonatomic, assign, getter = isNillable) BOOL nillable;
+
+@property (nonatomic, assign, readonly, getter = isObjectType) BOOL objectType;
+
 #pragma mark - General factories
 
 /**

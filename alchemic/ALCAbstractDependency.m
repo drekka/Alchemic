@@ -14,6 +14,7 @@
 #import <Alchemic/ALCValueSource.h>
 #import <Alchemic/ALCType.h>
 #import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCFlagMacros.h>
 
 @implementation ALCAbstractDependency
 
@@ -59,7 +60,21 @@
     methodReturningStringNotImplemented;
 }
 
-#pragma mark - ALCDependency
+#pragma mark - OVerride points
+
+-(void) configureWithOptions:(NSArray *) options {
+    
+    for (id option in options) {
+        if ([option isKindOfClass:[ALCIsNillable class]]) {
+            if (!_type.isObjectType) {
+                throwException(AlchemicIllegalArgumentException, @"Scalar types cannot be nillable");
+            }
+            _type.nillable = YES;
+            return;
+        }
+        throwException(AlchemicIllegalArgumentException, @"Unknown variable dependency option: %@", option);
+    }
+}
 
 -(NSString *)stackName {
     methodReturningStringNotImplemented;

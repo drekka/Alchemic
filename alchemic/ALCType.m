@@ -174,6 +174,10 @@ return [[ALCType alloc] initWithValueType:ALCValueType ## valueType]; \
 
 #pragma mark - Other methods
 
+-(BOOL) isObjectType {
+    return _type == ALCValueTypeObject || _type == ALCValueTypeArray;
+}
+
 -(NSString *) description {
 
     switch (_type) {

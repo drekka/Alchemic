@@ -45,8 +45,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) injectObject:(id) object {
     ALCValue *value = self.valueSource.value;
     if (value) {
-        ALCInvocationInjectorBlock injector = [value invocationInjectorForType:self.type.type];
-        injector(object, (NSInteger) _index);
+        ALCInvocationInjectorBlock injector = [value invocationInjectorForType:self.type];
+        NSError *error;
+        if (!injector(object, self.type, (NSInteger) _index, &error)) {
+            throwException(AlchemicInjectionException, @"Error injecting value at index %lu: %@", (unsigned long)_index, error.localizedDescription);
+        }
         return;
     }
 }

@@ -18,48 +18,62 @@
 
 @implementation ALCVariableDependencyTests {
     int aIvar;
-    ALCVariableDependency *_dependency;
+    id aObj;
+    ALCVariableDependency *_scalarDependency;
+    ALCVariableDependency *_objectDependency;
 }
 
 -(void)setUp {
-    Ivar ivar = class_getInstanceVariable([self class], "aIvar");
-    ALCType *type = [ALCType typeWithEncoding:"i"];
-    id<ALCValueSource> source = AcInt(5);
-    _dependency = [ALCVariableDependency variableDependencyWithType:type
-                                                        valueSource:source
-                                                           intoIvar:ivar
+    Ivar scalarIvar = class_getInstanceVariable([self class], "aIvar");
+    ALCType *scalarType = [ALCType typeWithEncoding:"i"];
+    id<ALCValueSource> scalarValue = AcInt(5);
+    _scalarDependency = [ALCVariableDependency variableDependencyWithType:scalarType
+                                                        valueSource:scalarValue
+                                                           intoIvar:scalarIvar
                                                            withName:@"abc"];
+
+    Ivar objIvar = class_getInstanceVariable([self class], "aObj");
+    ALCType *objType = [ALCType typeWithClass:[NSObject class]];
+    id<ALCValueSource> objValue = AcString(@"xyz");
+    _objectDependency = [ALCVariableDependency variableDependencyWithType:objType
+                                                        valueSource:objValue
+                                                           intoIvar:objIvar
+                                                           withName:@"def"];
 }
 
 -(void) testFactoryMethod {
-    XCTAssertNotNil(_dependency);
-    XCTAssertEqualObjects(@"abc", _dependency.name);
+    XCTAssertNotNil(_scalarDependency);
+    XCTAssertEqualObjects(@"abc", _scalarDependency.name);
 }
 
 #pragma mark - Configuring
 
 -(void) testConfigureWithOptionsNillable {
-    [_dependency configureWithOptions:@[AcNillable]];
+    [_objectDependency configureWithOptions:@[AcNillable]];
+}
+
+-(void) testConfigureAScalarWithOptionsNillableThrows {
+    XCTAssertThrowsSpecific([_scalarDependency configureWithOptions:@[AcNillable]], AlchemicIllegalArgumentException);
 }
 
 -(void) testConfigureWithOptionsUnknownOption {
-    XCTAssertThrowsSpecific(([_dependency configureWithOptions:@[@"XXX"]]), AlchemicIllegalArgumentException);
+    XCTAssertThrowsSpecific(([_scalarDependency configureWithOptions:@[@"XXX"]]), AlchemicIllegalArgumentException);
 }
 
 #pragma mark - Naming
 
 -(void) testStackName {
-    XCTAssertEqualObjects(@"abc", _dependency.stackName);
+    XCTAssertEqualObjects(@"abc", _scalarDependency.stackName);
 }
 
 -(void) testResolvingDescription {
-    XCTAssertEqualObjects(@"Variable abc", _dependency.resolvingDescription);
+    XCTAssertEqualObjects(@"Variable abc", _scalarDependency.resolvingDescription);
 }
 
 #pragma mark - Injecting
 
 -(void) testInjecting {
-    [_dependency injectObject:self];
+    [_scalarDependency injectObject:self];
     XCTAssertEqual(5, aIvar);
 }
 

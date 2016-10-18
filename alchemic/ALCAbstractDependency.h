@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype) dependencyWithType:(ALCType *) type
                        valueSource:(id<ALCValueSource>) valueSource;
 
+-(void) configureWithOptions:(NSArray *) options NS_REQUIRES_SUPER;
+
 @end
 
 NS_ASSUME_NONNULL_END

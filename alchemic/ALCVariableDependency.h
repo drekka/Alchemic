@@ -49,7 +49,6 @@ NS_ASSUME_NONNULL_BEGIN
                                   intoIvar:(Ivar) ivar
                                   withName:(NSString *) name;
 
--(void) configureWithOptions:(NSArray *) options;
 
 @end
 

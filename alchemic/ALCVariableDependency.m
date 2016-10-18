@@ -8,8 +8,6 @@
 
 #import <Alchemic/ALCVariableDependency.h>
 
-#import <Alchemic/ALCFlagMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCException.h>
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCValue+Injection.h>
@@ -17,7 +15,6 @@
 
 @implementation ALCVariableDependency {
     Ivar _ivar;
-    BOOL _allowNil;
 }
 
 -(instancetype) initWithType:(ALCType *) type
@@ -42,18 +39,6 @@
                                               withName:name];
 }
 
--(void) configureWithOptions:(NSArray *) options {
-    for (id option in options) {
-
-        if ([option isKindOfClass:[ALCIsNillable class]]) {
-            _allowNil = YES;
-
-        } else {
-            throwException(AlchemicIllegalArgumentException, @"Unknown variable dependency option: %@", option);
-        }
-    }
-}
-
 -(NSString *)stackName {
     return _name;
 }
@@ -61,8 +46,11 @@
 -(void) injectObject:(id)object {
     ALCValue *value = self.valueSource.value;
     if (value) {
-        ALCVariableInjectorBlock injector = [value variableInjectorForType:self.type.type];
-        injector(object, _ivar);
+        ALCVariableInjectorBlock injector = [value variableInjectorForType:self.type];
+        NSError *error;
+        if (!injector(object, self.type, _ivar, &error)) {
+            throwException(AlchemicInjectionException, @"Error injecting value into variable %@: %@", [ALCRuntime forClass:[object class] propertyDescription:_name], error.localizedDescription);
+        }
         return;
     }
 }
