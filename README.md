@@ -19,6 +19,11 @@ ___Main features___
 * Automatic handling of UIApplicationDelegate instances.
 * Much, much more.
 
+# V2.1.2 #
+
+* Fixed bug where it was possible to inject a nil from a nillable factory into a non-nullable variable or method argument.
+
+
 # v2.1.1 #
 
 * Updated context description to print the current model. Useful for debugging.
