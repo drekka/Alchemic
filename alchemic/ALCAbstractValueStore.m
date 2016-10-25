@@ -53,7 +53,14 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key {}
 
 -(nullable id) valueStoreValueForKey:(id) key {
-    methodReturningObjectNotImplemented;
+
+    // Check for a transformer method.
+    SEL transformerSelector = NSSelectorFromString(str(@"%@valueTransformerFromCloud:", key));
+    if ([self respondsToSelector:transformerSelector]) {
+        value = ( (id (*)(id, SEL, id)) objc_msgSend)(self, transformerSelector, value);
+    }
+    
+    return value;
 }
 
 -(void)valueStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key {
@@ -81,7 +88,16 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) setValue:(nullable id) value forUndefinedKey:(NSString *)key {
     STLog(self, @"Undefined key %@ passing value to backing store", key);
     if (!_loadingData) {
-        [self valueStoreSetValue:value forKey:key];
+        
+        id finalValue = value;
+        
+        // Check for a transformer method.
+        SEL transformerSelector = NSSelectorFromString(str(@"%@valueTransformerToCloud:", key));
+        if ([self respondsToSelector:transformerSelector]) {
+            finalValue = ( (id (*)(id, SEL, id)) objc_msgSend)(self, transformerSelector, value);
+        }
+        
+        [self valueStoreSetValue:finalValue forKey:key];
     }
 }
 

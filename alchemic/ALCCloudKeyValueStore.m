@@ -44,21 +44,21 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key {
-    
-    id finalValue = value;
-    
-    // Check for a transformer method.
-    SEL transformerSelector = NSSelectorFromString(str(@"%@valueTransformerToCloud", key));
-    if ([self respondsToSelector:transformerSelector]) {
-        finalValue = [self performSelector:transformerSelector withObject:finalValue];
-    }
-    
-    STLog(self, @"Sending value to cloud key %@: %@", key, finalValue);
-    [[NSUbiquitousKeyValueStore defaultStore] setObject:finalValue forKey:key];
+    STLog(self, @"Sending value to cloud key %@: %@", key, value);
+    [[NSUbiquitousKeyValueStore defaultStore] setObject:value forKey:key];
 }
 
 -(nullable id) valueStoreValueForKey:(id) key {
-    return [[NSUbiquitousKeyValueStore defaultStore] objectForKey:key];
+
+    id value = [[NSUbiquitousKeyValueStore defaultStore] objectForKey:key];
+    
+    // Check for a transformer method.
+    SEL transformerSelector = NSSelectorFromString(str(@"%@valueTransformerFromCloud:", key));
+    if ([self respondsToSelector:transformerSelector]) {
+        value = ( (id (*)(id, SEL, id)) objc_msgSend)(self, transformerSelector, value);
+    }
+
+    return value;
 }
 
 @end
