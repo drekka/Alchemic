@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
     [[NSNotificationCenter defaultCenter] removeObserver:_storeDataChangedObserver];
 }
 
--(nullable NSDictionary<NSString *, id> *) loadDefaults {
+-(nullable NSDictionary<NSString *, id> *) backingStoreDefaults {
     
     [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil queue:nil usingBlock:^(NSNotification *notification) {
         
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
             NSArray<NSString *> *keys = notification.userInfo[NSUbiquitousKeyValueStoreChangedKeysKey];
             for (NSString *key in keys) {
                 STLog(self, @"Cloud updated value for %@", key);
-                [self valueStoreDidUpdateValue:[self valueStoreValueForKey:key] forKey:key];
+                [self backingStoreDidUpdateValue:[self backingStoreValueForKey:key] forKey:key];
             }
         }
     }];
@@ -43,22 +43,13 @@ NS_ASSUME_NONNULL_BEGIN
     return [[NSUbiquitousKeyValueStore defaultStore] dictionaryRepresentation];
 }
 
--(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key {
+-(void)setBackingStoreValue:(nullable id)value forKey:(NSString *)key {
     STLog(self, @"Sending value to cloud key %@: %@", key, value);
     [[NSUbiquitousKeyValueStore defaultStore] setObject:value forKey:key];
 }
 
--(nullable id) valueStoreValueForKey:(id) key {
-
-    id value = [[NSUbiquitousKeyValueStore defaultStore] objectForKey:key];
-    
-    // Check for a transformer method.
-    SEL transformerSelector = NSSelectorFromString(str(@"%@valueTransformerFromCloud:", key));
-    if ([self respondsToSelector:transformerSelector]) {
-        value = ( (id (*)(id, SEL, id)) objc_msgSend)(self, transformerSelector, value);
-    }
-
-    return value;
+-(nullable id) backingStoreValueForKey:(id) key {
+    return [[NSUbiquitousKeyValueStore defaultStore] objectForKey:key];
 }
 
 @end

@@ -15,70 +15,64 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractValueStore {
-    NSArray *_watchedProperties;
-    BOOL _loadingData;
+    NSArray *_kvoProperties;
+    BOOL _settingValues;
 }
 
 -(void)dealloc {
     STLog([self class], @"deallocing");
-    for (NSString *prop in _watchedProperties) {
+    for (NSString *prop in _kvoProperties) {
         [self removeObserver:self forKeyPath:prop];
     }
 }
 
 -(void) alchemicDidInjectDependencies {
-    NSDictionary<NSString *, id> *defaults = [self loadDefaults];
+    NSDictionary<NSString *, id> *defaults = self.backingStoreDefaults;
     if (defaults) {
-        _loadingData = YES;
+        _settingValues = YES;
         [self setValuesForKeysWithDictionary:defaults];
-        _loadingData = NO;
+        _settingValues = NO;
     }
-    [self kvoWatchProperties];
-}
 
--(void) kvoWatchProperties {
-    _watchedProperties = [ALCRuntime writeablePropertiesForClass:[self class]];
-    for (NSString *prop in _watchedProperties) {
+    // Now start watching all writable properties.
+    _kvoProperties = [ALCRuntime writeablePropertiesForClass:[self class]];
+    for (NSString *prop in _kvoProperties) {
         STLog(self, @"Watching property %@", prop);
         [self addObserver:self forKeyPath:prop options:NSKeyValueObservingOptionNew context:nil];
     }
 }
 
-#pragma mark - Override points
+#pragma mark - Backing store override points
 
--(nullable NSDictionary<NSString *, id> *) loadDefaults {
+-(nullable NSDictionary<NSString *, id> *) backingStoreDefaults {
     return nil;
 }
 
--(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key {}
+-(void)setBackingStoreValue:(nullable id) value forKey:(NSString *)key {}
 
--(nullable id) valueStoreValueForKey:(id) key {
-
-    // Check for a transformer method.
-    SEL transformerSelector = NSSelectorFromString(str(@"%@valueTransformerFromCloud:", key));
-    if ([self respondsToSelector:transformerSelector]) {
-        value = ( (id (*)(id, SEL, id)) objc_msgSend)(self, transformerSelector, value);
-    }
-    
-    return value;
+-(nullable id) backingStoreValueForKey:(id) key {
+    methodReturningObjectNotImplemented;
 }
 
--(void)valueStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key {
-    _loadingData = YES;
+-(void)backingStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key {
+    _settingValues = YES;
     [self setValue:value forKey:key];
-    _loadingData = NO;
+    _settingValues = NO;
 }
 
 #pragma mark - KVO
 
-// Triggered when setting autowatched properties.
 -(void)observeValueForKeyPath:(nullable NSString *)keyPath
                      ofObject:(nullable id)object
                        change:(nullable NSDictionary<NSKeyValueChangeKey,id> *)change
                       context:(nullable void *)context {
-    STLog(self, @"Value set for key: %@: %@", keyPath, change[NSKeyValueChangeNewKey]);
-    if (!_loadingData) {
-        [self valueStoreSetValue:change[NSKeyValueChangeNewKey] forKey:keyPath];
+
+    // If we are not loading, then KVO has picked up a value being set, so ensure the backing store has it.
+    if (!_settingValues) {
+        id value = change[NSKeyValueChangeNewKey];
+        id finalValue = [self transformValue:value forKey:keyPath direction:@"To"];
+        STLog(self, @"Value changed for key: %@: %@", keyPath, finalValue);
+        [self setBackingStoreValue:finalValue forKey:keyPath];
     }
 }
 
@@ -87,24 +81,17 @@ NS_ASSUME_NONNULL_BEGIN
 // Setting a value for a undefined key means that there is no property for it. But we still need to get it to the store.
 -(void) setValue:(nullable id) value forUndefinedKey:(NSString *)key {
     STLog(self, @"Undefined key %@ passing value to backing store", key);
-    if (!_loadingData) {
-        
-        id finalValue = value;
-        
-        // Check for a transformer method.
-        SEL transformerSelector = NSSelectorFromString(str(@"%@valueTransformerToCloud:", key));
-        if ([self respondsToSelector:transformerSelector]) {
-            finalValue = ( (id (*)(id, SEL, id)) objc_msgSend)(self, transformerSelector, value);
-        }
-        
-        [self valueStoreSetValue:finalValue forKey:key];
+    if (!_settingValues) {
+        id finalValue = [self transformValue:value forKey:key direction:@"To"];
+        [self setBackingStoreValue:finalValue forKey:key];
     }
 }
 
 // Will be called when not using a custom class. Therefore we want to get the data from the backing store.
 -(nullable id) valueForUndefinedKey:(NSString *)key {
     STLog(self, @"Undefined key %@ getting value from backing store", key);
-    return [self valueStoreValueForKey:key];
+    id value = [self backingStoreValueForKey:key];
+    return [self transformValue:value forKey:key direction:@"From"];
 }
 
 #pragma mark - Subscripting.
@@ -116,6 +103,18 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) setObject:(id) obj forKeyedSubscript:(NSString<NSCopying> *) key {
     [self setValue:obj forKey:(NSString *) key];
 }
+
+#pragma mark - Internal
+
+-(id) transformValue:(id) value forKey:(NSString *) key direction:(NSString *) direction {
+    SEL transformerSelector = NSSelectorFromString(str(@"%@valueTransformer%@Cloud:", key, direction));
+    id transformedValue = value;
+    if ([self respondsToSelector:transformerSelector]) {
+        transformedValue = ( (id (*)(id, SEL, id)) objc_msgSend)(self, transformerSelector, value);
+    }
+    return transformedValue;
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

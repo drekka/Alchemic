@@ -32,14 +32,14 @@
 
 -(void) testLoadDefaults {
     OCMStub([(NSUbiquitousKeyValueStore *)_mockCloudStore dictionaryRepresentation]).andReturn(@{@"abc":@"def"});
-    NSDictionary *defaults = [_store loadDefaults];
+    NSDictionary *defaults = _store.backingStoreDefaults;
     XCTAssertEqualObjects(@"def", defaults[@"abc"]);
 }
 
 -(void) testCloudUpdateUpdatesLocalStore {
     
     OCMStub([(NSUbiquitousKeyValueStore *)_mockCloudStore dictionaryRepresentation]).andReturn(@{@"abc":@"def"});
-    [_store loadDefaults];
+    __unused id _ = _store.backingStoreDefaults;
     
     [self expectationForNotification:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil handler:nil];
     

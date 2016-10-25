@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCUserDefaults
 
--(nullable NSDictionary<NSString *, id> *) loadDefaults {
+-(nullable NSDictionary<NSString *, id> *) backingStoreDefaults {
 
     NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"];
     if(!settingsBundle) {
@@ -37,11 +37,11 @@ NS_ASSUME_NONNULL_BEGIN
     return settings;
 }
 
--(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key {
+-(void)setBackingStoreValue:(nullable id)value forKey:(NSString *)key {
     [[NSUserDefaults standardUserDefaults] setValue:value forKey:key];
 }
 
--(nullable id) valueStoreValueForKey:(id) key {
+-(nullable id) backingStoreValueForKey:(id) key {
     return [[NSUserDefaults standardUserDefaults] valueForKey:key];
 }
 

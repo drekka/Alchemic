@@ -12,26 +12,30 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Abstract parent class for classes that can act as facades fro various properties systems. For example user defaults or cloud key value stores.
+ Abstract parent class for classes that can act as facades for various properties systems. For example user defaults or cloud key value stores.
  
  This class provides services to KVO watch properties in extended classes and automatically update the backing storage mechanism and provides subscript based access to data.
+ 
+ It's designed to act as a local copy of the original store which is referred to as the backing store.
  
  */
 @interface ALCAbstractValueStore : NSObject<AlchemicAware>
 
-#pragma mark - Override points
+#pragma mark - Backing store override points
 
 /**
- Retrive the defaults for loading into the stored properties.
- */
--(nullable NSDictionary<NSString *, id> *) loadDefaults;
-
-/**
- Call when your backing store updates a value independantly of this store.
+ Retruns the default values to initialize this store with.
  
- This will then update this stores data without triggering an upload back to the store.
+ For example, from a root.plist file.
  */
--(void)valueStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key;
+@property (nonatomic, strong, nullable, readonly) NSDictionary<NSString *, id> *backingStoreDefaults;
+
+/**
+ Call when your backing store updates a value.
+ 
+ This will then update this stores data without triggering an recursive update back to the backing store.
+ */
+-(void) backingStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key;
 
 /**
  Override to save a new value to the backing store.
@@ -39,16 +43,14 @@ NS_ASSUME_NONNULL_BEGIN
  @param value The value to be saved.
  @param key The key within the backing store to save under.
  */
--(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key;
+-(void) setBackingStoreValue:(nullable id)value forKey:(NSString *)key;
 
 /**
  Override to retrieve a value from the backing store.
  
  @param key The key within the backing store.
  */
--(nullable id) valueStoreValueForKey:(id) key;
-
-#pragma mark - Updating local values
+-(nullable id) backingStoreValueForKey:(id) key;
 
 #pragma mark - Subscripting services.
 
