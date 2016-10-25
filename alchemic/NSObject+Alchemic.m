@@ -103,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Load the arguments.
     [arguments enumerateObjectsUsingBlock:^(id<ALCDependency> dependency, NSUInteger idx, BOOL *stop) {
-        STLog(self.class, @"Injecting argument at index %i", idx);
+        STLog(self.class, @"Injecting argument at index %lu", (unsigned long)idx);
         [dependency injectObject:inv];
     }];
 

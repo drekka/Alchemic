@@ -76,7 +76,7 @@
                          AcStrongSelf;
                          [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
                          
-                         STLog(strongSelf.type, @"Resolving %i injections into a %@", strongSelf->_dependencies.count, NSStringFromClass(strongSelf.type.objcClass));
+                         STLog(strongSelf.type, @"Resolving %lu injections into a %@", (unsigned long) strongSelf->_dependencies.count, NSStringFromClass(strongSelf.type.objcClass));
                          [strongSelf->_dependencies resolveWithStack:resolvingStack model:model];
                      }];
     

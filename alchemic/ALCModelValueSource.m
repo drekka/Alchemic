@@ -74,7 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     // Resolve dependencies.
-    STLog(self, @"Found %i object factories", _resolvedFactories.count);
+    STLog(self, @"Found %lu object factories", (unsigned long)_resolvedFactories.count);
     for (id<ALCResolvable> objectFactory in _resolvedFactories) {
         STLog(self, @"Resolving dependency %@", objectFactory);
         [objectFactory resolveWithStack:resolvingStack model:model];
