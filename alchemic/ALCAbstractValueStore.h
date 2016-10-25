@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Call when your backing store updates a value independantly of this store.
+ 
+ This will then update this stores data without triggering an upload back to the store.
  */
 -(void)valueStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key;
 
