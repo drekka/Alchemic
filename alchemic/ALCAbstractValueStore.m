@@ -109,12 +109,12 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Internal
 
 -(id) valueFromBackingStoreValue:(id) value usingTransformerForKey:(NSString *) key  {
-    SEL transformerSelector = NSSelectorFromString(str(@"FromBackingStoreValue%@:", key));
+    SEL transformerSelector = NSSelectorFromString(str(@"%@FromBackingStoreValue:", key));
     return [self transformValue:value usingSelector:transformerSelector];
 }
 
 -(id) backingStoreValueFromValue:(id) value  usingTransformerForKey:(NSString *) key {
-    SEL transformerSelector = NSSelectorFromString(str(@"%@backingStoreValueFrom:", key.capitalizedString));
+    SEL transformerSelector = NSSelectorFromString(str(@"backingStoreValueFrom%@:", key.capitalizedString));
     return [self transformValue:value usingSelector:transformerSelector];
 }
 

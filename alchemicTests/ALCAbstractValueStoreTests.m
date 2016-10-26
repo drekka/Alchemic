@@ -62,6 +62,7 @@
     value.number = 5;
     dsv[@"abc"] = value;
     DummyValue *result = dsv[@"abc"];
+    XCTAssertNotEqual(value, result);
     XCTAssertEqual(5, result.number);
 }
 
@@ -71,6 +72,7 @@
     value.number = 5;
     [dsv setValue:value forKey:@"abc"];
     DummyValue *result = [dsv valueForKey:@"abc"];
+    XCTAssertNotEqual(value, result);
     XCTAssertEqual(5, result.number);
 }
 
@@ -80,6 +82,7 @@
     value.number = 5;
     dsv.abc = value;
     DummyValue *result = dsv.abc;
+    XCTAssertNotEqual(value, result);
     XCTAssertEqual(5, result.number);
 }
 
