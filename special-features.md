@@ -5,8 +5,10 @@ title: Runtime
  * [Managing the UIApplicationDelegate instance](#managing-the-uiapplicationdelegate-instance)
  * [UIViewControllers and Story Boards](#uiviewcontrollers-and-story-boards)
      * [Initial controller](#initial-controllers)
- * [NSUserDefaults](#nsuserdefaults)
- * [Cloud based key value storage](#cloud-based-key-value-storage)
+ * [Key-Value stores](#key-value-stores)
+     * [NSUserDefaults](#nsuserdefaults)
+     * [Cloud based key value storage](#cloud-based-key-value-storage)
+     * [Custom value transformers](#custom-value-transformers)
 
 # Managing the UIApplicationDelegate instance
 
@@ -69,7 +71,9 @@ __AcWhenReady__ passes the block to Alchemic which doesn't execute it until afte
 
 *Note: If Alchemic has managed to start before __AcWhenReady__  is called, then it will execute the block immediately.*
 
-# NSUserDefaults
+# Key-Value stores
+
+## NSUserDefaults
 
 Alchemic provides a set of tools for automatically managing data which you want stored in the user defaults area. Alchemics user defaults management feature is activated by adding the `AcEnabledUserDefaults` macro to any of your classes. You only need to add it once and Alchemic will automatically find it. For example:
 
@@ -150,7 +154,7 @@ AcInject(_defaults)
 ```
 
 
-# Cloud based key value storage
+## Cloud based key value storage
 
 Apple provides a [cloud base key value storage](https://developer.apple.com/library/prerelease/content/documentation/General/Conceptual/iCloudDesignGuide/Chapters/DesigningForKey-ValueDataIniCloud.html) facility which you can use in your apps. Essentially this works exactly the same was as `NSUserDefaults` except the data is stored in the cloud rather than on the device. This enables a simple mechanism which can synchronise your data (within certain limits) between your devices.
 
@@ -188,4 +192,40 @@ AcInject(_ckvs)
 @end
 ```
 
+## Custom value transformers
 
+With all key value stores you can store values of types that are not natively supported by their backing stores. To do so, you need to implement two methods for each property which is of an unknown type.
+
+```objc
+-(id) <property-name>FromBackingStoreValue:(id) value;
+-(id) backingStoreValueFrom<property-name>:(id) value;
+``` 
+
+For example if you want to store instances of `MyClass` in the cloud, you have to transform those instances into something that the cloud can store. Here's an example of implementing suitable transformers.
+
+```objc
+@interface MyCloudStore : ALCCloudKeyValueStore
+// Defining a property is optional, but useful.
+@property (nonatomic, strong) MyClass *myObject;
+@end
+```
+
+```objc
+@implementation MyCloudStore
+
+-(MyClass *) myObjectFromBackingStoreValue:(NSDictionary *) values {
+    MyClass *myClass = [[MyClass alloc] init];
+    [MyClass setValuesForKeysWithDictionary:values];
+    return myClass;
+}
+
+-(NSDictionary *) backingStoreValueFromMyObject:(id) myObj {
+    return @[
+        // myObj properties.
+    ];
+}
+
+@end
+```
+
+When sending a value to or from the backing key value store, Alchemic will automatically search for and call these transformer methods if they exist. 
