@@ -20,33 +20,38 @@
 @end
 
 @interface DummyValueStore : ALCAbstractValueStore
-@property (nonatomic, strong) DummyValue *abc;
+@property (nonatomic, strong) id backingStoreValue;
 @end
 
-@implementation DummyValueStore {
-    id obj;
-}
+@implementation DummyValueStore
 
 -(void) setBackingStoreValue:(nullable id)value forKey:(NSString *)key {
-    obj = value;
+    _backingStoreValue = value;
 }
 
 -(nullable id) backingStoreValueForKey:(id) key {
-    return obj;
+    return _backingStoreValue;
 }
 
 -(id) abcFromBackingStoreValue:(id) value {
-    NSNumber *bsv = (NSNumber *) value;
-    DummyValue *kvc = (DummyValue *) value;
-    kvc.number = bsv.intValue;
-    return kvc;
+    NSNumber *bsValue = (NSNumber *) value;
+    DummyValue *dummyValue = [[DummyValue alloc] init];
+    dummyValue.number = bsValue.intValue;
+    return dummyValue;
 }
 
 -(id) backingStoreValueFromAbc:(id) value {
-    DummyValue *kvc = (DummyValue *) value;
-    return @(kvc.number);
+    DummyValue *dummyValue = (DummyValue *) value;
+    return @(dummyValue.number);
 }
 
+@end
+
+@interface DummyValueStoreWithProperty : DummyValueStore
+@property (nonatomic, strong) DummyValue *abc;
+@end
+
+@implementation DummyValueStoreWithProperty
 @end
 
 #pragma mark - Tests
@@ -54,35 +59,44 @@
 @interface ALCAbstractValueStoreTests : XCTestCase
 @end
 
-@implementation ALCAbstractValueStoreTests
+@implementation ALCAbstractValueStoreTests {
+    DummyValueStore *_store;
+    DummyValueStoreWithProperty *_storeWithProperty;
+    DummyValue *_value;
+}
+
+-(void)setUp {
+    _store = [[DummyValueStore alloc] init];
+    [_store alchemicDidInjectDependencies];
+
+    _storeWithProperty = [[DummyValueStoreWithProperty alloc] init];
+    [_storeWithProperty alchemicDidInjectDependencies];
+
+    _value = [[DummyValue alloc] init];
+    _value.number = 5;
+}
 
 -(void) testToFromTransformersUsingSubscripts {
-    DummyValueStore *dsv = [[DummyValueStore alloc] init];
-    DummyValue *value = [[DummyValue alloc] init];
-    value.number = 5;
-    dsv[@"abc"] = value;
-    DummyValue *result = dsv[@"abc"];
-    XCTAssertNotEqual(value, result);
+    _store[@"abc"] = _value;
+    XCTAssertEqual(5, ((NSNumber *)_store.backingStoreValue).intValue);
+    DummyValue *result = _store[@"abc"];
+    XCTAssertNotEqual(_value, result);
     XCTAssertEqual(5, result.number);
 }
 
 -(void) testToFromTransformersUsingKVC {
-    DummyValueStore *dsv = [[DummyValueStore alloc] init];
-    DummyValue *value = [[DummyValue alloc] init];
-    value.number = 5;
-    [dsv setValue:value forKey:@"abc"];
-    DummyValue *result = [dsv valueForKey:@"abc"];
-    XCTAssertNotEqual(value, result);
+    [_store setValue:_value forKey:@"abc"];
+    XCTAssertEqual(5, ((NSNumber *)_store.backingStoreValue).intValue);
+    DummyValue *result = [_store valueForKey:@"abc"];
+    XCTAssertNotEqual(_value, result);
     XCTAssertEqual(5, result.number);
 }
 
 -(void) testToFromTransformersUsingProperty {
-    DummyValueStore *dsv = [[DummyValueStore alloc] init];
-    DummyValue *value = [[DummyValue alloc] init];
-    value.number = 5;
-    dsv.abc = value;
-    DummyValue *result = dsv.abc;
-    XCTAssertNotEqual(value, result);
+    _storeWithProperty.abc = _value;
+    XCTAssertEqual(5, ((NSNumber *)_storeWithProperty.backingStoreValue).intValue);
+    DummyValue *result = _storeWithProperty.abc;
+    XCTAssertEqual(_value, result);
     XCTAssertEqual(5, result.number);
 }
 

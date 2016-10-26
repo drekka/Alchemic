@@ -15,7 +15,7 @@ ___Main features___
 * Supports methods and initializer arguments from objects or constants.
 * Objects can be located using class, protocol or unique name searches.
 * Works with implementation variables and methods, minimising public declarations.
-* Automatic array boxing for injection.
+* Automatic array boxing for injections.
 * Automatic handling of UIApplicationDelegate instances.
 * Support for NSUserDefaults and Apple's cloud based key-value stores.
 * and much, much more.
@@ -24,7 +24,6 @@ ___Main features___
 
 * Fixed bug where it was possible to inject a nil from a nillable factory into a non-nullable variable or method argument.
 * Added support for value transformations when sending values to and from value stores.
-
 
 # v2.1.1 #
 
