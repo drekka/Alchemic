@@ -7,7 +7,9 @@
 //
 
 @import Foundation;
-#import <Alchemic/AlchemicAware.h>
+
+#import <Alchemic/ALCValueStore.h>
+#import <Alchemic/ALCValueStoreImplementation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,44 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  It's designed to act as a local copy of the original store which is referred to as the backing store.
  
  */
-@interface ALCAbstractValueStore : NSObject<AlchemicAware>
-
-#pragma mark - Backing store override points
-
-/**
- Retruns the default values to initialize this store with.
- 
- For example, from a root.plist file.
- */
-@property (nonatomic, strong, nullable, readonly) NSDictionary<NSString *, id> *backingStoreDefaults;
-
-/**
- Call when your backing store updates a value.
- 
- This will then update this stores data without triggering an recursive update back to the backing store.
- */
--(void) backingStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key;
-
-/**
- Override to save a new value to the backing store.
- 
- @param value The value to be saved.
- @param key The key within the backing store to save under.
- */
--(void) setBackingStoreValue:(nullable id)value forKey:(NSString *)key;
-
-/**
- Override to retrieve a value from the backing store.
- 
- @param key The key within the backing store.
- */
--(nullable id) backingStoreValueForKey:(id) key;
-
-#pragma mark - Subscripting services.
-
--(id) objectForKeyedSubscript:(NSString *) key;
-
--(void) setObject:(id) obj forKeyedSubscript:(NSString<NSCopying> *) key;
+@interface ALCAbstractValueStore : NSObject<ALCValueStore, ALCValueStoreImplementation>
 
 @end
 

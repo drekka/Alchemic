@@ -7,10 +7,12 @@
 //
 
 @import StoryTeller;
+
 #import <Alchemic/ALCAbstractValueStore.h>
 
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCValueStoreImplementation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -70,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
     // If we are not loading, then KVO has picked up a value being set, so ensure the backing store has it.
     if (!_settingValues) {
         id value = change[NSKeyValueChangeNewKey];
-        id finalValue = [self transformValue:value forKey:keyPath direction:@"To"];
+        id finalValue = [self backingStoreValueFromValue:value usingTransformerForKey:keyPath];
         STLog(self, @"Value changed for key: %@: %@", keyPath, finalValue);
         [self setBackingStoreValue:finalValue forKey:keyPath];
     }
@@ -82,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) setValue:(nullable id) value forUndefinedKey:(NSString *)key {
     STLog(self, @"Undefined key %@ passing value to backing store", key);
     if (!_settingValues) {
-        id finalValue = [self transformValue:value forKey:key direction:@"To"];
+        id finalValue = [self backingStoreValueFromValue:value usingTransformerForKey:key];
         [self setBackingStoreValue:finalValue forKey:key];
     }
 }
@@ -91,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable id) valueForUndefinedKey:(NSString *)key {
     STLog(self, @"Undefined key %@ getting value from backing store", key);
     id value = [self backingStoreValueForKey:key];
-    return [self transformValue:value forKey:key direction:@"From"];
+    return [self valueFromBackingStoreValue:value usingTransformerForKey:key];
 }
 
 #pragma mark - Subscripting.
@@ -106,13 +108,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Internal
 
--(id) transformValue:(id) value forKey:(NSString *) key direction:(NSString *) direction {
-    SEL transformerSelector = NSSelectorFromString(str(@"%@valueTransformer%@Cloud:", key, direction));
-    id transformedValue = value;
-    if ([self respondsToSelector:transformerSelector]) {
-        transformedValue = ( (id (*)(id, SEL, id)) objc_msgSend)(self, transformerSelector, value);
+-(id) valueFromBackingStoreValue:(id) value usingTransformerForKey:(NSString *) key  {
+    SEL transformerSelector = NSSelectorFromString(str(@"FromBackingStoreValue%@:", key));
+    return [self transformValue:value usingSelector:transformerSelector];
+}
+
+-(id) backingStoreValueFromValue:(id) value  usingTransformerForKey:(NSString *) key {
+    SEL transformerSelector = NSSelectorFromString(str(@"%@backingStoreValueFrom:", key.capitalizedString));
+    return [self transformValue:value usingSelector:transformerSelector];
+}
+
+-(id) transformValue:(id) value usingSelector:(SEL) selector {
+    if ([self respondsToSelector:selector]) {
+        return ( (id (*)(id, SEL, id)) objc_msgSend)(self, selector, value);
     }
-    return transformedValue;
+    return value;
 }
 
 @end

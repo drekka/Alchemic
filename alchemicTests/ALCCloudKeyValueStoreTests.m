@@ -28,6 +28,7 @@
 
 -(void) tearDown {
     [_mockCloudStore stopMocking];
+    _store = nil; // Ensures dealloc is called.
 }
 
 -(void) testLoadDefaults {

@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
     id _storeDataChangedObserver;
 }
 
--(void)dealloc {
+-(void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:_storeDataChangedObserver];
 }
 
