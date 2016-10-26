@@ -9,19 +9,21 @@ ___Main features___
 
 * Engineered in Objective-C, usable in Objective-C and Swift projects.
 * Definitions and injections are dynamically read from the runtime.
-* Automatically started on a background thread.
-* Objects can be instantiated using initializers or factory methods if desired.
-* Objects can be managed as singletons, factories (templates) or externally sourced.
-* Arguments to methods and initializers can be other objects or constants.
+* Self starting on a background thread.
+* Uses default initializers, custom initializers or factory methods to instantiate objects.
+* Supports singletons, factories (templates) or externally created objects.
+* Supports methods and initializer arguments from objects or constants.
 * Objects can be located using class, protocol or unique name searches.
 * Works with implementation variables and methods, minimising public declarations.
 * Automatic array boxing for injection.
 * Automatic handling of UIApplicationDelegate instances.
-* Much, much more.
+* Support for NSUserDefaults and Apple's cloud based key-value stores.
+* and much, much more.
 
 # V2.1.2 #
 
 * Fixed bug where it was possible to inject a nil from a nillable factory into a non-nullable variable or method argument.
+* Added support for value transformations when sending values to and from value stores.
 
 
 # v2.1.1 #

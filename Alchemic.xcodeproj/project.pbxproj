@@ -254,6 +254,7 @@
 		6CED05781BCB548700B6C55B /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05771BCB548700B6C55B /* PEGKit.framework */; };
 		6C5BC1C31D6B2EDA009592EB /* PEGKit.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757AA1D6ACF6D00BCAF6B /* PEGKit.framework.dSYM */; };
 		6C8757AD1D6ACF7400BCAF6B /* PEGKit.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757AA1D6ACF6D00BCAF6B /* PEGKit.framework.dSYM */; };
+		6CF6E8DD1DC069F1009D6533 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 6CF6E8DC1DC069F1009D6533 /* README.md */; };
 		6CB595CA1D6B435C006BC061 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6CB595C91D6B435C006BC061 /* Settings.bundle */; };
 		6C5830241D68688A00297AF8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
 		6C5830261D6868BF00297AF8 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CED05751BCB545800B6C55B /* StoryTeller.framework */; };
@@ -427,6 +428,7 @@
 		6CD8EB961D68607300A0FCB5 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/tvOS/PEGKit.framework; sourceTree = "<group>"; };
 		6CED05771BCB548700B6C55B /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/iOS/PEGKit.framework; sourceTree = "<group>"; };
 		6C8757AA1D6ACF6D00BCAF6B /* PEGKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = PEGKit.framework.dSYM; path = Carthage/Build/iOS/PEGKit.framework.dSYM; sourceTree = "<group>"; };
+		6CF6E8DC1DC069F1009D6533 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6CB595C91D6B435C006BC061 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		6CD8EB971D68607300A0FCB5 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/tvOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6CED05751BCB545800B6C55B /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/iOS/StoryTeller.framework; sourceTree = "<group>"; };
@@ -490,6 +492,7 @@
 				6CE899421D8FABB500A1983F /* Cartfile.private */,
 				6C469BB61BB0210A00CD2286 /* Frameworks */,
 				6C66DC2F1A8B82C3009F9D94 /* Products */,
+				6CF6E8DC1DC069F1009D6533 /* README.md */,
 				F4908C821CF556AC00DB4830 /* Resources */,
 				F45828351CEBFE100074A844 /* Tests */,
 			);
@@ -1290,6 +1293,7 @@
 				6C71D5481CA16BE600D25AC0 /* NSArray+Alchemic.m in Sources */,
 				6CC2848A1CB53F03006B613F /* NSBundle+Alchemic.m in Sources */,
 				6C68CF8A1C6636D6003A7A54 /* NSObject+Alchemic.m in Sources */,
+				6CF6E8DD1DC069F1009D6533 /* README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
