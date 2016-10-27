@@ -24,6 +24,7 @@ ___Main features___
 
 * Fixed bug where it was possible to inject a nil from a nillable factory into a non-nullable variable or method argument.
 * Added support for value transformations when sending values to and from value stores.
+* Split value store loading into defaults and current values for better management of incoming data.
 
 # v2.1.1 #
 

@@ -33,7 +33,7 @@
 
 -(void) testLoadDefaults {
     OCMStub([(NSUbiquitousKeyValueStore *)_mockCloudStore dictionaryRepresentation]).andReturn(@{@"abc":@"def"});
-    NSDictionary *defaults = _store.backingStoreDefaults;
+    NSDictionary *defaults = _store.backingStoreValues;
     XCTAssertEqualObjects(@"def", defaults[@"abc"]);
 }
 
