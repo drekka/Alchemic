@@ -23,8 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
     [[NSNotificationCenter defaultCenter] removeObserver:_storeDataChangedObserver];
 }
 
--(nullable NSDictionary<NSString *, id> *) backingStoreDefaults {
-    
+-(void) alchemicDidInjectDependencies {
+
+    [super alchemicDidInjectDependencies];
+
+    // Start watching the store for changes.
     [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil queue:nil usingBlock:^(NSNotification *notification) {
         
         // If the store has changed, update the local properties with the passed keys.
@@ -37,8 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
             }
         }
     }];
-    
-    // get changes that might have happened while this instance of your app wasn't running
+}
+
+-(nullable NSDictionary<NSString *, id> *) backingStoreValues {
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     return [[NSUbiquitousKeyValueStore defaultStore] dictionaryRepresentation];
 }

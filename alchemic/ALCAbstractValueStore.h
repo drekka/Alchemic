@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
  
  It's designed to act as a local copy of the original store which is referred to as the backing store.
  
+ Note; If instantiating this class outside of Alchemic, ensure that the alchemicDidInjectDependencies methos is called to finish initializing it and to get defaults loaded.
+ 
  */
 @interface ALCAbstractValueStore : NSObject<ALCValueStore, ALCValueStoreImplementation>
 

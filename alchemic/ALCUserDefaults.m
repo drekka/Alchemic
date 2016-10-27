@@ -37,6 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
     return settings;
 }
 
+-(nullable NSDictionary<NSString *,id> *) backingStoreValues {
+    return [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+}
+
 -(void)setBackingStoreValue:(nullable id)value forKey:(NSString *)key {
     [[NSUserDefaults standardUserDefaults] setValue:value forKey:key];
 }

@@ -18,10 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractValueStore {
     NSArray *_kvoProperties;
-    BOOL _settingValues;
+    BOOL _loadingDataFromBackingStore;
 }
 
--(void)dealloc {
+-(void) dealloc {
     STLog([self class], @"deallocing");
     for (NSString *prop in _kvoProperties) {
         [self removeObserver:self forKeyPath:prop];
@@ -29,14 +29,12 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) alchemicDidInjectDependencies {
-    NSDictionary<NSString *, id> *defaults = self.backingStoreDefaults;
-    if (defaults) {
-        _settingValues = YES;
-        [self setValuesForKeysWithDictionary:defaults];
-        _settingValues = NO;
-    }
 
-    // Now start watching all writable properties.
+    // Load default values then current values into the store.
+    [self loadData:self.backingStoreDefaults];
+    [self loadData:self.backingStoreValues];
+    
+    // Now start watching all writable properties for changes mde by the app.
     _kvoProperties = [ALCRuntime writeablePropertiesForClass:[self class]];
     for (NSString *prop in _kvoProperties) {
         STLog(self, @"Watching property %@", prop);
@@ -50,27 +48,31 @@ NS_ASSUME_NONNULL_BEGIN
     return nil;
 }
 
--(void)setBackingStoreValue:(nullable id) value forKey:(NSString *)key {}
+-(nullable NSDictionary<NSString *, id> *) backingStoreValues {
+    return nil;
+}
+
+-(void) setBackingStoreValue:(nullable id) value forKey:(NSString *)key {}
 
 -(nullable id) backingStoreValueForKey:(id) key {
     methodReturningObjectNotImplemented;
 }
 
--(void)backingStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key {
-    _settingValues = YES;
+-(void)backingStoreDidUpdateValue:(nullable id) value forKey:(NSString *) key {
+    _loadingDataFromBackingStore = YES;
     [self setValue:value forKey:key];
-    _settingValues = NO;
+    _loadingDataFromBackingStore = NO;
 }
 
 #pragma mark - KVO
 
--(void)observeValueForKeyPath:(nullable NSString *)keyPath
-                     ofObject:(nullable id)object
-                       change:(nullable NSDictionary<NSKeyValueChangeKey,id> *)change
-                      context:(nullable void *)context {
+-(void) observeValueForKeyPath:(nullable NSString *) keyPath
+                     ofObject:(nullable id) object
+                       change:(nullable NSDictionary<NSKeyValueChangeKey,id> *) change
+                      context:(nullable void *) context {
 
     // If we are not loading, then KVO has picked up a value being set, so ensure the backing store has it.
-    if (!_settingValues) {
+    if (!_loadingDataFromBackingStore) {
         id value = change[NSKeyValueChangeNewKey];
         id finalValue = [self backingStoreValueFromValue:value usingTransformerForKey:keyPath];
         STLog(self, @"Value changed for key: %@: %@", keyPath, finalValue);
@@ -83,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Setting a value for a undefined key means that there is no property for it. But we still need to get it to the store.
 -(void) setValue:(nullable id) value forUndefinedKey:(NSString *)key {
     STLog(self, @"Undefined key %@ passing value to backing store", key);
-    if (!_settingValues) {
+    if (!_loadingDataFromBackingStore) {
         id finalValue = [self backingStoreValueFromValue:value usingTransformerForKey:key];
         [self setBackingStoreValue:finalValue forKey:key];
     }
@@ -107,6 +109,21 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 #pragma mark - Internal
+
+-(void) loadData:(nullable NSDictionary *) source {
+
+    NSMutableDictionary<NSString *, id> *data = [source mutableCopy];
+    if (data) {
+        
+        // Convert any values that need it.
+        [data enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL *stop) {
+            data[key] = [self valueFromBackingStoreValue:data[key] usingTransformerForKey:key];
+        }];
+        
+        [self setValuesForKeysWithDictionary:data];
+    }
+
+}
 
 -(id) valueFromBackingStoreValue:(id) value usingTransformerForKey:(NSString *) key  {
     SEL transformerSelector = NSSelectorFromString(str(@"%@FromBackingStoreValue:", key));
