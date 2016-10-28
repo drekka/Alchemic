@@ -25,6 +25,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCAbstractValueStore : NSObject<ALCValueStore, ALCValueStoreImplementation>
 
+/**
+ Override so we can require a call to super if this is overriden.
+ */
+-(void) observeValueForKeyPath:(nullable NSString *) keyPath
+                      ofObject:(nullable id) object
+                        change:(nullable NSDictionary<NSKeyValueChangeKey,id> *) change
+                       context:(nullable void *) context NS_REQUIRES_SUPER;
+
 @end
 
 NS_ASSUME_NONNULL_END

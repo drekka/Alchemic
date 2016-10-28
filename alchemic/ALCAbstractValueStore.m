@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractValueStore {
     NSArray *_kvoProperties;
-    BOOL _loadingDataFromBackingStore;
+    BOOL _loadingData;
 }
 
 -(void) dealloc {
@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) alchemicDidInjectDependencies {
-
+    
     // Load default values then current values into the store.
     [self loadData:self.backingStoreDefaults];
     [self loadData:self.backingStoreValues];
@@ -59,23 +59,23 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)backingStoreDidUpdateValue:(nullable id) value forKey:(NSString *) key {
-    _loadingDataFromBackingStore = YES;
+    _loadingData = YES;
     [self setValue:value forKey:key];
-    _loadingDataFromBackingStore = NO;
+    _loadingData = NO;
 }
 
 #pragma mark - KVO
 
 -(void) observeValueForKeyPath:(nullable NSString *) keyPath
-                     ofObject:(nullable id) object
-                       change:(nullable NSDictionary<NSKeyValueChangeKey,id> *) change
-                      context:(nullable void *) context {
-
-    // If we are not loading, then KVO has picked up a value being set, so ensure the backing store has it.
-    if (!_loadingDataFromBackingStore) {
+                      ofObject:(nullable id) object
+                        change:(nullable NSDictionary<NSKeyValueChangeKey,id> *) change
+                       context:(nullable void *) context {
+    
+    if (!_loadingData) {
+        // If we are not loading data from the backing store, then KVO has picked up a value being set, so forward to the backing store.
         id value = change[NSKeyValueChangeNewKey];
         id finalValue = [self backingStoreValueFromValue:value usingTransformerForKey:keyPath];
-        STLog(self, @"Value changed for key: %@: %@", keyPath, finalValue);
+        STLog(self, @"Forwarding value for key '%@' to backing store", keyPath);
         [self setBackingStoreValue:finalValue forKey:keyPath];
     }
 }
@@ -83,9 +83,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - KVC
 
 // Setting a value for a undefined key means that there is no property for it. But we still need to get it to the store.
--(void) setValue:(nullable id) value forUndefinedKey:(NSString *)key {
-    STLog(self, @"Undefined key %@ passing value to backing store", key);
-    if (!_loadingDataFromBackingStore) {
+-(void) setValue:(nullable id) value forUndefinedKey:(NSString *) key {
+    if (!_loadingData) {
+        STLog(self, @"Forwarding value for unknown key '%@' to backing store", key);
         id finalValue = [self backingStoreValueFromValue:value usingTransformerForKey:key];
         [self setBackingStoreValue:finalValue forKey:key];
     }
@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Will be called when not using a custom class. Therefore we want to get the data from the backing store.
 -(nullable id) valueForUndefinedKey:(NSString *)key {
-    STLog(self, @"Undefined key %@ getting value from backing store", key);
+    STLog(self, @"Value for unknown key %@ requested, getting value from backing store", key);
     id value = [self backingStoreValueForKey:key];
     return [self valueFromBackingStoreValue:value usingTransformerForKey:key];
 }
@@ -111,7 +111,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Internal
 
 -(void) loadData:(nullable NSDictionary *) source {
-
+    
     NSMutableDictionary<NSString *, id> *data = [source mutableCopy];
     if (data) {
         
@@ -122,7 +122,7 @@ NS_ASSUME_NONNULL_BEGIN
         
         [self setValuesForKeysWithDictionary:data];
     }
-
+    
 }
 
 -(id) valueFromBackingStoreValue:(id) value usingTransformerForKey:(NSString *) key  {

@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setBackingStoreValue:(nullable id)value forKey:(NSString *)key {
     STLog(self, @"Sending value to cloud key %@: %@", key, value);
     [[NSUbiquitousKeyValueStore defaultStore] setObject:value forKey:key];
+    [[NSUbiquitousKeyValueStore defaultStore] synchronize]; // Because it seems to take some time
 }
 
 -(nullable id) backingStoreValueForKey:(id) key {
