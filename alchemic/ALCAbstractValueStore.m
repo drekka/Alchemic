@@ -74,9 +74,9 @@ NS_ASSUME_NONNULL_BEGIN
     if (!_loadingData) {
         // If we are not loading data from the backing store, then KVO has picked up a value being set, so forward to the backing store.
         id value = change[NSKeyValueChangeNewKey];
-        id finalValue = [self backingStoreValueFromValue:value usingTransformerForKey:keyPath];
+        id bsValue = [self backingStoreValueFromValue:value usingTransformerForKey:keyPath];
         STLog(self, @"Forwarding value for key '%@' to backing store", keyPath);
-        [self setBackingStoreValue:finalValue forKey:keyPath];
+        [self setBackingStoreValue:bsValue forKey:keyPath];
     }
 }
 
@@ -86,8 +86,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) setValue:(nullable id) value forUndefinedKey:(NSString *) key {
     if (!_loadingData) {
         STLog(self, @"Forwarding value for unknown key '%@' to backing store", key);
-        id finalValue = [self backingStoreValueFromValue:value usingTransformerForKey:key];
-        [self setBackingStoreValue:finalValue forKey:key];
+        id bsValue = [self backingStoreValueFromValue:value usingTransformerForKey:key];
+        [self setBackingStoreValue:bsValue forKey:key];
     }
 }
 
@@ -112,6 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) loadData:(nullable NSDictionary *) source {
     
+    _loadingData = YES;
     NSMutableDictionary<NSString *, id> *data = [source mutableCopy];
     if (data) {
         
@@ -122,6 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
         
         [self setValuesForKeysWithDictionary:data];
     }
+    _loadingData = NO;
     
 }
 
@@ -130,7 +132,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [self transformValue:value usingSelector:transformerSelector];
 }
 
--(id) backingStoreValueFromValue:(id) value  usingTransformerForKey:(NSString *) key {
+-(id) backingStoreValueFromValue:(id) value usingTransformerForKey:(NSString *) key {
     SEL transformerSelector = NSSelectorFromString(str(@"backingStoreValueFrom%@:", key.capitalizedString));
     return [self transformValue:value usingSelector:transformerSelector];
 }
