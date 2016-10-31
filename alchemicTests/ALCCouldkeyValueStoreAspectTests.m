@@ -23,9 +23,9 @@
 }
 
 -(void) testEnabled {
-    XCTAssertFalse([ALCCloudKeyValueStoreAspect enabled]);
-    [ALCCloudKeyValueStoreAspect setEnabled:YES];
-    XCTAssertTrue([ALCCloudKeyValueStoreAspect enabled]);
+    XCTAssertFalse(ALCCloudKeyValueStoreAspect.enabled);
+    ALCCloudKeyValueStoreAspect.enabled = YES;
+    XCTAssertTrue(ALCCloudKeyValueStoreAspect.enabled);
 }
 
 -(void) testModelWillResolveWhenNoFactories {

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6CA1CAA61DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CA1CAA71DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6CA1CAA81DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */; };
+		6CA1CAA91DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */; };
 		6C34CA291D5D91C60080D428 /* ALCAbstractDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C34C9EE1D5D91C60080D428 /* ALCAbstractDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */; };
@@ -278,6 +282,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractAspect.h; sourceTree = "<group>"; };
+		6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractAspect.m; sourceTree = "<group>"; };
 		F4023C001CE9827A00AEC0E5 /* ALCAbstractDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractDependency.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		F4023C011CE9827A00AEC0E5 /* ALCAbstractDependency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractDependency.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C5BC1BB1D68ACB4009592EB /* ALCAbstractDependencyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractDependencyTests.m; sourceTree = "<group>"; };
@@ -620,6 +626,8 @@
 		6CD8EB9C1D6863EF00A0FCB5 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */,
+				6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */,
 				6C150B631D73E97F0060CA08 /* ALCAbstractValueStore.h */,
 				6C150B641D73E97F0060CA08 /* ALCAbstractValueStore.m */,
 				6C8757BB1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.h */,
@@ -844,6 +852,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CA1CAA71DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */,
 				6C34CA291D5D91C60080D428 /* ALCAbstractDependency.h in Headers */,
 				6C34CA0D1D5D91C60080D428 /* ALCAbstractObjectFactory.h in Headers */,
 				6C34CA211D5D91C60080D428 /* ALCAbstractObjectFactoryType.h in Headers */,
@@ -910,6 +919,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CA1CAA61DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */,
 				F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */,
 				6C25D2801C5760FF00D982DC /* ALCAbstractObjectFactory.h in Headers */,
 				6CC503CD1D182A78004283DA /* ALCAbstractObjectFactoryType.h in Headers */,
@@ -1205,6 +1215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CA1CAA91DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */,
 				6C34C9EE1D5D91C60080D428 /* ALCAbstractDependency.m in Sources */,
 				6C34C9F01D5D91C60080D428 /* ALCAbstractObjectFactory.m in Sources */,
 				6C34C9EB1D5D91C60080D428 /* ALCAbstractObjectFactoryType.m in Sources */,
@@ -1252,6 +1263,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CA1CAA81DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */,
 				F4023C031CE9827A00AEC0E5 /* ALCAbstractDependency.m in Sources */,
 				6C25D2811C5760FF00D982DC /* ALCAbstractObjectFactory.m in Sources */,
 				6CC503CE1D182A78004283DA /* ALCAbstractObjectFactoryType.m in Sources */,

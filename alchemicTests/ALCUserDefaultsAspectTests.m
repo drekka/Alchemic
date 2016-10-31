@@ -19,13 +19,14 @@
 }
 
 -(void)setUp {
+    ALCUserDefaultsAspect.enabled = NO;
     _aspect = [[ALCUserDefaultsAspect alloc] init];
 }
 
 -(void) testEnabled {
-    XCTAssertFalse([ALCUserDefaultsAspect enabled]);
-    [ALCUserDefaultsAspect setEnabled:YES];
-    XCTAssertTrue([ALCUserDefaultsAspect enabled]);
+    XCTAssertFalse(ALCUserDefaultsAspect.enabled);
+    ALCUserDefaultsAspect.enabled = YES;
+    XCTAssertTrue(ALCUserDefaultsAspect.enabled);
 }
 
 -(void) testModelWillResolveWhenNoFactories {

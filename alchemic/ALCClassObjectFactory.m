@@ -156,8 +156,6 @@
 
 -(void) injectDependencies:(id) object {
     
-    STLog(self.type, @"Injecting dependencies into a %@", NSStringFromClass(self.type.objcClass));
-    
     // Perform injections.
     for (ALCVariableDependency *dep in _dependencies) {
         [self injectObject:object dependency:dep];
@@ -175,7 +173,7 @@
 
 -(void) injectObject:(id) object dependency:(ALCVariableDependency *) dependency {
     
-    STLog(self, @"Starting injection of variable %@", dependency.name);
+    STLog(self, @"Injecting variable %@", dependency.name);
     
     [dependency injectObject:object];
     

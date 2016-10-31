@@ -41,9 +41,9 @@
 }
 
 -(void) testAlwaysEnabled {
-    XCTAssertTrue([ALCApplicationDelegateAspect enabled]);
-    [ALCApplicationDelegateAspect setEnabled:NO];
-    XCTAssertTrue([ALCApplicationDelegateAspect enabled]);
+    XCTAssertTrue(ALCApplicationDelegateAspect.enabled);
+    ALCApplicationDelegateAspect.enabled = NO;
+    XCTAssertTrue(ALCApplicationDelegateAspect.enabled);
 }
 
 -(void) testModelWillResolveWhenDelegateFound {
