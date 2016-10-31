@@ -29,6 +29,7 @@
     // First check and ensure any pre-registered app delegate is set to a reference type for later injection.
     for (ALCClassObjectFactory *objectFactory in model.classObjectFactories) {
         if ([objectFactory.type.objcClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
+            STLog(self, @"Found pre-registered app delegate class: %@", NSStringFromClass(objectFactory.type.objcClass));
             self->_appDelegateFactory = objectFactory;
             break;
         }
@@ -39,6 +40,7 @@
         id delegate = [UIApplication sharedApplication].delegate;
         ALCType *appDelegateType = [ALCType typeWithClass:[delegate class]];
         _appDelegateFactory = [[ALCClassObjectFactory alloc] initWithType:appDelegateType];
+        STLog(self, @"Registering app delegate with class: %@", NSStringFromClass(appDelegateType.objcClass));
         [model addObjectFactory:_appDelegateFactory withName:nil];
     }
 
@@ -49,7 +51,7 @@
     if (_appDelegateFactory) {
         id delegate = [UIApplication sharedApplication].delegate;
         if (delegate) {
-            STLog(self, @"Setting UIApplicationDelegate instance in model ...");
+            STLog(self, @"Setting app delegate instance in model ...");
             [_appDelegateFactory setObject:delegate];
         }
     }
