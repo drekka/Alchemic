@@ -51,7 +51,6 @@
         if (!injector(object, self.type, _ivar, &error)) {
             throwException(AlchemicInjectionException, @"Error injecting value into variable %@: %@", [ALCRuntime forClass:[object class] propertyDescription:_name], error.localizedDescription);
         }
-        return;
     }
 }
 

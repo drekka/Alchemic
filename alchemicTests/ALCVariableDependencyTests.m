@@ -77,4 +77,17 @@
     XCTAssertEqual(5, aIvar);
 }
 
+    -(void) testInjectionFailure {
+
+        Ivar objIvar = class_getInstanceVariable([self class], "aObj");
+        ALCType *objType = [ALCType typeWithClass:[NSObject class]];
+        id<ALCValueSource> scalarValue = AcInt(5);
+
+        ALCVariableDependency *dep = [ALCVariableDependency variableDependencyWithType:objType
+                                              valueSource:scalarValue
+                                                 intoIvar:objIvar
+                                                 withName:@"abc"];
+        XCTAssertThrowsSpecific([dep injectObject:self], AlchemicInjectionException);
+    }
+
 @end
