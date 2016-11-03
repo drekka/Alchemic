@@ -27,6 +27,7 @@ ___Main features___
 * Split value store loading into defaults and current values for better management of incoming data.
 * Added an abstract aspect parent class.
 * Fixed bug where app delegates with no injections were not being added to the model.
+* Cleaned up value handling code.
 
 # v2.1.1 #
 
