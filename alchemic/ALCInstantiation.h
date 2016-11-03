@@ -37,9 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) id object;
 
 /**
- Tells the instantiation to execute it's completion block.
- 
- This also notifies the object of the completion being execute and issues the AlchemicDidCreateObject notification.
+ Finishes the instantion, executing the completion block if present.
  */
 -(void) complete;
 

@@ -33,16 +33,4 @@
     XCTAssertTrue(blockCalled);
 }
 
--(void) testDidCreateObjectNotificationSent {
-
-    ALCInstantiation *inst = [ALCInstantiation instantiationWithObject:@"abc" completion:NULL];
-
-    [self expectationForNotification:AlchemicDidCreateObject object:inst handler:nil];
-
-    [inst complete];
-
-    [self waitForExpectationsWithTimeout:0.3 handler:nil];
-
-}
-
 @end

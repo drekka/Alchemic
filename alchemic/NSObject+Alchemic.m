@@ -108,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     [inv invokeWithTarget:object];
-    
+
     id __unsafe_unretained returnObj;
     [inv getReturnValue:&returnObj];
     return returnObj;

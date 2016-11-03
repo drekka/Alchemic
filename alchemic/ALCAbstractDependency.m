@@ -46,6 +46,10 @@
     return YES;
 }
 
+-(BOOL)referencesTransients {
+    return _valueSource.referencesTransients;
+}
+
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                    model:(id<ALCModel>)model {
     STLog(self, @"Resolving %@", self.resolvingDescription);
@@ -78,10 +82,6 @@
 
 -(NSString *)stackName {
     methodReturningStringNotImplemented;
-}
-
--(BOOL)referencesTransients {
-    return FALSE;
 }
 
 -(void) injectObject:(id)object {

@@ -94,6 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ALCBlockWithObject) objectCompletion {
     return ^(ALCBlockWithObjectArgs){
+        STLog(self, @"Completing method execution");
         [(ALCContextImpl *)[Alchemic mainContext] injectDependencies:object searchCriteria:@[]];
     };
 }

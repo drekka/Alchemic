@@ -145,11 +145,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setObject:(nullable id) object {
 
-    // forward to the storeObject: method in the strategy and execute the returned completio block.
+    // forward to the storeObject: method in the strategy and execute the returned completion block.
     ALCBlockWithObject completion = [self storeObject:object];
     [ALCRuntime executeBlock:completion withObject:object];
 
     // Let other factories know we have updated.
+    STLog(self, @"Sending stored object notification");
     id oldValue = _typeStrategy.isReady ? _typeStrategy.object : nil; // Allows for references types which will throw if not ready.
     NSDictionary *userInfo = @{
                                AlchemicDidStoreObjectUserInfoOldValue:oldValue ? oldValue : [NSNull null],

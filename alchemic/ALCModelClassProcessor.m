@@ -58,7 +58,7 @@
                           inContext:(id<ALCContext>) context {
     
     // If we are here then we have an alchemic method to process,
-    // so create an object factory if we don't aready have one.
+    // so create an object factory if we don't already have one.
     if (!*classFactory) {
         STLog(aClass, @"Class %@ has alchemic methods, creating factory", NSStringFromClass(aClass));
         *classFactory = [context registerObjectFactoryForClass:aClass];
@@ -69,6 +69,7 @@
 }
 
 -(void) processFeatureSelector:(SEL) selector inClass:(Class) aClass {
+    // Simple call the feature selector.
     ( (void (*)(id, SEL)) objc_msgSend)(aClass, selector);
 }
 

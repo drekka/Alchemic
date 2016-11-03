@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
         return [factory isKindOfClass:[ALCClassObjectFactory class]];
     }]];
     if (factories.count > 1) {
-        throwException(AlchemicTooManyResultsException, @"Exepcted 1 object factory for critieria '%@', but found %lu.", criteria, (unsigned long) factories.count);
+        throwException(AlchemicTooManyResultsException, @"Expected 1 object factory for critieria '%@', but found %lu.", criteria, (unsigned long) factories.count);
     } else if (factories.count == 0) {
         return nil;
     } else {

@@ -28,18 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void) complete {
-    [ALCRuntime executeBlock:^(id object) {
-        
-        [ALCRuntime executeBlock:self->_completion withObject:object];
-        
-        // Now tell everyone the object has been instantiated.
-        STLog(self, @"Posting instantiation notification for a %@", NSStringFromClass([self.object class]));
-        [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidCreateObject
-                                                            object:self
-                                                          userInfo:@{AlchemicDidCreateObjectUserInfoObject: object}];
-    }
-                  withObject:_object];
-    
+    [ALCRuntime executeBlock:self->_completion withObject:_object];
 }
 
 @end

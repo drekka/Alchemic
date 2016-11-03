@@ -169,12 +169,14 @@ static NSCharacterSet *__typeEncodingDelimiters;
 
 +(void) executeSimpleBlock:(nullable ALCSimpleBlock) block {
     if (block) {
+        STLog(self, @"Executing block");
         block();
     }
 }
 
 +(void) executeBlock:(nullable ALCBlockWithObject) block withObject:(nullable id) object {
     if (object && block) {
+        STLog(self, @"Executing block with object");
         block(object);
     }
 }
