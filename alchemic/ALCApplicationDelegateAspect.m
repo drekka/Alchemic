@@ -52,7 +52,7 @@
         id delegate = [UIApplication sharedApplication].delegate;
         if (delegate) {
             STLog(self, @"Setting app delegate instance in model ...");
-            [_appDelegateFactory setObject:delegate];
+            [_appDelegateFactory storeObject:delegate];
         }
     }
 }

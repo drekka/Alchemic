@@ -189,15 +189,15 @@
     OCMStub([(id<ALCObjectFactory>) classFactoryMock type]).andReturn(type);
     OCMStub([classFactoryMock description]).andReturn(@"singelton abc");
     
-    id instantiationMock = OCMClassMock([ALCInstantiation class]);
-    OCMExpect([classFactoryMock instantiation]).andReturn(instantiationMock);
-    OCMExpect([instantiationMock object]).andReturn(@"xyz");
-    OCMExpect([instantiationMock complete]);
+    id valueMock = OCMClassMock([ALCValue class]);
+    OCMExpect([(ALCClassObjectFactory *)classFactoryMock value]).andReturn(valueMock);
+    OCMExpect([valueMock object]).andReturn(@"xyz");
+    OCMExpect([valueMock complete]);
     
     [_model startSingletons];
     
     OCMVerifyAll(classFactoryMock);
-    OCMVerifyAll(instantiationMock);
+    OCMVerifyAll(valueMock);
 }
 
 -(void) testStartSingletonsWithUIApplicationDelegate {

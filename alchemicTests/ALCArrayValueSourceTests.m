@@ -34,33 +34,26 @@
     OCMVerifyAll(_mockOtherValueSource);
 }
 
--(void) testValueReturnsValue {
+-(void) testValueReturnsValueInArray {
 
-    // Mock out a ALCValue.
-    id mockValue = OCMClassMock([ALCValue class]);
-    OCMStub([(ALCValue *) mockValue value]).andReturn(@"abc");
     __block BOOL completionCalled;
-    ALCSimpleBlock completion = ^{
+    ALCValue *value = [ALCValue withObject:@"abc" completion:^(NSString *val) {
+        XCTAssertEqualObjects(@"abc", val);
         completionCalled = YES;
-    };
-    OCMStub([mockValue completion]).andReturn(completion);
-    
+    }];
+
     // Have the other data source return the value.
-    OCMStub([(id<ALCValueSource>)_mockOtherValueSource value]).andReturn(mockValue);
+    OCMStub([(id<ALCValueSource>)_mockOtherValueSource value]).andReturn(value);
 
-    // Call the method.
-    id result = _source.value;
+    // Test - Call the method.
+    ALCValue *result = _source.value;
 
-    // Assert we have been given back the value.
-    XCTAssertTrue([result isKindOfClass:[ALCValue class]]);
-    ALCValue *value = result;
-
-    NSArray *actualResults = value.value;
-    XCTAssertEqual(1u, actualResults.count);
-    XCTAssertEqualObjects(@"abc", actualResults[0]);
+    NSArray *objects = result.object;
+    XCTAssertEqual(1u, objects.count);
+    XCTAssertEqualObjects(@"abc", objects[0]);
     
     // And that the completions have been assembled.
-    value.completion();
+    [result complete];
     XCTAssertTrue(completionCalled);
 }
 

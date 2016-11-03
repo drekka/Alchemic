@@ -112,10 +112,6 @@
 		6C34C9F21D5D91C60080D428 /* ALCFlagMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */; };
 		6CB7C4351CC7BC1300C05B0B /* ALCFlagMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */; };
 		6C0076921D17D60500E88987 /* ALCFlagMacrosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0076911D17D60500E88987 /* ALCFlagMacrosTests.m */; };
-		6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C34CA061D5D91C60080D428 /* ALCInstantiation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6C1ADB051C9050FB00267E77 /* ALCInstantiation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */; };
-		6C34C9E71D5D91C60080D428 /* ALCInstantiation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */; };
 		6CB57E991D43C53500CFE4DF /* ALCInstantiationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB57E951D43C52C00CFE4DF /* ALCInstantiationTests.m */; };
 		6C34CA251D5D91C60080D428 /* ALCInstantiator.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4D85AF1C7F37400061CA84 /* ALCInstantiator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C4D85B01C7F37400061CA84 /* ALCInstantiator.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C4D85AF1C7F37400061CA84 /* ALCInstantiator.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -343,8 +339,6 @@
 		6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCFlagMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCFlagMacros.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C0076911D17D60500E88987 /* ALCFlagMacrosTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCFlagMacrosTests.m; path = alchemicTests/ALCFlagMacrosTests.m; sourceTree = "<group>"; };
-		6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInstantiation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCInstantiation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CB57E951D43C52C00CFE4DF /* ALCInstantiationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCInstantiationTests.m; path = alchemicTests/ALCInstantiationTests.m; sourceTree = "<group>"; };
 		6C4D85AF1C7F37400061CA84 /* ALCInstantiator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInstantiator.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCInternalMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -599,8 +593,6 @@
 				6C237CD41CCA746700B8F551 /* ALCFactoryName.m */,
 				6CB7C42E1CC7BC1300C05B0B /* ALCFlagMacros.h */,
 				6CB7C42F1CC7BC1300C05B0B /* ALCFlagMacros.m */,
-				6C1ADB021C9050FB00267E77 /* ALCInstantiation.h */,
-				6C1ADB031C9050FB00267E77 /* ALCInstantiation.m */,
 				6C4D85AF1C7F37400061CA84 /* ALCInstantiator.h */,
 				6C4B56141C6E0AD10040AEC2 /* ALCMethodObjectFactory.h */,
 				6C4B56151C6E0AD10040AEC2 /* ALCMethodObjectFactory.m */,
@@ -876,7 +868,6 @@
 				6C34CA051D5D91C60080D428 /* ALCException.h in Headers */,
 				6C34CA301D5D91C60080D428 /* ALCFactoryName.h in Headers */,
 				6C34CA201D5D91C60080D428 /* ALCFlagMacros.h in Headers */,
-				6C34CA061D5D91C60080D428 /* ALCInstantiation.h in Headers */,
 				6C34CA251D5D91C60080D428 /* ALCInstantiator.h in Headers */,
 				6C34CA031D5D91C60080D428 /* ALCInternalMacros.h in Headers */,
 				6C34CA091D5D91C60080D428 /* ALCMacros.h in Headers */,
@@ -943,7 +934,6 @@
 				6CC2847C1CB29A7C006B613F /* ALCException.h in Headers */,
 				6C237CD71CCA74CE00B8F551 /* ALCFactoryName.h in Headers */,
 				6CB7C4341CC7BC1300C05B0B /* ALCFlagMacros.h in Headers */,
-				6C1ADB041C9050FB00267E77 /* ALCInstantiation.h in Headers */,
 				6C4D85B01C7F37400061CA84 /* ALCInstantiator.h in Headers */,
 				6C4B560F1C6CC3800040AEC2 /* ALCInternalMacros.h in Headers */,
 				6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */,
@@ -1235,7 +1225,6 @@
 				6C34C9F31D5D91C60080D428 /* ALCException.m in Sources */,
 				6C34C9EC1D5D91C60080D428 /* ALCFactoryName.m in Sources */,
 				6C34C9F21D5D91C60080D428 /* ALCFlagMacros.m in Sources */,
-				6C34C9E71D5D91C60080D428 /* ALCInstantiation.m in Sources */,
 				6C34C9F41D5D91C60080D428 /* ALCMethodArgumentDependency.m in Sources */,
 				6C34C9FC1D5D91C60080D428 /* ALCMethodObjectFactory.m in Sources */,
 				6C34C9FB1D5D91C60080D428 /* ALCModelClassProcessor.m in Sources */,
@@ -1283,7 +1272,6 @@
 				6CC2847D1CB29A7C006B613F /* ALCException.m in Sources */,
 				6C237CD61CCA74C700B8F551 /* ALCFactoryName.m in Sources */,
 				6CB7C4351CC7BC1300C05B0B /* ALCFlagMacros.m in Sources */,
-				6C1ADB051C9050FB00267E77 /* ALCInstantiation.m in Sources */,
 				6C71D5441CA161A200D25AC0 /* ALCMethodArgumentDependency.m in Sources */,
 				6C4B56171C6E0AD10040AEC2 /* ALCMethodObjectFactory.m in Sources */,
 				6CE234EC1CEB4B9400728CBE /* ALCModelClassProcessor.m in Sources */,

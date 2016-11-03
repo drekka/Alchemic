@@ -17,18 +17,18 @@
 @implementation ALCInstantiationTests
 
 -(void) testFactoryMethodStoresObject {
-    ALCInstantiation *inst = [ALCInstantiation instantiationWithObject:@"abc" completion:NULL];
-    XCTAssertEqualObjects(@"abc", inst.object);
+    ALCValue *value = [ALCValue withObject:@"abc" completion:NULL];
+    XCTAssertEqualObjects(@"abc", value.object);
 }
 
 -(void) testCompletionCallsBlock {
 
     __block BOOL blockCalled = NO;
-    ALCInstantiation *inst = [ALCInstantiation instantiationWithObject:@"abc" completion:^(id obj) {
+    ALCValue *value = [ALCValue withObject:@"abc" completion:^(id obj) {
         blockCalled = YES;
     }];
 
-    [inst complete];
+    [value complete];
 
     XCTAssertTrue(blockCalled);
 }

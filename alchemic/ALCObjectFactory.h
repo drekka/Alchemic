@@ -10,7 +10,7 @@
 
 #import <Alchemic/ALCInstantiator.h>
 
-@class ALCInstantiation;
+@class ALCValue;
 @protocol ALCModel;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -72,7 +72,7 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
 /**
  Tells the factory to instantiate an the represented object or return one if it already exists.
  */
-@property (nonatomic, strong, readonly) ALCInstantiation *instantiation;
+@property (nonatomic, strong, readonly) ALCValue *value;
 
 /**
  Configures the factory.
@@ -93,7 +93,7 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
  
  @return the completion block that can be called to perform injections into the stored object.
  */
--(void) setObject:(nullable id) object;
+-(void) storeObject:(nullable id) object;
 
 /**
  Call just before unloading the object factory.

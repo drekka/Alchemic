@@ -14,7 +14,6 @@
 #import <Alchemic/NSArray+Alchemic.h>
 #import <Alchemic/NSObject+Alchemic.h>
 #import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/Alchemic.h>
 #import <Alchemic/ALCType.h>
 #import <Alchemic/ALCRuntime.h>
@@ -83,13 +82,14 @@ NS_ASSUME_NONNULL_BEGIN
 
     STStartScope(self.type);
 
-    ALCInstantiation *parentGeneration = _parentObjectFactory.instantiation;
-    if (!parentGeneration.object) {
+    ALCValue *parentValue = _parentObjectFactory.value;
+    id parentObj = parentValue.object;
+    if (!parentObj) {
         throwException(AlchemicNilParentObjectException, @"Parent object of method is nil.");
     }
 
-    [parentGeneration complete];
-    return [(NSObject *) parentGeneration.object invokeSelector:_selector arguments:_arguments];
+    [parentValue complete];
+    return [(NSObject *) parentObj invokeSelector:_selector arguments:_arguments];
 }
 
 -(ALCBlockWithObject) objectCompletion {

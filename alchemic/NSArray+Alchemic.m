@@ -104,6 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (constantValues.count == 1) {
             return constantValues[0];
         } else {
+            // Array of constants. Combine into a single value source.
             return [ALCArrayValueSource valueSourceWithValueSources:constantValues];
         }
     }

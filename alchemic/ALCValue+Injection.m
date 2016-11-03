@@ -13,7 +13,6 @@
 #import <Alchemic/ALCValue+Injection.h>
 
 #import <Alchemic/ALCStringMacros.h>
-#import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCException.h>
 
@@ -39,12 +38,12 @@ NS_ASSUME_NONNULL_BEGIN
 -(ALCVariableInjectorBlock) variableInjectorFor ## typeName { \
 return ^BOOL(ALCVariableInjectorBlockArgs) { \
 type value; \
-[self.value getValue:&value]; \
+[self.object getValue:&value]; \
 CFTypeRef objRef = CFBridgingRetain(obj); \
 type *ivarPtr = (type *) ((uint8_t *) objRef + ivar_getOffset(ivar)); \
 *ivarPtr = value; \
 CFBridgingRelease(objRef); \
-[ALCRuntime executeSimpleBlock:self.completion]; \
+[self complete]; \
 return YES; \
 }; \
 }
@@ -94,8 +93,8 @@ scalarVariableInjector(CGRect, CGRect)
 -(ALCInvocationInjectorBlock) invocationInjectorFor ## typeName { \
 return ^BOOL(ALCInvocationInjectorBlockArgs) { \
 scalarType value; \
-[(NSValue *)self.value getValue:&value]; \
-[ALCRuntime executeSimpleBlock:self.completion]; \
+[(NSValue *)self.object getValue:&value]; \
+[self complete]; \
 [inv setArgument:&value atIndex:idx + 2]; \
 return YES; \
 }; \
@@ -205,7 +204,7 @@ scalarMethodArgumentInjector(CGRect, CGRect)
 -(nullable NSArray *) valueAsArrayError:(NSError **) error {
     
     // Already an array.
-    id value = self.value;
+    id value = self.object;
     if ([value isKindOfClass:[NSArray class]]) {
         return value;
     }
@@ -217,12 +216,12 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     }
     
     // Must be an object but check for null.
-    return value == [NSNull null] ? @[] : @[value];
+    return value ? @[value] : @[];
 }
 
 -(nullable id) valueAsObjectError:(NSError **) error {
     
-    id value = self.value;
+    id value = self.object;
     if ([value isKindOfClass:[NSArray class]]) {
         NSArray *values = value;
         switch (values.count) {
@@ -242,8 +241,7 @@ scalarMethodArgumentInjector(CGRect, CGRect)
         return nil;
     }
     
-    // Must be an object but check for null.
-    return value == [NSNull null] ? nil : value;
+    return value;
 }
 
 -(BOOL) injectValue:(nullable id) value ofType:(ALCType *) type intoObject:(id) obj variable:(Ivar) ivar error:(NSError **) error {
@@ -261,7 +259,7 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     }
     
     object_setIvar(obj, ivar, value);
-    [ALCRuntime executeSimpleBlock:self.completion];
+    [self complete];
     return YES;
 }
 
@@ -273,7 +271,7 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     }
     
     if (value) {
-        [ALCRuntime executeSimpleBlock:self.completion];
+        [self complete];
         id localValue = value;
         [inv setArgument:&localValue atIndex:index + 2];
     }

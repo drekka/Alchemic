@@ -12,7 +12,6 @@
 
 #import <Alchemic/ALCAbstractObjectFactory.h>
 
-#import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCFactoryName.h>
 #import <Alchemic/ALCFlagMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
@@ -22,6 +21,7 @@
 #import <Alchemic/ALCObjectFactoryTypeSingleton.h>
 #import <Alchemic/ALCRuntime.h>
 #import <Alchemic/ALCType.h>
+#import <Alchemic/ALCValue.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -123,14 +123,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack model:(id<ALCModel>) model {}
 
--(ALCInstantiation *) instantiation {
+-(ALCValue *) value {
     id object = _typeStrategy.object;
     if (object || _typeStrategy.isNillable) {
-        return [ALCInstantiation instantiationWithObject:object completion:NULL];
+        return [ALCValue withObject:object completion:NULL];
     }
     object = [self createObject];
-    ALCBlockWithObject completion = [self storeObject:object];
-    return [ALCInstantiation instantiationWithObject:object completion:completion];
+    return [ALCValue withObject:object completion:[self saveObject:object]];
 }
 
 -(id) createObject {
@@ -143,10 +142,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Updating
 
--(void) setObject:(nullable id) object {
+-(void) storeObject:(nullable id) object {
 
     // forward to the storeObject: method in the strategy and execute the returned completion block.
-    ALCBlockWithObject completion = [self storeObject:object];
+    ALCBlockWithObject completion = [self saveObject:object];
     [ALCRuntime executeBlock:completion withObject:object];
 
     // Let other factories know we have updated.
@@ -161,7 +160,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                       userInfo:userInfo];
 }
 
--(ALCBlockWithObject) storeObject:(nullable id) object {
+-(ALCBlockWithObject) saveObject:(nullable id) object {
     _typeStrategy.object = object;
     return object ? self.objectCompletion : NULL;
 }

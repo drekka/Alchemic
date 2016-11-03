@@ -254,10 +254,10 @@ registerFactoryMethod:(SEL) selector
     [source resolveWithStack:[[NSMutableArray alloc] init] model:_model];
 
     ALCValue *alcValue = source.value;
-    [ALCRuntime executeSimpleBlock:alcValue.completion];
+    [alcValue complete];
 
     // Get the value which will be an array of objects.
-    NSArray *values = alcValue.value;
+    NSArray *values = alcValue.object;
 
     // Handle arrays.
     if ([returnType isSubclassOfClass:[NSArray class]]) {
@@ -307,7 +307,7 @@ registerFactoryMethod:(SEL) selector
 
         // Pass the object to the factory.
         STLog(objClass, @"Storing reference %@ using criteria %@", objClass, searchCriteria);
-        [((ALCAbstractObjectFactory *) factories[0]) setObject:finalObject];
+        [((ALCAbstractObjectFactory *) factories[0]) storeObject:finalObject];
     };
 
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.

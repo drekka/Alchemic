@@ -46,7 +46,7 @@
 -(void) testVariableInjection ## ivarName { \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(ivarType)]; \
-ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL]; \
+ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL]; \
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 ALCType *alcType = [ALCType typeForIvar:ivar]; \
 ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType]; \
@@ -76,7 +76,7 @@ testScalarVariableInjection(_aUShort, unsigned short, 5u)
     const char *encoding = ivar_getTypeEncoding(ivar);
     char *value = "abc";
     NSValue *nsValue = [NSValue valueWithBytes:&value objCType:encoding];
-    ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL];
+    ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL];
     ALCType *alcType = [ALCType typeForIvar:ivar];
     ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
     NSError *error;
@@ -91,7 +91,7 @@ Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 const char *encoding = ivar_getTypeEncoding(ivar); \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:encoding]; \
-ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL]; \
+ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL]; \
 ALCType *alcType = [ALCType typeForIvar:ivar]; \
 ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType]; \
 NSError *error; \
@@ -105,7 +105,7 @@ testScalarStructVariableInjection(_point, CGPoint, CGPointMake(1.0f, 2.0f), CGPo
 testScalarStructVariableInjection(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.0f), CGRectEqualToRect)
 
 -(void) testVariableInjection_Object {
-    ALCValue *alcValue = [ALCValue withValue:@5 completion:NULL];
+    ALCValue *alcValue = [ALCValue withObject:@5 completion:NULL];
     ALCType *alcType = [ALCType typeWithClass:[NSNumber class]];
     ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
     Ivar ivar = class_getInstanceVariable([self class], "_aNumber");
@@ -116,7 +116,7 @@ testScalarStructVariableInjection(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.
 }
 
 -(void) testVariableInjection_ObjectWhenNilAllowed {
-    ALCValue *alcValue = [ALCValue withValue:[NSNull null] completion:NULL];
+    ALCValue *alcValue = [ALCValue withObject:nil completion:NULL];
     ALCType *alcType = [ALCType typeWithClass:[NSNumber class]];
     alcType.nillable = YES;
     ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
@@ -128,7 +128,7 @@ testScalarStructVariableInjection(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.
 }
 
 -(void) testVariableInjection_ObjectWhenNilNotAllowed {
-    ALCValue *alcValue = [ALCValue withValue:[NSNull null] completion:NULL];
+    ALCValue *alcValue = [ALCValue withObject:nil completion:NULL];
     ALCType *alcType = [ALCType typeWithClass:[NSNumber class]];
     ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
     Ivar ivar = class_getInstanceVariable([self class], "_aNumber");
@@ -139,7 +139,7 @@ testScalarStructVariableInjection(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.
 }
 
 -(void) testVariableInjection_Array {
-    ALCValue *alcValue = [ALCValue withValue:@[@5] completion:NULL];
+    ALCValue *alcValue = [ALCValue withObject:@[@5] completion:NULL];
     ALCType *alcType = [ALCType typeWithClass:[NSArray class]];
     ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
     Ivar ivar = class_getInstanceVariable([self class], "_arrayOfNumbers");
@@ -157,7 +157,7 @@ testScalarStructVariableInjection(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.
 NSInvocation *inv = [self invForSelector:@selector(methodSelector)]; \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(ivarType)]; \
-ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL]; \
+ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL]; \
 ALCType *alcType = [ALCType typeWithEncoding:@encode(ivarType)]; \
 ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType]; \
 NSError *error; \
@@ -186,7 +186,7 @@ testScalarInvocationInjectionTest(aUShort, unsigned short, setAUShort:, 5u)
 NSInvocation *inv = [self invForSelector:@selector(methodSelector)]; \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(ivarType)]; \
-ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL]; \
+ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL]; \
 ALCType *alcType = [ALCType typeWithEncoding:@encode(ivarType)]; \
 ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType]; \
 NSError *error; \
@@ -204,7 +204,7 @@ testScalarStructInvocationInjectionTest(_rect, CGRect, setRect:, CGRectMake(1.0f
     NSInvocation *inv = [self invForSelector:@selector(setACharPointer:)];
     char *value = "abc";
     NSValue *nsValue = [NSValue valueWithBytes:&value objCType:"*"];
-    ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL];
+    ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL];
     ALCType *alcType = [ALCType typeWithEncoding:@encode(char *)];
     ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType];
     NSError *error;
@@ -216,7 +216,7 @@ testScalarStructInvocationInjectionTest(_rect, CGRect, setRect:, CGRectMake(1.0f
 
 -(void) testInvocationInjection_Object {
     NSInvocation *inv = [self invForSelector:@selector(setANumber:)];
-    ALCValue *alcValue = [ALCValue withValue:@5 completion:NULL];
+    ALCValue *alcValue = [ALCValue withObject:@5 completion:NULL];
     ALCType *alcType = [ALCType typeWithClass:[NSNumber class]];
     ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType];
     NSError *error;
@@ -228,7 +228,7 @@ testScalarStructInvocationInjectionTest(_rect, CGRect, setRect:, CGRectMake(1.0f
 
 -(void) testInvocationInjection_Array {
     NSInvocation *inv = [self invForSelector:@selector(setArrayOfNumbers:)];
-    ALCValue *alcValue = [ALCValue withValue:@[@5] completion:NULL];
+    ALCValue *alcValue = [ALCValue withObject:@[@5] completion:NULL];
     ALCType *alcType = [ALCType typeWithClass:[NSArray class]];
     ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType];
     NSError *error;

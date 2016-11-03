@@ -63,7 +63,7 @@
     ALCType *type = [ALCType typeWithClass:_delegateClass];
     OCMStub([(id<ALCObjectFactory>)mockFactory type]).andReturn(type);
     
-    OCMExpect([(id<ALCObjectFactory>) mockFactory setObject:delegate]);
+    OCMExpect([(id<ALCObjectFactory>) mockFactory storeObject:delegate]);
     
     [_aspect modelWillResolve:mockModel];
     [_aspect modelDidResolve:mockModel];

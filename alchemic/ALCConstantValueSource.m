@@ -137,7 +137,7 @@ id<ALCValueSource> AcRect(float x, float y, float width, float height) {
 }
 
 -(nullable ALCValue *) value {
-    return [ALCValue withValue:_value completion:NULL];
+    return [ALCValue withObject:_value completion:NULL];
 }
 
 -(NSString *)resolvingDescription {

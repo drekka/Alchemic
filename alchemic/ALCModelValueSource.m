@@ -10,7 +10,6 @@
 
 #import <Alchemic/ALCModelValueSource.h>
 
-#import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCInternalMacros.h>
 #import <Alchemic/ALCModel.h>
 #import <Alchemic/ALCObjectFactory.h>
@@ -102,38 +101,34 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Retrieving results.
 
 -(nullable ALCValue *) value {
-    NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
-    NSArray *values = [self valuesFromInstantiations:instantations];
-    return [ALCValue withValue:values completion:[self completionForInstantiations:instantations]];
+    NSArray<ALCValue *> *values = [self retrieveValues];
+    return [ALCValue withObject:[self objectsFromValues:values]
+                     completion:^(NSArray<ALCValue *> *storedValues){
+        for (ALCValue *value in storedValues) {
+            [value complete];
+        }
+    }];
 }
 
 #pragma mark - Internal
 
--(NSArray<ALCInstantiation *> *) retrieveInstantiations {
+-(NSArray<ALCValue *> *) retrieveValues {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     for (id<ALCObjectFactory> factory in _resolvedFactories) {
-        [results addObject:factory.instantiation];
+        [results addObject:factory.value];
     }
     return results;
 }
 
--(NSArray *) valuesFromInstantiations:(NSArray<ALCInstantiation *> *) instantiations {
+-(NSArray *) objectsFromValues:(NSArray<ALCValue *> *) values {
     NSMutableArray *results = [[NSMutableArray alloc] init];
-    for (ALCInstantiation *instantiation in instantiations) {
-        id obj = instantiation.object;
+    for (ALCValue *value in values) {
+        id obj = value.object;
         if (obj) {
             [results addObject:obj];
         }
     }
     return results;
-}
-
--(ALCSimpleBlock) completionForInstantiations:(NSArray<ALCInstantiation *> *) instantiations {
-    return ^{
-        for (ALCInstantiation *instantiation in instantiations) {
-            [instantiation complete];
-        }
-    };
 }
 
 @end

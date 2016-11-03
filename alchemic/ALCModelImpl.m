@@ -11,7 +11,6 @@
 
 #import <Alchemic/ALCModelImpl.h>
 
-#import <Alchemic/ALCInstantiation.h>
 #import <Alchemic/ALCMacros.h>
 #import <Alchemic/ALCInternalMacros.h>
 
@@ -137,9 +136,9 @@ NS_ASSUME_NONNULL_BEGIN
         if (objectFactory.factoryType == ALCFactoryTypeSingleton
             && objectFactory.isReady) {
             STLog(self, @"Starting %@, as '%@'", [objectFactory description], key);
-            ALCInstantiation *instantiation = objectFactory.instantiation;
-            __unused id obj = instantiation.object;
-            [instantiation complete];
+            ALCValue *value = objectFactory.value;
+            __unused id obj = value.object;
+            [value complete];
         }
     }];
 }
