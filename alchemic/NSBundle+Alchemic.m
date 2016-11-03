@@ -56,7 +56,11 @@
 }
 
 -(void) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
-    
+
+    // Make sure the bungle is loaded.
+    [self load];
+    STLog(self, @"loaded");
+
     unsigned int count = 0;
     const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &count);
     
