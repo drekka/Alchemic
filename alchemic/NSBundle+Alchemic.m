@@ -62,7 +62,7 @@
     STLog(self, @"loaded");
 
     unsigned int count = 0;
-    const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &count);
+    const char** classes = objc_copyClassNamesForImage([[self bundlePath] UTF8String], &count);
     
     STLog(self, @"Scanning %i runtime classes in bundle %@", count, self.bundlePath.lastPathComponent);
     
