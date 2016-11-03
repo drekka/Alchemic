@@ -312,6 +312,22 @@
     OCMVerifyAll(mockFactory);
 }
 
+-(void) testSetObjectWithValueSource {
+
+    // Tell the context it's started
+    [_context setValue:@(ALCStatusStarted) forKey:@"_status"];
+
+    // Stub getting the factory.
+    id mockFactory = OCMClassMock([ALCAbstractObjectFactory class]);
+    OCMStub([_mockModel settableObjectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
+
+    OCMExpect([(ALCAbstractObjectFactory *) mockFactory storeObject:@"abc"]);
+
+    [_context setObject:AcString(@"abc"), AcClass(NSString), nil];
+
+    OCMVerifyAll(mockFactory);
+}
+
 -(void) testSetObjectWithSearchCriteriaThrowsWhenNoFactoryFound {
 
     // Tell the context it's started

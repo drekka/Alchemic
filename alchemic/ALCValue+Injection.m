@@ -257,7 +257,7 @@ scalarMethodArgumentInjector(CGRect, CGRect)
     if (value && strlen(ivar_getTypeEncoding(ivar)) == 0) {
         value = [self copyValueWithRetain:value];
     }
-    
+
     object_setIvar(obj, ivar, value);
     [self complete];
     return YES;

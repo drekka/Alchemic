@@ -43,7 +43,7 @@
     return _name;
 }
 
--(void) injectObject:(id)object {
+-(void) injectObject:(id) object {
     ALCValue *value = self.valueSource.value;
     if (value) {
         ALCVariableInjectorBlock injector = [value variableInjectorForType:self.type];

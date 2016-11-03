@@ -289,7 +289,7 @@ registerFactoryMethod:(SEL) selector
         // Check for an Alchemic value.
         id finalObject = object;
         if ([object conformsToProtocol:@protocol(ALCValueSource)]) {
-            finalObject = ((id<ALCValueSource>)object).value;
+            finalObject = ((id<ALCValueSource>)object).value.object;
         }
 
         Class objClass = [finalObject class];
