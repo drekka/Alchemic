@@ -103,8 +103,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ALCValue *) value {
     NSArray<ALCValue *> *values = [self retrieveValues];
     return [ALCValue withObject:[self objectsFromValues:values]
-                     completion:^(NSArray<ALCValue *> *storedValues){
-        for (ALCValue *value in storedValues) {
+                     completion:^(__unused NSArray *objects){
+        for (ALCValue *value in values) {
             [value complete];
         }
     }];
