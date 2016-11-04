@@ -6,7 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-@import Alchemic;
+@import Alchemic
+
 #import "Model.h"
 
 @implementation Singleton : NSObject

@@ -83,6 +83,19 @@
     OCMVerifyAll(_mockModel);
 }
 
+#pragma mark - Execute in background
+
+-(void) testExecuteInBackground {
+
+    XCTestExpectation *exp = [self expectationWithDescription:@"background"];
+
+    [_context executeInBackground:^{
+        [exp fulfill];
+    }];
+
+    [ self waitForExpectationsWithTimeout:0.5f handler:nil];
+}
+
 #pragma mark - Adding resolve aspects
 
 -(void) testAddResolveAspect {
@@ -237,7 +250,7 @@
 
 -(void) testObjectFactoryRegisterInjection {
 
-    Class t241 = objc_allocateClassPair([NSObject class], "T141", 0);
+    Class t241 = objc_allocateClassPair([NSObject class], "T241", 0);
     class_addIvar(t241, "aInt", sizeof(int), 0, "i");
     objc_registerClassPair(t241);
 
@@ -256,13 +269,28 @@
     OCMExpect([mockDependency configureWithOptions:[OCMArg checkWithBlock:^BOOL(NSArray *options) {
         return YES;
     }]]);
-    
+
+    // Test
     [_context objectFactory:mockParentObjectFactory registerInjection: @"aInt", intValueSource, nil];
     
     OCMVerifyAll(mockParentObjectFactory);
     OCMVerifyAll(mockDependency);
-    
 }
+
+-(void) testObjectFactoryRegisterInjectionWhenSourceReturnsNil {
+
+    Class t282 = objc_allocateClassPair([NSObject class], "T282", 0);
+    class_addIvar(t282, "aInt", sizeof(int), 0, "i");
+    objc_registerClassPair(t282);
+
+    id mockParentObjectFactory = [self mockParentObjectFactoryOfType:ALCFactoryTypeSingleton forClass:t282];
+
+    id<ALCValueSource> intValueSource = AcInt(5);
+
+    // Test
+    XCTAssertThrowsSpecific(([_context objectFactory:mockParentObjectFactory registerInjection: @"aInt", intValueSource, nil]), AlchemicIllegalArgumentException);
+}
+
 
 #pragma mark - Getting and setting
 

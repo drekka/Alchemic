@@ -3,3 +3,10 @@ module Alchemic {
     requires objc_arc
     link framework "StoryTeller"
 }
+
+// Here so that the Swift code can access these headers.
+explicit module Alchemic.Private {
+    umbrella "PrivateHeaders"
+    requires objc_arc
+    link framework "StoryTeller"
+}

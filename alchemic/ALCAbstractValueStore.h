@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) observeValueForKeyPath:(nullable NSString *) keyPath
                       ofObject:(nullable id) object
-                        change:(nullable NSDictionary<NSKeyValueChangeKey,id> *) change
+                        change:(nullable NSDictionary<NSKeyValueChangeKey, id> *) change
                        context:(nullable void *) context NS_REQUIRES_SUPER;
 
 @end
