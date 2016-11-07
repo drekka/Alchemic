@@ -28,6 +28,7 @@ ___Main features___
 * Added an abstract aspect parent class.
 * Fixed bug where app delegates with no injections were not being added to the model.
 * Cleaned up value handling code.
+* Fixed bug where frameworks were not being scanned correctly on devices which resulted in Alchemic registrations being missed.
 
 # v2.1.1 #
 
