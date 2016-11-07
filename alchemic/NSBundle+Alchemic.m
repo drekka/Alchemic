@@ -62,14 +62,14 @@
         // Get a file reference from the executable URL, then convert to a system path. This process of going through a file reference corrects the incorrect executable path returned on a device.
         CFURLRef executableFileRefereceURL = CFURLCreateFileReferenceURL(NULL, executableURL, NULL);
         CFStringRef executableFileReference = CFURLCopyFileSystemPath(executableFileRefereceURL, kCFURLPOSIXPathStyle);
-        executableFilepath = CFStringGetCStringPtr(executableFileReference, kCFStringEncodingUTF8);
         CFRelease(executableFileRefereceURL);
-        CFRelease(executableFileReference);
+        executableFilepath = CFStringGetCStringPtr(executableFileReference, kCFStringEncodingUTF8);
+        CFAutorelease(executableFileReference);
     } else {
         // Otherwise we can use the bundles executable path.
         CFStringRef executableFileSystemPath = CFURLCopyFileSystemPath(executableURL, kCFURLPOSIXPathStyle);
         executableFilepath = CFStringGetCStringPtr(executableFileSystemPath, kCFStringEncodingUTF8);
-        CFRelease(executableFileSystemPath);
+        CFAutorelease(executableFileSystemPath);
     }
 
     CFRelease(extension);
