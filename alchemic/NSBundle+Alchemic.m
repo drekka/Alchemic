@@ -51,14 +51,29 @@
 
     // Get the path to the executable in the bundle. Note that on devices this path is not entirely correct.
     CFURLRef executableURL = CFBundleCopyExecutableURL(bundle);
-    CFAutorelease(executableURL);
 
-    // Get a file reference from the executable URL, then convert to a system path. This process of going through a file reference corrects the incorrect executable path returned on a device.
-    CFURLRef fileRefereceURL = CFURLCreateFileReferenceURL(NULL, executableURL, NULL);
-    CFAutorelease(fileRefereceURL);
-    CFStringRef executablePathString = CFURLCopyFileSystemPath(fileRefereceURL, kCFURLPOSIXPathStyle);
-    CFAutorelease(executablePathString);
-    const char *executableFilepath = CFStringGetCStringPtr(executablePathString, kCFStringEncodingUTF8);
+    // find out if we are dealing with a framework.
+    CFURLRef bundleURL = CFBundleCopyBundleURL(bundle);
+    CFStringRef extension = CFURLCopyPathExtension(bundleURL);
+    CFRelease(bundleURL);
+
+    const char *executableFilepath;
+    if ([@"framework" isEqualToString:(__bridge NSString *) extension]) {
+        // Get a file reference from the executable URL, then convert to a system path. This process of going through a file reference corrects the incorrect executable path returned on a device.
+        CFURLRef executableFileRefereceURL = CFURLCreateFileReferenceURL(NULL, executableURL, NULL);
+        CFStringRef executableFileReference = CFURLCopyFileSystemPath(executableFileRefereceURL, kCFURLPOSIXPathStyle);
+        executableFilepath = CFStringGetCStringPtr(executableFileReference, kCFStringEncodingUTF8);
+        CFRelease(executableFileRefereceURL);
+        CFRelease(executableFileReference);
+    } else {
+        // Otherwise we can use the bundles executable path.
+        CFStringRef executableFileSystemPath = CFURLCopyFileSystemPath(executableURL, kCFURLPOSIXPathStyle);
+        executableFilepath = CFStringGetCStringPtr(executableFileSystemPath, kCFStringEncodingUTF8);
+        CFRelease(executableFileSystemPath);
+    }
+
+    CFRelease(extension);
+    CFRelease(executableURL);
 
     // Now get the number of classes.
     unsigned int count = 0;
