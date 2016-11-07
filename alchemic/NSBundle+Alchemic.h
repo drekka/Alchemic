@@ -17,14 +17,12 @@
  */
 @interface NSBundle (Alchemic)
 
-+(NSSet *) scannableBundles;
-
 /**
- Scans a bundle with a variety of ALCClassProcessor instances for Alchemic registrations.
- 
+ Scans all the frameworks in the application using the passed ALCClassProcessor instances for Alchemic registrations.
+
  @param processors A list of processors to scan all classes with.
  @param context    The current context.
  */
--(void) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context;
++(void) scanApplicationWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context;
 
 @end

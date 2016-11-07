@@ -150,19 +150,12 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Scanning
 
 +(void) scanRuntimeWithContext:(id<ALCContext>) context {
-    
-    // Get a list of all the scannable bundles.
-    NSSet<NSBundle *> *appBundles = [NSBundle scannableBundles];
-    
-    // Scan the bundles, checking each class in each one.
     NSArray<id<ALCClassProcessor>> *processors = @[
                                                    [[ALCConfigClassProcessor alloc] init],
                                                    [[ALCModelClassProcessor alloc] init],
                                                    [[ALCAspectClassProcessor alloc] init]
                                                    ];
-    [appBundles enumerateObjectsUsingBlock:^(NSBundle *bundle, BOOL *stop) {
-        [bundle scanWithProcessors:processors context:context];
-    }];
+    [NSBundle scanApplicationWithProcessors:processors context:context];
 }
 
 #pragma mark - Executing blocks
