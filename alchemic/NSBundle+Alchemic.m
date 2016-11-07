@@ -22,20 +22,20 @@
     CFBundleRef mainBundle = CFBundleGetMainBundle();
 
     // first scan the app bundle.
-    //[self scanBundle:mainBundle withProcessors:processors context:context];
-    CFURLRef homeDir = CFBundleCopyBundleURL(mainBundle);
-    CFAutorelease(homeDir);
-    [self scanDirectoryForBundles:homeDir withProcessors:processors context:context];
+    [self scanBundle:mainBundle withProcessors:processors context:context];
+    //    CFURLRef homeDir = CFBundleCopyBundleURL(mainBundle);
+    //    CFAutorelease(homeDir);
+    //    [self scanDirectoryForBundles:homeDir withProcessors:processors context:context];
 
     CFURLRef frameworksDir = CFBundleCopyPrivateFrameworksURL(mainBundle);
     CFAutorelease(frameworksDir);
-    [self scanDirectoryForBundles:frameworksDir withProcessors:processors context:context];
+    [self scanDirectoryForFrameworks:frameworksDir withProcessors:processors context:context];
 }
 
-+(void) scanDirectoryForBundles:(CFURLRef) directory
-                 withProcessors:(NSArray<id<ALCClassProcessor>> *) processors
-                        context:(id<ALCContext>) context {
-    CFArrayRef bundles = CFBundleCreateBundlesFromDirectory(NULL, directory, NULL);
++(void) scanDirectoryForFrameworks:(CFURLRef) directory
+                    withProcessors:(NSArray<id<ALCClassProcessor>> *) processors
+                           context:(id<ALCContext>) context {
+    CFArrayRef bundles = CFBundleCreateBundlesFromDirectory(NULL, directory, (CFStringRef) @"framework");
     CFAutorelease(bundles);
 
     for (int i = 0; i < CFArrayGetCount(bundles); i++) {
