@@ -19,70 +19,35 @@
 
 +(void) scanApplicationWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
 
-    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    // We have to base on Core Foundation code here because NSBundle.allBundles actually returns incorrect results if we are running when attached to Xcode. The bundles it returns are correct for the app, but not necessarily the bundles that the app has loaded. The end result is that when we query the classes we get back zero results.
+    CFArrayRef allBundles = CFBundleGetAllBundles();
+    for (int i = 0;i < CFArrayGetCount(allBundles);i++) {
 
-    // first scan the app bundle.
-    [self scanBundle:mainBundle withProcessors:processors context:context];
-    //    CFURLRef homeDir = CFBundleCopyBundleURL(mainBundle);
-    //    CFAutorelease(homeDir);
-    //    [self scanDirectoryForBundles:homeDir withProcessors:processors context:context];
+        CFBundleRef bundle = (CFBundleRef) CFArrayGetValueAtIndex(allBundles, i);
 
-    CFURLRef frameworksDir = CFBundleCopyPrivateFrameworksURL(mainBundle);
-    CFAutorelease(frameworksDir);
-    [self scanDirectoryForFrameworks:frameworksDir withProcessors:processors context:context];
-}
+        // Ignore all Apple bundles as we know they won't have Alchemic registration code in them.
+        NSString *bundleId = (NSString *) CFBundleGetIdentifier(bundle);
+        if (!bundleId || [bundleId hasPrefix:@"com.apple"]) {
+            return;
+        }
 
-+(void) scanDirectoryForFrameworks:(CFURLRef) directory
-                    withProcessors:(NSArray<id<ALCClassProcessor>> *) processors
-                           context:(id<ALCContext>) context {
-    CFArrayRef bundles = CFBundleCreateBundlesFromDirectory(NULL, directory, (CFStringRef) @"framework");
-    CFAutorelease(bundles);
-
-    for (int i = 0; i < CFArrayGetCount(bundles); i++) {
-        CFBundleRef bundle = (CFBundleRef) CFArrayGetValueAtIndex(bundles, i);
-        [self scanBundle:bundle withProcessors:processors context:context];
+        // Now get the executable from the bundle so we can scan it for classes.
+        NSURL *executableURL = (NSURL *) CFBridgingRelease(CFBundleCopyExecutableURL(bundle));
+        if (executableURL) {
+            [self scanExecutable:executableURL.fileSystemRepresentation withProcessors:processors context:context];
+        }
     }
 }
 
++(void) scanExecutable:(const char *) executable withProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
 
-+(void) scanBundle:(CFBundleRef) bundle
-    withProcessors:(NSArray<id<ALCClassProcessor>> *) processors
-           context:(id<ALCContext>) context {
-
-    // Get the path to the executable in the bundle. Note that on devices this path is not entirely correct.
-    CFURLRef executableURL = CFBundleCopyExecutableURL(bundle);
-
-    // find out if we are dealing with a framework.
-    CFURLRef bundleURL = CFBundleCopyBundleURL(bundle);
-    CFStringRef extension = CFURLCopyPathExtension(bundleURL);
-    CFRelease(bundleURL);
-
-    const char *executableFilepath;
-    if ([@"framework" isEqualToString:(__bridge NSString *) extension]) {
-        // Get a file reference from the executable URL, then convert to a system path. This process of going through a file reference corrects the incorrect executable path returned on a device.
-        CFURLRef executableFileRefereceURL = CFURLCreateFileReferenceURL(NULL, executableURL, NULL);
-        CFStringRef executableFileReference = CFURLCopyFileSystemPath(executableFileRefereceURL, kCFURLPOSIXPathStyle);
-        CFRelease(executableFileRefereceURL);
-        executableFilepath = CFStringGetCStringPtr(executableFileReference, kCFStringEncodingUTF8);
-        CFAutorelease(executableFileReference);
-    } else {
-        // Otherwise we can use the bundles executable path.
-        CFStringRef executableFileSystemPath = CFURLCopyFileSystemPath(executableURL, kCFURLPOSIXPathStyle);
-        executableFilepath = CFStringGetCStringPtr(executableFileSystemPath, kCFStringEncodingUTF8);
-        CFAutorelease(executableFileSystemPath);
-    }
-
-    CFRelease(extension);
-    CFRelease(executableURL);
-
-    // Now get the number of classes.
+    // Get the classes.
     unsigned int count = 0;
-    const char** classes = objc_copyClassNamesForImage(executableFilepath, &count);
+    const char** classes = objc_copyClassNamesForImage(executable, &count);
     if (count == 0) {
         return;
     }
 
-    STLog(self, @"Scanning %i runtime classes in bundle %@", count, bundle);
     for(unsigned int i = 0;i < count;i++) {
         Class nextClass = objc_getClass(classes[i]);
         for (id<ALCClassProcessor> classProcessor in processors) {
@@ -91,6 +56,7 @@
             }
         }
     }
+    
     free(classes);
 }
 
