@@ -28,7 +28,7 @@
         // Ignore all Apple bundles as we know they won't have Alchemic registration code in them.
         NSString *bundleId = (NSString *) CFBundleGetIdentifier(bundle);
         if (!bundleId || [bundleId hasPrefix:@"com.apple"]) {
-            return;
+            continue;
         }
 
         // Now get the executable from the bundle so we can scan it for classes.
