@@ -48,6 +48,8 @@
         return;
     }
 
+    STLog(self, @"Scanning %i runtime classes in executable %s", count, executable);
+
     for(unsigned int i = 0;i < count;i++) {
         Class nextClass = objc_getClass(classes[i]);
         for (id<ALCClassProcessor> classProcessor in processors) {
