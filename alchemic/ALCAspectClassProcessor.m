@@ -8,12 +8,14 @@
 
 #import <Alchemic/ALCAspectClassProcessor.h>
 #import <Alchemic/ALCResolveAspect.h>
+#import <Alchemic/ALCAbstractAspect.h>
 #import <Alchemic/ALCContext.h>
 
 @implementation ALCAspectClassProcessor
 
 -(BOOL) canProcessClass:(Class) aClass {
-    return [aClass conformsToProtocol:@protocol(ALCResolveAspect)];
+    return [aClass conformsToProtocol:@protocol(ALCResolveAspect)]
+    && [[ALCAbstractAspect class] isSubclassOfClass:aClass];
 }
 
 -(void) processClass:(Class) aClass withContext:(id<ALCContext>) context {
