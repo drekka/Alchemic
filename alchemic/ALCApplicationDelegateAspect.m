@@ -37,7 +37,14 @@
     
     // If there is no pre-registered app delegate then set it up.
     if (!_appDelegateFactory) {
-        id delegate = [UIApplication sharedApplication].delegate;
+
+        // There is a possibility that this code could execute before the application is available. So if it's not present, sleep the current loop for a while and continue.
+        while (!UIApplication.sharedApplication.delegate) {
+            STLog(self, @"Application not ready, pausing ...");
+            [NSThread sleepForTimeInterval:0.1];
+        }
+        id delegate = UIApplication.sharedApplication.delegate;
+
         ALCType *appDelegateType = [ALCType typeWithClass:[delegate class]];
         _appDelegateFactory = [[ALCClassObjectFactory alloc] initWithType:appDelegateType];
         STLog(self, @"Registering app delegate with class: %@", NSStringFromClass(appDelegateType.objcClass));
