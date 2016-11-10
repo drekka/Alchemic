@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractValueStore.h"
+#import <Alchemic/ALCAbstractValueStore.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

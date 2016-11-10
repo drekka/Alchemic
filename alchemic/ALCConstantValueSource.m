@@ -8,11 +8,11 @@
 
 @import CoreGraphics;
 
-#import "ALCConstantValueSource.h"
-#import "ALCType.h"
-#import "ALCValue.h"
-#import "ALCInternalMacros.h"
-#import "ALCAbstractValueSource.h"
+#import <Alchemic/ALCConstantValueSource.h>
+#import <Alchemic/ALCType.h>
+#import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCAbstractValueSource.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

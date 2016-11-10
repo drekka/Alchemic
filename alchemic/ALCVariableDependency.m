@@ -6,12 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCVariableDependency.h"
+#import <Alchemic/ALCVariableDependency.h>
 
-#import "ALCException.h"
-#import "ALCRuntime.h"
-#import "ALCValue+Injection.h"
-#import "ALCValueSource.h"
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCValue+Injection.h>
+#import <Alchemic/ALCValueSource.h>
 
 @implementation ALCVariableDependency {
     Ivar _ivar;

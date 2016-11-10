@@ -9,8 +9,8 @@
 @import ObjectiveC;
 @import StoryTeller;
 
-#import "NSBundle+Alchemic.h"
-#import "ALCClassProcessor.h"
+#import <Alchemic/NSBundle+Alchemic.h>
+#import <Alchemic/ALCClassProcessor.h>
 
 @implementation NSBundle (Alchemic)
 

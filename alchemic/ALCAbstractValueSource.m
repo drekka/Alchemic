@@ -6,13 +6,13 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractValueSource.h"
+#import <Alchemic/ALCAbstractValueSource.h>
 
-#import "ALCInternalMacros.h"
-#import "ALCObjectFactory.h"
-#import "ALCResolvable.h"
-#import "ALCModel.h"
-#import "ALCType.h"
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCResolvable.h>
+#import <Alchemic/ALCModel.h>
+#import <Alchemic/ALCType.h>
 
 @implementation ALCAbstractValueSource
 

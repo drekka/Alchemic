@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCAbstractAspect.h"
+#import <Alchemic/ALCAbstractAspect.h>
 
 @interface ALCApplicationDelegateAspect : ALCAbstractAspect
 

@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCAbstractAspect.h"
+#import <Alchemic/ALCAbstractAspect.h>
 
 /**
  Aspect which manages the creation of user default handling classes. If the user has not defined any class derived from ALCUserDefaults, 

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCResolveAspect.h"
+#import <Alchemic/ALCResolveAspect.h>
 
 @interface ALCAbstractAspect : NSObject<ALCResolveAspect>
 

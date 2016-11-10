@@ -8,13 +8,13 @@
 
 @import StoryTeller;
 
-#import "ALCAbstractDependency.h"
+#import <Alchemic/ALCAbstractDependency.h>
 
-#import "ALCInternalMacros.h"
-#import "ALCValueSource.h"
-#import "ALCType.h"
-#import "ALCValue.h"
-#import "ALCFlagMacros.h"
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCValueSource.h>
+#import <Alchemic/ALCType.h>
+#import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCFlagMacros.h>
 
 @implementation ALCAbstractDependency
 

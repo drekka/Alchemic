@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-#import "ALCObjectFactoryType.h"
+#import <Alchemic/ALCObjectFactoryType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

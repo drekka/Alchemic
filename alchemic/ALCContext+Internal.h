@@ -9,7 +9,7 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import "ALCContextImpl.h"
+#import <Alchemic/ALCContextImpl.h>
 
 @class ALCClassObjectFactory;
 @class ALCType;

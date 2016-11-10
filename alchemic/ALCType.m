@@ -6,12 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCType.h"
+#import <Alchemic/ALCType.h>
 
-#import "ALCRuntime.h"
-#import "ALCValue.h"
-#import "ALCInternalMacros.h"
-#import "ALCModelSearchCriteria.h"
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCModelSearchCriteria.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

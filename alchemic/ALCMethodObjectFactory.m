@@ -9,15 +9,15 @@
 @import StoryTeller;
 
 
-#import "ALCMethodObjectFactory.h"
+#import <Alchemic/ALCMethodObjectFactory.h>
 
-#import "NSArray+Alchemic.h"
-#import "NSObject+Alchemic.h"
-#import "ALCInternalMacros.h"
-#import "Alchemic.h"
-#import "ALCType.h"
-#import "ALCRuntime.h"
-#import "ALCContext+Internal.h"
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/NSObject+Alchemic.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/Alchemic.h>
+#import <Alchemic/ALCType.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/ALCContext+Internal.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
