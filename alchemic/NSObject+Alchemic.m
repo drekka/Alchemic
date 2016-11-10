@@ -8,19 +8,18 @@
 
 @import StoryTeller;
 
-#import <Alchemic/NSObject+Alchemic.h>
+#import "NSObject+Alchemic.h"
 
-#import <Alchemic/ALCDependency.h>
-#import <Alchemic/ALCException.h>
-#import <Alchemic/ALCInstantiation.h>
-#import <Alchemic/ALCInstantiator.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCMethodArgumentDependency.h>
-#import <Alchemic/ALCResolvable.h>
-#import <Alchemic/ALCRuntime.h>
-#import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/ALCType.h>
+#import "ALCDependency.h"
+#import "ALCException.h"
+#import "ALCInstantiator.h"
+#import "ALCMacros.h"
+#import "ALCInternalMacros.h"
+#import "ALCMethodArgumentDependency.h"
+#import "ALCResolvable.h"
+#import "ALCRuntime.h"
+#import "NSArray+Alchemic.h"
+#import "ALCType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -103,12 +102,12 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Load the arguments.
     [arguments enumerateObjectsUsingBlock:^(id<ALCDependency> dependency, NSUInteger idx, BOOL *stop) {
-        STLog(self.class, @"Injecting argument at index %i", idx);
+        STLog(self.class, @"Injecting argument at index %lu", (unsigned long)idx);
         [dependency injectObject:inv];
     }];
 
     [inv invokeWithTarget:object];
-    
+
     id __unsafe_unretained returnObj;
     [inv getReturnValue:&returnObj];
     return returnObj;

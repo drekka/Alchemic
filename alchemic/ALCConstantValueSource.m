@@ -8,11 +8,11 @@
 
 @import CoreGraphics;
 
-#import <Alchemic/ALCConstantValueSource.h>
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCValue.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCAbstractValueSource.h>
+#import "ALCConstantValueSource.h"
+#import "ALCType.h"
+#import "ALCValue.h"
+#import "ALCInternalMacros.h"
+#import "ALCAbstractValueSource.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -137,7 +137,7 @@ id<ALCValueSource> AcRect(float x, float y, float width, float height) {
 }
 
 -(nullable ALCValue *) value {
-    return [ALCValue withValue:_value completion:NULL];
+    return [ALCValue withObject:_value completion:NULL];
 }
 
 -(NSString *)resolvingDescription {

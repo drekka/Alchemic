@@ -9,7 +9,7 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCTypeDefs.h>
+#import "ALCTypeDefs.h"
 
 @protocol ALCDependency;
 @protocol ALCModel;

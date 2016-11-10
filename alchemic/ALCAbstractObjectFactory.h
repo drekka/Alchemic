@@ -8,8 +8,8 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCDefs.h>
+#import "ALCObjectFactory.h"
+#import "ALCDefs.h"
 
 @class ALCInstantiation;
 @protocol ALCModel;
@@ -31,8 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Default initializer shared by implementations.
- 
- @param objectClass the class of the object that the factory will create or manage.
  
  @return An instance of the factory with default settings.
  */

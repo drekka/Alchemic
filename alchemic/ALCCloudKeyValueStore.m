@@ -6,12 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCCloudKeyValueStore.h>
+#import "ALCCloudKeyValueStore.h"
 
 @import StoryTeller;
 
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCRuntime.h>
+#import "ALCMacros.h"
+#import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,12 +19,15 @@ NS_ASSUME_NONNULL_BEGIN
     id _storeDataChangedObserver;
 }
 
--(void)dealloc {
+-(void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:_storeDataChangedObserver];
 }
 
--(nullable NSDictionary<NSString *, id> *) loadDefaults {
-    
+-(void) alchemicDidInjectDependencies {
+
+    [super alchemicDidInjectDependencies];
+
+    // Start watching the store for changes.
     [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil queue:nil usingBlock:^(NSNotification *notification) {
         
         // If the store has changed, update the local properties with the passed keys.
@@ -33,22 +36,24 @@ NS_ASSUME_NONNULL_BEGIN
             NSArray<NSString *> *keys = notification.userInfo[NSUbiquitousKeyValueStoreChangedKeysKey];
             for (NSString *key in keys) {
                 STLog(self, @"Cloud updated value for %@", key);
-                [self valueStoreDidUpdateValue:[self valueStoreValueForKey:key] forKey:key];
+                [self backingStoreDidUpdateValue:[self backingStoreValueForKey:key] forKey:key];
             }
         }
     }];
-    
-    // get changes that might have happened while this instance of your app wasn't running
+}
+
+-(nullable NSDictionary<NSString *, id> *) backingStoreValues {
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     return [[NSUbiquitousKeyValueStore defaultStore] dictionaryRepresentation];
 }
 
--(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key {
+-(void)setBackingStoreValue:(nullable id)value forKey:(NSString *)key {
     STLog(self, @"Sending value to cloud key %@: %@", key, value);
     [[NSUbiquitousKeyValueStore defaultStore] setObject:value forKey:key];
+    [[NSUbiquitousKeyValueStore defaultStore] synchronize]; // Because it seems to take some time
 }
 
--(nullable id) valueStoreValueForKey:(id) key {
+-(nullable id) backingStoreValueForKey:(id) key {
     return [[NSUbiquitousKeyValueStore defaultStore] objectForKey:key];
 }
 

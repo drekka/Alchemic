@@ -6,16 +6,16 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCFactoryName.h>
-#import <Alchemic/ALCFlagMacros.h>
-#import <Alchemic/ALCMethodArgumentDependency.h>
-#import <Alchemic/ALCModelSearchCriteria.h>
-#import <Alchemic/ALCClassObjectFactory.h>
-#import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCStringMacros.h>
-#import <Alchemic/ALCUserDefaultsAspect.h>
-#import <Alchemic/ALCValue.h>
-#import <Alchemic/ALCDefs.h>
+#import "ALCFactoryName.h"
+#import "ALCFlagMacros.h"
+#import "ALCMethodArgumentDependency.h"
+#import "ALCModelSearchCriteria.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCContext.h"
+#import "ALCStringMacros.h"
+#import "ALCUserDefaultsAspect.h"
+#import "ALCValue.h"
+#import "ALCDefs.h"
 
 #pragma mark - registration
 
@@ -182,12 +182,12 @@ returnType:[methodType class], ## __VA_ARGS__, nil]; \
 
 #define AcEnableUserDefaults \
 +(void) alc_featureMethodName(enableUserDefaults, __LINE__) { \
-[ALCUserDefaultsAspect setEnabled:YES]; \
+ALCUserDefaultsAspect.enabled = YES; \
 }
 
 #define AcEnableCloudKeyValueStore \
 +(void) alc_featureMethodName(enableCloudKeyValueStore, __LINE__) { \
-[ALCCloudKeyValueStoreAspect setEnabled:YES]; \
+ALCCloudKeyValueStoreAspect.enabled = YES; \
 }
 
 #pragma mark - Misc

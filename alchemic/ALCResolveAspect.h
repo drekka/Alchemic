@@ -15,8 +15,7 @@
  */
 @protocol ALCResolveAspect <NSObject>
 
-+(void) setEnabled:(BOOL) enabled;
-+(BOOL) enabled;
+@property (class, atomic, assign) BOOL enabled;
 
 @optional
 

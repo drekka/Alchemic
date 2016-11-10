@@ -1,5 +1,0 @@
-explicit module Alchemic.Private {
-    umbrella "PrivateHeaders"
-    requires objc_arc
-    link framework "StoryTeller"
-}

@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCClassProcessor.h>
+#import "ALCClassProcessor.h"
 
 /**
  *  Scans classes looking for Alchemic config classes.

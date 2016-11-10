@@ -8,12 +8,13 @@
 
 @import StoryTeller;
 
-#import <Alchemic/ALCAbstractDependency.h>
+#import "ALCAbstractDependency.h"
 
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCValueSource.h>
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCValue.h>
+#import "ALCInternalMacros.h"
+#import "ALCValueSource.h"
+#import "ALCType.h"
+#import "ALCValue.h"
+#import "ALCFlagMacros.h"
 
 @implementation ALCAbstractDependency
 
@@ -45,6 +46,10 @@
     return YES;
 }
 
+-(BOOL)referencesTransients {
+    return _valueSource.referencesTransients;
+}
+
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *) resolvingStack
                    model:(id<ALCModel>)model {
     STLog(self, @"Resolving %@", self.resolvingDescription);
@@ -59,14 +64,24 @@
     methodReturningStringNotImplemented;
 }
 
-#pragma mark - ALCDependency
+#pragma mark - Override points
+
+-(void) configureWithOptions:(NSArray *) options {
+    
+    for (id option in options) {
+        if ([option isKindOfClass:[ALCIsNillable class]]) {
+            if (!_type.isObjectType) {
+                throwException(AlchemicIllegalArgumentException, @"Scalar types cannot be nillable");
+            }
+            _type.nillable = YES;
+            return;
+        }
+        throwException(AlchemicIllegalArgumentException, @"Unknown variable dependency option: %@", option);
+    }
+}
 
 -(NSString *)stackName {
     methodReturningStringNotImplemented;
-}
-
--(BOOL)referencesTransients {
-    return FALSE;
 }
 
 -(void) injectObject:(id)object {

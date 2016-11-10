@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCAbstractObjectFactory.h>
+#import "ALCAbstractObjectFactory.h"
 
 @class ALCClassObjectFactory;
 @protocol ALCDependency;
@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Unavailable initializer.
- @param objectClass -
+ @param type -
  */
 -(instancetype) initWithType:(ALCType *) type NS_UNAVAILABLE;
 

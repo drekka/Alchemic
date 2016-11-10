@@ -9,25 +9,15 @@
 @import UIKit;
 @import StoryTeller;
 
-#import <Alchemic/ALCCloudKeyValueStoreAspect.h>
+#import "ALCCloudKeyValueStoreAspect.h"
 
-#import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCClassObjectFactory.h>
-#import <Alchemic/ALCCloudKeyValueStore.h>
-#import <Alchemic/ALCType.h>
+#import "ALCModel.h"
+#import "ALCMacros.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCCloudKeyValueStore.h"
+#import "ALCType.h"
 
 @implementation ALCCloudKeyValueStoreAspect
-
-static BOOL _enabled;
-
-+(void) setEnabled:(BOOL) enabled {
-    _enabled = enabled;
-}
-
-+(BOOL) enabled {
-    return _enabled;
-}
 
 -(void)modelWillResolve:(id<ALCModel>) model {
     

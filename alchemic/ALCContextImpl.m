@@ -8,18 +8,18 @@
 
 @import StoryTeller;
 
-#import <Alchemic/ALCClassObjectFactoryInitializer.h>
-#import <Alchemic/ALCContextImpl.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCMethodObjectFactory.h>
-#import <Alchemic/ALCModelImpl.h>
-#import <Alchemic/ALCModelValueSource.h>
-#import <Alchemic/ALCRuntime.h>
-#import <Alchemic/ALCType.h>
-#import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/ALCVariableDependency.h>
-#import <Alchemic/ALCContext+Internal.h>
+#import "ALCClassObjectFactoryInitializer.h"
+#import "ALCContextImpl.h"
+#import "ALCMacros.h"
+#import "ALCInternalMacros.h"
+#import "ALCMethodObjectFactory.h"
+#import "ALCModelImpl.h"
+#import "ALCModelValueSource.h"
+#import "ALCRuntime.h"
+#import "ALCType.h"
+#import "NSArray+Alchemic.h"
+#import "ALCVariableDependency.h"
+#import "ALCContext+Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -251,13 +251,13 @@ registerFactoryMethod:(SEL) selector
     ALCModelValueSource *source = [ALCModelValueSource valueSourceWithCriteria:modelSearchCriteria];
 
     // Resolve to find the factories.
-    [source resolveWithStack:[[NSMutableArray alloc] init] model:_model];
+    [source resolveWithModel:_model];
 
     ALCValue *alcValue = source.value;
-    [ALCRuntime executeSimpleBlock:alcValue.completion];
+    [alcValue complete];
 
     // Get the value which will be an array of objects.
-    NSArray *values = alcValue.value;
+    NSArray *values = alcValue.object;
 
     // Handle arrays.
     if ([returnType isSubclassOfClass:[NSArray class]]) {
@@ -289,7 +289,7 @@ registerFactoryMethod:(SEL) selector
         // Check for an Alchemic value.
         id finalObject = object;
         if ([object conformsToProtocol:@protocol(ALCValueSource)]) {
-            finalObject = ((id<ALCValueSource>)object).value;
+            finalObject = ((id<ALCValueSource>)object).value.object;
         }
 
         Class objClass = [finalObject class];
@@ -307,7 +307,7 @@ registerFactoryMethod:(SEL) selector
 
         // Pass the object to the factory.
         STLog(objClass, @"Storing reference %@ using criteria %@", objClass, searchCriteria);
-        [((ALCAbstractObjectFactory *) factories[0]) setObject:finalObject];
+        [((ALCAbstractObjectFactory *) factories[0]) storeObject:finalObject];
     };
 
     // If startup blocks have not been executed yet then there may be registrations which need to occur, so add the block to the list.

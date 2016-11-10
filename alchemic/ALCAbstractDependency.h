@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCDependency.h>
+#import "ALCDependency.h"
 
 @class ALCType;
 @class ALCValue;
@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
  Default initializer.
  
  @param type The type to beinjected.
- @param dataSource Where the value for the injection is to come from.
+ @param valueSource Where the value for the injection is to come from.
  
  @return An instance of this class.
  */
@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) dependencyWithType:(ALCType *) type
                        valueSource:(id<ALCValueSource>) valueSource;
+
+-(void) configureWithOptions:(NSArray *) options NS_REQUIRES_SUPER;
 
 @end
 

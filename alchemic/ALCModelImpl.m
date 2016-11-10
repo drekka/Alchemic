@@ -9,11 +9,10 @@
 @import UIKit;
 @import StoryTeller;
 
-#import <Alchemic/ALCModelImpl.h>
+#import "ALCModelImpl.h"
 
-#import <Alchemic/ALCInstantiation.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
+#import "ALCMacros.h"
+#import "ALCInternalMacros.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
         return [factory isKindOfClass:[ALCClassObjectFactory class]];
     }]];
     if (factories.count > 1) {
-        throwException(AlchemicTooManyResultsException, @"Exepcted 1 object factory for critieria '%@', but found %lu.", criteria, (unsigned long) factories.count);
+        throwException(AlchemicTooManyResultsException, @"Expected 1 object factory for critieria '%@', but found %lu.", criteria, (unsigned long) factories.count);
     } else if (factories.count == 0) {
         return nil;
     } else {
@@ -137,9 +136,9 @@ NS_ASSUME_NONNULL_BEGIN
         if (objectFactory.factoryType == ALCFactoryTypeSingleton
             && objectFactory.isReady) {
             STLog(self, @"Starting %@, as '%@'", [objectFactory description], key);
-            ALCInstantiation *instantiation = objectFactory.instantiation;
-            __unused id obj = instantiation.object;
-            [instantiation complete];
+            ALCValue *value = objectFactory.value;
+            __unused id obj = value.object;
+            [value complete];
         }
     }];
 }

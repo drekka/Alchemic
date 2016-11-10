@@ -46,11 +46,14 @@
 -(void) testVariableInjection ## ivarName { \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(ivarType)]; \
-ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL]; \
+ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL]; \
 Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 ALCType *alcType = [ALCType typeForIvar:ivar]; \
-ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType.type]; \
-inj(self, ivar); \
+ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType]; \
+NSError *error; \
+BOOL success = inj(self, alcType, ivar, &error); \
+XCTAssertTrue(success); \
+XCTAssertNil(error); \
 XCTAssertEqual(ivarName, expectedValue); \
 }
 
@@ -73,10 +76,12 @@ testScalarVariableInjection(_aUShort, unsigned short, 5u)
     const char *encoding = ivar_getTypeEncoding(ivar);
     char *value = "abc";
     NSValue *nsValue = [NSValue valueWithBytes:&value objCType:encoding];
-    ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL];
+    ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL];
     ALCType *alcType = [ALCType typeForIvar:ivar];
-    ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType.type];
-    inj(self, ivar);
+    ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
+    NSError *error;
+    XCTAssertTrue(inj(self, alcType, ivar, &error));
+    XCTAssertNil(error);
     XCTAssertTrue(strcmp("abc", _aCharPointer) == 0);
 }
 
@@ -86,10 +91,12 @@ Ivar ivar = class_getInstanceVariable([self class], alc_toCString(ivarName)); \
 const char *encoding = ivar_getTypeEncoding(ivar); \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:encoding]; \
-ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL]; \
+ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL]; \
 ALCType *alcType = [ALCType typeForIvar:ivar]; \
-ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType.type]; \
-inj(self, ivar); \
+ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType]; \
+NSError *error; \
+XCTAssertTrue(inj(self, alcType, ivar, &error)); \
+XCTAssertNil(error); \
 XCTAssertTrue(compareFunction(ivarName, expectedValue)); \
 }
 
@@ -98,18 +105,47 @@ testScalarStructVariableInjection(_point, CGPoint, CGPointMake(1.0f, 2.0f), CGPo
 testScalarStructVariableInjection(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.0f), CGRectEqualToRect)
 
 -(void) testVariableInjection_Object {
-    ALCValue *alcValue = [ALCValue withValue:@5 completion:NULL];
-    ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:ALCValueTypeObject];
+    ALCValue *alcValue = [ALCValue withObject:@5 completion:NULL];
+    ALCType *alcType = [ALCType typeWithClass:[NSNumber class]];
+    ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
     Ivar ivar = class_getInstanceVariable([self class], "_aNumber");
-    inj(self, ivar);
+    NSError *error;
+    XCTAssertTrue(inj(self, alcType, ivar, &error));
+    XCTAssertNil(error);
     XCTAssertEqualObjects(@5, _aNumber);
 }
 
+-(void) testVariableInjection_ObjectWhenNilAllowed {
+    ALCValue *alcValue = [ALCValue withObject:nil completion:NULL];
+    ALCType *alcType = [ALCType typeWithClass:[NSNumber class]];
+    alcType.nillable = YES;
+    ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
+    Ivar ivar = class_getInstanceVariable([self class], "_aNumber");
+    NSError *error;
+    XCTAssertTrue(inj(self, alcType, ivar, &error));
+    XCTAssertNil(error);
+    XCTAssertNil(_aNumber);
+}
+
+-(void) testVariableInjection_ObjectWhenNilNotAllowed {
+    ALCValue *alcValue = [ALCValue withObject:nil completion:NULL];
+    ALCType *alcType = [ALCType typeWithClass:[NSNumber class]];
+    ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
+    Ivar ivar = class_getInstanceVariable([self class], "_aNumber");
+    NSError *error;
+    XCTAssertFalse(inj(self, alcType, ivar, &error));
+    XCTAssertEqualObjects(@"Nil value not allowed in this injection", error.localizedDescription);
+    XCTAssertNil(_aNumber);
+}
+
 -(void) testVariableInjection_Array {
-    ALCValue *alcValue = [ALCValue withValue:@[@5] completion:NULL];
-    ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:ALCValueTypeArray];
+    ALCValue *alcValue = [ALCValue withObject:@[@5] completion:NULL];
+    ALCType *alcType = [ALCType typeWithClass:[NSArray class]];
+    ALCVariableInjectorBlock inj = [alcValue variableInjectorForType:alcType];
     Ivar ivar = class_getInstanceVariable([self class], "_arrayOfNumbers");
-    inj(self, ivar);
+    NSError *error;
+    XCTAssertTrue(inj(self, alcType, ivar, &error));
+    XCTAssertNil(error);
     XCTAssertEqual(1u, _arrayOfNumbers.count);
     XCTAssertEqualObjects(@5, _arrayOfNumbers[0]);
 }
@@ -121,9 +157,12 @@ testScalarStructVariableInjection(_rect, CGRect, CGRectMake(1.0f, 2.0f, 3.0f, 4.
 NSInvocation *inv = [self invForSelector:@selector(methodSelector)]; \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(ivarType)]; \
-ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL]; \
-ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:[ALCType typeWithEncoding:@encode(ivarType)].type]; \
-inj(inv, 0); \
+ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL]; \
+ALCType *alcType = [ALCType typeWithEncoding:@encode(ivarType)]; \
+ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType]; \
+NSError *error; \
+XCTAssertTrue(inj(inv, alcType, 0, &error)); \
+XCTAssertNil(error); \
 [inv invokeWithTarget:self]; \
 XCTAssertEqual(_ ## varName, expectedValue); \
 }
@@ -147,9 +186,12 @@ testScalarInvocationInjectionTest(aUShort, unsigned short, setAUShort:, 5u)
 NSInvocation *inv = [self invForSelector:@selector(methodSelector)]; \
 ivarType value = expectedValue; \
 NSValue *nsValue = [NSValue valueWithBytes:&value objCType:@encode(ivarType)]; \
-ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL]; \
-ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:[ALCType typeWithEncoding:@encode(ivarType)].type]; \
-inj(inv, 0); \
+ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL]; \
+ALCType *alcType = [ALCType typeWithEncoding:@encode(ivarType)]; \
+ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType]; \
+NSError *error; \
+XCTAssertTrue(inj(inv, alcType, 0, &error)); \
+XCTAssertNil(error); \
 [inv invokeWithTarget:self]; \
 XCTAssertTrue(compareFunction(varName, expectedValue)); \
 }
@@ -162,27 +204,36 @@ testScalarStructInvocationInjectionTest(_rect, CGRect, setRect:, CGRectMake(1.0f
     NSInvocation *inv = [self invForSelector:@selector(setACharPointer:)];
     char *value = "abc";
     NSValue *nsValue = [NSValue valueWithBytes:&value objCType:"*"];
-    ALCValue *alcValue = [ALCValue withValue:nsValue completion:NULL];
-    ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:[ALCType typeWithEncoding:@encode(char *)].type];
-    inj(inv, 0);
+    ALCValue *alcValue = [ALCValue withObject:nsValue completion:NULL];
+    ALCType *alcType = [ALCType typeWithEncoding:@encode(char *)];
+    ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType];
+    NSError *error;
+    XCTAssertTrue(inj(inv, alcType, 0, &error));
+    XCTAssertNil(error);
     [inv invokeWithTarget:self];
     XCTAssertTrue(strcmp(_aCharPointer, "abc") == 0);
 }
 
 -(void) testInvocationInjection_Object {
     NSInvocation *inv = [self invForSelector:@selector(setANumber:)];
-    ALCValue *alcValue = [ALCValue withValue:@5 completion:NULL];
-    ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:ALCValueTypeObject];
-    inj(inv, 0);
+    ALCValue *alcValue = [ALCValue withObject:@5 completion:NULL];
+    ALCType *alcType = [ALCType typeWithClass:[NSNumber class]];
+    ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType];
+    NSError *error;
+    XCTAssertTrue(inj(inv, alcType, 0, &error));
+    XCTAssertNil(error);
     [inv invokeWithTarget:self];
     XCTAssertEqualObjects(@5, _aNumber);
 }
 
 -(void) testInvocationInjection_Array {
     NSInvocation *inv = [self invForSelector:@selector(setArrayOfNumbers:)];
-    ALCValue *alcValue = [ALCValue withValue:@[@5] completion:NULL];
-    ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:ALCValueTypeArray];
-    inj(inv, 0);
+    ALCValue *alcValue = [ALCValue withObject:@[@5] completion:NULL];
+    ALCType *alcType = [ALCType typeWithClass:[NSArray class]];
+    ALCInvocationInjectorBlock inj = [alcValue invocationInjectorForType:alcType];
+    NSError *error;
+    XCTAssertTrue(inj(inv, alcType, 0, &error));
+    XCTAssertNil(error);
     [inv invokeWithTarget:self];
     XCTAssertEqual(1u, _arrayOfNumbers.count);
     XCTAssertEqualObjects(@5, _arrayOfNumbers[0]);

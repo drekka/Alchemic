@@ -9,7 +9,7 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCAbstractDependency.h>
+#import "ALCAbstractDependency.h"
 
 @protocol ALCInjector;
 @protocol ALCValueSource;
@@ -29,7 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Unavailable initiailizer.
- @param injector -
  */
 -(instancetype) initWithType:(ALCType *) type
                  valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;
@@ -49,7 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
                                   intoIvar:(Ivar) ivar
                                   withName:(NSString *) name;
 
--(void) configureWithOptions:(NSArray *) options;
 
 @end
 

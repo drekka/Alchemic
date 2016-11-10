@@ -9,16 +9,6 @@
 @import Foundation;
 
 /**
- Notification psoted after an object's completion is executed.
- */
-FOUNDATION_EXPORT NSString *AlchemicDidCreateObject;
-
-/**
- Key for the AlchemicDidCreateObject notification userInfo.
- */
-FOUNDATION_EXPORT NSString *AlchemicDidCreateObjectUserInfoObject;
-
-/**
  Notification sent after Alchemic has finished starting all singleton instances.
  */
 FOUNDATION_EXPORT NSString *AlchemicDidFinishStarting;

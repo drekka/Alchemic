@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCResolvable.h>
+#import "ALCResolvable.h"
 
 @class ALCValue;
 @protocol ALCObjectFactory;

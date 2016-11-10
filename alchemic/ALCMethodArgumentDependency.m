@@ -8,14 +8,14 @@
 
 @import StoryTeller;
 
-#import <Alchemic/ALCMethodArgumentDependency.h>
+#import "ALCMethodArgumentDependency.h"
 
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCValueSource.h>
-#import <Alchemic/ALCException.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/ALCValue+Injection.h>
+#import "ALCType.h"
+#import "ALCValueSource.h"
+#import "ALCException.h"
+#import "ALCInternalMacros.h"
+#import "NSArray+Alchemic.h"
+#import "ALCValue+Injection.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,8 +45,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) injectObject:(id) object {
     ALCValue *value = self.valueSource.value;
     if (value) {
-        ALCInvocationInjectorBlock injector = [value invocationInjectorForType:self.type.type];
-        injector(object, (NSInteger) _index);
+        ALCInvocationInjectorBlock injector = [value invocationInjectorForType:self.type];
+        NSError *error;
+        if (!injector(object, self.type, (NSInteger) _index, &error)) {
+            throwException(AlchemicInjectionException, @"Error injecting value at index %lu: %@", (unsigned long)_index, error.localizedDescription);
+        }
         return;
     }
 }

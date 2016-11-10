@@ -6,14 +6,14 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCValueSource.h>
-#import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCArrayValueSource.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCResolvable.h>
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCValue.h>
-#import <Alchemic/ALCTypeDefs.h>
+#import "ALCValueSource.h"
+#import "ALCObjectFactory.h"
+#import "ALCArrayValueSource.h"
+#import "ALCInternalMacros.h"
+#import "ALCResolvable.h"
+#import "ALCType.h"
+#import "ALCValue.h"
+#import "ALCTypeDefs.h"
 
 @implementation ALCArrayValueSource {
     NSArray<id<ALCValueSource>> *_sources;
@@ -46,30 +46,20 @@
 -(nullable ALCValue *) value {
 
     NSMutableArray *results = [NSMutableArray arrayWithCapacity:_sources.count];
-    NSMutableArray *completions = [NSMutableArray arrayWithCapacity:_sources.count];
+    NSMutableArray<ALCValue *> *values = [NSMutableArray arrayWithCapacity:_sources.count];
 
-    // Retrieve all values and completion blocks.
     for (id<ALCValueSource> source in _sources) {
         ALCValue *value = source.value;
-        if (!value) {
-            // Theres an error.
-            return nil;
-        }
-        [results addObject:value.value];
-        ALCSimpleBlock completion = value.completion;
-        if (completion) {
-            [completions addObject:completion];
-        }
+        [results addObject:value.object];
+        [values addObject:value];
     }
 
-    // Combine the blocks.
-    ALCSimpleBlock allCompletions = ^{
-        for (ALCSimpleBlock block in completions) {
-            block();
-        }
-    };
-
-    return [ALCValue withValue:results completion:allCompletions];
+    return [ALCValue withObject:results
+                    completion:^(__unused id obj){
+                        for (ALCValue *value in values) {
+                            [value complete];
+                        }
+                    }];
 }
 
 -(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {

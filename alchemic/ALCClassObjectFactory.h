@@ -8,7 +8,7 @@
 
 @import ObjectiveC;
 
-#import <Alchemic/ALCAbstractObjectFactory.h>
+#import "ALCAbstractObjectFactory.h"
 
 @protocol ALCInjector;
 @protocol ALCValueSource;

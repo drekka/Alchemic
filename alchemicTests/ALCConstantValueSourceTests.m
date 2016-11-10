@@ -21,7 +21,7 @@
 id<ALCValueSource> source = function; \
 ALCValue *alcValue = source.value; \
 XCTAssertNotNil(alcValue); \
-NSValue *nsValue = alcValue.value; \
+NSValue *nsValue = alcValue.object; \
 type result; \
 [nsValue getValue:&result]; \
 validate; \
@@ -49,7 +49,7 @@ testScalar(Rect, AcRect(1.0f,2.0f,3.0f,4.0f), CGRect, XCTAssertTrue(CGRectEqualT
     id<ALCValueSource> source = AcString(@"abc");
     ALCValue *alcValue = source.value;
     XCTAssertNotNil(alcValue);
-    XCTAssertEqualObjects(@"abc", alcValue.value);
+    XCTAssertEqualObjects(@"abc", alcValue.object);
 }
 
 

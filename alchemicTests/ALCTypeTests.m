@@ -169,11 +169,11 @@ testDescription(classAndProtocol, @"class NSNumber<AlchemicAware> *")
 
 -(void) testWithValueCompletion {
     __block BOOL completionCalled;
-    ALCValue *value = [ALCValue withValue:@"abc" completion:^{
+    ALCValue *value = [ALCValue withObject:@"abc" completion:^(id val){
         completionCalled = YES;
     }];
-    XCTAssertEqualObjects(@"abc", value.value);
-    value.completion();
+    XCTAssertEqualObjects(@"abc", value.object);
+    [value complete];
     XCTAssertTrue(completionCalled);
 }
 

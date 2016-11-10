@@ -8,24 +8,14 @@
 
 @import StoryTeller;
 
-#import <Alchemic/ALCUserDefaultsAspect.h>
+#import "ALCUserDefaultsAspect.h"
 
-#import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCClassObjectFactory.h>
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCUserDefaults.h>
+#import "ALCModel.h"
+#import "ALCClassObjectFactory.h"
+#import "ALCType.h"
+#import "ALCUserDefaults.h"
 
 @implementation ALCUserDefaultsAspect
-
-static BOOL _enabled;
-
-+(void) setEnabled:(BOOL) enabled {
-    _enabled = enabled;
-}
-
-+(BOOL) enabled {
-    return _enabled;
-}
 
 -(void)modelWillResolve:(id<ALCModel>) model {
     

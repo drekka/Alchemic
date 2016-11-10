@@ -6,12 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCType.h>
+#import "ALCType.h"
 
-#import <Alchemic/ALCRuntime.h>
-#import <Alchemic/ALCValue.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCModelSearchCriteria.h>
+#import "ALCRuntime.h"
+#import "ALCValue.h"
+#import "ALCInternalMacros.h"
+#import "ALCModelSearchCriteria.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -173,6 +173,10 @@ return [[ALCType alloc] initWithValueType:ALCValueType ## valueType]; \
 }
 
 #pragma mark - Other methods
+
+-(BOOL) isObjectType {
+    return _type == ALCValueTypeObject || _type == ALCValueTypeArray;
+}
 
 -(NSString *) description {
 

@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCClassProcessor.h>
+#import "ALCClassProcessor.h"
 
 @interface ALCAspectClassProcessor : NSObject<ALCClassProcessor>
 

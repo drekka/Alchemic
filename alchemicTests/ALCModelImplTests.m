@@ -11,22 +11,12 @@
 @import Alchemic.Private;
 @import OCMock;
 
-@interface FakeAspect:NSObject<ALCResolveAspect>
+@interface FakeAspect:ALCAbstractAspect
 @property (nonatomic, assign, readonly) BOOL willCalled;
 @property (nonatomic, assign, readonly) BOOL didCalled;
 @end
 
 @implementation FakeAspect
-
-static BOOL _enabled;
-
-+(void) setEnabled:(BOOL) enabled {
-    _enabled = enabled;
-}
-
-+(BOOL) enabled {
-    return _enabled;
-}
 
 -(void) modelWillResolve:(id<ALCModel>) model {
     _willCalled = YES;
@@ -77,7 +67,7 @@ static BOOL _enabled;
     
     FakeAspect *aspect = [[FakeAspect alloc] init];
     
-    [FakeAspect setEnabled:YES];
+    FakeAspect.enabled = YES;
     
     [_model addResolveAspect:aspect];
     [_model resolveDependencies];
@@ -88,7 +78,7 @@ static BOOL _enabled;
 
 -(void) testAspectGetsCalledWhenCreatedLast {
     
-    [FakeAspect setEnabled:YES];
+    FakeAspect.enabled = YES;
     
     FakeAspect *aspect = [[FakeAspect alloc] init];
     
@@ -103,7 +93,7 @@ static BOOL _enabled;
     
     FakeAspect *aspect = [[FakeAspect alloc] init];
     
-    [FakeAspect setEnabled:NO];
+    FakeAspect.enabled = NO;
     
     [_model addResolveAspect:aspect];
     [_model resolveDependencies];
@@ -199,15 +189,15 @@ static BOOL _enabled;
     OCMStub([(id<ALCObjectFactory>) classFactoryMock type]).andReturn(type);
     OCMStub([classFactoryMock description]).andReturn(@"singelton abc");
     
-    id instantiationMock = OCMClassMock([ALCInstantiation class]);
-    OCMExpect([classFactoryMock instantiation]).andReturn(instantiationMock);
-    OCMExpect([instantiationMock object]).andReturn(@"xyz");
-    OCMExpect([instantiationMock complete]);
+    id valueMock = OCMClassMock([ALCValue class]);
+    OCMExpect([(ALCClassObjectFactory *)classFactoryMock value]).andReturn(valueMock);
+    OCMExpect([valueMock object]).andReturn(@"xyz");
+    OCMExpect([valueMock complete]);
     
     [_model startSingletons];
     
     OCMVerifyAll(classFactoryMock);
-    OCMVerifyAll(instantiationMock);
+    OCMVerifyAll(valueMock);
 }
 
 -(void) testStartSingletonsWithUIApplicationDelegate {

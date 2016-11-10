@@ -7,61 +7,46 @@
 //
 
 @import ObjectiveC;
-
-#import <Alchemic/NSBundle+Alchemic.h>
-#import <Alchemic/Alchemic.h>
-
 @import StoryTeller;
 
-#import <Alchemic/ALCClassProcessor.h>
+#import "NSBundle+Alchemic.h"
+#import "ALCClassProcessor.h"
 
 @implementation NSBundle (Alchemic)
 
-+(NSSet *) scannableBundles {
++(void) scanApplicationWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
 
-    // Start with the main app bundles.
-    NSMutableSet<NSBundle *> *appBundles = [NSMutableSet setWithArray:[NSBundle allBundles]];
+    // We have to base on Core Foundation code here because NSBundle.allBundles actually returns incorrect results if we are running when attached to Xcode. The bundles it returns are correct for the app, but not necessarily the bundles that the app has loaded. The end result is that when we query the classes we get back zero results.
+    CFArrayRef allBundles = CFBundleGetAllBundles();
+    for (int i = 0;i < CFArrayGetCount(allBundles);i++) {
 
-    // Get filesystem resource id of the app's framework directory.
-    NSMutableSet *mainBundleResourceIds = [[NSMutableSet alloc] init];
-    [appBundles enumerateObjectsUsingBlock:^(NSBundle *bundle, BOOL *stop) {
-        id bundleFrameworksDirId = nil;
-        [bundle.privateFrameworksURL getResourceValue:&bundleFrameworksDirId forKey:NSURLFileResourceIdentifierKey error:nil];
-        if (bundleFrameworksDirId) {
-            [mainBundleResourceIds addObject:bundleFrameworksDirId];
+        CFBundleRef bundle = (CFBundleRef) CFArrayGetValueAtIndex(allBundles, i);
+
+        // Ignore all Apple bundles as we know they won't have Alchemic registration code in them.
+        NSString *bundleId = (NSString *) CFBundleGetIdentifier(bundle);
+        if (!bundleId || [bundleId hasPrefix:@"com.apple"]) {
+            continue;
         }
-    }];
 
-    // Check that Alchemic's own bundle is in the list. This can happen when testing the raw alchemic code.
-    NSBundle *alchemicBundle = [NSBundle bundleForClass:[Alchemic class]];
-    if (![appBundles containsObject:alchemicBundle]) {
-        [appBundles addObject:alchemicBundle];
+        // Now get the executable from the bundle so we can scan it for classes.
+        NSURL *executableURL = (NSURL *) CFBridgingRelease(CFBundleCopyExecutableURL(bundle));
+        if (executableURL) {
+            [self scanExecutable:executableURL.fileSystemRepresentation withProcessors:processors context:context];
+        }
     }
-
-    // Loop through the app's frameworks and add those that are in the app bundle's frameworks directories.
-    [[NSBundle allFrameworks] enumerateObjectsUsingBlock:^(NSBundle *framework, NSUInteger idx, BOOL *stop) {
-
-        NSURL *frameworkDirectoryURL = nil;
-        [framework.bundleURL getResourceValue:&frameworkDirectoryURL forKey:NSURLParentDirectoryURLKey error:nil];
-
-        id frameworkDirectoryId = nil;
-        [frameworkDirectoryURL getResourceValue:&frameworkDirectoryId forKey:NSURLFileResourceIdentifierKey error:nil];
-
-        if ([mainBundleResourceIds containsObject:frameworkDirectoryId]) {
-            [appBundles addObject:framework];
-        }
-    }];
-
-    return appBundles;
 }
 
--(void) scanWithProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
-    
++(void) scanExecutable:(const char *) executable withProcessors:(NSArray<id<ALCClassProcessor>> *) processors context:(id<ALCContext>) context {
+
+    // Get the classes.
     unsigned int count = 0;
-    const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &count);
-    
-    STLog(self, @"Scanning %i runtime classes in bundle %@", count, self.bundlePath.lastPathComponent);
-    
+    const char** classes = objc_copyClassNamesForImage(executable, &count);
+    if (count == 0) {
+        return;
+    }
+
+    STLog(self, @"Scanning %i runtime classes in executable %s", count, executable);
+
     for(unsigned int i = 0;i < count;i++) {
         Class nextClass = objc_getClass(classes[i]);
         for (id<ALCClassProcessor> classProcessor in processors) {
@@ -70,6 +55,8 @@
             }
         }
     }
+    
+    free(classes);
 }
 
 @end

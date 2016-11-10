@@ -8,14 +8,13 @@
 
 @import StoryTeller;
 
-#import <Alchemic/ALCModelValueSource.h>
+#import "ALCModelValueSource.h"
 
-#import <Alchemic/ALCInstantiation.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCValue.h>
-#import <Alchemic/ALCType.h>
+#import "ALCInternalMacros.h"
+#import "ALCModel.h"
+#import "ALCObjectFactory.h"
+#import "ALCValue.h"
+#import "ALCType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -56,6 +55,16 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack
                    model:(id<ALCModel>) model {
 
+    [self resolveWithModel:model];
+
+    // Resolve dependencies.
+    for (id<ALCResolvable> objectFactory in _resolvedFactories) {
+        STLog(self, @"Resolving dependency %@", objectFactory);
+        [objectFactory resolveWithStack:resolvingStack model:model];
+    }
+}
+
+-(void) resolveWithModel:(id<ALCModel>) model {
     STLog(self, @"Searching model using %@", _criteria);
 
     // Find dependencies
@@ -73,12 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
         _resolvedFactories = primaryFactories;
     }
 
-    // Resolve dependencies.
-    STLog(self, @"Found %i object factories", _resolvedFactories.count);
-    for (id<ALCResolvable> objectFactory in _resolvedFactories) {
-        STLog(self, @"Resolving dependency %@", objectFactory);
-        [objectFactory resolveWithStack:resolvingStack model:model];
-    }
+    STLog(self, @"Found %lu object factories", (unsigned long)_resolvedFactories.count);
 }
 
 -(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {
@@ -102,38 +106,34 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Retrieving results.
 
 -(nullable ALCValue *) value {
-    NSArray<ALCInstantiation *> *instantations = [self retrieveInstantiations];
-    NSArray *values = [self valuesFromInstantiations:instantations];
-    return [ALCValue withValue:values completion:[self completionForInstantiations:instantations]];
+    NSArray<ALCValue *> *values = [self retrieveValues];
+    return [ALCValue withObject:[self objectsFromValues:values]
+                     completion:^(__unused NSArray *objects){
+        for (ALCValue *value in values) {
+            [value complete];
+        }
+    }];
 }
 
 #pragma mark - Internal
 
--(NSArray<ALCInstantiation *> *) retrieveInstantiations {
+-(NSArray<ALCValue *> *) retrieveValues {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     for (id<ALCObjectFactory> factory in _resolvedFactories) {
-        [results addObject:factory.instantiation];
+        [results addObject:factory.value];
     }
     return results;
 }
 
--(NSArray *) valuesFromInstantiations:(NSArray<ALCInstantiation *> *) instantiations {
+-(NSArray *) objectsFromValues:(NSArray<ALCValue *> *) values {
     NSMutableArray *results = [[NSMutableArray alloc] init];
-    for (ALCInstantiation *instantiation in instantiations) {
-        id obj = instantiation.object;
+    for (ALCValue *value in values) {
+        id obj = value.object;
         if (obj) {
             [results addObject:obj];
         }
     }
     return results;
-}
-
--(ALCSimpleBlock) completionForInstantiations:(NSArray<ALCInstantiation *> *) instantiations {
-    return ^{
-        for (ALCInstantiation *instantiation in instantiations) {
-            [instantiation complete];
-        }
-    };
 }
 
 @end

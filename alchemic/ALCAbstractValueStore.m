@@ -7,56 +7,58 @@
 //
 
 @import StoryTeller;
-#import <Alchemic/ALCAbstractValueStore.h>
 
-#import <Alchemic/ALCRuntime.h>
-#import <Alchemic/ALCInternalMacros.h>
+#import "ALCAbstractValueStore.h"
+
+#import "ALCRuntime.h"
+#import "ALCInternalMacros.h"
+#import "ALCValueStoreImplementation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ALCAbstractValueStore {
-    NSArray *_watchedProperties;
+    NSArray *_kvoProperties;
     BOOL _loadingData;
 }
 
--(void)dealloc {
+-(void) dealloc {
     STLog([self class], @"deallocing");
-    for (NSString *prop in _watchedProperties) {
+    for (NSString *prop in _kvoProperties) {
         [self removeObserver:self forKeyPath:prop];
     }
 }
 
 -(void) alchemicDidInjectDependencies {
-    NSDictionary<NSString *, id> *defaults = [self loadDefaults];
-    if (defaults) {
-        _loadingData = YES;
-        [self setValuesForKeysWithDictionary:defaults];
-        _loadingData = NO;
-    }
-    [self kvoWatchProperties];
-}
-
--(void) kvoWatchProperties {
-    _watchedProperties = [ALCRuntime writeablePropertiesForClass:[self class]];
-    for (NSString *prop in _watchedProperties) {
+    
+    // Load default values then current values into the store.
+    [self loadData:self.backingStoreDefaults];
+    [self loadData:self.backingStoreValues];
+    
+    // Now start watching all writable properties for changes mde by the app.
+    _kvoProperties = [ALCRuntime writeablePropertiesForClass:[self class]];
+    for (NSString *prop in _kvoProperties) {
         STLog(self, @"Watching property %@", prop);
         [self addObserver:self forKeyPath:prop options:NSKeyValueObservingOptionNew context:nil];
     }
 }
 
-#pragma mark - Override points
+#pragma mark - Backing store override points
 
--(nullable NSDictionary<NSString *, id> *) loadDefaults {
+-(nullable NSDictionary<NSString *, id> *) backingStoreDefaults {
     return nil;
 }
 
--(void)valueStoreSetValue:(nullable id)value forKey:(NSString *)key {}
+-(nullable NSDictionary<NSString *, id> *) backingStoreValues {
+    return nil;
+}
 
--(nullable id) valueStoreValueForKey:(id) key {
+-(void) setBackingStoreValue:(nullable id) value forKey:(NSString *)key {}
+
+-(nullable id) backingStoreValueForKey:(id) key {
     methodReturningObjectNotImplemented;
 }
 
--(void)valueStoreDidUpdateValue:(nullable id)value forKey:(NSString *)key {
+-(void)backingStoreDidUpdateValue:(nullable id) value forKey:(NSString *) key {
     _loadingData = YES;
     [self setValue:value forKey:key];
     _loadingData = NO;
@@ -64,31 +66,36 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - KVO
 
-// Triggered when setting autowatched properties.
--(void)observeValueForKeyPath:(nullable NSString *)keyPath
-                     ofObject:(nullable id)object
-                       change:(nullable NSDictionary<NSKeyValueChangeKey,id> *)change
-                      context:(nullable void *)context {
-    STLog(self, @"Value set for key: %@: %@", keyPath, change[NSKeyValueChangeNewKey]);
+-(void) observeValueForKeyPath:(nullable NSString *) keyPath
+                      ofObject:(nullable id) object
+                        change:(nullable NSDictionary<NSKeyValueChangeKey,id> *) change
+                       context:(nullable void *) context {
+    
     if (!_loadingData) {
-        [self valueStoreSetValue:change[NSKeyValueChangeNewKey] forKey:keyPath];
+        // If we are not loading data from the backing store, then KVO has picked up a value being set, so forward to the backing store.
+        id value = change[NSKeyValueChangeNewKey];
+        id bsValue = [self backingStoreValueFromValue:value usingTransformerForKey:keyPath];
+        STLog(self, @"Forwarding value for key '%@' to backing store", keyPath);
+        [self setBackingStoreValue:bsValue forKey:keyPath];
     }
 }
 
 #pragma mark - KVC
 
 // Setting a value for a undefined key means that there is no property for it. But we still need to get it to the store.
--(void) setValue:(nullable id) value forUndefinedKey:(NSString *)key {
-    STLog(self, @"Undefined key %@ passing value to backing store", key);
+-(void) setValue:(nullable id) value forUndefinedKey:(NSString *) key {
     if (!_loadingData) {
-        [self valueStoreSetValue:value forKey:key];
+        STLog(self, @"Forwarding value for unknown key '%@' to backing store", key);
+        id bsValue = [self backingStoreValueFromValue:value usingTransformerForKey:key];
+        [self setBackingStoreValue:bsValue forKey:key];
     }
 }
 
 // Will be called when not using a custom class. Therefore we want to get the data from the backing store.
 -(nullable id) valueForUndefinedKey:(NSString *)key {
-    STLog(self, @"Undefined key %@ getting value from backing store", key);
-    return [self valueStoreValueForKey:key];
+    STLog(self, @"Value for unknown key %@ requested, getting value from backing store", key);
+    id value = [self backingStoreValueForKey:key];
+    return [self valueFromBackingStoreValue:value usingTransformerForKey:key];
 }
 
 #pragma mark - Subscripting.
@@ -100,6 +107,43 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) setObject:(id) obj forKeyedSubscript:(NSString<NSCopying> *) key {
     [self setValue:obj forKey:(NSString *) key];
 }
+
+#pragma mark - Internal
+
+-(void) loadData:(nullable NSDictionary *) source {
+    
+    _loadingData = YES;
+    NSMutableDictionary<NSString *, id> *data = [source mutableCopy];
+    if (data) {
+        
+        // Convert any values that need it.
+        [data enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL *stop) {
+            data[key] = [self valueFromBackingStoreValue:data[key] usingTransformerForKey:key];
+        }];
+        
+        [self setValuesForKeysWithDictionary:data];
+    }
+    _loadingData = NO;
+    
+}
+
+-(id) valueFromBackingStoreValue:(id) value usingTransformerForKey:(NSString *) key  {
+    SEL transformerSelector = NSSelectorFromString(str(@"%@FromBackingStoreValue:", key));
+    return [self transformValue:value usingSelector:transformerSelector];
+}
+
+-(id) backingStoreValueFromValue:(id) value usingTransformerForKey:(NSString *) key {
+    SEL transformerSelector = NSSelectorFromString(str(@"backingStoreValueFrom%@:", key.capitalizedString));
+    return [self transformValue:value usingSelector:transformerSelector];
+}
+
+-(id) transformValue:(id) value usingSelector:(SEL) selector {
+    if ([self respondsToSelector:selector]) {
+        return ( (id (*)(id, SEL, id)) objc_msgSend)(self, selector, value);
+    }
+    return value;
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -289,7 +289,7 @@
     OCMStub([_mockModel objectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
 
     // ANd return a matching value.
-    ALCValue *value = [ALCValue withValue:@[@5] completion:NULL];
+    ALCValue *value = [ALCValue withObject:@[@5] completion:NULL];
     OCMStub([(id<ALCValueSource>) mockValueSource value]).andReturn(value);
 
     NSNumber *result = [_context objectWithClass:[NSNumber class], nil];
@@ -305,9 +305,25 @@
     id mockFactory = OCMClassMock([ALCAbstractObjectFactory class]);
     OCMStub([_mockModel settableObjectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
 
-    OCMExpect([(ALCAbstractObjectFactory *) mockFactory setObject:@"abc"]);
+    OCMExpect([(ALCAbstractObjectFactory *) mockFactory storeObject:@"abc"]);
 
     [_context setObject:@"abc", AcClass(NSString), nil];
+
+    OCMVerifyAll(mockFactory);
+}
+
+-(void) testSetObjectWithValueSource {
+
+    // Tell the context it's started
+    [_context setValue:@(ALCStatusStarted) forKey:@"_status"];
+
+    // Stub getting the factory.
+    id mockFactory = OCMClassMock([ALCAbstractObjectFactory class]);
+    OCMStub([_mockModel settableObjectFactoriesMatchingCriteria:OCMOCK_ANY]).andReturn(@[mockFactory]);
+
+    OCMExpect([(ALCAbstractObjectFactory *) mockFactory storeObject:@"abc"]);
+
+    [_context setObject:AcString(@"abc"), AcClass(NSString), nil];
 
     OCMVerifyAll(mockFactory);
 }

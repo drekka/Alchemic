@@ -9,8 +9,8 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCtypeDefs.h>
+#import "ALCInternalMacros.h"
+#import "ALCtypeDefs.h"
 
 @class ALCType;
 
@@ -21,11 +21,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ALCValue : NSObject
 
-@property (nonatomic, strong, readonly) id value;
-@property (nonatomic, strong, nullable, readonly) ALCSimpleBlock completion;
+@property (nonatomic, strong, readonly, nullable) id object;
 
-+(ALCValue *) withValue:(id) value
-             completion:(nullable ALCSimpleBlock) completion;
+/**
+ Executes the completion block if present.
+ */
+-(void) complete;
+
++(ALCValue *) withObject:(nullable id) object
+             completion:(nullable ALCBlockWithObject) completion;
 
 @end
 

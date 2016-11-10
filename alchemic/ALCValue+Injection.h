@@ -6,23 +6,20 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCValue.h>
+#import "ALCType.h"
+#import "ALCValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define ALCVariableInjectorBlockArgs id obj, Ivar ivar
-typedef void (^ALCVariableInjectorBlock)(ALCVariableInjectorBlockArgs);
+#define ALCVariableInjectorBlockArgs id obj, ALCType *type, Ivar ivar, NSError **error
+typedef BOOL (^ALCVariableInjectorBlock)(ALCVariableInjectorBlockArgs);
 
-#define ALCInvocationInjectorBlockArgs NSInvocation *inv, NSInteger idx
-typedef void (^ALCInvocationInjectorBlock)(ALCInvocationInjectorBlockArgs);
+#define ALCInvocationInjectorBlockArgs NSInvocation *inv, ALCType *type, NSInteger idx, NSError **error
+typedef BOOL (^ALCInvocationInjectorBlock)(ALCInvocationInjectorBlockArgs);
 
 @interface ALCValue (Injection)
-
--(nullable ALCVariableInjectorBlock) variableInjectorForType:(ALCValueType) type;
-
--(nullable ALCInvocationInjectorBlock) invocationInjectorForType:(ALCValueType) type;
-
+-(nullable ALCVariableInjectorBlock) variableInjectorForType:(ALCType *) type;
+-(nullable ALCInvocationInjectorBlock) invocationInjectorForType:(ALCType *) type;
 @end
 
 NS_ASSUME_NONNULL_END

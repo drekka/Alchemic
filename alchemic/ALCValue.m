@@ -6,19 +6,26 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCValue.h>
-#import <Alchemic/ALCType.h>
+#import "ALCValue.h"
+#import "ALCType.h"
+#import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation ALCValue
+@implementation ALCValue {
+    ALCBlockWithObject _completion;
+}
 
-+(ALCValue *) withValue:(id) value
-             completion:(nullable ALCSimpleBlock) completion {
++(ALCValue *) withObject:(nullable id) object
+             completion:(nullable ALCBlockWithObject) completion {
     ALCValue *alcValue = [[ALCValue alloc] init];
     alcValue->_completion = completion;
-    alcValue->_value = value;
+    alcValue->_object = object;
     return alcValue;
+}
+
+-(void) complete {
+    [ALCRuntime executeBlock:self->_completion withObject:_object];
 }
 
 @end

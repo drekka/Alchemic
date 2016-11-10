@@ -7,18 +7,18 @@
 //
 @import StoryTeller;
 
-#import <Alchemic/ALCClassProcessor.h>
-#import <Alchemic/ALCConfigClassProcessor.h>
-#import <Alchemic/ALCContext.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCModelClassProcessor.h>
-#import <Alchemic/ALCAspectClassProcessor.h>
-#import <Alchemic/ALCRuntime.h>
-#import <Alchemic/ALCValue.h>
-#import <Alchemic/ALCType.h>
-#import <Alchemic/NSBundle+Alchemic.h>
-#import <Alchemic/ALCException.h>
+#import "ALCClassProcessor.h"
+#import "ALCConfigClassProcessor.h"
+#import "ALCContext.h"
+#import "ALCMacros.h"
+#import "ALCInternalMacros.h"
+#import "ALCModelClassProcessor.h"
+#import "ALCAspectClassProcessor.h"
+#import "ALCRuntime.h"
+#import "ALCValue.h"
+#import "ALCType.h"
+#import "NSBundle+Alchemic.h"
+#import "ALCException.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -150,31 +150,26 @@ static NSCharacterSet *__typeEncodingDelimiters;
 #pragma mark - Scanning
 
 +(void) scanRuntimeWithContext:(id<ALCContext>) context {
-    
-    // Get a list of all the scannable bundles.
-    NSSet<NSBundle *> *appBundles = [NSBundle scannableBundles];
-    
-    // Scan the bundles, checking each class in each one.
     NSArray<id<ALCClassProcessor>> *processors = @[
                                                    [[ALCConfigClassProcessor alloc] init],
                                                    [[ALCModelClassProcessor alloc] init],
                                                    [[ALCAspectClassProcessor alloc] init]
                                                    ];
-    [appBundles enumerateObjectsUsingBlock:^(NSBundle *bundle, BOOL *stop) {
-        [bundle scanWithProcessors:processors context:context];
-    }];
+    [NSBundle scanApplicationWithProcessors:processors context:context];
 }
 
 #pragma mark - Executing blocks
 
 +(void) executeSimpleBlock:(nullable ALCSimpleBlock) block {
     if (block) {
+        STLog(self, @"Executing block");
         block();
     }
 }
 
 +(void) executeBlock:(nullable ALCBlockWithObject) block withObject:(nullable id) object {
     if (object && block) {
+        STLog(self, @"Executing block with object");
         block(object);
     }
 }
