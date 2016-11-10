@@ -29,6 +29,8 @@ ___Main features___
 * Fixed bug where app delegates with no injections were not being added to the model.
 * Cleaned up value handling code.
 * Fixed bug where frameworks were not being scanned correctly on devices which resulted in Alchemic registrations being missed.
+* Fixed bug where having API projects in the current Xcode workspace was causing class scanning failures.  
+* Fixed bug where startup code that looked for a UIApplicationDelegate was executing before the app had been started. Therefore a nil was being returned.
 
 # v2.1.1 #
 
