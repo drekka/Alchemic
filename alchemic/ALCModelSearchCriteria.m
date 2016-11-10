@@ -7,12 +7,12 @@
 //
 
 // :: Framework ::
-#import "ALCException.h"
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCModelSearchCriteria.h"
-#import "ALCObjectFactory.h"
-#import "ALCType.h"
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCModelSearchCriteria.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

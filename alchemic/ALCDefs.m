@@ -1,5 +1,5 @@
 
-#import "ALCDefs.h"
+#import <Alchemic/ALCDefs.h>
 
 NSString *AlchemicDidFinishStarting = @"AlchemicDidFinishStarting";
 

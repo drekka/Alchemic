@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import "ALCInstantiator.h"
+#import <Alchemic/ALCInstantiator.h>
 
 @class ALCValue;
 @protocol ALCModel;

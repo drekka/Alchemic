@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "AlchemicAware.h"
+#import <Alchemic/AlchemicAware.h>
 
 
 /**

@@ -8,13 +8,13 @@
 
 @import StoryTeller;
 
-#import "ALCModelClassProcessor.h"
+#import <Alchemic/ALCModelClassProcessor.h>
 
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCStringMacros.h"
-#import "ALCContext.h"
-#import "ALCRuntime.h"
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCStringMacros.h>
+#import <Alchemic/ALCContext.h>
+#import <Alchemic/ALCRuntime.h>
 
 @implementation ALCModelClassProcessor
 

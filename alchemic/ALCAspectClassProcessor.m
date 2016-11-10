@@ -6,10 +6,10 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAspectClassProcessor.h"
-#import "ALCResolveAspect.h"
-#import "ALCAbstractAspect.h"
-#import "ALCContext.h"
+#import <Alchemic/ALCAspectClassProcessor.h>
+#import <Alchemic/ALCResolveAspect.h>
+#import <Alchemic/ALCAbstractAspect.h>
+#import <Alchemic/ALCContext.h>
 
 @implementation ALCAspectClassProcessor
 

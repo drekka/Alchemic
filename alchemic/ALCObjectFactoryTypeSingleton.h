@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractObjectFactoryType.h"
+#import <Alchemic/ALCAbstractObjectFactoryType.h>
 
 /**
  An ALCObjectFactoryType which is used for storing and managing singleton instances.

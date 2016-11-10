@@ -8,18 +8,18 @@
 
 @import StoryTeller;
 
-#import "NSObject+Alchemic.h"
+#import <Alchemic/NSObject+Alchemic.h>
 
-#import "ALCDependency.h"
-#import "ALCException.h"
-#import "ALCInstantiator.h"
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
-#import "ALCMethodArgumentDependency.h"
-#import "ALCResolvable.h"
-#import "ALCRuntime.h"
-#import "NSArray+Alchemic.h"
-#import "ALCType.h"
+#import <Alchemic/ALCDependency.h>
+#import <Alchemic/ALCException.h>
+#import <Alchemic/ALCInstantiator.h>
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCMethodArgumentDependency.h>
+#import <Alchemic/ALCResolvable.h>
+#import <Alchemic/ALCRuntime.h>
+#import <Alchemic/NSArray+Alchemic.h>
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

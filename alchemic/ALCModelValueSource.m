@@ -8,13 +8,13 @@
 
 @import StoryTeller;
 
-#import "ALCModelValueSource.h"
+#import <Alchemic/ALCModelValueSource.h>
 
-#import "ALCInternalMacros.h"
-#import "ALCModel.h"
-#import "ALCObjectFactory.h"
-#import "ALCValue.h"
-#import "ALCType.h"
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCModel.h>
+#import <Alchemic/ALCObjectFactory.h>
+#import <Alchemic/ALCValue.h>
+#import <Alchemic/ALCType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

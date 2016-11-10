@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-#import "ALCModel.h"
+#import <Alchemic/ALCModel.h>
 
 /**
  Implementation of the ALCModel protocol.

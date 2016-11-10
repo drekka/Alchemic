@@ -9,10 +9,10 @@
 @import UIKit;
 @import StoryTeller;
 
-#import "ALCModelImpl.h"
+#import <Alchemic/ALCModelImpl.h>
 
-#import "ALCMacros.h"
-#import "ALCInternalMacros.h"
+#import <Alchemic/ALCMacros.h>
+#import <Alchemic/ALCInternalMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

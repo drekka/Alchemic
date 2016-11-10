@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCObjectFactoryTypeSingleton.h"
+#import <Alchemic/ALCObjectFactoryTypeSingleton.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

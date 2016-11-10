@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import "ALCAbstractAspect.h"
+#import <Alchemic/ALCAbstractAspect.h>
 
 @implementation ALCAbstractAspect
 

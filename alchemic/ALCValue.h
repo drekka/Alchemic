@@ -9,8 +9,8 @@
 @import Foundation;
 @import ObjectiveC;
 
-#import "ALCInternalMacros.h"
-#import "ALCtypeDefs.h"
+#import <Alchemic/ALCInternalMacros.h>
+#import <Alchemic/ALCtypeDefs.h>
 
 @class ALCType;
 
