@@ -9,11 +9,11 @@
 @import UIKit;
 @import StoryTeller;
 
-#import <Alchemic/ALCApplicationDelegateAspect.h>
+#import "ALCApplicationDelegateAspect.h"
 
-#import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCType.h>
+#import "ALCModel.h"
+#import "ALCMacros.h"
+#import "ALCType.h"
 
 @implementation ALCApplicationDelegateAspect {
     ALCClassObjectFactory *_appDelegateFactory;

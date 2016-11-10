@@ -2,9 +2,9 @@
 @import StoryTeller;
 @import UIKit;
 
-#import <Alchemic/Alchemic.h>
-#import <Alchemic/ALCContextImpl.h>
-#import <Alchemic/ALCRuntime.h>
+#import "Alchemic.h"
+#import "ALCContextImpl.h"
+#import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

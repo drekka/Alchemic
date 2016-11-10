@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCValueSource.h>
+#import "ALCValueSource.h"
 
 @class ALCModelSearchCriteria;
 
@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
  @return The results of the search, mapped to the objectClass type.
  */
 +(instancetype) valueSourceWithCriteria:(ALCModelSearchCriteria *) criteria;
+
+-(void) resolveWithModel:(id<ALCModel>) model;
 
 @end
 

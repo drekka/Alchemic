@@ -8,8 +8,8 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCResolvable.h>
-#import <Alchemic/ALCTypeDefs.h>
+#import "ALCResolvable.h"
+#import "ALCTypeDefs.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

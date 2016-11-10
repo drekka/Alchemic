@@ -6,8 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCStringMacros.h>
-#import <Alchemic/ALCException.h>
+#import "ALCStringMacros.h"
+#import "ALCException.h"
 
 #define AlchemicDomain @"Alchemic"
 

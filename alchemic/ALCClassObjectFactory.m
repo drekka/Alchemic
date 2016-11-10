@@ -8,17 +8,17 @@
 
 @import StoryTeller;
 
-#import <Alchemic/ALCClassObjectFactory.h>
+#import "ALCClassObjectFactory.h"
 
-#import <Alchemic/ALCClassObjectFactoryInitializer.h>
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCVariableDependency.h>
-#import <Alchemic/NSArray+Alchemic.h>
-#import <Alchemic/NSObject+Alchemic.h>
-#import <Alchemic/AlchemicAware.h>
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCRuntime.h>
+#import "ALCClassObjectFactoryInitializer.h"
+#import "ALCMacros.h"
+#import "ALCInternalMacros.h"
+#import "ALCVariableDependency.h"
+#import "NSArray+Alchemic.h"
+#import "NSObject+Alchemic.h"
+#import "AlchemicAware.h"
+#import "ALCType.h"
+#import "ALCRuntime.h"
 
 @implementation ALCClassObjectFactory {
 
@@ -77,13 +77,16 @@
                          AcStrongSelf;
                          [strongSelf->_initializer resolveWithStack:resolvingStack model:model];
 
-                         STLog(strongSelf.type, @"Resolving %lu injections into a %@", (unsigned long) strongSelf->_dependencies.count, NSStringFromClass(strongSelf.type.objcClass));
+                         STLog(strongSelf.type, @"Resolving %lu variable injections in a %@", (unsigned long) strongSelf->_dependencies.count, NSStringFromClass(strongSelf.type.objcClass));
                          [strongSelf->_dependencies resolveWithStack:resolvingStack model:model];
                      }];
 
     // Figure out if we need to watch for transient factory changes.
     for (ALCVariableDependency *dependency in _dependencies) {
         if (dependency.referencesTransients) {
+            STLog(self, @"%@ is references a transient, configuring factory to watch for changes", [ALCRuntime forClass:self.type.objcClass propertyDescription:dependency.name]);
+            // Any dependency which refers to transients must be nillable.
+            [dependency configureWithOptions:@[AcNillable]];
             [self setUpTransientWatch];
         }
     }
@@ -107,6 +110,7 @@
             // Loop through all dependencies and check to see if they are watching the factory that has changed it's value.
             for (ALCVariableDependency *variableDependency in strongSelf->_dependencies) {
                 if ([variableDependency referencesObjectFactory:sourceObjectFactory]) {
+                    STLog(self, @"Found dependency which needs updating, injecting %lu objects", (unsigned long) strongSelf->_injectedObjectHistory.count);
                     for (id object in strongSelf->_injectedObjectHistory) {
                         [strongSelf injectObject:object dependency:variableDependency];
                     }
@@ -115,7 +119,6 @@
         }
     };
 
-    STLog(self, @"%@ is watching for transient changes", NSStringFromClass(self.type.objcClass));
     self->_dependencyChangedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AlchemicDidStoreObject
                                                                                          object:nil
                                                                                           queue:nil
@@ -162,7 +165,10 @@
     }
 
     // Store a weak reference.
-    [_injectedObjectHistory addObject:object];
+    if (_injectedObjectHistory) {
+        STLog(self, @"Storing object in injection history");
+        [_injectedObjectHistory addObject:object];
+    }
 
     // Notify of injection completion.
     if ([object respondsToSelector:@selector(alchemicDidInjectDependencies)]) {

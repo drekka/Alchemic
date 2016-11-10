@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCAbstractValueSource.h>
+#import "ALCAbstractValueSource.h"
 
 @class ALCType;
 @protocol ALCValueSource;

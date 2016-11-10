@@ -9,6 +9,7 @@
 import XCTest
 @testable import Alchemic
 import ObjectiveC
+import StoryTeller
 
 class MacroReplementsTests: XCTestCase {
 

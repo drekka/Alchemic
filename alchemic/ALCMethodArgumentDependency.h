@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCAbstractDependency.h>
+#import "ALCAbstractDependency.h"
 
 @class ALCType;
 

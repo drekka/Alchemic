@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCDependency.h>
+#import "ALCDependency.h"
 
 @class ALCType;
 @class ALCValue;

@@ -10,11 +10,11 @@
 @import StoryTeller;
 @import CoreGraphics;
 
-#import <Alchemic/ALCValue+Injection.h>
+#import "ALCValue+Injection.h"
 
-#import <Alchemic/ALCStringMacros.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCException.h>
+#import "ALCStringMacros.h"
+#import "ALCInternalMacros.h"
+#import "ALCException.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -6,12 +6,12 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCCloudKeyValueStore.h>
+#import "ALCCloudKeyValueStore.h"
 
 @import StoryTeller;
 
-#import <Alchemic/ALCMacros.h>
-#import <Alchemic/ALCRuntime.h>
+#import "ALCMacros.h"
+#import "ALCRuntime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

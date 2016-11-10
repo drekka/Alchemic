@@ -218,6 +218,7 @@
 		6CA1CAA91DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */; };
 		6CA787E01D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA787DF1D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m */; };
 		6CACA5321D79C0E6007808CF /* ALCConstantValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CACA5311D79C0E6007808CF /* ALCConstantValueSourceTests.m */; };
+		6CB373631DD43FD100C38F6C /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */; };
 		6CB57E991D43C53500CFE4DF /* ALCInstantiationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB57E951D43C52C00CFE4DF /* ALCInstantiationTests.m */; };
 		6CB57E9A1D43C53900CFE4DF /* ALCMethodObjectFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB57E961D43C52C00CFE4DF /* ALCMethodObjectFactoryTests.m */; };
 		6CB57E9C1D43C66B00CFE4DF /* ALCClassObjectFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB57E9B1D43C66B00CFE4DF /* ALCClassObjectFactoryTests.m */; };
@@ -1101,6 +1102,7 @@
 				6C97D1561DD09A7B005F93E0 /* Sources */,
 				6C97D1571DD09A7B005F93E0 /* Frameworks */,
 				6CCE2E741DD34D7A00EC1CDB /* Copy frameworks */,
+				6CB373611DD4356900C38F6C /* Resources */,
 			);
 			buildRules = (
 			);
@@ -1189,6 +1191,14 @@
 				6C5BC1C31D6B2EDA009592EB /* PEGKit.framework.dSYM in Resources */,
 				6C5BC1C41D6B2EDA009592EB /* StoryTeller.framework.dSYM in Resources */,
 				6CC2849B1CB69EE6006B613F /* StoryTellerConfig.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CB373611DD4356900C38F6C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CB373631DD43FD100C38F6C /* StoryTellerConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1775,9 +1785,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 3MHZ7974Y8;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.Swift-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1799,8 +1812,11 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 3MHZ7974Y8;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.Swift-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

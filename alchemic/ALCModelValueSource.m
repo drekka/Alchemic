@@ -8,13 +8,13 @@
 
 @import StoryTeller;
 
-#import <Alchemic/ALCModelValueSource.h>
+#import "ALCModelValueSource.h"
 
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCModel.h>
-#import <Alchemic/ALCObjectFactory.h>
-#import <Alchemic/ALCValue.h>
-#import <Alchemic/ALCType.h>
+#import "ALCInternalMacros.h"
+#import "ALCModel.h"
+#import "ALCObjectFactory.h"
+#import "ALCValue.h"
+#import "ALCType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -55,6 +55,16 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) resolveWithStack:(NSMutableArray<id<ALCResolvable>> *)resolvingStack
                    model:(id<ALCModel>) model {
 
+    [self resolveWithModel:model];
+
+    // Resolve dependencies.
+    for (id<ALCResolvable> objectFactory in _resolvedFactories) {
+        STLog(self, @"Resolving dependency %@", objectFactory);
+        [objectFactory resolveWithStack:resolvingStack model:model];
+    }
+}
+
+-(void) resolveWithModel:(id<ALCModel>) model {
     STLog(self, @"Searching model using %@", _criteria);
 
     // Find dependencies
@@ -72,12 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
         _resolvedFactories = primaryFactories;
     }
 
-    // Resolve dependencies.
     STLog(self, @"Found %lu object factories", (unsigned long)_resolvedFactories.count);
-    for (id<ALCResolvable> objectFactory in _resolvedFactories) {
-        STLog(self, @"Resolving dependency %@", objectFactory);
-        [objectFactory resolveWithStack:resolvingStack model:model];
-    }
 }
 
 -(BOOL) referencesObjectFactory:(id<ALCObjectFactory>) objectFactory {

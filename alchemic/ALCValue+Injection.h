@@ -6,8 +6,8 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCValue.h>
+#import "ALCType.h"
+#import "ALCValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

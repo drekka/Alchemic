@@ -6,7 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
-#import <Alchemic/ALCAbstractObjectFactory.h>
+#import "ALCAbstractObjectFactory.h"
 
 @class ALCClassObjectFactory;
 @protocol ALCDependency;

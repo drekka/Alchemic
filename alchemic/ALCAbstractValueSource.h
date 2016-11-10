@@ -7,7 +7,7 @@
 //
 
 @import Foundation;
-#import <Alchemic/ALCValueSource.h>
+#import "ALCValueSource.h"
 
 @class ALCType;
 

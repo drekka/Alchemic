@@ -8,13 +8,13 @@
 
 @import StoryTeller;
 
-#import <Alchemic/ALCAbstractDependency.h>
+#import "ALCAbstractDependency.h"
 
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCValueSource.h>
-#import <Alchemic/ALCType.h>
-#import <Alchemic/ALCValue.h>
-#import <Alchemic/ALCFlagMacros.h>
+#import "ALCInternalMacros.h"
+#import "ALCValueSource.h"
+#import "ALCType.h"
+#import "ALCValue.h"
+#import "ALCFlagMacros.h"
 
 @implementation ALCAbstractDependency
 
@@ -64,7 +64,7 @@
     methodReturningStringNotImplemented;
 }
 
-#pragma mark - OVerride points
+#pragma mark - Override points
 
 -(void) configureWithOptions:(NSArray *) options {
     

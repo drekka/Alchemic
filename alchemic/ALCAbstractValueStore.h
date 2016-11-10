@@ -8,8 +8,8 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCValueStore.h>
-#import <Alchemic/ALCValueStoreImplementation.h>
+#import "ALCValueStore.h"
+#import "ALCValueStoreImplementation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

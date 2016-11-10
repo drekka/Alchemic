@@ -8,11 +8,11 @@
 
 @import StoryTeller;
 
-#import <Alchemic/ALCAbstractValueStore.h>
+#import "ALCAbstractValueStore.h"
 
-#import <Alchemic/ALCRuntime.h>
-#import <Alchemic/ALCInternalMacros.h>
-#import <Alchemic/ALCValueStoreImplementation.h>
+#import "ALCRuntime.h"
+#import "ALCInternalMacros.h"
+#import "ALCValueStoreImplementation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
