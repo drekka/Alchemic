@@ -32,8 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Default initializer shared by implementations.
  
- @param objectClass the class of the object that the factory will create or manage.
- 
  @return An instance of the factory with default settings.
  */
 -(instancetype) initWithType:(ALCType *) type NS_DESIGNATED_INITIALIZER;

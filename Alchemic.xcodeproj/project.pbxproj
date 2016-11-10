@@ -210,11 +210,8 @@
 		6C93C04B1D6E71B500D8DAC2 /* BlockConverterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C93C04A1D6E71B500D8DAC2 /* BlockConverterTests.m */; };
 		6C97D1501DD08CB2005F93E0 /* AlchemicMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C97D14D1DD08CB2005F93E0 /* AlchemicMacros.swift */; };
 		6C97D1511DD08CB2005F93E0 /* AlchemicMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C97D14D1DD08CB2005F93E0 /* AlchemicMacros.swift */; };
-		6C97D1521DD08CB2005F93E0 /* AlchemicSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C97D14E1DD08CB2005F93E0 /* AlchemicSwift.h */; };
-		6C97D1531DD08CB2005F93E0 /* AlchemicSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C97D14E1DD08CB2005F93E0 /* AlchemicSwift.h */; };
 		6C97D1541DD08CB2005F93E0 /* ALCTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C97D14F1DD08CB2005F93E0 /* ALCTypeExtensions.swift */; };
 		6C97D1551DD08CB2005F93E0 /* ALCTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C97D14F1DD08CB2005F93E0 /* ALCTypeExtensions.swift */; };
-		6C97D15D1DD09A7B005F93E0 /* Swift_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C97D15C1DD09A7B005F93E0 /* Swift_tests.swift */; };
 		6CA1CAA61DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CA1CAA71DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CA1CAA81DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */; };
@@ -247,6 +244,10 @@
 		6CC503D81D1ACE67004283DA /* ALCObjectFactoryTypeTemplateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC503D71D1ACE67004283DA /* ALCObjectFactoryTypeTemplateTests.m */; };
 		6CC503DB1D1C2227004283DA /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC503D91D1C21FB004283DA /* OCMock.framework */; };
 		6CCBF4711D2293D100211F08 /* ALCContextImplTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */; };
+		6CCE2E6B1DD3477600EC1CDB /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
+		6CCE2E6D1DD347DC00EC1CDB /* ExceptionCatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCE2E5B1DD3451D00EC1CDB /* ExceptionCatcher.m */; };
+		6CCE2E6E1DD347DC00EC1CDB /* MacroReplacementsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCE2E5C1DD3451D00EC1CDB /* MacroReplacementsTests.swift */; };
+		6CCE2E6F1DD347DC00EC1CDB /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCE2E5D1DD3451D00EC1CDB /* Model.swift */; };
 		6CD8EB981D68607300A0FCB5 /* PEGKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD8EB961D68607300A0FCB5 /* PEGKit.framework */; };
 		6CD8EB991D68607300A0FCB5 /* StoryTeller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD8EB971D68607300A0FCB5 /* StoryTeller.framework */; };
 		6CE234E01CEB469900728CBE /* ALCClassProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -276,6 +277,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		6C16AF691DAE73750003FCB2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6C66DC261A8B82C3009F9D94 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C36D74E1B3851680073C4FB;
+			remoteInfo = "Alchemic iOS";
+		};
+		6CCE2E691DD3476800EC1CDB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6C66DC261A8B82C3009F9D94 /* Project object */;
 			proxyType = 1;
@@ -388,11 +396,8 @@
 		6C8757C21D6ADCD000BCAF6B /* ALCAspectClassProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAspectClassProcessor.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C93C04A1D6E71B500D8DAC2 /* BlockConverterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockConverterTests.m; sourceTree = "<group>"; };
 		6C97D14D1DD08CB2005F93E0 /* AlchemicMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicMacros.swift; sourceTree = "<group>"; };
-		6C97D14E1DD08CB2005F93E0 /* AlchemicSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlchemicSwift.h; sourceTree = "<group>"; };
 		6C97D14F1DD08CB2005F93E0 /* ALCTypeExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ALCTypeExtensions.swift; sourceTree = "<group>"; };
 		6C97D15A1DD09A7B005F93E0 /* Swift tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6C97D15C1DD09A7B005F93E0 /* Swift_tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swift_tests.swift; sourceTree = "<group>"; };
-		6C97D15E1DD09A7B005F93E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractAspect.h; sourceTree = "<group>"; };
 		6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractAspect.m; sourceTree = "<group>"; };
 		6CA787DF1D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCAbtractObjectFactoryTests.m; path = alchemicTests/ALCAbtractObjectFactoryTests.m; sourceTree = "<group>"; };
@@ -423,6 +428,11 @@
 		6CC503D71D1ACE67004283DA /* ALCObjectFactoryTypeTemplateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCObjectFactoryTypeTemplateTests.m; path = alchemicTests/ALCObjectFactoryTypeTemplateTests.m; sourceTree = "<group>"; };
 		6CC503D91D1C21FB004283DA /* OCMock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCMock.framework; path = Carthage/Build/iOS/OCMock.framework; sourceTree = "<group>"; };
 		6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCContextImplTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6CCE2E5A1DD3451D00EC1CDB /* ExceptionCatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExceptionCatcher.h; sourceTree = "<group>"; };
+		6CCE2E5B1DD3451D00EC1CDB /* ExceptionCatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExceptionCatcher.m; sourceTree = "<group>"; };
+		6CCE2E5C1DD3451D00EC1CDB /* MacroReplacementsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacroReplacementsTests.swift; sourceTree = "<group>"; };
+		6CCE2E5D1DD3451D00EC1CDB /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		6CCE2E5E1DD3451D00EC1CDB /* SwiftTestsBridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftTestsBridgingHeader.h; sourceTree = "<group>"; };
 		6CD8EB961D68607300A0FCB5 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/tvOS/PEGKit.framework; sourceTree = "<group>"; };
 		6CD8EB971D68607300A0FCB5 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/tvOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassProcessor.h; sourceTree = "<group>"; };
@@ -496,6 +506,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CCE2E6B1DD3477600EC1CDB /* Alchemic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,7 +673,6 @@
 				6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */,
 				6CC284861CB53349006B613F /* AlchemicConfig.h */,
 				6C97D14D1DD08CB2005F93E0 /* AlchemicMacros.swift */,
-				6C97D14E1DD08CB2005F93E0 /* AlchemicSwift.h */,
 				6C4B560E1C6CC3800040AEC2 /* ALCInternalMacros.h */,
 				6C24CD031CA539D00026D18C /* ALCMacros.h */,
 				6C3AFBCA1C63794C00B4FCAA /* ALCResolvable.h */,
@@ -739,10 +749,14 @@
 		6C97D15B1DD09A7B005F93E0 /* Swift tests */ = {
 			isa = PBXGroup;
 			children = (
-				6C97D15C1DD09A7B005F93E0 /* Swift_tests.swift */,
-				6C97D15E1DD09A7B005F93E0 /* Info.plist */,
+				6CCE2E5A1DD3451D00EC1CDB /* ExceptionCatcher.h */,
+				6CCE2E5B1DD3451D00EC1CDB /* ExceptionCatcher.m */,
+				6CCE2E5C1DD3451D00EC1CDB /* MacroReplacementsTests.swift */,
+				6CCE2E5D1DD3451D00EC1CDB /* Model.swift */,
+				6CCE2E5E1DD3451D00EC1CDB /* SwiftTestsBridgingHeader.h */,
 			);
-			path = "Swift tests";
+			name = "Swift tests";
+			path = alchemicTests;
 			sourceTree = "<group>";
 		};
 		6CB595CB1D6B439C006BC061 /* Features */ = {
@@ -904,7 +918,6 @@
 				6C34CA031D5D91C60080D428 /* ALCInternalMacros.h in Headers */,
 				6C34CA091D5D91C60080D428 /* ALCMacros.h in Headers */,
 				6C34CA231D5D91C60080D428 /* ALCMethodArgumentDependency.h in Headers */,
-				6C97D1531DD08CB2005F93E0 /* AlchemicSwift.h in Headers */,
 				6C34CA0F1D5D91C60080D428 /* ALCMethodObjectFactory.h in Headers */,
 				6C34CA1E1D5D91C60080D428 /* ALCModel.h in Headers */,
 				6C34CA2E1D5D91C60080D428 /* ALCModelClassProcessor.h in Headers */,
@@ -971,7 +984,6 @@
 				6C4B560F1C6CC3800040AEC2 /* ALCInternalMacros.h in Headers */,
 				6C24CD041CA539D00026D18C /* ALCMacros.h in Headers */,
 				6C71D5431CA161A200D25AC0 /* ALCMethodArgumentDependency.h in Headers */,
-				6C97D1521DD08CB2005F93E0 /* AlchemicSwift.h in Headers */,
 				6C4B56161C6E0AD10040AEC2 /* ALCMethodObjectFactory.h in Headers */,
 				6C25D2751C566E2D00D982DC /* ALCModel.h in Headers */,
 				6CE234EB1CEB4B9400728CBE /* ALCModelClassProcessor.h in Headers */,
@@ -1088,11 +1100,12 @@
 			buildPhases = (
 				6C97D1561DD09A7B005F93E0 /* Sources */,
 				6C97D1571DD09A7B005F93E0 /* Frameworks */,
-				6C97D1581DD09A7B005F93E0 /* Resources */,
+				6CCE2E741DD34D7A00EC1CDB /* Copy frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6CCE2E6A1DD3476800EC1CDB /* PBXTargetDependency */,
 			);
 			name = "Swift tests";
 			productName = "Swift tests";
@@ -1107,7 +1120,7 @@
 			attributes = {
 				CLASSPREFIX = ALC;
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Derek Clarkson";
 				TargetAttributes = {
 					6C24CCE11CA42BA80026D18C = {
@@ -1179,13 +1192,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6C97D1581DD09A7B005F93E0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1230,6 +1236,23 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/PEGKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/StoryTeller.framework",
+			);
+			name = "Copy frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "carthage copy-frameworks";
+			showEnvVarsInLog = 0;
+		};
+		6CCE2E741DD34D7A00EC1CDB /* Copy frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/StoryTeller.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/PEGKit.framework",
 			);
 			name = "Copy frameworks";
 			outputPaths = (
@@ -1413,7 +1436,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C97D15D1DD09A7B005F93E0 /* Swift_tests.swift in Sources */,
+				6CCE2E6D1DD347DC00EC1CDB /* ExceptionCatcher.m in Sources */,
+				6CCE2E6E1DD347DC00EC1CDB /* MacroReplacementsTests.swift in Sources */,
+				6CCE2E6F1DD347DC00EC1CDB /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1424,6 +1449,11 @@
 			isa = PBXTargetDependency;
 			target = 6C36D74E1B3851680073C4FB /* Alchemic iOS */;
 			targetProxy = 6C16AF691DAE73750003FCB2 /* PBXContainerItemProxy */;
+		};
+		6CCE2E6A1DD3476800EC1CDB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C36D74E1B3851680073C4FB /* Alchemic iOS */;
+			targetProxy = 6CCE2E691DD3476800EC1CDB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1529,6 +1559,7 @@
 				PRODUCT_NAME = Alchemic;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1555,6 +1586,7 @@
 				PRODUCT_NAME = Alchemic;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1692,6 +1724,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1735,6 +1768,7 @@
 		6C97D1601DD09A7B005F93E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1743,14 +1777,13 @@
 				DEVELOPMENT_TEAM = 3MHZ7974Y8;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				INFOPLIST_FILE = "Swift tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.Swift-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/AlchemicTests/SwiftTestsBridgingHeader.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1759,6 +1792,7 @@
 		6C97D1611DD09A7B005F93E0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1766,13 +1800,12 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 3MHZ7974Y8;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				INFOPLIST_FILE = "Swift tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.Swift-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/AlchemicTests/SwiftTestsBridgingHeader.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1833,6 +1866,7 @@
 				6C97D1611DD09A7B005F93E0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

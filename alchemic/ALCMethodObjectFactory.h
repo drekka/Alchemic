@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Unavailable initializer.
- @param objectClass -
+ @param type -
  */
 -(instancetype) initWithType:(ALCType *) type NS_UNAVAILABLE;
 

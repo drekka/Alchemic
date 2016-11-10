@@ -91,7 +91,6 @@ typedef NS_ENUM(NSUInteger, ALCFactoryType) {
  
  @param object The object to store.
  
- @return the completion block that can be called to perform injections into the stored object.
  */
 -(void) storeObject:(nullable id) object;
 

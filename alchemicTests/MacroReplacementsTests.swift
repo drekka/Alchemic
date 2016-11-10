@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import AlchemicSwift
+@testable import Alchemic
 import ObjectiveC
 
 class MacroReplementsTests: XCTestCase {

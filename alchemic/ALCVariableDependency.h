@@ -29,7 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Unavailable initiailizer.
- @param injector -
  */
 -(instancetype) initWithType:(ALCType *) type
                  valueSource:(id<ALCValueSource>) valueSource NS_UNAVAILABLE;

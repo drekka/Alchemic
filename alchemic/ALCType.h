@@ -86,7 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Returns an instance of ALCType containing information about the type of the ivar.
  
- @param iVar The ivar to examine.
+ @param ivar The ivar to examine.
  
  @return An instance of ALCValue containing the type information.
  */

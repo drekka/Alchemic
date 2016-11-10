@@ -8,7 +8,7 @@
 
 import UIKit
 
-@testable import AlchemicSwift
+@testable import Alchemic
 
 class Singleton:NSObject {
     static func alchemic(_ of: ALCClassObjectFactory) {

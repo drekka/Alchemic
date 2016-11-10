@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
  Default initializer.
  
  @param type The type to beinjected.
- @param dataSource Where the value for the injection is to come from.
+ @param valueSource Where the value for the injection is to come from.
  
  @return An instance of this class.
  */
