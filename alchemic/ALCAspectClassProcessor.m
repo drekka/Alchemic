@@ -15,7 +15,7 @@
 
 -(BOOL) canProcessClass:(Class) aClass {
     return [aClass conformsToProtocol:@protocol(ALCResolveAspect)]
-    && [[ALCAbstractAspect class] isSubclassOfClass:aClass];
+    && ![[ALCAbstractAspect class] isSubclassOfClass:aClass];
 }
 
 -(void) processClass:(Class) aClass withContext:(id<ALCContext>) context {
