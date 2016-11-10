@@ -20,8 +20,9 @@ ___Main features___
 * Support for NSUserDefaults and Apple's cloud based key-value stores.
 * and much, much more.
 
-# V2.1.2 #
+# V2.2.0 #
 
+* Merged Swift support back into main Alchemic framework.
 * Fixed bug where it was possible to inject a nil from a nillable factory into a non-nullable variable or method argument.
 * Added support for value transformations when sending values to and from value stores.
 * Split value store loading into defaults and current values for better management of incoming data.
