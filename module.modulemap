@@ -1,6 +1,7 @@
 module Alchemic {
     umbrella header "Headers/Alchemic.h"
     requires objc_arc
+    export Alchemic.Private
     link framework "StoryTeller"
 }
 

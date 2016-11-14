@@ -172,6 +172,7 @@
 		6C5BC1C21D6B2EDA009592EB /* OCMock.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757A91D6ACF6D00BCAF6B /* OCMock.framework.dSYM */; };
 		6C5BC1C31D6B2EDA009592EB /* PEGKit.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757AA1D6ACF6D00BCAF6B /* PEGKit.framework.dSYM */; };
 		6C5BC1C41D6B2EDA009592EB /* StoryTeller.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 6C8757AB1D6ACF6D00BCAF6B /* StoryTeller.framework.dSYM */; };
+		6C5DA2FC1DD59F4500580FA4 /* ALCTypeExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5DA2FB1DD59F4500580FA4 /* ALCTypeExtensionTests.swift */; };
 		6C62030B1D78F94F005355E8 /* ALCCouldkeyValueStoreAspectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C62030A1D78F94F005355E8 /* ALCCouldkeyValueStoreAspectTests.m */; };
 		6C62030D1D78FC99005355E8 /* ALCCloudKeyValueStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C62030C1D78FC99005355E8 /* ALCCloudKeyValueStoreTests.m */; };
 		6C62030F1D7906D2005355E8 /* ALCAbstractValueStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C62030E1D7906D2005355E8 /* ALCAbstractValueStoreTests.m */; };
@@ -303,7 +304,7 @@
 		6C04EE7D1D6D8AB5004F32F8 /* ALCAspectClassProcessorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAspectClassProcessorTests.m; sourceTree = "<group>"; };
 		6C0D87821D40876600FEC25A /* NSBundle+AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+AlchemicTests.m"; sourceTree = "<group>"; };
 		6C0D87841D40A4B900FEC25A /* ALCVariableDependencyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCVariableDependencyTests.m; sourceTree = "<group>"; };
-		6C150B631D73E97F0060CA08 /* ALCAbstractValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractValueStore.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		6C150B631D73E97F0060CA08 /* ALCAbstractValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractValueStore.h; sourceTree = "<group>"; };
 		6C150B641D73E97F0060CA08 /* ALCAbstractValueStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractValueStore.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C150B651D73E97F0060CA08 /* ALCCloudKeyValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCCloudKeyValueStore.h; sourceTree = "<group>"; };
 		6C150B661D73E97F0060CA08 /* ALCCloudKeyValueStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCCloudKeyValueStore.m; sourceTree = "<group>"; };
@@ -312,7 +313,7 @@
 		6C150B791D7424700060CA08 /* ALCArrayValueSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCArrayValueSource.h; sourceTree = "<group>"; };
 		6C150B7A1D7424700060CA08 /* ALCArrayValueSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCArrayValueSource.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C16DE051D708DAC0091E04F /* ALCValueSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCValueSource.h; sourceTree = "<group>"; };
-		6C16DE081D7452AD0091E04F /* ALCAbstractValueSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractValueSource.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		6C16DE081D7452AD0091E04F /* ALCAbstractValueSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractValueSource.h; sourceTree = "<group>"; };
 		6C16DE091D7452AD0091E04F /* ALCAbstractValueSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractValueSource.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C1ADAFE1C8DB28400267E77 /* AlchemicAware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlchemicAware.h; sourceTree = "<group>"; };
 		6C1ADB001C8DB88C00267E77 /* Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alchemic.m; sourceTree = "<group>"; };
@@ -367,6 +368,8 @@
 		6C5ABC931D70319700E1E65A /* ALCType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ALCType.m; path = alchemic/ALCType.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6C5BC1B91D68A6E1009592EB /* AlchemicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlchemicTests.m; sourceTree = "<group>"; };
 		6C5BC1BB1D68ACB4009592EB /* ALCAbstractDependencyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractDependencyTests.m; sourceTree = "<group>"; };
+		6C5DA2FA1DD59F4400580FA4 /* Unit tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Unit tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		6C5DA2FB1DD59F4500580FA4 /* ALCTypeExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ALCTypeExtensionTests.swift; sourceTree = "<group>"; };
 		6C62030A1D78F94F005355E8 /* ALCCouldkeyValueStoreAspectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCCouldkeyValueStoreAspectTests.m; sourceTree = "<group>"; };
 		6C62030C1D78FC99005355E8 /* ALCCloudKeyValueStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCCloudKeyValueStoreTests.m; sourceTree = "<group>"; };
 		6C62030E1D7906D2005355E8 /* ALCAbstractValueStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractValueStoreTests.m; sourceTree = "<group>"; };
@@ -399,8 +402,8 @@
 		6C97D14D1DD08CB2005F93E0 /* AlchemicMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicMacros.swift; sourceTree = "<group>"; };
 		6C97D14F1DD08CB2005F93E0 /* ALCTypeExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ALCTypeExtensions.swift; sourceTree = "<group>"; };
 		6C97D15A1DD09A7B005F93E0 /* Swift tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractAspect.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractAspect.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractAspect.h; sourceTree = "<group>"; };
+		6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractAspect.m; sourceTree = "<group>"; };
 		6CA787DF1D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCAbtractObjectFactoryTests.m; path = alchemicTests/ALCAbtractObjectFactoryTests.m; sourceTree = "<group>"; };
 		6CACA5311D79C0E6007808CF /* ALCConstantValueSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConstantValueSourceTests.m; sourceTree = "<group>"; };
 		6CB57E951D43C52C00CFE4DF /* ALCInstantiationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCInstantiationTests.m; path = alchemicTests/ALCInstantiationTests.m; sourceTree = "<group>"; };
@@ -431,9 +434,9 @@
 		6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCContextImplTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		6CCE2E5A1DD3451D00EC1CDB /* ExceptionCatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExceptionCatcher.h; sourceTree = "<group>"; };
 		6CCE2E5B1DD3451D00EC1CDB /* ExceptionCatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExceptionCatcher.m; sourceTree = "<group>"; };
-		6CCE2E5C1DD3451D00EC1CDB /* MacroReplacementsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacroReplacementsTests.swift; sourceTree = "<group>"; };
+		6CCE2E5C1DD3451D00EC1CDB /* MacroReplacementsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MacroReplacementsTests.swift; path = alchemicTests/MacroReplacementsTests.swift; sourceTree = "<group>"; };
 		6CCE2E5D1DD3451D00EC1CDB /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		6CCE2E5E1DD3451D00EC1CDB /* SwiftTestsBridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftTestsBridgingHeader.h; sourceTree = "<group>"; };
+		6CCE2E5E1DD3451D00EC1CDB /* SwiftTestsBridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftTestsBridgingHeader.h; path = alchemicTests/SwiftTestsBridgingHeader.h; sourceTree = "<group>"; };
 		6CD8EB961D68607300A0FCB5 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = Carthage/Build/tvOS/PEGKit.framework; sourceTree = "<group>"; };
 		6CD8EB971D68607300A0FCB5 /* StoryTeller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryTeller.framework; path = Carthage/Build/tvOS/StoryTeller.framework; sourceTree = "<group>"; };
 		6CE234DF1CEB469900728CBE /* ALCClassProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCClassProcessor.h; sourceTree = "<group>"; };
@@ -567,6 +570,8 @@
 		6C2A2B461DAD12F500FF890D /* Integration tests */ = {
 			isa = PBXGroup;
 			children = (
+				6CCE2E5E1DD3451D00EC1CDB /* SwiftTestsBridgingHeader.h */,
+				6CCE2E5C1DD3451D00EC1CDB /* MacroReplacementsTests.swift */,
 				6C2A2B471DAD134800FF890D /* Model.h */,
 				6C2A2B481DAD134800FF890D /* Model.m */,
 			);
@@ -695,6 +700,8 @@
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;
 			children = (
+				6C5DA2FB1DD59F4500580FA4 /* ALCTypeExtensionTests.swift */,
+				6C5DA2FA1DD59F4400580FA4 /* Unit tests-Bridging-Header.h */,
 				6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */,
 				6C5BC1B91D68A6E1009592EB /* AlchemicTests.m */,
 				6C4D85A81C7DB6A80061CA84 /* Dependencies */,
@@ -752,9 +759,7 @@
 			children = (
 				6CCE2E5A1DD3451D00EC1CDB /* ExceptionCatcher.h */,
 				6CCE2E5B1DD3451D00EC1CDB /* ExceptionCatcher.m */,
-				6CCE2E5C1DD3451D00EC1CDB /* MacroReplacementsTests.swift */,
 				6CCE2E5D1DD3451D00EC1CDB /* Model.swift */,
-				6CCE2E5E1DD3451D00EC1CDB /* SwiftTestsBridgingHeader.h */,
 			);
 			name = "Swift tests";
 			path = alchemicTests;
@@ -1142,6 +1147,7 @@
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 3MHZ7974Y8;
 						DevelopmentTeamName = "Derek Clarkson";
+						LastSwiftMigration = 0820;
 					};
 					6C97D1591DD09A7B005F93E0 = {
 						CreatedOnToolsVersion = 8.2;
@@ -1414,6 +1420,7 @@
 				6C62030D1D78FC99005355E8 /* ALCCloudKeyValueStoreTests.m in Sources */,
 				F408073F1CEDA9A30055CD72 /* ALCConfigClassProcessorTests.m in Sources */,
 				6CACA5321D79C0E6007808CF /* ALCConstantValueSourceTests.m in Sources */,
+				6C5DA2FC1DD59F4500580FA4 /* ALCTypeExtensionTests.swift in Sources */,
 				6CCBF4711D2293D100211F08 /* ALCContextImplTests.m in Sources */,
 				6C62030B1D78F94F005355E8 /* ALCCouldkeyValueStoreAspectTests.m in Sources */,
 				6CE6FFF71D2A9B2100D61613 /* ALCFactoryNameTests.m in Sources */,
@@ -1635,7 +1642,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.2.0;
+				CURRENT_PROJECT_VERSION = 2.1.2;
 				DYLIB_CURRENT_VERSION = "$(API_VERSION).$(BUILD_NUMBER)";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1707,7 +1714,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.2.0;
+				CURRENT_PROJECT_VERSION = 2.1.2;
 				DYLIB_CURRENT_VERSION = "$(API_VERSION).$(BUILD_NUMBER)";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1746,6 +1753,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1753,9 +1761,13 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "alchemicTests/Unit tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1763,15 +1775,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "alchemicTests/Unit tests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1779,6 +1795,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1787,6 +1805,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.Swift-tests";
@@ -1803,6 +1822,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1811,6 +1832,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.com.derekclarkson.Swift-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
