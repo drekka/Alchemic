@@ -62,7 +62,7 @@ public func AcFactoryName(_ name: String) -> ALCFactoryName {
 
 // MARK:- Lifecycle
 
-func AcWhenReady(_ whenReady:@escaping () -> Swift.Void) {
+public func AcWhenReady(_ whenReady:@escaping () -> Swift.Void) {
     mainContext().execute(whenStarted: whenReady)
 }
 
