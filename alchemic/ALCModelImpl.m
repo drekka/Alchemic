@@ -113,9 +113,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) modelWillResolve {
     STLog(self, @"Model will resolve");
     for (NSObject<ALCResolveAspect> *aspect in _resolveAspects) {
-        STLog(self, @"Checking %@", aspect);
         if ([[aspect class] enabled] && [aspect respondsToSelector:@selector(modelWillResolve:)]) {
-            STLog(self, @"Calling aspect will resolve");
+            STLog(self, @"Calling modelWillResolve in Aspect %@", aspect);
             [aspect modelWillResolve:self];
         }
     }
@@ -124,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) modelDidResolve {
     for (NSObject<ALCResolveAspect> *aspect in _resolveAspects) {
         if ([[aspect class] enabled] && [aspect respondsToSelector:@selector(modelDidResolve:)]) {
-            STLog(self, @"Calling aspect did resolve");
+            STLog(self, @"Calling modelDidResolve in Aspect %@", aspect);
             [aspect modelDidResolve:self];
         }
     }

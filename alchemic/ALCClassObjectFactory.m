@@ -32,7 +32,7 @@
     NSHashTable *_injectedObjectHistory;
 
     // The notification observer listening to dependency updates. Currently only used by transient dependencies.
-    id _dependencyChangedObserver;
+    id _transientChangedObserver;
 
 }
 
@@ -85,7 +85,7 @@
     for (ALCVariableDependency *dependency in _dependencies) {
         if (dependency.referencesTransients) {
             STLog(self, @"%@ is references a transient, configuring factory to watch for changes", [ALCRuntime forClass:self.type.objcClass propertyDescription:dependency.name]);
-            // Any dependency which refers to transients must be nillable.
+            // Any dependency which refers to transients must be nillable by default.
             [dependency configureWithOptions:@[AcNillable]];
             [self setUpTransientWatch];
         }
@@ -94,23 +94,29 @@
 
 -(void) setUpTransientWatch {
 
+    if (_injectedObjectHistory) {
+        // Already watching for transient changes.
+        return;
+    }
+
     // We need to track all objects we have injected which are still active so we can re-inject them on a transient change.
     _injectedObjectHistory = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory capacity:0];
 
     AcWeakSelf;
-    void (^dependenciesChanged)(NSNotification *notificaton) = ^(NSNotification *notification) {
+    void (^objectStored) (NSNotification *notificaton) = ^(NSNotification *notification) {
 
         AcStrongSelf;
-        id sourceObjectFactory = notification.object;
+        id<ALCObjectFactory> sourceObjectFactory = notification.object;
 
-        if (strongSelf->_injectedObjectHistory.count > 0) {
+        // Only check dependencies if the object factory that generated the notification is a transient factory and we have at least one object that may need a new value injected.
+        if (strongSelf->_transientChangedObserver && sourceObjectFactory.isTransient) {
 
-            STLog(self, @"%@ checking transient changed notification", NSStringFromClass(self.type.objcClass));
+            STLog(self, @"Transient factory stored new object. Checking dependencies of factory %@ ...", self);
 
             // Loop through all dependencies and check to see if they are watching the factory that has changed it's value.
             for (ALCVariableDependency *variableDependency in strongSelf->_dependencies) {
                 if ([variableDependency referencesObjectFactory:sourceObjectFactory]) {
-                    STLog(self, @"Found dependency which needs updating, injecting %lu objects", (unsigned long) strongSelf->_injectedObjectHistory.count);
+                    STLog(self, @"Dependency %@ is watching factory, injecting %lu objects", [ALCRuntime forClass:self.type.objcClass propertyDescription:variableDependency.name], (unsigned long) strongSelf->_injectedObjectHistory.count);
                     for (id object in strongSelf->_injectedObjectHistory) {
                         [strongSelf injectObject:object dependency:variableDependency];
                     }
@@ -119,10 +125,10 @@
         }
     };
 
-    self->_dependencyChangedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AlchemicDidStoreObject
+    self->_transientChangedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AlchemicDidStoreObject
                                                                                          object:nil
                                                                                           queue:nil
-                                                                                     usingBlock:dependenciesChanged];
+                                                                                     usingBlock:objectStored];
 }
 
 -(BOOL) isReady {
@@ -150,8 +156,8 @@
 }
 
 -(void) unload {
-    if (_dependencyChangedObserver) {
-        [[NSNotificationCenter defaultCenter] removeObserver:_dependencyChangedObserver];
+    if (_transientChangedObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:_transientChangedObserver];
     }
 }
 
