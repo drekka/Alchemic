@@ -20,6 +20,10 @@ ___Main features___
 * Support for NSUserDefaults and Apple's cloud based key-value stores.
 * and much, much more.
 
+# v2.2.2
+
+* Removing  requirement for Address Sanitizer from the built library.
+
 # v2.2.1
 
 * Fixed bug where tranient watches were triggering the re-injection non-transient injections. 
@@ -38,7 +42,7 @@ ___Main features___
 * Fixed bug where having API projects in the current Xcode workspace was causing class scanning failures.  
 * Fixed bug where startup code that looked for a UIApplicationDelegate was executing before the app had been started. Therefore a nil was being returned.
 
-# v2.1.1 #
+# v2.1.1
 
 * Updated context description to print the current model. Useful for debugging.
 * Fixed bug where post startup blocks could trigger a lifecycle failure if they called inject dependencies.
