@@ -20,7 +20,12 @@ ___Main features___
 * Support for NSUserDefaults and Apple's cloud based key-value stores.
 * and much, much more.
 
-# V2.2.0 #
+# v2.2.1
+
+* Fixed bug where tranient watches were triggering the re-injection non-transient injections. 
+* Changed LogInitialModel to just logModel to dump the model into the logs on startup.
+
+# v2.2.0
 
 * Merged Swift support back into main Alchemic framework.
 * Fixed bug where it was possible to inject a nil from a nillable factory into a non-nullable variable or method argument.

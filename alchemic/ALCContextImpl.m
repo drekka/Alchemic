@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
             self->_finishedStartingOp = nil;
             self->_status = ALCStatusStarted;
             [[NSNotificationCenter defaultCenter] postNotificationName:AlchemicDidFinishStarting object:self];
-            STLog(@"LogInitialModel", @"Alchemic started.%@", self);
+            STLog(@"LogModel", @"Alchemic started.%@", self);
         }];
 
         // Setup dependencies.
