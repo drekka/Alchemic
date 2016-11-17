@@ -20,6 +20,10 @@ ___Main features___
 * Support for NSUserDefaults and Apple's cloud based key-value stores.
 * and much, much more.
 
+# v2.2.4
+
+* Refactoring to improve some exception messages.
+
 # v2.2.3
 
 * Swift version of AcWhenReady now public.

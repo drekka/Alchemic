@@ -9,16 +9,19 @@
 @import XCTest;
 @import Alchemic;
 @import Alchemic.Private;
+@import OCMock;
 
 @interface ALCObjectFactoryTypeTemplateTests : XCTestCase
 @end
 
 @implementation ALCObjectFactoryTypeTemplateTests {
     ALCObjectFactoryTypeTemplate *_factoryType;
+    id _mockObjectFactory;
 }
 
 -(void) setUp {
-    _factoryType = [[ALCObjectFactoryTypeTemplate alloc] init];
+    _mockObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
+    _factoryType = [[ALCObjectFactoryTypeTemplate alloc] initWithFactory:_mockObjectFactory];
 }
 
 -(void) testWeakThrows {

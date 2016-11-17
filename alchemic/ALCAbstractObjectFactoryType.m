@@ -19,6 +19,19 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize weak = _weak;
 @synthesize nillable = _nillable;
 
+-(instancetype) init {
+    methodReturningObjectNotImplemented;
+}
+
+-(instancetype) initWithFactory:(__weak id<ALCObjectFactory>) objectFactory {
+    self = [super init];
+    if (self) {
+        _objectFactory = objectFactory;
+    }
+    return self;
+}
+
+
 #pragma mark - Override properties
 
 -(ALCFactoryType) type {
@@ -28,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setObject:(nullable id) object {
     
     if (!object && !_nillable) {
-        throwException(AlchemicNilValueException, @"Cannot set a nil value.");
+        throwException(AlchemicNilValueException, @"Cannot set a nil value in factory %@", self.objectFactory);
     }
     
     if (_weak) {

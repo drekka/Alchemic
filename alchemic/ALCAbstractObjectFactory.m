@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
     self = [super init];
     if (self) {
         _type = type;
-        _typeStrategy = [[ALCObjectFactoryTypeSingleton alloc] init];
+        _typeStrategy = [[ALCObjectFactoryTypeSingleton alloc] initWithFactory:self];
     }
     return self;
 }
@@ -108,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     // Final validations
-    if (_transient && [_typeStrategy isKindOfClass:[ALCObjectFactoryTypeTemplate class]]) {
+    if (self.transient && [_typeStrategy isKindOfClass:[ALCObjectFactoryTypeTemplate class]]) {
         throwException(AlchemicIllegalArgumentException, @"Invalid configuration: Template factories cannot be transient.");
     }
     
@@ -116,7 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) setNewStrategyType:(Class) newStrategyClass {
     id<ALCObjectFactoryType> oldStrategy = _typeStrategy;
-    _typeStrategy = [[newStrategyClass alloc] init];
+    _typeStrategy = [[newStrategyClass alloc] initWithFactory:self];
     _typeStrategy.weak = oldStrategy.isWeak;
     _typeStrategy.nillable = oldStrategy.isNillable;
 }
