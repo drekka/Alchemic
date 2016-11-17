@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
     // Find dependencies
     _resolvedFactories = [model objectFactoriesMatchingCriteria:_criteria];
     if ([_resolvedFactories count] == 0) {
-        throwException(AlchemicNoDependenciesFoundException, @"No object factories found for criteria %@", _criteria);
+        throwException(AlchemicNoDependenciesFoundException, @"No object factories found for criteria: %@", _criteria);
     }
 
     // Filter for primary factories and replace if there are any present.
