@@ -108,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     // Final validations
-    if (_transient && [_typeStrategy isKindOfClass:[ALCObjectFactoryTypeTemplate class]]) {
+    if (self.transient && [_typeStrategy isKindOfClass:[ALCObjectFactoryTypeTemplate class]]) {
         throwException(AlchemicIllegalArgumentException, @"Invalid configuration: Template factories cannot be transient.");
     }
     
