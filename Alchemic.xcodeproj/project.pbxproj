@@ -1168,9 +1168,9 @@
 			projectRoot = "";
 			targets = (
 				6C36D74E1B3851680073C4FB /* Alchemic iOS */,
+				6C34C9DB1D5D91C60080D428 /* Alchemic tvOS */,
 				6C66DC381A8B82C3009F9D94 /* Unit tests */,
 				6C24CCE11CA42BA80026D18C /* Integration tests */,
-				6C34C9DB1D5D91C60080D428 /* Alchemic tvOS */,
 				6C97D1591DD09A7B005F93E0 /* Swift tests */,
 			);
 		};
@@ -1520,12 +1520,12 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@rpath";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = Alchemic;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1545,12 +1545,12 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@rpath";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = Alchemic;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -1570,7 +1570,6 @@
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				INSTALL_PATH = "@rpath";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = Alchemic;
@@ -1597,7 +1596,6 @@
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				INSTALL_PATH = "@rpath";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.Alchemic;
 				PRODUCT_NAME = Alchemic;
