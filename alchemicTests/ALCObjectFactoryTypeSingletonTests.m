@@ -9,6 +9,7 @@
 @import XCTest;
 @import Alchemic;
 @import Alchemic.Private;
+@import OCMock;
 
 @interface ALCObjectFactoryTypeSingletonTests : XCTestCase
 
@@ -16,10 +17,12 @@
 
 @implementation ALCObjectFactoryTypeSingletonTests {
     ALCObjectFactoryTypeSingleton *_objectFactoryType;
+    id _mockObjectFactory;
 }
 
 -(void)setUp {
-    _objectFactoryType = [[ALCObjectFactoryTypeSingleton alloc] init];
+    _mockObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
+    _objectFactoryType = [[ALCObjectFactoryTypeSingleton alloc] initWithFactory:_mockObjectFactory];
 }
 
 -(void) testReady {

@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable id) object {
     if (!self.isReady) {
-        throwException(AlchemicReferenceObjectNotSetException, @"%@ is a reference factory which has not had a value set.", self);
+        throwException(AlchemicReferenceObjectNotSetException, @"%@ is a reference factory does not have a value.", self.objectFactory);
     }
     return super.object;
 }

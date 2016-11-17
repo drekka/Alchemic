@@ -7,6 +7,7 @@
 //
 
 @import XCTest;
+@import OCMock;
 
 @import Alchemic;
 @import Alchemic.Private;
@@ -16,11 +17,13 @@
 @end
 
 @implementation ALCAbstractObjectFactoryTypeTests {
+    id _mockObjectFactory;
     ALCAbstractObjectFactoryType *_factoryType;
 }
 
 -(void)setUp {
-    _factoryType = [[ALCAbstractObjectFactoryType alloc] init];
+    _mockObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
+    _factoryType = [[ALCAbstractObjectFactoryType alloc] initWithFactory:_mockObjectFactory];
 }
 
 -(void) testFactoryType {
