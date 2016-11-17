@@ -1,1 +1,1 @@
-carthage update --no-use-binaries --platform iOS,tvOS --configuration Debug
+carthage update --no-use-binaries --platform iOS,tvOS $@

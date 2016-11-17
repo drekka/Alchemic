@@ -9,6 +9,7 @@
 @import XCTest;
 @import Alchemic;
 @import Alchemic.Private;
+@import OCMock;
 
 @interface ALCObjectFactoryTypeReferenceTests : XCTestCase
 
@@ -16,10 +17,12 @@
 
 @implementation ALCObjectFactoryTypeReferenceTests {
     ALCObjectFactoryTypeReference *_objectFactoryType;
+    id _mockObjectFactory;
 }
 
 -(void)setUp {
-    _objectFactoryType = [[ALCObjectFactoryTypeReference alloc] init];
+    _mockObjectFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
+    _objectFactoryType = [[ALCObjectFactoryTypeReference alloc] initWithFactory:_mockObjectFactory];
 }
 
 -(void) testObjectIsNilWhenNotNillable {
