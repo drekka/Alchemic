@@ -167,6 +167,14 @@ static NSCharacterSet *__typeEncodingDelimiters;
     }
 }
 
++(void) executeSimpleBlockOnMainThread:(nullable ALCSimpleBlock) block {
+    if ([NSThread currentThread].isMainThread) {
+        block();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), block);
+    }
+}
+
 +(void) executeBlock:(nullable ALCBlockWithObject) block withObject:(nullable id) object {
     if (object && block) {
         STLog(self, @"Executing block with object");

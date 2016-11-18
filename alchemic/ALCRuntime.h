@@ -149,6 +149,8 @@ bool AcStrHasPrefix(const char *str, const char *prefix);
  */
 +(void) executeSimpleBlock:(nullable ALCSimpleBlock) block;
 
++(void) executeSimpleBlockOnMainThread:(nullable ALCSimpleBlock) block;
+
 /**
  Executes a passed block if it's not null.
 

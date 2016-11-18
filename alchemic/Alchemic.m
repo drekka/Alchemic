@@ -37,7 +37,6 @@ static __nullable __strong id<ALCContext> __mainContext;
     if ([self mainContext]) {
         // Because we are executing before the UIApplication has been started, it's possible for Alchemic to not find the delegate. So we post the startup block to the main thread to get it executing after the app startup code has executed.
         dispatch_async(dispatch_get_main_queue(), ^{
-            // Now execute the startup on Alchemic's background thread.
             [[self mainContext] executeInBackground:^{
                 [ALCRuntime scanRuntimeWithContext:__mainContext];
                 [__mainContext start];
