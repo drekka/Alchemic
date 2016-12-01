@@ -20,6 +20,10 @@ ___Main features___
 * Support for NSUserDefaults and Apple's cloud based key-value stores.
 * and much, much more.
 
+# v2.2.7
+
+* Fixing version numbers which were missing from the framework.
+
 # v2.2.5
 
 * Bug fix: Ensuring injection callback methods in the AlchemicAware protocol are always called on the main thread.
