@@ -20,6 +20,10 @@ ___Main features___
 * Support for NSUserDefaults and Apple's cloud based key-value stores.
 * and much, much more.
 
+# v2.2.8
+
+* Fixing bug where using in a framework with no app delegate was throwing an error.
+
 # v2.2.7
 
 * Fixing version numbers which were missing from the framework.

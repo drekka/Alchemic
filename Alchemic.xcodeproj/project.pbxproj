@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6C0076921D17D60500E88987 /* ALCFlagMacrosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0076911D17D60500E88987 /* ALCFlagMacrosTests.m */; };
-		6C019F1C1D35283B005C7D7D /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */; };
 		6C04EE5F1D6C184C004F32F8 /* ALCUserDefaultsAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C04EE5D1D6C184C004F32F8 /* ALCUserDefaultsAspect.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C04EE601D6C184C004F32F8 /* ALCUserDefaultsAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C04EE5D1D6C184C004F32F8 /* ALCUserDefaultsAspect.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C04EE611D6C184C004F32F8 /* ALCUserDefaultsAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C04EE5E1D6C184C004F32F8 /* ALCUserDefaultsAspect.m */; };
@@ -213,13 +212,14 @@
 		6C97D1511DD08CB2005F93E0 /* AlchemicMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C97D14D1DD08CB2005F93E0 /* AlchemicMacros.swift */; };
 		6C97D1541DD08CB2005F93E0 /* ALCTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C97D14F1DD08CB2005F93E0 /* ALCTypeExtensions.swift */; };
 		6C97D1551DD08CB2005F93E0 /* ALCTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C97D14F1DD08CB2005F93E0 /* ALCTypeExtensions.swift */; };
+		6C9E31FA1DF1825C00AFEAE1 /* FrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9E31F91DF1825C00AFEAE1 /* FrameworkTests.m */; };
+		6C9E31FF1DF1836500AFEAE1 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
 		6CA1CAA61DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CA1CAA71DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CA1CAA81DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */; };
 		6CA1CAA91DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */; };
 		6CA787E01D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA787DF1D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m */; };
 		6CACA5321D79C0E6007808CF /* ALCConstantValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CACA5311D79C0E6007808CF /* ALCConstantValueSourceTests.m */; };
-		6CB373631DD43FD100C38F6C /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */; };
 		6CB57E991D43C53500CFE4DF /* ALCInstantiationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB57E951D43C52C00CFE4DF /* ALCInstantiationTests.m */; };
 		6CB57E9A1D43C53900CFE4DF /* ALCMethodObjectFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB57E961D43C52C00CFE4DF /* ALCMethodObjectFactoryTests.m */; };
 		6CB57E9C1D43C66B00CFE4DF /* ALCClassObjectFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB57E9B1D43C66B00CFE4DF /* ALCClassObjectFactoryTests.m */; };
@@ -236,7 +236,6 @@
 		6CC2847D1CB29A7C006B613F /* ALCException.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC2847B1CB29A7C006B613F /* ALCException.m */; };
 		6CC284891CB53F03006B613F /* NSBundle+Alchemic.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC284871CB53F03006B613F /* NSBundle+Alchemic.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CC2848A1CB53F03006B613F /* NSBundle+Alchemic.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC284881CB53F03006B613F /* NSBundle+Alchemic.m */; };
-		6CC2849B1CB69EE6006B613F /* StoryTellerConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */; };
 		6CC464221C7986D500B20A95 /* ALCDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC464211C7986D500B20A95 /* ALCDependency.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CC503CD1D182A78004283DA /* ALCAbstractObjectFactoryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CC503CB1D182A78004283DA /* ALCAbstractObjectFactoryType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6CC503CE1D182A78004283DA /* ALCAbstractObjectFactoryType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC503CC1D182A78004283DA /* ALCAbstractObjectFactoryType.m */; };
@@ -402,6 +401,9 @@
 		6C97D14D1DD08CB2005F93E0 /* AlchemicMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlchemicMacros.swift; sourceTree = "<group>"; };
 		6C97D14F1DD08CB2005F93E0 /* ALCTypeExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ALCTypeExtensions.swift; sourceTree = "<group>"; };
 		6C97D15A1DD09A7B005F93E0 /* Swift tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C9E31F71DF1825C00AFEAE1 /* FrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C9E31F91DF1825C00AFEAE1 /* FrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrameworkTests.m; sourceTree = "<group>"; };
+		6C9E31FB1DF1825C00AFEAE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractAspect.h; sourceTree = "<group>"; };
 		6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractAspect.m; sourceTree = "<group>"; };
 		6CA787DF1D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCAbtractObjectFactoryTests.m; path = alchemicTests/ALCAbtractObjectFactoryTests.m; sourceTree = "<group>"; };
@@ -422,7 +424,6 @@
 		6CC284861CB53349006B613F /* AlchemicConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlchemicConfig.h; sourceTree = "<group>"; };
 		6CC284871CB53F03006B613F /* NSBundle+Alchemic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Alchemic.h"; sourceTree = "<group>"; };
 		6CC284881CB53F03006B613F /* NSBundle+Alchemic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSBundle+Alchemic.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = StoryTellerConfig.json; path = alchemicTests/StoryTellerConfig.json; sourceTree = "<group>"; };
 		6CC464211C7986D500B20A95 /* ALCDependency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCDependency.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6CC503CB1D182A78004283DA /* ALCAbstractObjectFactoryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ALCAbstractObjectFactoryType.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6CC503CC1D182A78004283DA /* ALCAbstractObjectFactoryType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ALCAbstractObjectFactoryType.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -511,6 +512,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CCE2E6B1DD3477600EC1CDB /* Alchemic.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C9E31F41DF1825C00AFEAE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C9E31FF1DF1836500AFEAE1 /* Alchemic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -659,6 +668,7 @@
 				6C24CCFB1CA42BA80026D18C /* Integration tests.xctest */,
 				6C66DC391A8B82C3009F9D94 /* Unit tests.xctest */,
 				6C97D15A1DD09A7B005F93E0 /* Swift tests.xctest */,
+				6C9E31F71DF1825C00AFEAE1 /* FrameworkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -765,6 +775,15 @@
 			path = alchemicTests;
 			sourceTree = "<group>";
 		};
+		6C9E31F81DF1825C00AFEAE1 /* FrameworkTests */ = {
+			isa = PBXGroup;
+			children = (
+				6C9E31F91DF1825C00AFEAE1 /* FrameworkTests.m */,
+				6C9E31FB1DF1825C00AFEAE1 /* Info.plist */,
+			);
+			path = FrameworkTests;
+			sourceTree = "<group>";
+		};
 		6CB595CB1D6B439C006BC061 /* Features */ = {
 			isa = PBXGroup;
 			children = (
@@ -869,10 +888,10 @@
 		F45828351CEBFE100074A844 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				6C9E31F81DF1825C00AFEAE1 /* FrameworkTests */,
 				6C97D15B1DD09A7B005F93E0 /* Swift tests */,
 				6C2A2B461DAD12F500FF890D /* Integration tests */,
 				6CB595C91D6B435C006BC061 /* Settings.bundle */,
-				6CC2849A1CB69ECE006B613F /* StoryTellerConfig.json */,
 				6C66DC3D1A8B82C3009F9D94 /* Unit tests */,
 				F458283B1CEBFECE0074A844 /* XCTestCase+Alchemic.h */,
 				F458283C1CEBFECE0074A844 /* XCTestCase+Alchemic.m */,
@@ -1119,6 +1138,23 @@
 			productReference = 6C97D15A1DD09A7B005F93E0 /* Swift tests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		6C9E31F61DF1825C00AFEAE1 /* FrameworkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C9E31FE1DF1825C00AFEAE1 /* Build configuration list for PBXNativeTarget "FrameworkTests" */;
+			buildPhases = (
+				6C9E31F31DF1825C00AFEAE1 /* Sources */,
+				6C9E31F41DF1825C00AFEAE1 /* Frameworks */,
+				6C9E32001DF183DD00AFEAE1 /* Copy carthage frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FrameworkTests;
+			productName = FrameworkTests;
+			productReference = 6C9E31F71DF1825C00AFEAE1 /* FrameworkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1131,8 +1167,8 @@
 				ORGANIZATIONNAME = "Derek Clarkson";
 				TargetAttributes = {
 					6C24CCE11CA42BA80026D18C = {
-						DevelopmentTeam = 3MHZ7974Y8;
 						DevelopmentTeamName = "Derek Clarkson";
+						ProvisioningStyle = Automatic;
 					};
 					6C34C9DB1D5D91C60080D428 = {
 						LastSwiftMigration = 0820;
@@ -1145,11 +1181,15 @@
 					};
 					6C66DC381A8B82C3009F9D94 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 3MHZ7974Y8;
 						DevelopmentTeamName = "Derek Clarkson";
 						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
 					};
 					6C97D1591DD09A7B005F93E0 = {
+						CreatedOnToolsVersion = 8.2;
+						ProvisioningStyle = Automatic;
+					};
+					6C9E31F61DF1825C00AFEAE1 = {
 						CreatedOnToolsVersion = 8.2;
 						ProvisioningStyle = Automatic;
 					};
@@ -1172,6 +1212,7 @@
 				6C66DC381A8B82C3009F9D94 /* Unit tests */,
 				6C24CCE11CA42BA80026D18C /* Integration tests */,
 				6C97D1591DD09A7B005F93E0 /* Swift tests */,
+				6C9E31F61DF1825C00AFEAE1 /* FrameworkTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1185,7 +1226,6 @@
 				6C8757AD1D6ACF7400BCAF6B /* PEGKit.framework.dSYM in Resources */,
 				6CB595CA1D6B435C006BC061 /* Settings.bundle in Resources */,
 				6C8757AE1D6ACF7400BCAF6B /* StoryTeller.framework.dSYM in Resources */,
-				6C019F1C1D35283B005C7D7D /* StoryTellerConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1196,7 +1236,6 @@
 				6C5BC1C21D6B2EDA009592EB /* OCMock.framework.dSYM in Resources */,
 				6C5BC1C31D6B2EDA009592EB /* PEGKit.framework.dSYM in Resources */,
 				6C5BC1C41D6B2EDA009592EB /* StoryTeller.framework.dSYM in Resources */,
-				6CC2849B1CB69EE6006B613F /* StoryTellerConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1204,7 +1243,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CB373631DD43FD100C38F6C /* StoryTellerConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1237,6 +1275,23 @@
 				"$(SRCROOT)/Carthage/Build/iOS/StoryTeller.framework",
 			);
 			name = "Copy frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "carthage copy-frameworks";
+			showEnvVarsInLog = 0;
+		};
+		6C9E32001DF183DD00AFEAE1 /* Copy carthage frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/PEGKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/StoryTeller.framework",
+			);
+			name = "Copy carthage frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1459,6 +1514,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6C9E31F31DF1825C00AFEAE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C9E31FA1DF1825C00AFEAE1 /* FrameworkTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1480,7 +1543,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = 3MHZ7974Y8;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
@@ -1495,7 +1560,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = 3MHZ7974Y8;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
@@ -1641,7 +1708,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
-				DYLIB_CURRENT_VERSION = 2.2.7;
+				DYLIB_CURRENT_VERSION = 2.2.8;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -1713,7 +1780,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
-				DYLIB_CURRENT_VERSION = 2.2.7;
+				DYLIB_CURRENT_VERSION = 2.2.8;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -1752,8 +1819,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = 3MHZ7974Y8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -1774,7 +1843,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = 3MHZ7974Y8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -1841,6 +1912,45 @@
 			};
 			name = Release;
 		};
+		6C9E31FC1DF1825C00AFEAE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3MHZ7974Y8;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				INFOPLIST_FILE = FrameworkTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.FrameworkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6C9E31FD1DF1825C00AFEAE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3MHZ7974Y8;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				INFOPLIST_FILE = FrameworkTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.derekclarkson.FrameworkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1897,6 +2007,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		6C9E31FE1DF1825C00AFEAE1 /* Build configuration list for PBXNativeTarget "FrameworkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C9E31FC1DF1825C00AFEAE1 /* Debug */,
+				6C9E31FD1DF1825C00AFEAE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
