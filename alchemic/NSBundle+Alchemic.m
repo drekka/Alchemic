@@ -28,9 +28,12 @@
             continue;
         }
 
+        STLog(self, @"Scanning bundle %@", bundleId);
+
         // Now get the executable from the bundle so we can scan it for classes.
         NSURL *executableURL = (NSURL *) CFBridgingRelease(CFBundleCopyExecutableURL(bundle));
         if (executableURL) {
+            STLog(self, @"At url: %@", executableURL);
             [self scanExecutable:executableURL.fileSystemRepresentation withProcessors:processors context:context];
         }
     }
@@ -41,11 +44,10 @@
     // Get the classes.
     unsigned int count = 0;
     const char** classes = objc_copyClassNamesForImage(executable, &count);
+    STLog(self, @"Found %i classes", count);
     if (count == 0) {
         return;
     }
-
-    STLog(self, @"Scanning %i runtime classes in executable %s", count, executable);
 
     for(unsigned int i = 0;i < count;i++) {
         Class nextClass = objc_getClass(classes[i]);
