@@ -1855,7 +1855,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
-				DYLIB_CURRENT_VERSION = 2.2.10;
+				DYLIB_CURRENT_VERSION = 2.2.11;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -1927,7 +1927,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
-				DYLIB_CURRENT_VERSION = 2.2.10;
+				DYLIB_CURRENT_VERSION = 2.2.11;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -2108,6 +2108,7 @@
 				6C0432D91DF2F484008C548C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6C24CCF81CA42BA80026D18C /* Build configuration list for PBXNativeTarget "Integration tests" */ = {
 			isa = XCConfigurationList;

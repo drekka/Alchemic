@@ -22,12 +22,11 @@
 
         CFBundleRef bundle = (CFBundleRef) CFArrayGetValueAtIndex(allBundles, i);
 
-        // Commenting out as some bundles don't have an id when testing.
         // Ignore all Apple bundles as we know they won't have Alchemic registration code in them.
-//        NSString *bundleId = (NSString *) CFBundleGetIdentifier(bundle);
-//        if (!bundleId || [bundleId hasPrefix:@"com.apple"]) {
-//            continue;
-//        }
+        NSString *bundleId = (NSString *) CFBundleGetIdentifier(bundle);
+        if ([bundleId hasPrefix:@"com.apple"]) {
+            continue;
+        }
 
         // Now get the executable from the bundle so we can scan it for classes.
         NSURL *executableURL = (NSURL *) CFBridgingRelease(CFBundleCopyExecutableURL(bundle));
