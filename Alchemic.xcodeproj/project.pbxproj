@@ -749,7 +749,6 @@
 		6C66DC3D1A8B82C3009F9D94 /* Unit tests */ = {
 			isa = PBXGroup;
 			children = (
-				6C5DA2FB1DD59F4500580FA4 /* ALCTypeExtensionTests.swift */,
 				6C5DA2FA1DD59F4400580FA4 /* Unit tests-Bridging-Header.h */,
 				6CCBF4701D2293D100211F08 /* ALCContextImplTests.m */,
 				6C5BC1B91D68A6E1009592EB /* AlchemicTests.m */,
@@ -806,6 +805,7 @@
 		6C97D15B1DD09A7B005F93E0 /* Swift tests */ = {
 			isa = PBXGroup;
 			children = (
+				6C5DA2FB1DD59F4500580FA4 /* ALCTypeExtensionTests.swift */,
 				6CCE2E5A1DD3451D00EC1CDB /* ExceptionCatcher.h */,
 				6CCE2E5B1DD3451D00EC1CDB /* ExceptionCatcher.m */,
 				6CCE2E5D1DD3451D00EC1CDB /* Model.swift */,
