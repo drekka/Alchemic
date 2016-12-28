@@ -24,6 +24,8 @@
     return YES;
 }
 
++(void) setEnabled:(BOOL) enabled {}
+
 -(void) modelWillResolve:(id<ALCModel>) model {
 
     // First check and ensure any pre-registered app delegate is set to a reference type for later injection.

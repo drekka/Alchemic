@@ -6,6 +6,7 @@
 //  Copyright © 2016 Derek Clarkson. All rights reserved.
 //
 
+@import UIKit;
 @import StoryTeller;
 
 #import <Alchemic/ALCClassObjectFactory.h>
@@ -201,7 +202,12 @@
 #pragma mark - Descriptions
 
 -(NSString *) description {
-    return str(@"%@ class %@", super.description, self.defaultModelName);
+    return str(@"%@%@C ] %@%@",
+               super.description,
+               self.transient ? @"~" : @" ",
+               self.defaultModelName,
+               [self.type.objcClass conformsToProtocol:@protocol(UIApplicationDelegate)] ? @" (App delegate)" : @""
+               );
 }
 
 -(NSString *)resolvingDescription {

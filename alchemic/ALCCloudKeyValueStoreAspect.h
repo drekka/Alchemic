@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCAbstractAspect.h>
+#import <Alchemic/ALCResolveAspect.h>
 
 /**
  Aspect which enables clould based key value storage access.
@@ -19,6 +19,6 @@
  
  Otherwise a class can be declared which extends ALCCloudKeyValueStore. All that needs to be added are properties. The parent ALCCloudKeyValueStore will take care of managing the synchronization with the cloud.
  */
-@interface ALCCloudKeyValueStoreAspect : ALCAbstractAspect
+@interface ALCCloudKeyValueStoreAspect : NSObject<ALCResolveAspect>
 
 @end

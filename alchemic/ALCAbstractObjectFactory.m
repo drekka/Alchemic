@@ -175,15 +175,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) description {
-    
-    NSMutableString *description = [[NSMutableString alloc] initWithString:_typeStrategy.isObjectPresent ? @"* " : @"  "];
-    
+    NSMutableString *description = [[NSMutableString alloc] initWithString:_typeStrategy.isObjectPresent ? @"[*" : @"[ "];
     [description appendString:_typeStrategy.description];
-    
-    if ([_type.objcClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
-        [description appendString:@" (App delegate)"];
-    }
-    
     return description;
 }
 
