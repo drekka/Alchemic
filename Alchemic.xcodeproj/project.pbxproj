@@ -1129,7 +1129,6 @@
 				6C34C9DC1D5D91C60080D428 /* Sources */,
 				6C34C9FD1D5D91C60080D428 /* Frameworks */,
 				6C34CA011D5D91C60080D428 /* Headers */,
-				6C34CA001D5D91C60080D428 /* Appledoc */,
 			);
 			buildRules = (
 			);
@@ -1147,7 +1146,6 @@
 				6C36D74A1B3851680073C4FB /* Sources */,
 				6C36D74B1B3851680073C4FB /* Frameworks */,
 				6C36D74C1B3851680073C4FB /* Headers */,
-				6CFF3BD41B709F8800538BA1 /* Appledoc */,
 			);
 			buildRules = (
 			);
@@ -1183,7 +1181,6 @@
 				6C97D1561DD09A7B005F93E0 /* Sources */,
 				6C97D1571DD09A7B005F93E0 /* Frameworks */,
 				6CCE2E741DD34D7A00EC1CDB /* Copy frameworks */,
-				6CB373611DD4356900C38F6C /* Resources */,
 			);
 			buildRules = (
 			);
@@ -1308,31 +1305,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6CB373611DD4356900C38F6C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6C34CA001D5D91C60080D428 /* Appledoc */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Appledoc;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "exit 0\n\n# Not sure why, but the latest versions of appledoc seem to be\n# fullof bugs and mess up the results quite badly.\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--templates \"$PROJECT_DIR/External/appledoc/templates\" \\\n--clean-output \\\n--create-docset \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--verbose 6 \\\n--logformat 3 \\\n--keep-intermediate-files \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n#--ignore ALCMacros.h \\\n";
-			showEnvVarsInLog = 0;
-		};
 		6C58302C1D6869CE00297AF8 /* Copy frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1400,21 +1375,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "carthage copy-frameworks";
-			showEnvVarsInLog = 0;
-		};
-		6CFF3BD41B709F8800538BA1 /* Appledoc */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Appledoc;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "exit 0\n\n# Not sure why, but the latest versions of appledoc seem to be\n# fullof bugs and mess up the results quite badly.\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--templates \"$PROJECT_DIR/External/appledoc/templates\" \\\n--clean-output \\\n--create-docset \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--verbose 6 \\\n--logformat 3 \\\n--keep-intermediate-files \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n#--ignore ALCMacros.h \\\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

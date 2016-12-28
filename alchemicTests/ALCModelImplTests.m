@@ -11,7 +11,7 @@
 @import Alchemic.Private;
 @import OCMock;
 
-@interface FakeAspect:ALCAbstractAspect
+@interface FakeAspect:NSObject<ALCResolveAspect>
 @property (nonatomic, assign, readonly) BOOL willCalled;
 @property (nonatomic, assign, readonly) BOOL didCalled;
 @end
