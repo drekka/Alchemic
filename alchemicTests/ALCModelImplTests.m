@@ -16,7 +16,17 @@
 @property (nonatomic, assign, readonly) BOOL didCalled;
 @end
 
-@implementation FakeAspect
+@implementation FakeAspect {
+}
+
+static BOOL _enabled;
++(BOOL) enabled {
+    return _enabled;
+}
+
++(void) setEnabled:(BOOL) enabled {
+    _enabled = enabled;
+}
 
 -(void) modelWillResolve:(id<ALCModel>) model {
     _willCalled = YES;
@@ -207,9 +217,9 @@
 -(void) testDescription {
     NSString *desc = _model.description;
     XCTAssertTrue([desc containsString:@"Alchemic model (* - instantiated):"]);
-    XCTAssertTrue([desc containsString:@"Singleton class NSString, as 'NSString'"]);
-    XCTAssertTrue([desc containsString:@"Singleton class NSString, as 'ref'"]);
-    XCTAssertTrue([desc containsString:@"Template method +[NSString description] -> NSString, as 'abc'"]);
+    XCTAssertTrue([desc containsString:@"[ S     C ] NSString, as 'NSString'"], @"Desc: %@", desc);
+    XCTAssertTrue([desc containsString:@"[ S     C ] NSString, as 'ref'"]);
+    XCTAssertTrue([desc containsString:@"[   T    M] +[NSString description] -> NSString, as 'abc'"]);
 }
 
 @end

@@ -180,21 +180,21 @@
 #pragma mark - Describing things
 
 -(void) testDescription {
-    XCTAssertEqualObjects(@"  Singleton", [_factory description]);
+    XCTAssertEqualObjects(@"[ S    ", [_factory description]);
 }
 
 -(void) testDescriptionWhenSet {
     ALCType *type = [ALCType typeWithClass:[NSString class]];
     DummyFactory *df = [[DummyFactory alloc] initWithType:type];
     [df storeObject:@"abc"];
-    XCTAssertEqualObjects(@"* Singleton", [df description]);
+    XCTAssertEqualObjects(@"[*S    ", [df description]);
 }
 
 -(void) testDescriptionWhenReferenceNotSet {
     ALCType *type = [ALCType typeWithClass:[NSString class]];
     DummyFactory *df = [[DummyFactory alloc] initWithType:type];
     [df configureWithOptions:@[AcReference] model:_mockModel];
-    XCTAssertEqualObjects(@"  Reference", [df description]);
+    XCTAssertEqualObjects(@"[  R   ", [df description]);
 }
 
 -(void) testDescriptionWhenReferenceSet {
@@ -202,13 +202,13 @@
     DummyFactory *df = [[DummyFactory alloc] initWithType:type];
     [df configureWithOptions:@[AcReference] model:_mockModel];
     [df storeObject:@"abc"];
-    XCTAssertEqualObjects(@"* Reference", [df description]);
+    XCTAssertEqualObjects(@"[* R   ", [df description]);
 }
 
 -(void) testDescriptionWhenUIApplicationDelegate {
     ALCType *type = [ALCType typeWithClass:[DummyAppDelegate class]];
     DummyFactory *df = [[DummyFactory alloc] initWithType:type];
-    XCTAssertEqualObjects(@"  Singleton (App delegate)", [df description]);
+    XCTAssertEqualObjects(@"[ S    ", [df description]);
 }
 
 @end

@@ -52,17 +52,16 @@
     id mockModel = OCMProtocolMock(@protocol(ALCModel));
     id mockFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
     OCMStub([mockModel classObjectFactories]).andReturn(@[mockFactory]);
-    
-    
+
+    ALCType *type = [ALCType typeWithClass:_delegateClass];
+    OCMStub([(id<ALCObjectFactory>)mockFactory type]).andReturn(type);
+
     id delegate = [[_delegateClass alloc] init];
 
     // Mock out the shared application.
     OCMStub(ClassMethod([_appMock sharedApplication])).andReturn(_appMock);
     OCMStub([(UIApplication *)_appMock delegate]).andReturn(delegate);
-    
-    ALCType *type = [ALCType typeWithClass:_delegateClass];
-    OCMStub([(id<ALCObjectFactory>)mockFactory type]).andReturn(type);
-    
+
     OCMExpect([(id<ALCObjectFactory>) mockFactory storeObject:delegate]);
     
     [_aspect modelWillResolve:mockModel];
@@ -73,18 +72,17 @@
 
 -(void) testModelWillResolveWhenDelegateNotFound {
     
-    // Mock out the model
+    // Mock out the model with a string factory
     id mockModel = OCMProtocolMock(@protocol(ALCModel));
     id mockFactory = OCMProtocolMock(@protocol(ALCObjectFactory));
     OCMStub([mockModel classObjectFactories]).andReturn(@[mockFactory]);
-    
-    
-    // Mock out the shared application.
-    OCMStub(ClassMethod([_appMock sharedApplication])).andReturn(nil);
-    
-    ALCType *type = [ALCType typeWithClass:_delegateClass];
+
+    ALCType *type = [ALCType typeWithClass:[NSString class]];
     OCMStub([(id<ALCObjectFactory>)mockFactory type]).andReturn(type);
-    
+
+    // Mock out the shared application to return nil.
+    OCMStub(ClassMethod([_appMock sharedApplication])).andReturn(nil);
+
     [_aspect modelWillResolve:mockModel];
     [_aspect modelDidResolve:mockModel];
     

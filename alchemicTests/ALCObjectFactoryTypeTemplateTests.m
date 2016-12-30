@@ -42,7 +42,7 @@
 }
 
 -(void) testDescription {
-    XCTAssertEqualObjects(@"Template", _factoryType.description);
+    XCTAssertEqualObjects(@"  T  ", _factoryType.description);
 }
 
 
