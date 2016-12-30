@@ -27,7 +27,7 @@ ___Main features___
 * Condensed the 'LogModel' output in the logs. Output now looks like
     [*SRTNW~CM] <class> or <method> as 'Name'
   Where the flags `*SRTNW~CM` stand for instantiated, singleton, reference, template, nillable, weak, transient, class and method.
-
+* Fixing bug where the UIApplicationDelegate aspect would fail if there was no application delegate.
 
 # v2.2.8
 
