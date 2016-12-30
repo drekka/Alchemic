@@ -109,7 +109,7 @@ registerFactoryMethod:(SEL) selector
 #pragma mark - Tasks
 
 /// @name Other functions
-
+ 
 /**
  Access point for injecting dependencies into an object without having to store it in the model.
  

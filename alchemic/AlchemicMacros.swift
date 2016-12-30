@@ -117,8 +117,7 @@ public func AcGet<T>(_ searchCriteria:AnyObject...) -> T? {
     let mc = mainContext()
 
     // This code needs exploring. What happens when T is a protocol?
-    let returnType = T.self as? AnyClass
-    return mc.object(with: returnType == nil ? NSObject.self : returnType!, searchCriteria:searchCriteria) as? T
+    return mc.object(with:T.self as! AnyClass, searchCriteria:searchCriteria) as? T
 }
 
 public func AcSet(_ object:AnyObject, _ searchCriteria:AnyObject...) {

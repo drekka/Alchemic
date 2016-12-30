@@ -8,8 +8,8 @@
 
 @import Foundation;
 
-#import <Alchemic/ALCAbstractAspect.h>
+#import <Alchemic/ALCResolveAspect.h>
 
-@interface ALCApplicationDelegateAspect : ALCAbstractAspect
+@interface ALCApplicationDelegateAspect : NSObject<ALCResolveAspect>
 
 @end

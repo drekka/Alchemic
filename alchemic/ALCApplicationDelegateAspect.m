@@ -24,12 +24,14 @@
     return YES;
 }
 
++(void) setEnabled:(BOOL) enabled {}
+
 -(void) modelWillResolve:(id<ALCModel>) model {
 
     // First check and ensure any pre-registered app delegate is set to a reference type for later injection.
     for (ALCClassObjectFactory *objectFactory in model.classObjectFactories) {
         if ([objectFactory.type.objcClass conformsToProtocol:@protocol(UIApplicationDelegate)]) {
-            STLog(self, @"Found pre-registered app delegate class: %@", NSStringFromClass(objectFactory.type.objcClass));
+            STLog(self, @"Found pre-registered app delegate factory: %@", NSStringFromClass(objectFactory.type.objcClass));
             self->_appDelegateFactory = objectFactory;
             break;
         }
@@ -39,7 +41,7 @@
     id delegate = UIApplication.sharedApplication.delegate;
     if (!delegate) {
         if (_appDelegateFactory) {
-            throwException(AlchemicResolvingException, @"No app delegate available for setting in app delegate factory");
+            throwException(AlchemicResolvingException, @"Expected app delegate");
         }
 
         // No app delegate so don't configure one.

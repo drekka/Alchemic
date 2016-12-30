@@ -17,6 +17,16 @@
 
 @implementation ALCUserDefaultsAspect
 
+static BOOL _enabled;
+
++(void) setEnabled:(BOOL) enabled {
+    _enabled = enabled;
+}
+
++(BOOL) enabled {
+    return _enabled;
+}
+
 -(void)modelWillResolve:(id<ALCModel>) model {
     
     // First look for a user defined user defaults already present in the model.

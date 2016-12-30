@@ -73,17 +73,17 @@
 }
 
 -(void) testDescriptionWithType {
-    XCTAssertEqualObjects(@"XXX", [_factoryType descriptionWithType:@"XXX"]);
+    XCTAssertEqualObjects(@"S    ", [_factoryType descriptionWithType:@"XXX"]);
 }
 
 -(void) testDescriptionWithTypeNillable {
     _factoryType.nillable = YES;
-    XCTAssertEqualObjects(@"nillable XXX", [_factoryType descriptionWithType:@"XXX"]);
+    XCTAssertEqualObjects(@"S  N ", [_factoryType descriptionWithType:@"XXX"]);
 }
 
 -(void) testDescriptionWithTypeWeak {
     _factoryType.weak = YES;
-    XCTAssertEqualObjects(@"weak XXX", [_factoryType descriptionWithType:@"XXX"]);
+    XCTAssertEqualObjects(@"S   W", [_factoryType descriptionWithType:@"XXX"]);
 }
 
 -(void) testDescriptionThrows {

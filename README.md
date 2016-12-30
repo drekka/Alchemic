@@ -20,6 +20,15 @@ ___Main features___
 * Support for NSUserDefaults and Apple's cloud based key-value stores.
 * and much, much more.
 
+# v2.2.9, v2.2.10, v2.2.11, v2.2.12
+
+* Fixed bugs in bundle scanning which caused test bundles to not be scanned. 
+* Fixed a bug where aspects where being loaded on incorrect flags.
+* Condensed the 'LogModel' output in the logs. Output now looks like
+    [*SRTNW~CM] <class> or <method> as 'Name'
+  Where the flags `*SRTNW~CM` stand for instantiated, singleton, reference, template, nillable, weak, transient, class and method.
+* Fixing bug where the UIApplicationDelegate aspect would fail if there was no application delegate.
+
 # v2.2.8
 
 * Fixing bug where using in a framework with no app delegate was throwing an error.

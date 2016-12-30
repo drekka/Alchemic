@@ -54,7 +54,7 @@
 }
 
 -(void) testDescription {
-    XCTAssertEqualObjects(@"Reference", _objectFactoryType.description);
+    XCTAssertEqualObjects(@" R   ", _objectFactoryType.description);
 }
 
 @end

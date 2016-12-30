@@ -102,7 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Descriptions
 
 -(NSString *) description {
-    return str(@"%@ method %@ -> %@", super.description, self.defaultModelName, NSStringFromClass(self.type.objcClass));
+    return str(@"%@  M] %@ -> %@", super.description, self.defaultModelName, NSStringFromClass(self.type.objcClass));
 }
 
 -(NSString *)resolvingDescription {

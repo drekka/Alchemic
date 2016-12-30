@@ -70,7 +70,21 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(NSString *) descriptionWithType:(NSString *) type {
-    return str(@"%@%@%@", self.nillable ? @"nillable " : @"", self.isWeak ? @"weak " : @"", type);
+    NSString *typeStr;
+    switch (self.type) {
+        case ALCFactoryTypeReference:
+            typeStr = @" R ";
+            break;
+
+        case ALCFactoryTypeTemplate:
+            typeStr = @"  T";
+            break;
+
+        default:
+            typeStr = @"S  ";
+            break;
+    }
+    return str(@"%@%@%@", typeStr, self.nillable ? @"N" : @" ", self.weak ? @"W" : @" ");
 }
 
 

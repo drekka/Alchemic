@@ -218,10 +218,6 @@
 		6C97D1551DD08CB2005F93E0 /* ALCTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C97D14F1DD08CB2005F93E0 /* ALCTypeExtensions.swift */; };
 		6C9E31FA1DF1825C00AFEAE1 /* FrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9E31F91DF1825C00AFEAE1 /* FrameworkTests.m */; };
 		6C9E31FF1DF1836500AFEAE1 /* Alchemic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C36D74F1B3851680073C4FB /* Alchemic.framework */; };
-		6CA1CAA61DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6CA1CAA71DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		6CA1CAA81DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */; };
-		6CA1CAA91DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */; };
 		6CA787E01D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA787DF1D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m */; };
 		6CACA5321D79C0E6007808CF /* ALCConstantValueSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CACA5311D79C0E6007808CF /* ALCConstantValueSourceTests.m */; };
 		6CB57E991D43C53500CFE4DF /* ALCInstantiationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB57E951D43C52C00CFE4DF /* ALCInstantiationTests.m */; };
@@ -424,8 +420,6 @@
 		6C9E31F71DF1825C00AFEAE1 /* FrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C9E31F91DF1825C00AFEAE1 /* FrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrameworkTests.m; sourceTree = "<group>"; };
 		6C9E31FB1DF1825C00AFEAE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCAbstractAspect.h; sourceTree = "<group>"; };
-		6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCAbstractAspect.m; sourceTree = "<group>"; };
 		6CA787DF1D2CB584002E1D3C /* ALCAbtractObjectFactoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCAbtractObjectFactoryTests.m; path = alchemicTests/ALCAbtractObjectFactoryTests.m; sourceTree = "<group>"; };
 		6CACA5311D79C0E6007808CF /* ALCConstantValueSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCConstantValueSourceTests.m; sourceTree = "<group>"; };
 		6CB57E951D43C52C00CFE4DF /* ALCInstantiationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALCInstantiationTests.m; path = alchemicTests/ALCInstantiationTests.m; sourceTree = "<group>"; };
@@ -886,8 +880,6 @@
 		6CD8EB9C1D6863EF00A0FCB5 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				6CA1CAA41DC6D3FD00321EA5 /* ALCAbstractAspect.h */,
-				6CA1CAA51DC6D3FD00321EA5 /* ALCAbstractAspect.m */,
 				6C150B631D73E97F0060CA08 /* ALCAbstractValueStore.h */,
 				6C150B641D73E97F0060CA08 /* ALCAbstractValueStore.m */,
 				6C8757BB1D6AD74600BCAF6B /* ALCApplicationDelegateAspect.h */,
@@ -963,7 +955,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CA1CAA71DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */,
 				6C34CA291D5D91C60080D428 /* ALCAbstractDependency.h in Headers */,
 				6C34CA0D1D5D91C60080D428 /* ALCAbstractObjectFactory.h in Headers */,
 				6C34CA211D5D91C60080D428 /* ALCAbstractObjectFactoryType.h in Headers */,
@@ -1029,7 +1020,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CA1CAA61DC6D3FD00321EA5 /* ALCAbstractAspect.h in Headers */,
 				F4023C021CE9827A00AEC0E5 /* ALCAbstractDependency.h in Headers */,
 				6C25D2801C5760FF00D982DC /* ALCAbstractObjectFactory.h in Headers */,
 				6CC503CD1D182A78004283DA /* ALCAbstractObjectFactoryType.h in Headers */,
@@ -1139,7 +1129,6 @@
 				6C34C9DC1D5D91C60080D428 /* Sources */,
 				6C34C9FD1D5D91C60080D428 /* Frameworks */,
 				6C34CA011D5D91C60080D428 /* Headers */,
-				6C34CA001D5D91C60080D428 /* Appledoc */,
 			);
 			buildRules = (
 			);
@@ -1157,7 +1146,6 @@
 				6C36D74A1B3851680073C4FB /* Sources */,
 				6C36D74B1B3851680073C4FB /* Frameworks */,
 				6C36D74C1B3851680073C4FB /* Headers */,
-				6CFF3BD41B709F8800538BA1 /* Appledoc */,
 			);
 			buildRules = (
 			);
@@ -1193,7 +1181,6 @@
 				6C97D1561DD09A7B005F93E0 /* Sources */,
 				6C97D1571DD09A7B005F93E0 /* Frameworks */,
 				6CCE2E741DD34D7A00EC1CDB /* Copy frameworks */,
-				6CB373611DD4356900C38F6C /* Resources */,
 			);
 			buildRules = (
 			);
@@ -1318,31 +1305,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6CB373611DD4356900C38F6C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6C34CA001D5D91C60080D428 /* Appledoc */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Appledoc;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "exit 0\n\n# Not sure why, but the latest versions of appledoc seem to be\n# fullof bugs and mess up the results quite badly.\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--templates \"$PROJECT_DIR/External/appledoc/templates\" \\\n--clean-output \\\n--create-docset \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--verbose 6 \\\n--logformat 3 \\\n--keep-intermediate-files \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n#--ignore ALCMacros.h \\\n";
-			showEnvVarsInLog = 0;
-		};
 		6C58302C1D6869CE00297AF8 /* Copy frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1412,21 +1377,6 @@
 			shellScript = "carthage copy-frameworks";
 			showEnvVarsInLog = 0;
 		};
-		6CFF3BD41B709F8800538BA1 /* Appledoc */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Appledoc;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "exit 0\n\n# Not sure why, but the latest versions of appledoc seem to be\n# fullof bugs and mess up the results quite badly.\n\n\"$PROJECT_DIR/External/appledoc/appledoc\" \\\n--templates \"$PROJECT_DIR/External/appledoc/templates\" \\\n--clean-output \\\n--create-docset \\\n--project-name \"Alchemic ${DYLIB_CURRENT_VERSION}\" \\\n--project-company \"Derek Clarkson\" \\\n--company-id au.com.derekclarkson \\\n--output ~/help \\\n--verbose 6 \\\n--logformat 3 \\\n--keep-intermediate-files \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--search-undocumented-doc \\\n--preprocess-headerdoc \\\n--no-repeat-first-par \\\n--exit-threshold 2 \\\n--ignore .m \\\nAlchemic\n#--ignore ALCMacros.h \\\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1450,7 +1400,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CA1CAA91DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */,
 				6C97D1551DD08CB2005F93E0 /* ALCTypeExtensions.swift in Sources */,
 				6C34C9EE1D5D91C60080D428 /* ALCAbstractDependency.m in Sources */,
 				6C34C9F01D5D91C60080D428 /* ALCAbstractObjectFactory.m in Sources */,
@@ -1499,7 +1448,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CA1CAA81DC6D3FD00321EA5 /* ALCAbstractAspect.m in Sources */,
 				6C97D1541DD08CB2005F93E0 /* ALCTypeExtensions.swift in Sources */,
 				F4023C031CE9827A00AEC0E5 /* ALCAbstractDependency.m in Sources */,
 				6C25D2811C5760FF00D982DC /* ALCAbstractObjectFactory.m in Sources */,
@@ -1855,7 +1803,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
-				DYLIB_CURRENT_VERSION = 2.2.11;
+				DYLIB_CURRENT_VERSION = 2.2.12;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -1927,7 +1875,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
-				DYLIB_CURRENT_VERSION = 2.2.11;
+				DYLIB_CURRENT_VERSION = 2.2.12;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
